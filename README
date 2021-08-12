@@ -1,0 +1,81 @@
+======================================================================
+    TextMIDITools -- MIDI file converters and computer-generated music.
+
+                    Thomas E. Janzen
+                    <janzentome@gmail.com>
+                    <https://www.tomejanzenfoto.com>
+
+======================================================================
+What is this?
+======================================================================
+
+General Information
+
+TextMIDITools is a collection of four programs for converting MIDI and SMUS
+files in and out of text format, and for automatic generation of music.
+
+The converters are:
+textmidi - convert a text representation of a MIDI file into a binary
+           standard MIDI file.
+miditext - convert a binary standard MIDI file into a text representation.
+smustextmidi - convert a Simple Musical Score file into a text
+               representation in textmidi language.
+textmidicgm - Generate music in textmidi text file format, using a
+              model of musical form based on slowly-changing sinusoids
+              that control the means and ranges of pitch, dynamics,
+              duration, and the complement (number of instruments
+              playing).
+
+textmidicgm is a rewrite of AlgoRhythms, an open-source computer-music
+generator by Thomas E. Janzen for the Commodore Amiga first
+seen publically in 1990.
+
+smustextmidi is a rewrite of smusmidi, an open-source convertor
+from Simple Musical Scores, first seen in 1992 from Thomas E. Janzen.
+
+textmidi and miditext are rewrites in C++20 of programs developed for
+private use from 1999 to 2003 and enhanced later by Thomas E. Janzen.
+
+======================================================================
+Features
+======================================================================
+
+* textmidi
+  + Defines a text language that represents standard MIDI files for
+    musical use.  It permits the specification of anything a musical
+    MIDI file (from the MIDI Specification 1.1) can include.
+  + Defines a "LAZY" or "BRIEF" mode that makes it quicker to type in
+    long conventional instrumental scores, such as those from
+    Johann Sebastian Bach.
+  + Use with text tools and a macro processor such as m4 can enrich
+    the language.
+* miditext
+  + Converts a standard MIDI file for musical purposes into a text
+    representation in textmidi language.  The text can be hand-edited,
+    or automatically processed.
+* smustextmidi
+  + Converts an SMUS (Simple Musical Score) file, defined by Electronic
+    Arts in the mid-1980's, into a text representation of a MIDI file
+    in textmidi language, using LAZY mode for the note events.
+* textmidicgm
+  + Generates random musical pieces in terms of MIDI key numbers, velocities,
+    and durations, using a model of musical form the describes slow
+    sinusoids that modulate the mean and range for pitch, dynamics, and
+    durations, as well as the complement (number of voices).
+  + The XML form input file is hand-editable.
+  + textmidicgm can generate a random XML form file, making it altogether
+    unnecessary to think about what music you are writing.
+
+======================================================================
+Where to get a copy
+======================================================================
+
+The latest release of TextMIDITools are available at:
+github.
+
+======================================================================
+How to install
+======================================================================
+
+Refer INSTALL file in the distribution.
+

@@ -1,0 +1,43 @@
+2021-08-12    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
+	* miditext: Rewrite/rename from mididisasm.
+	* smustextmidi: Rewrite of SMUSMIDI to output textmidi text.
+	* textmidicgm: Rewrite from AlgoRhythms without a GUI; to produce textmidi text files; use C++20.
+	Change output format to textmidi text output, which can be
+	converted into MIDI Standard MIDI Files by textmidi.
+
+2003    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
+	Remove extra NULL text events; fix key signatures.
+
+2002-12-29 Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
+	which was published on the Classical MIDI Archive.
+	* mididisasm: First private version.
+
+1999-09-18 Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* textmidi:  Initial private version.
+
+1994-- Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* AlgoRhythms: Version 3.0 for Commodore Amiga computers.
+
+1992-- Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* AlgoRhythms: Version 2.0, now textmidicgm.
+	On Fred Fish Disk 606 for Commodore Amiga computers.
+
+1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
+	Commodore Amiga.
+
+1990-- Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* AlgoRhythms: Initial revision 1.0
+	on Fred Fish Disk 356 for Commodore Amiga computers.
+

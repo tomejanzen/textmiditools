@@ -1,0 +1,6 @@
+2021-08-12
+    * Version 1.0
+      This is the first public version of textmiditools
+      including rewrites of AlgoRhythms as textmidicgm,
+      smusmidi as smustextmidi, mididisasm as miditext,
+      and textmidi.

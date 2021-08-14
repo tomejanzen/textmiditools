@@ -1,3 +1,14 @@
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
+	to return it to its previous meaning of if (0 == pulse_per_rhythm)
+	but not activating a bug.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
+	as a work-around for a crash due to a possible bug in boost::rational.
+
 2021-08-12    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
 
 	* textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.

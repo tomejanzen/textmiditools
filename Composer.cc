@@ -97,7 +97,7 @@ namespace
             // snap the rhythm (duration) to pulses.
             pulse_per_rhythm.assign(pulse_per_rhythm.numerator() - rem,
                 pulse_per_rhythm.denominator());
-            if (pulse_per_rhythm)
+            if (!pulse_per_rhythm)
             {
                 pulse_per_rhythm = 1; // i.e., one pulse minimum.
             }

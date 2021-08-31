@@ -239,7 +239,9 @@ pentatonic (think Debussy), tritone (C, D, E, F, F#, G#, A#, B),
 chromatic, on any chromatic step.  The scales themselve cover the full range of
 MIDI key numbers.
 @cindex random complement
-@item The number of voices is random from 1 to 16.
+@item The number of voices is random from 1 to 9 and 11 to 16.  Channel 10 is for idiophones.
+If idiophones are selected then the pitch range is coerced to that in the MIDI spec for 
+idiophones, and the channel is coerced to 10.
 @cindex random scale
 @item Each voice is set to use
 a random MIDI channel from 1 to 16.

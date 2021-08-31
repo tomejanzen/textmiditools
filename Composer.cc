@@ -130,9 +130,8 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
     const TicksDuration time_step{xml_form.pulse()
         ? (static_cast<int64_t>(static_cast<double>
           (TicksPerQuarter) / xml_form.pulse())) : 1};
-    const TicksDuration
-        totalDuration(static_cast<int64_t>(floor(xml_form.len()
-                        * double(TicksPerQuarter))));
+    const TicksDuration totalDuration(static_cast<int64_t>(floor(xml_form.len()
+          * double(TicksPerQuarter))));
 
     //
     // For all follower tracks
@@ -178,6 +177,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
         }
         ++tr;
     }
+#undef PRINT
 #if defined(PRINT)
     for (auto& row : followers_graph)
     {
@@ -239,11 +239,6 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
         cout << '\n';
     }
 #endif
-    //
-    //  This loops like the real-time version:
-    //    for all time
-    //      for all tracks that are not follower tracks
-    //         Add note event to track
     track_note_events.resize(tracks.size());
     // loop over the vector of lists of voice indices:
     for (auto& lts : leaders_topo_sort)
@@ -254,13 +249,11 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow_) [[likely]]
             {
-                for (TicksDuration theTime(0); theTime < totalDuration;
-                    theTime += time_step)
+                while (track.the_next_time() < totalDuration)
                 {
                     MusicalCharacter musical_character{};
-                    xml_form.character_now(theTime, musical_character);
+                    xml_form.character_now(track.the_next_time(), musical_character);
 
-                    if (theTime >= track.the_next_time()) [[unlikely]]
                     {
                         double dynamicd{(musical_character.dynamic_range
                                        * random_double())
@@ -299,8 +292,8 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                             ( rhythmtdrational.numerator()
                             + rhythmtdrational.denominator() / 2)
                             / rhythmtdrational.denominator()};
-                        track.the_next_time(theTime + rhythmtd);
-                        track.the_last_time(theTime);
+                        track.the_last_time(track.the_next_time());
+                        track.the_next_time(track.the_next_time() + rhythmtd);
 
                         int pitch_index{0};
 
@@ -511,7 +504,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
         write_form_as_gnuplot_data(xml_form, gnuplot_filename);
     }
 
-    // Need a rhythm track, so add 1 to the number of playing tracks
+    // Need a TEMPO or rhythm track, so add 1 to the number of playing tracks
     // The last integer on the line, is the ticks per quarter;
     // feel free to make it higher.
     textmidi_file << "FILEHEADER " << (xml_form.voices().size() + 1)
@@ -526,17 +519,12 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                   << "TEXT CREATED BY TEXTMIDICGM BY THOMAS JANZEN\n"
                   << "TRACK " << xml_form.name() << '\n'
                   << "LAZY\n";
-    // I need an event in the tempo track so that
-    // timidity generates the silence at the beginning for all tracks
-    // so that mixwave3d can just mix them from the starting sample
-    // and have channels be aligned in time.
-    textmidi_file << "chan 10 vel 1 C4 1\n";
-    for (TicksDuration aTime(0); aTime < maxTime;
-         aTime += TicksDuration(4 * TicksPerQuarter))
+    for (TicksDuration aTime(0); aTime < maxTime; aTime += TicksDuration(4 * TicksPerQuarter))
     {
         textmidi_file << "R 1\n";
     }
     textmidi_file << "END_LAZY\n";
+    textmidi_file << "ticks \"End of Track\"\n";
     textmidi_file << "END_OF_TRACK\n";
 
     for (int track_index{}; auto& trackIter : tracks)
@@ -565,6 +553,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
             }
             textmidi_file << eventRef << '\n';
         }
+        textmidi_file << "ticks \"End of Track\"\n";
         textmidi_file << "END_LAZY\nEND_OF_TRACK\n";
         ++track_index;
     }

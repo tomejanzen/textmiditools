@@ -340,3 +340,8 @@ pair<int, bool> textmidi::pitchname_to_keynumber(const string& pitchname)
     return make_pair(keynumber, is_delta);
 }
 
+bool textmidi::CompareLowerNoteName::operator()(const std::string& left, const std::string& right) const
+{
+    return pitchname_to_keynumber(left) < pitchname_to_keynumber(right);
+}
+

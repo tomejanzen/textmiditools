@@ -81,7 +81,8 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi 1.0\n";
+        cout << "textmidi\n";
+        cout << "TextMIDITools 1.0.3\n";
         cout << "Copyright © 2021 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << " <https://gnu.org/licenses/gpl.html>\n";
@@ -150,12 +151,14 @@ int main(int argc, char *argv[])
         lazy::note_off_select = true;
     }
 
+#if 0
     if (midi_filename == text_filename)
     {
         cerr << "You would have overwritten the source name!;"
              << " exitting!" << '\n';
         exit(EXIT_SUCCESS);
     }
+#endif
     if (midi_filename.empty()) [[unlikely]]
     {
         midi_filename = text_filename + ".mid";

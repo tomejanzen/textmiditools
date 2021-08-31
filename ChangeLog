@@ -1,3 +1,50 @@
+2021-08-31    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* Composer.cc: Remove the kluge that put a quiet note at the beginning of the
+	tempo track to force generation of silent starts of tracks by TiMidity++.
+	Loop time by using musical ratios instead of chrono time.  This results in
+	more accurate alignment at the end, but the individual tracks can still
+	be a measure longer than requested because they don't exceed the maximum
+	time until they have generated the last note.
+
+2021-08-30    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* textmidi.l: fix accumulated time defect so that tracks that should be
+	the same length in ticks are or at least only a tick off at the end.
+	This can make very fast tracks a very different length, and was noticed
+	with fast tracks written by textmidicgm.  This was an accumulating
+	floating-point addition error, esp. wrt conversion to int types.
+	* Composer.cc: Removed the forced percussion event (a kluge for
+	separate track recording) part of the music time, so that it is not
+	extra time.
+	Trying to rationalize rhythm due to short tracks from textmidicgm.
+	* NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
+
+2021-08-29    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* main.cc: remove old block that checks if you would overwrite a file
+	but leave check if --answer is set.
+
+2021-08-26    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* MusicalForm.cc: After a random form is created,
+	remove scale notes that are too high or low for any or the
+	General MIDI patches selected in random().  This avoids lots of repeated very 
+	high or low notes when the pitch curve is beyond any instrument's range
+	and the end of the scale.  This could still happen with small-range instruments.
+	* textmidiform.py: add to tree.  Has a file widget, reads in the XML form file
+	and draws the graph of the form.
+	* MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
+
+2021-08-23    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* textmidicgm.texi: correct description of random selection of channel to
+	coerce channel 10 for idiophones.
+
+2021-08-18    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* textmidicgm.cc: handle boost xml serialization exceptions.
+
 2021-08-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
 
 	* Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),

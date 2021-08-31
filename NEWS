@@ -4,3 +4,10 @@
       including rewrites of AlgoRhythms as textmidicgm,
       smusmidi as smustextmidi, mididisasm as miditext,
       and textmidi.
+    * Version 1.0.1
+    * Version 1.0.2
+    * Version 1.0.3
+      Fix a length problem: using a generated form using
+      textmidicgm --random, the rhythms were very unusual
+      and reveal a time-counting issue in the note-event
+      generating loop in Composer.cc.

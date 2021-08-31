@@ -19,6 +19,11 @@ namespace textmidi
     extern std::pair<int, bool> key_sig_name_to_accidentals(std::string &key_sig_name);
     extern std::pair<int, bool> pitchname_to_keynumber(const std::string& pitchname);
     extern std::string num_to_note(int num);
+
+    struct CompareLowerNoteName
+    {
+        bool operator()(const std::string& left, const std::string& right) const;
+    };
 }
 #endif
 

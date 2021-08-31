@@ -19,12 +19,20 @@ std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
     if (RestPitch == ne.pitch())
     {
         os << "R ";
-        os << ne.musical_rhythm();
     }
     else
     {
         const auto note_name(textmidi::num_to_note(ne.pitch()));
         os << note_name << ' ';
+    }
+    if ((1 == ne.musical_rhythm().numerator())
+       && (ne.musical_rhythm().denominator() != 0))
+    {
+        os << ne.musical_rhythm().denominator();
+    }
+    else
+    {
+        // boost rational prints "2/1" and not "2", like we need.
         os << ne.musical_rhythm();
     }
     return os;

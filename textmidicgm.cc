@@ -66,6 +66,8 @@
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/rational.hpp>
+#include <boost/archive/basic_xml_archive.hpp>
+#include <boost/archive/xml_archive_exception.hpp>
 
 #include "MIDIKeyString.h"
 #include "MusicalForm.h"
@@ -159,7 +161,8 @@ int main(int argc, char *argv[])
     {
         string str{};
         str.reserve(512);
-        ((((((str += "textmidicgm 1.0\n")
+        (((((((str += "textmidicgm\n")
+            += "TextMIDITools 1.0.3\n")
             += "Copyright © 2021 Thomas E. Janzen\n")
             += "License GPLv3+: GNU GPL version 3 or later ")
             += "<https://gnu.org/licenses/gpl.html>\n")
@@ -327,6 +330,14 @@ int main(int argc, char *argv[])
                     {
                         cerr << iosfail.what() << '\n';
                         exit(EXIT_SUCCESS);
+                    }
+                    catch (archive::xml_archive_exception& xae)
+                    {
+                        cerr << xae.what() <<'\n';
+                    }
+                    catch (archive::archive_exception& ae)
+                    {
+                        cerr << ae.what() <<'\n';
                     }
                 }
             }

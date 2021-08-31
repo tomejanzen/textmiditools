@@ -28,6 +28,7 @@
 
 #include <cmath>
 #include <numeric>
+#include <algorithm>
 #include <iostream>
 
 #include <boost/lexical_cast.hpp>
@@ -40,6 +41,7 @@
 using namespace std;
 using namespace cgm;
 using namespace boost;
+using namespace textmidi;
 
 namespace cgm
 {
@@ -491,6 +493,22 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         v.pan((((&v - &voices_[0]) * 128) / voices_.size()) - 64);
         v.follower(VoiceXml::Follower{});
     }
+    // truncate scale to not exceed the instrument ranges.
+    // The scales provided are monotonically increasing but
+    // user-edited forms may have non-monotonic scales.
+    // This algorithm assume a monotonically increasng scale.
+    // Find the maximum instrument range note.
+    CompareLowerNoteName lower_note{};
+    const auto min_instrument_range = *min_element(voices_.begin(), voices_.end(),
+        [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.low_pitch(), vright.low_pitch()); }) ;
+    const auto max_instrument_range = *max_element(voices_.begin(), voices_.end(),
+        [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.high_pitch(), vright.high_pitch()); }) ;
+    auto erase_iter{remove_if(scale_.begin(), scale_.end(),
+        [max_instrument_range, min_instrument_range, lower_note](const string& scale_pitch){
+        return lower_note(scale_pitch, min_instrument_range.low_pitch())
+            || lower_note(max_instrument_range.high_pitch(), scale_pitch) ; })};
+    scale_.erase(erase_iter, scale_.end());
+    // scale_ should now just cover the maximum extent of the instruments' ranges.
 }
 
 bool cgm::MusicalForm::valid() const

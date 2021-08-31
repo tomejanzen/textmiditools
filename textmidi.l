@@ -15,7 +15,7 @@
 **          which was submitted to the classical MIDI archive.
 **    2021: C++ upgrades, fuller MIDI implementation to MIDI 1.1
 **
-** textmidi.l is a flex tokenizer specification for recognizing textmidi language 
+** textmidi.l is a flex tokenizer specification for recognizing textmidi language
 ** in order to write binary MIDI files for musical purposes.
 **
 */
@@ -72,12 +72,14 @@ namespace
     uint16_t track_counter{}; // Count the tracks in order to set MIDI header
     vector<uint8_t> trackchunk; // One track's data bytes.
     uint32_t accum_delay{}; // Delay accumulated between events.
-    uint64_t total_ticks{}; // accum. tracks ticks to print for "ticks" cmd
+    double global_total_track_ticks{}; // accum. tracks ticks to print for "ticks" cmd
     uint32_t total_beats{}; // beat to print for errors.
     // running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
     uint8_t running_status{};
     // To turn off notes using NOTE_ON, use a zero velocity.
     constexpr uint8_t note_off_velocity{};
+    constexpr double DotLength(0.5);
+    constexpr double DoubleDotLength(0.25);
     // Map textmidi strings to MIDI file format codes.
     const map<const string_view, uint8_t> text_meta_map{
                   {"TEXT",         text_prefix},
@@ -135,13 +137,13 @@ namespace
 
         if (!matches[match_note_or_key].str().empty())
         {
-            tie(keynumber, is_delta) 
+            tie(keynumber, is_delta)
                 = pitchname_to_keynumber(matches[match_note_or_key]);
         }
         return keynumber;
     }
 
-    // KeyTie is a class that can hold the note event as a key number 
+    // KeyTie is a class that can hold the note event as a key number
     // and its ties in and out.
     struct KeyTie
     {
@@ -215,7 +217,7 @@ namespace
         return numvec;
     }
 
-    // 
+    //
     // int24_to_vec converts 24-bit numbers to MIDI extended values.
     vector<uint8_t> int24_to_vec(int i)
     {
@@ -242,22 +244,20 @@ namespace
         }
     }
 
-    // 
+    //
     // write_delay writes the time delay in MIDI ticks.
     void write_delay()
     {
-        //if (accum_delay)
-        {
-            vector<uint8_t> delayvec{int_to_vec(accum_delay)};
-            trackchunk.insert(trackchunk.end(), delayvec.begin(), delayvec.end());
-            total_beats += (accum_delay / global_ticks_per_quarter);
-            accum_delay = 0;
-        }
+        // Delays must occur between events even if delay is zero.
+        vector<uint8_t> delayvec{int_to_vec(accum_delay)};
+        trackchunk.insert(trackchunk.end(), delayvec.begin(), delayvec.end());
+        total_beats += (accum_delay / global_ticks_per_quarter);
+        accum_delay = 0;
     }
 
-    // 
+    //
     // shift_channel
-    // transforms a textmidi channel in (1..16) 
+    // transforms a textmidi channel in (1..16)
     // to a MIDI binary channel in (0..15).
     void shift_channel(uint32_t& channel)
     {
@@ -271,6 +271,49 @@ namespace
             = channel = (((channel > 0) ? (channel - 1) : channel) & channel_mask);
     }
 
+    uint32_t delay_and_update_total_ticks(double thenumerator,
+            double thedivisor, bool dotted, bool double_dotted)
+    {
+        // This routine handles full note rhythm value.
+        // detache adjustments are done in the client
+        // after calling this function.
+        double ticks{};
+        if (thedivisor != 0.0)
+        {
+          // Musical values are in whole notes, as a 1/4 note
+          // is 1/4 of a whole note, but MIDI specifies ticks per quarter.
+          ticks = (static_cast<double>(QuartersPerWhole) * thenumerator
+                 * static_cast<double>(global_ticks_per_quarter))
+                 / static_cast<double>(thedivisor);
+        }
+        if (dotted) // dotted notes
+        {
+            auto save_ticks{ticks};
+            // This looks backwards but
+            // We are here because we know there is a dot at the end.
+            // If there is a dot in front of it we know it was a
+            // double-dot; hence the proper lengths get added.
+            ticks += (save_ticks * DotLength);
+            if (double_dotted) // double dotted notes
+            {
+                ticks += (save_ticks * DoubleDotLength);
+            }
+        }
+        // We update total ticks with the full duration
+        // although detache might get subtracted in the caller.
+        // So global_total_track_ticks includes the detache value.
+        const auto temp_total_track_ticks = global_total_track_ticks + ticks;
+        // To address the running sums problem.
+        // Tracks were long or short due to accumulating rounding errors.
+        if ((temp_total_track_ticks - trunc(temp_total_track_ticks)) >= 0.5)
+        {
+            ticks += 0.5; // put it over the next integer value up.
+        }
+        // Now it's OK to use round().
+        ticks = round(ticks);
+        global_total_track_ticks += ticks; 
+        return ticks;
+    }
 }
 
 namespace lazy
@@ -414,7 +457,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(0);
     trackchunk.push_back(0);
     total_beats = 0;
-    total_ticks = 0;
+    global_total_track_ticks = 0.0;
     running_status = 0;
   }
 
@@ -518,7 +561,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t delay{};
     stringstream >> discard >> delay;
     accum_delay += delay;
-    total_ticks += delay;
+    global_total_track_ticks += static_cast<double>(delay);
   }
 
 <DETAIL_STATE>NOTE_ON{SOMESPACE}{INTEGER}{SOMESPACE}{PITCH_NAME}{SOMESPACE}{INTEGER} {
@@ -1047,11 +1090,12 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
 <DETAIL_STATE,LAZY_STATE>ticks{SPACE}{STRING} {
     /* Recognize ticks {string to end of line} */
-    /* This will print to the screen, the accumulated ticks at this point 
-    ** in the current track. */
+    /* This will print to the screen, the accumulated ticks at this point
+    ** in the current track for auditing purposes (such as tracks
+    ** being different lengths in ticks). */
     string ticks_str{};
     (((ticks_str += "Ticks: ")
-        += lexical_cast<string>(total_ticks)) += ' ') += yytext;
+        += lexical_cast<string>(global_total_track_ticks)) += ' ') += yytext;
     cout << ticks_str << '\n';
     {
       write_delay();
@@ -1238,7 +1282,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
              note_duration{};
     iss >> num1;
 
-    // a quarter is "4" or "1/4".  A double whole note must be "2/1".
+    // a quarter note is "4" or "1/4".  A double whole note must be "2/1".
     const size_t slashi{rhythmstr.find('/')};
     if (slashi != rhythmstr.npos)
     {
@@ -1253,39 +1297,23 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     {
       // we have a single number, which we divide into 1.0
       thedivisor = num1;
-      if (thedivisor > (global_ticks_per_quarter * 4))
+      if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
       {
         cerr << text_filename << ':' << line_ctr
-             << " A duration denominator that is > ticks_per_quarter! "
-             << thedivisor << '>' << global_ticks_per_quarter << '\n';
+             << " A duration denominator that is > ticks per whole! "
+             << thedivisor << '>' << (global_ticks_per_quarter * QuartersPerWhole) << '\n';
       }
     }
-    if (thedivisor != 0.0)
-    {
-      // The "4.0 *" is due to global_ticks_per_quarter being
-      // for a quarter note.
-      total_duration
-        = static_cast<uint32_t>(floor((4.0 * thenumerator
-        * (double)global_ticks_per_quarter) / thedivisor));
-    }
-    if ('.' == rhythmstr[rhythmstr.size() - 1]) // dotted notes
-    {
-      auto save_duration{total_duration};
-      // This looks backwards but
-      // We are here because we know there is a dot at the end.
-      // If there is a dot in front of it we know it was a
-      // double-dot; hence the proper lengths get added.
-      total_duration += (save_duration / 2);
-      if ('.' == rhythmstr[rhythmstr.size() - 2]) // double dotted notes
-      {
-        total_duration += (save_duration / 4);
-      }
-    }
+    total_duration = delay_and_update_total_ticks(thenumerator, thedivisor,
+            ('.' == rhythmstr[rhythmstr.size() - 1]),
+            ('.' == rhythmstr[rhythmstr.size() - 2]));
+    //
+    // Subtract detache, to be added back in as a "rest".
     note_duration
-        = total_duration - ((detache < total_duration) ? detache : 0);
+        = total_duration - ((static_cast<double>(detache) < total_duration) ? detache : 0);
     // write note offs for each note in the chord with 0 delays
     accum_delay += note_duration;
-    total_ticks += note_duration;
+
     for (const auto& keytie : lazy::chord)
     {
       if (!keytie.tie_out_)
@@ -1309,9 +1337,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         [](const KeyTie& kt) { return !kt.tie_out_; });
 
     lazy::chord.clear();
-    accum_delay += detache;
-    total_ticks += detache;
-    // lazy::chord.clear();
+    if (static_cast<double>(detache) < total_duration)
+    {
+        accum_delay += detache;
+    }
     BEGIN(LAZY_STATE);
   }
 
@@ -1341,34 +1370,17 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     {
       // we have a single number, which we divide into 1.0
       thedivisor = num1;
-      if (thedivisor > (global_ticks_per_quarter * 4))
+      if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
       {
         cerr << text_filename << ':' << line_ctr
-             << " A duration denominator that is > ticks_per_quarter! "
-             << thedivisor << '>' << global_ticks_per_quarter << '\n';
+             << " A duration denominator that is > ticks per whole! "
+             << thedivisor << '>' << (global_ticks_per_quarter * QuartersPerWhole) << '\n';
       }
     }
-    if (thedivisor != 0.0)
-    {
-      total_duration
-        = static_cast<uint32_t>(floor((4.0 * thenumerator
-        * (double)global_ticks_per_quarter) / thedivisor));
-    }
-    if ('.' == rhythmstr[rhythmstr.size() - 1]) // dotted notes
-    {
-      auto save_duration{total_duration};
-      // This looks backwards but
-      // We are here because we know there is a dot at the end.
-      // If there is a dot in front of it we know it was a
-      // double-dot; hence the proper lengths get added.
-      total_duration += (save_duration / 2);
-      if ('.' == rhythmstr[rhythmstr.size() - 2]) // double dotted notes
-      {
-        total_duration += (save_duration / 4);
-      }
-    }
+    total_duration = delay_and_update_total_ticks(thenumerator, thedivisor,
+            ('.' == rhythmstr[rhythmstr.size() - 1]),
+            ('.' == rhythmstr[rhythmstr.size() - 2]));
     accum_delay += total_duration;
-    total_ticks += total_duration;
   }
 
 <DETAIL_STATE,LAZY_STATE>{COMMENT} {

@@ -100,7 +100,7 @@ namespace textmidi
     constexpr std::uint8_t end_of_sysex             {0xf7};
     constexpr std::uint8_t yamaha                   {0x43};
 
-    constexpr std::uint32_t QuartersPerWhole{4};
+    constexpr std::int64_t QuartersPerWhole(4);
 
     constexpr size_t bits_per_byte{8};
 

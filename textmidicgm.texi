@@ -216,35 +216,43 @@ Use of this file format is deprecated.
 The input file: an XML file supporting more features.  If @minus{}@minus{}random is
 specified, the form's output file.
 @item -r, --random
-Make a random form, write it to the filename given with @minus{}@minus{}xmlform and exit.
-@cindex random
+Make a random form, write it to the base filename given, adding @quotedblleft{}.form.xml@quotedblright{} and exit.
+@cindex random xml_form_file_base
 @itemize
 @cindex random length
 @item The duration is 30 minutes.  The min and max note lengths
-are 0.0 to 2.0 seconds.
+are (0.0@dots{}2.0) seconds.
 @cindex random pulse
-@item The pulse is random 0.0 to to 16.0.
+@item The pulse is random in (0.0@dots{}16.0).
 @cindex random walk
-@item The melodic probabilities are random including rests,
-but the up and down probabilities are set equal.
+@item The melody probabilities are set to rest 1/8 of the time on average;
+the probabilities of walking down and repeating the same pitch are random;
+the walking up probability is set to be equal to the down probability so
+that the voice doesn't wander off to one end of its range.
 @cindex random sinusoids
-@item The form sines are all set with no effective offsets or gains,
-that is sines that range from 0.0 to 1.0.
+@item The form sines are all set with offsets and gains such that
+that the sines vary in (0.0@dots{}1.0).
 @cindex random sinusoids
 @item The form sines period is random from 1 to 6 minutes and the phase
-is random from -pi to +pi.
+is random in the range @math{(-\pi@dots{}+\pi)}.
 @cindex random scale
 @item The scale is randomly selected from diatonic, minor, whole, diminished,
 pentatonic (think Debussy), tritone (C, D, E, F, F#, G#, A#, B),
 chromatic, on any chromatic step.  The scales themselve cover the full range of
 MIDI key numbers.
 @cindex random complement
-@item The number of voices is random from 1 to 9 and 11 to 16.  Channel 10 is for idiophones.
-If idiophones are selected then the pitch range is coerced to that in the MIDI spec for 
-idiophones, and the channel is coerced to 10.
+@item The number of voices is random in (1@dots{}24).  MIDI channels (1@dots{}16)
+are used sequentially save channel 10, which General MIDI assigns to 
+idiophones; if idiophones are selected with @minus{}@minus{}instruments idiophone
+then channel 10 is used for an idiophone channel.
+Idiophones are not used unless specified by use of option 
+@minus{}@minus{}instruments idiophone, along with other instrument groups 
+if desired.
 @cindex random scale
 @item Each voice is set to use
-a random MIDI channel from 1 to 16.
+a random MIDI channel from (1@dots{}16), exclusive of 10.
+If the idiophone program is selected then the channel
+for a voice is set to 10.
 @item A voice is randomly selected to walk or skip.
 @cindex random instrument
 @item The General MIDI program is selected
@@ -253,8 +261,33 @@ The voices' ranges are limited
 by the characteristic range of the instruments
 selected, using http://en.wikipedia.org to look up the actual instruments.
 @cindex random pan
-@item The pan is set to spread the voices across
-the audio field from left to right.
+@item The pan is set to spread the channels across
+the audio field from left to right, starting from the center.
+Idiophones on channel 10 are always centered.
+We don't want other channels to be pushed over to one side.
+There are one more stereo zones than the number of channels.
+For example:
+If there is one MIDI channel, there will be two zones, 
+one on the left and one on the right, and
+the channel is centered:
+@smallexample
+(---------|---------)
+L---------C---------R
+          ^
+@end smallexample
+Two voices have 3 zones:
+@smallexample
+(------|------|-----)
+L---------C---------R
+       ^      ^
+@end smallexample
+3 voices have 4 zones:
+@smallexample
+(---|-----|-----|---)
+L---------C---------R
+    ^     ^     ^
+@end smallexample
+
 @cindex random follow
 @item No voice is set to follow another voice.
 @end itemize
@@ -344,7 +377,7 @@ The mean, or average, pitch (actually the mean MIDI key number);
 @item phase: in radians (sorry).
 @cindex phase
 Note that one full circle is two pi radians (about 6.28).
-Ninety degrees is a half Pi, about 1.5707, and so on.
+Ninety degrees is @math{\pi/2}, about 1.5707 radians, and so on.
 Phase may be negative, so the full range could be represented
 from about -3.14159 to +3.14159.
 @end itemize
@@ -437,7 +470,7 @@ pulses per second;
 @cindex pulse
 @item in the XML form file, probabilities of a walking voice rising,
 falling, or repeating the last key number;
-@cindex melodic probabilities
+@cindex melody probabilities
 @item a number of voices, each of which has the following attributes:
 @cindex voices
 @itemize
@@ -577,7 +610,7 @@ In addition, note that when the range goes beyond the actual limits
 of key number or dynamic,
 it is clipped, or truncated to the practical limit.
 Because the range sinusoid, which varies
-from -1 to 1, is defined as covering the full range,
+(0@dots{}1), is defined as covering the full range,
 this happens any time that the
 added range exceeds the peak of the mean sinusoid, or below its minimum.
 Originally the form sinusoids had periods of about 1 to 4 minutes.
@@ -694,15 +727,54 @@ then you may add or delete members of a container.
 The new format of XML Form file adds a number of items for specifying the
 form to the original text format:
 @itemize
-@item Melodic Probabilities
-@cindex melodic probabilities
+@item Melody Probabilities
+@cindex melody probabilities
 When using a random walk, the probability of walking up or down, or repeating
-the previous key number, or by implicaton, resting, can be specified.  These probabilities
-should not
-add up to more than 1.0.  If they add to less than 1.0, then the voice
-can be quiet the remaining proportion of time.
-The probability of moving up and down should be equal, or the voice will tend to
-drift in one direction and hover near either the bottom or top of the scale.
+the previous key number, or by implicaton, resting, can be specified.  
+These probabilities are cumulative and act as thresholds.
+@itemize
+@item Up:
+@b{up} is the probability of a walking voice 
+either being silent, walking down or repeating the last note; if the 
+random variable @geq{} @b{up}, then it walks up the scale;
+@item Same:
+@b{same} is the probability of a walking voice either 
+being silent or walking down.  If the random variable @geq{}
+@b{same} and < @b{up},
+then it repeats the last pitch.
+@item Down:
+@b{down} is the probability of a walking voice being 
+silent.  If the random variable @geq{}
+@b{down} but < 
+@b{same}, then it walks down; otherwise it 
+rests. 
+@item Rest:
+If the random variable < 
+@b{down}, the walking voice rests. 
+@end itemize
+@*
+@*
+@math{down = probability(resting)}
+@*
+@math{same = probability(resting) + probability(walking down)}
+@*
+@math{up   = probability(resting) + probability(walking down) + probability(repeating the last pitch)}
+@*
+Because the probabilities are cumulative, the following hold:
+@*
+@math{1.0 @geq{} up}
+@*
+@math{up @geq{} same}
+@*
+@math{same @geq{} down}
+@*
+@math{down @geq{} 0.0}
+@*
+To prevent voices from walking off to one end of their ranges, keep
+@*
+@math{up == down}.
+
+
 The original program, AlgoRhythms,
 did not provide for voices randomly resting; voices only rested because the
 current musical character's texture did not specify sufficient voices for

@@ -35,6 +35,7 @@
 #include <boost/preprocessor/stringize.hpp>
 
 #include "MusicalForm.h"
+#include "Midi.h"
 #include "GeneralMIDI.h"
 #include "MIDIKeyString.h"
 
@@ -151,19 +152,33 @@ bool cgm::MeanRangeSines::valid() const
 cgm::MelodyProbabilities::MelodyDirection
     cgm::MelodyProbabilities::operator()(double random_variable) const
 {
-    if (random_variable > up_)
+    // The probabilities are cumulative probabilities 
+    // and like thresholds.
+    // down = probability(resting)
+    // same = probability(resting) + probability(walking down)
+    // up   = probability(resting) + probability(walking down) + 
+    //        probability(repeating the last pitch)
+    //
+    // Because the probabilities are cumulative, the following holds:
+    //   0.0 >= down
+    //   down >= same
+    //   up >= 1.0
+    // To prevent voices from walking off to one end of their ranges, keep
+    //   up == down
+
+    if (random_variable >= up_)
     {
         return MelodyDirection::Up;
     }
     else
     {
-        if (random_variable > same_)
+        if (random_variable >= same_)
         {
             return MelodyDirection::Same;
         }
         else
         {
-            if (random_variable > down_)
+            if (random_variable >= down_)
             {
                 return MelodyDirection::Down;
             }
@@ -371,13 +386,20 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     // scale
     pulse_ = rd() * 16.0;
 
-    double temp_tacit{rd()};
+    // We are finding the cumulative probabilities if walking has
+    // been randomly selected.  If tacit is allowed to be random to 1.0, you can
+    // get leading voice pauses that are quite long and disconcerting,
+    // so we set it to 1/8.
+    const double temp_tacit{0.125};
     double temp_down{rd()};
     double temp_same{rd()};
+    // temp_up == temp_down so that there is an equal probability of
+    // going either up or down, and the voice won't drift off to one
+    // end of its range.
     double temp_up{temp_down};
-    double temp_sum{temp_up + temp_same + temp_tacit + temp_down};
-    double temp_factor{1.0 / temp_sum};
-    temp_tacit *= temp_factor;
+    // Scale the sum P(up)+P(same)+P(down) to 1-P(tacit)
+    const double temp_sum{temp_up + temp_same + temp_down};
+    const double temp_factor{(1.0 - temp_tacit) / temp_sum};
     temp_down  *= temp_factor;
     temp_same  *= temp_factor;
     temp_up    *= temp_factor;
@@ -419,7 +441,8 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     texture_form_.amplitude(0.5);
     texture_form_.offset(0.5);
 
-    voices_.resize(ri() % 16 + 1);
+    const int MaxRandomVoiceQty{24};
+    voices_.resize(ri() % MaxRandomVoiceQty + 1);
 
     scale_ = scale_strs[ri() % scale_strs.size()];
 
@@ -463,16 +486,21 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         }
     }
 
+    // We will count through the melodic channel numbers.
+    // (General MIDI puts idiophones on channel 10.)
+    constexpr int NumberOfNonPercussionChannels{15};
+    vector<int> melodic_channels(textmidi::MidiChannelQty);
+    iota(melodic_channels.begin(), melodic_channels.end(), 1);
+    auto mc_it{find(melodic_channels.begin(), melodic_channels.end(),
+        MidiIdiophoneChannel)};
+    if (mc_it != melodic_channels.end())
+    {
+        melodic_channels.erase(mc_it);
+    }
+
     for (auto& v : voices_)
     {
-        constexpr int NumberOfNonPercussionChannels{15};
-        // MIDI Channels in (1..9, 11..16)
-        v.channel((ri() % NumberOfNonPercussionChannels) + 1);
-        // Coerce channels above 10 (idiophones channel)
-        if (v.channel() >= IdiophoneChannel)
-        {
-            v.channel(v.channel() + 1);
-        }
+        v.channel(melodic_channels[ri() % melodic_channels.size()]);
         v.walking((ri() % 2) == 1);
 
         const auto program_index{ri() % programs.size()};
@@ -491,8 +519,49 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
             v.program(lexical_cast<string>(programs[program_index]));
         }
         v.pan((((&v - &voices_[0]) * 128) / voices_.size()) - 64);
+        // No Followers in a random form.
         v.follower(VoiceXml::Follower{});
     }
+    vector<int> channels(voices_.size());
+    transform(voices_.begin(), voices_.end(), channels.begin(), 
+           [](const VoiceXml& v) { return v.channel(); });
+    sort(channels.begin(), channels.end());
+    auto uniq_it{unique(channels.begin(), channels.end())};
+    channels.erase(uniq_it, channels.end());
+    //
+    // We don't want voices way over at one side.
+    // So we will add a stereo zone to the number of channels.
+    // For example:
+    // 1 voice has two zones, one on the left and one on the right:
+    // L---------C---------R
+    //           ^
+    // 2 voices have 3 zones:
+    // L---------C---------R
+    //        ^      ^
+    // 
+    // 3 voices have 4 zones:
+    // L---------C---------R
+    //     ^     ^     ^
+    // 
+    const int stereo_zones{channels.size() + 1};
+    const auto pan_step{(textmidi::PanExcess64 * 2) / stereo_zones};
+    const auto first_pan{pan_step - textmidi::PanExcess64};
+    map<int, int> channel_to_pan;
+    int pan(first_pan);
+    for (auto ch : channels)
+    {
+        channel_to_pan[ch] = pan; 
+        pan += pan_step;
+
+    }
+    for (auto& v : voices_)
+    {
+        v.pan(channel_to_pan[v.channel()]);
+    }
+
+    // Coerce idiophones to be pan-centered.
+    // It doesn't matter whether it's already in the map.
+    channel_to_pan[10] = 0;
     // truncate scale to not exceed the instrument ranges.
     // The scales provided are monotonically increasing but
     // user-edited forms may have non-monotonic scales.

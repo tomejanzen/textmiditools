@@ -1,3 +1,20 @@
+2021-09-02    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
+        Add comments describing Melody Probabilities as cumulative.  Increase the 
+        possible number of voices in a random form to 24.
+        * textmidicgm.texi:  Correct description of melody probabilities and update
+        description of randomized melody probabilities (using the --random option).
+
+2021-09-01    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
+        to spread for near the left to near the right.  The symptom was that
+        idiophone-only random forms were bunching up the instruments way over 
+        on the right.  Now a single channel score should put them in the center
+        although the percussion instruments in TiMidity++ seem to be panned 
+        stereo samples, so channel 10 is always centered.
+
 2021-08-31    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
 
 	* Composer.cc: Remove the kluge that put a quiet note at the beginning of the

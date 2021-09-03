@@ -11,3 +11,10 @@
       textmidicgm --random, the rhythms were very unusual
       and reveal a time-counting issue in the note-event
       generating loop in Composer.cc.
+    * Version 1.0.4
+      Update documentation for texmidicgm.
+      Random forms now have a set .125 probability of silence,
+      for walking voices.
+      Panning for random forms has been fixed so that
+      if there is only one channel it won't land on the
+      far right of the audio field.

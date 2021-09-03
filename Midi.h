@@ -21,6 +21,7 @@ namespace textmidi
     typedef std::vector<uint8_t> MidiStreamVector;
     constexpr int MidiPitchQty{128};
     constexpr int MidiChannelQty{16};
+    constexpr int MidiIdiophoneChannel{10};
     constexpr std::int32_t PanExcess64{64};
     constexpr std::uint32_t variable_len_word_mask{0xfffffff};
 

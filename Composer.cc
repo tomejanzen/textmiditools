@@ -254,146 +254,145 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                     MusicalCharacter musical_character{};
                     xml_form.character_now(track.the_next_time(), musical_character);
 
+
+                    double dynamicd{(musical_character.dynamic_range
+                                   * random_double())
+                      - (musical_character.dynamic_range / 2.0)
+                      +  musical_character.dynamic_mean};
+                    int dynamic{static_cast<int>(round(dynamicd))};
+
+                    dynamic = min(dynamic, 127);
+                    dynamic = max(dynamic, 0);
+
+                    double rhythmd
+                        {musical_character.duration(random_double())};
+                    auto rhythm{duration_to_rhythm(rhythmd)};
+
+                    // Now apply the pulse.
+                    // pulse is in pulses per second.
+                    if (xml_form.pulse() != 0)
                     {
-                        double dynamicd{(musical_character.dynamic_range
-                                       * random_double())
-                          - (musical_character.dynamic_range / 2.0)
-                          +  musical_character.dynamic_mean};
-                        int dynamic{static_cast<int>(round(dynamicd))};
+                        rhythm = snap_to_pulse(rhythm, xml_form.pulse());
+                    }
+                    const double rhythm_double{
+                          static_cast<double>(rhythm.numerator())
+                        / static_cast<double>(rhythm.denominator())};
+                    const MusicalRhythm wholes_per_second{
+                        TempoBeatsPerMinute * WholesPerBeat
+                            / SecondsPerMinute};
+                    const MusicalRhythm TicksPerSecond{
+                        TicksPerQuarter * QuartersPerWhole
+                                        * wholes_per_second};
+                    // wholes   Ticks    second
+                    // ------ * ------ * ------
+                    // note     Second   wholes
+                    auto rhythmtdrational{rhythm * TicksPerSecond
+                        / wholes_per_second};
+                    TicksDuration rhythmtd{
+                        ( rhythmtdrational.numerator()
+                        + rhythmtdrational.denominator() / 2)
+                        / rhythmtdrational.denominator()};
+                    track.the_last_time(track.the_next_time());
+                    track.the_next_time(track.the_next_time() + rhythmtd);
 
-                        dynamic = min(dynamic, 127);
-                        dynamic = max(dynamic, 0);
+                    int pitch_index{0};
 
-                        double rhythmd
-                            {musical_character.duration(random_double())};
-                        auto rhythm{duration_to_rhythm(rhythmd)};
-
-                        // Now apply the pulse.
-                        // pulse is in pulses per second.
-                        if (xml_form.pulse() != 0)
+                    MelodyProbabilities::MelodyDirection
+                        direction{xml_form.melody_probabilities()
+                        (random_double())};
+                    if (xml_form.voices()[tr].walking())
+                    {
+                        switch (direction)
                         {
-                            rhythm = snap_to_pulse(rhythm, xml_form.pulse());
-                        }
-                        const double rhythm_double{
-                              static_cast<double>(rhythm.numerator())
-                            / static_cast<double>(rhythm.denominator())};
-                        const MusicalRhythm wholes_per_second{
-                            TempoBeatsPerMinute * WholesPerBeat
-                                / SecondsPerMinute};
-                        const MusicalRhythm TicksPerSecond{
-                            TicksPerQuarter * QuartersPerWhole
-                                            * wholes_per_second};
-                        // wholes   Ticks    second
-                        // ------ * ------ * ------
-                        // note     Second   wholes
-                        auto rhythmtdrational{rhythm * TicksPerSecond
-                            / wholes_per_second};
-                        TicksDuration rhythmtd{
-                            ( rhythmtdrational.numerator()
-                            + rhythmtdrational.denominator() / 2)
-                            / rhythmtdrational.denominator()};
-                        track.the_last_time(track.the_next_time());
-                        track.the_next_time(track.the_next_time() + rhythmtd);
-
-                        int pitch_index{0};
-
-                        MelodyProbabilities::MelodyDirection
-                            direction{xml_form.melody_probabilities()
-                            (random_double())};
-                        if (xml_form.voices()[tr].walking())
-                        {
-                            switch (direction)
-                            {
-                                case MelodyProbabilities::MelodyDirection::Up:
-                                    if (track.last_pitch_index()
-                                        < (xml_form.scale().size() - 1))
-                                    {
-                                        pitch_index
-                                            = track.last_pitch_index() + 1;
-                                    }
-                                    else
-                                    {
-                                        pitch_index = track.last_pitch_index();
-                                    }
-                                    break;
-                                case MelodyProbabilities::MelodyDirection::Same:
+                            case MelodyProbabilities::MelodyDirection::Up:
+                                if (track.last_pitch_index()
+                                    < (xml_form.scale().size() - 1))
+                                {
+                                    pitch_index
+                                        = track.last_pitch_index() + 1;
+                                }
+                                else
+                                {
                                     pitch_index = track.last_pitch_index();
-                                    break;
-                                case MelodyProbabilities::MelodyDirection::Down:
-                                    if (track.last_pitch_index() > 0)
-                                    {
-                                        pitch_index = track.last_pitch_index()
-                                                    - 1;
-                                    }
-                                    else
-                                    {
-                                        pitch_index = track.last_pitch_index();
-                                    }
-                                    break;
-                                case MelodyProbabilities::MelodyDirection::Rest:
-                                    pitch_index = RestPitchIndex;
-                                    break;
-                            }
+                                }
+                                break;
+                            case MelodyProbabilities::MelodyDirection::Same:
+                                pitch_index = track.last_pitch_index();
+                                break;
+                            case MelodyProbabilities::MelodyDirection::Down:
+                                if (track.last_pitch_index() > 0)
+                                {
+                                    pitch_index = track.last_pitch_index()
+                                                - 1;
+                                }
+                                else
+                                {
+                                    pitch_index = track.last_pitch_index();
+                                }
+                                break;
+                            case MelodyProbabilities::MelodyDirection::Rest:
+                                pitch_index = RestPitchIndex;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        if (direction
+                            != MelodyProbabilities::MelodyDirection::Rest)
+                        {
+                            pitch_index
+                                = musical_character.pitch_index
+                                (random_double());
                         }
                         else
                         {
-                            if (direction
-                                != MelodyProbabilities::MelodyDirection::Rest)
-                            {
-                                pitch_index
-                                    = musical_character.pitch_index
-                                    (random_double());
-                            }
-                            else
-                            {
-                                pitch_index = RestPitchIndex;
-                            }
+                            pitch_index = RestPitchIndex;
                         }
+                    }
 
-                        // coerce to be on scale
-                        if ((pitch_index != RestPitchIndex)
-                            && (pitch_index
-                                >= static_cast<int>(xml_form.scale().size())))
+                    // coerce to be on scale
+                    if ((pitch_index != RestPitchIndex)
+                        && (pitch_index
+                            >= static_cast<int>(xml_form.scale().size())))
+                    {
+                        // This is probably why it keeps banging
+                        // on the top of the scale.
+                        // Alternatively it could be changed to a rest.
+                        pitch_index = xml_form.scale().size() - 1;
+                    }
+                    // Same pitch index as the last pitch index
+                    if (pitch_index != RestPitchIndex)
+                    {
+                        track.last_pitch_index(pitch_index);
+                    }
+
+                    if ((pitch_index != RestPitchIndex)
+                        && (tr <= musical_character.texture_range))
+                    {
+                        auto key_number(key_scale[pitch_index]);
+                        key_number = max(key_number, tessitura[tr].first);
+                        key_number = min(key_number, tessitura[tr].second);
+                        int key_index{0U};
                         {
-                            // This is probably why it keeps banging
-                            // on the top of the scale.
-                            // Alternatively it could be changed to a rest.
-                            pitch_index = xml_form.scale().size() - 1;
+                            auto key_iter{find(key_scale.begin(),
+                                key_scale.end(), key_number)};
+                            if (key_iter != key_scale.end())
+                            {
+                                key_index = std::distance(key_scale.begin(),
+                                            key_iter);
+                            }
                         }
-                        // Same pitch index as the last pitch index
                         if (pitch_index != RestPitchIndex)
                         {
-                            track.last_pitch_index(pitch_index);
+                            track.last_pitch_index(key_index);
                         }
-
-                        if ((pitch_index != RestPitchIndex)
-                            && (tr <= musical_character.texture_range))
-                        {
-                            auto key_number(key_scale[pitch_index]);
-                            key_number = max(key_number, tessitura[tr].first);
-                            key_number = min(key_number, tessitura[tr].second);
-                            int key_index{0U};
-                            {
-                                auto key_iter{find(key_scale.begin(),
-                                    key_scale.end(), key_number)};
-                                if (key_iter != key_scale.end())
-                                {
-                                    key_index = std::distance(key_scale.begin(),
-                                                key_iter);
-                                }
-                            }
-                            if (pitch_index != RestPitchIndex)
-                            {
-                                track.last_pitch_index(key_index);
-                            }
-                            NoteEvent temp_note_event{key_number,
-                                dynamic, rhythm_double, rhythm};
-                            track_note_events[i].push_back(temp_note_event);
-                        } else {
-                            NoteEvent temp_note_event{RestPitch, 0,
-                                rhythm_double, rhythm};
-                            track_note_events[i].push_back(temp_note_event);
-                        }
+                        NoteEvent temp_note_event{key_number,
+                            dynamic, rhythm_double, rhythm};
+                        track_note_events[i].push_back(temp_note_event);
+                    } else {
+                        NoteEvent temp_note_event{RestPitch, 0,
+                            rhythm_double, rhythm};
+                        track_note_events[i].push_back(temp_note_event);
                     }
                 }
             }

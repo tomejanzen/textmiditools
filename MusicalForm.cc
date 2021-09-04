@@ -503,22 +503,6 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         v.channel(melodic_channels[ri() % melodic_channels.size()]);
         v.walking((ri() % 2) == 1);
 
-        const auto program_index{ri() % programs.size()};
-        v.low_pitch(midi_programs[programs[program_index]].range_.first);
-        v.high_pitch(midi_programs[programs[program_index]].range_.second);
-        // If idiophones were selected, then coerce channel to 10.
-        if (129 == programs[program_index])
-        {
-            v.program(lexical_cast<string>(1));
-            v.channel(IdiophoneChannel);
-            v.low_pitch(IdiophoneRange.first);
-            v.high_pitch(IdiophoneRange.second);
-        }
-        else
-        {
-            v.program(lexical_cast<string>(programs[program_index]));
-        }
-        v.pan((((&v - &voices_[0]) * 128) / voices_.size()) - 64);
         // No Followers in a random form.
         v.follower(VoiceXml::Follower{});
     }
@@ -559,6 +543,29 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         v.pan(channel_to_pan[v.channel()]);
     }
 
+    map<int, int> channel_to_program;
+    for (auto ch : channels)
+    {
+        channel_to_program[ch] = programs[ri() % programs.size()];
+    }  
+    for (auto& v : voices_)
+    {
+        const auto program{channel_to_program[v.channel()]};
+        v.low_pitch(midi_programs[program].range_.first);
+        v.high_pitch(midi_programs[program].range_.second);
+        // If idiophones were selected, then coerce channel to 10.
+        if (IdiophoneMarker == program)
+        {
+            v.program(lexical_cast<string>(1));
+            v.channel(IdiophoneChannel);
+            v.low_pitch(IdiophoneRange.first);
+            v.high_pitch(IdiophoneRange.second);
+        }
+        else
+        {
+            v.program(lexical_cast<string>(program));
+        }
+    }
     // Coerce idiophones to be pan-centered.
     // It doesn't matter whether it's already in the map.
     channel_to_pan[10] = 0;
@@ -569,7 +576,9 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     // Find the maximum instrument range note.
     CompareLowerNoteName lower_note{};
     const auto min_instrument_range = *min_element(voices_.begin(), voices_.end(),
-        [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.low_pitch(), vright.low_pitch()); }) ;
+        [lower_note](const VoiceXml& vleft, 
+        const VoiceXml& vright){ return lower_note(vleft.low_pitch(), 
+        vright.low_pitch()); }) ;
     const auto max_instrument_range = *max_element(voices_.begin(), voices_.end(),
         [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.high_pitch(), vright.high_pitch()); }) ;
     auto erase_iter{remove_if(scale_.begin(), scale_.end(),

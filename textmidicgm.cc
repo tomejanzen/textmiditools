@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
                 auto random_filename{var_map[RandomOpt].as<string>()};
 
                 int32_t instrument_flags{static_cast<int>(0)};
-#if 1
+
                 if (var_map.count(InstrumentsOpt))
                 {
                     vector<string> instruments{var_map[InstrumentsOpt].as<vector<string>>()};
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
                 {
                     instrument_flags = static_cast<int>(GeneralMIDIGroup::Melodic);
                 }
-#endif
+
                 MusicalForm xml_form{};
                 xml_form.random(random_filename, instrument_flags);
                 {

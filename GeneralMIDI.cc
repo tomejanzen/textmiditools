@@ -43,8 +43,12 @@ std::map<std::string_view, cgm::GeneralMIDIGroup> cgm::program_group_map
 
 const MIDI_Program cgm::midi_programs[] =
 {
-    // Piano
+    // This is used as a 1-based sequence.
+    // MIDI refers to channels and programs in a unit (1)-based way.
+    // However elsewhere in this package channel and program are
+    // 0-based until they are written to a binary MIDI file.
     { 0, "Dummy",                           {"A0",  "C8"}},
+    // Piano
     { 1, "Acoustic Grand Piano",            {"A0",  "C8"}},
     { 2, "Bright Acoustic Piano",           {"A0",  "C8"}},
     { 3, "Electric Grand Piano",            {"E1",  "E7"}},

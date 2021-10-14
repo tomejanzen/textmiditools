@@ -18,3 +18,14 @@
       Panning for random forms has been fixed so that
       if there is only one channel it won't land on the
       far right of the audio field.
+    * Version 1.0.5
+      Fix bug of random forms getting different program
+      assignments on different voices that have the same
+      MIDI channel.   There must be a (single-valued relation) 
+      function from MIDI channel to program.
+    * Version 1.0.6
+      Add textmidiformedit.py and its associated python files,
+      to make it possible to graphically edit musical forms
+      for use by textmidicgm to compose random music.
+      Also added previously omitted B's from the chromatic
+      scale in textmidicgm for making random forms.

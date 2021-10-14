@@ -6,15 +6,15 @@ smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc
 textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc
 
 textmidi_LDADD = @LEXLIB@
-info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi
+info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
 
 AM_LDFLAGS = -lboost_program_options -lboost_system -lboost_serialization 
-CXX = /usr/bin/g++
+CXX = /usr/bin/env g++
 AM_CXXFLAGS  = -std=c++20 -Wall -Wextra -Weffc++ -g
 AM_CXXFLAGS += -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i
-LEX=/usr/bin/lex
+LEX=/usr/bin/env lex
 
 all : ${bin_PROGRAMS}
 
@@ -73,10 +73,10 @@ install:
 	$(INSTALL_PROGRAM) smustextmidi$(EXEEXT) $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) textmidicgm$(EXEEXT) $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
 uninstall:
-	/bin/rm -f $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
-	/bin/rm -f $(DESTDIR)$(bindir)/miditext$(EXEEXT)
-	/bin/rm -f $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
-	/bin/rm -f $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/miditext$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
 install-strip:
 	$(MAKE) $(INSTALL_PROGRAM) = '$(INSTALL_PROGRAM) -s' install
 distclean : clean
@@ -93,4 +93,6 @@ smustextmidi.info: smustextmidi.texi
 	$(MAKEINFO) smustextmidi.texi
 textmidicgm.info: textmidicgm.texi
 	$(MAKEINFO) textmidicgm.texi
+textmidiformedit.info: textmidiformedit.texi
+	$(MAKEINFO) textmidiformedit.texi
 

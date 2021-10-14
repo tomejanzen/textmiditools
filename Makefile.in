@@ -210,14 +210,19 @@ am__v_texidevnull_ = $(am__v_texidevnull_@AM_DEFAULT_V@)
 am__v_texidevnull_0 = > /dev/null
 am__v_texidevnull_1 = 
 INFO_DEPS = $(srcdir)/textmidi.info $(srcdir)/miditext.info \
-	$(srcdir)/smustextmidi.info $(srcdir)/textmidicgm.info
+	$(srcdir)/smustextmidi.info $(srcdir)/textmidicgm.info \
+	$(srcdir)/textmidiformedit.info
 am__TEXINFO_TEX_DIR = $(srcdir)
-DVIS = textmidi.dvi miditext.dvi smustextmidi.dvi textmidicgm.dvi
-PDFS = textmidi.pdf miditext.pdf smustextmidi.pdf textmidicgm.pdf
-PSS = textmidi.ps miditext.ps smustextmidi.ps textmidicgm.ps
-HTMLS = textmidi.html miditext.html smustextmidi.html textmidicgm.html
+DVIS = textmidi.dvi miditext.dvi smustextmidi.dvi textmidicgm.dvi \
+	textmidiformedit.dvi
+PDFS = textmidi.pdf miditext.pdf smustextmidi.pdf textmidicgm.pdf \
+	textmidiformedit.pdf
+PSS = textmidi.ps miditext.ps smustextmidi.ps textmidicgm.ps \
+	textmidiformedit.ps
+HTMLS = textmidi.html miditext.html smustextmidi.html textmidicgm.html \
+	textmidiformedit.html
 TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi \
-	textmidicgm.texi
+	textmidicgm.texi textmidiformedit.texi
 TEXI2DVI = texi2dvi
 TEXI2PDF = $(TEXI2DVI) --pdf --batch
 MAKEINFOHTML = $(MAKEINFO) --html
@@ -311,7 +316,7 @@ CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
-CXX = /usr/bin/g++
+CXX = /usr/bin/env g++
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -397,12 +402,12 @@ miditext_SOURCES = miditext.cc Midi.cc MidiMessages.cc MIDIKeyString.cc
 smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc
 textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc
 textmidi_LDADD = @LEXLIB@
-info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi
+info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
 AM_LDFLAGS = -lboost_program_options -lboost_system -lboost_serialization 
 AM_CXXFLAGS = -std=c++20 -Wall -Wextra -Weffc++ -g -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i
-LEX = /usr/bin/lex
+LEX = /usr/bin/env lex
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -620,6 +625,10 @@ $(srcdir)/textmidicgm.info: textmidicgm.texi
 textmidicgm.dvi: textmidicgm.texi 
 textmidicgm.pdf: textmidicgm.texi 
 textmidicgm.html: textmidicgm.texi 
+$(srcdir)/textmidiformedit.info: textmidiformedit.texi 
+textmidiformedit.dvi: textmidiformedit.texi 
+textmidiformedit.pdf: textmidiformedit.texi 
+textmidiformedit.html: textmidiformedit.texi 
 .dvi.ps:
 	$(AM_V_DVIPS)TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	$(DVIPS) $(AM_V_texinfo) -o $@ $<
@@ -703,19 +712,21 @@ dist-info: $(INFO_DEPS)
 mostlyclean-aminfo:
 	-rm -rf textmidi.t2d textmidi.t2p miditext.t2d miditext.t2p \
 	  smustextmidi.t2d smustextmidi.t2p textmidicgm.t2d \
-	  textmidicgm.t2p
+	  textmidicgm.t2p textmidiformedit.t2d textmidiformedit.t2p
 
 clean-aminfo:
 	-test -z "textmidi.dvi textmidi.pdf textmidi.ps textmidi.html miditext.dvi \
 	  miditext.pdf miditext.ps miditext.html smustextmidi.dvi \
 	  smustextmidi.pdf smustextmidi.ps smustextmidi.html \
 	  textmidicgm.dvi textmidicgm.pdf textmidicgm.ps \
-	  textmidicgm.html" \
+	  textmidicgm.html textmidiformedit.dvi textmidiformedit.pdf \
+	  textmidiformedit.ps textmidiformedit.html" \
 	|| rm -rf textmidi.dvi textmidi.pdf textmidi.ps textmidi.html miditext.dvi \
 	  miditext.pdf miditext.ps miditext.html smustextmidi.dvi \
 	  smustextmidi.pdf smustextmidi.ps smustextmidi.html \
 	  textmidicgm.dvi textmidicgm.pdf textmidicgm.ps \
-	  textmidicgm.html
+	  textmidicgm.html textmidiformedit.dvi textmidiformedit.pdf \
+	  textmidiformedit.ps textmidiformedit.html
 
 maintainer-clean-aminfo:
 	@list='$(INFO_DEPS)'; for i in $$list; do \
@@ -1218,10 +1229,10 @@ install:
 	$(INSTALL_PROGRAM) smustextmidi$(EXEEXT) $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) textmidicgm$(EXEEXT) $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
 uninstall:
-	/bin/rm -f $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
-	/bin/rm -f $(DESTDIR)$(bindir)/miditext$(EXEEXT)
-	/bin/rm -f $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
-	/bin/rm -f $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/miditext$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
+	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
 install-strip:
 	$(MAKE) $(INSTALL_PROGRAM) = '$(INSTALL_PROGRAM) -s' install
 distclean : clean
@@ -1238,6 +1249,8 @@ smustextmidi.info: smustextmidi.texi
 	$(MAKEINFO) smustextmidi.texi
 textmidicgm.info: textmidicgm.texi
 	$(MAKEINFO) textmidicgm.texi
+textmidiformedit.info: textmidiformedit.texi
+	$(MAKEINFO) textmidiformedit.texi
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

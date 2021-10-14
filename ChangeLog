@@ -1,3 +1,21 @@
+2021-10-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+        * Scales.cc: Added the "Bs" to the Chromatic scale by textmidicgm.
+        * Makefile.am, fixtempo.pl: Use /usr/bin/env instead of full paths for utilities.
+        * textmidiformedit.texi: added documentation
+        * textmidiformedit.py: added
+        * allforms.py: added
+        * form.py: added
+        * sine.py: added
+        * voice.py: added
+
+2021-09-03    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+	* MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
+        with the same channel won't set different programs.  This creates functions
+        or single-valued relations: track->channel; channel->program.  These are
+        in addition to the function channel->pan.
+
 2021-09-02    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
 
 	* MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.

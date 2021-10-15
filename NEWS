@@ -29,3 +29,6 @@
       for use by textmidicgm to compose random music.
       Also added previously omitted B's from the chromatic
       scale in textmidicgm for making random forms.
+    * Version 1.0.7
+      Fix form plot's unside-down mean curves, and add a 
+      Postscript menu item.

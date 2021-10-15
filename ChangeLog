@@ -1,3 +1,9 @@
+2021-10-14    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+        * textmidiformedit.py: Fix mean curve inversion due to left-handed plotting 
+        coordinates; add a save-postscript menu item; draw curves using create_polygon
+        rather than create_line.
+
 2021-10-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
 
         * Scales.cc: Added the "Bs" to the Chromatic scale by textmidicgm.

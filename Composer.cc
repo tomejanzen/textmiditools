@@ -161,7 +161,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
     // Make a square matrix of false.
     vector<vector<bool>> followers_graph(tracks.size(), vector<bool>(tracks.size(), false));
 
-    for (int tr{}; Track& track : tracks)
+    for (int tr{}; tr < tracks.size(); ++tr)
     {
         if (xml_form.voices()[tr].follower().follow_) [[unlikely]]
         {
@@ -175,7 +175,6 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                 }
             }
         }
-        ++tr;
     }
 #undef PRINT
 #if defined(PRINT)
@@ -526,7 +525,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
     textmidi_file << "ticks \"End of Track\"\n";
     textmidi_file << "END_OF_TRACK\n";
 
-    for (int track_index{}; auto& trackIter : tracks)
+    for (int track_index{}; track_index < tracks.size(); ++track_index)
     {
         textmidi_file << "STARTTRACK\n"
                       << "TRACK " << track_index << "\n"
@@ -554,7 +553,6 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
         }
         textmidi_file << "ticks \"End of Track\"\n";
         textmidi_file << "END_LAZY\nEND_OF_TRACK\n";
-        ++track_index;
     }
 }
 

@@ -154,11 +154,11 @@ bool cgm::MeanRangeSines::valid() const
 cgm::MelodyProbabilities::MelodyDirection
     cgm::MelodyProbabilities::operator()(double random_variable) const
 {
-    // The probabilities are cumulative probabilities 
+    // The probabilities are cumulative probabilities
     // and like thresholds.
     // down = probability(resting)
     // same = probability(resting) + probability(walking down)
-    // up   = probability(resting) + probability(walking down) + 
+    // up   = probability(resting) + probability(walking down) +
     //        probability(repeating the last pitch)
     //
     // Because the probabilities are cumulative, the following holds:
@@ -490,7 +490,6 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
 
     // We will count through the melodic channel numbers.
     // (General MIDI puts idiophones on channel 10.)
-    constexpr int NumberOfNonPercussionChannels{15};
     vector<int> melodic_channels(textmidi::MidiChannelQty);
     iota(melodic_channels.begin(), melodic_channels.end(), 1);
     auto mc_it{find(melodic_channels.begin(), melodic_channels.end(),
@@ -509,7 +508,7 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         v.follower(VoiceXml::Follower{});
     }
     vector<int> channels(voices_.size());
-    transform(voices_.begin(), voices_.end(), channels.begin(), 
+    transform(voices_.begin(), voices_.end(), channels.begin(),
            [](const VoiceXml& v) { return v.channel(); });
     sort(channels.begin(), channels.end());
     auto uniq_it{unique(channels.begin(), channels.end())};
@@ -524,19 +523,19 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     // 2 voices have 3 zones:
     // L---------C---------R
     //        ^      ^
-    // 
+    //
     // 3 voices have 4 zones:
     // L---------C---------R
     //     ^     ^     ^
-    // 
-    const int stereo_zones{channels.size() + 1};
+    //
+    const int stereo_zones{static_cast<int>(channels.size() + 1)};
     const auto pan_step{(textmidi::PanExcess64 * 2) / stereo_zones};
     const auto first_pan{pan_step - textmidi::PanExcess64};
     map<int, int> channel_to_pan;
     int pan(first_pan);
     for (auto ch : channels)
     {
-        channel_to_pan[ch] = pan; 
+        channel_to_pan[ch] = pan;
         pan += pan_step;
 
     }
@@ -549,7 +548,7 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     for (auto ch : channels)
     {
         channel_to_program[ch] = programs[ri() % programs.size()];
-    }  
+    }
     for (auto& v : voices_)
     {
         const auto program{channel_to_program[v.channel()]};
@@ -578,15 +577,15 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     // Find the maximum instrument range note.
     CompareLowerNoteName lower_note{};
     const auto min_instrument_range = *min_element(voices_.begin(), voices_.end(),
-        [lower_note](const VoiceXml& vleft, 
-        const VoiceXml& vright){ return lower_note(vleft.low_pitch(), 
-        vright.low_pitch()); }) ;
+        [lower_note](const VoiceXml& vleft,
+        const VoiceXml& vright){ return lower_note(vleft.low_pitch(),
+        vright.low_pitch()); });
     const auto max_instrument_range = *max_element(voices_.begin(), voices_.end(),
-        [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.high_pitch(), vright.high_pitch()); }) ;
+        [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.high_pitch(), vright.high_pitch()); });
     auto erase_iter{remove_if(scale_.begin(), scale_.end(),
         [max_instrument_range, min_instrument_range, lower_note](const string& scale_pitch){
         return lower_note(scale_pitch, min_instrument_range.low_pitch())
-            || lower_note(max_instrument_range.high_pitch(), scale_pitch) ; })};
+            || lower_note(max_instrument_range.high_pitch(), scale_pitch); })};
     scale_.erase(erase_iter, scale_.end());
     // scale_ should now just cover the maximum extent of the instruments' ranges.
 }
@@ -633,6 +632,23 @@ bool cgm::MusicalForm::valid() const
         throw MusicalFormException{mfe.what() + " Invalid texture form.\n"};
     }
     return rtn;
+}
+
+void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
+{
+    if (!voices_.empty())
+    {
+        const auto voice_min_note{min_element(voices_.begin(), voices_.end(),
+            [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
+            { return CompareLowerNoteName()(v1.low_pitch(), v2.low_pitch());})->low_pitch()};
+        const auto voice_max_note{max_element(voices_.begin(), voices_.end(),
+            [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
+            { return CompareLowerNoteName()(v1.high_pitch(), v2.high_pitch());})->high_pitch()};
+        scale_.erase(remove_if(scale_.begin(), scale_.end(),
+            [voice_min_note, voice_max_note](const string& note_name)
+            { return CompareLowerNoteName()(note_name, voice_min_note)
+            || CompareLowerNoteName()(voice_max_note, note_name); }), scale_.end());
+    }
 }
 
 RandomDouble cgm::rd{};

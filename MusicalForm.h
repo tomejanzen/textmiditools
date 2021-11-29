@@ -286,6 +286,7 @@ namespace cgm
                 MusicalCharacter& musical_character) const;
         void random(std::string formname = "random", std::int32_t instrument_flags = static_cast<std::int32_t>(GeneralMIDIGroup::Melodic));
         bool valid() const;
+        void clamp_scale_to_instrument_ranges();
       private:
         std::string name_;
         double len_;

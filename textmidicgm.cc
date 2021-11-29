@@ -118,6 +118,8 @@ namespace {
         "chromaticpercussion organ guitar bass strings ensemble brass reed pipe "
         "synthlead synthpad syntheffects ethnic percussive soundeffects all "
         "melodic idiophone"};
+    const string ClampScaleOpt{"clampscale"};
+    constexpr char ClampScaleTxt[]{"in each form, clamp the scale to the union of the voice ranges"};
 }
 
 int main(int argc, char *argv[])
@@ -134,6 +136,7 @@ int main(int argc, char *argv[])
         ((GnuplotOpt     + ",g").c_str(), GnuplotTxt)
         ((RandomOpt      + ",r").c_str(), program_options::value<string>(), RandomTxt)
         ((InstrumentsOpt + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
+        ((ClampScaleOpt  + ",c").c_str(), ClampScaleTxt)
     ;
     program_options::variables_map var_map;
     try
@@ -181,11 +184,6 @@ int main(int argc, char *argv[])
         verbose = true;
     }
 
-    string form_filename;
-    vector<string> form_filenames;
-
-    TextForm form;
-    vector<MusicalForm> xml_forms;
 
     string form_filename_glob;
     if (var_map.count(FormOpt))
@@ -238,7 +236,7 @@ int main(int argc, char *argv[])
                     }
                     if (verbose)
                     {
-                        cout << "Wrote " << form_filename << '\n';
+                        cout << "Wrote " << random_filename << '\n';
                     }
                 }
                 exit(EXIT_SUCCESS);
@@ -256,6 +254,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+    vector<string> form_filenames;
     if (var_map.count(FormOpt) || var_map.count(XML_FormOpt))
     {
         GlobStatusMap globStatusMap
@@ -293,10 +292,12 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
+    vector<MusicalForm> xml_forms;
     if (var_map.count(FormOpt))
     {
         for (const auto& form_filename_temp : form_filenames)
         {
+            TextForm form;
             form.read_from_file(form_filename_temp);
             xml_forms.push_back(MusicalForm(form_filename_temp, form));
         }
@@ -410,8 +411,12 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (const auto& xml_form : xml_forms)
+    for (auto& xml_form : xml_forms)
     {
+        if (var_map.count(ClampScaleOpt))
+        {
+            xml_form.clamp_scale_to_instrument_ranges();
+        }
         //
         // write the textmidi file, which can be translated by textmidi.
         //

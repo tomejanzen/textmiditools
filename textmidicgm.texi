@@ -201,8 +201,12 @@ textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
 @b{@minus{}x}|@b{@minus{}@minus{}xmlform} @var{xml_form_file}
 [@b{@minus{}r}|@b{@minus{}@minus{}random}]
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}]
-[@b{@minus{}i}|@b{@minus{}@minus{}instruments} @lbracechar{}piano chromaticpercussion organ guitar bass strings ensemble brass reed pipe synthlead synthpad syntheffects ethnic percussive soundeffects all melodic idiophone...@rbracechar{}]
-[@b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{output textmidi file}] [@b{@minus{}g}|@b{@minus{}@minus{}gnuplot}] [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
+[@b{@minus{}i}|@b{@minus{}@minus{}instruments} @lbracechar{}piano chromaticpercussion organ guitar bass strings ensemble brass
+reed pipe synthlead synthpad syntheffects ethnic percussive soundeffects
+all melodic idiophone...@rbracechar{}]
+[@b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{output textmidi file}] [@b{@minus{}g}|@b{@minus{}@minus{}gnuplot}]
+[@b{@minus{}c}|@b{@minus{}@minus{}clampscale}]
+[@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 @end smallexample
 
 @table @option
@@ -242,11 +246,11 @@ chromatic, on any chromatic step.  The scales themselve cover the full range of
 MIDI key numbers.
 @cindex random complement
 @item The number of voices is random in (1@dots{}24).  MIDI channels (1@dots{}16)
-are used sequentially save channel 10, which General MIDI assigns to 
+are used sequentially save channel 10, which General MIDI assigns to
 idiophones; if idiophones are selected with @minus{}@minus{}instruments idiophone
 then channel 10 is used for an idiophone channel.
-Idiophones are not used unless specified by use of option 
-@minus{}@minus{}instruments idiophone, along with other instrument groups 
+Idiophones are not used unless specified by use of option
+@minus{}@minus{}instruments idiophone, along with other instrument groups
 if desired.
 @cindex random scale
 @item Each voice is set to use
@@ -267,7 +271,7 @@ Idiophones on channel 10 are always centered.
 We don't want other channels to be pushed over to one side.
 There are one more stereo zones than the number of channels.
 For example:
-If there is one MIDI channel, there will be two zones, 
+If there is one MIDI channel, there will be two zones,
 one on the left and one on the right, and
 the channel is centered:
 @smallexample
@@ -306,6 +310,16 @@ The output file, in textmidi text language.
 @item -g, --gnuplot
 @cindex gnuplot
 Output a file of gnuplot data.
+@item -c, --clampscale
+Trims the scale to remove low notes below the lowest low pitch in the voices,
+and to remove high notes above the highest high pitch in the voices.
+The scale will still cover the union of ranges of all of the voices.
+The purpose of this is to avoid an effect in which the pitch curve is, say, 
+low, and the voice just bangs away at the voice's lowest note for a long time
+without moving at all until such time as the pitch curve starts to edge up
+above that low pitch for the voice.  Because it is not a per-voice adjustment
+it is not a complete solution, but is coherent with the original technique.
+This option does not assume an rising-ordered scale.
 @item -v, --verbose
 @cindex verbose
 Write some informative messages to the screen.  Errors are printed
@@ -569,9 +583,9 @@ The range sinusoid is used to spread out the mean.
 The mean sinusoid:
 
 @example
-   **     
- *    *   
-*      *  
+   **    
+ *    *  
+*      * 
         *      *
          *    *
            **
@@ -581,22 +595,22 @@ The range sinusoid:
 The lowest values of the range wave indicates a narrow range.
 
 @example
- *******    
+ *******   
 **********      **
 ***********    ***
 ******************
 ***********    ***
 **********      **
- *******    
+ *******   
 @end example
 
 
 The range sinusoid, by halves, added to and subtracted
 from the mean sinusoid:
 @example
-  ****      
- ******     
- *******    
+  ****     
+ ******    
+ *******   
 *********        *
 **********      **
 ***********    ***
@@ -730,27 +744,27 @@ form to the original text format:
 @item Melody Probabilities
 @cindex melody probabilities
 When using a random walk, the probability of walking up or down, or repeating
-the previous key number, or by implicaton, resting, can be specified.  
+the previous key number, or by implicaton, resting, can be specified. 
 These probabilities are cumulative and act as thresholds.
 @itemize
 @item Up:
-@b{up} is the probability of a walking voice 
-either being silent, walking down or repeating the last note; if the 
+@b{up} is the probability of a walking voice
+either being silent, walking down or repeating the last note; if the
 random variable @geq{} @b{up}, then it walks up the scale;
 @item Same:
-@b{same} is the probability of a walking voice either 
+@b{same} is the probability of a walking voice either
 being silent or walking down.  If the random variable @geq{}
 @b{same} and < @b{up},
 then it repeats the last pitch.
 @item Down:
-@b{down} is the probability of a walking voice being 
+@b{down} is the probability of a walking voice being
 silent.  If the random variable @geq{}
-@b{down} but < 
-@b{same}, then it walks down; otherwise it 
-rests. 
+@b{down} but <
+@b{same}, then it walks down; otherwise it
+rests.
 @item Rest:
-If the random variable < 
-@b{down}, the walking voice rests. 
+If the random variable <
+@b{down}, the walking voice rests.
 @end itemize
 @*
 @*

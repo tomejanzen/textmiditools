@@ -61,7 +61,7 @@
 #define PACKAGE_NAME "textmidi"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "textmidi 1.0.6"
+#define PACKAGE_STRING "textmidi 1.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "textmidi"

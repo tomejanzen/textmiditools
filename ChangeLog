@@ -1,3 +1,16 @@
+2021-11-20     Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+        * MusicalForm.cc: rewrite clampscale in fewer statements.
+        * Composer.cc: remove unused objects.
+
+2021-11-19     Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+
+        * textmidicgm.cc: cleanup usage of form file names; reported wrong name if verbose
+        with a random form; move declarations closer to usage.
+        * MusicalForm.h, MusicalForm.cc, textmidicgm.cc, textmidicgm.texi: add option 
+        --clampscale to clamp the scale in each form to not exceed the union 
+        of the voice ranges.
+
 2021-10-14    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
 
         * textmidiformedit.py: Fix mean curve inversion due to left-handed plotting 

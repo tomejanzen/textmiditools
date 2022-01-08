@@ -10,7 +10,6 @@
 // originally SMUSMIDI.C for the Commodore Amiga.
 // Converts a DMCS .SMUS file to a standard MIDI file.
 // Don't expect it to work on SMUS files from programs other than DMCS.
-// https://www.tomejanzenfoto.com
 //
 //  FACILITY:
 //

@@ -14,25 +14,32 @@ import tkinter.ttk
 from tkinter import *
 from tkinter.ttk import *
 
-class FormWindow(tkinter.Frame):
-    def __init__(self, master, arow, mean_period_callback, mean_phase_callback, range_period_callback, range_phase_callback, xml_subform):
-        self.the_row = arow;
+class FormFrame(tkinter.Frame):
+    def __init__(self, parent, form_title, mean_period_callback, mean_phase_callback, range_period_callback, range_phase_callback, xml_subform, mean_on = True, range_on = True):
+        self.the_row = 0;
         self.mean_period_callback  = mean_period_callback
         self.mean_phase_callback   = mean_phase_callback
         self.range_period_callback = range_period_callback
         self.range_phase_callback  = range_phase_callback
         self.xml_subform = xml_subform
-        super().__init__(master)
-        self.grid(sticky=NSEW, padx=100)
+        self.mean_on = mean_on
+        self.range_on = range_on
+        super().__init__(parent)
+        self.grid(sticky=NSEW, padx=10, pady=10)
+        self.form_title = form_title
         self.create_widgets()
 
     def create_widgets(self):
-        self.mean_label = tkinter.ttk.Label(self, text="Mean")
-        self.mean_label.grid(row=self.the_row, column=0, sticky=NSEW)
-        self.mean = Sine(master=self, arow=self.the_row, period_callback=self.mean_period_callback, phase_callback=self.mean_phase_callback, xml_sine=self.xml_subform['mean'])
-        self.range_label = tkinter.ttk.Label(self, text="Range")
-        self.range_label.grid(row=self.the_row + 2, column=0, sticky=NSEW)
-        self.range = Sine(master=self, arow=self.the_row, period_callback=self.range_period_callback, phase_callback=self.range_phase_callback, xml_sine=self.xml_subform['range'])
+        self.form_title_label = tkinter.ttk.Label(self, text=self.form_title)
+        self.form_title_label.grid(row=0, column=0)
+
+        if (self.mean_on):
+            self.mean = Sine(parent=self, sine_title="Mean", period_callback=self.mean_period_callback, phase_callback=self.mean_phase_callback, xml_sine=self.xml_subform['mean'])
+            self.mean.grid(row=self.the_row, column=2, sticky=NSEW, padx=10, pady=10)
+            self.the_row =  self.the_row + 1
+        if (self.range_on):
+            self.range = Sine(parent=self, sine_title="Range", period_callback=self.range_period_callback, phase_callback=self.range_phase_callback, xml_sine=self.xml_subform['range'])
+            self.range.grid(row=self.the_row, column=2, sticky=NSEW, padx=10, pady=10)
 
     def install_xml_subform(self, xml_subform):
         self.xml_subform = xml_subform

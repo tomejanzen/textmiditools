@@ -60,7 +60,7 @@ extern "C" int32_t yywrap (void) {};
 
 string text_filename{}; // set in main.cc as option
 uint32_t line_ctr{1};   // printed in main.cc as option
-uint32_t detache{10};   // set from cmd line; separation between notes
+uint32_t detache{0};   // set from cmd line; separation between notes
 ofstream midi_filestr{}; // set in main.cc
 bool verbose{};          // set in main.cc as option
 

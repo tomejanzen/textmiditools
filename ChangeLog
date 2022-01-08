@@ -1,9 +1,25 @@
-2021-11-20     Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2022-01-07     Thomas E. Janzen <janzentome@gmail.com>
+        * FormPlotWindow.png, KeyboardWindow.png, MusicalFormWindow.png, VoiceWindow.png: add images
+        * textmidiformedit.texi: Add images of the GUI windows and more explanation.
+        * textmidi.l, textmidi.texi: change default detache value to zero (0).
+
+2022-01-06     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, textmidiformedit.py, sine.py, voice.py, keyboard.py:
+        Remove trailing spaces, make keyboard bigger, make middle C bolder on keyboard.
+
+2022-01-04     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, voice.py: make spinboxes use ButtonRelease-1 event and not focus out or
+        decrement and increment.
+
+2021-12-31     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, form.py, sine.py, textmidiformedit.py, voice.py: Upgrade per "Modern Tkinter" by Roseman.
+
+2021-11-20     Thomas E. Janzen <janzentome@gmail.com>
 
         * MusicalForm.cc: rewrite clampscale in fewer statements.
         * Composer.cc: remove unused objects.
 
-2021-11-19     Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-11-19     Thomas E. Janzen <janzentome@gmail.com>
 
         * textmidicgm.cc: cleanup usage of form file names; reported wrong name if verbose
         with a random form; move declarations closer to usage.
@@ -11,13 +27,13 @@
         --clampscale to clamp the scale in each form to not exceed the union 
         of the voice ranges.
 
-2021-10-14    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-10-14    Thomas E. Janzen <janzentome@gmail.com>
 
         * textmidiformedit.py: Fix mean curve inversion due to left-handed plotting 
         coordinates; add a save-postscript menu item; draw curves using create_polygon
         rather than create_line.
 
-2021-10-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-10-13    Thomas E. Janzen <janzentome@gmail.com>
 
         * Scales.cc: Added the "Bs" to the Chromatic scale by textmidicgm.
         * Makefile.am, fixtempo.pl: Use /usr/bin/env instead of full paths for utilities.
@@ -28,14 +44,14 @@
         * sine.py: added
         * voice.py: added
 
-2021-09-03    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-09-03    Thomas E. Janzen <janzentome@gmail.com>
 
 	* MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
         with the same channel won't set different programs.  This creates functions
         or single-valued relations: track->channel; channel->program.  These are
         in addition to the function channel->pan.
 
-2021-09-02    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-09-02    Thomas E. Janzen <janzentome@gmail.com>
 
 	* MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
         Add comments describing Melody Probabilities as cumulative.  Increase the 
@@ -43,7 +59,7 @@
         * textmidicgm.texi:  Correct description of melody probabilities and update
         description of randomized melody probabilities (using the --random option).
 
-2021-09-01    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-09-01    Thomas E. Janzen <janzentome@gmail.com>
 
 	* Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
         to spread for near the left to near the right.  The symptom was that
@@ -52,7 +68,7 @@
         although the percussion instruments in TiMidity++ seem to be panned 
         stereo samples, so channel 10 is always centered.
 
-2021-08-31    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-31    Thomas E. Janzen <janzentome@gmail.com>
 
 	* Composer.cc: Remove the kluge that put a quiet note at the beginning of the
 	tempo track to force generation of silent starts of tracks by TiMidity++.
@@ -61,7 +77,7 @@
 	be a measure longer than requested because they don't exceed the maximum
 	time until they have generated the last note.
 
-2021-08-30    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-30    Thomas E. Janzen <janzentome@gmail.com>
 
 	* textmidi.l: fix accumulated time defect so that tracks that should be
 	the same length in ticks are or at least only a tick off at the end.
@@ -74,12 +90,12 @@
 	Trying to rationalize rhythm due to short tracks from textmidicgm.
 	* NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
 
-2021-08-29    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-29    Thomas E. Janzen <janzentome@gmail.com>
 
 	* main.cc: remove old block that checks if you would overwrite a file
 	but leave check if --answer is set.
 
-2021-08-26    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-26    Thomas E. Janzen <janzentome@gmail.com>
 
 	* MusicalForm.cc: After a random form is created,
 	remove scale notes that are too high or low for any or the
@@ -90,27 +106,27 @@
 	and draws the graph of the form.
 	* MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
 
-2021-08-23    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-23    Thomas E. Janzen <janzentome@gmail.com>
 
 	* textmidicgm.texi: correct description of random selection of channel to
 	coerce channel 10 for idiophones.
 
-2021-08-18    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-18    Thomas E. Janzen <janzentome@gmail.com>
 
 	* textmidicgm.cc: handle boost xml serialization exceptions.
 
-2021-08-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
 
 	* Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
 	to return it to its previous meaning of if (0 == pulse_per_rhythm)
 	but not activating a bug.
 
-2021-08-13    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
 
 	* Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
 	as a work-around for a crash due to a possible bug in boost::rational.
 
-2021-08-12    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2021-08-12    Thomas E. Janzen <janzentome@gmail.com>
 
 	* textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
 	* miditext: Rewrite/rename from mididisasm.
@@ -119,36 +135,36 @@
 	Change output format to textmidi text output, which can be
 	converted into MIDI Standard MIDI Files by textmidi.
 
-2003    Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2003    Thomas E. Janzen <janzentome@gmail.com>
 
 	* smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
 	Remove extra NULL text events; fix key signatures.
 
-2002-12-29 Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+2002-12-29 Thomas E. Janzen <janzentome@gmail.com>
 
 	* textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
 	which was published on the Classical MIDI Archive.
 	* mididisasm: First private version.
 
-1999-09-18 Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+1999-09-18 Thomas E. Janzen <janzentome@gmail.com>
 
 	* textmidi:  Initial private version.
 
-1994-- Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+1994-- Thomas E. Janzen <janzentome@gmail.com>
 
 	* AlgoRhythms: Version 3.0 for Commodore Amiga computers.
 
-1992-- Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+1992-- Thomas E. Janzen <janzentome@gmail.com>
 
 	* AlgoRhythms: Version 2.0, now textmidicgm.
 	On Fred Fish Disk 606 for Commodore Amiga computers.
 
-1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com>
 
 	* SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
 	Commodore Amiga.
 
-1990-- Thomas E. Janzen <janzentome@gmail.com> <https://www.tomejanzenfoto.com>
+1990-- Thomas E. Janzen <janzentome@gmail.com>
 
 	* AlgoRhythms: Initial revision 1.0
 	on Fred Fish Disk 356 for Commodore Amiga computers.

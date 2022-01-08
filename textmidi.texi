@@ -172,10 +172,11 @@ The output file; a binary standard MIDI file.
 @cindex @minus{}d, @minus{}@minus{}detache
 A small number of MIDI ticks to separate consecutive notes.  It always
 is shaved off the end of preceding note events and made into a rest
-(but not taken from preceding rests).  The default is 10, but 0 seems
-to work.  It was used at first because one synthesizer misbehaved if
-a note immediately followed another one.  The time is stolen from the
-preceding note's duration, not added.
+(but not taken from preceding rests).  The default is 0.
+Originally, the default was 10 and was based on experience with MIDI synthesizers
+from the 1980's that could behave poorly with high rates of note events
+with no delay between note-off and note-on events.
+The time is stolen from the preceding note's duration, not added.
 @item -l, --lazynoteoff
 @cindex @minus{}l, @minus{}@minus{}lazynoteoff
 In LAZY mode, for the ends of a note's duration, use a MIDI note-off

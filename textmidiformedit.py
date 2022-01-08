@@ -13,25 +13,41 @@ import sys
 import tkinter
 import tkinter.ttk
 from tkinter import *
+from tkinter import ttk
 from tkinter.ttk import *
 import tkinter.constants, tkinter.filedialog
 from xml.dom import minidom
 from xml.dom.minidom import parse, Node, getDOMImplementation
 from voice import VoiceWindow
 from allforms import AllFormsWindow
+from allforms import ScaleFrame
 
-class XmlForm(tkinter.Frame):
+class XmlForm(tkinter.Tk):
     xml_form_dict = {}
     the_filename = "Untitled"
-    def __init__(self, master):
-        super().__init__(master)
+    def __init__(self):
+        super().__init__()
         self.default_xml_form()
+        self.all_forms_window = AllFormsWindow(self.xml_form_dict)
+        self.voice_window = VoiceWindow(self.xml_form_dict)
         self.canvas = None
         self.draw_form()
+        self.title('Form Plot')
 
-        self.grid(sticky="we", row=0, column=2)
-        self.rowconfigure(index=0, weight=1)
-        self.columnconfigure(index=2, weight=1)
+        self.frame = ttk.Frame(self, padding="1 1 1 1")
+
+        self.option_add('*tearOff', FALSE)
+        self.frame = ttk.Frame(self, padding="1 1 1 1")
+        self.frame.grid(column=0, row=0, sticky=(N, W, E, S))
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.frame.focus()
+        self.makemenu(self)
+
+        self.frame.grid(sticky="we", row=0, column=2)
+        self.frame.rowconfigure(index=0, weight=1)
+        self.frame.columnconfigure(index=2, weight=1)
+        #self.frame.grab_set()
 
     def install_file(self, afilename):
         self.the_filename = afilename
@@ -66,7 +82,7 @@ class XmlForm(tkinter.Frame):
             range_freq = 1.0 / float(self.xml_form_dict['pitch_form']['range']['period'])
             seconds_per_pixel = duration / float(win_width)
             the_time = float(i) * seconds_per_pixel
-            # omega * t = twopi * mean_freq  * the_time 
+            # omega * t = twopi * mean_freq  * the_time
             # the phase = self.xml_form_dict['pitch_form']['mean']['phase']
             # omega * t + phase = twopi * mean_freq  * the_time + self.xml_form_dict['pitch_form']['mean']['phase']
             # take sin(omega*t + phase) which ranges -1.0 to 1.0
@@ -81,13 +97,13 @@ class XmlForm(tkinter.Frame):
             # oi la!
             y_mean  = (.5 - math.sin(twopi * mean_freq  * the_time + float(self.xml_form_dict['pitch_form']['mean']['phase']))  / 2.0) * (float(win_height) / 12.0) + (1.0 * float(win_height) / 16.0)
             y_range = (.5 + math.sin(twopi * range_freq * the_time + float(self.xml_form_dict['pitch_form']['range']['phase'])) / 2.0) * (float(win_height) / 12.0)
-            
+
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
-        polygon = poly_lr + poly_rl 
+        polygon = poly_lr + poly_rl
         pitch_plot_id = self.canvas.create_polygon(polygon, fill="black")
 
         poly_lr = []
@@ -111,7 +127,7 @@ class XmlForm(tkinter.Frame):
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
-        polygon = poly_lr + poly_rl 
+        polygon = poly_lr + poly_rl
         rhythm_plot_id = self.canvas.create_polygon(polygon, fill="black")
 
 
@@ -136,7 +152,7 @@ class XmlForm(tkinter.Frame):
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
-        polygon = poly_lr + poly_rl 
+        polygon = poly_lr + poly_rl
         dynamic_plot_id = self.canvas.create_polygon(polygon, fill="black")
 
         poly_lr = []
@@ -158,7 +174,7 @@ class XmlForm(tkinter.Frame):
             poly_rl.append(y_range + y_mean / 2)
             poly_rl.append(i)
         poly_rl.reverse()
-        polygon = poly_lr + poly_rl 
+        polygon = poly_lr + poly_rl
         texture_plot_id = self.canvas.create_polygon(polygon, fill="black")
 
 
@@ -172,10 +188,10 @@ class XmlForm(tkinter.Frame):
 
         self.canvas.create_window(win_width, win_width, window=widget)
         self.canvas.create_text(win_width / 2, 20, text=self.xml_form_dict["name"])
-        self.canvas.create_text(50, win_height * 1 / 16 - 20, text='Pitch')
-        self.canvas.create_text(50, win_height * 5 / 16 - 20, text='Rhythm')
-        self.canvas.create_text(50, win_height * 9 / 16  - 20, text='Dynamic')
-        self.canvas.create_text(50, win_height * 13 / 16 - 20, text='Texture')
+        self.canvas.create_text(30, win_height * 1 / 16 - 30, text='Pitch')
+        self.canvas.create_text(30, win_height * 5 / 16 - 30, text='Rhythm')
+        self.canvas.create_text(30, win_height * 9 / 16  - 30, text='Dynamic')
+        self.canvas.create_text(30, win_height * 13 / 16 - 30, text='Texture')
 
     def default_scale(self):
         scale_array = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
@@ -248,11 +264,11 @@ class XmlForm(tkinter.Frame):
         return vl
 
     def default_xml_form(self):
-        self.xml_form_dict['name'] = "Anonymous"
+        self.xml_form_dict['name'] = "Wave Sonata"
         self.xml_form_dict['len'] = 600.0
         self.xml_form_dict['min_note_len'] = 0.0
         self.xml_form_dict['max_note_len'] = 2.0
-        self.xml_form_dict['scale'] = self.default_scale()
+        self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
         self.xml_form_dict['pulse'] = 8.0
         self.xml_form_dict['melody_probabilities'] = self.default_melody_probabilities()
         self.xml_form_dict['pitch_form'] = self.default_form()
@@ -458,292 +474,281 @@ class XmlForm(tkinter.Frame):
         self.xml_form_dict['texture_form'] = self.traverse_texture_form(self.dom.getElementsByTagName("texture_form_")[0])
         self.xml_form_dict['voices'] = self.traverse_voices(self.dom.getElementsByTagName("voices_")[0])
 
-def postscript_callback():
-    afilename=tkinter.filedialog.asksaveasfilename(initialdir = ".",title = 'Save Postscript File', filetypes=(("ps files","*.ps"),("all files","*.*")))
-    xmlform_window.canvas.postscript(file=afilename)
+    def postscript_callback(self):
+        afilename=tkinter.filedialog.asksaveasfilename(initialdir = ".",title = 'Save Postscript File', filetypes=(("ps files","*.ps"),("all files","*.*")))
+        self.canvas.postscript(file=afilename)
 
-def makemenu(win):
-    top = Menu(win)
-    win.config(menu=top)
-    file = Menu(top)
-    file.add_command(label='Open...',   command=get_file_callback, underline=0)
-    file.add_command(label='Save...',   command=save_callback, underline=0)
-    file.add_command(label='Redraw...', command=redraw_callback, underline=0)
-    file.add_command(label='Save Postscript...', command=postscript_callback, underline=0)
-    file.add_command(label='About...',   command=about_callback, underline=0)
-    file.add_command(label='Quit...',   command=lambda:root.quit(), underline=0)
-    top.add_cascade(label='File', menu=file, underline=0)
+    def makemenu(self, toplevelwin):
+        top_menu = Menu(toplevelwin)
+        toplevelwin['menu'] = top_menu;
+        file_menu = Menu(top_menu)
+        top_menu.add_cascade(label='File', menu=file_menu, underline=0)
+        file_menu.add_command(label='Open...',   command=self.get_file_callback, underline=0)
+        file_menu.add_command(label='Save...',   command=self.save_callback, underline=0)
+        file_menu.add_command(label='Redraw', command=self.redraw_callback, underline=0)
+        file_menu.add_command(label='Save Postscript...', command=self.postscript_callback,
+            underline=0)
+        file_menu.add_command(label='About...',   command=self.about_callback, underline=0)
+        file_menu.add_command(label='Quit', command=lambda:toplevelwin.quit(), underline=0)
 
-def get_file_callback():
-    afilename=tkinter.filedialog.askopenfilename(initialdir = ".",title = 'Select XML Form File', filetypes=(("xml files","*.xml"),("all files","*.*")))
-    xmlform_window.install_file(afilename)
-    voice_window.install_xml_form(xmlform_window.xml_form_dict)
-    all_forms_window.install_xml_form(xmlform_window.xml_form_dict)
+    def get_file_callback(self):
+        afilename=tkinter.filedialog.askopenfilename(initialdir = ".",title = 'Select XML Form File', filetypes=(("xml files","*.xml"),("all files","*.*")))
+        self.install_file(afilename)
+        self.voice_window.install_xml_form(self.xml_form_dict)
+        self.all_forms_window.install_xml_form(self.xml_form_dict)
 
-def save_callback():
-    afilename=tkinter.filedialog.asksaveasfilename(initialdir = ".",title = 'Select XML Form File', filetypes=(("xml files","*.xml"),("all files","*.*")))
-    dom_impl = getDOMImplementation()
-    # copy form parts of xml_form_dict from AllForms
-    # copy voice parts from Voice
+    def save_callback(self):
+        afilename=tkinter.filedialog.asksaveasfilename(initialdir = ".",title = 'Select XML Form File', filetypes=(("xml files","*.xml"),("all files","*.*")))
+        dom_impl = getDOMImplementation()
+        # copy form parts of xml_form_dict from AllForms
+        # copy voice parts from Voice
 
-    xmlform_window.xml_form_dict['name'] = all_forms_window.xml_form['name']
-    xmlform_window.xml_form_dict['len'] = all_forms_window.xml_form['len']
-    xmlform_window.xml_form_dict['min_note_len'] = all_forms_window.xml_form['min_note_len']
-    xmlform_window.xml_form_dict['max_note_len'] = all_forms_window.xml_form['max_note_len']
-    # scale
-    xmlform_window.xml_form_dict['scale'] = all_forms_window.xml_form['scale']
-    xmlform_window.xml_form_dict['pulse'] = all_forms_window.xml_form['pulse']
-    xmlform_window.xml_form_dict['melody_probabilities']['down'] = all_forms_window.xml_form['melody_probabilities']['down']
-    xmlform_window.xml_form_dict['melody_probabilities']['same'] = all_forms_window.xml_form['melody_probabilities']['same']
-    xmlform_window.xml_form_dict['melody_probabilities']['up'] = all_forms_window.xml_form['melody_probabilities']['up']
+        self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
+        self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
+        self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
+        # scale
+        self.xml_form_dict['scale'] = self.all_forms_window.xml_form['scale']
+        self.xml_form_dict['pulse'] = self.all_forms_window.xml_form['pulse']
+        self.xml_form_dict['melody_probabilities']['down'] = self.all_forms_window.xml_form['melody_probabilities']['down']
+        self.xml_form_dict['melody_probabilities']['same'] = self.all_forms_window.xml_form['melody_probabilities']['same']
+        self.xml_form_dict['melody_probabilities']['up'] = self.all_forms_window.xml_form['melody_probabilities']['up']
 
-    xmlform_window.xml_form_dict['pitch_form']['mean']['period'] = all_forms_window.xml_form['pitch_form']['mean']['period']
-    xmlform_window.xml_form_dict['pitch_form']['mean']['phase'] = all_forms_window.xml_form['pitch_form']['mean']['phase']
-    xmlform_window.xml_form_dict['pitch_form']['mean']['amplitude'] = all_forms_window.xml_form['pitch_form']['mean']['amplitude']
-    xmlform_window.xml_form_dict['pitch_form']['mean']['offset'] = all_forms_window.xml_form['pitch_form']['mean']['offset']
+        self.xml_form_dict['pitch_form']['mean']['period'] = self.all_forms_window.xml_form['pitch_form']['mean']['period']
+        self.xml_form_dict['pitch_form']['mean']['phase'] = self.all_forms_window.xml_form['pitch_form']['mean']['phase']
+        self.xml_form_dict['pitch_form']['mean']['amplitude'] = self.all_forms_window.xml_form['pitch_form']['mean']['amplitude']
+        self.xml_form_dict['pitch_form']['mean']['offset'] = self.all_forms_window.xml_form['pitch_form']['mean']['offset']
 
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['period'] = all_forms_window.xml_form['rhythm_form']['mean']['period']
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['phase'] = all_forms_window.xml_form['rhythm_form']['mean']['phase']
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['amplitude'] = all_forms_window.xml_form['rhythm_form']['mean']['amplitude']
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['offset'] = all_forms_window.xml_form['rhythm_form']['mean']['offset']
+        self.xml_form_dict['rhythm_form']['mean']['period'] = self.all_forms_window.xml_form['rhythm_form']['mean']['period']
+        self.xml_form_dict['rhythm_form']['mean']['phase'] = self.all_forms_window.xml_form['rhythm_form']['mean']['phase']
+        self.xml_form_dict['rhythm_form']['mean']['amplitude'] = self.all_forms_window.xml_form['rhythm_form']['mean']['amplitude']
+        self.xml_form_dict['rhythm_form']['mean']['offset'] = self.all_forms_window.xml_form['rhythm_form']['mean']['offset']
 
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['period'] = all_forms_window.xml_form['dynamic_form']['mean']['period']
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['phase'] = all_forms_window.xml_form['dynamic_form']['mean']['phase']
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['amplitude'] = all_forms_window.xml_form['dynamic_form']['mean']['amplitude']
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['offset'] = all_forms_window.xml_form['dynamic_form']['mean']['offset']
+        self.xml_form_dict['dynamic_form']['mean']['period'] = self.all_forms_window.xml_form['dynamic_form']['mean']['period']
+        self.xml_form_dict['dynamic_form']['mean']['phase'] = self.all_forms_window.xml_form['dynamic_form']['mean']['phase']
+        self.xml_form_dict['dynamic_form']['mean']['amplitude'] = self.all_forms_window.xml_form['dynamic_form']['mean']['amplitude']
+        self.xml_form_dict['dynamic_form']['mean']['offset'] = self.all_forms_window.xml_form['dynamic_form']['mean']['offset']
 
-    xmlform_window.xml_form_dict['texture_form']['period'] = all_forms_window.xml_form['texture_form']['period']
-    xmlform_window.xml_form_dict['texture_form']['phase'] = all_forms_window.xml_form['texture_form']['phase']
-    xmlform_window.xml_form_dict['texture_form']['amplitude'] = all_forms_window.xml_form['texture_form']['amplitude']
-    xmlform_window.xml_form_dict['texture_form']['offset'] = all_forms_window.xml_form['texture_form']['offset']
+        self.xml_form_dict['texture_form']['period'] = self.all_forms_window.xml_form['texture_form']['period']
+        self.xml_form_dict['texture_form']['phase'] = self.all_forms_window.xml_form['texture_form']['phase']
+        self.xml_form_dict['texture_form']['amplitude'] = self.all_forms_window.xml_form['texture_form']['amplitude']
+        self.xml_form_dict['texture_form']['offset'] = self.all_forms_window.xml_form['texture_form']['offset']
 
-    xmlform_window.xml_form_dict['pitch_form']['range']['period'] = all_forms_window.xml_form['pitch_form']['range']['period']
-    xmlform_window.xml_form_dict['pitch_form']['range']['phase'] = all_forms_window.xml_form['pitch_form']['range']['phase']
-    xmlform_window.xml_form_dict['pitch_form']['range']['amplitude'] = all_forms_window.xml_form['pitch_form']['range']['amplitude']
-    xmlform_window.xml_form_dict['pitch_form']['range']['offset'] = all_forms_window.xml_form['pitch_form']['range']['offset']
+        self.xml_form_dict['pitch_form']['range']['period'] = self.all_forms_window.xml_form['pitch_form']['range']['period']
+        self.xml_form_dict['pitch_form']['range']['phase'] = self.all_forms_window.xml_form['pitch_form']['range']['phase']
+        self.xml_form_dict['pitch_form']['range']['amplitude'] = self.all_forms_window.xml_form['pitch_form']['range']['amplitude']
+        self.xml_form_dict['pitch_form']['range']['offset'] = self.all_forms_window.xml_form['pitch_form']['range']['offset']
 
-    xmlform_window.xml_form_dict['rhythm_form']['range']['period'] = all_forms_window.xml_form['rhythm_form']['range']['period']
-    xmlform_window.xml_form_dict['rhythm_form']['range']['phase'] = all_forms_window.xml_form['rhythm_form']['range']['phase']
-    xmlform_window.xml_form_dict['rhythm_form']['range']['amplitude'] = all_forms_window.xml_form['rhythm_form']['range']['amplitude']
-    xmlform_window.xml_form_dict['rhythm_form']['range']['offset'] = all_forms_window.xml_form['rhythm_form']['range']['offset']
+        self.xml_form_dict['rhythm_form']['range']['period'] = self.all_forms_window.xml_form['rhythm_form']['range']['period']
+        self.xml_form_dict['rhythm_form']['range']['phase'] = self.all_forms_window.xml_form['rhythm_form']['range']['phase']
+        self.xml_form_dict['rhythm_form']['range']['amplitude'] = self.all_forms_window.xml_form['rhythm_form']['range']['amplitude']
+        self.xml_form_dict['rhythm_form']['range']['offset'] = self.all_forms_window.xml_form['rhythm_form']['range']['offset']
 
-    xmlform_window.xml_form_dict['dynamic_form']['range']['period'] = all_forms_window.xml_form['dynamic_form']['range']['period']
-    xmlform_window.xml_form_dict['dynamic_form']['range']['phase'] = all_forms_window.xml_form['dynamic_form']['range']['phase']
-    xmlform_window.xml_form_dict['dynamic_form']['range']['amplitude'] = all_forms_window.xml_form['dynamic_form']['range']['amplitude']
-    xmlform_window.xml_form_dict['dynamic_form']['range']['offset'] = all_forms_window.xml_form['dynamic_form']['range']['offset']
+        self.xml_form_dict['dynamic_form']['range']['period'] = self.all_forms_window.xml_form['dynamic_form']['range']['period']
+        self.xml_form_dict['dynamic_form']['range']['phase'] = self.all_forms_window.xml_form['dynamic_form']['range']['phase']
+        self.xml_form_dict['dynamic_form']['range']['amplitude'] = self.all_forms_window.xml_form['dynamic_form']['range']['amplitude']
+        self.xml_form_dict['dynamic_form']['range']['offset'] = self.all_forms_window.xml_form['dynamic_form']['range']['offset']
 
-    form_document_type = dom_impl.createDocumentType("boost_serialization", None, None)
-    form_document = dom_impl.createDocument(None, "boost_serialization", form_document_type)
-    top = form_document.documentElement
-    top.setAttribute("signature", 'serialization::archive')
-    top.setAttribute("version", '14')
-    xml_form_element = form_document.createElement("xml_form")
-    xml_form_element.setAttribute("class_id", '0')
-    xml_form_element.setAttribute("tracking_level", '0')
-    xml_form_element.setAttribute("version", '0')
-    top.appendChild(xml_form_element)
+        form_document_type = dom_impl.createDocumentType("boost_serialization", None, None)
+        form_document = dom_impl.createDocument(None, "boost_serialization", form_document_type)
+        top = form_document.documentElement
+        top.setAttribute("signature", 'serialization::archive')
+        top.setAttribute("version", '14')
+        xml_form_element = form_document.createElement("xml_form")
+        xml_form_element.setAttribute("class_id", '0')
+        xml_form_element.setAttribute("tracking_level", '0')
+        xml_form_element.setAttribute("version", '0')
+        top.appendChild(xml_form_element)
 
-    add_text_element(form_document, xml_form_element, "name")
-    add_text_element(form_document, xml_form_element, "len")
-    add_text_element(form_document, xml_form_element, "min_note_len")
-    add_text_element(form_document, xml_form_element, "max_note_len")
+        self.add_text_element(form_document, xml_form_element, "name")
+        self.add_text_element(form_document, xml_form_element, "len")
+        self.add_text_element(form_document, xml_form_element, "min_note_len")
+        self.add_text_element(form_document, xml_form_element, "max_note_len")
 
-    scale_element = form_document.createElement("scale_")
-    scale_element.setAttribute("class_id", '1')
-    scale_element.setAttribute("tracking_level", '0')
-    scale_element.setAttribute("version", '0')
+        scale_element = form_document.createElement("scale_")
+        scale_element.setAttribute("class_id", '1')
+        scale_element.setAttribute("tracking_level", '0')
+        scale_element.setAttribute("version", '0')
 
-    add_text_element(form_document, scale_element, "count", "count", str(len(xmlform_window.xml_form_dict['scale'])))
+        self.add_text_element(form_document, scale_element, "count", "count", str(len(self.xml_form_dict['scale'])))
 
-    add_text_element(form_document, scale_element, "item_version", "item_version", "0")
+        self.add_text_element(form_document, scale_element, "item_version", "item_version", "0")
 
-    for n in xmlform_window.xml_form_dict['scale']:
-        add_text_element(form_document, scale_element, "item", "item", n)
+        self.xml_form_dict['scale'] = []
+        self.xml_form_dict['scale'] = self.all_forms_window.scale_frame.get_string_scale()
+        for n in self.xml_form_dict['scale']:
+            self.add_text_element(form_document, scale_element, "item", "item", n)
 
-    xml_form_element.appendChild(scale_element)
+        xml_form_element.appendChild(scale_element)
 
-    add_text_element(form_document, xml_form_element, "pulse")
+        self.add_text_element(form_document, xml_form_element, "pulse")
 
-    melody_probabilities_element = form_document.createElement("melody_probabilities_")
-    melody_probabilities_element.setAttribute("class_id", '2')
-    melody_probabilities_element.setAttribute("tracking_level", '0')
-    melody_probabilities_element.setAttribute("version", '0')
+        melody_probabilities_element = form_document.createElement("melody_probabilities_")
+        melody_probabilities_element.setAttribute("class_id", '2')
+        melody_probabilities_element.setAttribute("tracking_level", '0')
+        melody_probabilities_element.setAttribute("version", '0')
 
-    add_text_element(form_document, melody_probabilities_element, "down", "down_", str(xmlform_window.xml_form_dict['melody_probabilities']['down']))
-    add_text_element(form_document, melody_probabilities_element, "same", "same_", str(xmlform_window.xml_form_dict['melody_probabilities']['same']))
-    add_text_element(form_document, melody_probabilities_element, "up", "up_", str(xmlform_window.xml_form_dict['melody_probabilities']['up']))
-    xml_form_element.appendChild(melody_probabilities_element)
+        self.add_text_element(form_document, melody_probabilities_element, "down", "down_", str(self.xml_form_dict['melody_probabilities']['down']))
+        self.add_text_element(form_document, melody_probabilities_element, "same", "same_", str(self.xml_form_dict['melody_probabilities']['same']))
+        self.add_text_element(form_document, melody_probabilities_element, "up", "up_", str(self.xml_form_dict['melody_probabilities']['up']))
+        xml_form_element.appendChild(melody_probabilities_element)
 
-    add_form_element(form_document, xml_form_element, "pitch_form", True)
-    add_form_element(form_document, xml_form_element, "rhythm_form")
-    add_form_element(form_document, xml_form_element, "dynamic_form")
-    add_sine_element(form_document, xml_form_element, "texture_form")
+        self.add_form_element(form_document, xml_form_element, "pitch_form", True)
+        self.add_form_element(form_document, xml_form_element, "rhythm_form")
+        self.add_form_element(form_document, xml_form_element, "dynamic_form")
+        self.add_sine_element(form_document, xml_form_element, "texture_form")
 
-    voices_element = form_document.createElement("voices_")
-    voices_element.setAttribute("class_id", '5')
-    voices_element.setAttribute("tracking_level", '0')
-    voices_element.setAttribute("version", '0')
+        voices_element = form_document.createElement("voices_")
+        voices_element.setAttribute("class_id", '5')
+        voices_element.setAttribute("tracking_level", '0')
+        voices_element.setAttribute("version", '0')
 
-    add_text_element(form_document, voices_element, "count", "count", str(len(xmlform_window.xml_form_dict['voices'])))
-    add_text_element(form_document, voices_element, "item_version", "item_version", "0")
+        self.add_text_element(form_document, voices_element, "count", "count", str(len(self.xml_form_dict['voices'])))
+        self.add_text_element(form_document, voices_element, "item_version", "item_version", "0")
 
-    write_version = True
-    for v in xmlform_window.xml_form_dict['voices']:
-        add_voice_element(form_document, voices_element, v, write_version)
-        write_version = False
+        write_version = True
+        for v in self.xml_form_dict['voices']:
+            self.add_voice_element(form_document, voices_element, v, write_version)
+            write_version = False
 
-    xml_form_element.appendChild(voices_element)
+        xml_form_element.appendChild(voices_element)
 
-    form_document.writexml(open(afilename, 'w'), indent="", addindent="\t", newl='\n', encoding="UTF-8", standalone=True)
-    form_document.unlink()
+        form_document.writexml(open(afilename, 'w'), indent="", addindent="\t", newl='\n', encoding="UTF-8", standalone=True)
+        form_document.unlink()
 
 
-def add_voice_element(doc, parent, voice_dict, write_version):
-    item_element = doc.createElement("item")
-    if (write_version):
-        item_element.setAttribute("class_id", '6')
-        item_element.setAttribute("tracking_level", '0')
-        item_element.setAttribute("version", '0')
+    def add_voice_element(self, doc, parent, voice_dict, write_version):
+        item_element = doc.createElement("item")
+        if (write_version):
+            item_element.setAttribute("class_id", '6')
+            item_element.setAttribute("tracking_level", '0')
+            item_element.setAttribute("version", '0')
 
-    add_text_element(doc, item_element, "low_pitch", "low_pitch_", str(voice_dict['low_pitch']))
-    add_text_element(doc, item_element, "high_pitch", "high_pitch_", str(voice_dict['high_pitch']))
-    add_text_element(doc, item_element, "channel", "channel_", str(voice_dict['channel']))
-    add_text_element(doc, item_element, "walking", "walking_", str(voice_dict['walking']))
-    add_text_element(doc, item_element, "program", "program_", str(voice_dict['program']))
-    add_text_element(doc, item_element, "pan", "pan_", str(voice_dict['pan']))
-    follower_element = doc.createElement("follower_")
-    if (write_version):
-        follower_element.setAttribute("class_id", '7')
-        follower_element.setAttribute("tracking_level", '0')
-        follower_element.setAttribute("version", '0')
+        self.add_text_element(doc, item_element, "low_pitch", "low_pitch_", str(voice_dict['low_pitch']))
+        self.add_text_element(doc, item_element, "high_pitch", "high_pitch_", str(voice_dict['high_pitch']))
+        self.add_text_element(doc, item_element, "channel", "channel_", str(voice_dict['channel']))
+        self.add_text_element(doc, item_element, "walking", "walking_", str(voice_dict['walking']))
+        self.add_text_element(doc, item_element, "program", "program_", str(voice_dict['program']))
+        self.add_text_element(doc, item_element, "pan", "pan_", str(voice_dict['pan']))
+        follower_element = doc.createElement("follower_")
+        if (write_version):
+            follower_element.setAttribute("class_id", '7')
+            follower_element.setAttribute("tracking_level", '0')
+            follower_element.setAttribute("version", '0')
 
-    add_text_element(doc, follower_element, "follow", "follow_", str(voice_dict['follower']['follow']))
-    add_text_element(doc, follower_element, "leader", "leader_", str(voice_dict['follower']['leader']))
-    add_text_element(doc, follower_element, "interval_type", "interval_type_", str(voice_dict['follower']['interval_type']))
-    add_text_element(doc, follower_element, "interval", "interval_", str(voice_dict['follower']['interval']))
-    item_element.appendChild(follower_element)
-    parent.appendChild(item_element)
+        self.add_text_element(doc, follower_element, "follow", "follow_", str(voice_dict['follower']['follow']))
+        self.add_text_element(doc, follower_element, "leader", "leader_", str(voice_dict['follower']['leader']))
+        self.add_text_element(doc, follower_element, "interval_type", "interval_type_", str(voice_dict['follower']['interval_type']))
+        self.add_text_element(doc, follower_element, "interval", "interval_", str(voice_dict['follower']['interval']))
+        item_element.appendChild(follower_element)
+        parent.appendChild(item_element)
 
-def add_form_element(doc, parent, form_name, add_attributes = False):
-    form_element = doc.createElement(form_name + "_")
-    if (add_attributes == True):
-        form_element.setAttribute("class_id", '3')
-        form_element.setAttribute("tracking_level", '0')
-        form_element.setAttribute("version", '0')
+    def add_form_element(self, doc, parent, form_name, add_attributes = False):
+        form_element = doc.createElement(form_name + "_")
+        if (add_attributes == True):
+            form_element.setAttribute("class_id", '3')
+            form_element.setAttribute("tracking_level", '0')
+            form_element.setAttribute("version", '0')
 
-    mean_sine_element = doc.createElement("mean_sine_")
-    if (add_attributes == True):
-        mean_sine_element.setAttribute("class_id", '4')
-        mean_sine_element.setAttribute("tracking_level", '0')
-        mean_sine_element.setAttribute("version", '0')
-    add_text_element(doc, mean_sine_element , "period", "period_", str(xmlform_window.xml_form_dict[form_name]['mean']['period']))
-    add_text_element(doc, mean_sine_element , "phase", "phase_", str(xmlform_window.xml_form_dict[form_name]['mean']['phase']))
-    add_text_element(doc, mean_sine_element , "amplitude", "amplitude_", str(xmlform_window.xml_form_dict[form_name]['mean']['amplitude']))
-    add_text_element(doc, mean_sine_element , "offset", "offset_", str(xmlform_window.xml_form_dict[form_name]['mean']['offset']))
-    form_element.appendChild(mean_sine_element)
-    range_sine_element = doc.createElement("range_sine_")
-    add_text_element(doc, range_sine_element , "period", "period_", str(xmlform_window.xml_form_dict[form_name]['range']['period']))
-    add_text_element(doc, range_sine_element , "phase", "phase_", str(xmlform_window.xml_form_dict[form_name]['range']['phase']))
-    add_text_element(doc, range_sine_element , "amplitude", "amplitude_", str(xmlform_window.xml_form_dict[form_name]['range']['amplitude']))
-    add_text_element(doc, range_sine_element , "offset", "offset_", str(xmlform_window.xml_form_dict[form_name]['range']['offset']))
-    form_element.appendChild(range_sine_element)
-    parent.appendChild(form_element)
+        mean_sine_element = doc.createElement("mean_sine_")
+        if (add_attributes == True):
+            mean_sine_element.setAttribute("class_id", '4')
+            mean_sine_element.setAttribute("tracking_level", '0')
+            mean_sine_element.setAttribute("version", '0')
+        self.add_text_element(doc, mean_sine_element , "period", "period_", str(self.xml_form_dict[form_name]['mean']['period']))
+        self.add_text_element(doc, mean_sine_element , "phase", "phase_", str(self.xml_form_dict[form_name]['mean']['phase']))
+        self.add_text_element(doc, mean_sine_element , "amplitude", "amplitude_", str(self.xml_form_dict[form_name]['mean']['amplitude']))
+        self.add_text_element(doc, mean_sine_element , "offset", "offset_", str(self.xml_form_dict[form_name]['mean']['offset']))
+        form_element.appendChild(mean_sine_element)
+        range_sine_element = doc.createElement("range_sine_")
+        self.add_text_element(doc, range_sine_element , "period", "period_", str(self.xml_form_dict[form_name]['range']['period']))
+        self.add_text_element(doc, range_sine_element , "phase", "phase_", str(self.xml_form_dict[form_name]['range']['phase']))
+        self.add_text_element(doc, range_sine_element , "amplitude", "amplitude_", str(self.xml_form_dict[form_name]['range']['amplitude']))
+        self.add_text_element(doc, range_sine_element , "offset", "offset_", str(self.xml_form_dict[form_name]['range']['offset']))
+        form_element.appendChild(range_sine_element)
+        parent.appendChild(form_element)
 
-def add_sine_element(doc, parent, sine_name):
-    sine_element = doc.createElement(sine_name + "_")
-    add_text_element(doc, sine_element , "period", "period_", str(xmlform_window.xml_form_dict[sine_name]['period']))
-    add_text_element(doc, sine_element , "phase", "phase_", str(xmlform_window.xml_form_dict[sine_name]['phase']))
-    add_text_element(doc, sine_element , "amplitude", "amplitude_", str(xmlform_window.xml_form_dict[sine_name]['amplitude']))
-    add_text_element(doc, sine_element , "offset", "offset_", str(xmlform_window.xml_form_dict[sine_name]['offset']))
-    parent.appendChild(sine_element)
+    def add_sine_element(self, doc, parent, sine_name):
+        sine_element = doc.createElement(sine_name + "_")
+        self.add_text_element(doc, sine_element , "period", "period_", str(self.xml_form_dict[sine_name]['period']))
+        self.add_text_element(doc, sine_element , "phase", "phase_", str(self.xml_form_dict[sine_name]['phase']))
+        self.add_text_element(doc, sine_element , "amplitude", "amplitude_", str(self.xml_form_dict[sine_name]['amplitude']))
+        self.add_text_element(doc, sine_element , "offset", "offset_", str(self.xml_form_dict[sine_name]['offset']))
+        parent.appendChild(sine_element)
 
-def add_text_element(doc, parent, name, xmltag = None, value = None):
-    if (xmltag == None):
-        xmltag = name + "_"
-    if (value == None):
-        value = str(xmlform_window.xml_form_dict[name])
+    def add_text_element(self, doc, parent, name, xmltag = None, value = None):
+        if (xmltag == None):
+            xmltag = name + "_"
+        if (value == None):
+            value = str(self.xml_form_dict[name])
 
-    any_element = doc.createElement(xmltag)
-    parent.appendChild(any_element)
-    any_text_node = doc.createTextNode(value)
-    any_element.appendChild(any_text_node)
-    parent.appendChild(any_element)
+        any_element = doc.createElement(xmltag)
+        parent.appendChild(any_element)
+        any_text_node = doc.createTextNode(value)
+        any_element.appendChild(any_text_node)
+        parent.appendChild(any_element)
 
-def redraw_callback():
-    xmlform_window.xml_form_dict['name'] = all_forms_window.xml_form['name']
-    xmlform_window.xml_form_dict['len'] = all_forms_window.xml_form['len']
-    xmlform_window.xml_form_dict['min_note_len'] = all_forms_window.xml_form['min_note_len']
-    xmlform_window.xml_form_dict['max_note_len'] = all_forms_window.xml_form['max_note_len']
-    xmlform_window.xml_form_dict['pulse'] = all_forms_window.xml_form['pulse']
-    xmlform_window.xml_form_dict['melody_probabilities']['down'] = all_forms_window.xml_form['melody_probabilities']['down']
-    xmlform_window.xml_form_dict['melody_probabilities']['same'] = all_forms_window.xml_form['melody_probabilities']['same']
-    xmlform_window.xml_form_dict['melody_probabilities']['up'] = all_forms_window.xml_form['melody_probabilities']['up']
+    def redraw_callback(self):
+        self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
+        self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
+        self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
+        self.xml_form_dict['pulse'] = self.all_forms_window.xml_form['pulse']
+        self.xml_form_dict['melody_probabilities']['down'] = self.all_forms_window.xml_form['melody_probabilities']['down']
+        self.xml_form_dict['melody_probabilities']['same'] = self.all_forms_window.xml_form['melody_probabilities']['same']
+        self.xml_form_dict['melody_probabilities']['up'] = self.all_forms_window.xml_form['melody_probabilities']['up']
 
-    xmlform_window.xml_form_dict['pitch_form']['mean']['period'] = all_forms_window.xml_form['pitch_form']['mean']['period']
-    xmlform_window.xml_form_dict['pitch_form']['mean']['phase'] = all_forms_window.xml_form['pitch_form']['mean']['phase']
-    xmlform_window.xml_form_dict['pitch_form']['mean']['amplitude'] = all_forms_window.xml_form['pitch_form']['mean']['amplitude']
-    xmlform_window.xml_form_dict['pitch_form']['mean']['offset'] = all_forms_window.xml_form['pitch_form']['mean']['offset']
+        self.xml_form_dict['pitch_form']['mean']['period'] = self.all_forms_window.xml_form['pitch_form']['mean']['period']
+        self.xml_form_dict['pitch_form']['mean']['phase'] = self.all_forms_window.xml_form['pitch_form']['mean']['phase']
+        self.xml_form_dict['pitch_form']['mean']['amplitude'] = self.all_forms_window.xml_form['pitch_form']['mean']['amplitude']
+        self.xml_form_dict['pitch_form']['mean']['offset'] = self.all_forms_window.xml_form['pitch_form']['mean']['offset']
 
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['period'] = all_forms_window.xml_form['rhythm_form']['mean']['period']
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['phase'] = all_forms_window.xml_form['rhythm_form']['mean']['phase']
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['amplitude'] = all_forms_window.xml_form['rhythm_form']['mean']['amplitude']
-    xmlform_window.xml_form_dict['rhythm_form']['mean']['offset'] = all_forms_window.xml_form['rhythm_form']['mean']['offset']
+        self.xml_form_dict['rhythm_form']['mean']['period'] = self.all_forms_window.xml_form['rhythm_form']['mean']['period']
+        self.xml_form_dict['rhythm_form']['mean']['phase'] = self.all_forms_window.xml_form['rhythm_form']['mean']['phase']
+        self.xml_form_dict['rhythm_form']['mean']['amplitude'] = self.all_forms_window.xml_form['rhythm_form']['mean']['amplitude']
+        self.xml_form_dict['rhythm_form']['mean']['offset'] = self.all_forms_window.xml_form['rhythm_form']['mean']['offset']
 
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['period'] = all_forms_window.xml_form['dynamic_form']['mean']['period']
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['phase'] = all_forms_window.xml_form['dynamic_form']['mean']['phase']
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['amplitude'] = all_forms_window.xml_form['dynamic_form']['mean']['amplitude']
-    xmlform_window.xml_form_dict['dynamic_form']['mean']['offset'] = all_forms_window.xml_form['dynamic_form']['mean']['offset']
+        self.xml_form_dict['dynamic_form']['mean']['period'] = self.all_forms_window.xml_form['dynamic_form']['mean']['period']
+        self.xml_form_dict['dynamic_form']['mean']['phase'] = self.all_forms_window.xml_form['dynamic_form']['mean']['phase']
+        self.xml_form_dict['dynamic_form']['mean']['amplitude'] = self.all_forms_window.xml_form['dynamic_form']['mean']['amplitude']
+        self.xml_form_dict['dynamic_form']['mean']['offset'] = self.all_forms_window.xml_form['dynamic_form']['mean']['offset']
 
-    xmlform_window.xml_form_dict['texture_form']['period'] = all_forms_window.xml_form['texture_form']['period']
-    xmlform_window.xml_form_dict['texture_form']['phase'] = all_forms_window.xml_form['texture_form']['phase']
-    xmlform_window.xml_form_dict['texture_form']['amplitude'] = all_forms_window.xml_form['texture_form']['amplitude']
-    xmlform_window.xml_form_dict['texture_form']['offset'] = all_forms_window.xml_form['texture_form']['offset']
+        self.xml_form_dict['texture_form']['period'] = self.all_forms_window.xml_form['texture_form']['period']
+        self.xml_form_dict['texture_form']['phase'] = self.all_forms_window.xml_form['texture_form']['phase']
+        self.xml_form_dict['texture_form']['amplitude'] = self.all_forms_window.xml_form['texture_form']['amplitude']
+        self.xml_form_dict['texture_form']['offset'] = self.all_forms_window.xml_form['texture_form']['offset']
 
-    xmlform_window.xml_form_dict['pitch_form']['range']['period'] = all_forms_window.xml_form['pitch_form']['range']['period']
-    xmlform_window.xml_form_dict['pitch_form']['range']['phase'] = all_forms_window.xml_form['pitch_form']['range']['phase']
-    xmlform_window.xml_form_dict['pitch_form']['range']['amplitude'] = all_forms_window.xml_form['pitch_form']['range']['amplitude']
-    xmlform_window.xml_form_dict['pitch_form']['range']['offset'] = all_forms_window.xml_form['pitch_form']['range']['offset']
+        self.xml_form_dict['pitch_form']['range']['period'] = self.all_forms_window.xml_form['pitch_form']['range']['period']
+        self.xml_form_dict['pitch_form']['range']['phase'] = self.all_forms_window.xml_form['pitch_form']['range']['phase']
+        self.xml_form_dict['pitch_form']['range']['amplitude'] = self.all_forms_window.xml_form['pitch_form']['range']['amplitude']
+        self.xml_form_dict['pitch_form']['range']['offset'] = self.all_forms_window.xml_form['pitch_form']['range']['offset']
 
-    xmlform_window.xml_form_dict['rhythm_form']['range']['period'] = all_forms_window.xml_form['rhythm_form']['range']['period']
-    xmlform_window.xml_form_dict['rhythm_form']['range']['phase'] = all_forms_window.xml_form['rhythm_form']['range']['phase']
-    xmlform_window.xml_form_dict['rhythm_form']['range']['amplitude'] = all_forms_window.xml_form['rhythm_form']['range']['amplitude']
-    xmlform_window.xml_form_dict['rhythm_form']['range']['offset'] = all_forms_window.xml_form['rhythm_form']['range']['offset']
+        self.xml_form_dict['rhythm_form']['range']['period'] = self.all_forms_window.xml_form['rhythm_form']['range']['period']
+        self.xml_form_dict['rhythm_form']['range']['phase'] = self.all_forms_window.xml_form['rhythm_form']['range']['phase']
+        self.xml_form_dict['rhythm_form']['range']['amplitude'] = self.all_forms_window.xml_form['rhythm_form']['range']['amplitude']
+        self.xml_form_dict['rhythm_form']['range']['offset'] = self.all_forms_window.xml_form['rhythm_form']['range']['offset']
 
-    xmlform_window.xml_form_dict['dynamic_form']['range']['period'] = all_forms_window.xml_form['dynamic_form']['range']['period']
-    xmlform_window.xml_form_dict['dynamic_form']['range']['phase'] = all_forms_window.xml_form['dynamic_form']['range']['phase']
-    xmlform_window.xml_form_dict['dynamic_form']['range']['amplitude'] = all_forms_window.xml_form['dynamic_form']['range']['amplitude']
-    xmlform_window.xml_form_dict['dynamic_form']['range']['offset'] = all_forms_window.xml_form['dynamic_form']['range']['offset']
+        self.xml_form_dict['dynamic_form']['range']['period'] = self.all_forms_window.xml_form['dynamic_form']['range']['period']
+        self.xml_form_dict['dynamic_form']['range']['phase'] = self.all_forms_window.xml_form['dynamic_form']['range']['phase']
+        self.xml_form_dict['dynamic_form']['range']['amplitude'] = self.all_forms_window.xml_form['dynamic_form']['range']['amplitude']
+        self.xml_form_dict['dynamic_form']['range']['offset'] = self.all_forms_window.xml_form['dynamic_form']['range']['offset']
 
-    xmlform_window.draw_form()
+        self.draw_form()
 
-def about_callback():
-    about_window = tkinter.Text(Toplevel(root))
-    about_window.grid(sticky="we", row=0, column=0)
-    about_window.insert('1.0', "textmidiformedit musical form editor by Thomas E. Janzen\n2021\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools")
-    about_window['state'] = "disabled"
-    about_window.focus()
+    def about_callback(self):
+        about_top = tkinter.Tk()
+        about_window = tkinter.Text(about_top)
+        about_window.grid(sticky="we", row=0, column=0)
+        about_top.title('About')
+        about_window.insert('1.0', "textmidiformedit musical form editor by Thomas E. Janzen\n2021\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools")
+        about_window['state'] = "disabled"
+        about_window.focus()
 
 if __name__ == '__main__':
-    root = tkinter.Tk()
-    root.title('textmidiformedit')
-    makemenu(root)
-    msg = Label(root, text='Window menu')
-    msg.grid(sticky="n")
-    msg.config(relief=SUNKEN, width=40)
+    xmlform_window = XmlForm()
+    xmlform_window.frame.grid(sticky="we", row=0, column=0)
+    xmlform_window.frame.rowconfigure(index=0, weight=1)
+    xmlform_window.frame.columnconfigure(index=0, weight=1)
 
-    xmlform_window = XmlForm(root)
-    xmlform_window.grid(sticky="we", row=0, column=0)
-    xmlform_window.rowconfigure(index=0, weight=1)
-    xmlform_window.columnconfigure(index=0, weight=1)
+    xmlform_window.mainloop()
 
-    all_forms_window = AllFormsWindow(Toplevel(root), xml_form = xmlform_window.xml_form_dict)
-    all_forms_window.grid(sticky="nw", row=2, column=0)
-    all_forms_window.rowconfigure(index=2, weight=1)
-    all_forms_window.columnconfigure(index=0, weight=1)
-
-    voice_window = VoiceWindow(Toplevel(root), xml_form=xmlform_window.xml_form_dict)
-    voice_window.grid(sticky="w", row=2, column=1)
-    voice_window.rowconfigure(index=2, weight=1)
-    voice_window.columnconfigure(index=1, weight=1)
-
-    mainloop()

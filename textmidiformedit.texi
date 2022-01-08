@@ -35,13 +35,16 @@ license is included in the section entitled ``GNU Free Documentation License.''
 @node Top
 @top textmidiformedit
 
-
 @end ifnottex
 @contents
 
 @menu
 * Overview::
 * Invoking textmidiformedit::
+* Musical Form Window::
+* Instrumental Voices Window::
+* Form Plot Window::
+* Keyboard Window::
 * GNU Free Documentation License::
 * Bibliography::
 * Concept Index::
@@ -52,12 +55,13 @@ license is included in the section entitled ``GNU Free Documentation License.''
 The @command{textmidiformedit} program can be used interactively to
 edit new or pre-existing musical form files used by textmidicgm,
 which generates works of music in textmidi language,
-which can then be converted by textmidi into standard MIDI file formats.
+which can then be converted by @command{textmidi} into standard MIDI 1.1 file formats.
 Using @command{textmidiformedit}, it is possible to edit musical forms
 as defined by @command{textmidicgm} rather than hand-edit the XML form file.
 
 The model of musical form defined by textmidicgm is described in
-the info file for textmidicgm.
+the info file for textmidicgm.  This manual only describes the
+user interface for textmidiformedit.py.
 
 @menu
 * What is textmidiformedit?::
@@ -74,10 +78,322 @@ musical form files, as used by @command{textmidicgm}.
 @chapter Invoking textmidiformedit
 @cindex Invoking textmidiformedit
 @command{textmidiformedit.py} has no options.  To run it, go to the directory
-where it is found and invoke it:
+where it is found (after unpacking the archive for TextMIDITools) and invoke it:
 @smallexample
 ./textmidiformedit.py
 @end smallexample
+
+@node Musical Form Window
+@chapter Musical Form Window
+@cindex Musical Form Window
+@image{MusicalFormWindow,2.65in,4.6in,Musical Form Window, png}
+The Musical Form window allows the setting of global form
+qualities except for the instrumental attributes of individual
+voices, which is done on the Voices window.
+@menu
+* Name::
+* Len::
+* Min/Max Note Len::
+* Pulse/Sec::
+* Melodic Probabilities::
+* Scale Transpose and From Keyboard::
+* Pitch Form::
+* Rhythm Form::
+* Dynamic Form::
+* Texture Form::
+@end menu
+The Musical Form Window has several items.
+@node Name
+@section Name
+@cindex Name
+The name string can be typed in; it is meant to be the title of the musical
+work to be created by textmidicgm.
+@node Len
+@section Len
+@cindex Len
+The len text field is the duration of the musical work in seconds.
+Entering 600 will tell textmidicgm to generate 10 minutes of music.
+@node Min/Max Note Len
+@section Min/Max Note Len
+@cindex Min/Max Note Len
+The minimum and maximum note lengths specifies the duration range for all note events.
+When the rhythm curve is very low and the range curve narrow, the min note length is used;
+when the rhythm curve is high with a narrow range, the maximum note length is used.
+@node Pulse/Sec
+@section Pulse/Sec
+@cindex Pulse/Sec
+Pulse per second is used optionally to force textmidicgm to generate rhythms that line up on
+a pulse.  Such music is likely to be easier to notate in scoring program such that human players 
+could play it.  Note, however, that textmidicgm has no model of meter, that is, the grouping of
+beats and accents.  The original concept for this model of form (develoiped in 1976 for manual
+composition) was connected to very fluid, conversational, ametrical rhythms.
+On the other hand, setting a pulse can make works produced by textmidicgm sound more dance-like,
+for example, with a pulse of about 5 or so per second.
+@node Melodic Probabilities
+@section Melodic Probabilities
+@cindex Melodic Probabilities
+Melodic Probabilities are cumulative probabilities that apply only when a voice is in 
+walking mode: they determine how often a voice moves up, or moves down, repeats a note, or
+is resting.  A random variable used to select melodic movement 
+varies in (0..<1.0).  When the random variable is:
+
+@itemize
+@item Below the "Down" probability, the voice will move down a step in the scale; when ;
+@item At or above Down and below the Same probability, it will repeat the previous key;
+@item At or above the Up probability, it will step up the scale.
+@item At or above the Up probability, it will be silent.
+@end itemize
+Because these are cumulative probabilities, the following inequalities must hold:
+0.0 <= Down <= Same <= Up <= 1.0.
+If you don't want the voice to drift off down or up, then the probabilities for up and down should be
+equal, but by differences:  (Up - Same) == (Same - Down).
+These probabilities apply only if a voice is in walking mode.
+
+@node Scale Transpose and From Keyboard
+@section Scale Transpose and From Keyboard
+@cindex Scale Transpose and From Keyboard
+Scales can be entered the following ways:
+@itemize
+@item Loaded from a form file
+@item Set from the scale menu selections
+@item Loaded from the keyboard window, by using the "From Keyboard" push button.
+@end itemize
+Once a scale has been loaded, it may be transposed by using the transpose spin button.
+Note that if the scale loaded from a file was already transposed, then that version
+of the scale will be the 
+transposition of zero (0) in the Musical Form window for that scale.
+
+Pushing the From Keyboard button will copy the scale that is set in the keyboard window
+to be the scale in the musical form.
+
+@node Pitch Form
+@section Pitch Form
+@cindex Pitch Form
+The Form curves are the core concept of the textmidicgm model for musical form.
+The curves are always sinusoidal (wave-like), but they are biased to sit above zero
+and range from 0 to 1.  Pitch, Rhythm, and Dynamic curves have two sinusoids: mean and range.
+The controls for each sinusoid include a period (in seconds) and a phase slider in radians.
+There are two * pi radians (about 6.28) in a full circle.  The slider ranges from -pi to +pi.
+For example, to get 90 degrees, set the slider about 3/4 of the way across between 0 and +pi.
+The mean sinusoid is roughly the average or center value of the parameter (in which parameter refers to 
+pitch, rhythm, and dynamic) and the sinusoid for range gives the range from low value to high
+value.  Only a range sinusoid is used for texture.
+The seven sinusoids are all all independent in phase and period.
+After adjusting form curve values, you should select the Redraw item on the Form Plot window's menu
+to see how you have changed the form.
+The result of these curves is to cause the music generated by textmidicgm to change in 
+character over time.  Ordinarily the periods used are around 120 to 360 seconds (2 to 6 minutes).
+However, to make a parameter's mean or range stay static, merely make the period very long, such as
+1000000 seconds.
+Unless a voice is in walking mode,
+the Pitch mean curve generally causes the pitches played to be higher when the curve is higher
+and lower when the curve is lowe; the Pitch range curve causes a wider range of of notes
+in the scale when the curve is higher and fewer (even just repeating a pitch).
+In walking mode, a voice ignores the pitch curves and follows the melodic probabilities on
+how to walk up and down.
+
+@node Rhythm Form
+@section Rhythm Form
+@cindex Rhythm Form
+A high rhythm mean curve generally tells textmidicgm to make longer duration (slower) note events.
+When the rhythm mean curve is at a low point in the wave, it tends to make shorter durations (faster notes).
+A high rhythm range curve tends to make a wider range of durations and sound more syncopated, even
+with a pulse-per-second set; a low rhythm range curve tends to make more monotonous and repetitive
+durations.
+@node Dynamic Form
+@section Dynamic Form
+@cindex Dynamic Form
+A high dynamic mean curve generally tells textmidicgm to make louder note events.
+When the dynamic mean curve is at a low point in the wave, it tends to make quieter notes.
+A high dynamic range curve tends to make a wider range of loudnesses and sound more natural;
+a low dynamic range curve tends to make more evenly loud notes.
+
+@node Texture Form
+@section Texture Form
+@cindex Texture Form
+A high texture range curve makes more voices playe (a larger complement);
+a low texture range curve makes fewer voices play.  
+As the texture curve rises, the voices are added in voice number order.
+To suggest a solist, the solo voice should probably be in voice 0 position in the voice window.
+
+@node Instrumental Voices Window
+@chapter Instrumental Voices Window
+@cindex Instrumental Voices Window
+@image{VoiceWindow,2.9in,2.6in,Voice Window,png}
+@menu
+* Number of Voices::
+* Voice::
+* Low Pitch::
+* High Pitch::
+* Channel::
+* Program::
+* Walking::
+* Pan::
+* Follow/Leader::
+* Interval Type/Interval::
+@end menu
+The Instrumental Voices Window has several items.
+@node Number of Voices
+@section Number of Voices
+@cindex Number of Voices
+The number of voices is the total number of voices that can play when the form's texture curve
+is high.  This model of musical form is basically counterpuntal and made of solo voices.
+There is no real limit for number of voices, but the form editor only offers 23 voices.
+
+@node Voice
+@section Voice
+@cindex Voice
+Voice is the index (in 0..Number of Voices - 1) of the voice to be currently edited in the voice window.
+
+@node Low Pitch
+@section Low Pitch
+@cindex Low Pitch
+The low pitch is the low pitch for the voice.  If the Form Pitch curve goes below this low pitch, then
+the low pitch will be played.  This can be monotonous; textmidicgm has an option on the command that
+trims the scale to the range for all the instruments together to help with this, but this is not a 
+perfect fix.
+
+@node High Pitch
+@section High Pitch
+@cindex High Pitch
+The high pitch is the high pitch for the voice.  If the Form Pitch curve goes above this high pitch, then
+the high pitch will be played.  This can be monotonous; textmidicgm has an option on the command that
+trims the scale to the range for all the instruments together to help with this, but this is not a 
+perfect fix.
+
+@node Channel
+@section Channel
+@cindex Channel
+The channel is the MIDI Channel (1..16) for the voice.
+
+@node Program
+@section Program
+@cindex Program
+The Program is the MIDI program in (1..128) for the voice.
+
+@node Walking
+@section Walking
+@cindex Walking
+The walking flag sets walking for a voice.  In walking mode, a voice ignores
+the Form Pitch curve and follows the Melodic Probabilities.
+
+@node Pan
+@section Pan
+@cindex Pan
+Pan is the MIDI stereo pan for the voice.
+
+@node Follow/Leader
+@section Follow/Leader
+@cindex Follow/Leader
+The Follower/Leader feature permits you to tell a voice to ignore the Form curves altogether, and
+instead to follow another voice.  Set the follow button to make a voice follow another.
+Set the Leader to the number of the voice to follow.  Select the interval type of following: scaler or chromatic.
+Scaler intervals will count steps up in the scale (down for a negative interval)
+being used to select the interval of following;
+chromatic intervals will count by 1's up (down for a negative interval) in a chromatic scale to find the
+follower's pitch.
+
+@node Interval Type/Interval
+@section Interval Type/Interval
+@cindex Interval Type/Interval
+
+@node Form Plot Window
+@chapter Form Plot Window
+@cindex Form Plot Window
+@image{FormPlotWindow,4.7in,3.2in,Form Plot Window,png}
+The Form Plot window has a menu.
+@menu
+* Open::
+* Save::
+* Redraw::
+* Save Postscript::
+* About::
+* Quit::
+@end menu
+The Form Plot Window shows the sinusoidsal curves that act to change the mean and range of pitch,
+rhythm (duration), dynamic (loudness) and the complement (the number of instruments playing).
+A vertical line is drawn at each minute of time from the beginning.
+The Form Plot Window menu has several items.
+@node Open
+@section Open
+@cindex Open
+The Open menu allows you to load a boost::serialization (cf. boost.org) XML archive
+form file.  All of the values of the form file will be distributed throughout the
+user interface and the plot redrawn.
+@node Save
+@section Save
+@cindex Save
+The Save menu allows you to save an XML 
+form file.  All of the values of the form in the user interface of
+textmidiformedit.py will be written out to the file.
+
+@node Redraw
+@section Redraw
+@cindex Redraw
+The form plot is redrawn; this is called for if the form curves are 
+changed in the Musical Form window.
+
+@node Save Postscript
+@section Save Postscript
+@cindex Save Postscript
+The Save Postscript menu item will save a Postscript image of the Form Plot window.
+
+@node About
+@section About
+@cindex About
+The About item puts up a window with information about the program.
+
+@node Quit
+@section Quit
+@cindex Quit
+The Quit menu item will exit the program.  The window close decoration will also
+do this.  Any work done but unsaved is lost; you are not prompted to save work.
+
+@node Keyboard Window
+@chapter Keyboard Window
+@cindex Keyboard Window
+@image{KeyboardWindow,6in,0.77in,Keyboard Window,png}
+
+The Keyboard Window has a keyboard in which individual keys can be clicked, and also several buttons.
+The keyboard presents 128 keys, all of the keys supported by MIDI (C-1 to G9).  Middle-C is outlined
+in a thicker line than other keys.  Any key can be clicked
+to toggle whether it is to be included in a scale.
+When a key is included in a scale it is drawn with a stipple in red.  Keys that are not in the scale
+are white if they are white keys and black if they are black keys.
+The keyboard will reflect selection of scale made in the Musical Form window.  
+Any arbitrary combination of the 128 keys can be clicked to create a scale.
+To create a scale that repeats each octave, just click the unique keys for one octave, then hit the
+"Octave Repeat" push button.
+@menu
+* Clear::
+* All::
+* Complement::
+* Octave Repeat::
+@end menu
+@node Clear
+@section Clear
+@cindex Clear
+Clear the scale.
+
+@node All
+@section All
+@cindex All
+Set all of the keys, thta is, the full chromatic MIDI scale.
+
+@node Complement
+@section Complement
+@cindex Complement
+Set the scale to select notes not in the scale and remove
+notes that were in the scale.
+For example, select a Diatonic scale in the Musical Form window; this will appear in the keyboard as C Major.
+Then push the Complement push button on the Keyboard window 
+to select the missing notes instead, and the result will be the black
+keys only, which is a form of pentatonic scale.
+
+@node Octave Repeat
+@section Octave Repeat
+@cindex Octave Repeat
+Any notes set in the keyboard are repeated per octave throughout the full scale.
 
 @node GNU Free Documentation License
 @chapter GNU Free Documentation License

@@ -1,0 +1,148 @@
+FILEHEADER 2 240
+STARTTRACK ; bytes in track: 3131
+TEMPO 110 TIME_SIGNATURE 3 4 24
+PROGRAM 2 14
+TEXT PRELUDE VI from Book 2 of Bach Well-Tempered Clavier. For Jane's Birthday 2016. By Tom Janzen 201600326
+LAZY
+mf
+chan 2
+
+ff D3 32 c3 32 d3 8. mf d2 4 r 4
+mf r 8 d2 8 g2 8 Bb2 8 forte D3 32 c3 32 d3 8. 
+mf r 8 d2 8 f2 8 a2 8 forte D3 32 c3 32 d3 8. 
+mf r 8 Bb3 8 forte e3 8 mf g3 8 forte C#3 8 mf a3 8
+ff D3 D4 4 r 16 g3 16 f3 16 e3 16 forte d3 16 mf f3 16 e3 16 d3 16
+ff Bb3 16 mf g3 16 d3 16 g3 16 forte Bb3 16 mf g3 16 d3 16 g3 16 forte Bb3 16 mf g3 16 d3 16 g3 16
+ff a3 16 mf g3 16 d3 16 g3 16 forte a3 16 mf f3 16 d3 16 f3 16 forte a3 16 mf f3 16 d3 16 f3 16
+ff g3 16 mf e3 16 d3 16 e3 16 forte g3 16 mf e3 16 c#3 16 e3 16 forte g3 16 mf e3 16 c#3 16 e3 16
+ff f3 16 mf d3 16 e3 16 f3 16 forte g3 16 mf a3 16 b3 16 C#4 16 forte d4 16 mf c4 16 b3 16 a3 16
+ff b3 16 mf c4 16 b3 16 a3 16 g3 16 f3 16 e3 16 d3 16 e3 8 g3 8
+ff c3 8 mf d3 16 e3 16 forte f3 16 mf g3 16 a3 16 Bb3 16 c4 16 Bb3 16 a3 16 g3 16 
+ff a3 16 mf Bb3 16 a3 16 g3 16 forte f3 16 mf Eb3 16 d3 16 c3 16 forte d3 8 mf f3 8
+ff Bb2 8 mf Bb3 16 c4 16 d4 8 f4 8 Bb3 8 d4 8
+ff g3 16 mf Bb3 16 g3 16 f3 16 forte e3 16 mf g3 16 e3 16 d3 16 forte C#3 16 mf e3 16 C#3 16 b2 16
+ff a2 8 mf a3 16 b3 16 C#4 8 e4 8 a3 8 g3 8
+ff f3 16 mf d4 16 f3 16 e3 16 forte d3 16 mf a3 16 d3 16 c3 16 forte Bb2 16 mf f3 16 Bb2 16 a2 16
+ff g2 8 mf g3 16 a3 16 Bb3 8 d4 8 g3 8 Bb3 8
+ff a3 8 mf e4 8 a3 8 e4 8 a3 8 e4 8 
+ff g3 8 mf e4 8 g3 8 e4 8 g3 8 e4 8 
+ff f3 8 mf f4  8 f3 8 f4  8 f3 8 f4  8
+ff C#4 8 mf g4 8 C#4 8 g4 8 C#4 8 g4 8 
+ff d4 8 mf f4 8 d4 8 f4 8 d4 8 f4 8 
+ff c4 8 mf a4 8 c4 8 a4 8 c4 8 a4 8 
+ff b3 8 mf g4 8 b3 8 g4 8 b3 8 g4 8 
+ff e4 8 mf b4 8 e4 8 b4 8 e4 8 b4 8 
+A3 C5 4 r 16 d4 16 c4 16 b3 16 forte a3 16 mf c4 16 b3 16 a3 16
+ff f4 16 mf d4 16 a3 16 d4 16 forte f4 16 mf d4 16 a3 16 d4 16 forte f4 16 mf d4 16 a3 16 d4 16
+ff e4 16 mf d4 16 a3 16 d4 16 forte e4 16 mf c4 16 a3 16 c4 16 forte e4 16 mf c4 16 a3 16 c4 16
+ff d4 16 mf b3 16 a3 16 b3 16 forte d4 16 mf b3 16 ab3 16 b3 16 forte d4 16 mf b3 16 ab3 16 b3 16
+ff c4 8 mf a2 8 c3 8 e3 8 a3 8 c4 8
+ff d4 8 mf f4 8 a3 8 d4 8 d3 8 b3 8
+ff c4 8 mf e4 8 a3 8 c4 8 c3 8 a3  8
+ff b3 8 mf d4 8 G#3 8 b3 8 e4 8 e3 8
+ff a3 16 mf a4 16 g4 16 f4 16 forte e4 16 mf d4 16 c4 16 b3 16 forte a3 16 mf c4 16 e3 16 g3 16
+ff F#3 8 mf a4 8 c5 8 a4 8 F#4 8 d4 8
+ff g4 8 mf g3 8 Bb3 8 d4 8 g4 8 f4 8
+ff e4 16 mf Db4 16 c4 16 Bb3 16 forte f4 16 mf d4 16 c4 16 Bb3 16 forte g4 16 mf d4 16 c4 16 Bb3 16
+ff a3 16 mf f4 16 e4 16 d4 16 forte c4 16 mf Bb3 16 a3 16 g3 16 forte Bb3 16 mf a3 16 g3 16 f3 16
+ff e3 16 mf g4 16 f4 16 e4 16 forte d4 16 mf g4 16 f4 16 e4 16 forte c#4 16 mf g4 16 f4 16 e4  16
+ff d3 16 mf Eb4 16 d4 16 c4 16 forte Bb3 16 mf c4 16 Bb3 16 a3 16 forte g3 16 mf a3 16 g3 16 f3 16
+ff e3 16 mf Bb3 16 a3 16 g3 16 forte f3 16 mf g3 16 f3 16 e3 16 forte d3 16 mf Eb3 16 d3 16 c3 16
+ff Bb2 8 mf g2 8 Bb2 8 d3 8 g3 32 f3 32 g3 8.
+r 16 g3 16 a2 16 g2 16 forte a2 16 mf g3 16 a2 16 g3 16 a2 16 g3 16 a2 16 g3 16 
+ff a2 16 mf f3 16 a2 16 g2 16 forte a2 16 mf f3 16 a2 16 f3 16 forte a2 16 mf f3 16 a2 16 f3 16
+ff a2 16 mf e3 16 a2 16 g2 16 forte a2 16 mf e3 16 a2 16 e3 16 forte a2 16 mf e3 16 a2 16 e3 16
+ff a2 16 mf d3 16 f3 16 d3 16 forte a2 16 mf d3 16 f3 16 a3 16 forte g2 16 mf e3 16 g3 16 Bb3 16
+ff g3 8 mf C#3 8 e3 8 G2 8 r 16 Bb2 16 a2 16 g2 16
+ff f2 16 mf f3 16 e3 16 f3 16 forte f2 16 mf f3 16 e3 16 f3 16 forte f2 16 mf f3 16 e3 16 d3  16
+ff C#3 8 mf e2 8 g2 8 C#2 8 r 16 c#3 16 b2 16 a2 16
+ff d3 8 mf d2 8 f2 8 a2 8 d3 32 c3 32 d3 8.
+ff r 16 mf g3 16 a3 16 Bb3 16 forte c3 16 mf F#3 16 g3 16 a3 16 forte Bb2 16 mf g3 16 a3 16 Bb3 16
+ff c3 16 mf F#3 16 g3 16 a3 16 forte Bb2 16 mf g3 16 a3 16 Bb3 16 forte a2 16 mf d3 16 e3 16 f#3 16
+ff g2 16 mf d3 16 e3 16 F#3 16 g3 16 r 16 r 8 r 4
+r 4 r 16 c4 16 Bb3 16 a3 16 g3 16 Bb3 16 e3 16 g3 16
+C#3 4 r 8 a2 8 b2 8 C#3 8
+ff d3 8 mf e3 8 ff f3 8 mf g3 8 ff a3 8 mf a2 8
+ff d3 8 mf a3 8 ff d3 8 mf a3 8 ff d3 8 mf a3 8
+ff d3 8 mf g3 8 ff d3 8 mf g3 8 ff d3 8 mf g3 8
+ff d3 8 mf a3 8 ff d3 8 mf a3 8 ff d3 8 mf a3 8
+ff d3 8 mf Bb3 8 
+ff d3 8 mf Bb3 8 
+ff d3 8 mf Bb3 8
+d3 a3 2.
+
+END_LAZY
+
+END_OF_TRACK
+STARTTRACK ; bytes in track: 3131
+PROGRAM 1 14
+LAZY
+mf
+chan 1
+ff d5 8 mf c5 16 Bb4 16 forte a4 16 mf g4 16 f4 16 e4 16 forte d4 16 mf f4 16 e4 16 d4 16
+ff Bb4 16 mf g4 16 d4 16 g4 16 forte Bb4 16 mf g4 16 d4 16 g4 16 forte Bb4 16 mf g4 16 d4 16 g4 16
+ff A4 16 mf g4 16 d4 16 g4 16 forte A4 16 mf f4 16 d4 16 f4 16 forte A4 16 mf f4 16 d4 16 f4 16
+ff G4 16 mf E4 16 D4 16 E4 16 forte G4 16 mf E4 16 C#4 16 E4 16 forte G4 16 mf E4 16 C#4 16 E4 16
+R 16 d4 16 c4 16 Bb3 16 forte A3 16 mf R 16 R 8 R 4
+R 8 d4 8 forte g4 8 mf Bb4 8 D5 32 C5 32 D5 8.
+R 8 d4 8 forte f4 8 mf a4 8 D5 32 C5 32 D5 8.
+R 8 g4 8 forte C#5 8 mf E5 8 C#5 8 A4 8
+ff d5 8 mf c5 16 Bb4 16 forte a4 16 mf g4 16 f4 16 e4 16 f4 8 a4 8.
+ff g4 16 mf a4 16 b4 16 c5 16 forte d5 16 mf e5 16 f5 16 g5 16 forte f5 16 mf e5 16 d5 16
+ff e5 16 mf c5 16 b4 16 a4 16 forte g4 16 mf f4 16 e4 16 d4 16 e4 8 g4 8.
+ff f4 16 mf g4 16 a4 16 Bb4 16 forte c5 16 mf d5 16 Eb5 16 f5 16 forte Eb5 16 mf d5 16 c5 16
+ff d5 16 mf f5 16 d5 16 c5 16 forte Bb4 16 mf d5 16 Bb4 16 a4 16 forte g4 16 mf Bb4 16 g4 16 f4 16
+e4 8 e5 16 f5 16 g5 8 Bb5 8 e5 8 g5 8
+ff C#5 16 mf g5 16 C#5 16 b4 16 forte a4 16 mf e5 16 a4 16 g4 16 forte F4 16 mf C#5 16 F4 16 E4 16
+D4 8 D5 16 E5 16 F5 8 A5 8 D5 8 C5 8
+ff Bb4 16 mf G5 16 Bb4 16 A4 16 forte G4 16 mf Bb4 16 G4 16 F4 16 forte Eb4 16 mf Bb4 16 Eb4 16 D4 16
+ff C#4 16 mf A4 16 C#4 16 B3 16 forte C#4 16 mf A4 16 C#4 16 A4 16 forte C#4 16 mf A4 16 C#4 16 A4 16
+ff C#4 16 mf A4 16 C#4 16 B3 16 forte C#4 16 mf A4 16 C#4 16 A4 16 forte C#4 16 mf A4 16 C#4 16 A4 16
+ff D4 16 mf A4 16 D4 16 C#4 16 forte D4 16 mf A4 16 D4 16 A4  16 forte D4 16 mf A4 16 D4 16 A4  16
+ff E4 16 mf A4 16 E4 16 D4 16 forte E4 16 mf A4 16 E4 16 A4 16 forte E4 16 mf A4 16 E4 16 A4 16
+mf F4 32 a4 32 forte b4 32 C#5 32 ff d5 16 mf a4 16 f4 16 a4 16 forte d5 16 mf a4 16 f4 16 a4 16 d5 16 a4 16 
+ff F#4 16 mf d5 16 F#4 16 e4 16 forte F#4 16 mf d5 16 F#4 16 d5 16 forte F#4 16 mf d5 16 F#4 16 d5 16 
+mf G4 32 a4 32 forte b4 32 c5 32 ff d5 16 mf b4 16 g4 16 b4 16 d5 16 forte b4 16 mf g4 16 b4 16 d5 16 b4 16 
+ff G#4 16 mf D5 16 G#4 16 F#4 16 forte G#4 16 mf D5 16 G#4 16 D5 16 forte G#4 16 mf D5 16 G#4 16 D5 16 
+R 16 a4 16 g4 16 f4 16 forte e4 16 mf r 16 r 8 r 4
+r 8 a4 8 forte d5 8 mf f5 8 a5 32 g5 32 a5 8.
+r 8 a4 8 forte c5 8 mf e5 8 a5 32 g5 32 a5 8.
+r 8 d5 8 forte g#5 8 mf b5 8 g#5 8  e5 8 
+ff a5 8 mf g5 16 f5 16 e5 16 forte d5 16 mf c5 16 b4 16 a4 16 c5 16 b4 16 a4 16
+ff f5 16 mf d5 16 a4 16 d5 16 forte f5 16 mf d5 16 a4 16 d5 16 forte f5 16 mf d5 16 a4 16 d5 16 
+ff e5 16 mf d5 16 a4 16 d5 16 forte e5 16 mf c5 16 a4 16 c5 16 forte e5 16 mf c5 16 a4 16 c5 16 
+ff d5 16 mf b4 16 a4 16 b4 16 forte d5 16 mf b4 16 g#4 16 b4 16 forte d5 16 mf b4 16 g#4 16 b4 16
+c5 2.
+ff r 16 mf Eb5 16 d5 16 c5 16 forte F#5 16 mf Eb5 16 d5 16 c5 16 forte a5 16 mf Eb5 16 d5 16 c5 16
+ff Bb4 16 mf g5 16 f5 16 Eb5 16 forte d5 16 mf c5 16 Bb4 16 a4 16 forte C5 16 mf Bb4 16 a4 16 g4 16
+ff c5 8 mf e5 8 b4 8 f5 8 Bb4 8 G5 8.
+ff d5 16 mf c5 16 Bb4 16 a4 16 forte G5 16 mf f5 16 e5 16 d5 16 forte Bb5 16 mf e5 16 d5 16
+ff C#5 16 mf Bb4 16 a4 16 g4 16 forte D5 16 mf Bb4 16 a4 16 g4 16 forte e5 16 mf Bb4 16 a4 16 g4 16
+f4 8 f#4 8 g4 8 a4 8 Bb4 8 b4 8
+ff c5 8 mf C#5 8 d5 8 e5 8 f5 8 f#5 8
+ff G5 16 mf d5 16 Bb5 16 a5 16 forte g5 16 mf f5 16 e5 16 d5 16 forte C#5 16 mf d5 16 e5 16 C#5 16
+ff a4 8 mf e4 8 a4 8 C#5 8 e5 32 d5 32 e5 8.
+r 16 a4 16 f4 16 forte a4 16 mf d5 16 a4 16 f4 16 a4 16 d5 32 c5 32 d5 8.
+r 16 g4 16 e4 16 g4 16 forte c5 16 mf g4 16 e4 16 g4 16 c5 32 Bb4 32 c5 8.
+r 16 ff f4 16 mf d4 16 f4 16 Bb4 16 forte f4 16 mf d4 16 f4 16 Bb4 16 forte g4 16 mf e4 16 g4 16 
+C#4 16 a4 16 Bb4 16 a4 16 C#4 16 a4 16 Bb4 16 a4 16 c#4 8 e4 8.
+a4 16 Bb4 16 a4 16 d4 16 a4 16 Bb4 16 a4 16 d4 8 f4 8.
+g4 16 a4 16 g4 16 e4 16 g4 16 a4 16 g4 16 a3 8 g4 8.
+ff Bb3 16 mf a3 16 g3 16 a3 16 forte e4 16 mf d4 16 C#4 16 d4 16 forte g4 16 mf f4 16 e4 16
+ff f4 16 mf Bb3 16 c4 16 d4 16 forte Eb4 16 mf a3 16 Bb3 16 c4 16 forte d4 16 mf Bb3 16 c4 16 d4 16
+ff Eb4 16 mf a3 16 Bb3 16 c4 16 forte d4 16 mf Bb3 16 c4 16 d4 16 forte c4 16 mf F#3 16 g3 16 a3 16
+ff Bb3 16 mf r 16 r 8 r 16 a3 16 Bb3 16 c4 16 d4 16 Bb3 16 g4 16 d4 16
+ff Bb4 16 mf g4 16 f4 16 Eb4 16 d4 16 r 16 r 8  r 4
+ff r 16 mf Bb4 16 a4 16 g4 16 forte e5 16 mf d5 16 C#5 16 b4 16 forte a4 16 mf g4 16 f4 16 e4 16
+ff f4 16 mf d4 16 g4 16 d4 16 forte a4 16 mf d4 16 Bb4 16 d4 16 forte r 16 mf d4 16 e4 16 C#4 16
+ff d4 16 mf c4 16 F#3 16 c4 16 forte d4 16 mf c4 16 F#3 16 c4 16 forte d4 16 mf c4 16 F#3 16 c4 16
+ff Bb3 16 mf d4 16 Bb3 16 f#3 16 forte Bb3 16 mf d4 16 Bb3 16 f#3 16 forte Bb3 16 mf d4 16 Bb3 16 E3 16
+ff f3 16 mf d4 16 f3 16 d4 16 f3 16 d4 16 forte f3 16 mf d4 16 f3 16 d4 16 f3 16 d4 16
+g3 16 C#4 16 g3 16 e3 16 g3 16 C#4 16 g3 16 e3 16 g3 16 C#4 16 g3 16 e3 16
+F#3 D4 2.
+
+
+END_LAZY
+
+END_OF_TRACK
+

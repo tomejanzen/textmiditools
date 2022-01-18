@@ -528,7 +528,7 @@ Document version 96.1.
 Second edition.
 1995.
 Los Angeles.
-The MIDI Manufacturers Assocation.
+The MIDI Manufacturers Association.
 
 @end itemize
 

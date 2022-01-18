@@ -1,3 +1,7 @@
+2022-01-17     Thomas E. Janzen <janzentome@gmail.com>
+        * Most: Show correct version
+        * *.texi: Correct spelling of Association
+
 2022-01-07     Thomas E. Janzen <janzentome@gmail.com>
         * FormPlotWindow.png, KeyboardWindow.png, MusicalFormWindow.png, VoiceWindow.png: add images
         * textmidiformedit.texi: Add images of the GUI windows and more explanation.

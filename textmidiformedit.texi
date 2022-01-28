@@ -40,6 +40,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 
 @menu
 * Overview::
+* Downloading textmidiformedit::
 * Invoking textmidiformedit::
 * Musical Form Window::
 * Instrumental Voices Window::
@@ -74,6 +75,15 @@ The program @command{textmidiformedit} can be used interactively to
 create new musical form files, or edit previously-existing 
 musical form files, as used by @command{textmidicgm}.
 
+@node Downloading textmidiformedit
+@chapter Downloading textmidiformedit
+@cindex Downloading textmidiformedit
+If you have downloaded textmidiformedit.py and its support *.py files, then
+you can run it as described below.
+You can also download textmidiformedit from pypi.org.
+@smallexample
+python3 -m pip install --no-deps textmidiformedit
+@end smallexample
 @node Invoking textmidiformedit
 @chapter Invoking textmidiformedit
 @cindex Invoking textmidiformedit
@@ -82,7 +92,17 @@ where it is found (after unpacking the archive for TextMIDITools) and invoke it:
 @smallexample
 ./textmidiformedit.py
 @end smallexample
-
+If you downloaded textmidiformedit from pypi.org, or installed it in an equivalent way,
+you can use it as a python package:
+@smallexample
+python3
+>>> from textmidiformedit import *
+>>> textmidiformedit()
+@end smallexample
+When you quit the application, just exit from python with control-D or 
+@smallexample
+>>> exit()
+@end smallexample
 @node Musical Form Window
 @chapter Musical Form Window
 @cindex Musical Form Window

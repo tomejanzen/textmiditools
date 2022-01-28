@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.10
-# textmidiform.py 1.0
+# TextMIDITools Version 1.0.11
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -744,11 +743,14 @@ class XmlForm(tkinter.Tk):
         about_window['state'] = "disabled"
         about_window.focus()
 
-if __name__ == '__main__':
+def textmidiformedit():
     xmlform_window = XmlForm()
     xmlform_window.frame.grid(sticky="we", row=0, column=0)
     xmlform_window.frame.rowconfigure(index=0, weight=1)
     xmlform_window.frame.columnconfigure(index=0, weight=1)
 
     xmlform_window.mainloop()
+    
+if __name__ == '__main__':
+    textmidiformedit()
 

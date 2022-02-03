@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.12
+# TextMIDITools Version 1.0.13
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -503,7 +503,6 @@ class XmlForm(tkinter.Tk):
         # copy voice parts from Voice
 
         self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
-        print(506, self.all_forms_window.xml_form['len'])
         self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']

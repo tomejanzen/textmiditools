@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.12
+# TextMIDITools Version 1.0.13
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -346,7 +346,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
 
     def name_callback(self, event):
-        self.xml_form['name'] = self.name
+        self.xml_form['name'] = self.name.get()
 
     def len_callback(self, event):
         self.xml_form['len'] = self.len.get()
@@ -625,9 +625,9 @@ class AllFormsWindow(tkinter.Toplevel):
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
 
-        self.name = self.xml_form['name']
+        self.name.set(self.xml_form['name'])
         self.name_entry.delete(0, 1024)
-        self.name_entry.insert(0, self.name)
+        self.name_entry.insert(0, self.name.get())
         self.name_entry.update()
         
         self.len = self.xml_form['len']

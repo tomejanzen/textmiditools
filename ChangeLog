@@ -2,6 +2,8 @@
         * voice.py, textmidiformedit.py, allforms.py: fix checkbox behavior;
         fix reads from the form XML file for min/max note len, name, len, pulse, down, same up;
         fix writes of voice pan.  Fix follow radio buttons write to file.
+        Later continue to fix assignments.  Use get/set on StringVar; use delete/insert
+        on changing Entry.  Except the min/max key seems to work setting the StringVar.
         * texmidicgm.texi: add descriptions of trackscramble and trackscrambleperiod
 
 2022-02-01     Thomas E. Janzen <janzentome@gmail.com>

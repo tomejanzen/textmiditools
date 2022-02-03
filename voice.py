@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.12
+# TextMIDITools Version 1.0.13
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -171,15 +171,17 @@ class VoiceWindow(tkinter.Toplevel):
         self.scaler_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.frame,
             text='Scaler', variable=self.frame.interval_type, value="1",
             command=self.interval_type_callback)
-        if (self.xml_form['voices'][int(self.voice_number.get())]['follower']['follow'] == '1'):
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-        else:
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
         self.scaler_interval_type_radiobutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
 
         self.chromatic_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.frame,
             text='Chromatic', variable=self.frame.interval_type, value="2",
             command=self.interval_type_callback)
+        if (self.xml_form['voices'][int(self.voice_number.get())]['follower']['follow'] == '1'):
+            self.scaler_interval_type_radiobutton["state"] = "enabled"
+            self.chromatic_interval_type_radiobutton["state"] = "enabled"
+        else:
+            self.scaler_interval_type_radiobutton["state"] = "disabled"
+            self.chromatic_interval_type_radiobutton["state"] = "disabled"
         self.chromatic_interval_type_radiobutton["state"] = "disabled"
         self.chromatic_interval_type_radiobutton.grid(row=the_row, column=2, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
@@ -210,7 +212,6 @@ class VoiceWindow(tkinter.Toplevel):
         self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval'] = self.follow_interval.get()
 
     def interval_type_callback(self):
-        print(self.frame.interval_type.get())
         self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type'] = self.frame.interval_type.get()
 
     def number_of_voices_callback(self, event=None):
@@ -252,7 +253,8 @@ class VoiceWindow(tkinter.Toplevel):
         if (not self.walking_checkbutton.instate(['selected']) and self.walking):
             self.walking_checkbutton.invoke()
 
-        self.program.set(self.xml_form['voices'][voice_number]['program'])
+        self.program_entry.delete(0, 1024)
+        self.program_entry.insert(0, self.xml_form['voices'][voice_number]['program'])
         self.program_entry.update()
         the_pan = float(self.xml_form['voices'][voice_number]['pan']) / 128.0 + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)
@@ -267,19 +269,21 @@ class VoiceWindow(tkinter.Toplevel):
         self.leader.set(self.xml_form['voices'][voice_number]['follower']['leader'])
         self.leader_spinbox.update()
 
-        self.frame.interval_type = self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type']
-        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 0):
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 1):
+        self.frame.interval_type.set(self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type'])
+        if (self.xml_form['voices'][voice_number]['follower']['follow'] == 1):
+            self.leader_spinbox["state"] = "enabled"
             self.scaler_interval_type_radiobutton["state"] = "enabled"
+            self.chromatic_interval_type_radiobutton["state"] = "enabled"
+            self.follow_interval.set(self.xml_form['voices'][voice_number]['follower']['interval'])
+            self.frame.interval_type.set(self.xml_form['voices'][voice_number]['follower']['interval_type'])
+            self.scaler_interval_type_radiobutton.update()
+            self.chromatic_interval_type_radiobutton.update()
+            self.follow_interval_spinbox.update()
+        else:
+            self.leader_spinbox["state"] = "disabled"
             self.scaler_interval_type_radiobutton["state"] = "disabled"
-        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 2):
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-
-        self.follow_interval.set(self.xml_form['voices'][voice_number]['follower']['interval'])
-        self.follow_interval_spinbox.update()
+            self.chromatic_interval_type_radiobutton["state"] = "disabled"
+            self.leader.set('2147483647')
 
     def leader_callback(self, event=None):
         self.xml_form['voices'][int(self.voice_number.get())]['follower']['leader'] = self.leader.get()

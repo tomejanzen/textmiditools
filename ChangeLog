@@ -1,3 +1,17 @@
+2022-02-02     Thomas E. Janzen <janzentome@gmail.com>
+        * voice.py, textmidiformedit.py, allforms.py: fix checkbox behavior;
+        fix reads from the form XML file for min/max note len, name, len, pulse, down, same up;
+        fix writes of voice pan.  Fix follow radio buttons write to file.
+        * texmidicgm.texi: add descriptions of trackscramble and trackscrambleperiod
+
+2022-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix scale length error in saving XML Form files.
+        * Voice.h, Composer.h, textmidicgm.cc, Composer.cc: Add track scrambling feature
+
+2022-01-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidi.l, MusicalForm.h, MusicalForm.cc: Use MaxDynamic
+        and MinDynamic names where appropriate instead of magic numbers.
+
 2022-01-17     Thomas E. Janzen <janzentome@gmail.com>
         * Most: Show correct version
         * *.texi: Correct spelling of Association

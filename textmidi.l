@@ -48,6 +48,7 @@
 #include "Midi.h" // MIDI codes and MIDI file header
 #include "MIDIKeyString.h"
 #include "textmidi.h" // For this file's interfaces to main.cc
+#include "MusicalForm.h"
 
 using namespace std;
 using namespace boost;
@@ -113,7 +114,7 @@ namespace
     // In addition we allow the words "left", "center", and "right".
     const map<string_view, int> PanStringToValue{{"left", 0},
                                                  {"center", 64},
-                                                 {"right", 127}};
+                                                 {"right", static_cast<int>(round(cgm::MaxDynamic))}};
 
     // keyevent_to_keynumber
     // converts a string keyevent, which can include tie-in and tie-out,
@@ -1160,7 +1161,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     if (note_name == "ffff")
     {
-      dynamic = 127;
+      dynamic = static_cast<int>(round(cgm::MaxDynamic));
     }
 
     lazy::dynamic = dynamic % 128;

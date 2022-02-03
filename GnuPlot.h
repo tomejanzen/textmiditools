@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.11
+// TextMIDITools Version 1.0.12
 //
 // textmidicgm 1.0
 // Copyright © 2021 Thomas E. Janzen
@@ -19,7 +19,7 @@ namespace cgm
 {
 
     void write_form_as_gnuplot_data(
-        const MusicalForm& musical_form, 
+        const MusicalForm& musical_form,
         const std::string& gnuplot_filename);
 
 }

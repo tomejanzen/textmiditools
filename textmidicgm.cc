@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.11
+// TextMIDITools Version 1.0.12
 //
 // textmidicgm 1.0
 // Copyright © 2021 Thomas E. Janzen
@@ -120,6 +120,11 @@ namespace {
         "melodic idiophone"};
     const string ClampScaleOpt{"clampscale"};
     constexpr char ClampScaleTxt[]{"in each form, clamp the scale to the union of the voice ranges"};
+    const string TrackScrambleOpt{"trackscramble"};
+    constexpr char TrackScrambleTxt[]{"rotateright rotateleft reverse previouspermutation "
+        "nextpermutation swappairs randomshuffle"};
+    const string TrackScramblePeriodOpt{"trackscrambleperiod"};
+    constexpr char TrackScramblePeriodTxt[]{"floating seconds"};
 }
 
 int main(int argc, char *argv[])
@@ -137,6 +142,8 @@ int main(int argc, char *argv[])
         ((RandomOpt      + ",r").c_str(), program_options::value<string>(), RandomTxt)
         ((InstrumentsOpt + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
         ((ClampScaleOpt  + ",c").c_str(), ClampScaleTxt)
+        ((TrackScrambleOpt + ",z").c_str(), program_options::value<string>(), TrackScrambleTxt)
+        ((TrackScramblePeriodOpt + ",y").c_str(), program_options::value<double>(), TrackScramblePeriodTxt)
     ;
     program_options::variables_map var_map;
     try
@@ -167,7 +174,7 @@ int main(int argc, char *argv[])
         string str{};
         str.reserve(512);
         (((((((str += "textmidicgm\n")
-            += "TextMIDITools 1.0.11\n")
+            += "TextMIDITools 1.0.12\n")
             += "Copyright © 2021 Thomas E. Janzen\n")
             += "License GPLv3+: GNU GPL version 3 or later ")
             += "<https://gnu.org/licenses/gpl.html>\n")
@@ -363,6 +370,25 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
+    TrackScramble track_scramble;
+
+    if (var_map.count(TrackScrambleOpt)) [[unlikely]]
+    {
+        const string scramble_string{var_map[TrackScrambleOpt].as<string>()};
+        TrackScrambleEnum track_scramble_type{TrackScrambleEnum::None};
+        const auto it{track_scramble_map.find(scramble_string)};
+        if (it != track_scramble_map.end())
+        {
+            track_scramble_type = it->second;
+        }
+        TicksDuration track_scramble_period{120 * TicksPerQuarter};
+        if (var_map.count(TrackScramblePeriodOpt))
+        {
+            track_scramble_period = TicksDuration{static_cast<int64_t>(floor(var_map[TrackScramblePeriodOpt].as<double>())) * TicksPerQuarter};
+        }
+        track_scramble = TrackScramble(track_scramble_type, track_scramble_period);
+    }
+
     string textmidi_filename;
     if (var_map.count(TextmidiOpt))
     {
@@ -431,7 +457,7 @@ int main(int argc, char *argv[])
             textmidi_file.open((xml_form.name() + ".txt").c_str());
         }
 
-        compose(xml_form, textmidi_file, gnuplot, answer);
+        compose(xml_form, textmidi_file, gnuplot, answer, track_scramble);
 
         textmidi_file.close();
     }

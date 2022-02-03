@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.11
+# TextMIDITools Version 1.0.12
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -40,6 +40,8 @@ class ScaleFrame(tkinter.Frame):
                        "C7", "C#7", "D7", "D#7", "E7", "F7", "F#7", "G7", "G#7", "A7", "A#7", "B7",
                        "C8", "C#8", "D8", "D#8", "E8", "F8", "F#8", "G8", "G#8", "A8", "A#8", "B8",
                        "C9", "C#9", "D9", "D#9", "E9", "F9", "F#9", "G9"]
+    notenames = {'C' : 0, 'D' : 2, 'E' : 4, 'F' : 5, 'G' : 7, 'A' : 9, 'B' : 11}
+    accidentals = {'b' : -1, '#' : 1, 'bb' : -2, 'x' : 2}
     half_steps_per_octave = 12
     midi_keys_qty = 128
     midi_octaves_qty = 11
@@ -73,15 +75,34 @@ class ScaleFrame(tkinter.Frame):
         self.keyboard_window.keyboard_frame.set_selects(midi_key_selects)
 
     def set_keyboard_from_xml(self, xml_form):
+        scale_ints = []
+        for key_string in xml_form['scale']:
+            key_string[:1].upper()
+            notename = key_string[0]
+            if (len(key_string) == 2): # C0
+                keynum = ScaleFrame.notenames[notename] + ScaleFrame.half_steps_per_octave * (int(key_string[1]) + 1)
+            if (len(key_string) == 3): # C-1 Cb1 C#1 Cx2
+                if (key_string[1:3] == '-1'): # bottom octave
+                    keynum = ScaleFrame.notenames[notename]
+                else: # C#1
+                    keynum = ScaleFrame.notenames[notename] + ScaleFrame.accidentals[key_string[1]] + ScaleFrame.half_steps_per_octave * (int(key_string[2]) + 1)
+            if (len(key_string) == 4): # Db-1 Cbb1 C#-1 Ebb4
+                if (key_string[2:4] == '-1'):
+                    keynum = ScaleFrame.notenames[notename] + ScaleFrame.accidentals[key_string[1]]
+                else:
+                    if (key_string[1:3] == 'bb'):
+                        keynum = ScaleFrame.notenames[notename] + ScaleFrame.accidentals[key_string[1:3]] + ScaleFrame.half_steps_per_octave * (int(key_string[3]) + 1)
+            if (len(key_string) == 5): # Dbb-1 ;there is no Cbb-1
+                if ((key_string[3:5] == '-1') and (key_string[1:3] == 'bb')):
+                    keynum = ScaleFrame.notenames[notename] + ScaleFrame.accidentals[key_string[1:3]]
+            scale_ints.append(keynum)
+
         midi_key_selects = []
+
         for s in range(0, len(ScaleFrame.full_midi_scale)):
             midi_key_selects.append(False)
-        for key_string in xml_form['scale']:
-            k = 0
-            while (k < len(ScaleFrame.full_midi_scale)) and (ScaleFrame.full_midi_scale[k] != key_string):
-                k = k + 1
-            if (k < len(ScaleFrame.full_midi_scale)):
-                midi_key_selects[k] = True
+        for si in scale_ints:
+            midi_key_selects[si] = True
         self.keyboard_window.keyboard_frame.set_selects(midi_key_selects)
         self.scale_untransposed = []
         for k in range(0, len(midi_key_selects)):
@@ -325,7 +346,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
 
     def name_callback(self, event):
-        self.xml_form['name'] = self.name.get()
+        self.xml_form['name'] = self.name
 
     def len_callback(self, event):
         self.xml_form['len'] = self.len.get()
@@ -603,6 +624,47 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
+
+        self.name = self.xml_form['name']
+        self.name_entry.delete(0, 1024)
+        self.name_entry.insert(0, self.name)
+        self.name_entry.update()
+        
+        self.len = self.xml_form['len']
+        self.len_entry.delete(0, 1024)
+        self.len_entry.insert(0, self.len)
+        self.len_entry.update()
+
+        self.min_note_len = self.xml_form['min_note_len']
+        self.min_note_len_entry.delete(0, 1024)
+        self.min_note_len_entry.insert(0, self.min_note_len)
+        self.min_note_len_entry.update()
+
+        self.max_note_len = self.xml_form['max_note_len']
+        self.max_note_len_entry.delete(0, 1024)
+        self.max_note_len_entry.insert(0, self.max_note_len)
+        self.max_note_len_entry.update()
+
+        self.pulse = self.xml_form['pulse']
+        self.pulse_entry.delete(0, 1024)
+        self.pulse_entry.insert(0, self.pulse)
+        self.pulse_entry.update()
+
+        self.down = self.xml_form['melody_probabilities']['down']
+        self.down_entry.delete(0, 1024)
+        self.down_entry.insert(0, self.down)
+        self.down_entry.update()
+
+        self.same = self.xml_form['melody_probabilities']['same']
+        self.same_entry.delete(0, 1024)
+        self.same_entry.insert(0, self.same)
+        self.same_entry.update()
+
+        self.up = self.xml_form['melody_probabilities']['up']
+        self.up_entry.delete(0, 1024)
+        self.up_entry.insert(0, self.up)
+        self.up_entry.update()
+
         self.pitch_form.install_xml_subform(self.xml_form['pitch_form'])
         self.pitch_form.update()
         self.rhythm_form.install_xml_subform(self.xml_form['rhythm_form'])

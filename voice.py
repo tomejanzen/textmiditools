@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.11
+# TextMIDITools Version 1.0.12
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -95,6 +95,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.channel_spinbox["to"] = 16.0
         self.channel_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.channel_spinbox.bind('<Key-Return>', self.channel_callback)
+        self.channel_spinbox.bind('<FocusOut>', self.channel_callback)
         self.channel_spinbox.bind('<ButtonRelease-1>', self.channel_callback)
         self.channel = tkinter.StringVar()
         self.channel.set(self.xml_form['voices'][int(self.voice_number.get())]['channel'])
@@ -114,17 +115,10 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.walking_label = tkinter.ttk.Label(self.frame, text="Walking")
         self.walking_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.walking = tkinter.StringVar()
+        self.walking = tkinter.IntVar()
         self.walking = self.xml_form['voices'][int(self.voice_number.get())]['walking']
-        self.walking_checkbutton = tkinter.ttk.Checkbutton(self.frame, textvariable=self.walking, command=self.walking_callback)
-        self.walking_checkbutton["onvalue"] = "1"
-        self.walking_checkbutton["offvalue"] = "0"
-        if (self.walking == "1"):
-            if (not self.walking_checkbutton.instate(['selected'])):
-                self.walking_checkbutton.state(self.walking_checkbutton.state().append('selected'))
-        else:
-            if (self.walking_checkbutton.instate(['selected'])):
-                self.walking_checkbutton.state(self.walking_checkbutton.state().remove('selected'))
+        self.walking_checkbutton = tkinter.ttk.Checkbutton(self.frame, text="walking",
+            variable=self.walking, command=self.walking_callback)
         self.walking_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
 
@@ -144,17 +138,10 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.follow_label = tkinter.ttk.Label(self.frame, text="Follow")
         self.follow_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.follow = tkinter.StringVar()
+        self.follow = tkinter.IntVar()
         self.follow.set(self.xml_form['voices'][int(self.voice_number.get())]['follower']['follow'])
-        self.follow_checkbutton = tkinter.ttk.Checkbutton(self.frame, textvariable=self.follow, command=self.follow_callback)
-        self.follow_checkbutton["onvalue"] = "1"
-        self.follow_checkbutton["offvalue"] = "0"
-        if (self.follow == "1"):
-            if (not self.follow_checkbutton.instate(['selected'])):
-                self.follow_checkbutton.state(self.follow_checkbutton.state().append('selected'))
-        else:
-            if (self.follow_checkbutton.instate(['selected'])):
-                self.follow_checkbutton.state(self.follow_checkbutton.state().remove('selected'))
+        self.follow_checkbutton = tkinter.ttk.Checkbutton(self.frame, text="follow",
+            variable=self.follow, command=self.follow_callback)
         self.follow_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
 
@@ -179,19 +166,19 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.scaler_interval_type_label = tkinter.ttk.Label(self.frame, text="Interval Type")
         self.scaler_interval_type_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.frame.interval_type = tkinter.IntVar()
-        self.frame.interval_type = self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type']
+        self.frame.interval_type = tkinter.StringVar()
+        self.frame.interval_type.set(self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type'])
         self.scaler_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.frame,
-            text='Scaler', variable=self.frame.interval_type, value='1',
+            text='Scaler', variable=self.frame.interval_type, value="1",
             command=self.interval_type_callback)
-        if (self.xml_form['voices'][int(self.voice_number.get())]['follower']['follow'] == 1):
+        if (self.xml_form['voices'][int(self.voice_number.get())]['follower']['follow'] == '1'):
             self.scaler_interval_type_radiobutton["state"] = "enabled"
         else:
             self.scaler_interval_type_radiobutton["state"] = "disabled"
         self.scaler_interval_type_radiobutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
 
         self.chromatic_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.frame,
-            text='Chromatic', variable=self.frame.interval_type, value='2',
+            text='Chromatic', variable=self.frame.interval_type, value="2",
             command=self.interval_type_callback)
         self.chromatic_interval_type_radiobutton["state"] = "disabled"
         self.chromatic_interval_type_radiobutton.grid(row=the_row, column=2, sticky=NSEW, padx=2, pady=2)
@@ -219,63 +206,14 @@ class VoiceWindow(tkinter.Toplevel):
     def high_pitch_callback(self, event):
         self.xml_form['voices'][int(self.voice_number.get())]['high_pitch'] = self.high_pitch.get()
 
-    def follow_interval_callback(self, event):
+    def follow_interval_callback(self, event=None):
         self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval'] = self.follow_interval.get()
 
     def interval_type_callback(self):
-        self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type'] = self.frame.interval_type
+        print(self.frame.interval_type.get())
+        self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type'] = self.frame.interval_type.get()
 
-    def voice_number_callback(self, event=None):
-
-        voice_number = int(self.voice_number.get())
-        self.low_pitch.set(self.xml_form['voices'][voice_number]['low_pitch'])
-        self.low_pitch_entry.update()
-        self.high_pitch.set(self.xml_form['voices'][voice_number]['high_pitch'])
-        self.high_pitch_entry.update()
-        self.channel.set(self.xml_form['voices'][voice_number]['channel'])
-        self.walking = self.xml_form['voices'][voice_number]['walking']
-
-        if (self.walking == "1"):
-            if (not self.walking_checkbutton.instate(['selected'])):
-                self.walking_checkbutton.state(self.walking_checkbutton.state().append('selected'))
-        else:
-            if (self.walking_checkbutton.instate(['selected'])):
-                self.walking_checkbutton.state(self.walking_checkbutton.state().remove('selected'))
-
-        self.walking_checkbutton.update()
-        self.program.set(self.xml_form['voices'][voice_number]['program'])
-        self.program_entry.update()
-        the_pan = float(self.xml_form['voices'][voice_number]['pan']) / 128.0 + 0.5
-        self.pan_scrollbar.set(the_pan, the_pan)
-        self.pan_scrollbar.update()
-
-        if (self.follow == "1"):
-            if (not self.follow_checkbutton.instate(['selected'])):
-                self.follow_checkbutton.state(self.follow_checkbutton.state().append('selected'))
-        else:
-            if (self.follow_checkbutton.instate(['selected'])):
-                self.follow_checkbutton.state(self.follow_checkbutton.state().remove('selected'))
-
-        self.follow_checkbutton.update()
-
-        self.leader.set(self.xml_form['voices'][voice_number]['follower']['leader'])
-        self.leader_spinbox.update()
-
-        self.frame.interval_type = self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type']
-        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 0):
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 1):
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 2):
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-
-        self.follow_interval.set(self.xml_form['voices'][voice_number]['follower']['interval'])
-        self.follow_interval_spinbox.update()
-
-    def number_of_voices_callback(self, event):
+    def number_of_voices_callback(self, event=None):
         number_of_voices = int(self.number_of_voices.get())
         voice_number = int(self.voice_number.get())
         if (voice_number >= number_of_voices):
@@ -301,7 +239,49 @@ class VoiceWindow(tkinter.Toplevel):
                 self.xml_form['voices'].append(vd)
         self.voice_number_spinbox["to"] = len(self.xml_form['voices']) - 1
 
-    def leader_callback(self, event):
+    def voice_number_callback(self, event=None):
+        voice_number = int(self.voice_number.get())
+        self.low_pitch.set(self.xml_form['voices'][voice_number]['low_pitch'])
+        self.low_pitch_entry.update()
+        self.high_pitch.set(self.xml_form['voices'][voice_number]['high_pitch'])
+        self.high_pitch_entry.update()
+        self.channel.set(self.xml_form['voices'][voice_number]['channel'])
+        self.walking = self.xml_form['voices'][voice_number]['walking']
+        if (self.walking_checkbutton.instate(['selected']) and not self.walking):
+            self.walking_checkbutton.invoke()
+        if (not self.walking_checkbutton.instate(['selected']) and self.walking):
+            self.walking_checkbutton.invoke()
+
+        self.program.set(self.xml_form['voices'][voice_number]['program'])
+        self.program_entry.update()
+        the_pan = float(self.xml_form['voices'][voice_number]['pan']) / 128.0 + 0.5
+        self.pan_scrollbar.set(the_pan, the_pan)
+        self.pan_scrollbar.update()
+
+        self.follow = self.xml_form['voices'][voice_number]['follower']['follow']
+        if (self.follow_checkbutton.instate(['selected']) and not self.follow):
+            self.follow_checkbutton.invoke()
+        if (not self.follow_checkbutton.instate(['selected']) and self.follow):
+            self.follow_checkbutton.invoke()
+
+        self.leader.set(self.xml_form['voices'][voice_number]['follower']['leader'])
+        self.leader_spinbox.update()
+
+        self.frame.interval_type = self.xml_form['voices'][int(self.voice_number.get())]['follower']['interval_type']
+        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 0):
+            self.scaler_interval_type_radiobutton["state"] = "disabled"
+            self.scaler_interval_type_radiobutton["state"] = "disabled"
+        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 1):
+            self.scaler_interval_type_radiobutton["state"] = "enabled"
+            self.scaler_interval_type_radiobutton["state"] = "disabled"
+        if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 2):
+            self.scaler_interval_type_radiobutton["state"] = "disabled"
+            self.scaler_interval_type_radiobutton["state"] = "enabled"
+
+        self.follow_interval.set(self.xml_form['voices'][voice_number]['follower']['interval'])
+        self.follow_interval_spinbox.update()
+
+    def leader_callback(self, event=None):
         self.xml_form['voices'][int(self.voice_number.get())]['follower']['leader'] = self.leader.get()
 
     def channel_callback(self, event=None):
@@ -311,7 +291,10 @@ class VoiceWindow(tkinter.Toplevel):
         self.xml_form['voices'][int(self.voice_number.get())]['program'] = self.program.get()
 
     def walking_callback(self):
-        self.xml_form['voices'][int(self.voice_number.get())]['walking'] = self.walking
+        if (self.walking_checkbutton.instate(['selected'])):
+            self.xml_form['voices'][int(self.voice_number.get())]['walking'] = 1
+        else:
+            self.xml_form['voices'][int(self.voice_number.get())]['walking'] = 0
 
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
@@ -327,17 +310,23 @@ class VoiceWindow(tkinter.Toplevel):
         self.channel_spinbox.update()
         self.program.set(self.xml_form['voices'][voice_number]['program'])
         self.program_entry.update()
+
+        self.walking = self.xml_form['voices'][voice_number]['walking']
+        if (self.walking_checkbutton.instate(['selected']) and not self.walking):
+            self.walking_checkbutton.invoke()
+        if (not self.walking_checkbutton.instate(['selected']) and self.walking):
+            self.walking_checkbutton.invoke()
+
         the_pan = float(self.xml_form['voices'][voice_number]['pan']) / 128.0 + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)
         self.pan_scrollbar.update()
-        self.follow.set(self.xml_form['voices'][voice_number]['follower']['follow'])
-        if (self.follow == "1"):
-            if (not self.follow_checkbutton.instate(['selected'])):
-                self.follow_checkbutton.state(self.follow_checkbutton.state().append('selected'))
-        else:
-            if (self.follow_checkbutton.instate(['selected'])):
-                self.follow_checkbutton.state(self.follow_checkbutton.state().remove('selected'))
-        self.follow_checkbutton.update()
+
+        self.follow = self.xml_form['voices'][voice_number]['follower']['follow']
+        if (self.follow_checkbutton.instate(['selected']) and not self.follow):
+            self.follow_checkbutton.invoke()
+        if (not self.follow_checkbutton.instate(['selected']) and self.follow):
+            self.follow_checkbutton.invoke()
+
         self.leader.set(self.xml_form['voices'][voice_number]['follower']['leader'])
         self.leader_spinbox.update()
         if (self.xml_form['voices'][voice_number]['follower']['interval_type'] == 0):
@@ -355,13 +344,16 @@ class VoiceWindow(tkinter.Toplevel):
         self.frame.update()
 
     def follow_callback(self):
+        voice_number = int(self.voice_number.get())
         if (self.follow_checkbutton.instate(['selected'])):
+            self.xml_form['voices'][voice_number]['follower']['follow'] = 1
             self.walking_checkbutton["state"] = "disabled"
             self.leader_spinbox["state"] = "normal"
             self.scaler_interval_type_radiobutton["state"] = "normal"
             self.chromatic_interval_type_radiobutton["state"] = "normal"
             self.follow_interval_spinbox["state"] = "normal"
         else:
+            self.xml_form['voices'][voice_number]['follower']['follow'] = 0
             self.walking_checkbutton["state"] = "normal"
             self.leader_spinbox["state"] = "disabled"
             self.scaler_interval_type_radiobutton["state"] = "disabled"

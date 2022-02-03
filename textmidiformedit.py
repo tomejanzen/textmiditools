@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.11
+# TextMIDITools Version 1.0.12
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -503,6 +503,7 @@ class XmlForm(tkinter.Tk):
         # copy voice parts from Voice
 
         self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
+        print(506, self.all_forms_window.xml_form['len'])
         self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
@@ -569,7 +570,8 @@ class XmlForm(tkinter.Tk):
         scale_element.setAttribute("tracking_level", '0')
         scale_element.setAttribute("version", '0')
 
-        self.add_text_element(form_document, scale_element, "count", "count", str(len(self.xml_form_dict['scale'])))
+        temp_scale = self.all_forms_window.scale_frame.get_string_scale()
+        self.add_text_element(form_document, scale_element, "count", "count", str(len(temp_scale)))
 
         self.add_text_element(form_document, scale_element, "item_version", "item_version", "0")
 
@@ -625,20 +627,20 @@ class XmlForm(tkinter.Tk):
 
         self.add_text_element(doc, item_element, "low_pitch", "low_pitch_", str(voice_dict['low_pitch']))
         self.add_text_element(doc, item_element, "high_pitch", "high_pitch_", str(voice_dict['high_pitch']))
-        self.add_text_element(doc, item_element, "channel", "channel_", str(voice_dict['channel']))
-        self.add_text_element(doc, item_element, "walking", "walking_", str(voice_dict['walking']))
+        self.add_text_element(doc, item_element, "channel", "channel_", str(int(voice_dict['channel'])))
+        self.add_text_element(doc, item_element, "walking", "walking_", str(int(voice_dict['walking'])))
         self.add_text_element(doc, item_element, "program", "program_", str(voice_dict['program']))
-        self.add_text_element(doc, item_element, "pan", "pan_", str(voice_dict['pan']))
+        self.add_text_element(doc, item_element, "pan", "pan_", str(int(voice_dict['pan'])))
         follower_element = doc.createElement("follower_")
         if (write_version):
             follower_element.setAttribute("class_id", '7')
             follower_element.setAttribute("tracking_level", '0')
             follower_element.setAttribute("version", '0')
 
-        self.add_text_element(doc, follower_element, "follow", "follow_", str(voice_dict['follower']['follow']))
-        self.add_text_element(doc, follower_element, "leader", "leader_", str(voice_dict['follower']['leader']))
-        self.add_text_element(doc, follower_element, "interval_type", "interval_type_", str(voice_dict['follower']['interval_type']))
-        self.add_text_element(doc, follower_element, "interval", "interval_", str(voice_dict['follower']['interval']))
+        self.add_text_element(doc, follower_element, "follow", "follow_", str(int(voice_dict['follower']['follow'])))
+        self.add_text_element(doc, follower_element, "leader", "leader_", str(int(voice_dict['follower']['leader'])))
+        self.add_text_element(doc, follower_element, "interval_type", "interval_type_", str(int(voice_dict['follower']['interval_type'])))
+        self.add_text_element(doc, follower_element, "interval", "interval_", str(int(voice_dict['follower']['interval'])))
         item_element.appendChild(follower_element)
         parent.appendChild(item_element)
 
@@ -750,7 +752,7 @@ def textmidiformedit():
     xmlform_window.frame.columnconfigure(index=0, weight=1)
 
     xmlform_window.mainloop()
-    
+
 if __name__ == '__main__':
     textmidiformedit()
 

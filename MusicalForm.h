@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.11
+// TextMIDITools Version 1.0.12
 //
 // textmidicgm 1.0
 // Copyright © 2021 Thomas E. Janzen
@@ -29,6 +29,8 @@
 
 namespace cgm
 {
+    constexpr double MinDynamic{30};
+    constexpr double MaxDynamic{127};
 
     class MusicalFormException
     {
@@ -249,7 +251,7 @@ namespace cgm
         {
             scale_.resize(form.scale.size());
             transform(form.scale.begin(), form.scale.end(),
-                scale_.begin(), [](const std::uint32_t notenum) 
+                scale_.begin(), [](const std::uint32_t notenum)
                 { return textmidi::num_to_note(notenum); });
             voices_.clear();
             voices_.insert(voices_.begin(), form.voices.begin(),

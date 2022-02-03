@@ -201,11 +201,14 @@ textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
 @b{@minus{}x}|@b{@minus{}@minus{}xmlform} @var{xml_form_file}
 [@b{@minus{}r}|@b{@minus{}@minus{}random}]
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}]
-[@b{@minus{}i}|@b{@minus{}@minus{}instruments} @lbracechar{}piano chromaticpercussion organ guitar bass strings ensemble brass
-reed pipe synthlead synthpad syntheffects ethnic percussive soundeffects
-all melodic idiophone...@rbracechar{}]
+[@b{@minus{}i}|@b{@minus{}@minus{}instruments} @lbracechar{}piano | chromaticpercussion | organ | guitar | bass | strings | ensemble | brass
+| reed | pipe | synthlead | synthpad | syntheffects | ethnic | percussive | soundeffects
+| all | melodic | idiophone...@rbracechar{}]
 [@b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{output textmidi file}] [@b{@minus{}g}|@b{@minus{}@minus{}gnuplot}]
 [@b{@minus{}c}|@b{@minus{}@minus{}clampscale}]
+[@b{@minus{}z}|@b{@minus{}@minus{}trackscramble} @lbracechar{}rotateright | rotateleft | reverse 
+| previouspermutation | nextpermutation | swappairs | randomshuffle @rbracechar{}
+[@b{@minus{}y}|@b{@minus{}@minus{}trackscrambleperiod} @lbracechar{}time in seconds@rbracechar{}
 [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 @end smallexample
 
@@ -320,6 +323,49 @@ without moving at all until such time as the pitch curve starts to edge up
 above that low pitch for the voice.  Because it is not a per-voice adjustment
 it is not a complete solution, but is coherent with the original technique.
 This option does not assume an rising-ordered scale.
+@item -z, --trackscramble rotateright | rotateleft | reverse | previouspermutation | nextpermutation | swappairs | randomshuffle
+Periodically reorder the track priority for the purposes of applying the texture curve, which determines how large a portion of the complement (the ensemble) is playing.
+Without this feature, when the texture curve was thin, and a solo instrument played, it would always be the same track and instrument playing.
+By re-ordering the tracks now and then, a different voice can be the soloist at those times.
+For example, if trackscrambleperiod is set to the same duration as the texture period, then each time the texture permits only one track to play,
+possibly a different track and instrument will play the solo.
+This has no effect on which track follows another; those remain as they were at the start.
+The algorithms are based (with the exception of swappairs) on C++ standard library algorithms for containers.
+@itemize
+@item rotateright
+@cindex rotateright
+Rotate right pushes the tracks down in priority and brings the last voice to the top.  The new top voice plays the solo when the texture curve is thin.
+
+@item rotateleft
+@cindex rotateleft
+Rotate left pulls the tracks up in priority and pushes the top voice to the last position.
+
+@item reverse
+@cindex reverse
+Reverse the order of tracks.  The last voice becomes first in priority, and vis versa.
+Alternate periods produce the same priority order.
+
+@item previouspermutation
+@cindex previouspermutation
+Find and apply the previous permutation of the voice/track pairs in terms of the integer priority, where 0 is the highest and plays the solo when the texture curve is thinest.
+
+@item nextpermutation
+@cindex nextpermutation
+Permute the voice/track pairs in terms of the integer priority to the next permutation.
+
+@item swappairs
+@cindex swappairs
+Swap neighboring pairs of voice/tracks.  Every other swap gets the same priority order.
+
+@item randomshuffle
+@cindex randomshuffle
+Randomly shuffle the tracks each scramble period.
+
+@end itemize
+
+@item -y, --trackscrambleperiod time_in_seconds
+The time period in seconds at which to apply the track scramble algorithm.
+
 @item -v, --verbose
 @cindex verbose
 Write some informative messages to the screen.  Errors are printed

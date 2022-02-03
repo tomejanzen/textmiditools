@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.11
+// TextMIDITools Version 1.0.12
 //
 // textmidicgm 1.0
 // Copyright © 2021 Thomas E. Janzen
@@ -45,12 +45,6 @@ using namespace std;
 using namespace cgm;
 using namespace boost;
 using namespace textmidi;
-
-namespace cgm
-{
-    constexpr double MinDynamic{30};
-    constexpr double MaxDynamic{127};
-}
 
 double cgm::Sine::period() const noexcept
 {

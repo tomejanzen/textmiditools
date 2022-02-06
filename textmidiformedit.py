@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.13
+# TextMIDITools Version 1.0.14
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -17,9 +17,9 @@ from tkinter.ttk import *
 import tkinter.constants, tkinter.filedialog
 from xml.dom import minidom
 from xml.dom.minidom import parse, Node, getDOMImplementation
-from voice import VoiceWindow
-from allforms import AllFormsWindow
-from allforms import ScaleFrame
+from VoiceWindow import VoiceWindow
+from AllFormsWindow import AllFormsWindow
+from AllFormsWindow import ScaleFrame
 
 class XmlForm(tkinter.Tk):
     xml_form_dict = {}
@@ -29,14 +29,16 @@ class XmlForm(tkinter.Tk):
         self.default_xml_form()
         self.all_forms_window = AllFormsWindow(self.xml_form_dict)
         self.voice_window = VoiceWindow(self.xml_form_dict)
-        self.canvas = None
+        #self.resizable(False, False)
+        self.win_height = 600
+        self.win_width = 1000
+        self.canvas = Canvas(self, bg='white', height=self.win_height, width=self.win_width, background='#88AAFF')
         self.draw_form()
         self.title('Form Plot')
 
         self.frame = ttk.Frame(self, padding="1 1 1 1")
 
         self.option_add('*tearOff', FALSE)
-        self.frame = ttk.Frame(self, padding="1 1 1 1")
         self.frame.grid(column=0, row=0, sticky=(N, W, E, S))
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
@@ -46,6 +48,7 @@ class XmlForm(tkinter.Tk):
         self.frame.grid(sticky="we", row=0, column=2)
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=2, weight=1)
+        self.geometry('1000x600+450+50')
         #self.frame.grab_set()
 
     def install_file(self, afilename):
@@ -55,31 +58,28 @@ class XmlForm(tkinter.Tk):
         self.traverse_xml_form()
         self.draw_form()
 
-    def on_motion(self, event):
-        a_canvas = event.widget
+    def configure_callback(self, event=None):
+        self.win_width = event.width
+        self.win_height = event.height
         self.draw_form()
 
     def draw_form(self):
         duration = float(self.xml_form_dict['len'])
         twopi = 2.0 * math.pi
-        win_height = 600
-        win_width = 1000
-        if (self.canvas == None):
-            self.canvas = Canvas(self, bg='white', height=win_height, width=win_width)
-        else:
-            self.canvas.delete()
-            self.canvas = Canvas(self, bg='white', height=win_height, width=win_width)
-            self.canvas.grid(row=0, column=0, sticky=NSEW)
+
+        self.canvas.delete('all')
+        self.canvas.grid(row=0, column=0, sticky=NSEW)
+
+        self.canvas.bind("<Configure>", self.configure_callback)
 
         self.canvas.grid(sticky=NSEW)
-        self.canvas.bind('<B1-Motion>', self.on_motion)
 
         poly_lr = []
         poly_rl = []
-        for i in range(1, win_width, 1):
-            mean_freq = 1.0 / float(self.xml_form_dict['pitch_form']['mean']['period'])
+        for i in range(1, self.win_width, 1):
+            mean_freq  = 1.0 / float(self.xml_form_dict['pitch_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['pitch_form']['range']['period'])
-            seconds_per_pixel = duration / float(win_width)
+            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             # omega * t = twopi * mean_freq  * the_time
             # the phase = self.xml_form_dict['pitch_form']['mean']['phase']
@@ -88,14 +88,14 @@ class XmlForm(tkinter.Tk):
             # make it work with the form model by making it range from 0 to 1.
             # 0.5 + sin(omega * t + phase) / 2
             # scale it for graphical plotting on the canvas
-            # 0.5 + sin(omega * t + phase) / 2 * win_height / 16
+            # 0.5 + sin(omega * t + phase) / 2 * self.win_height / 16
             # but window coordinates are left-handed, so invert the mean curve
-            # -(0.5 + sin(omega * t + phase) / 2 * win_height / 16)
+            # -(0.5 + sin(omega * t + phase) / 2 * self.win_height / 16)
             # position it on the canvas
-            # 0.5 + sin(omega * t + phase) / 2 * win_height / 16 + 1 * win_height / 16
+            # 0.5 + sin(omega * t + phase) / 2 * self.win_height / 16 + 1 * self.win_height / 16
             # oi la!
-            y_mean  = (.5 - math.sin(twopi * mean_freq  * the_time + float(self.xml_form_dict['pitch_form']['mean']['phase']))  / 2.0) * (float(win_height) / 12.0) + (1.0 * float(win_height) / 16.0)
-            y_range = (.5 + math.sin(twopi * range_freq * the_time + float(self.xml_form_dict['pitch_form']['range']['phase'])) / 2.0) * (float(win_height) / 12.0)
+            y_mean  = (.5 - math.sin(twopi * mean_freq  * the_time + float(self.xml_form_dict['pitch_form']['mean']['phase']))  / 2.0) * (float(self.win_height) / 12.0) + (1.0 * float(self.win_height) / 16.0)
+            y_range = (.5 + math.sin(twopi * range_freq * the_time + float(self.xml_form_dict['pitch_form']['range']['phase'])) / 2.0) * (float(self.win_height) / 12.0)
 
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
@@ -103,98 +103,103 @@ class XmlForm(tkinter.Tk):
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        pitch_plot_id = self.canvas.create_polygon(polygon, fill="black")
+        fill_color = '#004400'
+        pitch_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
+        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (1.0 * float(self.win_height) / 16.0)
+        axis_color = '#000000'
+        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
 
         poly_lr = []
         poly_rl = []
         polygon = []
-        for i in range(1, win_width):
+        for i in range(1, self.win_width):
             mean_freq = 1.0 / float(self.xml_form_dict['rhythm_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['rhythm_form']['range']['period'])
-            seconds_per_pixel = duration / float(win_width)
+            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             y_mean  = (.5
                        - math.sin(twopi * mean_freq  * the_time
                                   + float(self.xml_form_dict['rhythm_form']['mean']['phase']))
-                       / 2.0) * float(win_height) / 12.0 + 5.0 * float(win_height / 16.0)
+                       / 2.0) * float(self.win_height) / 12.0 + 5.0 * float(self.win_height / 16.0)
             y_range = (.5
                       + math.sin(twopi * range_freq * the_time
                                  + float(self.xml_form_dict['rhythm_form']['range']['phase']))
-                      / 2.0) * float(win_height) / 12.0
+                      / 2.0) * float(self.win_height) / 12.0
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        rhythm_plot_id = self.canvas.create_polygon(polygon, fill="black")
-
+        rhythm_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
+        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (5.0 * float(self.win_height) / 16.0)
+        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
 
         poly_lr = []
         poly_rl = []
         polygon = []
-        for i in range(1, win_width):
+        for i in range(1, self.win_width):
             mean_freq = 1.0 / float(self.xml_form_dict['dynamic_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['dynamic_form']['range']['period'])
-            seconds_per_pixel = duration / float(win_width)
+            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             y_mean  = (.5
                        - math.sin(twopi * mean_freq  * the_time
                                   + float(self.xml_form_dict['dynamic_form']['mean']['phase']))
-                       / 2.0) * float(win_height) / 12.0 + 9.0 * float(win_height / 16.0)
+                       / 2.0) * float(self.win_height) / 12.0 + 9.0 * float(self.win_height / 16.0)
             y_range = (.5
                       + math.sin(twopi * range_freq * the_time
                                  + float(self.xml_form_dict['dynamic_form']['range']['phase']))
-                      / 2.0) * float(win_height) / 12.0
+                      / 2.0) * float(self.win_height) / 12.0
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        dynamic_plot_id = self.canvas.create_polygon(polygon, fill="black")
+        dynamic_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
+        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (9.0 * float(self.win_height) / 16.0)
+        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
 
         poly_lr = []
         poly_rl = []
         polygon = []
         # Texture (number of voices playing) was misdefined as the mean alone,
         # but really it is the range.  So there is a reversal of roles here.
-        for i in range(1, win_width):
+        for i in range(1, self.win_width):
             mean_freq = 1.0 / float(self.xml_form_dict['texture_form']['period'])
-            seconds_per_pixel = duration / float(win_width)
+            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             y_mean  = (.5
                       + math.sin(twopi * mean_freq  * the_time
                                  + float(self.xml_form_dict['texture_form']['phase']))
-                      / 2.0) * float(win_height / 12.0)
-            y_range = float(win_height) / 12.0 + (13.0 * float(win_height) / 16.0)
+                      / 2.0) * float(self.win_height / 12.0)
+            y_range = float(self.win_height) / 12.0 + (13.0 * float(self.win_height) / 16.0)
             poly_lr.append(i)
             poly_lr.append(y_range - y_mean / 2)
             poly_rl.append(y_range + y_mean / 2)
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        texture_plot_id = self.canvas.create_polygon(polygon, fill="black")
+        texture_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
+        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (float(self.win_height) / 16.0)
+        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
 
-
-        scale_height = win_height * 55 / 100
-        self.canvas.create_line(0, scale_height, win_width, scale_height)
+        # Draw minute markers
+        scale_height = self.win_height * 55 / 100
+        #self.canvas.create_line(0, scale_height, self.win_width, scale_height)
         for s in range(0, int(duration), 60):
             tickx = s / seconds_per_pixel
-            self.canvas.create_line(tickx, 0, tickx, win_height)
+            self.canvas.create_line(tickx, 0, tickx, self.win_height, fill=axis_color, dash='.')
 
         widget = tkinter.ttk.Label(self.canvas, text='Pitch', style="BW.TLabel")
 
-        self.canvas.create_window(win_width, win_width, window=widget)
-        self.canvas.create_text(win_width / 2, 20, text=self.xml_form_dict["name"])
-        self.canvas.create_text(30, win_height * 1 / 16 - 30, text='Pitch')
-        self.canvas.create_text(30, win_height * 5 / 16 - 30, text='Rhythm')
-        self.canvas.create_text(30, win_height * 9 / 16  - 30, text='Dynamic')
-        self.canvas.create_text(30, win_height * 13 / 16 - 30, text='Texture')
-
-    def default_scale(self):
-        scale_array = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5']
-        return scale_array
+        self.canvas.create_window(self.win_width, self.win_width, window=widget)
+        self.canvas.create_text(self.win_width / 2, 20, text=self.xml_form_dict["name"], fill=axis_color)
+        self.canvas.create_text(30, self.win_height * 1 / 16 - 30, text='Pitch', fill=axis_color)
+        self.canvas.create_text(30, self.win_height * 5 / 16 - 30, text='Rhythm', fill=axis_color)
+        self.canvas.create_text(30, self.win_height * 9 / 16  - 30, text='Dynamic', fill=axis_color)
+        self.canvas.create_text(30, self.win_height * 13 / 16 - 30, text='Texture', fill=axis_color)
 
     def default_melody_probabilities(self):
         # These probabilities are cumulative.
@@ -475,20 +480,20 @@ class XmlForm(tkinter.Tk):
 
     def postscript_callback(self):
         afilename=tkinter.filedialog.asksaveasfilename(initialdir = ".",title = 'Save Postscript File', filetypes=(("ps files","*.ps"),("all files","*.*")))
-        self.canvas.postscript(file=afilename)
+        self.canvas.postscript(file=afilename, colormode='gray', pageheight='8i', pagewidth='8i')
 
     def makemenu(self, toplevelwin):
         top_menu = Menu(toplevelwin)
         toplevelwin['menu'] = top_menu;
         file_menu = Menu(top_menu)
         top_menu.add_cascade(label='File', menu=file_menu, underline=0)
-        file_menu.add_command(label='Open...',   command=self.get_file_callback, underline=0)
-        file_menu.add_command(label='Save...',   command=self.save_callback, underline=0)
-        file_menu.add_command(label='Redraw', command=self.redraw_callback, underline=0)
+        file_menu.add_command(label='Open...',   command=self.get_file_callback, underline=0, accelerator='O')
+        file_menu.add_command(label='Save...',   command=self.save_callback, underline=0, accelerator='S')
+        file_menu.add_command(label='Redraw', command=self.redraw_callback, underline=0, accelerator='R')
         file_menu.add_command(label='Save Postscript...', command=self.postscript_callback,
-            underline=0)
-        file_menu.add_command(label='About...',   command=self.about_callback, underline=0)
-        file_menu.add_command(label='Quit', command=lambda:toplevelwin.quit(), underline=0)
+            underline=0, accelerator='S')
+        file_menu.add_command(label='About...',   command=self.about_callback, underline=0, accelerator='A')
+        file_menu.add_command(label='Quit', command=lambda:toplevelwin.quit(), underline=0, accelerator='Q')
 
     def get_file_callback(self):
         afilename=tkinter.filedialog.askopenfilename(initialdir = ".",title = 'Select XML Form File', filetypes=(("xml files","*.xml"),("all files","*.*")))

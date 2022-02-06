@@ -1,3 +1,15 @@
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.py, VoiceWindow.py: finish using General MIDI names in program entry.
+        * KeyboardWindow.py, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py: set screen positions.
+        * Fix an issue with widget update on Voice-program.  
+        * Change colors on form plot but verify on Postscript output.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: Make file names the same as the main window names.
+        * GeneralMIDI.py: add General MIDI instruments for the spinbo in the voice window
+        * VoiceWindow.py: Use GeneralMIDI iun the program spinbox
+        * Composer.cc: refactor some code into local functions. 
+
 2022-02-02     Thomas E. Janzen <janzentome@gmail.com>
         * voice.py, textmidiformedit.py, allforms.py: fix checkbox behavior;
         fix reads from the form XML file for min/max note len, name, len, pulse, down, same up;

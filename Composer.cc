@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.13
+// TextMIDITools Version 1.0.14
 // Copyright © 2021 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -108,6 +108,189 @@ namespace
         return rhythm;
     }
 
+    void build_composition_priority_graph(const MusicalForm& xml_form,
+        vector<list<int>>& leaders_topo_sort)
+    {
+        leaders_topo_sort.clear();
+        // Build a composition priority graph.
+        // The leaders have to be composed first.
+        // The resulting leaders_topo_sort is a list of lists.
+        //     leader1 follower5
+        //     leader3 follower2 follower6 follower7
+        //     leader4 follower8 follower9
+        //
+        // It is acceptable to have citing circles with no leaders;
+        // they just won't get any note events.  That's why this is not
+        // a tree graph; it can have loops.
+        // It is also acceptable for a follower to be a lower-numbered
+        // voice then its leader.
+        // The following graph is not affected by track scrambling.
+        // Track scrambling is just track priority scrambling under
+        // the texture curve.
+        //
+        // For all follower tracks
+        //
+        // Square matrix to represent the follower graph.
+        // 1 follows 2
+        // 2 follows 0
+        // 3 follows 0
+        // |  F  F  F  F  |
+        // |  F  F  T  F  |
+        // |  T  F  F  F  |
+        // |  T  F  F  F  |
+        //
+        // 0 follows 1
+        // 1 follows 2
+        // 2 follows 3
+        // |  F  T  F  F  |
+        // |  F  F  T  F  |
+        // |  F  F  F  T  |
+        // |  F  F  F  F  |
+        // If there is no true in a row, then the voice is not a follower.
+        // Use the graph to follow the leaders to the leader with no trues in its row.
+        // Then that is the real leader of a group.
+        // Then generate the voices backwards from the leader to all followers in its column,
+        // and follow the leaders to the next followers.
+
+        // Make a square matrix of false.
+        vector<vector<bool>> followers_graph(xml_form.voices().size(), vector<bool>(xml_form.voices().size(), false));
+
+        for (int tr{}; tr < xml_form.voices().size(); ++tr)
+        {
+            if (xml_form.voices()[tr].follower().follow_) [[unlikely]]
+            {
+                if (xml_form.voices()[tr].follower().leader_ < followers_graph.size())
+                {
+                    followers_graph[xml_form.voices()[tr].follower().leader_][tr] = true;
+                    if (xml_form.voices()[tr].follower().leader_ == tr)
+                    {
+                        cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__) << " voice "
+                             << tr << " is a self-follower!\n";
+                    }
+                }
+            }
+        }
+#if defined(TEXTMIDI_PRINT)
+        for (auto& row : followers_graph)
+        {
+            copy(row.begin(), row.end(), ostream_iterator<bool>(cout, " "));
+            cout << '\n';
+        }
+#endif
+        leaders_topo_sort.resize(followers_graph.size());
+
+        for (int follower_index{}; follower_index < followers_graph.size(); ++follower_index)
+        {
+            bool leader_only{true};
+            for (int leader_index{}; leader_index < followers_graph[0].size(); ++leader_index)
+            {
+                if (followers_graph[leader_index][follower_index]) // if this is a follower
+                {
+                    leader_only = false;
+                }
+            }
+            if (leader_only)
+            {
+                leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
+            }
+        }
+#if defined(TEXTMIDI_PRINT)
+        cout << "List of non-followers: ";
+        copy(leaders_topo_sort[0].begin(), leaders_topo_sort[0].end(), ostream_iterator<int>(cout, " "));
+        cout << '\n';
+#endif
+        for (auto g{1}; g < followers_graph.size(); ++g)
+        {
+            for (int follower_index{}; follower_index < followers_graph[0].size(); ++follower_index)
+            {
+                for (int leader_index{}; leader_index < followers_graph.size(); ++leader_index)
+                {
+#if defined(TEXTMIDI_PRINT)
+                    cout << "** " << leader_index << ' ' << follower_index << ' ' << followers_graph[leader_index][follower_index] << '\n';
+#endif
+                    if (followers_graph[leader_index][follower_index]) // if this is a follower
+                    {
+                        auto it{find(leaders_topo_sort[g - 1].begin(),
+                                     leaders_topo_sort[g - 1].end(), leader_index)};
+                        if (it != leaders_topo_sort[g - 1].end())
+                        {
+                            leaders_topo_sort[g].push_back(follower_index);
+                        }
+                    }
+                }
+#if defined(TEXTMIDI_PRINT)
+                cout << '\n';
+#endif
+            }
+        }
+#if defined(TEXTMIDI_PRINT)
+        cout << "order of composing:\n";
+        for (auto& lts : leaders_topo_sort)
+        {
+            copy(lts.begin(), lts.end(), ostream_iterator<int>(cout, " "));
+            cout << '\n';
+        }
+#endif
+    }
+
+    void build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
+        int track_qty, TicksDuration total_duration, TrackScramble track_scramble)
+    {
+        track_scramble_sequences.resize(1, vector<int>(track_qty));
+        iota(track_scramble_sequences[0].begin(), track_scramble_sequences[0].end(), 0);
+
+        auto previous_sequence{track_scramble_sequences[0]};
+        for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
+            scramble_time = scramble_time + track_scramble.period_)
+        {
+            switch(track_scramble.scramble_)
+            {
+                case TrackScrambleEnum::RotateRight:
+                    if (previous_sequence.size() > 1)
+                    {
+                        rotate(previous_sequence.begin(), previous_sequence.begin() + (previous_sequence.size() - 1), previous_sequence.end());
+                    }
+                    break;
+                case TrackScrambleEnum::RotateLeft:
+                    if (previous_sequence.size() > 1)
+                    {
+                        rotate(previous_sequence.begin(), previous_sequence.begin() + 1, previous_sequence.end());
+                    }
+                    break;
+                case TrackScrambleEnum::Reverse:
+                    reverse(previous_sequence.begin(), previous_sequence.end());
+                    break;
+                case TrackScrambleEnum::PreviousPermutation:
+                    prev_permutation(previous_sequence.begin(), previous_sequence.end());
+                    break;
+                case TrackScrambleEnum::NextPermutation:
+                    next_permutation(previous_sequence.begin(), previous_sequence.end());
+                    break;
+                case TrackScrambleEnum::SwapPairs:
+                    for (int i(0); i < previous_sequence.size() - (previous_sequence.size() % 2); i += 2)
+                    {
+                        swap(previous_sequence[i], previous_sequence[i + 1]);
+                    }
+                    break;
+                case TrackScrambleEnum::RandomShuffle:
+                    random_shuffle(previous_sequence.begin(), previous_sequence.end());
+                    break;
+                case TrackScrambleEnum::None:
+                    break;
+                default:
+                    break;
+            }
+            track_scramble_sequences.insert(track_scramble_sequences.end(), previous_sequence);
+        }
+#if defined(TEXTMIDI_PRINT)
+        cout << "track_scramble_sequences\n";
+        for (auto tss : track_scramble_sequences)
+        {
+            copy(tss.begin(), tss.end(), ostream_iterator<int>(cout, " "));
+            cout << '\n';
+        }
+#endif
+    }
 }
 
 //
@@ -135,167 +318,14 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
     const TicksDuration total_duration(static_cast<int64_t>(floor(xml_form.len()
           * double(TicksPerQuarter))));
 
-    //
-    // For all follower tracks
-    //
-    // Square matrix to represent the follower graph.
-    // 1 follows 2
-    // 2 follows 0
-    // 3 follows 0
-    // |  F  F  F  F  |
-    // |  F  F  T  F  |
-    // |  T  F  F  F  |
-    // |  T  F  F  F  |
-    //
-    // 0 follows 1
-    // 1 follows 2
-    // 2 follows 3
-    // |  F  T  F  F  |
-    // |  F  F  T  F  |
-    // |  F  F  F  T  |
-    // |  F  F  F  F  |
-    // If there is no true in a row, then the voice is not a follower.
-    // Use the graph to follow the leaders to the leader with no trues in its row.
-    // Then that is the real leader of a group.
-    // Then generate the voices backwards from the leader to all followers in its column,
-    // and follow the leaders to the next followers.
+    vector<list<int>> leaders_topo_sort;
+    build_composition_priority_graph(xml_form, leaders_topo_sort);
 
-    // Make a square matrix of false.
-    vector<vector<bool>> followers_graph(tracks.size(), vector<bool>(tracks.size(), false));
+    vector<vector<int>> track_scramble_sequences;
+    build_track_scramble_sequences(track_scramble_sequences, xml_form.voices().size(),
+        total_duration, track_scramble);
 
-    for (int tr{}; tr < tracks.size(); ++tr)
-    {
-        if (xml_form.voices()[tr].follower().follow_) [[unlikely]]
-        {
-            if (xml_form.voices()[tr].follower().leader_ < followers_graph.size())
-            {
-                followers_graph[xml_form.voices()[tr].follower().leader_][tr] = true;
-                if (xml_form.voices()[tr].follower().leader_ == tr)
-                {
-                    cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__) << " voice "
-                         << tr << " is a self-follower!\n";
-                }
-            }
-        }
-    }
-#if defined(TEXTMIDI_PRINT)
-    for (auto& row : followers_graph)
-    {
-        copy(row.begin(), row.end(), ostream_iterator<bool>(cout, " "));
-        cout << '\n';
-    }
-#endif
-    vector<list<int>> leaders_topo_sort(followers_graph.size());
-
-    for (int follower_index{}; follower_index < followers_graph.size(); ++follower_index)
-    {
-        bool leader_only{true};
-        for (int leader_index{}; leader_index < followers_graph[0].size(); ++leader_index)
-        {
-            if (followers_graph[leader_index][follower_index]) // if this is a follower
-            {
-                leader_only = false;
-            }
-        }
-        if (leader_only)
-        {
-            leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
-        }
-    }
-#if defined(TEXTMIDI_PRINT)
-    cout << "List of non-followers: ";
-    copy(leaders_topo_sort[0].begin(), leaders_topo_sort[0].end(), ostream_iterator<int>(cout, " "));
-    cout << '\n';
-#endif
-    for (auto g{1}; g < followers_graph.size(); ++g)
-    {
-        for (int follower_index{}; follower_index < followers_graph[0].size(); ++follower_index)
-        {
-            for (int leader_index{}; leader_index < followers_graph.size(); ++leader_index)
-            {
-#if defined(TEXTMIDI_PRINT)
-                cout << "** " << leader_index << ' ' << follower_index << ' ' << followers_graph[leader_index][follower_index] << '\n';
-#endif
-                if (followers_graph[leader_index][follower_index]) // if this is a follower
-                {
-                    auto it{find(leaders_topo_sort[g - 1].begin(),
-                                 leaders_topo_sort[g - 1].end(), leader_index)};
-                    if (it != leaders_topo_sort[g - 1].end())
-                    {
-                        leaders_topo_sort[g].push_back(follower_index);
-                    }
-                }
-            }
-#if defined(TEXTMIDI_PRINT)
-            cout << '\n';
-#endif
-        }
-    }
-#if defined(TEXTMIDI_PRINT)
-    cout << "order of composing:\n";
-    for (auto& lts : leaders_topo_sort)
-    {
-        copy(lts.begin(), lts.end(), ostream_iterator<int>(cout, " "));
-        cout << '\n';
-    }
-#endif
-    vector<vector<int>> track_scramble_sequences(1, vector<int>(tracks.size()));
-    iota(track_scramble_sequences[0].begin(), track_scramble_sequences[0].end(), 0);
-
-    auto previous_sequence{track_scramble_sequences[0]};
-    for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
-        scramble_time = scramble_time + track_scramble.period_)
-    {
-        switch(track_scramble.scramble_)
-        {
-            case TrackScrambleEnum::RotateRight:
-                if (previous_sequence.size() > 1)
-                {
-                    rotate(previous_sequence.begin(), previous_sequence.begin() + (previous_sequence.size() - 1), previous_sequence.end());
-                }
-                break;
-            case TrackScrambleEnum::RotateLeft:
-                if (previous_sequence.size() > 1)
-                {
-                    rotate(previous_sequence.begin(), previous_sequence.begin() + 1, previous_sequence.end());
-                }
-                break;
-            case TrackScrambleEnum::Reverse:
-                reverse(previous_sequence.begin(), previous_sequence.end());
-                break;
-            case TrackScrambleEnum::PreviousPermutation:
-                prev_permutation(previous_sequence.begin(), previous_sequence.end());
-                break;
-            case TrackScrambleEnum::NextPermutation:
-                next_permutation(previous_sequence.begin(), previous_sequence.end());
-                break;
-            case TrackScrambleEnum::SwapPairs:
-                for (int i(0); i < previous_sequence.size() - (previous_sequence.size() % 2); i += 2)
-                {
-                    swap(previous_sequence[i], previous_sequence[i + 1]);
-                }
-                break;
-            case TrackScrambleEnum::RandomShuffle:
-                random_shuffle(previous_sequence.begin(), previous_sequence.end());
-                break;
-            case TrackScrambleEnum::None:
-                break;
-            default:
-                break;
-        }
-        track_scramble_sequences.insert(track_scramble_sequences.end(), previous_sequence);
-    }
-#if defined(TEXTMIDI_PRINT)
-    cout << "track_scramble_sequences\n";
-    for (auto tss : track_scramble_sequences)
-    {
-        copy(tss.begin(), tss.end(), ostream_iterator<int>(cout, " "));
-        cout << '\n';
-    }
-#endif
-
-
-    std::vector<std::vector<cgm::NoteEvent>> track_note_events(tracks.size());
+    std::vector<std::vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
     for (auto& lts : leaders_topo_sort)
     {
@@ -591,26 +621,26 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
     textmidi_file << "ticks \"End of Track\"\n";
     textmidi_file << "END_OF_TRACK\n";
 
-    for (int track_index{}; track_index < tracks.size(); ++track_index)
+    for (int track_index{}; auto voice : xml_form.voices())
     {
 #if defined(TEXTMIDI_PRINT)
         cout << "STARTTRACK\n"
                       << "TRACK " << track_index << "\n"
-            << "PROGRAM " << xml_form.voices()[track_index].channel()
-            << ' ' << xml_form.voices()[track_index].program() << "\n"
-            << "PAN " << xml_form.voices()[track_index].channel() << ' '
-                      << xml_form.voices()[track_index].pan() << "\n"
+            << "PROGRAM " << voice.channel()
+            << ' ' << voice.program() << "\n"
+            << "PAN " << voice.channel() << ' '
+                      << voice.pan() << "\n"
             << "LAZY\n"
-            << "chan " << xml_form.voices()[track_index].channel() << '\n';
+            << "chan " << voice.channel() << '\n';
 #endif
         textmidi_file << "STARTTRACK\n"
                       << "TRACK " << track_index << "\n"
-            << "PROGRAM " << xml_form.voices()[track_index].channel()
-            << ' ' << xml_form.voices()[track_index].program() << "\n"
-            << "PAN " << xml_form.voices()[track_index].channel() << ' '
-                      << xml_form.voices()[track_index].pan() << "\n"
+            << "PROGRAM " << voice.channel()
+            << ' ' << voice.program() << "\n"
+            << "PAN " << voice.channel() << ' '
+                      << voice.pan() << "\n"
             << "LAZY\n"
-            << "chan " << xml_form.voices()[track_index].channel() << '\n';
+            << "chan " << voice.channel() << '\n';
         int lastVel{128};
         for (const auto&  eventRef : track_note_events[track_index])
         {
@@ -629,6 +659,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
         }
         textmidi_file << "ticks \"End of Track\"\n";
         textmidi_file << "END_LAZY\nEND_OF_TRACK\n";
+        ++track_index;
     }
 }
 

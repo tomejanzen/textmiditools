@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.14
+# TextMIDITools Version 1.0.15
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -127,9 +127,7 @@ class ScaleFrame(tkinter.Frame):
         self.scale_name_spinbox.grid(row=the_row, column=1, sticky=NSEW)
         self.scale_name_spinbox.bind('<Key-Return>', self.scale_name_callback)
         self.scale_name_spinbox.bind('<ButtonRelease-1>', self.scale_name_callback)
-        self.scale_name = tkinter.StringVar()
-        self.scale_name.set("Unnamed")
-        self.scale_name_spinbox["textvariable"] = self.scale_name
+        self.scale_name_spinbox.set("Unnamed")
         the_row = the_row + 1
 
         self.rowconfigure(index=the_row, weight=1)
@@ -142,9 +140,7 @@ class ScaleFrame(tkinter.Frame):
         self.transpose_spinbox.grid(row=the_row, column=1, sticky=NSEW)
         self.transpose_spinbox.bind('<Key-Return>', self.transpose_callback)
         self.transpose_spinbox.bind('<ButtonRelease-1>', self.transpose_callback)
-        self.transpose = tkinter.IntVar()
-        self.transpose.set(0)
-        self.transpose_spinbox["textvariable"] = self.transpose
+        self.transpose_spinbox.set(0)
         self.from_keyboard_button = tkinter.ttk.Button(self, text='From Keyboard',
             command=self.from_keyboard_callback)
         self.from_keyboard_button.grid(row=the_row, column=2, stick=NSEW)
@@ -158,13 +154,13 @@ class ScaleFrame(tkinter.Frame):
         self.transpose_scale()
 
     def transpose_callback(self, event):
-        self.transpose_num = self.transpose.get()
+        self.transpose_num = int(self.transpose_spinbox.get())
         self.transpose_scale()
         self.set_keyboard()
 
     def scale_name_callback(self, event):
         self.scale_name_spinbox.update()
-        scale_name = self.scale_name.get()
+        scale_name = self.scale_name_spinbox.get()
         self.scale_untransposed = []
         for keynum in self.scales_dict[scale_name]:
             self.scale_untransposed.append(keynum)

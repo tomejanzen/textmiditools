@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.14
+# TextMIDITools Version 1.0.15
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -44,9 +44,9 @@ class Sine(tkinter.Frame):
         validate_command = (self.register(self.validate_length),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.period_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate="focusout")
-        self.period = tkinter.StringVar()
-        self.period.set(self.xml_sine['period'])
-        self.period_entry["textvariable"] = self.period
+        self.period_entry.delete(0, 1024)
+        self.period_entry.insert(0, self.xml_sine['period'])
+        self.period_entry.update()
         self.period_entry.grid(row=self.the_row, column=2, sticky=NSEW)
         self.period_entry.bind('<Key-Return>', self.period_callback)
         self.period_entry.bind('<FocusOut>', self.period_callback)
@@ -72,7 +72,8 @@ class Sine(tkinter.Frame):
 
     def install_xml_sine(self, xml_sine):
         self.xml_sine = xml_sine
-        self.period.set(self.xml_sine['period'])
+        self.period_entry.delete(0, 1024)
+        self.period_entry.insert(0, self.xml_sine['period'])
         self.period_entry.update()
         phase = self.xml_sine['phase'] / (2.0 * self.pi) + 0.5
         self.phase_scrollbar.set(phase, phase)

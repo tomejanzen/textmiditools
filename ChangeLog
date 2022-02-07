@@ -1,3 +1,8 @@
+2022-02-06     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py: simplify usage to correct behavior as the voice number changes.
+        Remove widget variables for Sine and Voice.  It makes the interface slower but 
+        on Voice the Entry and Spinbox values would propagate to other voices for no reason.
+
 2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
         * GeneralMIDI.py, VoiceWindow.py: finish using General MIDI names in program entry.
         * KeyboardWindow.py, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py: set screen positions.

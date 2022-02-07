@@ -241,6 +241,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.voice_number_spinbox["to"] = len(self.xml_form['voices']) - 1
 
     def voice_number_callback(self, event=None):
+        self.update_idletasks()
         vox = int(self.voice_number_spinbox.get())
         ch = self.xml_form['voices'][vox]['channel']
         self.channel_spinbox.set(ch)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.15
+# TextMIDITools Version 1.0.17
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -114,7 +114,7 @@ class ScaleFrame(tkinter.Frame):
         the_row = 0
 
         self.keyboard_window = KeyboardWindow()
-        self.keyboard_window.geometry('1900x200-50-50')
+        self.keyboard_window.geometry('1500x162+50-50')
         self.set_keyboard()
 
         self.rowconfigure(index=the_row, weight=1)
@@ -122,25 +122,25 @@ class ScaleFrame(tkinter.Frame):
         self.columnconfigure(index=1, weight=1)
         self.scale_name_label = tkinter.ttk.Label(self, text="Scale")
         self.scale_name_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.scale_name_spinbox = tkinter.ttk.Spinbox(self)
+        self.scale_name_spinbox = tkinter.ttk.Spinbox(self, wrap=True)
         self.scale_name_spinbox["values"] = self.scale_names
         self.scale_name_spinbox.grid(row=the_row, column=1, sticky=NSEW)
-        self.scale_name_spinbox.bind('<Key-Return>', self.scale_name_callback)
         self.scale_name_spinbox.bind('<ButtonRelease-1>', self.scale_name_callback)
         self.scale_name_spinbox.set("Unnamed")
+        self.scale_name_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
         self.rowconfigure(index=the_row, weight=1)
         self.transpose_label = tkinter.ttk.Label(self, text="Transpose")
         self.transpose_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.transpose_spinbox = tkinter.ttk.Spinbox(self)
+        self.transpose_spinbox = tkinter.ttk.Spinbox(self, wrap=True)
         self.transpose_spinbox["increment"] = 1
         self.transpose_spinbox["from"]      = -5
         self.transpose_spinbox["to"]        = 6
         self.transpose_spinbox.grid(row=the_row, column=1, sticky=NSEW)
-        self.transpose_spinbox.bind('<Key-Return>', self.transpose_callback)
         self.transpose_spinbox.bind('<ButtonRelease-1>', self.transpose_callback)
         self.transpose_spinbox.set(0)
+        self.transpose_spinbox['state'] = 'readonly'
         self.from_keyboard_button = tkinter.ttk.Button(self, text='From Keyboard',
             command=self.from_keyboard_callback)
         self.from_keyboard_button.grid(row=the_row, column=2, stick=NSEW)
@@ -152,6 +152,13 @@ class ScaleFrame(tkinter.Frame):
         for key in key_ints:
             self.scale_untransposed.append(key)
         self.transpose_scale()
+        self.scale_name_spinbox['state'] = '!readonly'
+        self.scale_name_spinbox.set(self.scale_names[0])
+        self.scale_name_spinbox['state'] = 'readonly'
+
+        self.transpose_spinbox['state'] = '!readonly'
+        self.transpose_spinbox.set(0)
+        self.transpose_spinbox['state'] = 'readonly'
 
     def transpose_callback(self, event):
         self.transpose_num = int(self.transpose_spinbox.get())
@@ -209,7 +216,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=0, weight=1)
         self.title('Musical Form')
-        self.geometry('400x850+10+20')
+        self.geometry('400x850+20+50')
 
     def create_widgets(self):
         the_row = 0
@@ -218,9 +225,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.name_label = tkinter.ttk.Label(self.frame, text="Name")
         self.name_label.grid(row=the_row, column=0, sticky=NSEW)
         self.name_entry = tkinter.ttk.Entry(self.frame)
-        self.name = tkinter.StringVar()
-        self.name.set(self.xml_form['name'])
-        self.name_entry["textvariable"] = self.name
+        self.name_entry.insert(0, self.xml_form['name'])
         self.name_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.name_entry.bind('<Key-Return>', self.name_callback)
         self.name_entry.bind('<FocusOut>', self.name_callback)
@@ -232,9 +237,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.len_label = tkinter.ttk.Label(self.frame, text="Len")
         self.len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.len_entry = tkinter.ttk.Entry(self.frame)
-        self.len = tkinter.StringVar()
-        self.len.set(self.xml_form['len'])
-        self.len_entry["textvariable"] = self.len
+        self.len_entry.insert(0, self.xml_form['len'])
         self.len_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.len_entry.bind('<Key-Return>', self.len_callback)
         self.len_entry.bind('<FocusOut>', self.len_callback)
@@ -244,9 +247,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.min_note_len_label = tkinter.ttk.Label(self.frame, text="Min Note Len")
         self.min_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.min_note_len_entry = tkinter.ttk.Entry(self.frame)
-        self.min_note_len = tkinter.StringVar()
-        self.min_note_len.set(self.xml_form['min_note_len'])
-        self.min_note_len_entry["textvariable"] = self.min_note_len
+        self.min_note_len_entry.insert(0, self.xml_form['min_note_len'])
         self.min_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.min_note_len_entry.bind('<Key-Return>', self.min_note_len_callback)
         self.min_note_len_entry.bind('<FocusOut>', self.min_note_len_callback)
@@ -256,9 +257,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.max_note_len_label = tkinter.ttk.Label(self.frame, text="Max Note Len")
         self.max_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.max_note_len_entry = tkinter.ttk.Entry(self.frame)
-        self.max_note_len = tkinter.StringVar()
-        self.max_note_len.set(self.xml_form['max_note_len'])
-        self.max_note_len_entry["textvariable"] = self.max_note_len
+        self.max_note_len_entry.insert(0, self.xml_form['max_note_len'])
         self.max_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.max_note_len_entry.bind('<Key-Return>', self.max_note_len_callback)
         self.max_note_len_entry.bind('<FocusOut>', self.max_note_len_callback)
@@ -268,9 +267,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.pulse_label = tkinter.ttk.Label(self.frame, text="Pulse/Sec")
         self.pulse_label.grid(row=the_row, column=0, sticky=NSEW)
         self.pulse_entry = tkinter.ttk.Entry(self.frame)
-        self.pulse = tkinter.StringVar()
-        self.pulse.set(self.xml_form['pulse'])
-        self.pulse_entry["textvariable"] = self.pulse
+        self.pulse_entry.insert(0, self.xml_form['pulse'])
         self.pulse_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.pulse_entry.bind('<Key-Return>', self.pulse_callback)
         self.pulse_entry.bind('<FocusOut>', self.pulse_callback)
@@ -285,9 +282,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.down_label = tkinter.ttk.Label(self.frame, text="Down")
         self.down_label.grid(row=the_row, column=0, sticky=NSEW)
         self.down_entry = tkinter.ttk.Entry(self.frame)
-        self.down = tkinter.StringVar()
-        self.down.set(self.xml_form['melody_probabilities']['down'])
-        self.down_entry["textvariable"] = self.down
+        self.down_entry.insert(0, self.xml_form['melody_probabilities']['down'])
         self.down_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.down_entry.bind('<Key-Return>', self.melody_down_callback)
         self.down_entry.bind('<FocusOut>', self.melody_down_callback)
@@ -297,9 +292,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.same_label = tkinter.ttk.Label(self.frame, text="Same")
         self.same_label.grid(row=the_row, column=0, sticky=NSEW)
         self.same_entry = tkinter.ttk.Entry(self.frame)
-        self.same = tkinter.StringVar()
-        self.same.set(self.xml_form['melody_probabilities']['same'])
-        self.same_entry["textvariable"] = self.same
+        self.same_entry.insert(0, self.xml_form['melody_probabilities']['same'])
         self.same_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.same_entry.bind('<Key-Return>', self.melody_same_callback)
         self.same_entry.bind('<FocusOut>', self.melody_same_callback)
@@ -309,9 +302,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.up_label = tkinter.ttk.Label(self.frame, text="Up")
         self.up_label.grid(row=the_row, column=0, sticky=NSEW)
         self.up_entry = tkinter.ttk.Entry(self.frame)
-        self.up = tkinter.StringVar()
-        self.up.set(self.xml_form['melody_probabilities']['up'])
-        self.up_entry["textvariable"] = self.up
+        self.up_entry.insert(0, self.xml_form['melody_probabilities']['up'])
         self.up_entry.grid(row=the_row, column=1, sticky=NSEW)
         self.up_entry.bind('<Key-Return>', self.melody_up_callback)
         self.up_entry.bind('<FocusOut>', self.melody_up_callback)
@@ -344,28 +335,28 @@ class AllFormsWindow(tkinter.Toplevel):
         self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
 
     def name_callback(self, event):
-        self.xml_form['name'] = self.name.get()
+        self.xml_form['name'] = self.name_entry.get()
 
     def len_callback(self, event):
-        self.xml_form['len'] = self.len.get()
+        self.xml_form['len'] = self.len_entry.get()
 
     def min_note_len_callback(self, event):
-        self.xml_form['min_note_len'] = self.min_note_len.get()
+        self.xml_form['min_note_len'] = self.min_note_len_entry.get()
 
     def max_note_len_callback(self, event):
-        self.xml_form['max_note_len'] = self.max_note_len.get()
+        self.xml_form['max_note_len'] = self.max_note_len_entry.get()
 
     def pulse_callback(self, event):
-        self.xml_form['pulse'] = self.pulse.get()
+        self.xml_form['pulse'] = self.pulse_entry.get()
 
     def melody_down_callback(self, event):
-        self.xml_form['melody_probabilities']['down'] = self.down.get()
+        self.xml_form['melody_probabilities']['down'] = self.down_entry.get()
 
     def melody_same_callback(self, event):
-        self.xml_form['melody_probabilities']['same'] = self.same.get()
+        self.xml_form['melody_probabilities']['same'] = self.same_entry.get()
 
     def melody_up_callback(self, event):
-        self.xml_form['melody_probabilities']['up'] = self.up.get()
+        self.xml_form['melody_probabilities']['up'] = self.up_entry.get()
 
     def pitch_mean_period_callback(self, event):
         self.xml_form['pitch_form']['mean']['period'] = self.pitch_form.mean.period_entry.get()
@@ -623,44 +614,36 @@ class AllFormsWindow(tkinter.Toplevel):
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
 
-        self.name.set(self.xml_form['name'])
         self.name_entry.delete(0, 1024)
-        self.name_entry.insert(0, self.name.get())
+        self.name_entry.insert(0, self.xml_form['name'])
         self.name_entry.update()
         
-        self.len = self.xml_form['len']
         self.len_entry.delete(0, 1024)
-        self.len_entry.insert(0, self.len)
+        self.len_entry.insert(0, self.xml_form['len'])
         self.len_entry.update()
 
-        self.min_note_len = self.xml_form['min_note_len']
         self.min_note_len_entry.delete(0, 1024)
-        self.min_note_len_entry.insert(0, self.min_note_len)
+        self.min_note_len_entry.insert(0, self.xml_form['min_note_len'])
         self.min_note_len_entry.update()
 
-        self.max_note_len = self.xml_form['max_note_len']
         self.max_note_len_entry.delete(0, 1024)
-        self.max_note_len_entry.insert(0, self.max_note_len)
+        self.max_note_len_entry.insert(0, self.xml_form['max_note_len'])
         self.max_note_len_entry.update()
 
-        self.pulse = self.xml_form['pulse']
         self.pulse_entry.delete(0, 1024)
-        self.pulse_entry.insert(0, self.pulse)
+        self.pulse_entry.insert(0, self.xml_form['pulse'])
         self.pulse_entry.update()
 
-        self.down = self.xml_form['melody_probabilities']['down']
         self.down_entry.delete(0, 1024)
-        self.down_entry.insert(0, self.down)
+        self.down_entry.insert(0, self.xml_form['melody_probabilities']['down'])
         self.down_entry.update()
 
-        self.same = self.xml_form['melody_probabilities']['same']
         self.same_entry.delete(0, 1024)
-        self.same_entry.insert(0, self.same)
+        self.same_entry.insert(0, self.xml_form['melody_probabilities']['same'])
         self.same_entry.update()
 
-        self.up = self.xml_form['melody_probabilities']['up']
         self.up_entry.delete(0, 1024)
-        self.up_entry.insert(0, self.up)
+        self.up_entry.insert(0, self.xml_form['melody_probabilities']['up'])
         self.up_entry.update()
 
         self.pitch_form.install_xml_subform(self.xml_form['pitch_form'])
@@ -674,5 +657,4 @@ class AllFormsWindow(tkinter.Toplevel):
         self.scale_frame.set_keyboard_from_xml(self.xml_form)
         self.scale_frame.update()
         self.update()
-
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.15
+# TextMIDITools Version 1.0.17
 # textmidiform.py 1.0
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -16,6 +16,7 @@ import re
 
 class VoiceWindow(tkinter.Toplevel):
     max_voice_number = 23
+    general_midi_list = list(GeneralMIDIInstrumentDict)
     def __init__(self, xml_form):
         super().__init__()
         self.frame = ttk.Frame(self, padding="1 1 1 1")
@@ -24,34 +25,34 @@ class VoiceWindow(tkinter.Toplevel):
         self.create_widgets()
         self.title('Instrumental Voices')
         self.geometry('400x400-50+50')
-        self.general_midi_list = list(GeneralMIDIInstrumentDict)
 
     def create_widgets(self):
         the_row = 0
 
         self.number_of_voices_label = tkinter.ttk.Label(self.frame, text="Number of Voices")
         self.number_of_voices_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.number_of_voices_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.number_of_voices_callback)
+        self.number_of_voices_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.number_of_voices_callback, state='readonly', wrap=True)
         self.number_of_voices_spinbox["increment"] = 1
         self.number_of_voices_spinbox["from"]      = 1
-        self.number_of_voices_spinbox["to"]        = self.max_voice_number
         self.number_of_voices_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
-        self.number_of_voices_spinbox.bind('<Key-Return>', self.number_of_voices_callback)
         self.number_of_voices_spinbox.bind('<ButtonRelease-1>', self.number_of_voices_callback)
+        self.number_of_voices_spinbox['state'] = '!readonly'
         self.number_of_voices_spinbox.set(len(self.xml_form['voices']))
+        self.number_of_voices_spinbox["to"] = len(self.xml_form['voices']) - 1
+        self.number_of_voices_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
         self.voice_number_label = tkinter.ttk.Label(self.frame, text="Voice")
         self.voice_number_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.voice_number_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.voice_number_callback)
+        self.voice_number_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.voice_number_callback, wrap=True)
         self.voice_number_spinbox["increment"] = 1.0
         self.voice_number_spinbox["from"] = 0.0
         self.voice_number_spinbox["to"] = len(self.xml_form['voices'])
         self.voice_number_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
-        self.voice_number_spinbox.bind('<Key-Return>', self.voice_number_callback)
         self.voice_number_spinbox.bind('<ButtonRelease-1>', self.voice_number_callback)
         vox = 0
         self.voice_number_spinbox.set(vox)
+        self.voice_number_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
         self.low_pitch_label = tkinter.ttk.Label(self.frame, text="Low Pitch")
@@ -84,34 +85,30 @@ class VoiceWindow(tkinter.Toplevel):
         self.high_pitch_entry.update()
         self.high_pitch_entry.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.high_pitch_entry.bind('<Key-Return>', self.high_pitch_callback)
-        self.high_pitch_entry.bind('<FocusOut>', self.high_pitch_callback)
         the_row = the_row + 1
 
         self.channel_label = tkinter.ttk.Label(self.frame, text="Channel")
         self.channel_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.channel_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.channel_callback)
+        self.channel_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.channel_callback, wrap=True)
         self.channel_spinbox["increment"] = 1.0
         self.channel_spinbox["from"] = 1.0
         self.channel_spinbox["to"] = 16.0
         self.channel_spinbox.set(self.xml_form['voices'][vox]['channel'])
         self.channel_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
-        self.channel_spinbox.bind('<Key-Return>', self.channel_callback)
-        self.channel_spinbox.bind('<FocusOut>', self.channel_callback)
         self.channel_spinbox.bind('<ButtonRelease-1>', self.channel_callback)
+        self.channel_spinbox['state'] = "readonly"
         the_row = the_row + 1
 
         self.program_label = tkinter.ttk.Label(self.frame, text="Program")
         self.program_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.general_midi_list = list(GeneralMIDIInstrumentDict)
-        self.program_spinbox = tkinter.ttk.Spinbox(self.frame, values=self.general_midi_list)
+        self.program_spinbox = tkinter.ttk.Spinbox(self.frame, values=self.general_midi_list, state='readonly', wrap=True)
         self.program_spinbox["increment"] = 1.0
         self.program_spinbox["from"] = 1.0
         self.program_spinbox["to"] = 128.0
         self.program_spinbox.set(self.general_midi_list[self.xml_form['voices'][vox]['program'] - 1])
         self.program_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.program_spinbox.bind('<ButtonRelease-1>', self.program_callback)
-        self.program_spinbox.bind('<Key-Return>', self.program_callback)
-        self.program_spinbox.bind('<FocusOut>', self.program_callback)
+        self.program_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
         self.walking_label = tkinter.ttk.Label(self.frame, text="Walking")
@@ -147,10 +144,10 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.leader_label = tkinter.ttk.Label(self.frame, text="Leader")
         self.leader_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.leader_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.leader_callback)
+        self.leader_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.leader_callback, wrap=True)
         self.leader_spinbox["increment"] = 1.0
         self.leader_spinbox["from"] = 0.0
-        self.leader_spinbox["to"] = 63.0
+        self.leader_spinbox["to"] = self.number_of_voices_spinbox.get()
         if (self.xml_form['voices'][vox]['follower']['follow'] == 1):
             self.leader_spinbox["state"] = "enabled"
         else:
@@ -186,14 +183,12 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.follow_interval_label = tkinter.ttk.Label(self.frame, text="Interval")
         self.follow_interval_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.follow_interval_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.follow_interval_callback)
+        self.follow_interval_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.follow_interval_callback, wrap=True)
         self.follow_interval_spinbox["increment"] = 1.0
         self.follow_interval_spinbox["from"] = -24.0
         self.follow_interval_spinbox["to"] = 24.0
         self.follow_interval_spinbox["state"] = "disabled"
         self.follow_interval_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
-        self.follow_interval_spinbox.bind('<Key-Return>', self.follow_interval_callback)
-        self.follow_interval_spinbox.bind('<FocusOut>', self.follow_interval_callback)
         self.follow_interval_spinbox.bind('<ButtonRelease-1>', self.follow_interval_callback)
         self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
         the_row = the_row + 1
@@ -217,7 +212,7 @@ class VoiceWindow(tkinter.Toplevel):
     def number_of_voices_callback(self, event=None):
         vox = int(self.voice_number_spinbox.get())
         number_of_voices = int(self.number_of_voices_spinbox.get())
-        while (vox >= number_of_voices):
+        if (vox >= number_of_voices):
             vox = (number_of_voices - 1)
 
         if (len(self.xml_form['voices']) > number_of_voices):
@@ -247,9 +242,10 @@ class VoiceWindow(tkinter.Toplevel):
         self.channel_spinbox.set(ch)
         self.channel_spinbox.update()
         instrument = self.general_midi_list[self.xml_form['voices'][vox]['program'] - 1]
-        self.program_spinbox.delete(0, 1024)
-        self.program_spinbox.insert(0, instrument)
+        self.program_spinbox['state'] = '!readonly'
+        self.program_spinbox.set(instrument)
         self.program_spinbox.update()
+        self.program_spinbox['state'] = 'readonly'
 
         self.low_pitch_entry.delete(0, 1024)
         self.low_pitch_entry.insert(0, self.xml_form['voices'][vox]['low_pitch'])
@@ -328,9 +324,13 @@ class VoiceWindow(tkinter.Toplevel):
         vox = 0
         ch = self.xml_form['voices'][vox]['channel']
         self.xml_form = xml_form
+        self.number_of_voices_spinbox['state'] = '!readonly'
         self.number_of_voices_spinbox.set(len(self.xml_form['voices']))
+        self.number_of_voices_spinbox['state'] = 'readonly'
+        self.voice_number_spinbox['state'] = '!readonly'
         self.voice_number_spinbox["to"] = len(self.xml_form['voices']) - 1
         self.voice_number_spinbox.set(vox)
+        self.voice_number_spinbox['state'] = 'readonly'
 
         self.low_pitch_entry.delete(0, 1024)
         self.low_pitch_entry.insert(0, self.xml_form['voices'][vox]['low_pitch'])
@@ -343,7 +343,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.channel_spinbox.set(ch)
         self.channel_spinbox.update()
         self.program_spinbox.set(
-            list(GeneralMIDIInstrumentDict)[self.xml_form['voices'][vox]['program'] - 1][0])
+            self.general_midi_list[self.xml_form['voices'][vox]['program'] - 1])
         self.program_spinbox.update()
 
         self.walking = self.xml_form['voices'][vox]['walking']
@@ -352,7 +352,7 @@ class VoiceWindow(tkinter.Toplevel):
         if (not self.walking_checkbutton.instate(['selected']) and self.walking):
             self.walking_checkbutton.invoke()
 
-        the_pan = (float(self.xml_form['voices'][int(self.voice_number_spinbox.get())]['pan']) / 128) + 0.5
+        the_pan = (float(self.xml_form['voices'][0]['pan']) / 128) + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)
         self.pan_scrollbar.update()
 

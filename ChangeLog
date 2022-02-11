@@ -1,3 +1,11 @@
+2022-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, KeyboardWindow.py: make keyboard smaller.
+
+2022-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py, textmidiformedit.py: remove widget variables where possible.
+        Make spinboxes readonly where possible, only make writable temporarily when necessary.
+        Fix a couple bugs discovered along the way.
+
 2022-02-06     Thomas E. Janzen <janzentome@gmail.com>
         * AllFormsWindow.py, VoiceWindow.py: simplify usage to correct behavior as the voice number changes.
         Remove widget variables for Sine and Voice.  It makes the interface slower but 

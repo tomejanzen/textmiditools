@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.15
+// TextMIDITools Version 1.0.17
 //
 // smustextmidi 1.0.6
 // Copyright © 2021 Thomas E. Janzen
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.15\n";
+        cout << "TextMIDITools 1.0.17\n";
         cout << "Copyright © 2021 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";

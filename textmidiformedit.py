@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.15
+# TextMIDITools Version 1.0.17
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -23,16 +23,22 @@ from AllFormsWindow import ScaleFrame
 
 class XmlForm(tkinter.Tk):
     xml_form_dict = {}
+    twopi = 2.0 * math.pi
     the_filename = "Untitled"
     def __init__(self):
         super().__init__()
         self.default_xml_form()
         self.all_forms_window = AllFormsWindow(self.xml_form_dict)
         self.voice_window = VoiceWindow(self.xml_form_dict)
-        #self.resizable(False, False)
         self.win_height = 600
         self.win_width = 1000
         self.canvas = Canvas(self, bg='white', height=self.win_height, width=self.win_width, background='#88AAFF')
+        self.canvas.grid(row=0, column=0, sticky=(N,S,E,W))
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+        self.canvas.bind("<Configure>", self.configure_callback)
+
         self.draw_form()
         self.title('Form Plot')
 
@@ -48,7 +54,7 @@ class XmlForm(tkinter.Tk):
         self.frame.grid(sticky="we", row=0, column=2)
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=2, weight=1)
-        self.geometry('1000x600+450+50')
+        self.geometry('1000x600+435+50')
         #self.frame.grab_set()
 
     def install_file(self, afilename):
@@ -65,12 +71,9 @@ class XmlForm(tkinter.Tk):
 
     def draw_form(self):
         duration = float(self.xml_form_dict['len'])
-        twopi = 2.0 * math.pi
 
         self.canvas.delete('all')
         self.canvas.grid(row=0, column=0, sticky=NSEW)
-
-        self.canvas.bind("<Configure>", self.configure_callback)
 
         self.canvas.grid(sticky=NSEW)
 
@@ -94,8 +97,8 @@ class XmlForm(tkinter.Tk):
             # position it on the canvas
             # 0.5 + sin(omega * t + phase) / 2 * self.win_height / 16 + 1 * self.win_height / 16
             # oi la!
-            y_mean  = (.5 - math.sin(twopi * mean_freq  * the_time + float(self.xml_form_dict['pitch_form']['mean']['phase']))  / 2.0) * (float(self.win_height) / 12.0) + (1.0 * float(self.win_height) / 16.0)
-            y_range = (.5 + math.sin(twopi * range_freq * the_time + float(self.xml_form_dict['pitch_form']['range']['phase'])) / 2.0) * (float(self.win_height) / 12.0)
+            y_mean  = (.5 - math.sin(self.twopi * mean_freq  * the_time + float(self.xml_form_dict['pitch_form']['mean']['phase']))  / 2.0) * (float(self.win_height) / 12.0) + (1.0 * float(self.win_height) / 16.0)
+            y_range = (.5 + math.sin(self.twopi * range_freq * the_time + float(self.xml_form_dict['pitch_form']['range']['phase'])) / 2.0) * (float(self.win_height) / 12.0)
 
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
@@ -118,11 +121,11 @@ class XmlForm(tkinter.Tk):
             seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             y_mean  = (.5
-                       - math.sin(twopi * mean_freq  * the_time
+                       - math.sin(self.twopi * mean_freq  * the_time
                                   + float(self.xml_form_dict['rhythm_form']['mean']['phase']))
                        / 2.0) * float(self.win_height) / 12.0 + 5.0 * float(self.win_height / 16.0)
             y_range = (.5
-                      + math.sin(twopi * range_freq * the_time
+                      + math.sin(self.twopi * range_freq * the_time
                                  + float(self.xml_form_dict['rhythm_form']['range']['phase']))
                       / 2.0) * float(self.win_height) / 12.0
             poly_lr.append(i)
@@ -144,11 +147,11 @@ class XmlForm(tkinter.Tk):
             seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             y_mean  = (.5
-                       - math.sin(twopi * mean_freq  * the_time
+                       - math.sin(self.twopi * mean_freq  * the_time
                                   + float(self.xml_form_dict['dynamic_form']['mean']['phase']))
                        / 2.0) * float(self.win_height) / 12.0 + 9.0 * float(self.win_height / 16.0)
             y_range = (.5
-                      + math.sin(twopi * range_freq * the_time
+                      + math.sin(self.twopi * range_freq * the_time
                                  + float(self.xml_form_dict['dynamic_form']['range']['phase']))
                       / 2.0) * float(self.win_height) / 12.0
             poly_lr.append(i)
@@ -171,7 +174,7 @@ class XmlForm(tkinter.Tk):
             seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             y_mean  = (.5
-                      + math.sin(twopi * mean_freq  * the_time
+                      + math.sin(self.twopi * mean_freq  * the_time
                                  + float(self.xml_form_dict['texture_form']['phase']))
                       / 2.0) * float(self.win_height / 12.0)
             y_range = float(self.win_height) / 12.0 + (13.0 * float(self.win_height) / 16.0)

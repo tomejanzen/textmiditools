@@ -1,3 +1,7 @@
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * All files: update copyright to 2022.  Update version to 1.0.18.
+        * textmidi.texi, textmidiformedit.texi: fix errors and update.
+
 2022-02-10     Thomas E. Janzen <janzentome@gmail.com>
         * AllFormsWindow.py, KeyboardWindow.py: make keyboard smaller.
 

@@ -17,7 +17,7 @@
 @author Thomas E. Janzen
 @end titlepage
 @copying
-Copyright @copyright{} 2021 Thomas E. Janzen.
+Copyright @copyright{} 2022 Thomas E. Janzen.
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2
@@ -127,7 +127,7 @@ software.
 @section History
 @cindex history
 @command{textmidi} was developed in 1999 and improved in 2020
-and 2021 in order to add support for more of the MIDI specification.
+to 2022 in order to add support for more of the MIDI specification.
 It was used in 2003 to create the MIDI file for the Quintet for piano
 and strings by Robert Schumann, which was added to the Classical MIDI
 Archive at that time.
@@ -374,7 +374,7 @@ take string arguments.  These events may repeat throughout the track
 within Detail mode.  The string data the follows text event commands must either use the remainder of a line, or be double-quoted.
 
 @smallexample
-TEXT @quotedblleft{}Rewrite this measure@quotedblright{} TIME_SIGNATURE 3 4 24
+TEXT "Rewrite this measure" TIME_SIGNATURE 3 4 24
 @end smallexample
 
 or
@@ -386,24 +386,27 @@ TIME_SIGNATURE 3 4 24
 
 @table @option
 @cindex @command{textmidi} text meta events
-@item TEXT [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+Note that <EOL> refers to end-of-line, that is, no commands follow on the same line.
+Text events can be written with no quotes if no commands follow.
+If the text is put inside quotes, then other commands may follow on the same line.
+@item TEXT [string]<EOL> or TEXT "a string" [more commands]
 @cindex TEXT
 @example
 TEXT "See above"
 @end example
-@item COPYRIGHT  [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+@item COPYRIGHT  [string]<EOL> or COPYRIGHT "string" [more commands]
 @cindex COPYRIGHT
 The copyright notice meta event.
 @example
-COPYRIGHT Copyright (c) 1823 Ludwig van Beethoven
+COPYRIGHT Copyright @copyright{} 1823 Ludwig van Beethoven
 @end example
-@item TRACK [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+@item TRACK [string]<EOL> or TRACK "string"
 @cindex TRACK
 The track name.
 @example
 TRACK "Trumpet stings"
 @end example
-@item INSTRUMENT [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+@item INSTRUMENT [string]<EOL> or INSTRUMENT "string" [more commands]
 @cindex INSTRUMENT
 The instrument name for the given track.
 This is only a string and
@@ -411,18 +414,18 @@ does not effect the General MIDI instrument preset.
 @example
 INSTRUMENT "Flugel Horn or best substitute"
 @end example
-@item LYRIC [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+@item LYRIC [string]<EOL> or LYRIC "string"
 @cindex LYRIC
 A lyric string.
 @example
-LYRIC "No lyric could be cleared"
+LYRIC "No lyric could be cleared, oh Baby!"
 @end example
-@item MARKER [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+@item MARKER [string]<EOL> or MARKER "string"
 @cindex MARKER
 @example
 MARKER "Letter A"
 @end example
-@item CUE_POINT [string]<EOL> or TEXT @quotedblleft{}string@quotedblright{}
+@item CUE_POINT [string]<EOL> or CUE_POINT "string"
 @cindex CUE_POINT
 @example
 CUE_POINT "Letter A"
@@ -549,11 +552,6 @@ Nevertheless it is available in @command{textmidi}.
 @cindex ALL_SOUND_OFF
 This would probably not be used in a MIDI file, but only by a MIDI player.
 Nevertheless it is available in @command{textmidi}.
-@item BREATH channelnum value
-@cindex BREATH
-@example
-BREATH 1 32
-@end example
 @item DAMPER channelnum value
 @cindex DAMPER
 The damper pedal on a piano.
@@ -640,7 +638,7 @@ the message, and an F7 to the end.  (The length includes only the
 functional data and the terminating F7).
 @item SYSEXRAW byte byte byte...
 SYSEXRAW also takes either decimal or hexadecimal byte values.  It permits
-sending a more freely-formatted block of data, and it fully specified
+sending a more freely-formatted block of data, and is fully specified
 by the synthesizer or effects box vendor.  Do not include the F7 at the
 start, or a length unless the synthesizer manufacturer specifies it,
 or an F7 at the end unless the synthesizer manufacturer requires it.
@@ -654,7 +652,7 @@ with a SYSEX block.
 @cindex LAZY track mode
 At any time in a track, during DETAIL mode,
 a LAZY (or BRIEF) command can be inserted in order to enter LAZY mode.
-You can leave END_LAZY mode and return to DETAIL mode at any time.
+You can leave LAZY mode and return to DETAIL mode at any time.
 There may be as many LAZY or DETAIL mode sections as needed.
 For example, in some music, it is necessary to reset the time signature
 in mid-track, especially the rhythm track (often the first track in a multitrack file).

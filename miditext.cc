@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.17
+// TextMIDITools Version 1.0.18
 //
 // miditext 1.0
-// Copyright © 2021 Thomas E. Janzen
+// Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -103,8 +103,8 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.17\n";
-        cout << "Copyright © 2021 Thomas E. Janzen\n";
+        cout << "TextMIDITools 1.0.18\n";
+        cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
         cout << "This is free software: "

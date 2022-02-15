@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.18
+# TextMIDITools Version 1.0.19
 # textmidiform.py 1.0
 # Copyright © 2022 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -19,7 +19,7 @@ class VoiceWindow(tkinter.Toplevel):
     general_midi_list = list(GeneralMIDIInstrumentDict)
     def __init__(self, xml_form):
         super().__init__()
-        self.frame = ttk.Frame(self, padding="1 1 1 1")
+        self.frame = ttk.Frame(self, padding='1 1 1 1')
         self.frame.grid()
         self.xml_form = xml_form
         self.create_widgets()
@@ -29,25 +29,25 @@ class VoiceWindow(tkinter.Toplevel):
     def create_widgets(self):
         the_row = 0
 
-        self.number_of_voices_label = tkinter.ttk.Label(self.frame, text="Number of Voices")
+        self.number_of_voices_label = tkinter.ttk.Label(self.frame, text='Number of Voices')
         self.number_of_voices_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.number_of_voices_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.number_of_voices_callback, state='readonly', wrap=True)
-        self.number_of_voices_spinbox["increment"] = 1
-        self.number_of_voices_spinbox["from"]      = 1
+        self.number_of_voices_spinbox['increment'] = 1
+        self.number_of_voices_spinbox['from']      = 1
         self.number_of_voices_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.number_of_voices_spinbox.bind('<ButtonRelease-1>', self.number_of_voices_callback)
         self.number_of_voices_spinbox['state'] = '!readonly'
         self.number_of_voices_spinbox.set(len(self.xml_form['voices']))
-        self.number_of_voices_spinbox["to"] = len(self.xml_form['voices']) - 1
+        self.number_of_voices_spinbox['to'] = len(self.xml_form['voices']) - 1
         self.number_of_voices_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
-        self.voice_number_label = tkinter.ttk.Label(self.frame, text="Voice")
+        self.voice_number_label = tkinter.ttk.Label(self.frame, text='Voice')
         self.voice_number_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.voice_number_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.voice_number_callback, wrap=True)
-        self.voice_number_spinbox["increment"] = 1.0
-        self.voice_number_spinbox["from"] = 0.0
-        self.voice_number_spinbox["to"] = len(self.xml_form['voices'])
+        self.voice_number_spinbox['increment'] = 1.0
+        self.voice_number_spinbox['from'] = 0.0
+        self.voice_number_spinbox['to'] = len(self.xml_form['voices'])
         self.voice_number_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.voice_number_spinbox.bind('<ButtonRelease-1>', self.voice_number_callback)
         vox = 0
@@ -55,7 +55,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.voice_number_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
-        self.low_pitch_label = tkinter.ttk.Label(self.frame, text="Low Pitch")
+        self.low_pitch_label = tkinter.ttk.Label(self.frame, text='Low Pitch')
         self.low_pitch_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         # TCL book p 509
         # %d type 1 insert, 0 del, -1 other
@@ -68,7 +68,7 @@ class VoiceWindow(tkinter.Toplevel):
         # %W tk name of widget
         validate_command = (self.register(self.validate_pitchname),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
-        self.low_pitch_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate="focusout")
+        self.low_pitch_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate='focusout')
         self.low_pitch_entry.delete(0, 1024)
         self.low_pitch_entry.insert(0, self.xml_form['voices'][vox]['low_pitch'])
         self.low_pitch_entry.update()
@@ -77,9 +77,9 @@ class VoiceWindow(tkinter.Toplevel):
         self.low_pitch_entry.bind('<FocusOut>', self.low_pitch_callback)
         the_row = the_row + 1
 
-        self.high_pitch_label = tkinter.ttk.Label(self.frame, text="High Pitch")
+        self.high_pitch_label = tkinter.ttk.Label(self.frame, text='High Pitch')
         self.high_pitch_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.high_pitch_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate="focusout")
+        self.high_pitch_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate='focusout')
         self.high_pitch_entry.delete(0, 1024)
         self.high_pitch_entry.insert(0, self.xml_form['voices'][vox]['high_pitch'])
         self.high_pitch_entry.update()
@@ -87,71 +87,71 @@ class VoiceWindow(tkinter.Toplevel):
         self.high_pitch_entry.bind('<Key-Return>', self.high_pitch_callback)
         the_row = the_row + 1
 
-        self.channel_label = tkinter.ttk.Label(self.frame, text="Channel")
+        self.channel_label = tkinter.ttk.Label(self.frame, text='Channel')
         self.channel_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.channel_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.channel_callback, wrap=True)
-        self.channel_spinbox["increment"] = 1.0
-        self.channel_spinbox["from"] = 1.0
-        self.channel_spinbox["to"] = 16.0
+        self.channel_spinbox['increment'] = 1.0
+        self.channel_spinbox['from'] = 1.0
+        self.channel_spinbox['to'] = 16.0
         self.channel_spinbox.set(self.xml_form['voices'][vox]['channel'])
         self.channel_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.channel_spinbox.bind('<ButtonRelease-1>', self.channel_callback)
-        self.channel_spinbox['state'] = "readonly"
+        self.channel_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
-        self.program_label = tkinter.ttk.Label(self.frame, text="Program")
+        self.program_label = tkinter.ttk.Label(self.frame, text='Program')
         self.program_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.program_spinbox = tkinter.ttk.Spinbox(self.frame, values=self.general_midi_list, state='readonly', wrap=True)
-        self.program_spinbox["increment"] = 1.0
-        self.program_spinbox["from"] = 1.0
-        self.program_spinbox["to"] = 128.0
+        self.program_spinbox['increment'] = 1.0
+        self.program_spinbox['from'] = 1.0
+        self.program_spinbox['to'] = 128.0
         self.program_spinbox.set(self.general_midi_list[self.xml_form['voices'][vox]['program'] - 1])
         self.program_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.program_spinbox.bind('<ButtonRelease-1>', self.program_callback)
         self.program_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
-        self.walking_label = tkinter.ttk.Label(self.frame, text="Walking")
+        self.walking_label = tkinter.ttk.Label(self.frame, text='Walking')
         self.walking_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.walking = tkinter.IntVar()
         self.walking = self.xml_form['voices'][vox]['walking']
-        self.walking_checkbutton = tkinter.ttk.Checkbutton(self.frame, text="walking",
+        self.walking_checkbutton = tkinter.ttk.Checkbutton(self.frame, text='walking',
             variable=self.walking, command=self.walking_callback)
         self.walking_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
 
-        self.pan_scroll_label = tkinter.ttk.Label(self.frame, text="-pi..................0..................pi")
+        self.pan_scroll_label = tkinter.ttk.Label(self.frame, text='-pi..................0..................pi')
         self.pan_scroll_label.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
 
-        self.pan_label = tkinter.ttk.Label(self.frame, text="Pan")
+        self.pan_label = tkinter.ttk.Label(self.frame, text='Pan')
         self.pan_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.pan_scrollbar = tkinter.ttk.Scrollbar(self.frame, command=self.pan_callback)
-        self.pan_scrollbar["orient"] = "horizontal"
+        self.pan_scrollbar['orient'] = 'horizontal'
         self.pan_scrollbar.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         temppan = self.xml_form['voices'][vox]['pan'] / 128 + 0.5
         self.pan_scrollbar.set(temppan, temppan)
         the_row = the_row + 1
 
-        self.follow_label = tkinter.ttk.Label(self.frame, text="Follow")
+        self.follow_label = tkinter.ttk.Label(self.frame, text='Follow')
         self.follow_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.follow = tkinter.IntVar()
         self.follow.set(self.xml_form['voices'][vox]['follower']['follow'])
-        self.follow_checkbutton = tkinter.ttk.Checkbutton(self.frame, text="follow",
+        self.follow_checkbutton = tkinter.ttk.Checkbutton(self.frame, text='follow',
             variable=self.follow, command=self.follow_callback)
         self.follow_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
 
-        self.leader_label = tkinter.ttk.Label(self.frame, text="Leader")
+        self.leader_label = tkinter.ttk.Label(self.frame, text='Leader')
         self.leader_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.leader_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.leader_callback, wrap=True)
-        self.leader_spinbox["increment"] = 1.0
-        self.leader_spinbox["from"] = 0.0
-        self.leader_spinbox["to"] = self.number_of_voices_spinbox.get()
+        self.leader_spinbox['increment'] = 1.0
+        self.leader_spinbox['from'] = 0.0
+        self.leader_spinbox['to'] = self.number_of_voices_spinbox.get()
         if (self.xml_form['voices'][vox]['follower']['follow'] == 1):
-            self.leader_spinbox["state"] = "enabled"
+            self.leader_spinbox['state'] = 'enabled'
         else:
-            self.leader_spinbox["state"] = "disabled"
+            self.leader_spinbox['state'] = 'disabled'
         self.leader_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.leader_spinbox.bind('<Key-Return>', self.leader_callback)
         self.leader_spinbox.bind('<FocusOut>', self.leader_callback)
@@ -159,35 +159,35 @@ class VoiceWindow(tkinter.Toplevel):
         self.leader_spinbox.set(self.xml_form['voices'][vox]['follower']['leader'])
         the_row = the_row + 1
 
-        self.scaler_interval_type_label = tkinter.ttk.Label(self.frame, text="Interval Type")
+        self.scaler_interval_type_label = tkinter.ttk.Label(self.frame, text='Interval Type')
         self.scaler_interval_type_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.frame.interval_type = tkinter.StringVar()
         self.frame.interval_type.set(self.xml_form['voices'][vox]['follower']['interval_type'])
         self.scaler_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.frame,
-            text='Scaler', variable=self.frame.interval_type, value="1",
+            text='Scaler', variable=self.frame.interval_type, value='1',
             command=self.interval_type_callback)
         self.scaler_interval_type_radiobutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
 
         self.chromatic_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.frame,
-            text='Chromatic', variable=self.frame.interval_type, value="2",
+            text='Chromatic', variable=self.frame.interval_type, value='2',
             command=self.interval_type_callback)
         if (self.xml_form['voices'][vox]['follower']['follow'] == '1'):
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-            self.chromatic_interval_type_radiobutton["state"] = "enabled"
+            self.scaler_interval_type_radiobutton['state'] = 'enabled'
+            self.chromatic_interval_type_radiobutton['state'] = 'enabled'
         else:
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.chromatic_interval_type_radiobutton["state"] = "disabled"
-        self.chromatic_interval_type_radiobutton["state"] = "disabled"
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.chromatic_interval_type_radiobutton['state'] = 'disabled'
+        self.chromatic_interval_type_radiobutton['state'] = 'disabled'
         self.chromatic_interval_type_radiobutton.grid(row=the_row, column=2, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
 
-        self.follow_interval_label = tkinter.ttk.Label(self.frame, text="Interval")
+        self.follow_interval_label = tkinter.ttk.Label(self.frame, text='Interval')
         self.follow_interval_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.follow_interval_spinbox = tkinter.ttk.Spinbox(self.frame, command=self.follow_interval_callback, wrap=True)
-        self.follow_interval_spinbox["increment"] = 1.0
-        self.follow_interval_spinbox["from"] = -24.0
-        self.follow_interval_spinbox["to"] = 24.0
-        self.follow_interval_spinbox["state"] = "disabled"
+        self.follow_interval_spinbox['increment'] = 1.0
+        self.follow_interval_spinbox['from'] = -24.0
+        self.follow_interval_spinbox['to'] = 24.0
+        self.follow_interval_spinbox['state'] = 'disabled'
         self.follow_interval_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.follow_interval_spinbox.bind('<ButtonRelease-1>', self.follow_interval_callback)
         self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
@@ -220,8 +220,8 @@ class VoiceWindow(tkinter.Toplevel):
         if (len(self.xml_form['voices']) < number_of_voices):
             for v in range(len(self.xml_form['voices']), number_of_voices):
                 vd = {}
-                vd['low_pitch'] = "A0"
-                vd['high_pitch'] = "C8"
+                vd['low_pitch'] = 'A0'
+                vd['high_pitch'] = 'C8'
                 vd['channel'] = 1
                 vd['walking'] = 0
                 vd['program'] = 1
@@ -233,7 +233,7 @@ class VoiceWindow(tkinter.Toplevel):
                 fd['interval'] = 0
                 vd['follower'] = fd
                 self.xml_form['voices'].append(vd)
-        self.voice_number_spinbox["to"] = len(self.xml_form['voices']) - 1
+        self.voice_number_spinbox['to'] = len(self.xml_form['voices']) - 1
 
     def voice_number_callback(self, event=None):
         self.update_idletasks()
@@ -276,18 +276,18 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.frame.interval_type.set(self.xml_form['voices'][vox]['follower']['interval_type'])
         if (self.xml_form['voices'][vox]['follower']['follow'] == 1):
-            self.leader_spinbox["state"] = "enabled"
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-            self.chromatic_interval_type_radiobutton["state"] = "enabled"
+            self.leader_spinbox['state'] = 'enabled'
+            self.scaler_interval_type_radiobutton['state'] = 'enabled'
+            self.chromatic_interval_type_radiobutton['state'] = 'enabled'
             self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
             self.frame.interval_type.set(self.xml_form['voices'][vox]['follower']['interval_type'])
             self.scaler_interval_type_radiobutton.update()
             self.chromatic_interval_type_radiobutton.update()
             self.follow_interval_spinbox.update()
         else:
-            self.leader_spinbox["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.chromatic_interval_type_radiobutton["state"] = "disabled"
+            self.leader_spinbox['state'] = 'disabled'
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.chromatic_interval_type_radiobutton['state'] = 'disabled'
             self.leader_spinbox.set('2147483647')
 
     def leader_callback(self, event=None):
@@ -328,7 +328,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.number_of_voices_spinbox.set(len(self.xml_form['voices']))
         self.number_of_voices_spinbox['state'] = 'readonly'
         self.voice_number_spinbox['state'] = '!readonly'
-        self.voice_number_spinbox["to"] = len(self.xml_form['voices']) - 1
+        self.voice_number_spinbox['to'] = len(self.xml_form['voices']) - 1
         self.voice_number_spinbox.set(vox)
         self.voice_number_spinbox['state'] = 'readonly'
 
@@ -365,14 +365,14 @@ class VoiceWindow(tkinter.Toplevel):
         self.leader_spinbox.set(self.xml_form['voices'][vox]['follower']['leader'])
         self.leader_spinbox.update()
         if (self.xml_form['voices'][vox]['follower']['interval_type'] == 0):
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
         if (self.xml_form['voices'][vox]['follower']['interval_type'] == 1):
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
+            self.scaler_interval_type_radiobutton['state'] = 'enabled'
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
         if (self.xml_form['voices'][vox]['follower']['interval_type'] == 2):
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "enabled"
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.scaler_interval_type_radiobutton['state'] = 'enabled'
         self.scaler_interval_type_radiobutton.update()
         self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
         self.follow_interval_spinbox.update()
@@ -382,25 +382,25 @@ class VoiceWindow(tkinter.Toplevel):
         vox = int(self.voice_number_spinbox.get())
         if (self.follow_checkbutton.instate(['selected'])):
             self.xml_form['voices'][vox]['follower']['follow'] = 1
-            self.walking_checkbutton["state"] = "disabled"
-            self.leader_spinbox["state"] = "normal"
-            self.scaler_interval_type_radiobutton["state"] = "normal"
-            self.chromatic_interval_type_radiobutton["state"] = "normal"
-            self.follow_interval_spinbox["state"] = "normal"
+            self.walking_checkbutton['state'] = 'disabled'
+            self.leader_spinbox['state'] = 'normal'
+            self.scaler_interval_type_radiobutton['state'] = 'normal'
+            self.chromatic_interval_type_radiobutton['state'] = 'normal'
+            self.follow_interval_spinbox['state'] = 'normal'
         else:
             self.xml_form['voices'][vox]['follower']['follow'] = 0
-            self.walking_checkbutton["state"] = "normal"
-            self.leader_spinbox["state"] = "disabled"
-            self.scaler_interval_type_radiobutton["state"] = "disabled"
-            self.chromatic_interval_type_radiobutton["state"] = "disabled"
-            self.follow_interval_spinbox["state"] = "disabled"
+            self.walking_checkbutton['state'] = 'normal'
+            self.leader_spinbox['state'] = 'disabled'
+            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.chromatic_interval_type_radiobutton['state'] = 'disabled'
+            self.follow_interval_spinbox['state'] = 'disabled'
 
     def pan_callback(self, action, sign, unitspage):
         vox = int(self.voice_number_spinbox.get())
         firstlastlist = self.pan_scrollbar.get()
         setting = 0
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[1]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -414,7 +414,7 @@ class VoiceWindow(tkinter.Toplevel):
                     value = 63
                 self.xml_form['voices'][vox]['pan'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[1]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -428,7 +428,7 @@ class VoiceWindow(tkinter.Toplevel):
                         value = 63
                     self.xml_form['voices'][vox]['pan'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.pan_scrollbar.set(firstlastlist[0])
                 value = (setting - 0.5) * 128

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -26,7 +26,7 @@ namespace cgm
         PreviousPermutation,
         NextPermutation,
         SwapPairs,
-        RandomShuffle,
+        Shuffle,
     };
     typedef std::map<std::string, TrackScrambleEnum> TrackScrambleMap;
     const TrackScrambleMap track_scramble_map
@@ -38,7 +38,7 @@ namespace cgm
         {"previousPermutation", TrackScrambleEnum::PreviousPermutation},
         {"nextPermutation", TrackScrambleEnum::NextPermutation},
         {"swappairs", TrackScrambleEnum::SwapPairs},
-        {"randomshuffle", TrackScrambleEnum::RandomShuffle}
+        {"shuffle", TrackScrambleEnum::Shuffle}
     };
     struct TrackScramble
     {

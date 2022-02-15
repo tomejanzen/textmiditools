@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -59,6 +59,7 @@
 using namespace std;
 using namespace boost;
 using namespace textmidi;
+using namespace textmidi::rational;
 using namespace smus;
 
 namespace
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.18\n";
+        cout << "TextMIDITools 1.0.19\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -400,7 +401,7 @@ int main(int argc, char *argv[])
 
         notes_per_track = bytes_per_track / sizeof(SmusTrackEvent);
 
-        delay_accum = 0;
+        delay_accum = TextmidiRational{0};
         trackEventPtr = reinterpret_cast<SmusTrackEvent*>(&smus_score[smus_index]);
         smus_index += bytes_per_track;
         trackEventVec.resize(notes_per_track);

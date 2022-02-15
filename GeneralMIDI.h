@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -16,7 +16,7 @@
 
 namespace cgm
 {
-    const std::pair<std::string, std::string> IdiophoneRange{"Eb1", "Eb6"};
+    const std::pair IdiophoneRange{std::string{"Eb1"}, std::string{"Eb6"}};
     constexpr int MIDIInstrumentsPerGroup{8};
     constexpr int IdiophoneChannel{10};
     enum class GeneralMIDIGroup

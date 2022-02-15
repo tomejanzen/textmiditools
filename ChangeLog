@@ -1,3 +1,25 @@
+2022-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}, SmusTrackEvent.cc, miditext.cc, MidiMessages.cc, Composer.cc:
+        Complete work integrating TextmidiRational.
+
+2022-02-13     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, SmusTrackEvent.h, SmusTrackEvent.cc, MidiMessages.cc, 
+        * rational_support.{h,cc}, Track.h, TextmidiRational.{h,cc}, NoteEvent.h
+        * Composer.cc, miditext.cc, smustextmidi.cc, MidiMessages.h, TextmidiRational.cc:
+        Use pair init without template args; dispose of boost::rational and replace
+        with TextmidiRational.  This stopped hard-to-track-down crashes of smustextmidi.
+
+2022-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h: use std::shuffle rather than random_shuffle, 
+        now deleted from C++.
+        * RandomDouble.h, RandomInt.h: add inclusion guards; to RandomInt.h add
+        min() and max() member functions and a typedef of result_type
+        so that std::shuffle can use them.
+        * MIDIKeyString.cc: remove unnecessary double braces.
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: replace double quotes with single quotes
+
 2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
         * All files: update copyright to 2022.  Update version to 1.0.18.
         * textmidi.texi, textmidiformedit.texi: fix errors and update.

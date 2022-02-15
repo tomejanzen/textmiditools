@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -67,7 +67,6 @@
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/rational.hpp>
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/xml_archive_exception.hpp>
 
@@ -122,7 +121,7 @@ namespace {
     constexpr char ClampScaleTxt[]{"in each form, clamp the scale to the union of the voice ranges"};
     const string TrackScrambleOpt{"trackscramble"};
     constexpr char TrackScrambleTxt[]{"rotateright rotateleft reverse previouspermutation "
-        "nextpermutation swappairs randomshuffle"};
+        "nextpermutation swappairs shuffle"};
     const string TrackScramblePeriodOpt{"trackscrambleperiod"};
     constexpr char TrackScramblePeriodTxt[]{"floating seconds"};
 }
@@ -174,7 +173,7 @@ int main(int argc, char *argv[])
         string str{};
         str.reserve(512);
         (((((((str += "textmidicgm\n")
-            += "TextMIDITools 1.0.18\n")
+            += "TextMIDITools 1.0.19\n")
             += "Copyright © 2022 Thomas E. Janzen\n")
             += "License GPLv3+: GNU GPL version 3 or later ")
             += "<https://gnu.org/licenses/gpl.html>\n")

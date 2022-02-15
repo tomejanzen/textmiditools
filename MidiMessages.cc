@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -78,7 +78,7 @@ ostream& textmidi::print_lazy_value(ostream& os, const Ratio64& ratio64)
     {
         if (3 != ratio64.numerator())
         {
-            if (ratio64 != 0L)
+            if (ratio64 != Ratio64{0L})
             {
                 os << ratio64 << ' ';
             }
@@ -1290,7 +1290,7 @@ void textmidi::value_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pa
         const Ratio64& quantum, uint32_t ticksperquarter)
 {
     const auto ticksperquantum{quantum
-        ? (quantum * QuartersPerWhole * ticksperquarter) : 1};
+        ? (quantum * rational::TextmidiRational{QuartersPerWhole} * rational::TextmidiRational{ticksperquarter}) : rational::TextmidiRational{1L}};
     for (auto delaymsgiter{midi_delay_message_pairs.begin()};
         (delaymsgiter != midi_delay_message_pairs.end())
         && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
@@ -1299,7 +1299,7 @@ void textmidi::value_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pa
     {
         if ((delaymsgiter + 1) != midi_delay_message_pairs.end())
         {
-            Ratio64 ratio_to_next_event{static_cast<Ratio64::int_type>
+            Ratio64 ratio_to_next_event{static_cast<std::int64_t>
                 (delaymsgiter->second->ticks_to_next_event()),
                     QuartersPerWhole * ticksperquarter};
             delaymsgiter->second->wholes_to_next_event(
@@ -1333,7 +1333,7 @@ void textmidi::value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs
             (delaymsgiter->second.get())};
         if (rest)
         {
-            Ratio64 ratio_to_note_off{static_cast<Ratio64::int_type>
+            Ratio64 ratio_to_note_off{static_cast<int64_t>
                 (rest->ticks_to_next_event()),
                     ticksperquarter * QuartersPerWhole};
             rest->wholes_to_noteoff(rational
@@ -1363,10 +1363,10 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiMessage* mm)
         }
         if (no->wholes_to_noteoff())
         {
-            if (no->wholes_to_next_event() != 0)
+            if (no->wholes_to_next_event() != rational::TextmidiRational{0L})
             {
                 print_lazy_value(os, no->wholes_to_noteoff()) << '\n';
-                if (no->wholes_past_noteoff() > 0)
+                if (no->wholes_past_noteoff() > rational::TextmidiRational{0L})
                 {
                     os << "R " << no->wholes_past_noteoff() << ' ';
                 }

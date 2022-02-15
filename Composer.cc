@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -24,12 +24,15 @@
 #include "Composer.h"
 #include "NoteEvent.h"
 #include "RandomDouble.h"
+#include "RandomInt.h"
 #include "Track.h"
 #include "GnuPlot.h"
 
 using namespace std;
 using namespace boost;
 using namespace cgm;
+using namespace textmidi;
+using namespace textmidi::rational;
 
 namespace
 {
@@ -49,13 +52,14 @@ namespace
         //  beat    whole   minute
         // ------ * ----- * -------
         // minute   beat    seconds
-        const MusicalRhythm wholes_per_second{
-          TempoBeatsPerMinute * WholesPerBeat / SecondsPerMinute };
+        MusicalRhythm wholes_per_second{
+          MusicalRhythm{TempoBeatsPerMinute} * WholesPerBeat / MusicalRhythm{SecondsPerMinute} };
+        //wholes_per_second.reduce();
         //  Ticks    Quarters    whole
         // ------- * -------- * -------
         // Quarter     Whole    second
         const MusicalRhythm TicksPerSecond{
-             TicksPerQuarter * QuartersPerWhole * wholes_per_second};
+             MusicalRhythm{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
         // Turn the rhythm (duration) into a ratio and multiply
         // both the numerator and the denominator by TicksPerSecond.
         // This gives us the actual musical rhythm value.
@@ -75,10 +79,11 @@ namespace
     // Coerce a duration to be in multiples of the pulse/second value.
     MusicalRhythm snap_to_pulse(MusicalRhythm rhythm, double pulse_per_second)
     {
-        const MusicalRhythm wholes_per_second{
-          TempoBeatsPerMinute * WholesPerBeat / SecondsPerMinute };
+        MusicalRhythm wholes_per_second{
+          MusicalRhythm{TempoBeatsPerMinute} * WholesPerBeat / MusicalRhythm{SecondsPerMinute} };
+        //wholes_per_second.reduce();
         const MusicalRhythm TicksPerSecond{
-             TicksPerQuarter * QuartersPerWhole * wholes_per_second};
+             MusicalRhythm{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
         const double TicksPerSecondDouble{
               static_cast<double>(TicksPerSecond.numerator())
             / static_cast<double>(TicksPerSecond.denominator())};
@@ -92,17 +97,18 @@ namespace
         // Get rid of the remainder.
         // but first round off by adding a half-pulse.
         MusicalRhythm
-            pulse_per_rhythm{(rhythm + whole_per_pulse / 2) / whole_per_pulse};
+            pulse_per_rhythm{(rhythm + whole_per_pulse / TextmidiRational{2L}) / whole_per_pulse};
         if (pulse_per_rhythm.denominator() != 1)
         {
             const auto rem{pulse_per_rhythm.numerator()
                          % pulse_per_rhythm.denominator()};
             // snap the rhythm (duration) to pulses.
-            pulse_per_rhythm.assign(pulse_per_rhythm.numerator() - rem,
-                pulse_per_rhythm.denominator());
+            pulse_per_rhythm = TextmidiRational{pulse_per_rhythm.numerator() - rem,
+                pulse_per_rhythm.denominator()};
+            //pulse_per_rhythm.reduce();
             if (!pulse_per_rhythm)
             {
-                pulse_per_rhythm = 1; // i.e., one pulse minimum.
+                pulse_per_rhythm = MusicalRhythm{1L}; // i.e., one pulse minimum.
             }
         }
         rhythm = pulse_per_rhythm * whole_per_pulse;
@@ -273,11 +279,12 @@ namespace
                         swap(previous_sequence[i], previous_sequence[i + 1]);
                     }
                     break;
-                case TrackScrambleEnum::RandomShuffle:
-                    random_shuffle(previous_sequence.begin(), previous_sequence.end());
+                case TrackScrambleEnum::Shuffle:
+                    shuffle(previous_sequence.begin(), previous_sequence.end(),
+                        RandomInt(0, previous_sequence.size() - 1));
                     break;
                 case TrackScrambleEnum::None:
-                    break;
+                    [[fallthrough]]
                 default:
                     break;
             }
@@ -373,11 +380,11 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                           static_cast<double>(rhythm.numerator())
                         / static_cast<double>(rhythm.denominator())};
                     const MusicalRhythm wholes_per_second{
-                        TempoBeatsPerMinute * WholesPerBeat
-                            / SecondsPerMinute};
-                    const MusicalRhythm TicksPerSecond{
-                        TicksPerQuarter * QuartersPerWhole
-                                        * wholes_per_second};
+                        TextmidiRational{TempoBeatsPerMinute} * WholesPerBeat
+                            / TextmidiRational{SecondsPerMinute}};
+                    const MusicalRhythm TicksPerSecond(
+                        MusicalRhythm{TicksPerQuarter} * QuartersPerWholeRat
+                                        * wholes_per_second);
                     // wholes   Ticks    second
                     // ------ * ------ * ------
                     // note     Second   wholes

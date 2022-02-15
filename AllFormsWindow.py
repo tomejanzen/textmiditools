@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.18
+# TextMIDITools Version 1.0.19
 # textmidiform.py 1.0
 # Copyright © 2022 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -29,17 +29,17 @@ class ScaleFrame(tkinter.Frame):
                         'Chromatic'  : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
                         'Pentatonic' : [0, 2, 5, 7, 9],
                         'Tritone' : [0, 2, 4, 5, 6, 8, 10, 11]}
-    full_midi_scale = ["C-1", "C#-1", "D-1", "D#-1", "E-1", "F-1", "F#-1", "G-1", "G#-1", "A-1", "A#-1", "B-1",
-                       "C0", "C#0", "D0", "D#0", "E0", "F0", "F#0", "G0", "G#0", "A0", "A#0", "B0",
-                       "C1", "C#1", "D1", "D#1", "E1", "F1", "F#1", "G1", "G#1", "A1", "A#1", "B1",
-                       "C2", "C#2", "D2", "D#2", "E2", "F2", "F#2", "G2", "G#2", "A2", "A#2", "B2",
-                       "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3",
-                       "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4",
-                       "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5", "A#5", "B5",
-                       "C6", "C#6", "D6", "D#6", "E6", "F6", "F#6", "G6", "G#6", "A6", "A#6", "B6",
-                       "C7", "C#7", "D7", "D#7", "E7", "F7", "F#7", "G7", "G#7", "A7", "A#7", "B7",
-                       "C8", "C#8", "D8", "D#8", "E8", "F8", "F#8", "G8", "G#8", "A8", "A#8", "B8",
-                       "C9", "C#9", "D9", "D#9", "E9", "F9", "F#9", "G9"]
+    full_midi_scale = ['C-1', 'C#-1', 'D-1', 'D#-1', 'E-1', 'F-1', 'F#-1', 'G-1', 'G#-1', 'A-1', 'A#-1', 'B-1',
+                       'C0', 'C#0', 'D0', 'D#0', 'E0', 'F0', 'F#0', 'G0', 'G#0', 'A0', 'A#0', 'B0',
+                       'C1', 'C#1', 'D1', 'D#1', 'E1', 'F1', 'F#1', 'G1', 'G#1', 'A1', 'A#1', 'B1',
+                       'C2', 'C#2', 'D2', 'D#2', 'E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2',
+                       'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3',
+                       'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
+                       'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
+                       'C6', 'C#6', 'D6', 'D#6', 'E6', 'F6', 'F#6', 'G6', 'G#6', 'A6', 'A#6', 'B6',
+                       'C7', 'C#7', 'D7', 'D#7', 'E7', 'F7', 'F#7', 'G7', 'G#7', 'A7', 'A#7', 'B7',
+                       'C8', 'C#8', 'D8', 'D#8', 'E8', 'F8', 'F#8', 'G8', 'G#8', 'A8', 'A#8', 'B8',
+                       'C9', 'C#9', 'D9', 'D#9', 'E9', 'F9', 'F#9', 'G9']
     notenames = {'C' : 0, 'D' : 2, 'E' : 4, 'F' : 5, 'G' : 7, 'A' : 9, 'B' : 11}
     accidentals = {'b' : -1, '#' : 1, 'bb' : -2, 'x' : 2}
     half_steps_per_octave = 12
@@ -120,23 +120,23 @@ class ScaleFrame(tkinter.Frame):
         self.rowconfigure(index=the_row, weight=1)
         self.columnconfigure(index=0, weight=1)
         self.columnconfigure(index=1, weight=1)
-        self.scale_name_label = tkinter.ttk.Label(self, text="Scale")
+        self.scale_name_label = tkinter.ttk.Label(self, text='Scale')
         self.scale_name_label.grid(row=the_row, column=0, sticky=NSEW)
         self.scale_name_spinbox = tkinter.ttk.Spinbox(self, wrap=True)
-        self.scale_name_spinbox["values"] = self.scale_names
+        self.scale_name_spinbox['values'] = self.scale_names
         self.scale_name_spinbox.grid(row=the_row, column=1, sticky=NSEW)
         self.scale_name_spinbox.bind('<ButtonRelease-1>', self.scale_name_callback)
-        self.scale_name_spinbox.set("Unnamed")
+        self.scale_name_spinbox.set('Unnamed')
         self.scale_name_spinbox['state'] = 'readonly'
         the_row = the_row + 1
 
         self.rowconfigure(index=the_row, weight=1)
-        self.transpose_label = tkinter.ttk.Label(self, text="Transpose")
+        self.transpose_label = tkinter.ttk.Label(self, text='Transpose')
         self.transpose_label.grid(row=the_row, column=0, sticky=NSEW)
         self.transpose_spinbox = tkinter.ttk.Spinbox(self, wrap=True)
-        self.transpose_spinbox["increment"] = 1
-        self.transpose_spinbox["from"]      = -5
-        self.transpose_spinbox["to"]        = 6
+        self.transpose_spinbox['increment'] = 1
+        self.transpose_spinbox['from']      = -5
+        self.transpose_spinbox['to']        = 6
         self.transpose_spinbox.grid(row=the_row, column=1, sticky=NSEW)
         self.transpose_spinbox.bind('<ButtonRelease-1>', self.transpose_callback)
         self.transpose_spinbox.set(0)
@@ -209,10 +209,10 @@ class AllFormsWindow(tkinter.Toplevel):
     twopi = 2.0 * math.pi
     def __init__(self, xml_form = None):
         super().__init__()
-        self.frame = ttk.Frame(self, padding="1 1 1 1")
+        self.frame = ttk.Frame(self, padding='1 1 1 1')
         self.xml_form = xml_form
         self.create_widgets()
-        self.frame.grid(sticky="nw", row=0, column=0)
+        self.frame.grid(sticky='nw', row=0, column=0)
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=0, weight=1)
         self.title('Musical Form')
@@ -222,7 +222,7 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = 0
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.name_label = tkinter.ttk.Label(self.frame, text="Name")
+        self.name_label = tkinter.ttk.Label(self.frame, text='Name')
         self.name_label.grid(row=the_row, column=0, sticky=NSEW)
         self.name_entry = tkinter.ttk.Entry(self.frame)
         self.name_entry.insert(0, self.xml_form['name'])
@@ -234,7 +234,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=the_row, weight=1)
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
-        self.len_label = tkinter.ttk.Label(self.frame, text="Len")
+        self.len_label = tkinter.ttk.Label(self.frame, text='Len')
         self.len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.len_entry = tkinter.ttk.Entry(self.frame)
         self.len_entry.insert(0, self.xml_form['len'])
@@ -244,7 +244,7 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.min_note_len_label = tkinter.ttk.Label(self.frame, text="Min Note Len")
+        self.min_note_len_label = tkinter.ttk.Label(self.frame, text='Min Note Len')
         self.min_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.min_note_len_entry = tkinter.ttk.Entry(self.frame)
         self.min_note_len_entry.insert(0, self.xml_form['min_note_len'])
@@ -254,7 +254,7 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.max_note_len_label = tkinter.ttk.Label(self.frame, text="Max Note Len")
+        self.max_note_len_label = tkinter.ttk.Label(self.frame, text='Max Note Len')
         self.max_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.max_note_len_entry = tkinter.ttk.Entry(self.frame)
         self.max_note_len_entry.insert(0, self.xml_form['max_note_len'])
@@ -264,7 +264,7 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.pulse_label = tkinter.ttk.Label(self.frame, text="Pulse/Sec")
+        self.pulse_label = tkinter.ttk.Label(self.frame, text='Pulse/Sec')
         self.pulse_label.grid(row=the_row, column=0, sticky=NSEW)
         self.pulse_entry = tkinter.ttk.Entry(self.frame)
         self.pulse_entry.insert(0, self.xml_form['pulse'])
@@ -274,12 +274,12 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.melody_probabilities_label = tkinter.ttk.Label(self.frame, text="Melody Probabilities")
+        self.melody_probabilities_label = tkinter.ttk.Label(self.frame, text='Melody Probabilities')
         self.melody_probabilities_label.grid(row=the_row, column=0, sticky=NSEW)
         self.melody_probabilities_entry = tkinter.ttk.Entry(self.frame)
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.down_label = tkinter.ttk.Label(self.frame, text="Down")
+        self.down_label = tkinter.ttk.Label(self.frame, text='Down')
         self.down_label.grid(row=the_row, column=0, sticky=NSEW)
         self.down_entry = tkinter.ttk.Entry(self.frame)
         self.down_entry.insert(0, self.xml_form['melody_probabilities']['down'])
@@ -289,7 +289,7 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.same_label = tkinter.ttk.Label(self.frame, text="Same")
+        self.same_label = tkinter.ttk.Label(self.frame, text='Same')
         self.same_label.grid(row=the_row, column=0, sticky=NSEW)
         self.same_entry = tkinter.ttk.Entry(self.frame)
         self.same_entry.insert(0, self.xml_form['melody_probabilities']['same'])
@@ -299,7 +299,7 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.up_label = tkinter.ttk.Label(self.frame, text="Up")
+        self.up_label = tkinter.ttk.Label(self.frame, text='Up')
         self.up_label.grid(row=the_row, column=0, sticky=NSEW)
         self.up_entry = tkinter.ttk.Entry(self.frame)
         self.up_entry.insert(0, self.xml_form['melody_probabilities']['up'])
@@ -309,29 +309,29 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
 
         self.scale_frame = ScaleFrame(self)
-        self.scale_frame.grid(sticky="w", row=the_row, column=0)
+        self.scale_frame.grid(sticky='w', row=the_row, column=0)
         self.scale_frame.rowconfigure(index=0, weight=1)
         self.scale_frame.columnconfigure(index=0, weight=1)
 
         the_row = the_row + 2
 
         the_row = the_row + 1
-        self.pitch_form = FormFrame(parent=self, form_title="PITCH", mean_period_callback=self.pitch_mean_period_callback, mean_phase_callback=self.pitch_mean_phase_callback, range_period_callback=self.pitch_range_period_callback, range_phase_callback=self.pitch_range_phase_callback, xml_subform=self.xml_form['pitch_form'])
+        self.pitch_form = FormFrame(parent=self, form_title='PITCH', mean_period_callback=self.pitch_mean_period_callback, mean_phase_callback=self.pitch_mean_phase_callback, range_period_callback=self.pitch_range_period_callback, range_phase_callback=self.pitch_range_phase_callback, xml_subform=self.xml_form['pitch_form'])
         self.pitch_form.grid(row=the_row, column=0, sticky=NSEW)
         the_row = the_row + 1
 
         the_row = the_row + 1
-        self.rhythm_form = FormFrame(parent=self, form_title="RHYTHM", mean_period_callback=self.rhythm_mean_period_callback, mean_phase_callback=self.rhythm_mean_phase_callback, range_period_callback=self.rhythm_range_period_callback, range_phase_callback=self.rhythm_range_phase_callback, xml_subform=self.xml_form['rhythm_form'])
+        self.rhythm_form = FormFrame(parent=self, form_title='RHYTHM', mean_period_callback=self.rhythm_mean_period_callback, mean_phase_callback=self.rhythm_mean_phase_callback, range_period_callback=self.rhythm_range_period_callback, range_phase_callback=self.rhythm_range_phase_callback, xml_subform=self.xml_form['rhythm_form'])
         self.rhythm_form.grid(row=the_row, column=0, sticky=NSEW)
         the_row = the_row + 1
 
         the_row = the_row + 1
-        self.dynamic_form = FormFrame(parent=self, form_title="DYNAMIC", mean_period_callback=self.dynamic_mean_period_callback, mean_phase_callback=self.dynamic_mean_phase_callback, range_period_callback=self.dynamic_range_period_callback, range_phase_callback=self.dynamic_range_phase_callback, xml_subform=self.xml_form['dynamic_form'])
+        self.dynamic_form = FormFrame(parent=self, form_title='DYNAMIC', mean_period_callback=self.dynamic_mean_period_callback, mean_phase_callback=self.dynamic_mean_phase_callback, range_period_callback=self.dynamic_range_period_callback, range_phase_callback=self.dynamic_range_phase_callback, xml_subform=self.xml_form['dynamic_form'])
         self.dynamic_form.grid(row=the_row, column=0, sticky=NSEW)
         the_row = the_row + 1
 
         the_row = the_row + 1
-        self.texture_form = Sine(parent=self, sine_title="TEXTURE", period_callback=self.texture_range_period_callback, phase_callback=self.texture_range_phase_callback, xml_sine=self.xml_form['texture_form'])
+        self.texture_form = Sine(parent=self, sine_title='TEXTURE', period_callback=self.texture_range_period_callback, phase_callback=self.texture_range_phase_callback, xml_sine=self.xml_form['texture_form'])
         self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
 
     def name_callback(self, event):
@@ -364,8 +364,8 @@ class AllFormsWindow(tkinter.Toplevel):
     def pitch_mean_phase_callback(self, action, sign, unitspage=None):
         self.pitch_form.mean.phase_scrollbar.update()
         firstlastlist = self.pitch_form.mean.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[0]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -377,7 +377,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['pitch_form']['mean']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[0]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -389,7 +389,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['pitch_form']['mean']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.pitch_form.mean.phase_scrollbar.set(setting)
                 value = (setting - 0.5) * self.twopi
@@ -400,8 +400,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def pitch_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.pitch_form.range.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[0]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -413,7 +413,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['pitch_form']['range']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[0]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -425,7 +425,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['pitch_form']['range']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.pitch_form.range.phase_scrollbar.set(setting, setting)
                 value = (setting - 0.5) * self.twopi
@@ -436,8 +436,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def rhythm_mean_phase_callback(self, action, sign, unitspage):
         firstlastlist = self.rhythm_form.mean.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[0]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -449,7 +449,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['rhythm_form']['mean']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[0]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -461,7 +461,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['rhythm_form']['mean']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 value = (setting - 0.5) * self.twopi
                 self.pitch_form.range.phase_scrollbar.set(setting, setting)
@@ -472,8 +472,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def rhythm_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.rhythm_form.range.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[0]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -485,7 +485,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['rhythm_form']['range']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[0]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -497,7 +497,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['rhythm_form']['range']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.rhythms_form.range.phase_scrollbar.set(setting, setting)
                 value = (setting - 0.5) * self.twopi
@@ -508,8 +508,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def dynamic_mean_phase_callback(self, action, sign, unitspage):
         firstlastlist = self.dynamic_form.mean.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[0]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -521,7 +521,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['mean']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[0]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -533,7 +533,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['dynamic_form']['mean']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.dynamic_form.mean.phase_scrollbar.set(setting, setting)
                 value = (setting - 0.5) * self.twopi
@@ -544,8 +544,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def dynamic_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.dynamic_form.range.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[0]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -557,7 +557,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['range']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[0]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -569,7 +569,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['dynamic_form']['range']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.dynamic_form.range.phase_scrollbar.set(firstlastlist[0])
                 value = (setting - 0.5) * self.twopi
@@ -580,8 +580,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def texture_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.texture_form.phase_scrollbar.get()
-        if (action == "scroll"):
-            if (unitspage == "pages"):
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
                 delta = float(sign) * 1.0 / 4
                 setting = firstlastlist[1]
                 if ((setting <= 0.0) and (delta < 0.0)):
@@ -593,7 +593,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['texture_form']['phase'] = value
             else:
-                if (unitspage == "units"):
+                if (unitspage == 'units'):
                     delta = float(sign) * 1.0 / 32
                     setting = firstlastlist[1]
                     if ((setting <= 0.0) and (delta < 0.0)):
@@ -605,7 +605,7 @@ class AllFormsWindow(tkinter.Toplevel):
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['texture_form']['phase'] = value
         else:
-            if (action == "goto"):
+            if (action == 'goto'):
                 setting = firstlastlist[0]
                 self.texture_form.range.phase_scrollbar.set(firstlastlist[0])
                 value = (setting - 0.5) * self.twopi

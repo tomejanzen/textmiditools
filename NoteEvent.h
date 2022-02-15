@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -14,12 +14,12 @@
 
 #include <cstdint>
 
-#include <boost/rational.hpp>
+#include "TextmidiRational.h"
 
 namespace cgm
 {
 
-typedef boost::rational<int64_t> MusicalRhythm;
+typedef textmidi::rational::TextmidiRational MusicalRhythm;
 constexpr int RestPitch{129};
 
 class NoteEvent

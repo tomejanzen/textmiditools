@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -74,7 +74,7 @@ void SmusTrackEventBase::channel(uint8_t channel)
 string SmusTrackEventBase::pre_rest()
 {
     ostringstream oss{};
-    if (delay_accum() > 0)
+    if (delay_accum() > rational::TextmidiRational{0L})
     {
         oss << "R ";
         print_lazy_value(oss, delay_accum());

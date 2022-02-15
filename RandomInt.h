@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -7,6 +7,8 @@
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
+#if !defined(RANDOMINT)
+#    define  RANDOMINT
 #include <iostream>
 #include <limits>
 #include <random>
@@ -18,10 +20,13 @@ namespace cgm
     class RandomInt
     {
       public:
+        typedef std::uint64_t result_type;
         RandomInt(std::uint64_t low = 0LU,
                   std::uint64_t high = std::numeric_limits<std::uint64_t>().max())
           : re_{},
-            dist_{low, high}
+            dist_{low, high},
+            low_{low},
+            high_{high}
         {
             std::chrono::time_point<std::chrono::system_clock>
                 today(std::chrono::system_clock::now());
@@ -33,8 +38,20 @@ namespace cgm
         {
             return dist_(re_);
         }
+        std::uint64_t min() const
+        {
+            return low_;
+        }
+        std::uint64_t max() const
+        {
+            return high_ + 1;
+        }
       private:
         std::default_random_engine re_;
         std::uniform_int_distribution<std::uint64_t> dist_;
+        std::uint64_t low_;
+        std::uint64_t high_;
     };
 }
+#endif
+

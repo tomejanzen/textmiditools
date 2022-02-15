@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.18
+# TextMIDITools Version 1.0.19
 # Copyright © 2022 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -19,7 +19,7 @@ import tkinter.constants, tkinter.filedialog
 class KeyboardButtons(tkinter.Frame):
     def __init__(self, parent, keyboard):
         super().__init__(parent)
-        self.frame = ttk.Frame(self, padding="1 1 1 1")
+        self.frame = ttk.Frame(self, padding='1 1 1 1')
         self.frame.grid(sticky=NSEW, row=1, column=0)
         self.draw_widgets()
         self.keyboard = keyboard
@@ -162,7 +162,7 @@ class KeyboardFrame(tkinter.Frame):
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.frame = ttk.Frame(self, padding="1 1 1 1")
+        self.frame = ttk.Frame(self, padding='1 1 1 1')
         for k in range(0, 128):
             self.midi_key_selects.append(False)
 
@@ -176,7 +176,7 @@ class KeyboardFrame(tkinter.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.canvas.bind('<Button-1>', self.on_click)
-        self.canvas.bind("<Configure>", self.configure_callback)
+        self.canvas.bind('<Configure>', self.configure_callback)
 
     def on_click(self, event):
         the_id = self.canvas.find('closest',  event.x, event.y)
@@ -227,9 +227,9 @@ class KeyboardFrame(tkinter.Frame):
         self.canvas.delete(all)
         key_ids = []
         for k in range(0, len(self.full_keyboard)):
-            the_width = "1.0"
+            the_width = '1.0'
             if (60 == k):
-                the_width = "4.0"
+                the_width = '4.0'
             key_ids.append(self.canvas.create_polygon(self.full_keyboard[k][2], fill=self.full_keyboard[k][1],
                 activefill='yellow', disabledfill='gray', width=the_width, outline='black', tags=(self.full_keyboard[k][0])))
         self.set_keys_from_selects()
@@ -261,7 +261,7 @@ class KeyboardFrame(tkinter.Frame):
 class KeyboardWindow(tkinter.Toplevel):
     def __init__(self):
         super().__init__()
-        self.frame = ttk.Frame(self, padding="1 1 1 1")
+        self.frame = ttk.Frame(self, padding='1 1 1 1')
         self.frame.grid(sticky=NSEW, row=0, column=0)
         self.create_widgets()
         self.title('Keyboard')

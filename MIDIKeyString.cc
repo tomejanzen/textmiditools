@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // MIDIKeyString.cc
 //
@@ -73,9 +73,7 @@ namespace {
             auto iter{accidental_to_deltahalfstep.find(matches[match_accidental_or_double_flat].str()[0])};
             if (iter !=accidental_to_deltahalfstep.end())
             {
-                {
-                    halfstep += iter->second;
-                }
+                halfstep += iter->second;
             }
         }
         else

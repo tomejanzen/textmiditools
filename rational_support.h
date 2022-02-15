@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -10,7 +10,7 @@
 #if !defined(RATIONAL_SUPPORT)
 #    define  RATIONAL_SUPPORT
 
-#include <boost/rational.hpp>
+#include "TextmidiRational.h"
 
 namespace textmidi
 {
@@ -18,60 +18,13 @@ namespace textmidi
     namespace rational
     {
 
-        template<typename IntType>
-        boost::rational<IntType> operator%(boost::rational<IntType> dividend,
-            const boost::rational<IntType>& divisor)
-        {
-            while ((dividend > divisor) && (divisor != boost::rational<IntType>{0}))
-            {
-                dividend -= divisor;
-            }
-            return dividend;
-        }
+        TextmidiRational operator%(TextmidiRational dividend, const TextmidiRational& divisor);
 
-        template<typename IntType>
-        boost::rational<IntType> round(boost::rational<IntType> ratnum)
-        {
-           const boost::rational<IntType> remainder(
-               ratnum.numerator() % ratnum.denominator(),
-               ratnum.denominator());
-           if (remainder >= boost::rational<IntType>(1, 2))
-           {
-               ratnum += 1 - remainder;
-           }
-           else
-           {
-               ratnum -= remainder;
-           }
-           return ratnum;
-        }
+        TextmidiRational round(TextmidiRational ratnum);
 
-        template <typename IntType>
-        typename boost::rational<IntType>::int_type
-        snap_to_int(boost::rational<IntType> num,
-            boost::rational<IntType> grid)
-        {
-            const auto modnum{(num % grid)};
-            boost::rational<IntType> snapped{ (modnum >= (grid / 2)) ?
-                  num + (grid - modnum) : num - modnum};
-            return round(snapped).numerator();
-        }
+        std::int64_t snap_to_int(TextmidiRational num, TextmidiRational grid);
 
-        template <typename IntType>
-        typename boost::rational<IntType> snap(boost::rational<IntType> num,
-            boost::rational<IntType> grid)
-        {
-            const auto modnum{(num % grid)};
-            if (grid != 0)
-            {
-                return (modnum >= (grid / 2)) ?
-                  num + (grid - modnum) : num - modnum;
-            }
-            else
-            {
-                return num;
-            }
-        }
+        TextmidiRational snap(TextmidiRational num, TextmidiRational grid);
 
     } // rational
 

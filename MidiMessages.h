@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -27,7 +27,8 @@
 #include <vector>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/rational.hpp>
+
+#include "TextmidiRational.h"
 
 #include "Midi.h"
 
@@ -38,7 +39,7 @@ namespace textmidi
     typedef std::vector<uint8_t> MidiStreamVector;
     typedef std::vector<uint8_t>::iterator MidiStreamIterator;
 
-    typedef boost::rational<int64_t> Ratio64;
+    typedef rational::TextmidiRational Ratio64;
 
     typedef std::map<std::pair<std::int32_t, bool>, std::string_view> KeySignatureMap;
     extern KeySignatureMap key_signature_map;

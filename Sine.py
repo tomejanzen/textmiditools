@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.18
+# TextMIDITools Version 1.0.19
 # textmidiform.py 1.0
 # Copyright © 2022 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -30,7 +30,7 @@ class Sine(tkinter.Frame):
         self.curve_label = tkinter.ttk.Label(self, text=self.sine_title)
         self.curve_label.grid(row=1, column=0)
         self.rowconfigure(index=self.the_row, weight=1)
-        self.period_label = tkinter.ttk.Label(self, text="Period")
+        self.period_label = tkinter.ttk.Label(self, text='Period')
         self.period_label.grid(row=self.the_row, column=1, sticky=NSEW)
         # TCL book p 509
         # %d type 1 insert, 0 del, -1 other
@@ -43,7 +43,7 @@ class Sine(tkinter.Frame):
         # %W tk name of widget
         validate_command = (self.register(self.validate_length),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
-        self.period_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate="focusout")
+        self.period_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate='focusout')
         self.period_entry.delete(0, 1024)
         self.period_entry.insert(0, self.xml_sine['period'])
         self.period_entry.update()
@@ -53,17 +53,17 @@ class Sine(tkinter.Frame):
         self.the_row = self.the_row + 1
 
         self.rowconfigure(index=self.the_row, weight=1)
-        self.phase_scroll_label = tkinter.ttk.Label(self, text="-pi..................0..................pi")
+        self.phase_scroll_label = tkinter.ttk.Label(self, text='-pi..................0..................pi')
         self.phase_scroll_label.rowconfigure(index=self.the_row, weight=1)
         self.phase_scroll_label.grid(row=self.the_row, column=2, sticky=NSEW)
         self.the_row = self.the_row + 1
 
         self.rowconfigure(index=self.the_row, weight=1)
-        self.phase_label = tkinter.ttk.Label(self, text="Phase")
+        self.phase_label = tkinter.ttk.Label(self, text='Phase')
         self.phase_label.rowconfigure(index=self.the_row, weight=1)
         self.phase_label.grid(row=self.the_row, column=1, sticky=NSEW)
         self.phase_scrollbar = tkinter.ttk.Scrollbar(self, command=self.phase_callback)
-        self.phase_scrollbar["orient"] = "horizontal"
+        self.phase_scrollbar['orient'] = 'horizontal'
         self.phase_scrollbar.grid(row=self.the_row, column=2, sticky=NSEW)
         self.phase_scrollbar.rowconfigure(index=self.the_row, weight=1)
         phase = self.xml_sine['phase'] / (2.0 * self.pi) + 0.5

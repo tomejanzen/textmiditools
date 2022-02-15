@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -23,7 +23,7 @@ namespace cgm
     // MIDI specifies tempo as per quarter note.
     const MusicalRhythm WholesPerBeat{1, 4};
     const MusicalRhythm QuarterPerWhole{1, 4};
-    const MusicalRhythm QuartersPerWhole(4, 1);
+    const MusicalRhythm QuartersPerWholeRat(4, 1);
     std::ostream& operator<<(std::ostream& os, const MusicalRhythm& mr);
     typedef std::ratio<1L, TicksPerQuarter> TicksRatio;
     typedef std::chrono::duration<std::int64_t, TicksRatio> TicksDuration;

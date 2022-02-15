@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.18
+// TextMIDITools Version 1.0.19
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -34,7 +34,6 @@ std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
     }
     else
     {
-        // boost rational prints "2/1" and not "2", like we need.
         os << ne.musical_rhythm();
     }
     return os;

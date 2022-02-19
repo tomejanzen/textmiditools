@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -28,7 +28,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "TextmidiRational.h"
+#include "RhythmRational.h"
 
 #include "Midi.h"
 
@@ -39,12 +39,8 @@ namespace textmidi
     typedef std::vector<uint8_t> MidiStreamVector;
     typedef std::vector<uint8_t>::iterator MidiStreamIterator;
 
-    typedef rational::TextmidiRational Ratio64;
-
     typedef std::map<std::pair<std::int32_t, bool>, std::string_view> KeySignatureMap;
     extern KeySignatureMap key_signature_map;
-
-    std::ostream& print_lazy_value(std::ostream& os, const Ratio64& ratio64);
 
     std::int64_t variable_len_value(MidiStreamIterator& midiiter);
 
@@ -82,13 +78,13 @@ namespace textmidi
         std::uint64_t ticks_to_next_note_on() const;
         void ticks_to_next_note_on(std::uint64_t ticks_to_next_note_on);
         // Report the number of whole notes before the next event.
-        Ratio64 wholes_to_next_event() const;
-        void wholes_to_next_event(const Ratio64& wholes_to_next_event);
+        rational::RhythmRational wholes_to_next_event() const;
+        void wholes_to_next_event(const rational::RhythmRational& wholes_to_next_event);
       private:
         std::uint64_t ticks_accumulated_;
         std::uint64_t ticks_to_next_event_;
         std::uint64_t ticks_to_next_note_on_;
-        Ratio64 wholes_to_next_event_;
+        rational::RhythmRational wholes_to_next_event_;
     };
 
     std::ostream& operator<<(std::ostream& os, const MidiMessage& msg);
@@ -204,10 +200,10 @@ namespace textmidi
             key_string("r");
         }
         std::ostream& text(std::ostream& os) const;
-        void wholes_to_noteoff(const Ratio64& wholes_to_noteoff);
-        Ratio64 wholes_to_noteoff() const;
+        void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
+        rational::RhythmRational wholes_to_noteoff() const;
       private:
-        Ratio64 wholes_to_noteoff_;
+        rational::RhythmRational wholes_to_noteoff_;
     };
 
     //
@@ -243,15 +239,15 @@ namespace textmidi
         std::int64_t ticks_to_noteoff() const;
         void ticks_past_noteoff(std::int64_t ticks_past_noteoff);
         std::int64_t ticks_past_noteoff() const;
-        void wholes_to_noteoff(const Ratio64& wholes_to_noteoff);
-        Ratio64 wholes_to_noteoff() const;
-        void wholes_past_noteoff(const Ratio64& wholes_past_noteoff);
-        Ratio64 wholes_past_noteoff() const;
+        void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
+        rational::RhythmRational wholes_to_noteoff() const;
+        void wholes_past_noteoff(const rational::RhythmRational& wholes_past_noteoff);
+        rational::RhythmRational wholes_past_noteoff() const;
       private:
         std::int64_t ticks_to_noteoff_;
         std::int64_t ticks_past_noteoff_;
-        Ratio64 wholes_to_noteoff_;
-        Ratio64 wholes_past_noteoff_;
+        rational::RhythmRational wholes_to_noteoff_;
+        rational::RhythmRational wholes_past_noteoff_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -770,22 +766,23 @@ namespace textmidi
         midi_delay_message_pairs);
 
     void value_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pairs,
-            const Ratio64& quantum, std::uint32_t ticksperquarter);
+            const rational::RhythmRational& quantum, std::uint32_t ticksperquarter);
     void value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs,
-            const Ratio64& quantum, std::uint32_t ticksperquarter);
+            const rational::RhythmRational& quantum, std::uint32_t ticksperquarter);
 
     // Print the text version of an event in LAZY mode.
     class PrintLazyEvent
     {
       public:
         PrintLazyEvent(bool lazy = false, std::uint8_t channel = 0)
-          : lazy_(lazy),
-            channel_(channel)
+          : lazy_{lazy},
+            channel_{channel}
         {}
         void operator()(std::ostream& os, MidiMessage* mm);
       private:
         bool lazy_;
         std::uint8_t channel_;
+        static int dynamic_;
     };
 
     //

@@ -312,7 +312,7 @@ namespace
         }
         // Now it's OK to use round().
         ticks = round(ticks);
-        global_total_track_ticks += ticks; 
+        global_total_track_ticks += ticks;
         return ticks;
     }
 }
@@ -1114,56 +1114,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t dynamic = 64;
 
     to_lower(note_name);
-    if (note_name == "pppp")
-    {
-      dynamic = 10;
-    }
-
-    if (note_name == "ppp")
-    {
-      dynamic = 25;
-    }
-
-    if (note_name == "pp")
-    {
-      dynamic = 40;
-    }
-
-    if (note_name == "p")
-    {
-      dynamic = 50;
-    }
-
-    if (note_name == "mp")
-    {
-      dynamic = 62;
-    }
-
-    if (note_name == "mf")
-    {
-      dynamic = 75;
-    }
-
-    if (note_name == "forte")
-    {
-      dynamic = 90;
-    }
-
-    if (note_name == "ff")
-    {
-      dynamic = 110;
-    }
-
-    if (note_name == "fff")
-    {
-      dynamic = 120;
-    }
-
-    if (note_name == "ffff")
-    {
-      dynamic = static_cast<int>(round(cgm::MaxDynamic));
-    }
-
+    // This use of the map must work because we can only
+    // be in here if the dynamic marking is one of the ones
+    // in the map; we will not call contains().
+    dynamic = dynamics_map.at(note_name);
     lazy::dynamic = dynamic % 128;
   }
 

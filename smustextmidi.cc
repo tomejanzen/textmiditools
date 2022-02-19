@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.19\n";
+        cout << "TextMIDITools 1.0.20\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
     notes_per_track = len / sizeof(SmusTrackEvent);
 
     // Read the first track and create a rhythm track.
-    Ratio64 delay_accum{0};
+    RhythmRational delay_accum{0};
     SmusTrackEvent* trackEventPtr{reinterpret_cast<SmusTrackEvent*>(&smus_score[smus_index])};
     vector<SmusTrackEvent> trackEventVec(notes_per_track);
     copy(&trackEventPtr[0], &trackEventPtr[notes_per_track], &trackEventVec[0]);
@@ -365,7 +365,8 @@ int main(int argc, char *argv[])
     }
     if (SmusTrackEventBase::delay_accum_)
     {
-        textmidi_file << "R " << SmusTrackEventBase::delay_accum_  << '\n';
+        textmidi_file << "R ";
+        print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_) << '\n';
     }
     SmusTrackEventPitch::flush();
     for_each(track_events.begin(), track_events.end(), [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
@@ -401,7 +402,7 @@ int main(int argc, char *argv[])
 
         notes_per_track = bytes_per_track / sizeof(SmusTrackEvent);
 
-        delay_accum = TextmidiRational{0};
+        delay_accum = RhythmRational{0};
         trackEventPtr = reinterpret_cast<SmusTrackEvent*>(&smus_score[smus_index]);
         smus_index += bytes_per_track;
         trackEventVec.resize(notes_per_track);
@@ -415,7 +416,8 @@ int main(int argc, char *argv[])
         }
         if (SmusTrackEventBase::delay_accum_)
         {
-            textmidi_file << "R " << SmusTrackEventBase::delay_accum_  << '\n';
+            textmidi_file << "R ";
+            print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_)  << '\n';
         }
         SmusTrackEventPitch::flush();
         for_each(track_events.begin(), track_events.end(), [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });

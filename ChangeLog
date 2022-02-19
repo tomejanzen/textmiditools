@@ -1,3 +1,39 @@
+2022-02-18     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.cc: Fix whole notes with a zero denominator.
+        This fixes missing whole note lengths in smustextmidi.
+        * Makefile.am: lists of sources per program are fixed.
+        * RhythmRational.cc: Fix print_rhythm to print 4 wholes as 4/1.
+        * SmusTrackEvent.cc: Fix duration() not recognizing a whole note.
+
+2022-02-17     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: always reduce the rationals for rhythm when using 
+        lazy mode in the miditext program.  This allows miditext to output 
+        dotted notes in lazy mode output.
+        * MidiMessages.{h,cc}, Midi.h, textmidi.l: create dynamics maps
+        and use in textmidi and miditext; fix miditext issue of not 
+        output dynamic markings.
+
+2022-02-16     Thomas E. Janzen <janzentome@gmail.com>
+        * writesmus.cc, writesmus.make: write for testing smustextmidi.
+        * RhythmRational.cc: If rhythms are dotted, they have a numerator of 1,
+        so we can use the abbreviated form (where a "1/4." (dotted quarter) note
+        is "4." ).
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}: rename as RhythmRational.{h,cc}
+        * Composer.cc, MidiMessages.cc, MidiMessages.h,
+	NoteEvent.cc, NoteEvent.h, SmusTrackEvent.cc,
+	SmusTrackEvent.h, Track.h, buildkit.bash, miditext.cc,
+	rational_support.cc, rational_support.h, smustextmidi.cc:
+        find all rhythm printing and make them use print_rhythm().
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Track.{h,cc}, TextmidiRational.cc: Remove extra operator<<(rational)
+        and edit the one in TextmidiRational to print 4 for 1/4 and 4/1 for 4/1.
+        * MidiMessages.cc, SmusTrackEvent.h, miditext.cc, smustextmidi.cc, TextmidiRational.cc,
+        NoteEvent.h, Track.h, TextmidiRational.h, MidiMessages.h, SmusTrackEvent.cc, Composer.cc:
+        Also remove typedefs of TextmidiRational and just use the name TextmidiRational.
+
 2022-02-14     Thomas E. Janzen <janzentome@gmail.com>
         * TextmidiRational.{h,cc}, SmusTrackEvent.cc, miditext.cc, MidiMessages.cc, Composer.cc:
         Complete work integrating TextmidiRational.

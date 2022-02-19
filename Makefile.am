@@ -1,9 +1,9 @@
 SET_MAKE = @SET_MAKE@
 bin_PROGRAMS = textmidi$(EXEEXT) miditext$(EXEEXT) smustextmidi$(EXEEXT) textmidicgm$(EXEEXT) 
-textmidi_SOURCES = textmidi.l Midi.cc main.cc miditext.cc
-miditext_SOURCES = miditext.cc Midi.cc MidiMessages.cc MIDIKeyString.cc
-smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc
-textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc
+textmidi_SOURCES = main.cc textmidi.l Midi.cc MIDIKeyString.cc RhythmRational.cc
+miditext_SOURCES = miditext.cc MidiMessages.cc MIDIKeyString.cc RhythmRational.cc rational_support.cc
+smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc Midi.cc MidiMessages.cc MIDIKeyString.cc RhythmRational.cc rational_support.cc
+textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc RhythmRational.cc
 
 textmidi_LDADD = @LEXLIB@
 info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
@@ -18,59 +18,59 @@ LEX=/usr/bin/env lex
 
 all : ${bin_PROGRAMS}
 
-textmidi$(EXEEXT) : main.o textmidi.o Midi.o MIDIKeyString.o TextmidiRational.o
-	$(CXX) $(AM_CXXFLAGS) -o $@ main.o textmidi.o Midi.o MIDIKeyString.o TextmidiRational.o $(AM_LDFLAGS)
+textmidi$(EXEEXT) : main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o
+	$(CXX) $(AM_CXXFLAGS) -o $@ main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o $(AM_LDFLAGS)
 main.o : main.cc textmidi.h Options.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-textmidi.o: textmidi.cc Midi.h MIDIKeyString.h textmidi.h TextmidiRational.h
+textmidi.o: textmidi.cc Midi.h MIDIKeyString.h textmidi.h RhythmRational.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 textmidi.cc : textmidi.l
 	$(LEX) $(LEXFLAGS) -o $@ $<
-miditext$(EXEEXT) : miditext.o Midi.o MidiMessages.o MIDIKeyString.o TextmidiRational.o rational_support.o
-	$(CXX) $(AM_CXXFLAGS) -o $@ $< Midi.o TextmidiRational.o MidiMessages.o MIDIKeyString.o rational_support.o $(AM_LDFLAGS)
-rational_support.o: rational_support.cc rational_support.h TextmidiRational.h
+miditext$(EXEEXT) : miditext.o Midi.o MidiMessages.o MIDIKeyString.o RhythmRational.o rational_support.o
+	$(CXX) $(AM_CXXFLAGS) -o $@ $< Midi.o RhythmRational.o MidiMessages.o MIDIKeyString.o rational_support.o $(AM_LDFLAGS)
+rational_support.o: rational_support.cc rational_support.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
-miditext.o: miditext.cc rational_support.h Midi.h MidiMessages.h Options.h TextmidiRational.h
+miditext.o: miditext.cc rational_support.h Midi.h MidiMessages.h Options.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
 Midi.o : Midi.cc Midi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-MidiMessages.o: MidiMessages.cc MidiMessages.h Midi.h rational_support.h MIDIKeyString.h TextmidiRational.h
+MidiMessages.o: MidiMessages.cc MidiMessages.h Midi.h rational_support.h MIDIKeyString.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -g -o MidiMessages.o MidiMessages.cc
-smustextmidi$(EXEEXT) : smustextmidi.o SmusTrackEvent.o Midi.o MidiMessages.o MIDIKeyString.o TextmidiRational.o rational_support.o
-	$(CXX) $(AM_CXXFLAGS) $< -o $@ SmusTrackEvent.o Midi.o MidiMessages.o MIDIKeyString.o TextmidiRational.o rational_support.o $(AM_LDFLAGS)
-smustextmidi.o: smustextmidi.cc MidiMessages.h Midi.h rational_support.h SmusTrackEvent.h Options.h TextmidiRational.h
+smustextmidi$(EXEEXT) : smustextmidi.o SmusTrackEvent.o Midi.o MidiMessages.o MIDIKeyString.o RhythmRational.o rational_support.o
+	$(CXX) $(AM_CXXFLAGS) $< -o $@ SmusTrackEvent.o Midi.o MidiMessages.o MIDIKeyString.o RhythmRational.o rational_support.o $(AM_LDFLAGS)
+smustextmidi.o: smustextmidi.cc MidiMessages.h Midi.h rational_support.h SmusTrackEvent.h Options.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h MidiMessages.h Midi.h rational_support.h MIDIKeyString.h TextmidiRational.h
+SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h MidiMessages.h Midi.h rational_support.h MIDIKeyString.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-TextmidiRational.o: TextmidiRational.cc TextmidiRational.h
+RhythmRational.o: RhythmRational.cc RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o TextmidiRational.o 
-	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o TextmidiRational.o $(AM_LDFLAGS) 
-textmidicgm.o: textmidicgm.cc MIDIKeyString.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Options.h Composer.h TextmidiRational.h
+textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o 
+	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o $(AM_LDFLAGS) 
+textmidicgm.o: textmidicgm.cc MIDIKeyString.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Options.h Composer.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MIDIKeyString.o : MIDIKeyString.cc MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-MusicalForm.o: MusicalForm.cc MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h TextmidiRational.h
+MusicalForm.o: MusicalForm.cc MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Track.o: Track.cc Track.h NoteEvent.h TextmidiRational.h
+Track.o: Track.cc Track.h NoteEvent.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Voice.o: Voice.cc Voice.h cgmlegacy.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Scales.o : Scales.cc Scales.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-NoteEvent.o : NoteEvent.cc NoteEvent.h Track.h MIDIKeyString.h TextmidiRational.h
+NoteEvent.o : NoteEvent.cc NoteEvent.h Track.h MIDIKeyString.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h TextmidiRational.h
+GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Composer.o: Composer.cc Midi.h Composer.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h GnuPlot.h TextmidiRational.h
+Composer.o: Composer.cc Midi.h Composer.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h GnuPlot.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 GeneralMIDI.o : GeneralMIDI.cc GeneralMIDI.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiMessages.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o Track.o Voice.o TextmidiRational.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT)
+	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiMessages.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o Track.o Voice.o RhythmRational.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT)
 install:
 	$(INSTALL_PROGRAM) textmidi$(EXEEXT) $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) miditext$(EXEEXT) $(DESTDIR)$(bindir)/miditext$(EXEEXT)

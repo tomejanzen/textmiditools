@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -62,20 +62,20 @@ namespace smus
         SmusTrackEventBase&& move(SmusTrackEventBase&& ) = delete;
         auto decision() const;
         auto data() const;
-        void add_to_delay_accum(const textmidi::Ratio64& delay);
-        textmidi::Ratio64 delay_accum() const;
-        void delay_accum(const textmidi::Ratio64& delay);
+        void add_to_delay_accum(const textmidi::rational::RhythmRational& delay);
+        textmidi::rational::RhythmRational delay_accum() const;
+        void delay_accum(const textmidi::rational::RhythmRational& delay);
         std::uint8_t current_dynamic() const;
         void current_dynamic(std::uint8_t current_dynamic);
         std::uint8_t channel() const;
         void channel(std::uint8_t channel);
         std::string pre_rest();
-        textmidi::Ratio64 duration() const;
+        textmidi::rational::RhythmRational duration() const;
         static void flush();
         virtual std::string textmidi() = 0;
         virtual std::string textmidi_tempo() = 0;
         virtual ~SmusTrackEventBase() = default;
-        static textmidi::Ratio64 delay_accum_;
+        static textmidi::rational::RhythmRational delay_accum_;
       private:
         std::uint8_t decision_;
         std::uint8_t data_;
@@ -83,8 +83,8 @@ namespace smus
         std::uint8_t channel_;
 
         bool is_dotted() const;
-        textmidi::Ratio64 dotted_multiplier() const;
-        textmidi::Ratio64 tuplet_multiplier() const;
+        textmidi::rational::RhythmRational dotted_multiplier() const;
+        textmidi::rational::RhythmRational tuplet_multiplier() const;
     };
 
     // 0-127 pitches

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -25,6 +25,7 @@ using namespace boost;
 
 using namespace smus;
 using namespace textmidi;
+using namespace textmidi::rational;
 
 auto SmusTrackEventBase::decision() const
 {
@@ -36,17 +37,17 @@ auto SmusTrackEventBase::data() const
     return data_;
 }
 
-void SmusTrackEventBase::add_to_delay_accum(const Ratio64& delay)
+void SmusTrackEventBase::add_to_delay_accum(const RhythmRational& delay)
 {
     delay_accum_ += delay;
 }
 
-Ratio64 SmusTrackEventBase::delay_accum() const
+RhythmRational SmusTrackEventBase::delay_accum() const
 {
     return delay_accum_;
 }
 
-void SmusTrackEventBase::delay_accum(const Ratio64& delay)
+void SmusTrackEventBase::delay_accum(const RhythmRational& delay)
 {
     delay_accum_ = delay;
 }
@@ -74,23 +75,34 @@ void SmusTrackEventBase::channel(uint8_t channel)
 string SmusTrackEventBase::pre_rest()
 {
     ostringstream oss{};
-    if (delay_accum() > rational::TextmidiRational{0L})
+    if (delay_accum() > rational::RhythmRational{0L})
     {
         oss << "R ";
-        print_lazy_value(oss, delay_accum());
-        delay_accum(Ratio64{0});
+        print_rhythm(oss, delay_accum());
+        delay_accum(RhythmRational{0});
         oss << '\n';
     }
     return oss.str();
 }
 
-Ratio64 SmusTrackEventBase::duration() const
+RhythmRational SmusTrackEventBase::duration() const
 {
     // 7    6    5    4    3    2    1    0
     // chrd tie  tuplet... dot  division
     //      out  1=trip,2=      0-whole
     //           quintet        1=half,2-qtr,3=8th,4=16th,5=32nd,6=64th,7=128th
-    Ratio64 len{1, (1 << (data() & 0x7))};
+    //           3=septuplet
+    const int value{data() & 0x7};
+    auto denominator = 0L;
+    if (0 == value)
+    {
+        denominator = 1L; // whole note
+    }
+    else
+    {
+        denominator = 1L << value; // other than whole notes
+    }
+    RhythmRational len{1L, denominator};
     len *= dotted_multiplier();
     len *= tuplet_multiplier();
     return len;
@@ -98,7 +110,7 @@ Ratio64 SmusTrackEventBase::duration() const
 
 void SmusTrackEventBase::flush()
 {
-    delay_accum_ = Ratio64{0};
+    delay_accum_ = RhythmRational{0L};
 }
 
 bool SmusTrackEventBase::is_dotted() const
@@ -106,31 +118,31 @@ bool SmusTrackEventBase::is_dotted() const
     return ((data() & (1 << 3)) != 0);
 }
 
-Ratio64 SmusTrackEventBase::dotted_multiplier() const
+RhythmRational SmusTrackEventBase::dotted_multiplier() const
 {
-    return (is_dotted() ? Ratio64(3, 2) : Ratio64(1));
+    return (is_dotted() ? RhythmRational(3L, 2L) : RhythmRational(1L));
 }
 
-Ratio64 SmusTrackEventBase::tuplet_multiplier() const
+RhythmRational SmusTrackEventBase::tuplet_multiplier() const
 {
     switch ((data() >> 4) & 3)
     {
       case 1:                        // triplet
-        return Ratio64{2, 3};
+        return RhythmRational{2L, 3L};
         break;
       case 2:                        // quintuplet
-        return Ratio64{4, 5};
+        return RhythmRational{4L, 5L};
         break;
       case 3:                        // septuplet
-        return Ratio64{6, 7};
+        return RhythmRational{6L, 7L};
         break;
       default:
-        return Ratio64(1);
+        return RhythmRational(1L);
         break;
     }
 }
 
-textmidi::Ratio64 SmusTrackEventBase::delay_accum_{};
+RhythmRational SmusTrackEventBase::delay_accum_{};
 
 string SmusTrackEventPitch::textmidi_tempo()
 {
@@ -165,8 +177,8 @@ string SmusTrackEventPitch::textmidi()
         if (!is_chorded())
         {
             delay_accum(delay_accum() + duration());
-            print_lazy_value(oss, delay_accum()) << '\n';
-            delay_accum(Ratio64{0});
+            print_rhythm(oss, delay_accum()) << '\n';
+            delay_accum(RhythmRational{0L});
         }
     }
     else
@@ -241,7 +253,8 @@ string SmusTrackEventInstrument::textmidi_tempo()
 
 string SmusTrackEventInstrument::textmidi()
 {
-    return string{"; SMUS Instrument Number set to "} + lexical_cast<string>(data()) + '\n';
+    return string{"; SMUS Instrument Number set to "} 
+        + lexical_cast<string>(static_cast<int>(data())) + '\n';
 }
 
 pair<unsigned, unsigned> SmusTrackEventTimeSignature::time_signature() const

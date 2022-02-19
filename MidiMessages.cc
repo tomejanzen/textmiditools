@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -29,6 +29,7 @@
 
 using namespace std;
 using namespace textmidi;
+using namespace textmidi::rational;
 
 //
 // Key names, major and minor.
@@ -66,30 +67,6 @@ textmidi::KeySignatureMap textmidi::key_signature_map{
     {{7, true}, string_view{"a#"}}
 };
 
-//
-// Print a lazy delay value.
-ostream& textmidi::print_lazy_value(ostream& os, const Ratio64& ratio64)
-{
-    if (1 == ratio64.numerator())
-    {
-        os << ratio64.denominator() << ' ';
-    }
-    else
-    {
-        if (3 != ratio64.numerator())
-        {
-            if (ratio64 != Ratio64{0L})
-            {
-                os << ratio64 << ' ';
-            }
-        }
-        else
-        {
-            os << (ratio64.denominator() / 2) << ". ";
-        }
-    }
-    return os;
-}
 
 //
 // Create a variable-length value.
@@ -145,15 +122,16 @@ void textmidi::MidiMessage::ticks_to_next_note_on(uint64_t ticks_to_next_note_on
     ticks_to_next_note_on_ = ticks_to_next_note_on;
 }
 
-Ratio64 textmidi::MidiMessage::wholes_to_next_event() const
+RhythmRational textmidi::MidiMessage::wholes_to_next_event() const
 {
     return wholes_to_next_event_;
 }
 
 void textmidi::MidiMessage::wholes_to_next_event(
-        const Ratio64& wholes_to_next_event)
+        const RhythmRational& wholes_to_next_event)
 {
     wholes_to_next_event_ = wholes_to_next_event;
+    wholes_to_next_event_.reduce();
 }
 
 ostream& textmidi::operator<<(ostream& os, const MidiMessage& msg)
@@ -317,7 +295,7 @@ ostream& textmidi::MidiChannelVoiceNoteRestMessage::text(ostream& os) const
     {
         os << "r ";
     }
-    print_lazy_value(os, wholes_to_next_event());
+    print_rhythm(os, wholes_to_next_event());
     if (wholes_to_next_event())
     {
         os << ' ';
@@ -326,12 +304,13 @@ ostream& textmidi::MidiChannelVoiceNoteRestMessage::text(ostream& os) const
 }
 
 void textmidi::MidiChannelVoiceNoteRestMessage
-    ::wholes_to_noteoff(const Ratio64& wholes_to_noteoff)
+    ::wholes_to_noteoff(const RhythmRational& wholes_to_noteoff)
 {
     wholes_to_noteoff_ = wholes_to_noteoff;
+    wholes_to_noteoff_.reduce();
 }
 
-Ratio64 textmidi::MidiChannelVoiceNoteRestMessage::wholes_to_noteoff() const
+RhythmRational textmidi::MidiChannelVoiceNoteRestMessage::wholes_to_noteoff() const
 {
     return wholes_to_noteoff_;
 }
@@ -376,23 +355,25 @@ int64_t textmidi::MidiChannelVoiceNoteOnMessage::ticks_past_noteoff() const
 }
 
 void textmidi::MidiChannelVoiceNoteOnMessage
-    ::wholes_to_noteoff(const Ratio64& wholes_to_noteoff)
+    ::wholes_to_noteoff(const RhythmRational& wholes_to_noteoff)
 {
     wholes_to_noteoff_ = wholes_to_noteoff;
+    wholes_to_noteoff_.reduce();
 }
 
-Ratio64 textmidi::MidiChannelVoiceNoteOnMessage::wholes_to_noteoff() const
+RhythmRational textmidi::MidiChannelVoiceNoteOnMessage::wholes_to_noteoff() const
 {
     return wholes_to_noteoff_;
 }
 
 void textmidi::MidiChannelVoiceNoteOnMessage
-    ::wholes_past_noteoff(const Ratio64& wholes_past_noteoff)
+    ::wholes_past_noteoff(const RhythmRational& wholes_past_noteoff)
 {
     wholes_past_noteoff_ = wholes_past_noteoff;
+    wholes_past_noteoff_.reduce();
 }
 
-Ratio64 textmidi::MidiChannelVoiceNoteOnMessage::wholes_past_noteoff() const
+RhythmRational textmidi::MidiChannelVoiceNoteOnMessage::wholes_past_noteoff() const
 {
     return wholes_past_noteoff_;
 }
@@ -1287,10 +1268,10 @@ void textmidi::ticks_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pa
 }
 
 void textmidi::value_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pairs,
-        const Ratio64& quantum, uint32_t ticksperquarter)
+        const RhythmRational& quantum, uint32_t ticksperquarter)
 {
     const auto ticksperquantum{quantum
-        ? (quantum * rational::TextmidiRational{QuartersPerWhole} * rational::TextmidiRational{ticksperquarter}) : rational::TextmidiRational{1L}};
+        ? (quantum * rational::RhythmRational{QuartersPerWhole} * rational::RhythmRational{ticksperquarter}) : rational::RhythmRational{1L}};
     for (auto delaymsgiter{midi_delay_message_pairs.begin()};
         (delaymsgiter != midi_delay_message_pairs.end())
         && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
@@ -1299,17 +1280,20 @@ void textmidi::value_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pa
     {
         if ((delaymsgiter + 1) != midi_delay_message_pairs.end())
         {
-            Ratio64 ratio_to_next_event{static_cast<std::int64_t>
+            RhythmRational ratio_to_next_event{static_cast<std::int64_t>
                 (delaymsgiter->second->ticks_to_next_event()),
                     QuartersPerWhole * ticksperquarter};
             delaymsgiter->second->wholes_to_next_event(
                     rational::snap(ratio_to_next_event, quantum));
+            auto temp{delaymsgiter->second->wholes_to_next_event()};
+            temp.reduce();
+            delaymsgiter->second->wholes_to_next_event(temp);
         }
     }
 }
 
 void textmidi::value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs,
-        const Ratio64& quantum, uint32_t ticksperquarter)
+        const RhythmRational& quantum, uint32_t ticksperquarter)
 {
     for (auto delaymsgiter{midi_delay_message_pairs.begin()};
         (delaymsgiter != midi_delay_message_pairs.end())
@@ -1320,11 +1304,11 @@ void textmidi::value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs
             (delaymsgiter->second.get())};
         if (note_on)
         {
-            Ratio64 ratio_to_note_off{note_on->ticks_to_noteoff(),
+            RhythmRational ratio_to_note_off{note_on->ticks_to_noteoff(),
                 ticksperquarter * QuartersPerWhole};
             note_on->wholes_to_noteoff(
                 rational::snap(ratio_to_note_off, quantum));
-            Ratio64 ratio_past_note_off{note_on->ticks_past_noteoff(),
+            RhythmRational ratio_past_note_off{note_on->ticks_past_noteoff(),
                 ticksperquarter * QuartersPerWhole};
             note_on->wholes_past_noteoff(
                 rational::snap(ratio_past_note_off, quantum));
@@ -1333,7 +1317,7 @@ void textmidi::value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs
             (delaymsgiter->second.get())};
         if (rest)
         {
-            Ratio64 ratio_to_note_off{static_cast<int64_t>
+            RhythmRational ratio_to_note_off{static_cast<int64_t>
                 (rest->ticks_to_next_event()),
                     ticksperquarter * QuartersPerWhole};
             rest->wholes_to_noteoff(rational
@@ -1359,16 +1343,30 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiMessage* mm)
         }
         if (no->velocity())
         {
+            if (dynamic_ != no->velocity())
+            {
+                if (dynamics_reverse_map.contains(no->velocity()))
+                {
+                    os << dynamics_reverse_map.at(no->velocity()) << '\n';
+                } 
+                else
+                {
+                    os << "vel " << no->velocity() << '\n';
+                }
+                dynamic_ = no->velocity();
+            }
             os << no->key_string() << ' ';
         }
         if (no->wholes_to_noteoff())
         {
-            if (no->wholes_to_next_event() != rational::TextmidiRational{0L})
+            if (no->wholes_to_next_event() != rational::RhythmRational{0L})
             {
-                print_lazy_value(os, no->wholes_to_noteoff()) << '\n';
-                if (no->wholes_past_noteoff() > rational::TextmidiRational{0L})
+                print_rhythm(os, no->wholes_to_noteoff()) << '\n';
+                if (no->wholes_past_noteoff() > rational::RhythmRational{0L})
                 {
-                    os << "R " << no->wholes_past_noteoff() << ' ';
+                    os << "R ";
+                    textmidi::rational::print_rhythm(os, no->wholes_past_noteoff());
+                    os << ' ';
                 }
             }
         }
@@ -1388,7 +1386,7 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiMessage* mm)
             os << rest->key_string() << ' ';
             if (rest->wholes_to_noteoff())
             {
-                print_lazy_value(os, rest->wholes_to_noteoff()) << '\n';
+                print_rhythm(os, rest->wholes_to_noteoff()) << '\n';
             }
         }
         return;
@@ -1404,7 +1402,7 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiMessage* mm)
         lazy_ = false;
     }
     os << *mm << ' ';
-    print_lazy_value(os, mm->wholes_to_next_event());
+    print_rhythm(os, mm->wholes_to_next_event());
     os << '\n';
 }
 
@@ -1483,4 +1481,7 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
     }
     midi_delay_message_pairs = new_midi_delay_message_pairs;
 }
+
+int textmidi::PrintLazyEvent::dynamic_{128};
+
 

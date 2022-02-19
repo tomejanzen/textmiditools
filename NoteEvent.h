@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -14,19 +14,18 @@
 
 #include <cstdint>
 
-#include "TextmidiRational.h"
+#include "RhythmRational.h"
 
 namespace cgm
 {
 
-typedef textmidi::rational::TextmidiRational MusicalRhythm;
 constexpr int RestPitch{129};
 
 class NoteEvent
 {
   public:
     NoteEvent(int pitch, int vel,
-                       double rhythm, MusicalRhythm musical_rhythm)
+                       double rhythm, textmidi::rational::RhythmRational musical_rhythm)
       : pitch_{pitch},
         vel_{vel},
         rhythm_{rhythm},
@@ -55,7 +54,7 @@ class NoteEvent
     {
         return rhythm_;
     }
-    MusicalRhythm musical_rhythm() const noexcept
+    textmidi::rational::RhythmRational musical_rhythm() const noexcept
     {
         return musical_rhythm_;
     }
@@ -63,7 +62,7 @@ class NoteEvent
     int pitch_;
     int vel_;
     double rhythm_;
-    MusicalRhythm musical_rhythm_;
+    textmidi::rational::RhythmRational musical_rhythm_;
 };
 
 std::ostream& operator<<(std::ostream& os, const NoteEvent& ne);

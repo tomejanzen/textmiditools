@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // textmidicgm 1.0.16
 // Copyright © 2022 Thomas E. Janzen
@@ -13,20 +13,6 @@
 
 using namespace cgm;
 using namespace std;
-
-ostream& cgm::operator<<(std::ostream& os, const cgm::MusicalRhythm& mr)
-{
-    if (1 == mr.numerator())
-    {
-        os << mr.denominator();
-    }
-    else
-    {
-        os << mr.numerator() << "/"
-           << mr.denominator();
-    }
-    return os;
-}
 
 TicksDuration cgm::Track::the_next_time() const
 {

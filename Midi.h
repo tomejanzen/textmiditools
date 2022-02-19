@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -103,6 +103,34 @@ namespace textmidi
     constexpr std::uint8_t end_of_sysex             {0xf7};
     constexpr std::uint8_t yamaha                   {0x43};
 
+    typedef std::map<int, std::string> DynamicsReverseMap;
+    const DynamicsReverseMap dynamics_reverse_map
+    {
+        { 10, "pppp"},
+        { 25, "ppp"},
+        { 40, "pp"},
+        { 50, "p"},
+        { 62, "mp"},
+        { 75, "mf"},
+        { 90, "forte"},
+        {110, "ff"},
+        {120, "fff"},
+        {127, "ffff"}
+    };
+    typedef std::map<std::string, int> DynamicsMap;
+    const DynamicsMap dynamics_map
+    {
+        {"pppp",  10},
+        {"ppp",   25},
+        {"pp",    40},
+        {"p",     50},
+        {"mp",    62},
+        {"mf",    75},
+        {"forte", 90},
+        {"ff",    110},
+        {"fff",   120},
+        {"ffff",  127}
+    };
     constexpr std::int64_t QuartersPerWhole(4);
 
     constexpr size_t bits_per_byte{8};

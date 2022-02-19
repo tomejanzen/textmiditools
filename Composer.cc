@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -43,7 +43,7 @@ namespace
 
     //
     // Convert a double duration in seconds to a musical ratio.
-    MusicalRhythm duration_to_rhythm(double duration)
+    RhythmRational duration_to_rhythm(double duration)
     {
         //  beat    quarter   whole   minute
         // ------ * ------- * ----- * -------
@@ -52,14 +52,14 @@ namespace
         //  beat    whole   minute
         // ------ * ----- * -------
         // minute   beat    seconds
-        MusicalRhythm wholes_per_second{
-          MusicalRhythm{TempoBeatsPerMinute} * WholesPerBeat / MusicalRhythm{SecondsPerMinute} };
+        RhythmRational wholes_per_second{
+          RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
         //wholes_per_second.reduce();
         //  Ticks    Quarters    whole
         // ------- * -------- * -------
         // Quarter     Whole    second
-        const MusicalRhythm TicksPerSecond{
-             MusicalRhythm{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
+        const RhythmRational TicksPerSecond{
+             RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
         // Turn the rhythm (duration) into a ratio and multiply
         // both the numerator and the denominator by TicksPerSecond.
         // This gives us the actual musical rhythm value.
@@ -68,7 +68,7 @@ namespace
             / static_cast<double>(TicksPerSecond.denominator())};
         const int64_t TicksPerSecondInt64
             {static_cast<int64_t>(round(TicksPerSecondDouble))};
-        MusicalRhythm rhythm
+        RhythmRational rhythm
             {static_cast<int64_t>(duration * TicksPerSecondDouble),
             TicksPerSecondInt64};
         rhythm *= wholes_per_second;
@@ -77,38 +77,38 @@ namespace
 
     //
     // Coerce a duration to be in multiples of the pulse/second value.
-    MusicalRhythm snap_to_pulse(MusicalRhythm rhythm, double pulse_per_second)
+    RhythmRational snap_to_pulse(RhythmRational rhythm, double pulse_per_second)
     {
-        MusicalRhythm wholes_per_second{
-          MusicalRhythm{TempoBeatsPerMinute} * WholesPerBeat / MusicalRhythm{SecondsPerMinute} };
+        RhythmRational wholes_per_second{
+          RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
         //wholes_per_second.reduce();
-        const MusicalRhythm TicksPerSecond{
-             MusicalRhythm{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
+        const RhythmRational TicksPerSecond{
+             RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
         const double TicksPerSecondDouble{
               static_cast<double>(TicksPerSecond.numerator())
             / static_cast<double>(TicksPerSecond.denominator())};
         const int64_t TicksPerSecondInt64
             {static_cast<int64_t>(round(TicksPerSecondDouble))};
-        MusicalRhythm whole_per_pulse(
+        RhythmRational whole_per_pulse(
             wholes_per_second *
-            MusicalRhythm(TicksPerSecondInt64,
+            RhythmRational(TicksPerSecondInt64,
             static_cast<int64_t>
                 (round(pulse_per_second * TicksPerSecondDouble))));
         // Get rid of the remainder.
         // but first round off by adding a half-pulse.
-        MusicalRhythm
-            pulse_per_rhythm{(rhythm + whole_per_pulse / TextmidiRational{2L}) / whole_per_pulse};
+        RhythmRational
+            pulse_per_rhythm{(rhythm + whole_per_pulse / RhythmRational{2L}) / whole_per_pulse};
         if (pulse_per_rhythm.denominator() != 1)
         {
             const auto rem{pulse_per_rhythm.numerator()
                          % pulse_per_rhythm.denominator()};
             // snap the rhythm (duration) to pulses.
-            pulse_per_rhythm = TextmidiRational{pulse_per_rhythm.numerator() - rem,
+            pulse_per_rhythm = RhythmRational{pulse_per_rhythm.numerator() - rem,
                 pulse_per_rhythm.denominator()};
             //pulse_per_rhythm.reduce();
             if (!pulse_per_rhythm)
             {
-                pulse_per_rhythm = MusicalRhythm{1L}; // i.e., one pulse minimum.
+                pulse_per_rhythm = RhythmRational{1L}; // i.e., one pulse minimum.
             }
         }
         rhythm = pulse_per_rhythm * whole_per_pulse;
@@ -379,11 +379,11 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                     const double rhythm_double{
                           static_cast<double>(rhythm.numerator())
                         / static_cast<double>(rhythm.denominator())};
-                    const MusicalRhythm wholes_per_second{
-                        TextmidiRational{TempoBeatsPerMinute} * WholesPerBeat
-                            / TextmidiRational{SecondsPerMinute}};
-                    const MusicalRhythm TicksPerSecond(
-                        MusicalRhythm{TicksPerQuarter} * QuartersPerWholeRat
+                    const RhythmRational wholes_per_second{
+                        RhythmRational{TempoBeatsPerMinute} * WholesPerBeat
+                            / RhythmRational{SecondsPerMinute}};
+                    const RhythmRational TicksPerSecond(
+                        RhythmRational{TicksPerQuarter} * QuartersPerWholeRat
                                         * wholes_per_second);
                     // wholes   Ticks    second
                     // ------ * ------ * ------

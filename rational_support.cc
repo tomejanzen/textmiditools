@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,24 +15,24 @@
 using namespace textmidi;
 using namespace textmidi::rational;
 
-TextmidiRational textmidi::rational::operator%(TextmidiRational dividend,
-    const TextmidiRational& divisor)
+RhythmRational textmidi::rational::operator%(RhythmRational dividend,
+    const RhythmRational& divisor)
 {
-    while ((dividend > divisor) && (divisor != TextmidiRational{0L}))
+    while ((dividend > divisor) && (divisor != RhythmRational{0L}))
     {
         dividend -= divisor;
     }
     return dividend;
 }
 
-TextmidiRational textmidi::rational::round(TextmidiRational ratnum)
+RhythmRational textmidi::rational::round(RhythmRational ratnum)
 {
-   const TextmidiRational remainder(
+   const RhythmRational remainder(
        ratnum.numerator() % ratnum.denominator(),
        ratnum.denominator());
-   if (remainder >= TextmidiRational{1L, 2L})
+   if (remainder >= RhythmRational{1L, 2L})
    {
-       ratnum += TextmidiRational{1L} - remainder;
+       ratnum += RhythmRational{1L} - remainder;
    }
    else
    {
@@ -41,20 +41,20 @@ TextmidiRational textmidi::rational::round(TextmidiRational ratnum)
    return ratnum;
 }
 
-std::int64_t textmidi::rational::snap_to_int(TextmidiRational num, TextmidiRational grid)
+std::int64_t textmidi::rational::snap_to_int(RhythmRational num, RhythmRational grid)
 {
     const auto modnum{(num % grid)};
-    TextmidiRational snapped{ (modnum >= (grid / TextmidiRational{2})) ?
+    RhythmRational snapped{ (modnum >= (grid / RhythmRational{2})) ?
           num + (grid - modnum) : num - modnum};
     return round(snapped).numerator();
 }
 
-TextmidiRational textmidi::rational::snap(TextmidiRational num, TextmidiRational grid)
+RhythmRational textmidi::rational::snap(RhythmRational num, RhythmRational grid)
 {
     const auto modnum{(num % grid)};
-    if (grid != TextmidiRational{0})
+    if (grid != RhythmRational{0})
     {
-        return (modnum >= (grid / TextmidiRational{2})) ?
+        return (modnum >= (grid / RhythmRational{2})) ?
           num + (grid - modnum) : num - modnum;
     }
     else

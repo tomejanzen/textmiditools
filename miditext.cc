@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.19
+// TextMIDITools Version 1.0.20
 //
 // miditext 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.19\n";
+        cout << "TextMIDITools 1.0.20\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
         cerr << desc << '\n';
         exit(EXIT_SUCCESS);
     }
-    Ratio64 quantum{0};
+    RhythmRational quantum{0};
     if (var_map.count(QuantizeOpt)) [[unlikely]]
     {
         string quantum_string{var_map[QuantizeOpt].as<string>()};
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     const uint32_t ticksperquarter{midi_header.division_};
     const uint32_t ticksperwhole{ticksperquarter * 4};
 
-    const auto ticksperquantum{quantum ? (quantum * TextmidiRational{ticksperwhole}) : TextmidiRational{1L}};
+    const auto ticksperquantum{quantum ? (quantum * RhythmRational{ticksperwhole}) : RhythmRational{1L}};
     text_filestr << midi_header.ntrks_ << ' ' << midi_header.division_ << '\n';
     if (verbose)
     {

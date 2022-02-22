@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.20
+// TextMIDITools Version 1.0.21
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -47,14 +47,12 @@ namespace smus
         SmusTrackEventBase()
           : decision_{},
             data_{},
-            current_dynamic_{64},
             channel_{}
         {
         }
         explicit SmusTrackEventBase(const std::uint8_t* bytes)
           : decision_{bytes[0]},
             data_{bytes[1]},
-            current_dynamic_{64},
             channel_{}
         {
         }
@@ -79,7 +77,7 @@ namespace smus
       private:
         std::uint8_t decision_;
         std::uint8_t data_;
-        std::uint8_t current_dynamic_;
+        static std::uint8_t current_dynamic_;
         std::uint8_t channel_;
 
         bool is_dotted() const;

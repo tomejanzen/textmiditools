@@ -1,3 +1,16 @@
+2022-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: remove duplication typedef of MidiStreamVector.
+        * dependencies.fig, textmidi.fig: add diagrams.
+
+2022-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.{cc,h}, smustextmidi.cc, writesmus.cc:
+        Fix SmusTrackEventVolume::textmidi to not repeat volume
+        commands as textmidi "vel" commands.  The solution was to
+        make current_dynamic static and re-init it at the beginning
+        of each track to 64.
+        Also fix them to use dynamics_reverse_map to output the
+        dynamic markings used by textmidi and miditext.
+
 2022-02-18     Thomas E. Janzen <janzentome@gmail.com>
         * SmusTrackEvent.cc: Fix whole notes with a zero denominator.
         This fixes missing whole note lengths in smustextmidi.

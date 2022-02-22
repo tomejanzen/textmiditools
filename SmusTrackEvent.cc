@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.20
+// TextMIDITools Version 1.0.21
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -253,7 +253,7 @@ string SmusTrackEventInstrument::textmidi_tempo()
 
 string SmusTrackEventInstrument::textmidi()
 {
-    return string{"; SMUS Instrument Number set to "} 
+    return string{"; SMUS Instrument Number set to "}
         + lexical_cast<string>(static_cast<int>(data())) + '\n';
 }
 
@@ -359,8 +359,15 @@ string SmusTrackEventVolume::textmidi()
     string str{pre_rest()};
     if (current_dynamic() != data())
     {
-        current_dynamic(data());
-        (((str += "vel ") += lexical_cast<string>(static_cast<int>(data()))) += '\n');
+       if (dynamics_reverse_map.contains(data()))
+       {
+           (str += dynamics_reverse_map.at(data())) += '\n';
+       }
+       else
+       {
+           ((str += "vel ") += lexical_cast<string>(static_cast<int>(data()))) += '\n';
+       }
+       current_dynamic(data());
     }
     return str;
 }
@@ -475,3 +482,4 @@ std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const Smus
     return teb;
 }
 
+std::uint8_t smus::SmusTrackEventBase::current_dynamic_{64};

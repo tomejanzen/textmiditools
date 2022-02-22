@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.20
+// TextMIDITools Version 1.0.21
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.20\n";
+        cout << "TextMIDITools 1.0.21\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -410,6 +410,9 @@ int main(int argc, char *argv[])
         auto trackEventIt{trackEventVec.begin()};
         track_events.resize(trackEventVec.size());
         transform(trackEventVec.begin(), trackEventVec.end(), track_events.begin(), track_event_factory);
+        // At the beginning of a track
+        // default to medium dynamic of 64 unless a Volume event sets it.
+        track_events[0]->current_dynamic(64); 
         for (const auto& te : track_events)
         {
             textmidi_file << te->textmidi();

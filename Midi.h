@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.20
+// TextMIDITools Version 1.0.21
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -20,7 +20,6 @@
 
 namespace textmidi
 {
-    typedef std::vector<uint8_t> MidiStreamVector;
     constexpr int MidiPitchQty{128};
     constexpr int MidiChannelQty{16};
     constexpr int MidiIdiophoneChannel{10};

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -7,7 +7,7 @@
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-// SmusTrackEvent implements Simple Music Score events.
+// SmusTrackEventFilePod implements Simple Music Score events.
 //
 #if HAVE_CONFIG_H
 #  include <config.h>
@@ -16,7 +16,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "SmusTrackEvent.h"
-#include "MidiMessages.h"
+#include "Midi.h"
 #include "rational_support.h"
 #include "MIDIKeyString.h"
 
@@ -440,7 +440,7 @@ string SmusTrackEventEnd::textmidi()
     return textmidi_tempo();
 }
 
-std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const SmusTrackEvent& te)
+std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const SmusTrackEventFilePod& te)
 {
     unique_ptr<SmusTrackEventBase> teb{};
     switch (te.decision)

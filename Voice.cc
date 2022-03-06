@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -18,7 +18,8 @@
 #include "Voice.h"
 
 using namespace std;
-using namespace cgm;
+using namespace textmidi;
+using namespace textmidi::cgm;
 
 std::string cgm::VoiceXml::low_pitch() const noexcept
 {

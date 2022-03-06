@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -30,275 +30,272 @@
 
 using namespace std;
 using namespace boost;
-using namespace cgm;
 using namespace textmidi;
+using namespace textmidi::cgm;
 using namespace textmidi::rational;
 
-namespace
+// might become settable at a later time.
+constexpr int SecondsPerMinute{60};
+constexpr int TempoBeatsPerMinute{60};
+constexpr int RestPitchIndex{numeric_limits<int>().max()};
+
+//
+// Convert a double duration in seconds to a musical ratio.
+RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
 {
-    // might become settable at a later time.
-    constexpr int SecondsPerMinute{60};
-    constexpr int TempoBeatsPerMinute{60};
-    constexpr int RestPitchIndex{numeric_limits<int>().max()};
+    //  beat    quarter   whole   minute
+    // ------ * ------- * ----- * -------
+    // minute    whole    beat    seconds
 
-    //
-    // Convert a double duration in seconds to a musical ratio.
-    RhythmRational duration_to_rhythm(double duration)
+    //  beat    whole   minute
+    // ------ * ----- * -------
+    // minute   beat    seconds
+    RhythmRational wholes_per_second{
+      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
+    //wholes_per_second.reduce();
+    //  Ticks    Quarters    whole
+    // ------- * -------- * -------
+    // Quarter     Whole    second
+    const RhythmRational TicksPerSecond{
+         RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
+    // Turn the rhythm (duration) into a ratio and multiply
+    // both the numerator and the denominator by TicksPerSecond.
+    // This gives us the actual musical rhythm value.
+    const double TicksPerSecondDouble{
+          static_cast<double>(TicksPerSecond.numerator())
+        / static_cast<double>(TicksPerSecond.denominator())};
+    const int64_t TicksPerSecondInt64
+        {static_cast<int64_t>(round(TicksPerSecondDouble))};
+    RhythmRational rhythm
+        {static_cast<int64_t>(duration * TicksPerSecondDouble),
+        TicksPerSecondInt64};
+    rhythm *= wholes_per_second;
+    return abs(rhythm);
+}
+
+//
+// Coerce a duration to be in multiples of the pulse/second value.
+RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, double pulse_per_second)
+{
+    RhythmRational wholes_per_second{
+      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
+    //wholes_per_second.reduce();
+    const RhythmRational TicksPerSecond{
+         RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
+    const double TicksPerSecondDouble{
+          static_cast<double>(TicksPerSecond.numerator())
+        / static_cast<double>(TicksPerSecond.denominator())};
+    const int64_t TicksPerSecondInt64
+        {static_cast<int64_t>(round(TicksPerSecondDouble))};
+    RhythmRational whole_per_pulse(
+        wholes_per_second *
+        RhythmRational(TicksPerSecondInt64,
+        static_cast<int64_t>
+            (round(pulse_per_second * TicksPerSecondDouble))));
+    // Get rid of the remainder.
+    // but first round off by adding a half-pulse.
+    RhythmRational
+        pulse_per_rhythm{(rhythm + whole_per_pulse / RhythmRational{2L}) / whole_per_pulse};
+    if (pulse_per_rhythm.denominator() != 1)
     {
-        //  beat    quarter   whole   minute
-        // ------ * ------- * ----- * -------
-        // minute    whole    beat    seconds
-
-        //  beat    whole   minute
-        // ------ * ----- * -------
-        // minute   beat    seconds
-        RhythmRational wholes_per_second{
-          RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
-        //wholes_per_second.reduce();
-        //  Ticks    Quarters    whole
-        // ------- * -------- * -------
-        // Quarter     Whole    second
-        const RhythmRational TicksPerSecond{
-             RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
-        // Turn the rhythm (duration) into a ratio and multiply
-        // both the numerator and the denominator by TicksPerSecond.
-        // This gives us the actual musical rhythm value.
-        const double TicksPerSecondDouble{
-              static_cast<double>(TicksPerSecond.numerator())
-            / static_cast<double>(TicksPerSecond.denominator())};
-        const int64_t TicksPerSecondInt64
-            {static_cast<int64_t>(round(TicksPerSecondDouble))};
-        RhythmRational rhythm
-            {static_cast<int64_t>(duration * TicksPerSecondDouble),
-            TicksPerSecondInt64};
-        rhythm *= wholes_per_second;
-        return abs(rhythm);
-    }
-
-    //
-    // Coerce a duration to be in multiples of the pulse/second value.
-    RhythmRational snap_to_pulse(RhythmRational rhythm, double pulse_per_second)
-    {
-        RhythmRational wholes_per_second{
-          RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
-        //wholes_per_second.reduce();
-        const RhythmRational TicksPerSecond{
-             RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
-        const double TicksPerSecondDouble{
-              static_cast<double>(TicksPerSecond.numerator())
-            / static_cast<double>(TicksPerSecond.denominator())};
-        const int64_t TicksPerSecondInt64
-            {static_cast<int64_t>(round(TicksPerSecondDouble))};
-        RhythmRational whole_per_pulse(
-            wholes_per_second *
-            RhythmRational(TicksPerSecondInt64,
-            static_cast<int64_t>
-                (round(pulse_per_second * TicksPerSecondDouble))));
-        // Get rid of the remainder.
-        // but first round off by adding a half-pulse.
-        RhythmRational
-            pulse_per_rhythm{(rhythm + whole_per_pulse / RhythmRational{2L}) / whole_per_pulse};
-        if (pulse_per_rhythm.denominator() != 1)
+        const auto rem{pulse_per_rhythm.numerator()
+                     % pulse_per_rhythm.denominator()};
+        // snap the rhythm (duration) to pulses.
+        pulse_per_rhythm = RhythmRational{pulse_per_rhythm.numerator() - rem,
+            pulse_per_rhythm.denominator()};
+        //pulse_per_rhythm.reduce();
+        if (!pulse_per_rhythm)
         {
-            const auto rem{pulse_per_rhythm.numerator()
-                         % pulse_per_rhythm.denominator()};
-            // snap the rhythm (duration) to pulses.
-            pulse_per_rhythm = RhythmRational{pulse_per_rhythm.numerator() - rem,
-                pulse_per_rhythm.denominator()};
-            //pulse_per_rhythm.reduce();
-            if (!pulse_per_rhythm)
-            {
-                pulse_per_rhythm = RhythmRational{1L}; // i.e., one pulse minimum.
-            }
+            pulse_per_rhythm = RhythmRational{1L}; // i.e., one pulse minimum.
         }
-        rhythm = pulse_per_rhythm * whole_per_pulse;
-        return rhythm;
     }
+    rhythm = pulse_per_rhythm * whole_per_pulse;
+    return rhythm;
+}
 
-    void build_composition_priority_graph(const MusicalForm& xml_form,
-        vector<list<int>>& leaders_topo_sort)
+void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm& xml_form,
+    vector<list<int>>& leaders_topo_sort)
+{
+    leaders_topo_sort.clear();
+    // Build a composition priority graph.
+    // The leaders have to be composed first.
+    // The resulting leaders_topo_sort is a list of lists.
+    //     leader1 follower5
+    //     leader3 follower2 follower6 follower7
+    //     leader4 follower8 follower9
+    //
+    // It is acceptable to have citing circles with no leaders;
+    // they just won't get any note events.  That's why this is not
+    // a tree graph; it can have loops.
+    // It is also acceptable for a follower to be a lower-numbered
+    // voice then its leader.
+    // The following graph is not affected by track scrambling.
+    // Track scrambling is just track priority scrambling under
+    // the texture curve.
+    //
+    // For all follower tracks
+    //
+    // Square matrix to represent the follower graph.
+    // 1 follows 2
+    // 2 follows 0
+    // 3 follows 0
+    // |  F  F  F  F  |
+    // |  F  F  T  F  |
+    // |  T  F  F  F  |
+    // |  T  F  F  F  |
+    //
+    // 0 follows 1
+    // 1 follows 2
+    // 2 follows 3
+    // |  F  T  F  F  |
+    // |  F  F  T  F  |
+    // |  F  F  F  T  |
+    // |  F  F  F  F  |
+    // If there is no true in a row, then the voice is not a follower.
+    // Use the graph to follow the leaders to the leader with no trues in its row.
+    // Then that is the real leader of a group.
+    // Then generate the voices backwards from the leader to all followers in its column,
+    // and follow the leaders to the next followers.
+
+    // Make a square matrix of false.
+    vector<vector<bool>> followers_graph(xml_form.voices().size(), vector<bool>(xml_form.voices().size(), false));
+
+    for (int tr{}; tr < xml_form.voices().size(); ++tr)
     {
-        leaders_topo_sort.clear();
-        // Build a composition priority graph.
-        // The leaders have to be composed first.
-        // The resulting leaders_topo_sort is a list of lists.
-        //     leader1 follower5
-        //     leader3 follower2 follower6 follower7
-        //     leader4 follower8 follower9
-        //
-        // It is acceptable to have citing circles with no leaders;
-        // they just won't get any note events.  That's why this is not
-        // a tree graph; it can have loops.
-        // It is also acceptable for a follower to be a lower-numbered
-        // voice then its leader.
-        // The following graph is not affected by track scrambling.
-        // Track scrambling is just track priority scrambling under
-        // the texture curve.
-        //
-        // For all follower tracks
-        //
-        // Square matrix to represent the follower graph.
-        // 1 follows 2
-        // 2 follows 0
-        // 3 follows 0
-        // |  F  F  F  F  |
-        // |  F  F  T  F  |
-        // |  T  F  F  F  |
-        // |  T  F  F  F  |
-        //
-        // 0 follows 1
-        // 1 follows 2
-        // 2 follows 3
-        // |  F  T  F  F  |
-        // |  F  F  T  F  |
-        // |  F  F  F  T  |
-        // |  F  F  F  F  |
-        // If there is no true in a row, then the voice is not a follower.
-        // Use the graph to follow the leaders to the leader with no trues in its row.
-        // Then that is the real leader of a group.
-        // Then generate the voices backwards from the leader to all followers in its column,
-        // and follow the leaders to the next followers.
-
-        // Make a square matrix of false.
-        vector<vector<bool>> followers_graph(xml_form.voices().size(), vector<bool>(xml_form.voices().size(), false));
-
-        for (int tr{}; tr < xml_form.voices().size(); ++tr)
+        if (xml_form.voices()[tr].follower().follow_) [[unlikely]]
         {
-            if (xml_form.voices()[tr].follower().follow_) [[unlikely]]
+            if (xml_form.voices()[tr].follower().leader_ < followers_graph.size())
             {
-                if (xml_form.voices()[tr].follower().leader_ < followers_graph.size())
+                followers_graph[xml_form.voices()[tr].follower().leader_][tr] = true;
+                if (xml_form.voices()[tr].follower().leader_ == tr)
                 {
-                    followers_graph[xml_form.voices()[tr].follower().leader_][tr] = true;
-                    if (xml_form.voices()[tr].follower().leader_ == tr)
-                    {
-                        cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__) << " voice "
-                             << tr << " is a self-follower!\n";
-                    }
+                    cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__) << " voice "
+                         << tr << " is a self-follower!\n";
                 }
             }
         }
+    }
 #if defined(TEXTMIDI_PRINT)
-        for (auto& row : followers_graph)
-        {
-            copy(row.begin(), row.end(), ostream_iterator<bool>(cout, " "));
-            cout << '\n';
-        }
+    for (auto& row : followers_graph)
+    {
+        copy(row.begin(), row.end(), ostream_iterator<bool>(cout, " "));
+        cout << '\n';
+    }
 #endif
-        leaders_topo_sort.resize(followers_graph.size());
+    leaders_topo_sort.resize(followers_graph.size());
 
-        for (int follower_index{}; follower_index < followers_graph.size(); ++follower_index)
+    for (int follower_index{}; follower_index < followers_graph.size(); ++follower_index)
+    {
+        bool leader_only{true};
+        for (int leader_index{}; leader_index < followers_graph[0].size(); ++leader_index)
         {
-            bool leader_only{true};
-            for (int leader_index{}; leader_index < followers_graph[0].size(); ++leader_index)
+            if (followers_graph[leader_index][follower_index]) // if this is a follower
             {
+                leader_only = false;
+            }
+        }
+        if (leader_only)
+        {
+            leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
+        }
+    }
+#if defined(TEXTMIDI_PRINT)
+    cout << "List of non-followers: ";
+    copy(leaders_topo_sort[0].begin(), leaders_topo_sort[0].end(), ostream_iterator<int>(cout, " "));
+    cout << '\n';
+#endif
+    for (auto g{1}; g < followers_graph.size(); ++g)
+    {
+        for (int follower_index{}; follower_index < followers_graph[0].size(); ++follower_index)
+        {
+            for (int leader_index{}; leader_index < followers_graph.size(); ++leader_index)
+             {
+#if defined(TEXTMIDI_PRINT)
+                cout << "** " << leader_index << ' ' << follower_index << ' ' << followers_graph[leader_index][follower_index] << '\n';
+#endif
                 if (followers_graph[leader_index][follower_index]) // if this is a follower
                 {
-                    leader_only = false;
-                }
-            }
-            if (leader_only)
-            {
-                leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
-            }
-        }
-#if defined(TEXTMIDI_PRINT)
-        cout << "List of non-followers: ";
-        copy(leaders_topo_sort[0].begin(), leaders_topo_sort[0].end(), ostream_iterator<int>(cout, " "));
-        cout << '\n';
-#endif
-        for (auto g{1}; g < followers_graph.size(); ++g)
-        {
-            for (int follower_index{}; follower_index < followers_graph[0].size(); ++follower_index)
-            {
-                for (int leader_index{}; leader_index < followers_graph.size(); ++leader_index)
-                {
-#if defined(TEXTMIDI_PRINT)
-                    cout << "** " << leader_index << ' ' << follower_index << ' ' << followers_graph[leader_index][follower_index] << '\n';
-#endif
-                    if (followers_graph[leader_index][follower_index]) // if this is a follower
+                    auto it{find(leaders_topo_sort[g - 1].begin(),
+                                 leaders_topo_sort[g - 1].end(), leader_index)};
+                    if (it != leaders_topo_sort[g - 1].end())
                     {
-                        auto it{find(leaders_topo_sort[g - 1].begin(),
-                                     leaders_topo_sort[g - 1].end(), leader_index)};
-                        if (it != leaders_topo_sort[g - 1].end())
-                        {
-                            leaders_topo_sort[g].push_back(follower_index);
-                        }
+                        leaders_topo_sort[g].push_back(follower_index);
                     }
                 }
-#if defined(TEXTMIDI_PRINT)
-                cout << '\n';
-#endif
             }
-        }
 #if defined(TEXTMIDI_PRINT)
-        cout << "order of composing:\n";
-        for (auto& lts : leaders_topo_sort)
-        {
-            copy(lts.begin(), lts.end(), ostream_iterator<int>(cout, " "));
             cout << '\n';
-        }
 #endif
+        }
     }
-
-    void build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
-        int track_qty, TicksDuration total_duration, TrackScramble track_scramble)
+#if defined(TEXTMIDI_PRINT)
+    cout << "order of composing:\n";
+    for (auto& lts : leaders_topo_sort)
     {
-        track_scramble_sequences.resize(1, vector<int>(track_qty));
-        iota(track_scramble_sequences[0].begin(), track_scramble_sequences[0].end(), 0);
-
-        auto previous_sequence{track_scramble_sequences[0]};
-        for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
-            scramble_time = scramble_time + track_scramble.period_)
-        {
-            switch(track_scramble.scramble_)
-            {
-                case TrackScrambleEnum::RotateRight:
-                    if (previous_sequence.size() > 1)
-                    {
-                        rotate(previous_sequence.begin(), previous_sequence.begin() + (previous_sequence.size() - 1), previous_sequence.end());
-                    }
-                    break;
-                case TrackScrambleEnum::RotateLeft:
-                    if (previous_sequence.size() > 1)
-                    {
-                        rotate(previous_sequence.begin(), previous_sequence.begin() + 1, previous_sequence.end());
-                    }
-                    break;
-                case TrackScrambleEnum::Reverse:
-                    reverse(previous_sequence.begin(), previous_sequence.end());
-                    break;
-                case TrackScrambleEnum::PreviousPermutation:
-                    prev_permutation(previous_sequence.begin(), previous_sequence.end());
-                    break;
-                case TrackScrambleEnum::NextPermutation:
-                    next_permutation(previous_sequence.begin(), previous_sequence.end());
-                    break;
-                case TrackScrambleEnum::SwapPairs:
-                    for (int i(0); i < previous_sequence.size() - (previous_sequence.size() % 2); i += 2)
-                    {
-                        swap(previous_sequence[i], previous_sequence[i + 1]);
-                    }
-                    break;
-                case TrackScrambleEnum::Shuffle:
-                    shuffle(previous_sequence.begin(), previous_sequence.end(),
-                        RandomInt(0, previous_sequence.size() - 1));
-                    break;
-                case TrackScrambleEnum::None:
-                    [[fallthrough]]
-                default:
-                    break;
-            }
-            track_scramble_sequences.insert(track_scramble_sequences.end(), previous_sequence);
-        }
-#if defined(TEXTMIDI_PRINT)
-        cout << "track_scramble_sequences\n";
-        for (auto tss : track_scramble_sequences)
-        {
-            copy(tss.begin(), tss.end(), ostream_iterator<int>(cout, " "));
-            cout << '\n';
-        }
-#endif
+        copy(lts.begin(), lts.end(), ostream_iterator<int>(cout, " "));
+        cout << '\n';
     }
+#endif
+}
+
+void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
+    int track_qty, TicksDuration total_duration)
+{
+    track_scramble_sequences.resize(1, vector<int>(track_qty));
+    iota(track_scramble_sequences[0].begin(), track_scramble_sequences[0].end(), 0);
+
+    auto previous_sequence{track_scramble_sequences[0]};
+    for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
+        scramble_time = scramble_time + track_scramble_.period_)
+    {
+        switch(track_scramble_.scramble_)
+        {
+            case TrackScrambleEnum::RotateRight:
+                if (previous_sequence.size() > 1)
+                {
+                    rotate(previous_sequence.begin(), previous_sequence.begin() + (previous_sequence.size() - 1), previous_sequence.end());
+                }
+                break;
+            case TrackScrambleEnum::RotateLeft:
+                if (previous_sequence.size() > 1)
+                {
+                    rotate(previous_sequence.begin(), previous_sequence.begin() + 1, previous_sequence.end());
+                }
+                break;
+            case TrackScrambleEnum::Reverse:
+                reverse(previous_sequence.begin(), previous_sequence.end());
+                break;
+            case TrackScrambleEnum::PreviousPermutation:
+                prev_permutation(previous_sequence.begin(), previous_sequence.end());
+                break;
+            case TrackScrambleEnum::NextPermutation:
+                next_permutation(previous_sequence.begin(), previous_sequence.end());
+                break;
+            case TrackScrambleEnum::SwapPairs:
+                for (int i(0); i < previous_sequence.size() - (previous_sequence.size() % 2); i += 2)
+                {
+                    swap(previous_sequence[i], previous_sequence[i + 1]);
+                }
+                break;
+            case TrackScrambleEnum::Shuffle:
+                shuffle(previous_sequence.begin(), previous_sequence.end(),
+                    RandomInt(0, previous_sequence.size() - 1));
+                break;
+            case TrackScrambleEnum::None:
+                break;
+            default:
+                break;
+        }
+        track_scramble_sequences.insert(track_scramble_sequences.end(), previous_sequence);
+    }
+#if defined(TEXTMIDI_PRINT)
+    cout << "track_scramble_sequences\n";
+    for (auto tss : track_scramble_sequences)
+    {
+        copy(tss.begin(), tss.end(), ostream_iterator<int>(cout, " "));
+        cout << '\n';
+    }
+#endif
 }
 
 //
@@ -306,8 +303,7 @@ namespace
 // It implements the composing engine from AlgoRhythms 3.0 for the Commodore Amiga
 // with minor enhancements.
 //
-void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnuplot, bool answer,
-    TrackScramble track_scramble)
+void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalForm& xml_form)
 {
     RandomDouble random_double{};
     vector<Track> tracks(xml_form.voices().size()/*, Track{ xml_form.scale().size() / 2 }*/);
@@ -331,7 +327,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
 
     vector<vector<int>> track_scramble_sequences;
     build_track_scramble_sequences(track_scramble_sequences, xml_form.voices().size(),
-        total_duration, track_scramble);
+        total_duration);
 
     std::vector<std::vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
@@ -348,7 +344,7 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
             {
                 while (track.the_next_time() < total_duration)
                 {
-                    auto scramble_index{track.the_next_time() / track_scramble.period_};
+                    auto scramble_index{track.the_next_time() / track_scramble_.period_};
                     scramble_index = ((scramble_index < track_scramble_sequences.size())
                         ?  scramble_index : track_scramble_sequences.size() - 1);
 #if defined(TEXTMIDI_PRINT)
@@ -363,8 +359,8 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                       +  musical_character.dynamic_mean};
                     int dynamic{static_cast<int>(round(dynamicd))};
 
-                    dynamic = std::min(dynamic, static_cast<int>(std::round(cgm::MaxDynamic)));
-                    dynamic = std::max(dynamic, static_cast<int>(std::round(cgm::MinDynamic)));
+                    dynamic = std::min(dynamic, static_cast<int>(std::round(MaxDynamic)));
+                    dynamic = std::max(dynamic, static_cast<int>(std::round(MinDynamic)));
 
                     double rhythmd
                         {musical_character.duration(random_double())};
@@ -376,9 +372,6 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                     {
                         rhythm = snap_to_pulse(rhythm, xml_form.pulse());
                     }
-                    const double rhythm_double{
-                          static_cast<double>(rhythm.numerator())
-                        / static_cast<double>(rhythm.denominator())};
                     const RhythmRational wholes_per_second{
                         RhythmRational{TempoBeatsPerMinute} * WholesPerBeat
                             / RhythmRational{SecondsPerMinute}};
@@ -490,11 +483,10 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
                             track.last_pitch_index(key_index);
                         }
                         NoteEvent temp_note_event{key_number,
-                            dynamic, rhythm_double, rhythm};
+                            dynamic, rhythm};
                         track_note_events[i].push_back(temp_note_event);
                     } else {
-                        NoteEvent temp_note_event{RestPitch, 0,
-                            rhythm_double, rhythm};
+                        NoteEvent temp_note_event{RestPitch, 0, rhythm};
                         track_note_events[i].push_back(temp_note_event);
                     }
                 }
@@ -585,20 +577,20 @@ void cgm::compose(const MusicalForm& xml_form, ofstream& textmidi_file, bool gnu
     }
 
     //
-    // Write the form sinusoids to a gnuplot load file.
+    // Write the form sinusoids to a gnuplot_ load file.
     //
-    if (gnuplot) [[unlikely]]
+    if (gnuplot_) [[unlikely]]
     {
         // gnuplot : plot 'concerto.form.plot' index [0123]
         // using 1:2:3:4 with yerror
         const string gnuplot_filename{xml_form.name() + ".plot"};
         error_code ec;
-        if (answer && filesystem::exists(gnuplot_filename, ec))
+        if (answer_ && filesystem::exists(gnuplot_filename, ec))
         {
             cout << "Overwrite " << gnuplot_filename << "?" << '\n';
-            string answer{};
-            cin >> answer;
-            if (!((answer[0] == 'y') || (answer[0] == 'Y')))
+            string answerstr{};
+            cin >> answerstr;
+            if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
             {
                 exit(0);
             }

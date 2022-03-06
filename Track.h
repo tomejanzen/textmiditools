@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -16,41 +16,44 @@
 
 #include "NoteEvent.h"
 
-namespace cgm
+namespace textmidi
 {
-
-    constexpr std::int64_t TicksPerQuarter(240);
-    // MIDI specifies tempo as per quarter note.
-    const textmidi::rational::RhythmRational WholesPerBeat{1, 4};
-    const textmidi::rational::RhythmRational QuarterPerWhole{1, 4};
-    const textmidi::rational::RhythmRational QuartersPerWholeRat(4, 1);
-    typedef std::ratio<1L, TicksPerQuarter> TicksRatio;
-    typedef std::chrono::duration<std::int64_t, TicksRatio> TicksDuration;
-
-    class Track
+    namespace cgm
     {
-      public:
-        explicit Track(int last_pitch_index = 0)
-          : the_last_time_(0),
-            the_next_time_(0),
-            last_pitch_index_(last_pitch_index)
+    
+        constexpr std::int64_t TicksPerQuarter(240);
+        // MIDI specifies tempo as per quarter note.
+        const textmidi::rational::RhythmRational WholesPerBeat{1, 4};
+        const textmidi::rational::RhythmRational QuarterPerWhole{1, 4};
+        const textmidi::rational::RhythmRational QuartersPerWholeRat(4, 1);
+        typedef std::ratio<1L, TicksPerQuarter> TicksRatio;
+        typedef std::chrono::duration<std::int64_t, TicksRatio> TicksDuration;
+    
+        class Track
         {
-        }
-        explicit Track(const Track& ) = default;
-        explicit Track(Track&& ) = delete;
-        Track& operator=(const Track& ) = default;
-        Track& operator=(Track&& ) = delete;
-        TicksDuration the_next_time() const;
-        int last_pitch_index() const;
-        void the_last_time(const TicksDuration the_last_time);
-        void the_next_time(const TicksDuration the_next_time);
-        void last_pitch_index(const int last_pitch_index);
-      private:
-        TicksDuration the_last_time_;
-        TicksDuration the_next_time_;
-        int last_pitch_index_;
-    };
-
+          public:
+            explicit Track(int last_pitch_index = 0)
+              : the_last_time_(0),
+                the_next_time_(0),
+                last_pitch_index_(last_pitch_index)
+            {
+            }
+            explicit Track(const Track& ) = default;
+            explicit Track(Track&& ) = delete;
+            Track& operator=(const Track& ) = default;
+            Track& operator=(Track&& ) = delete;
+            TicksDuration the_next_time() const;
+            int last_pitch_index() const;
+            void the_last_time(const TicksDuration the_last_time);
+            void the_next_time(const TicksDuration the_next_time);
+            void last_pitch_index(const int last_pitch_index);
+          private:
+            TicksDuration the_last_time_;
+            TicksDuration the_next_time_;
+            int last_pitch_index_;
+        };
+    
+    }
 }
 
 #endif

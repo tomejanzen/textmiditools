@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -15,13 +15,15 @@
 
 #include "MusicalForm.h"
 
-namespace cgm
+namespace textmidi
 {
-
-    void write_form_as_gnuplot_data(
-        const MusicalForm& musical_form,
-        const std::string& gnuplot_filename);
-
+    namespace cgm
+    {
+    
+        void write_form_as_gnuplot_data(
+            const MusicalForm& musical_form,
+            const std::string& gnuplot_filename);
+    
+    }
 }
-
 #endif

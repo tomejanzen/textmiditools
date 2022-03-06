@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -276,7 +276,7 @@ ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
 {
     // textmidi has a convention for quickness of typing that
     // a 1/4 note is written 4, or 1/4, or 2/8 etc.
-    if (tr.denominator() == 1L)
+    if ((tr.denominator() == 1L) && (tr.numerator() != 1L))
     {
         os << tr.numerator() << '/' << tr.denominator();
     }

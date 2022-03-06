@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -76,14 +76,13 @@
 
 #include "Track.h"
 #include "Voice.h"
-#include "NoteEvent.h"
 #include "Options.h"
 #include "Composer.h"
-#include "GeneralMIDI.h"
 
 using namespace std;
 using namespace boost;
-using namespace cgm;
+using namespace textmidi;
+using namespace textmidi::cgm;
 using namespace cgmlegacy;
 
 // This isn't really necessary but i wrote it in a
@@ -173,7 +172,7 @@ int main(int argc, char *argv[])
         string str{};
         str.reserve(512);
         (((((((str += "textmidicgm\n")
-            += "TextMIDITools 1.0.21\n")
+            += "TextMIDITools 1.0.22\n")
             += "Copyright © 2022 Thomas E. Janzen\n")
             += "License GPLv3+: GNU GPL version 3 or later ")
             += "<https://gnu.org/licenses/gpl.html>\n")
@@ -369,7 +368,7 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
-    TrackScramble track_scramble;
+    Composer::TrackScramble track_scramble;
 
     if (var_map.count(TrackScrambleOpt)) [[unlikely]]
     {
@@ -385,7 +384,7 @@ int main(int argc, char *argv[])
         {
             track_scramble_period = TicksDuration{static_cast<int64_t>(floor(var_map[TrackScramblePeriodOpt].as<double>())) * TicksPerQuarter};
         }
-        track_scramble = TrackScramble(track_scramble_type, track_scramble_period);
+        track_scramble = Composer::TrackScramble(track_scramble_type, track_scramble_period);
     }
 
     string textmidi_filename;
@@ -436,6 +435,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    Composer composer{gnuplot, answer, track_scramble};
     for (auto& xml_form : xml_forms)
     {
         if (var_map.count(ClampScaleOpt))
@@ -456,7 +456,7 @@ int main(int argc, char *argv[])
             textmidi_file.open((xml_form.name() + ".txt").c_str());
         }
 
-        compose(xml_form, textmidi_file, gnuplot, answer, track_scramble);
+        composer(textmidi_file, xml_form);
 
         textmidi_file.close();
     }

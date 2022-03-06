@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // miditext 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -38,7 +38,7 @@
 #include <boost/program_options.hpp>
 
 #include "rational_support.h"
-#include "Midi.h"
+#include "TextmidiUtils.h"
 #include "MidiMessages.h"
 #include "Options.h"
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.21\n";
+        cout << "TextMIDITools 1.0.22\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -138,6 +138,8 @@ int main(int argc, char *argv[])
     bool lazy{};
     if (var_map.count(LazyOpt)) [[unlikely]]
     {
+        cerr << "The implementation of --lazy is not finished\n";
+        exit(EXIT_SUCCESS);
         lazy = true;
     }
 

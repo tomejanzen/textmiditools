@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -14,7 +14,8 @@
 #include "Scales.h"
 
 using namespace std;
-using namespace cgm;
+using namespace textmidi;
+using namespace textmidi::cgm;
 
 vector<vector<std::string>> cgm::scale_strs{
     // 0: DiatonicOnC

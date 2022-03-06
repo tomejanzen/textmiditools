@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidicgm 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -42,9 +42,9 @@
 #include "MIDIKeyString.h"
 
 using namespace std;
-using namespace cgm;
-using namespace boost;
 using namespace textmidi;
+using namespace textmidi::cgm;
+using namespace boost;
 
 double cgm::Sine::period() const noexcept
 {

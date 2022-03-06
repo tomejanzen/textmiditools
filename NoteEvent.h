@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -16,57 +16,53 @@
 
 #include "RhythmRational.h"
 
-namespace cgm
+namespace textmidi
 {
-
-constexpr int RestPitch{129};
-
-class NoteEvent
-{
-  public:
-    NoteEvent(int pitch, int vel,
-                       double rhythm, textmidi::rational::RhythmRational musical_rhythm)
-      : pitch_{pitch},
-        vel_{vel},
-        rhythm_{rhythm},
-        musical_rhythm_{musical_rhythm}
+    namespace cgm
     {
-    }
-    NoteEvent() = default;
-    NoteEvent(const NoteEvent& ) = default;
-    explicit NoteEvent(NoteEvent&& ) = delete;
-    NoteEvent& operator=(const NoteEvent& ) = default;
-    NoteEvent& operator=(NoteEvent&& ) = delete;
-
-    void pitch(int pitch) noexcept
+    
+    constexpr int RestPitch{129};
+    
+    class NoteEvent
     {
-        pitch_ = pitch;
+      public:
+        NoteEvent(int pitch, int vel, textmidi::rational::RhythmRational musical_rhythm)
+          : pitch_{pitch},
+            vel_{vel},
+            musical_rhythm_{musical_rhythm}
+        {
+        }
+        NoteEvent() = default;
+        NoteEvent(const NoteEvent& ) = default;
+        explicit NoteEvent(NoteEvent&& ) = delete;
+        NoteEvent& operator=(const NoteEvent& ) = default;
+        NoteEvent& operator=(NoteEvent&& ) = delete;
+    
+        void pitch(int pitch) noexcept
+        {
+            pitch_ = pitch;
+        }
+        int pitch() const noexcept
+        {
+            return pitch_;
+        }
+        int vel() const noexcept
+        {
+            return vel_;
+        }
+        textmidi::rational::RhythmRational musical_rhythm() const noexcept
+        {
+            return musical_rhythm_;
+        }
+      private:
+        int pitch_;
+        int vel_;
+        textmidi::rational::RhythmRational musical_rhythm_;
+    };
+    
+    std::ostream& operator<<(std::ostream& os, const NoteEvent& ne);
+    
     }
-    int pitch() const noexcept
-    {
-        return pitch_;
-    }
-    int vel() const noexcept
-    {
-        return vel_;
-    }
-    double rhythm() const noexcept
-    {
-        return rhythm_;
-    }
-    textmidi::rational::RhythmRational musical_rhythm() const noexcept
-    {
-        return musical_rhythm_;
-    }
-  private:
-    int pitch_;
-    int vel_;
-    double rhythm_;
-    textmidi::rational::RhythmRational musical_rhythm_;
-};
-
-std::ostream& operator<<(std::ostream& os, const NoteEvent& ne);
-
 }
 
 #endif

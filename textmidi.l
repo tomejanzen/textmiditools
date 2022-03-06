@@ -46,9 +46,9 @@
 #include <boost/algorithm/string/case_conv.hpp>
 
 #include "Midi.h" // MIDI codes and MIDI file header
+#include "TextmidiUtils.h"
 #include "MIDIKeyString.h"
 #include "textmidi.h" // For this file's interfaces to main.cc
-#include "MusicalForm.h"
 
 using namespace std;
 using namespace boost;
@@ -114,7 +114,7 @@ namespace
     // In addition we allow the words "left", "center", and "right".
     const map<string_view, int> PanStringToValue{{"left", 0},
                                                  {"center", 64},
-                                                 {"right", static_cast<int>(round(cgm::MaxDynamic))}};
+                                                 {"right", static_cast<int>(round(MaxDynamic))}};
 
     // keyevent_to_keynumber
     // converts a string keyevent, which can include tie-in and tie-out,

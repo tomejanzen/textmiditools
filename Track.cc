@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidicgm 1.0.16
 // Copyright © 2022 Thomas E. Janzen
@@ -11,8 +11,9 @@
 //
 #include "Track.h"
 
-using namespace cgm;
 using namespace std;
+using namespace textmidi;
+using namespace textmidi::cgm;
 
 TicksDuration cgm::Track::the_next_time() const
 {

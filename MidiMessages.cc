@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -1351,59 +1351,64 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiMessage* mm)
                 } 
                 else
                 {
-                    os << "vel " << no->velocity() << '\n';
+                    os << "vel " << static_cast<int>(no->velocity()) << ' ';
                 }
                 dynamic_ = no->velocity();
             }
-            os << no->key_string() << ' ';
         }
+        os << no->key_string() << ' ';
+        // this doesn't really allow for asynchronous notes on a line.
+        // Don't use --lazy for that kind of track.
         if (no->wholes_to_noteoff())
         {
-            if (no->wholes_to_next_event() != rational::RhythmRational{0L})
+            print_rhythm(os, no->wholes_to_noteoff()) << '\n';
+            if (no->wholes_past_noteoff() > rational::RhythmRational{0L})
             {
-                print_rhythm(os, no->wholes_to_noteoff()) << '\n';
-                if (no->wholes_past_noteoff() > rational::RhythmRational{0L})
+                os << "R ";
+                print_rhythm(os, no->wholes_past_noteoff());
+                os << ' ';
+            }
+        }
+    }
+    else
+    {
+        const auto* noff{dynamic_cast<MidiChannelVoiceNoteOffMessage*>(mm)};
+        if (!noff)
+        {
+            const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestMessage*>(mm)};
+            if (rest && rest->wholes_to_noteoff())
+            {
+                if (!lazy_)
                 {
-                    os << "R ";
-                    textmidi::rational::print_rhythm(os, no->wholes_past_noteoff());
-                    os << ' ';
+                    os << "LAZY ";
+                    lazy_ = true;
+                }
+                os << rest->key_string() << ' ';
+                print_rhythm(os, rest->wholes_to_noteoff()) << '\n';
+            }
+            else
+            {
+                if (lazy_)
+                {
+                    os << "END_LAZY\n";
+                    lazy_ = false;
+                }
+                os << *mm << '\n';
+                if (mm->wholes_to_next_event() > rational::RhythmRational{0L, 1L})
+                {
+                    if (!lazy_)
+                    {
+                        os << "LAZY R ";
+                    }
+                    print_rhythm(os, mm->wholes_to_next_event());
+                    if (!lazy_)
+                    {
+                        os << " END_LAZY\n";
+                    }
                 }
             }
         }
-        return;
     }
-    const auto*
-        rest{dynamic_cast<MidiChannelVoiceNoteRestMessage*>(mm)};
-    if (rest)
-    {
-        if (rest->wholes_to_noteoff())
-        {
-            if (!lazy_)
-            {
-                os << "LAZY ";
-                lazy_ = true;
-            }
-            os << rest->key_string() << ' ';
-            if (rest->wholes_to_noteoff())
-            {
-                print_rhythm(os, rest->wholes_to_noteoff()) << '\n';
-            }
-        }
-        return;
-    }
-
-    if (dynamic_cast<const MidiChannelVoiceNoteOffMessage*>(mm))
-    {
-        return;
-    }
-    if (lazy_)
-    {
-        os << "END_LAZY ";
-        lazy_ = false;
-    }
-    os << *mm << ' ';
-    print_rhythm(os, mm->wholes_to_next_event());
-    os << '\n';
 }
 
 void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)

@@ -22,7 +22,7 @@ textmidi$(EXEEXT) : main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o
 	$(CXX) $(AM_CXXFLAGS) -o $@ main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o $(AM_LDFLAGS)
 main.o : main.cc textmidi.h Options.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-textmidi.o: textmidi.cc Midi.h MIDIKeyString.h textmidi.h RhythmRational.h
+textmidi.o: textmidi.cc Midi.h TextmidiUtils.h MIDIKeyString.h textmidi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 textmidi.cc : textmidi.l
 	$(LEX) $(LEXFLAGS) -o $@ $<
@@ -30,7 +30,7 @@ miditext$(EXEEXT) : miditext.o Midi.o MidiMessages.o MIDIKeyString.o RhythmRatio
 	$(CXX) $(AM_CXXFLAGS) -o $@ $< Midi.o RhythmRational.o MidiMessages.o MIDIKeyString.o rational_support.o $(AM_LDFLAGS)
 rational_support.o: rational_support.cc rational_support.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
-miditext.o: miditext.cc rational_support.h Midi.h MidiMessages.h Options.h RhythmRational.h
+miditext.o: miditext.cc rational_support.h RhythmRational.h TextmidiUtils.h MidiMessages.h Midi.h Options.h
 	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
 Midi.o : Midi.cc Midi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
@@ -38,9 +38,9 @@ MidiMessages.o: MidiMessages.cc MidiMessages.h Midi.h rational_support.h MIDIKey
 	$(CXX) $(AM_CXXFLAGS) -c -g -o MidiMessages.o MidiMessages.cc
 smustextmidi$(EXEEXT) : smustextmidi.o SmusTrackEvent.o Midi.o MidiMessages.o MIDIKeyString.o RhythmRational.o rational_support.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ SmusTrackEvent.o Midi.o MidiMessages.o MIDIKeyString.o RhythmRational.o rational_support.o $(AM_LDFLAGS)
-smustextmidi.o: smustextmidi.cc MidiMessages.h Midi.h rational_support.h SmusTrackEvent.h Options.h RhythmRational.h
+smustextmidi.o: smustextmidi.cc Midi.h TextmidiUtils.h rational_support.h RhythmRational.h SmusTrackEvent.h Options.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h MidiMessages.h Midi.h rational_support.h MIDIKeyString.h RhythmRational.h
+SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h RhythmRational.h Midi.h rational_support.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 RhythmRational.o: RhythmRational.cc RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
@@ -52,7 +52,7 @@ cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MIDIKeyString.o : MIDIKeyString.cc MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-MusicalForm.o: MusicalForm.cc MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h RhythmRational.h
+MusicalForm.o: MusicalForm.cc MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Midi.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Track.o: Track.cc Track.h NoteEvent.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
@@ -60,11 +60,11 @@ Voice.o: Voice.cc Voice.h cgmlegacy.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Scales.o : Scales.cc Scales.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-NoteEvent.o : NoteEvent.cc NoteEvent.h Track.h MIDIKeyString.h RhythmRational.h
+NoteEvent.o: NoteEvent.cc NoteEvent.h RhythmRational.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Composer.o: Composer.cc Midi.h Composer.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h GnuPlot.h RhythmRational.h
+Composer.o: Composer.cc Midi.h Composer.h RhythmRational.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h GnuPlot.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 GeneralMIDI.o : GeneralMIDI.cc GeneralMIDI.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<

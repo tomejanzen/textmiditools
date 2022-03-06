@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -18,12 +18,12 @@
 #include <utility>
 #include <vector>
 
-#include "MidiMessages.h"
+#include "RhythmRational.h"
 
 namespace smus
 {
 
-    struct SmusTrackEvent
+    struct SmusTrackEventFilePod
     {
         std::uint8_t decision;
         std::uint8_t data;
@@ -240,7 +240,7 @@ namespace smus
         SmusTrackEventFactory()
         {
         }
-        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEvent& te);
+        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEventFilePod& te);
     };
 
 }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -20,6 +20,9 @@
 
 namespace textmidi
 {
+    constexpr double MinDynamic{30};
+    constexpr double MaxDynamic{127};
+
     constexpr int MidiPitchQty{128};
     constexpr int MidiChannelQty{16};
     constexpr int MidiIdiophoneChannel{10};
@@ -203,14 +206,6 @@ namespace textmidi
     };
 
 #pragma pack()
-    // Stroustrup p 388 Programming
-    template<class T>
-    char* io_bytes(T& i)
-    {
-        void* addr = &i;
-        return static_cast<char*>(addr);
-    }
-
     std::ostream& operator<<(std::ostream& os, const MidiHeader& mh);
 
 }

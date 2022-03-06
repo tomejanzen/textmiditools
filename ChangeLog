@@ -1,3 +1,32 @@
+2022-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, miditext.cc, MidiMessages.cc: Tried to fix bugs in
+        miditext --lazy feature but postponed until a re-analysis.
+
+2022-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, TextmidiUtils.h, textmidi.l, textmidi.cc, smustextmidi.cc,
+        writesmus.cc, miditext.cc:
+        Move io_bytes to TextmidiUtils.h.
+        * smustextmidi.cc: remove extra data structure trackEventVec.
+        * Composer.cc, NoteEvent.{h,cc}: remove the double rep of rhythm (duration).
+
+2022-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.h, smustextmidi.cc,SmusTrackEvent.cc,writesmus.cc:
+        Change name of SmusTrackEvent to SmusTrackEventFilePod
+        * SmusTrackEvent.h, smustextmidi.cc, miditext.cc, SmusTrackEvent.cc:
+        remove dependence on MidiMessages.h when it's really Midi.h or nothing.
+        * *.fig: fix fonts; fix dependencies per above; add Composer class.
+
+2022-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.cc: smustextmidi was printing a whole note as 1/1
+        rather than as 1.  Check for a 1/1 rational before using 
+        operator<<(os, RhythmRational&).
+        * Composer.{cc,h}: Make Composer a class.
+        * *.cc *.h: put all cgm namespace code under namespace textmidi.
+
+2022-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, Composer.cc, Midi.h, MusicalForm.h: move
+        MinDynamic and MaxDynamic to Midi.h
+
 2022-02-21     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.h: remove duplication typedef of MidiStreamVector.
         * dependencies.fig, textmidi.fig: add diagrams.

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -13,7 +13,8 @@
 #include "GeneralMIDI.h"
 
 using namespace std;
-using namespace cgm;
+using namespace textmidi;
+using namespace textmidi::cgm;
 
 //
 // These values reflect the MIDI Specification 1.1,

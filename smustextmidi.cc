@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -51,7 +51,8 @@
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include "MidiMessages.h"
+#include "Midi.h"
+#include "TextmidiUtils.h"
 #include "rational_support.h"
 #include "SmusTrackEvent.h"
 #include "Options.h"
@@ -153,7 +154,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.21\n";
+        cout << "TextMIDITools 1.0.22\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -348,17 +349,15 @@ int main(int argc, char *argv[])
     textmidi_file << "TRACK Tempo\n";
     textmidi_file << "LAZY\n";
 
-    notes_per_track = len / sizeof(SmusTrackEvent);
+    notes_per_track = len / sizeof(SmusTrackEventFilePod);
 
     // Read the first track and create a rhythm track.
     RhythmRational delay_accum{0};
-    SmusTrackEvent* trackEventPtr{reinterpret_cast<SmusTrackEvent*>(&smus_score[smus_index])};
-    vector<SmusTrackEvent> trackEventVec(notes_per_track);
-    copy(&trackEventPtr[0], &trackEventPtr[notes_per_track], &trackEventVec[0]);
+    auto* trackEventPtr{reinterpret_cast<SmusTrackEventFilePod*>(&smus_score[smus_index])};
 
     SmusTrackEventFactory track_event_factory{};
-    vector<unique_ptr<SmusTrackEventBase>> track_events(trackEventVec.size());
-    transform(trackEventVec.begin(), trackEventVec.end(), track_events.begin(), track_event_factory);
+    vector<unique_ptr<SmusTrackEventBase>> track_events(notes_per_track);
+    transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], track_events.begin(), track_event_factory);
     for (const auto& te : track_events)
     {
         textmidi_file << te->textmidi_tempo();
@@ -400,19 +399,16 @@ int main(int argc, char *argv[])
         textmidi_file << "TRACK " << track_name << '\n';
         textmidi_file << "LAZY\n";
 
-        notes_per_track = bytes_per_track / sizeof(SmusTrackEvent);
+        notes_per_track = bytes_per_track / sizeof(SmusTrackEventFilePod);
 
         delay_accum = RhythmRational{0};
-        trackEventPtr = reinterpret_cast<SmusTrackEvent*>(&smus_score[smus_index]);
+        trackEventPtr = reinterpret_cast<SmusTrackEventFilePod*>(&smus_score[smus_index]);
         smus_index += bytes_per_track;
-        trackEventVec.resize(notes_per_track);
-        copy(&trackEventPtr[0], &trackEventPtr[notes_per_track], &trackEventVec[0]);
-        auto trackEventIt{trackEventVec.begin()};
-        track_events.resize(trackEventVec.size());
-        transform(trackEventVec.begin(), trackEventVec.end(), track_events.begin(), track_event_factory);
+        track_events.resize(notes_per_track);
+        transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], track_events.begin(), track_event_factory);
         // At the beginning of a track
         // default to medium dynamic of 64 unless a Volume event sets it.
-        track_events[0]->current_dynamic(64); 
+        track_events[0]->current_dynamic(64);
         for (const auto& te : track_events)
         {
             textmidi_file << te->textmidi();

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.22
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -13,6 +13,9 @@
 
 #include "NoteEvent.h"
 #include "MIDIKeyString.h"
+
+using namespace textmidi;
+using namespace textmidi::cgm;
 
 //
 // Write a note event as a textmidi text event.

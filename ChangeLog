@@ -1,3 +1,11 @@
+2022-03-06     Thomas E. Janzen <janzentome@gmail.com>
+
+        * Makefile.am: add rational_support to clean target.
+        * SmusTrackEvent.cc smustextmidi.cc textmidi.l: remove unused and
+        fix tie in/out mistake in smustextmidi that would add a pitch
+        to the tied_vec_ every time it appeared even though it was
+        in the same continuous tied note.
+
 2022-03-05     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, miditext.cc, MidiMessages.cc: Tried to fix bugs in
         miditext --lazy feature but postponed until a re-analysis.

@@ -1288,9 +1288,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         trackchunk.push_back(velocity);
       }
     }
-    remove_if(lazy::chord.begin(), lazy::chord.end(),
-        [](const KeyTie& kt) { return !kt.tie_out_; });
-
     lazy::chord.clear();
     if (static_cast<double>(detache) < total_duration)
     {

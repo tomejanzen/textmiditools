@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.22
+// TextMIDITools Version 1.0.23
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.22\n";
+        cout << "TextMIDITools 1.0.23\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -261,7 +261,6 @@ int main(int argc, char *argv[])
         cerr << "No SHDR chunk!\n";
         exit(EXIT_SUCCESS);
     }
-    vector<char> tied_vec{};
     int notes_per_track{};
     unsigned int start_of_tracks_index{};
 

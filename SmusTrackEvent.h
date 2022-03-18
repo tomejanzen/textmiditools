@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -31,29 +31,28 @@ namespace smus
 
     // decision:
     // 0-127 pitches
-    // 128 rest
-    // 129 Instrument Number (unknown)
-    // 130 Time Signature
-    // 131 key signature
-    // 132 volume
-    // 133 MIDI Channel
-    // 134 MIDI Preset
-    // 135 clef 0 treble , 1 bass, 2 alto , 3 tenor  (unknown)
-    // 136 tempo
-    // 255 end of track (unknown)
+    constexpr int Rest{128};
+    constexpr int InstrumentNumber{129};
+    constexpr int TimeSignature{130};
+    constexpr int KeySignature{131};
+    constexpr int Volume{132};
+    constexpr int Channel{133};
+    constexpr int Preset{134};
+    constexpr int Clef{135}; // 0 treble , 1 bass, 2 alto , 3 tenor  (unknown)
+    constexpr int Tempo{136};
+    constexpr int EndOfTrack{255};
+
     class SmusTrackEventBase
     {
        public:
         SmusTrackEventBase()
           : decision_{},
-            data_{},
-            channel_{}
+            data_{}
         {
         }
-        explicit SmusTrackEventBase(const std::uint8_t* bytes)
-          : decision_{bytes[0]},
-            data_{bytes[1]},
-            channel_{}
+        explicit SmusTrackEventBase(const SmusTrackEventFilePod evt)
+          : decision_{evt.decision},
+            data_{evt.data}
         {
         }
         SmusTrackEventBase& operator=(SmusTrackEventBase&& ) = delete;
@@ -63,10 +62,13 @@ namespace smus
         void add_to_delay_accum(const textmidi::rational::RhythmRational& delay);
         textmidi::rational::RhythmRational delay_accum() const;
         void delay_accum(const textmidi::rational::RhythmRational& delay);
-        std::uint8_t current_dynamic() const;
-        void current_dynamic(std::uint8_t current_dynamic);
-        std::uint8_t channel() const;
-        void channel(std::uint8_t channel);
+        static int current_dynamic();
+        static void current_dynamic(int current_dynamic);
+        static bool i_am_lazy();
+        static void i_am_lazy(bool i_am_lazy);
+        static std::string i_am_lazy_string(bool i_am_lazy);
+        static int channel();
+        static void channel(int channel);
         std::string pre_rest();
         textmidi::rational::RhythmRational duration() const;
         static void flush();
@@ -75,10 +77,11 @@ namespace smus
         virtual ~SmusTrackEventBase() = default;
         static textmidi::rational::RhythmRational delay_accum_;
       private:
-        std::uint8_t decision_;
-        std::uint8_t data_;
-        static std::uint8_t current_dynamic_;
-        std::uint8_t channel_;
+        int decision_;
+        int data_;
+        static int current_dynamic_;
+        static bool i_am_lazy_;
+        static int channel_;
 
         bool is_dotted() const;
         textmidi::rational::RhythmRational dotted_multiplier() const;
@@ -89,8 +92,8 @@ namespace smus
     class SmusTrackEventPitch final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventPitch(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventPitch(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         SmusTrackEventPitch ()
@@ -100,58 +103,58 @@ namespace smus
         std::string textmidi() override;
         bool is_tiedout() const;
         bool is_chorded() const;
-        bool is_tied_back(std::uint8_t tp) const;
+        bool is_tied_back(int tp) const;
         void remove_from_tied();
         void add_to_tied();
         static void flush();
       private:
-        static std::vector<std::uint8_t> tied_vec_;
+        static std::vector<int> tied_vec_;
     };
 
-    // 128 rest
+    // Rest
     class SmusTrackEventRest final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventRest(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventRest(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 129
+    // InstrumentNumber
     class SmusTrackEventInstrument final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventInstrument(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventInstrument(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 130 Time Signature
+    // TimeSignature
     class SmusTrackEventTimeSignature final : public SmusTrackEventBase
     {
       private:
         std::pair<unsigned, unsigned> time_signature() const;
       public:
-        SmusTrackEventTimeSignature(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 131 key signature
+    // KeySignature
     class SmusTrackEventKeySignature final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventKeySignature(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventKeySignature(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
@@ -160,74 +163,74 @@ namespace smus
         std::string key() const;
     };
 
-    // 132 volume
+    // Volume
     class SmusTrackEventVolume final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventVolume(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventVolume(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 133 volume
+    // Channel
     class SmusTrackEventChannel final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventChannel(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventChannel(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 134 Preset
+    // Preset
     class SmusTrackEventPreset final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventPreset(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventPreset(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 135
+    // Clef
     class SmusTrackEventClef final : public SmusTrackEventBase
     {
       private:
-          static std::map<std::uint8_t, std::string> clef_map;
+          static std::map<int, std::string> clef_map;
       public:
-        SmusTrackEventClef(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventClef(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 136 tempo
+    // Tempo
     class SmusTrackEventTempo final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventTempo(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventTempo(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
         std::string textmidi() override;
     };
 
-    // 255 end of track
+    // EndOfTrack
     class SmusTrackEventEnd final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventEnd(const std::uint8_t* bytes)
-          : SmusTrackEventBase{bytes}
+        SmusTrackEventEnd(const SmusTrackEventFilePod evt)
+          : SmusTrackEventBase{evt}
         {
         }
         std::string textmidi_tempo() override;
@@ -240,7 +243,7 @@ namespace smus
         SmusTrackEventFactory()
         {
         }
-        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEventFilePod& te);
+        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEventFilePod& evt);
     };
 
 }

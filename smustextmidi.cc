@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.23\n";
+        cout << "TextMIDITools 1.0.24\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -278,6 +278,10 @@ int main(int argc, char *argv[])
 
     bool in_track{};
     uint32_t len{};
+    // SMUS puts Meta Events prior to tracks, but MIDI puts them
+    // inside tracks, so
+    // we save them up for being inside the first track of the MIDI file.
+    string meta_events_string;
     do
     {
         memcpy((char *) &ID_int, &smus_score[smus_index], sizeof ID_int);
@@ -286,36 +290,30 @@ int main(int argc, char *argv[])
         smus_index += sizeof len;
         len = htobe32(len);
 
-        if (compare_id(TrakId, ID_int))
-        {
-            in_track = true;
-            break;
-        }
-
         if (compare_id(NameId, ID_int))
         {
-            uint8_t score_name[1024];
+            char score_name[1024];
             memcpy((char *) score_name, &smus_score[smus_index], len);
             score_name[len] = '\0';
-            textmidi_file << "TRACK " << score_name << '\n';
+            ((meta_events_string += "TEXT NameId ") += score_name) += '\n';
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
         }
 
         if (compare_id(CopyId, ID_int))
         {
-            uint8_t copyright[1024];
+            char copyright[1024];
             memcpy((char *) copyright, &smus_score[smus_index], len);
             copyright[len] = '\0';
-            textmidi_file << "COPYRIGHT " << "\"" << copyright << "\"" << '\n';
+            ((meta_events_string += "COPYRIGHT ") += copyright) += '\n';
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
         }
 
         if (compare_id(AuthId, ID_int))
         {
-            uint8_t author[1024];
+            char author[1024];
             memcpy((char *) author, &smus_score[smus_index], len);
             author[len] = '\0';
-            textmidi_file << "TEXT " << "\"" << author << "\"" << '\n';
+            ((meta_events_string += "TEXT AUTHOR ") += author) += '\n';
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
         }
 
@@ -328,25 +326,29 @@ int main(int argc, char *argv[])
             sound_item.name[len - 4] = '\0'; // -4 because instruments are structs
             // skip past name length but land on 2-byte alignment
             smus_index += len + (len % 2);
-            textmidi_file << "INSTRUMENT " << sound_item.name << '\n';
+            ((meta_events_string += "INSTRUMENT ") += sound_item.name) += '\n';
             if (1 == sound_item.type)
             {
-                textmidi_file << "PROGRAM " << (sound_item.thing_a + 1)
-                    << ' ' << (sound_item.thing_b + 1) << '\n';
+                ((((meta_events_string += "PROGRAM ") += lexical_cast<string>(sound_item.thing_a + 1))
+                    += ' ') += lexical_cast<string>(sound_item.thing_b + 1)) += '\n';
             }
         }
         // Instrument index is the number of instruments now.
         // I hope all the instruments have been listed by now.
         //
-
+        if (compare_id(TrakId, ID_int))
+        {
+            in_track = true;
+            // len is the byte length of the track
+        }
     } while (!in_track);
 
     // DO THE TEMPO TRACK
     start_of_tracks_index = smus_index - 8;
 
     textmidi_file << "\nSTARTTRACK\n";
+    textmidi_file << meta_events_string;
     textmidi_file << "TRACK Tempo\n";
-    textmidi_file << "LAZY\n";
 
     notes_per_track = len / sizeof(SmusTrackEventFilePod);
 
@@ -363,14 +365,18 @@ int main(int argc, char *argv[])
     }
     if (SmusTrackEventBase::delay_accum_)
     {
+        textmidi_file << SmusTrackEventBase::i_am_lazy_string(true);
         textmidi_file << "R ";
         print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_) << '\n';
     }
     SmusTrackEventPitch::flush();
+    if ((notes_per_track > 0) && !dynamic_cast<SmusTrackEventEnd*>(track_events[notes_per_track - 1].get()))
+    {
+        textmidi_file << SmusTrackEventBase::i_am_lazy_string(false);
+        textmidi_file << "\nEND_OF_TRACK\n";
+    }
     for_each(track_events.begin(), track_events.end(), [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
     track_events.clear();
-    textmidi_file << "END_LAZY\n";
-    textmidi_file << "END_OF_TRACK\n";
     //
     // end of tempo track
     //
@@ -396,7 +402,6 @@ int main(int argc, char *argv[])
         string track_name{"Track "};
         track_name += lexical_cast<string>(track);
         textmidi_file << "TRACK " << track_name << '\n';
-        textmidi_file << "LAZY\n";
 
         notes_per_track = bytes_per_track / sizeof(SmusTrackEventFilePod);
 
@@ -407,21 +412,30 @@ int main(int argc, char *argv[])
         transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], track_events.begin(), track_event_factory);
         // At the beginning of a track
         // default to medium dynamic of 64 unless a Volume event sets it.
-        track_events[0]->current_dynamic(64);
+        SmusTrackEventBase::channel(0);
+        SmusTrackEventBase::current_dynamic(64);
         for (const auto& te : track_events)
         {
             textmidi_file << te->textmidi();
         }
         if (SmusTrackEventBase::delay_accum_)
         {
+            if (!SmusTrackEventBase::i_am_lazy())
+            {
+                textmidi_file << "LAZY\n";
+                SmusTrackEventBase::i_am_lazy(true);
+            }
             textmidi_file << "R ";
             print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_)  << '\n';
         }
         SmusTrackEventPitch::flush();
+        if ((notes_per_track > 0) && !dynamic_cast<SmusTrackEventEnd*>(track_events[notes_per_track - 1].get()))
+        {
+            textmidi_file << SmusTrackEventBase::i_am_lazy_string(false);
+            textmidi_file << "\nEND_OF_TRACK\n";
+        }
         for_each(track_events.begin(), track_events.end(), [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
         track_events.clear();
-        textmidi_file << "END_LAZY\n";
-        textmidi_file << "END_OF_TRACK\n";
     }
     textmidi_file.close();
     exit(EXIT_SUCCESS);

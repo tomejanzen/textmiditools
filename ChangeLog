@@ -1,5 +1,38 @@
-2022-03-06     Thomas E. Janzen <janzentome@gmail.com>
+2022-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc, MidiMessages.cc: pass a simple textmidi --lazy test
+        for overlapping notes.
+        * miditext.cc, textmidi.l, textmidi.cc, SmusTrackEvent.cc,
+        Composer.cc, smustextmidi.cc, MidiMessages.cc: Always write
+        the file format when writing textmidi text files.
+        make the program that write textmidi text files write
+        text that looks more alike.  Make smustextmidi put the
+        text meta events into the first MIDI (tempo) track.
+        Improve behavior of miditext --lazy overall and 
+        remove the block on the --lazy option.
 
+2022-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: extra delays are gone in miditext --lazy.
+
+2022-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: recovered basic function
+        of miditext --lazy.  Quantization probably does not work.
+
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: a little cleanup.
+        Only write a hard-coded END_OF_TRACK if there was no SMUS
+        EndOfTrack in the SMUS track (0xFF).  The end-of-track in
+        the SMUS track appears to be optional, since the chunk
+        length is given anyway.
+        Refactor the code to write "LAZY" or "END_LAZY" only when
+        needed (procedurize it better from earlier today).
+        
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: name constants.
+        Track state "LAZY" to avoid redundant END_LAZY/LAZY pairs.
+        Change type of SmusTrackEvent decision and data to int type
+        with static storage.
+
+2022-03-06     Thomas E. Janzen <janzentome@gmail.com>
         * Makefile.am: add rational_support to clean target.
         * SmusTrackEvent.cc smustextmidi.cc textmidi.l: remove unused and
         fix tie in/out mistake in smustextmidi that would add a pitch

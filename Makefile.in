@@ -120,7 +120,7 @@ am_textmidicgm_OBJECTS = textmidicgm.$(OBJEXT) cgmlegacy.$(OBJEXT) \
 	MIDIKeyString.$(OBJEXT) MusicalForm.$(OBJEXT) \
 	NoteEvent.$(OBJEXT) Track.$(OBJEXT) Voice.$(OBJEXT) \
 	GnuPlot.$(OBJEXT) Composer.$(OBJEXT) Scales.$(OBJEXT) \
-	GeneralMIDI.$(OBJEXT) RhythmRational.$(OBJEXT)
+	GeneralMIDI.$(OBJEXT) RhythmRational.$(OBJEXT) Midi.$(OBJEXT)
 textmidicgm_OBJECTS = $(am_textmidicgm_OBJECTS)
 textmidicgm_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -404,7 +404,7 @@ bin_PROGRAMS = textmidi$(EXEEXT) miditext$(EXEEXT) smustextmidi$(EXEEXT) textmid
 textmidi_SOURCES = main.cc textmidi.l Midi.cc MIDIKeyString.cc RhythmRational.cc
 miditext_SOURCES = miditext.cc MidiMessages.cc MIDIKeyString.cc RhythmRational.cc rational_support.cc
 smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc Midi.cc MidiMessages.cc MIDIKeyString.cc RhythmRational.cc rational_support.cc
-textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc RhythmRational.cc
+textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc RhythmRational.cc Midi.cc
 textmidi_LDADD = @LEXLIB@
 info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
 AM_LDFLAGS = -lboost_program_options -lboost_system -lboost_serialization 
@@ -1206,8 +1206,8 @@ SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h RhythmRational.h Midi.h rat
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 RhythmRational.o: RhythmRational.cc RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o 
-	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o $(AM_LDFLAGS) 
+textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o
+	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o $(AM_LDFLAGS) 
 textmidicgm.o: textmidicgm.cc MIDIKeyString.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Options.h Composer.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h

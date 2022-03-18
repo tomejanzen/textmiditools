@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -25,6 +25,7 @@
 #include <ostream>
 #include <utility>
 #include <vector>
+#include <list>
 
 #include <boost/lexical_cast.hpp>
 
@@ -57,8 +58,9 @@ namespace textmidi
             wholes_to_next_event_{}
         {
         }
+        MidiMessage(const MidiMessage& ) = default;
         MidiMessage&& move(MidiMessage&& ) = delete;
-        MidiMessage& operator=(MidiMessage&& ) = delete;
+        MidiMessage& operator=(MidiMessage&& ) = default;
         //
         // Inspect the bytes of MIDI binary stream and save
         // the data in the class.
@@ -69,21 +71,21 @@ namespace textmidi
         virtual ~MidiMessage() = default;
         //
         // Report the accumulated number of ticks so far in this track.
-        std::uint64_t ticks_accumulated() const;
-        void ticks_accumulated(std::uint64_t ticks_accumulated);
+        std::int64_t ticks_accumulated() const;
+        void ticks_accumulated(std::int64_t ticks_accumulated);
         // Report the number of ticks before the next event.
-        std::uint64_t ticks_to_next_event() const;
-        void ticks_to_next_event(std::uint64_t ticks_to_next_event);
+        std::int64_t ticks_to_next_event() const;
+        void ticks_to_next_event(std::int64_t ticks_to_next_event);
         // Report the number of ticks before the next note-on.
-        std::uint64_t ticks_to_next_note_on() const;
-        void ticks_to_next_note_on(std::uint64_t ticks_to_next_note_on);
+        std::int64_t ticks_to_next_note_on() const;
+        void ticks_to_next_note_on(std::int64_t ticks_to_next_note_on);
         // Report the number of whole notes before the next event.
         rational::RhythmRational wholes_to_next_event() const;
         void wholes_to_next_event(const rational::RhythmRational& wholes_to_next_event);
       private:
-        std::uint64_t ticks_accumulated_;
-        std::uint64_t ticks_to_next_event_;
-        std::uint64_t ticks_to_next_note_on_;
+        std::int64_t ticks_accumulated_;
+        std::int64_t ticks_to_next_event_;
+        std::int64_t ticks_to_next_note_on_;
         rational::RhythmRational wholes_to_next_event_;
     };
 
@@ -197,7 +199,7 @@ namespace textmidi
           : MidiChannelVoiceNoteMessage(status),
             wholes_to_noteoff_{}
         {
-            key_string("r");
+            key_string("R");
         }
         std::ostream& text(std::ostream& os) const;
         void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
@@ -226,8 +228,9 @@ namespace textmidi
     class MidiChannelVoiceNoteOnMessage final : public MidiChannelVoiceNoteMessage
     {
       public:
-        MidiChannelVoiceNoteOnMessage(std::uint8_t status)
+        MidiChannelVoiceNoteOnMessage(std::uint8_t status, std::uint32_t ticks_per_whole)
           : MidiChannelVoiceNoteMessage(status),
+            ticks_per_whole_{ticks_per_whole},
             ticks_to_noteoff_{},
             ticks_past_noteoff_{},
             wholes_to_noteoff_{},
@@ -243,7 +246,9 @@ namespace textmidi
         rational::RhythmRational wholes_to_noteoff() const;
         void wholes_past_noteoff(const rational::RhythmRational& wholes_past_noteoff);
         rational::RhythmRational wholes_past_noteoff() const;
+        std::uint32_t ticks_per_whole() const;
       private:
+        std::uint32_t ticks_per_whole_;
         std::int64_t ticks_to_noteoff_;
         std::int64_t ticks_past_noteoff_;
         rational::RhythmRational wholes_to_noteoff_;
@@ -753,10 +758,11 @@ namespace textmidi
     // The factory that creates the classes above.
     class MidiEventFactory
     {
-        public:
+      public:
         MidiDelayMessagePair operator()(MidiStreamIterator& midiiter);
         static std::int64_t ticks_accumulated_;
         static std::int8_t  running_status_;
+        static std::uint32_t ticks_per_whole_;
     };
 
     void ticks_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs);
@@ -775,14 +781,16 @@ namespace textmidi
     {
       public:
         PrintLazyEvent(bool lazy = false, std::uint8_t channel = 0)
-          : lazy_{lazy},
-            channel_{channel}
+          : channel_{channel},
+            tied_list_{}
         {}
-        void operator()(std::ostream& os, MidiMessage* mm);
+        void operator()(std::ostream& os, MidiDelayMessagePair& mdmp);
       private:
-        bool lazy_;
         std::uint8_t channel_;
         static int dynamic_;
+        static bool lazy_;
+        static std::string lazy_string(bool lazy);
+        std::list<MidiChannelVoiceNoteOnMessage> tied_list_;
     };
 
     //

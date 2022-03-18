@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // miditext 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.23\n";
+        cout << "TextMIDITools 1.0.24\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -138,8 +138,6 @@ int main(int argc, char *argv[])
     bool lazy{};
     if (var_map.count(LazyOpt)) [[unlikely]]
     {
-        cerr << "The implementation of --lazy is not finished\n";
-        exit(EXIT_SUCCESS);
         lazy = true;
     }
 
@@ -231,7 +229,7 @@ int main(int argc, char *argv[])
     const uint32_t ticksperwhole{ticksperquarter * 4};
 
     const auto ticksperquantum{quantum ? (quantum * RhythmRational{ticksperwhole}) : RhythmRational{1L}};
-    text_filestr << midi_header.ntrks_ << ' ' << midi_header.division_ << '\n';
+    text_filestr << midi_header.ntrks_ << ' ' << midi_header.division_ << ' ' << midi_header.format_ << '\n';
     if (verbose)
     {
         cout << "FORMAT: " << midi_header.format_ << '\n';
@@ -250,6 +248,7 @@ int main(int argc, char *argv[])
         // event loop
         {
             MidiEventFactory midi_event_factory;
+            MidiEventFactory::ticks_per_whole_ = ticksperwhole;
 
             MidiDelayMessagePairs message_pairs;
             MidiDelayMessagePair midi_delay_msg_pair;
@@ -272,7 +271,7 @@ int main(int argc, char *argv[])
                 PrintLazyEvent print_lazy_event{};
                 for (auto& mp : message_pairs)
                 {
-                    print_lazy_event(text_filestr, mp.second.get());
+                    print_lazy_event(text_filestr, mp);
                 }
             }
             else

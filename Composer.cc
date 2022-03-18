@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -602,7 +602,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     // The last integer on the line, is the ticks per quarter;
     // feel free to make it higher.
     textmidi_file << "FILEHEADER " << (xml_form.voices().size() + 1)
-                  << " " << TicksPerQuarter << "\n\n";
+                  << ' ' << TicksPerQuarter << MIDI_Format::MultiTrack << "\n\n";
 
     TicksDuration maxTime(total_duration);
     textmidi_file << "STARTTRACK\n"

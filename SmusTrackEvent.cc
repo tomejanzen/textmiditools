@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // smustextmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -52,22 +52,54 @@ void SmusTrackEventBase::delay_accum(const RhythmRational& delay)
     delay_accum_ = delay;
 }
 
-uint8_t SmusTrackEventBase::current_dynamic() const
+int SmusTrackEventBase::current_dynamic()
 {
     return current_dynamic_;
 }
 
-void SmusTrackEventBase::current_dynamic(uint8_t current_dynamic)
+void SmusTrackEventBase::current_dynamic(int current_dynamic)
 {
     current_dynamic_ = current_dynamic;
 }
 
-uint8_t SmusTrackEventBase::channel() const
+bool SmusTrackEventBase::i_am_lazy()
+{
+    return i_am_lazy_;
+}
+
+void SmusTrackEventBase::i_am_lazy(bool i_am_lazy)
+{
+    i_am_lazy_ = i_am_lazy;
+}
+
+string SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy)
+{
+    string str{};
+    if (i_am_lazy)
+    {
+        if (!i_am_lazy_)
+        {
+            i_am_lazy_ = i_am_lazy;
+            return string{"LAZY "};
+        }
+    }
+    else
+    {
+        if (i_am_lazy_)
+        {
+            i_am_lazy_ = i_am_lazy;
+            return string{"END_LAZY "};
+        }
+    }
+    return str;
+}
+
+int SmusTrackEventBase::channel()
 {
     return channel_;
 }
 
-void SmusTrackEventBase::channel(uint8_t channel)
+void SmusTrackEventBase::channel(int channel)
 {
     channel_ = channel;
 }
@@ -77,6 +109,7 @@ string SmusTrackEventBase::pre_rest()
     ostringstream oss{};
     if (delay_accum() > rational::RhythmRational{0L})
     {
+        oss << i_am_lazy_string(true);
         oss << "R ";
         print_rhythm(oss, delay_accum());
         delay_accum(RhythmRational{0});
@@ -156,9 +189,16 @@ string SmusTrackEventPitch::textmidi_tempo()
 string SmusTrackEventPitch::textmidi()
 {
     ostringstream oss{};
-    if (decision() < 128)
+    if (decision() < Rest)
     {
+        oss << i_am_lazy_string(true);
         oss << pre_rest();
+        if (SmusTrackEventBase::channel() == 0)
+        {
+            SmusTrackEventBase::channel(1);
+            oss << "chan " << SmusTrackEventBase::channel() << ' ';
+        }
+
         const auto tied_back{is_tied_back(decision())};
         if (tied_back)
         {
@@ -202,7 +242,7 @@ bool SmusTrackEventPitch::is_chorded() const
     return ((data() & (1 << 7)) != 0);
 }
 
-bool SmusTrackEventPitch::is_tied_back(uint8_t tp) const
+bool SmusTrackEventPitch::is_tied_back(int tp) const
 {
     bool rtn{};
     const auto tplocal{tp};
@@ -237,7 +277,8 @@ void SmusTrackEventPitch::flush()
     tied_vec_.clear();
 }
 
-std::vector<std::uint8_t> SmusTrackEventPitch::tied_vec_;
+std::vector<int> SmusTrackEventPitch::tied_vec_;
+int SmusTrackEventBase::channel_{0};
 
 string SmusTrackEventRest::textmidi()
 {
@@ -258,7 +299,7 @@ string SmusTrackEventInstrument::textmidi_tempo()
 string SmusTrackEventInstrument::textmidi()
 {
     return string{"; SMUS Instrument Number set to "}
-        + lexical_cast<string>(static_cast<int>(data())) + '\n';
+        + lexical_cast<string>(data()) + '\n';
 }
 
 pair<unsigned, unsigned> SmusTrackEventTimeSignature::time_signature() const
@@ -270,13 +311,14 @@ pair<unsigned, unsigned> SmusTrackEventTimeSignature::time_signature() const
 
 string SmusTrackEventTimeSignature::textmidi_tempo()
 {
-    string rtn{pre_rest()};
+    string str{pre_rest()};
     const auto time_sig{time_signature()};
-    ((((((rtn += "END_LAZY TIME_SIGNATURE ")
+    str += i_am_lazy_string(false);
+    ((((((str += "TIME_SIGNATURE ")
         += lexical_cast<string>(time_sig.first))  += ' ')
         += lexical_cast<string>(time_sig.second)) += ' ')
-        += "24 LAZY\n");
-    return rtn;
+        += "24\n");
+    return str;
 }
 
 string SmusTrackEventTimeSignature::textmidi()
@@ -292,8 +334,8 @@ string SmusTrackEventKeySignature::textmidi()
 string SmusTrackEventKeySignature::textmidi_tempo()
 {
     auto str{pre_rest()};
-    (((str += "END_LAZY KEY_SIGNATURE ") += key())
-        += " LAZY\n");
+    str += i_am_lazy_string(false);
+    (((str += "KEY_SIGNATURE ") += key()) += '\n');
     return str;
 }
 
@@ -360,7 +402,10 @@ string SmusTrackEventVolume::textmidi_tempo()
 
 string SmusTrackEventVolume::textmidi()
 {
-    string str{pre_rest()};
+    string str{};
+    str += i_am_lazy_string(true);
+    str += ' ';
+    str += pre_rest();
     if (current_dynamic() != data())
     {
        if (dynamics_reverse_map.contains(data()))
@@ -369,7 +414,7 @@ string SmusTrackEventVolume::textmidi()
        }
        else
        {
-           ((str += "vel ") += lexical_cast<string>(static_cast<int>(data()))) += '\n';
+           ((str += "vel ") += lexical_cast<string>(data())) += ' ';
        }
        current_dynamic(data());
     }
@@ -383,9 +428,12 @@ string SmusTrackEventChannel::textmidi_tempo()
 
 string SmusTrackEventChannel::textmidi()
 {
-    string str{pre_rest()};
+    string str{};
+    str += i_am_lazy_string(true);
+    str += ' ';
+    str += pre_rest();
     channel(data());
-    (((str += " chan ") += lexical_cast<string>(static_cast<int>(channel()))) += '\n');
+    (((str += " chan ") += lexical_cast<string>(channel())) += '\n');
     return str;
 }
 
@@ -397,11 +445,13 @@ string SmusTrackEventPreset::textmidi_tempo()
 string SmusTrackEventPreset::textmidi()
 {
     string str{pre_rest()};
-    (((((str += "END_LAZY PROGRAM ") += lexical_cast<string>(static_cast<int>(channel())))
-             += ' ') += lexical_cast<string>(static_cast<int>(data()))) += " LAZY\n");
+    str += i_am_lazy_string(false);
+    (((((str += "PROGRAM ") += lexical_cast<string>(channel()))
+             += ' ') += lexical_cast<string>(data())) += '\n');
     return str;
 }
 
+// MIDI has no clef.
 string SmusTrackEventClef::textmidi_tempo()
 {
     return string{};
@@ -410,11 +460,18 @@ string SmusTrackEventClef::textmidi_tempo()
 string SmusTrackEventClef::textmidi()
 {
     string str{"; SMUS Clef set to "};
-    (str += clef_map[data()]) += '\n';
+    if (clef_map.contains(data()))
+    {
+        (str += clef_map[data()]) += '\n';
+    }
+    else
+    {
+        (str += lexical_cast<string>(data())) += '\n';
+    }
     return str;
 }
 
-map<uint8_t, string> SmusTrackEventClef
+map<int, string> SmusTrackEventClef
     ::clef_map{{0, string{"Treble"}},
                {1, string{"Bass"}},
                {2, string{"Alto"}},
@@ -428,20 +485,24 @@ string SmusTrackEventTempo::textmidi()
 string SmusTrackEventTempo::textmidi_tempo()
 {
     auto str{pre_rest()};
-    (((str += "END_LAZY TEMPO ")
-        += lexical_cast<string>(static_cast<int>(data())))
-        += " LAZY\n");
+    str += i_am_lazy_string(false);
+    (((str += "TEMPO ")
+        += lexical_cast<string>(data())) += '\n');
     return str;
 }
 
 string SmusTrackEventEnd::textmidi_tempo()
 {
-    return pre_rest();
+    auto str{pre_rest()};
+    str += i_am_lazy_string(false);
+    str += '\n';
+    str += "END_OF_TRACK\n";
+    return str;
 }
 
 string SmusTrackEventEnd::textmidi()
 {
-    return textmidi_tempo();
+    return string("\n") + textmidi_tempo();
 }
 
 std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const SmusTrackEventFilePod& te)
@@ -449,41 +510,43 @@ std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const Smus
     unique_ptr<SmusTrackEventBase> teb{};
     switch (te.decision)
     {
-      case 128: // Rest
-        teb.reset(new SmusTrackEventRest{reinterpret_cast<const uint8_t*>(&te)});
+      case Rest:
+        teb.reset(new SmusTrackEventRest{te});
         break;
-      case 129: // Instrument Number
-        teb.reset(new SmusTrackEventInstrument{reinterpret_cast<const uint8_t*>(&te)});
+      case InstrumentNumber:
+        teb.reset(new SmusTrackEventInstrument{te});
         break;
-      case 130: // Time Signature
-        teb.reset(new SmusTrackEventTimeSignature{reinterpret_cast<const uint8_t*>(&te)});
+      case TimeSignature:
+        teb.reset(new SmusTrackEventTimeSignature{te});
         break;
-      case 131: // trackEventIt->data is key
-        teb.reset(new SmusTrackEventKeySignature{reinterpret_cast<const uint8_t*>(&te)});
+      case KeySignature: // trackEventIt->data is key
+        teb.reset(new SmusTrackEventKeySignature{te});
         break;
-      case 132: // Set Volume
-        teb.reset(new SmusTrackEventVolume{reinterpret_cast<const uint8_t*>(&te)});
+      case Volume: // Set Volume
+        teb.reset(new SmusTrackEventVolume{te});
         break;
-      case 133: // Set MIDI Channel
-        teb.reset(new SmusTrackEventChannel{reinterpret_cast<const uint8_t*>(&te)});
+      case Channel:
+        teb.reset(new SmusTrackEventChannel{te});
         break;
-      case 134: // MIDI preset
-        teb.reset(new SmusTrackEventPreset{reinterpret_cast<const uint8_t*>(&te)});
+      case Preset:
+        teb.reset(new SmusTrackEventPreset{te});
         break;
-      [[unlikely]] case 135: // clef
-        teb.reset(new SmusTrackEventClef{reinterpret_cast<const uint8_t*>(&te)});
+      [[unlikely]] case Clef:
+        teb.reset(new SmusTrackEventClef{te});
         break;
-      case 136: // Tempo
-        teb.reset(new SmusTrackEventTempo{reinterpret_cast<const uint8_t*>(&te)});
+      case Tempo:
+        teb.reset(new SmusTrackEventTempo{te});
         break;
-      case 255: // End of Track
-        teb.reset(new SmusTrackEventEnd{reinterpret_cast<const uint8_t*>(&te)});
+      case EndOfTrack:
+        teb.reset(new SmusTrackEventEnd{te});
         break;
       default: // these are pitches
-        teb.reset(new SmusTrackEventPitch{reinterpret_cast<const uint8_t*>(&te)});
+        teb.reset(new SmusTrackEventPitch{te});
         break;
     }
     return teb;
 }
 
-std::uint8_t smus::SmusTrackEventBase::current_dynamic_{64};
+int  smus::SmusTrackEventBase::current_dynamic_{64};
+bool smus::SmusTrackEventBase::i_am_lazy_{false};
+

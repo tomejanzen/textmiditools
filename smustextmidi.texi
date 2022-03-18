@@ -40,6 +40,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 @menu
 * Overview::
 * Invoking smustextmidi::
+* Possible Issues::
 * Installation::
 * GNU Free Documentation License::
 * Bibliography::
@@ -172,6 +173,23 @@ it to the text-based textmidi language.
 @smallexample
 @command{smustextmidi} --smus prelude.smus --textmidi prelude.txt
 @end smallexample
+
+@node Possible Issues
+@chapter Possible Issues
+@cindex possible issues
+There may be an issue with tied notes.  SMUS files set a tied-out bit in each
+note to mark it as tied out.  The @command{smustextmidi} program does
+not audit whether there is a following matched note that is tied to.  If a note
+has a tie-out flag set in the SMUS file, but no matching note to which to tie,
+then it may be set on and never given a corresponding NOTE_OFF, or it may
+be accidentally note-off'd later when the same pitch on the same channel
+is turned off.  To address this, one may remove the tie-out mark (a dash, as in
+@quotedblleft{}C4-@quotedblright{}, changed to @quotedblleft{}C4@quotedblright{}).
+This can happen in a score in which some notes in a chord are tied to the next
+chord; the scoring program may not be capable of tie-ing just particular pitches
+in a chord.
+This description is based partly a supposition because the issue has not been fully
+examined.
 
 @node Installation
 @chapter Installation

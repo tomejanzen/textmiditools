@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.23
+// TextMIDITools Version 1.0.24
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -86,38 +86,38 @@ int64_t textmidi::variable_len_value(MidiStreamIterator& midiiter)
 
 //
 // return the accumulated MIDI ticks.
-uint64_t textmidi::MidiMessage::ticks_accumulated() const
+int64_t textmidi::MidiMessage::ticks_accumulated() const
 {
     return ticks_accumulated_;
 }
 
 //
 // set the accumulated MIDI ticks.
-void textmidi::MidiMessage::ticks_accumulated(uint64_t ticks_accumulated)
+void textmidi::MidiMessage::ticks_accumulated(int64_t ticks_accumulated)
 {
     ticks_accumulated_ = ticks_accumulated;
 }
 
 //
 // return the MIDI ticks to the next event.
-uint64_t textmidi::MidiMessage::ticks_to_next_event() const
+int64_t textmidi::MidiMessage::ticks_to_next_event() const
 {
     return ticks_to_next_event_;
 }
 
 //
 // set the MIDI ticks to the next event.
-void textmidi::MidiMessage::ticks_to_next_event(uint64_t ticks_to_next_event)
+void textmidi::MidiMessage::ticks_to_next_event(int64_t ticks_to_next_event)
 {
     ticks_to_next_event_ = ticks_to_next_event;
 }
 
-uint64_t textmidi::MidiMessage::ticks_to_next_note_on() const
+int64_t textmidi::MidiMessage::ticks_to_next_note_on() const
 {
     return ticks_to_next_note_on_;
 }
 
-void textmidi::MidiMessage::ticks_to_next_note_on(uint64_t ticks_to_next_note_on)
+void textmidi::MidiMessage::ticks_to_next_note_on(int64_t ticks_to_next_note_on)
 {
     ticks_to_next_note_on_ = ticks_to_next_note_on;
 }
@@ -291,15 +291,14 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteMessage& ms
 
 ostream& textmidi::MidiChannelVoiceNoteRestMessage::text(ostream& os) const
 {
-    if (wholes_to_next_event())
+    if (ticks_to_next_event())
     {
-        os << "r ";
+        os << "R ";
     }
-    print_rhythm(os, wholes_to_next_event());
-    if (wholes_to_next_event())
-    {
-        os << ' ';
-    }
+    RhythmRational duration{ticks_to_next_event(), MidiEventFactory::ticks_per_whole_};
+    duration.reduce();
+    print_rhythm(os, duration);
+    os << " \n";
     return os;
 }
 
@@ -341,6 +340,11 @@ void textmidi::MidiChannelVoiceNoteOnMessage
 int64_t textmidi::MidiChannelVoiceNoteOnMessage::ticks_to_noteoff() const
 {
     return ticks_to_noteoff_;
+}
+
+uint32_t textmidi::MidiChannelVoiceNoteOnMessage::ticks_per_whole() const
+{
+    return ticks_per_whole_;
 }
 
 void textmidi::MidiChannelVoiceNoteOnMessage
@@ -662,7 +666,7 @@ void textmidi::MidiFileMetaStringEvent
 
 ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
 {
-    os << "\"" << str_ << "\"" ;
+    os << str_;
     return os;
 }
 
@@ -780,7 +784,7 @@ void textmidi::MidiFileMetaEndOfTrackEvent
 
 ostream& textmidi::MidiFileMetaEndOfTrackEvent::text(ostream& os) const
 {
-    os << "END_OF_TRACK";
+    os << "\nEND_OF_TRACK";
     return os;
 }
 
@@ -1084,7 +1088,7 @@ MidiDelayMessagePair textmidi::MidiEventFactory::operator()(MidiStreamIterator& 
             {
               [[likely]] case note_on:
                 midi_delay_message_pair.second
-                    = make_shared<MidiChannelVoiceNoteOnMessage>(status);
+                    = make_shared<MidiChannelVoiceNoteOnMessage>(status, ticks_per_whole_);
                 break;
               [[likely]] case note_off:
                 midi_delay_message_pair.second
@@ -1134,9 +1138,9 @@ MidiDelayMessagePair textmidi::MidiEventFactory::operator()(MidiStreamIterator& 
     return midi_delay_message_pair;
 }
 
-int64_t MidiEventFactory::ticks_accumulated_{};
-int8_t MidiEventFactory::running_status_{};
-
+int64_t  MidiEventFactory::ticks_accumulated_{};
+int8_t   MidiEventFactory::running_status_{};
+uint32_t MidiEventFactory::ticks_per_whole_{};
 
 void textmidi::ticks_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs)
 {
@@ -1237,7 +1241,7 @@ void textmidi::ticks_to_next_note_on(MidiDelayMessagePairs& midi_delay_message_p
                     (offiter->second.get())};
                 if (next_note_on && (next_note_on->velocity() != 0))
                 {
-                    if (*next_note_on == *note_on)
+                    if (!(*next_note_on == *note_on))
                     {
                         note_on->ticks_to_next_note_on(
                             next_note_on->ticks_accumulated()
@@ -1319,105 +1323,174 @@ void textmidi::value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs
         {
             RhythmRational ratio_to_note_off{static_cast<int64_t>
                 (rest->ticks_to_next_event()),
-                    ticksperquarter * QuartersPerWhole};
-            rest->wholes_to_noteoff(rational
-                    ::snap(ratio_to_note_off, quantum));
+                    MidiEventFactory::ticks_per_whole_};
+            ratio_to_note_off.reduce();
+            rest->wholes_to_noteoff(rational::snap(ratio_to_note_off, quantum));
         }
     }
 }
 
-void textmidi::PrintLazyEvent::operator()(ostream& os, MidiMessage* mm)
+void textmidi::PrintLazyEvent::operator()(ostream& os, MidiDelayMessagePair& mdmp)
 {
-    const auto* no{dynamic_cast<MidiChannelVoiceNoteOnMessage*>(mm)};
+    MidiMessage* mm{mdmp.second.get()};
+    auto* no{dynamic_cast<MidiChannelVoiceNoteOnMessage*>(mm)};
     if (no)
     {
-        if (!lazy_)
-        {
-            os << "LAZY ";
-            lazy_ = true;
-        }
-        if (no->channel() != channel_)
-        {
-            channel_ = no->channel();
-            os << "chan " << static_cast<int>(channel_) << '\n';
-        }
         if (no->velocity())
         {
             if (dynamic_ != no->velocity())
             {
+                os << lazy_string(true);
                 if (dynamics_reverse_map.contains(no->velocity()))
                 {
                     os << dynamics_reverse_map.at(no->velocity()) << '\n';
-                } 
+                }
                 else
                 {
                     os << "vel " << static_cast<int>(no->velocity()) << ' ';
                 }
                 dynamic_ = no->velocity();
             }
-        }
-        os << no->key_string() << ' ';
-        // this doesn't really allow for asynchronous notes on a line.
-        // Don't use --lazy for that kind of track.
-        if (no->wholes_to_noteoff())
-        {
-            print_rhythm(os, no->wholes_to_noteoff()) << '\n';
-            if (no->wholes_past_noteoff() > rational::RhythmRational{0L})
+            if (no->channel() != channel_)
             {
-                os << "R ";
-                print_rhythm(os, no->wholes_past_noteoff());
+                os << lazy_string(true);
+                channel_ = no->channel();
+                os << "chan " << static_cast<int>(channel_) << ' ';
+            }
+            // find out if there are notes that are tied in.
+
+            // There are tied-in notes.
+            // Find the soonest thing to happen.
+            //
+            // First write the notes that are tied into the present.
+            //
+            int64_t  min_ticks_to_noteoff{numeric_limits<int64_t>().max()};
+            int64_t  min_ticks_to_next_event{numeric_limits<int64_t>().max()};
+            min_ticks_to_noteoff
+                = std::min(no->ticks_to_noteoff(), min_ticks_to_noteoff);
+            min_ticks_to_next_event
+                = std::min(no->ticks_to_next_event(), min_ticks_to_next_event);
+            if (!tied_list_.empty())
+            {
+                for (auto& tiednote : tied_list_)
+                {
+                    if (tiednote.ticks_to_noteoff())
+                    {
+                        min_ticks_to_noteoff
+                            = std::min(tiednote.ticks_to_noteoff(), min_ticks_to_noteoff);
+                    }
+                    if (tiednote.ticks_to_next_event())
+                    {
+                        min_ticks_to_next_event
+                            = std::min(tiednote.ticks_to_next_event(), min_ticks_to_next_event);
+                    }
+                }
+                for (auto& tiednote : tied_list_)
+                {
+                    os << lazy_string(true);
+                    os << '-';
+                    os << tiednote.key_string();
+                    if (tiednote.ticks_to_noteoff() > min_ticks_to_next_event)
+                    {
+                        os << "- ";
+                    }
+                    else
+                    {
+                        remove_if(tied_list_.begin(), tied_list_.end(),
+                            [tiednote](const MidiChannelVoiceNoteOnMessage& mcvnom)
+                            { return tiednote.running_status() == mcvnom.running_status(); } );
+                        os << ' ';
+                    }
+                    tiednote.ticks_to_next_event(tiednote.ticks_to_next_event() - min_ticks_to_next_event);
+                    tiednote.ticks_to_noteoff(tiednote.ticks_to_noteoff()       - min_ticks_to_next_event);
+                }
+                remove_if(tied_list_.begin(), tied_list_.end(),
+                    [](MidiChannelVoiceNoteOnMessage mcvnom) { return 0L == mcvnom.ticks_to_noteoff(); });
+            }
+
+            os << no->key_string();
+            if ((min_ticks_to_next_event > 0) && (no->ticks_to_noteoff() > min_ticks_to_next_event))
+            {
+                os << "- ";
+            }
+            else
+            {
                 os << ' ';
             }
+            RhythmRational duration{min_ticks_to_next_event, no->ticks_per_whole()};
+            duration.reduce();
+            if (duration > RhythmRational{0L, 1L})
+            {
+                print_rhythm(os, duration);
+                os << ' ';
+            }
+            no->ticks_to_next_event(no->ticks_to_next_event() - min_ticks_to_next_event);
+            no->ticks_to_noteoff(no->ticks_to_noteoff()       - min_ticks_to_next_event);
+            if ((min_ticks_to_next_event > 0) &&(no->ticks_to_noteoff() > min_ticks_to_next_event))
+            {
+                tied_list_.push_back(*no);
+            }
+
         }
     }
-    else
+    else // not a note-on
     {
         const auto* noff{dynamic_cast<MidiChannelVoiceNoteOffMessage*>(mm)};
         if (!noff)
         {
             const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestMessage*>(mm)};
-            if (rest && rest->wholes_to_noteoff())
+            if (rest)
             {
-                if (!lazy_)
+                RhythmRational duration{rest->ticks_to_next_event(), MidiEventFactory::ticks_per_whole_};
+                duration.reduce();
+                if (duration > RhythmRational{0L, 1L})
                 {
-                    os << "LAZY ";
-                    lazy_ = true;
+                    os << lazy_string(true);
+                    os << rest->key_string() << ' ';
+                    print_rhythm(os, duration);
+                    os << '\n';
                 }
-                os << rest->key_string() << ' ';
-                print_rhythm(os, rest->wholes_to_noteoff()) << '\n';
             }
             else
             {
-                if (lazy_)
-                {
-                    os << "END_LAZY\n";
-                    lazy_ = false;
-                }
+                os << lazy_string(false);
                 os << *mm << '\n';
-                if (mm->wholes_to_next_event() > rational::RhythmRational{0L, 1L})
-                {
-                    if (!lazy_)
-                    {
-                        os << "LAZY R ";
-                    }
-                    print_rhythm(os, mm->wholes_to_next_event());
-                    if (!lazy_)
-                    {
-                        os << " END_LAZY\n";
-                    }
-                }
             }
         }
     }
 }
 
+string textmidi::PrintLazyEvent::lazy_string(bool lazy)
+{
+    string str{};
+    if (lazy)
+    {
+        if (!lazy_)
+        {
+            lazy_ = lazy;
+            return string{"LAZY "};
+        }
+    }
+    else
+    {
+        if (lazy_)
+        {
+            lazy_ = lazy;
+            return string{"END_LAZY "};
+        }
+    }
+    return str;
+
+}
+
 void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
 {
+    // building a new sequence of MidiDelayMessagePair to replace the old one.
     MidiDelayMessagePairs new_midi_delay_message_pairs;
 
+    // Create a separate bit keyboard for each channel.
     typedef std::bitset<MidiPitchQty> KeyBoard;
     typedef std::vector<KeyBoard> ChannelKeyBoards;
-
     ChannelKeyBoards channel_keyboards(MidiChannelQty);
 
     uint64_t rest_start_ticks_accumulated{};
@@ -1426,12 +1499,10 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
               delaymsgiter != midi_delay_message_pairs.end();
             ++delaymsgiter)
     {
-        new_midi_delay_message_pairs.push_back(*delaymsgiter);
         auto non{dynamic_cast<MidiChannelVoiceNoteOnMessage*>
             (delaymsgiter->second.get())};
         if (non)
         {
-            channel_keyboards[non->channel() - 1][non->key()] = true;
             if (inrest)
             {
                 const auto rest_ticks{
@@ -1441,15 +1512,19 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
                     auto rest{make_shared<MidiChannelVoiceNoteRestMessage>()};
                     rest->ticks_accumulated(rest_start_ticks_accumulated);
                     rest->ticks_to_next_event(rest_ticks);
-                    MidiDelayMessagePair rest_pair{0, rest};
-                    new_midi_delay_message_pairs.push_back(rest_pair);
+                    RhythmRational wholes{rest_ticks, MidiEventFactory::ticks_per_whole_};
+                    wholes.reduce();
+                    if (wholes > RhythmRational{0L, 1L})
+                    {
+                        rest->wholes_to_next_event(wholes);
+                        MidiDelayMessagePair rest_pair{0, rest};
+                        new_midi_delay_message_pairs.push_back(rest_pair);
+                    }
                 }
             }
-            inrest = true;
-            for (auto chkb : channel_keyboards)
-            {
-                inrest &= chkb.none();
-            }
+            channel_keyboards[non->channel() - 1][non->key()] = true;
+            inrest = false;
+            new_midi_delay_message_pairs.push_back(*delaymsgiter);
         }
         else
         {
@@ -1481,6 +1556,25 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
                             = noff->ticks_accumulated();
                     }
                 }
+                new_midi_delay_message_pairs.push_back(*delaymsgiter);
+            }
+            else
+            {
+                new_midi_delay_message_pairs.push_back(*delaymsgiter);
+                auto rest{make_shared<MidiChannelVoiceNoteRestMessage>()};
+                rest->ticks_accumulated(delaymsgiter->second.get()->ticks_accumulated());
+                delaymsgiter->second.get()->ticks_accumulated(0L);
+                rest->ticks_to_next_event(delaymsgiter->second.get()->ticks_to_next_event());
+                delaymsgiter->second.get()->ticks_to_next_event(0L);
+                rest->ticks_to_next_note_on(delaymsgiter->second.get()->ticks_to_next_note_on());
+                delaymsgiter->second.get()->ticks_to_next_note_on(0L);
+                if (rest->ticks_to_next_event() > 0)
+                {
+                    rest->wholes_to_next_event(RhythmRational{rest->ticks_to_next_event(), MidiEventFactory::ticks_per_whole_});
+                    MidiDelayMessagePair rest_pair{rest->ticks_accumulated(), rest};
+                    new_midi_delay_message_pairs.push_back(rest_pair);
+                }
+                inrest = false;
             }
         }
     }
@@ -1488,5 +1582,6 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
 }
 
 int textmidi::PrintLazyEvent::dynamic_{128};
+bool textmidi::PrintLazyEvent::lazy_{false};
 
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.24
+// TextMIDITools Version 1.0.25
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -302,14 +302,14 @@ ostream& textmidi::MidiChannelVoiceNoteRestMessage::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiChannelVoiceNoteRestMessage
+void textmidi::MidiChannelVoiceNoteMessage
     ::wholes_to_noteoff(const RhythmRational& wholes_to_noteoff)
 {
     wholes_to_noteoff_ = wholes_to_noteoff;
     wholes_to_noteoff_.reduce();
 }
 
-RhythmRational textmidi::MidiChannelVoiceNoteRestMessage::wholes_to_noteoff() const
+RhythmRational textmidi::MidiChannelVoiceNoteMessage::wholes_to_noteoff() const
 {
     return wholes_to_noteoff_;
 }
@@ -356,18 +356,6 @@ void textmidi::MidiChannelVoiceNoteOnMessage
 int64_t textmidi::MidiChannelVoiceNoteOnMessage::ticks_past_noteoff() const
 {
     return ticks_past_noteoff_;
-}
-
-void textmidi::MidiChannelVoiceNoteOnMessage
-    ::wholes_to_noteoff(const RhythmRational& wholes_to_noteoff)
-{
-    wholes_to_noteoff_ = wholes_to_noteoff;
-    wholes_to_noteoff_.reduce();
-}
-
-RhythmRational textmidi::MidiChannelVoiceNoteOnMessage::wholes_to_noteoff() const
-{
-    return wholes_to_noteoff_;
 }
 
 void textmidi::MidiChannelVoiceNoteOnMessage
@@ -1364,25 +1352,23 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiDelayMessagePair& mdm
             //
             // First write the notes that are tied into the present.
             //
-            int64_t  min_ticks_to_noteoff{numeric_limits<int64_t>().max()};
-            int64_t  min_ticks_to_next_event{numeric_limits<int64_t>().max()};
-            min_ticks_to_noteoff
-                = std::min(no->ticks_to_noteoff(), min_ticks_to_noteoff);
-            min_ticks_to_next_event
-                = std::min(no->ticks_to_next_event(), min_ticks_to_next_event);
+            auto min_wholes_to_noteoff{RhythmRational{1000000000L, 1L}};
+            auto min_wholes_to_next_event{RhythmRational{1000000000L, 1L}};
+            min_wholes_to_noteoff = std::min(no->wholes_to_noteoff(), min_wholes_to_noteoff);
+            min_wholes_to_next_event = std::min(no->wholes_to_next_event(), min_wholes_to_next_event);
             if (!tied_list_.empty())
             {
                 for (auto& tiednote : tied_list_)
                 {
-                    if (tiednote.ticks_to_noteoff())
+                    if (tiednote.wholes_to_noteoff())
                     {
-                        min_ticks_to_noteoff
-                            = std::min(tiednote.ticks_to_noteoff(), min_ticks_to_noteoff);
+                        min_wholes_to_noteoff
+                            = std::min(tiednote.wholes_to_noteoff(), min_wholes_to_noteoff);
                     }
-                    if (tiednote.ticks_to_next_event())
+                    if (tiednote.wholes_to_next_event())
                     {
-                        min_ticks_to_next_event
-                            = std::min(tiednote.ticks_to_next_event(), min_ticks_to_next_event);
+                        min_wholes_to_next_event
+                            = std::min(tiednote.wholes_to_next_event(), min_wholes_to_next_event);
                     }
                 }
                 for (auto& tiednote : tied_list_)
@@ -1390,7 +1376,7 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiDelayMessagePair& mdm
                     os << lazy_string(true);
                     os << '-';
                     os << tiednote.key_string();
-                    if (tiednote.ticks_to_noteoff() > min_ticks_to_next_event)
+                    if (tiednote.wholes_to_noteoff() > min_wholes_to_next_event)
                     {
                         os << "- ";
                     }
@@ -1401,15 +1387,20 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiDelayMessagePair& mdm
                             { return tiednote.running_status() == mcvnom.running_status(); } );
                         os << ' ';
                     }
-                    tiednote.ticks_to_next_event(tiednote.ticks_to_next_event() - min_ticks_to_next_event);
-                    tiednote.ticks_to_noteoff(tiednote.ticks_to_noteoff()       - min_ticks_to_next_event);
+                    tiednote.wholes_to_next_event(tiednote.wholes_to_next_event() - min_wholes_to_next_event);
+                    const auto temp{tiednote.wholes_to_next_event() * RhythmRational{MidiEventFactory::ticks_per_whole_, 1L}};
+                    tiednote.ticks_to_next_event(temp.numerator() / temp.denominator());
+
+                    tiednote.wholes_to_noteoff(tiednote.wholes_to_noteoff()       - min_wholes_to_next_event);
+                    const auto temp2{tiednote.wholes_to_noteoff() * RhythmRational{MidiEventFactory::ticks_per_whole_, 1L}};
+                    tiednote.ticks_to_noteoff(temp.numerator() / temp.denominator());
                 }
                 remove_if(tied_list_.begin(), tied_list_.end(),
-                    [](MidiChannelVoiceNoteOnMessage mcvnom) { return 0L == mcvnom.ticks_to_noteoff(); });
+                    [](MidiChannelVoiceNoteOnMessage mcvnom) { return RhythmRational{} == mcvnom.wholes_to_noteoff(); });
             }
 
             os << no->key_string();
-            if ((min_ticks_to_next_event > 0) && (no->ticks_to_noteoff() > min_ticks_to_next_event))
+            if ((min_wholes_to_next_event > RhythmRational{}) && (no->wholes_to_noteoff() > min_wholes_to_next_event))
             {
                 os << "- ";
             }
@@ -1417,16 +1408,15 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiDelayMessagePair& mdm
             {
                 os << ' ';
             }
-            RhythmRational duration{min_ticks_to_next_event, no->ticks_per_whole()};
-            duration.reduce();
-            if (duration > RhythmRational{0L, 1L})
+            RhythmRational duration{min_wholes_to_next_event};
+            if (duration > RhythmRational{})
             {
                 print_rhythm(os, duration);
                 os << ' ';
             }
-            no->ticks_to_next_event(no->ticks_to_next_event() - min_ticks_to_next_event);
-            no->ticks_to_noteoff(no->ticks_to_noteoff()       - min_ticks_to_next_event);
-            if ((min_ticks_to_next_event > 0) &&(no->ticks_to_noteoff() > min_ticks_to_next_event))
+            no->wholes_to_next_event(no->wholes_to_next_event() - min_wholes_to_next_event);
+            no->wholes_to_noteoff(no->wholes_to_noteoff()       - min_wholes_to_next_event);
+            if ((min_wholes_to_next_event > RhythmRational{}) &&(no->wholes_to_noteoff() > min_wholes_to_next_event))
             {
                 tied_list_.push_back(*no);
             }
@@ -1443,7 +1433,7 @@ void textmidi::PrintLazyEvent::operator()(ostream& os, MidiDelayMessagePair& mdm
             {
                 RhythmRational duration{rest->ticks_to_next_event(), MidiEventFactory::ticks_per_whole_};
                 duration.reduce();
-                if (duration > RhythmRational{0L, 1L})
+                if (duration > RhythmRational{})
                 {
                     os << lazy_string(true);
                     os << rest->key_string() << ' ';
@@ -1514,9 +1504,10 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
                     rest->ticks_to_next_event(rest_ticks);
                     RhythmRational wholes{rest_ticks, MidiEventFactory::ticks_per_whole_};
                     wholes.reduce();
-                    if (wholes > RhythmRational{0L, 1L})
+                    if (wholes > RhythmRational{})
                     {
                         rest->wholes_to_next_event(wholes);
+                        rest->wholes_to_noteoff(wholes);
                         MidiDelayMessagePair rest_pair{0, rest};
                         new_midi_delay_message_pairs.push_back(rest_pair);
                     }
@@ -1571,6 +1562,7 @@ void textmidi::insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs)
                 if (rest->ticks_to_next_event() > 0)
                 {
                     rest->wholes_to_next_event(RhythmRational{rest->ticks_to_next_event(), MidiEventFactory::ticks_per_whole_});
+                    rest->wholes_to_noteoff(rest->wholes_to_next_event());
                     MidiDelayMessagePair rest_pair{rest->ticks_accumulated(), rest};
                     new_midi_delay_message_pairs.push_back(rest_pair);
                 }

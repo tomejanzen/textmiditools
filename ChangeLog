@@ -1,3 +1,13 @@
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: fix quantize.
+        the lazy fix broke quantize by using tick counts after
+        quantiziation had been applied to RhythmRationals
+        e.g, wholes_to_next_event() and wholes_to_noteoff().
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: remove unused lazy parameter in c-tor
+        of PrintLazyEvent.
+
 2022-03-17     Thomas E. Janzen <janzentome@gmail.com>
         * miditext.cc, MidiMessages.cc: pass a simple textmidi --lazy test
         for overlapping notes.

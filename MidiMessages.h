@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.24
+// TextMIDITools Version 1.0.25
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -91,7 +91,7 @@ namespace textmidi
 
     std::ostream& operator<<(std::ostream& os, const MidiMessage& msg);
 
-    typedef std::pair<std::uint64_t, std::shared_ptr<MidiMessage> >
+    typedef std::pair<std::int64_t, std::shared_ptr<MidiMessage> >
         MidiDelayMessagePair;
     std::ostream& operator<<(std::ostream& os,
         const MidiDelayMessagePair& msg_pair);
@@ -167,7 +167,8 @@ namespace textmidi
           : MidiChannelVoiceMessage(status),
             key_{},
             velocity_{},
-            key_string_{}
+            key_string_{},
+            wholes_to_noteoff_{}
         {
         }
 
@@ -180,10 +181,13 @@ namespace textmidi
         void key_string(std::string_view key_string);
         std::ostream& text(std::ostream& os) const;
         bool operator==(const MidiChannelVoiceNoteMessage& note) const;
+        void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
+        rational::RhythmRational wholes_to_noteoff() const;
       private:
         std::uint8_t key_;
         std::uint8_t velocity_;
         std::string key_string_;
+        rational::RhythmRational wholes_to_noteoff_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -196,16 +200,11 @@ namespace textmidi
     {
       public:
         MidiChannelVoiceNoteRestMessage(std::uint8_t status = 0)
-          : MidiChannelVoiceNoteMessage(status),
-            wholes_to_noteoff_{}
+          : MidiChannelVoiceNoteMessage(status)
         {
             key_string("R");
         }
         std::ostream& text(std::ostream& os) const;
-        void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
-        rational::RhythmRational wholes_to_noteoff() const;
-      private:
-        rational::RhythmRational wholes_to_noteoff_;
     };
 
     //
@@ -233,7 +232,6 @@ namespace textmidi
             ticks_per_whole_{ticks_per_whole},
             ticks_to_noteoff_{},
             ticks_past_noteoff_{},
-            wholes_to_noteoff_{},
             wholes_past_noteoff_{}
         {
         }
@@ -242,8 +240,6 @@ namespace textmidi
         std::int64_t ticks_to_noteoff() const;
         void ticks_past_noteoff(std::int64_t ticks_past_noteoff);
         std::int64_t ticks_past_noteoff() const;
-        void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
-        rational::RhythmRational wholes_to_noteoff() const;
         void wholes_past_noteoff(const rational::RhythmRational& wholes_past_noteoff);
         rational::RhythmRational wholes_past_noteoff() const;
         std::uint32_t ticks_per_whole() const;
@@ -251,7 +247,6 @@ namespace textmidi
         std::uint32_t ticks_per_whole_;
         std::int64_t ticks_to_noteoff_;
         std::int64_t ticks_past_noteoff_;
-        rational::RhythmRational wholes_to_noteoff_;
         rational::RhythmRational wholes_past_noteoff_;
     };
 
@@ -780,7 +775,7 @@ namespace textmidi
     class PrintLazyEvent
     {
       public:
-        PrintLazyEvent(bool lazy = false, std::uint8_t channel = 0)
+        PrintLazyEvent(std::uint8_t channel = 0)
           : channel_{channel},
             tied_list_{}
         {}

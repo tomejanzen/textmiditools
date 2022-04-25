@@ -1,3 +1,32 @@
+2022-04-25     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext by fixing
+        insert_rests().  Passes prelude1_II.com and sacre tests.
+        * prelude1_II.com: add a test script. 
+
+2022-04-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext --lazy
+        to do round-trip test on prelude1_II.txt.
+        Seems to be alright except for detache lazy in 
+        musescore, but timidity plays it ok and a miditext on it
+        looks OK.
+
+2022-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: reconcile integer types and
+        insert end-of-lines after each note event.
+        Fix missing rests after note_on with velocity of 0.
+        Fix quantization of rests.
+        * MidiMessages.fig: mispelling
+
+2022-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.texi: correct spelling, add details
+        about the keyboard and about voice following.
+
+2022-03-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: refactor
+        preparing to print textmidi text in lazy mode
+        to encapsulate the preparation for lazy inside
+        PrintLazyEvent which got renamed PrintLazyTrack.
+
 2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
         * MidiMessages.{cc,h}, miditext.cc: fix quantize.
         the lazy fix broke quantize by using tick counts after

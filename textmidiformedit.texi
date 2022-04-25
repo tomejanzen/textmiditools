@@ -316,6 +316,10 @@ follower's pitch.
 @node Interval Type/Interval
 @section Interval Type/Interval
 @cindex Interval Type/Interval
+The follower's Interval Type defines whether the follower stays in the scale for the form, or
+if it follows on a chromatic interval.  If the interval type is scaler, then the interval is the
+number of steps up or down the scale that the follower appears.  If the interval type is chromatic,
+then the follower will be "Interval" number of chromatic steps away from the voice it is following.
 
 @node Form Plot Window
 @chapter Form Plot Window
@@ -346,6 +350,7 @@ user interface and the plot redrawn.
 The Save menu allows you to save an XML 
 form file.  All of the values of the form in the user interface of
 textmidiformedit.py will be written out to the file.
+The XML form file is readable by @command{textmidicgm} using the --xmlform option.
 
 @node Redraw
 @section Redraw
@@ -378,12 +383,16 @@ The Keyboard Window has a keyboard in which individual keys can be clicked, and 
 The keyboard presents 128 keys, all of the keys supported by MIDI (C-1 to G9).  Middle-C is outlined
 in a thicker line than other keys.  Any key can be clicked
 to toggle whether it is to be included in a scale.
-When a key is included in a scale it is drawn with a stipple in red (if a white key)
-or blue (if a black key).  Keys that are not in the scale
+When a key is included in a scale it is drawn with a stipple in blue (if a white key)
+or red (if a black key).  Keys that are not in the scale
 are white if they are white keys and black if they are black keys.
 The keyboard will reflect selection of scale made in the Musical Form window, and the scale
 in the keyboard window can be copied into the form by clicking on the "From Keyboard" button
-in the Musical Form window.
+in the Musical Form window.  The keyboard does not affect the scale in the Form until you click
+"From Keyboard".
+Clicking on a key toggles its inclusion in the scale.  If you click on a selected key,
+it is removed from the scale; if the key is not in the scale, then clicking on it 
+adds it to the scale.
 Any arbitrary combination of the 128 keys can be clicked to create a scale.
 To create a scale that repeats each octave, just click the unique keys for one octave, then hit the
 "Octave Repeat" push button.
@@ -401,7 +410,7 @@ Clear the scale.
 @node All
 @section All
 @cindex All
-Set all of the keys, thta is, the full chromatic MIDI scale.
+Set all of the keys, that is, the full chromatic MIDI scale.
 
 @node Complement
 @section Complement

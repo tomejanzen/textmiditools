@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.25
+// TextMIDITools Version 1.0.26
 //
 // miditext 1.0
 // Copyright © 2022 Thomas E. Janzen
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.25\n";
+        cout << "TextMIDITools 1.0.26\n";
         cout << "Copyright © 2022 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -261,17 +261,8 @@ int main(int argc, char *argv[])
                                 (midi_delay_msg_pair.second.get()));
             if (lazy)
             {
-                ticks_of_note_on(message_pairs);
-                ticks_to_next_event(message_pairs);
-                ticks_to_next_note_on(message_pairs);
-                insert_rests(message_pairs);
-                value_of_note_on(message_pairs, quantum, ticksperquarter);
-                value_to_next_event(message_pairs, quantum, ticksperquarter);
-                PrintLazyEvent print_lazy_event{};
-                for (auto& mp : message_pairs)
-                {
-                    print_lazy_event(text_filestr, mp);
-                }
+                PrintLazyTrack print_lazy_track{message_pairs, quantum, ticksperquarter};
+                text_filestr << print_lazy_track << '\n';
             }
             else
             {

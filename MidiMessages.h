@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.25
+// TextMIDITools Version 1.0.26
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -760,39 +760,51 @@ namespace textmidi
         static std::uint32_t ticks_per_whole_;
     };
 
-    void ticks_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs);
-    void ticks_to_next_note_on(MidiDelayMessagePairs&
-        midi_delay_message_pairs);
-    void ticks_to_next_event(MidiDelayMessagePairs&
-        midi_delay_message_pairs);
-
-    void value_to_next_event(MidiDelayMessagePairs&  midi_delay_message_pairs,
-            const rational::RhythmRational& quantum, std::uint32_t ticksperquarter);
-    void value_of_note_on(MidiDelayMessagePairs&  midi_delay_message_pairs,
-            const rational::RhythmRational& quantum, std::uint32_t ticksperquarter);
-
     // Print the text version of an event in LAZY mode.
-    class PrintLazyEvent
+    class PrintLazyTrack
     {
       public:
-        PrintLazyEvent(std::uint8_t channel = 0)
-          : channel_{channel},
-            tied_list_{}
-        {}
-        void operator()(std::ostream& os, MidiDelayMessagePair& mdmp);
+        PrintLazyTrack(
+            MidiDelayMessagePairs& midi_delay_message_pairs, 
+            const rational::RhythmRational quantum, 
+            std::uint32_t ticksperquarter)
+          : channel_{0},
+            tied_list_{},
+            midi_delay_message_pairs_{midi_delay_message_pairs},
+            quantum_{quantum}, 
+            ticksperquarter_{ticksperquarter}
+        {
+            ticks_of_note_on();
+            ticks_to_next_event();
+            ticks_to_next_note_on();
+            insert_rests();
+            wholes_of_note_on();
+            wholes_to_next_event();
+        }
       private:
+        void print(std::ostream& , MidiDelayMessagePair& );
+        void ticks_of_note_on();
+        void ticks_to_next_event();
+        void ticks_to_next_note_on();
+        //
+        // traverse the list of MIDI messages and insert rest events
+        // representing the delay after each event when there is no sounding note.
+        void insert_rests();
+        void wholes_of_note_on();
+        void wholes_to_next_event();
+
         std::uint8_t channel_;
         static int dynamic_;
         static bool lazy_;
         static std::string lazy_string(bool lazy);
         std::list<MidiChannelVoiceNoteOnMessage> tied_list_;
+        MidiDelayMessagePairs& midi_delay_message_pairs_;
+        rational::RhythmRational quantum_;
+        std::uint32_t ticksperquarter_;
+
+        friend std::ostream& operator<<(std::ostream&, PrintLazyTrack& );
     };
-
-    //
-    // traverse the list of MIDI messages and insert rest events
-    // representing the delay after each event when there is no sounding note.
-    void insert_rests(MidiDelayMessagePairs&  midi_delay_message_pairs);
-
+    std::ostream& operator<<(std::ostream& , PrintLazyTrack& );
 }
 
 #endif // MIDI_EVENTS

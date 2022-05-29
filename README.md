@@ -8,4 +8,4 @@ miditext: convert a standard musical MIDI file into its text representation;
 
 smustextmidi: convert a Simple Musical Score (SMUS) into a textmidi text representation of a standard MIDI file
 
-textmidicgm: computer-generated music using evenly-distributed random numbers controlled by sinusoidal waveforms that (usually slowly) change the character of the music.  For example results see the Computer Music at tomejanzenfoto.com.
+textmidicgm: computer-generated music using evenly-distributed random numbers controlled by sinusoidal waveforms that (usually slowly) change the character of the music.

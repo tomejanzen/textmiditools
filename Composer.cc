@@ -1,11 +1,13 @@
 //
-// TextMIDITools Version 1.0.26
+// TextMIDITools Version 1.0.27
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
+// Sun 25 Dec 2022 01:47:08 AM EST add space between TicksPerQuarter and tracks type
+
 #if HAVE_CONFIG_H
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
@@ -602,7 +604,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     // The last integer on the line, is the ticks per quarter;
     // feel free to make it higher.
     textmidi_file << "FILEHEADER " << (xml_form.voices().size() + 1)
-                  << ' ' << TicksPerQuarter << MIDI_Format::MultiTrack << "\n\n";
+                  << ' ' << TicksPerQuarter << ' ' << MIDI_Format::MultiTrack << "\n\n";
 
     TicksDuration maxTime(total_duration);
     textmidi_file << "STARTTRACK\n"

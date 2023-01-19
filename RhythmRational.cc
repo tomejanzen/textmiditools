@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.27
+// TextMIDITools Version 1.0.28
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -14,6 +14,7 @@
 #include <type_traits> // swap()
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 
 #include "RhythmRational.h"
@@ -239,18 +240,20 @@ textmidi::rational::RhythmRational textmidi::rational::abs(RhythmRational val)
 
 std::ostream& textmidi::rational::operator<<(std::ostream& os, RhythmRational tr)
 {
+    auto flags{os.flags()};
     tr.reduce();
     // This looks backwards but textmidi has a convention that 1/4 can be written as 4,
     // but 4/1 has to be written as 4/1.  This is because it's faster to type in scores
     // in which 1/4 notes and 1/16 notes are far more common than 4/1 notes.
     if (1L == tr.denominator())
     {
-        os << tr.numerator();
+        os << dec << tr.numerator();
     }
     else
     {
-        os << tr.numerator() << '/' << tr.denominator();
+        os << dec << tr.numerator() << '/' << dec << tr.denominator();
     }
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -274,6 +277,7 @@ void textmidi::rational::RhythmRational::make_denominators_coherent(RhythmRation
 //
 ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
 {
+    auto flags{os.flags()};
     // textmidi has a convention for quickness of typing that
     // a 1/4 note is written 4, or 1/4, or 2/8 etc.
     if ((tr.denominator() == 1L) && (tr.numerator() != 1L))
@@ -285,12 +289,12 @@ ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
         switch (tr.numerator())
         {
           case 1L:
-            os << tr.denominator() << ' ';
+            os << dec << tr.denominator() << ' ';
             break;
           case 3L: // single dot possible
             if ((tr.denominator() % 2L) == 0L)
             {
-                os << (tr.denominator() / 2L) << ".";
+                os << dec << (tr.denominator() / 2L) << ".";
             }
             else
             {
@@ -300,7 +304,7 @@ ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
           case 7L: // double dot possible
             if ((tr.denominator() % 4L) == 0L)
             {
-                os << (tr.denominator() / 4L) << "..";
+                os << dec << (tr.denominator() / 4L) << "..";
             }
             else
             {
@@ -312,6 +316,7 @@ ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
           break;
         }
     }
+    auto oldflags{os.flags(flags)};
     return os;
 }
 

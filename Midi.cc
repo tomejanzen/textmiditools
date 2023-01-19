@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.27
+// TextMIDITools Version 1.0.28
 //
 // Copyright © 2022 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -39,7 +39,7 @@ textmidi::MidiHeader::swap()
 std::ostream&
 textmidi::operator<<(std::ostream& os, textmidi::MIDI_Format mf)
 {
-
+    auto flags{os.flags()};
     textmidi::MIDI_Format mfcopy{mf};
     auto it{find_if(format_map.begin(), format_map.end(),
         [mfcopy](const FormatMap::value_type& sm)
@@ -52,14 +52,18 @@ textmidi::operator<<(std::ostream& os, textmidi::MIDI_Format mf)
     {
         os << "UNKNOWN FORMAT";
     }
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
 std::ostream&
 textmidi::operator<<(std::ostream& os, const MidiHeader& mh)
 {
-    return os << mh.chunk_name_[0] << mh.chunk_name_[1] << mh.chunk_name_[2]
+    auto flags{os.flags()};
+    os << mh.chunk_name_[0] << mh.chunk_name_[1] << mh.chunk_name_[2]
         << mh.chunk_name_[3] << ' ' << mh.chunk_len_ << ' ' << mh.format_
         << ' ' << mh.ntrks_ << ' ' << mh.division_;
+    auto oldflags{os.flags(flags)};
+    return os;
 }
 

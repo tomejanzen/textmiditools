@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.27
+// TextMIDITools Version 1.0.28
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -166,6 +166,7 @@ void textmidi::MidiSysExEvent
 // Write the text version of the event to os.
 ostream& textmidi::MidiSysExEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << '\n' << hex << "SYSEX";
     for (auto sys_ex_it(sys_ex_vec_.begin());
             (sys_ex_it != sys_ex_vec_.end()) && (*sys_ex_it != end_of_sysex);
@@ -174,7 +175,7 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
         os << ' ' << hex << "0x" << setw(2) << setfill('0')
            << static_cast<unsigned>(*sys_ex_it);
     }
-    os << dec;
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -191,6 +192,7 @@ void textmidi::MidiSysExRawEvent
 
 ostream& textmidi::MidiSysExRawEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << '\n' << hex << "SYSEXRAW";
     for (auto sys_ex_it(sys_ex_vec_.begin());
             (sys_ex_it != sys_ex_vec_.end()) && (*sys_ex_it != end_of_sysex);
@@ -199,7 +201,7 @@ ostream& textmidi::MidiSysExRawEvent::text(ostream& os) const
         os << ' ' << hex << "0x"
            << setw(2) << setfill('0') << static_cast<unsigned>(*sys_ex_it);
     }
-    os << dec;
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -273,8 +275,11 @@ void textmidi::MidiChannelVoiceNoteMessage::key_string(string_view key_string)
 
 ostream& textmidi::MidiChannelVoiceNoteMessage::text(ostream& os) const
 {
-    return os << dec << static_cast<unsigned>(channel()) << ' '
-              << key_string() << ' ' << static_cast<unsigned>(velocity());
+    auto flags{os.flags()};
+    os << dec << static_cast<unsigned>(channel()) << ' '
+       << key_string() << ' ' << static_cast<unsigned>(velocity());
+    auto oldflags{os.flags(flags)};
+    return os;
 }
 
 bool textmidi::MidiChannelVoiceNoteMessage
@@ -290,6 +295,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteMessage& ms
 
 ostream& textmidi::MidiChannelVoiceNoteRestMessage::text(ostream& os) const
 {
+    auto flags{os.flags()};
     if (ticks_to_next_event())
     {
         os << "R ";
@@ -298,6 +304,7 @@ ostream& textmidi::MidiChannelVoiceNoteRestMessage::text(ostream& os) const
     duration.reduce();
     print_rhythm(os, duration);
     os << '\n';
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -396,6 +403,7 @@ void textmidi::MidiChannelVoiceControlChangeMessage
 
 ostream& textmidi::MidiChannelVoiceControlChangeMessage::text(ostream& os) const
 {
+    auto flags{os.flags()};
     if (control_pan == id_)
     {
         int32_t tempvalue{value_};
@@ -425,6 +433,7 @@ ostream& textmidi::MidiChannelVoiceControlChangeMessage::text(ostream& os) const
             << ' ' << static_cast<unsigned>(id_)
             << ' ' << static_cast<unsigned>(value_);
     }
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -462,8 +471,10 @@ void textmidi::MidiChannelVoiceProgramChangeMessage
 
 ostream& textmidi::MidiChannelVoiceProgramChangeMessage::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "PROGRAM " << dec << static_cast<int>(channel()) << ' '
        << (static_cast<int>(program_) + 1);
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -491,9 +502,11 @@ void textmidi::MidiChannelVoiceChannelPressureMessage
 
 ostream& textmidi::MidiChannelVoiceChannelPressureMessage::text(ostream& os) const
 {
-    return os;
+    auto flags{os.flags()};
     os << "CHANNEL_PRESSURE " << dec << static_cast<int>(channel())
        << ' ' << static_cast<int>(pressure_);
+    auto oldflags{os.flags(flags)};
+    return os;
 }
 
 uint8_t textmidi::MidiChannelVoiceChannelPressureMessage::pressure() const
@@ -522,8 +535,11 @@ void textmidi::MidiChannelVoicePitchBendMessage
 
 ostream& textmidi::MidiChannelVoicePitchBendMessage::text(ostream& os) const
 {
-    return os << "PITCH_WHEEL " << dec << static_cast<int>(channel())
-              << ' ' << static_cast<int>(pitch_wheel_);
+    auto flags{os.flags()};
+    os << "PITCH_WHEEL " << dec << static_cast<int>(channel())
+       << ' ' << static_cast<int>(pitch_wheel_);
+    auto oldflags{os.flags(flags)};
+    return os;
 }
 
 uint8_t textmidi::MidiChannelVoicePitchBendMessage::pitch_wheel() const
@@ -548,8 +564,10 @@ void textmidi::MidiChannelModeOmniPolyMessage
 
 ostream& textmidi::MidiChannelModeOmniPolyMessage::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "CHANNEL_MODE " << static_cast<int>(channel())
        << ' ' << static_cast<int>(mode_);
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -611,7 +629,9 @@ void textmidi::MidiFileMetaSequenceEvent
 
 ostream& textmidi::MidiFileMetaSequenceEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "SEQUENCE " << sequence_number_;
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -634,7 +654,9 @@ void textmidi::MidiFileMetaUnknown1Event
 
 ostream& textmidi::MidiFileMetaUnknown1Event::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "UNKNOWN META 0x11";
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -744,7 +766,9 @@ void textmidi::MidiFileMetaMidiChannelEvent
 
 ostream& textmidi::MidiFileMetaMidiChannelEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "MIDI_CHANNEL " << channel_;
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -793,14 +817,16 @@ void textmidi::MidiFileMetaSetTempoEvent
 
 ostream& textmidi::MidiFileMetaSetTempoEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     if (0 == tempo_)
     {
         os << "TEMPO 0";
     }
     else
     {
-        os << "TEMPO " << ((60 * 1000000) / tempo_);
+        os << "TEMPO " << dec << ((60 * 1000000) / tempo_);
     }
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -832,8 +858,10 @@ void textmidi::MidiFileMetaSMPTEOffsetEvent
 
 ostream& textmidi::MidiFileMetaSMPTEOffsetEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "SMPTE_OFFSET " << hours_ << ':' << minutes_
        << ':' << seconds_ << ':' << fr_ << ':' << ff_;
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -852,7 +880,9 @@ void textmidi::MidiFileMetaMidiPortEvent
 
 ostream& textmidi::MidiFileMetaMidiPortEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "MIDI_PORT " << midiport_;
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -873,10 +903,12 @@ void textmidi::MidiFileMetaTimeSignatureEvent
 
 ostream& textmidi::MidiFileMetaTimeSignatureEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "TIME_SIGNATURE " << numerator_ << ' '
        << (1 << denominator_)
        << ' ' << clocks_per_click_;
     // no one knows what thirtyseconds_per_quarter_ is for, so hide it.
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -895,9 +927,11 @@ void textmidi::MidiFileMetaKeySignatureEvent
 
 ostream& textmidi::MidiFileMetaKeySignatureEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     // -1 is one flat, 1, is one sharp, 0 is C or a.
     os << "KEY_SIGNATURE "
        << key_signature_map[KeySignatureMap::key_type{accidentals_, minor_mode_}];
+    auto oldflags{os.flags(flags)};
     return os;
 }
 
@@ -930,6 +964,7 @@ void textmidi::MidiFileMetaSequenceSpecificEvent
 
 ostream& textmidi::MidiFileMetaSequenceSpecificEvent::text(ostream& os) const
 {
+    auto flags{os.flags()};
     os << "SEQUENCE_SPECIFIC " << manufacturer_ << ' ' << '{';
     for (unsigned l{0}; l < len_; ++l)
     {
@@ -947,6 +982,7 @@ ostream& textmidi::MidiFileMetaSequenceSpecificEvent::text(ostream& os) const
         }
     }
     os << '}' << dec << '\n';
+    auto oldflags{os.flags(flags)};
     return os;
 }
 

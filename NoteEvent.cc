@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.27
+// TextMIDITools Version 1.0.28
 //
 // textmidi 1.0.6
 // Copyright © 2022 Thomas E. Janzen
@@ -21,6 +21,7 @@ using namespace textmidi::cgm;
 // Write a note event as a textmidi text event.
 std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
 {
+    auto flags{os.flags()};
     if (RestPitch == ne.pitch())
     {
         os << "R ";
@@ -31,6 +32,7 @@ std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
         os << note_name << ' ';
     }
     textmidi::rational::print_rhythm(os, ne.musical_rhythm());
+    auto oldflags{os.flags(flags)};
     return os;
 }
 

@@ -1,3 +1,31 @@
+2023-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.{h,cc}, textmidi.l:  Straighten out
+        SEQUENCER_SPECIFIC; fix spelling; adjust for 2- and
+        3- byte channel voice commands in "recognize()";
+        use classical archive MIDI files to test round-trip
+        conversion: MIDI->text->MIDI->text.
+        Text events in textmidi support escapes for
+        double-quotes, carriage-returns, line-feeds, tabs,
+        vertical tabs, bells, formfeed, and backspace.
+        MidiMessages.cc: Fix a bug that prevented channel 16
+        from being used.  Make TEMPO command take a simple floating-
+        point number.  Include SEQUENCE_NUMBER number event.
+        Fix POLYPRESSURE print error.
+        * all.cc: stream output now saves and restores formatting flags.
+        * textmidi.l: Fix pitch bend values to shift by 7 bits and not 8.
+        Fix int_to_vec().
+        * RhythmRational.{cc,h}: improve robustness of input operator.
+
+2023-01-18     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Fixed defect in stream output
+        for CHANNEL_POLYPRESSURE.
+        * MidiMessages.cc, Midi.cc, NoteEvent.cc, RhythmRational.cc:
+        Stream output now saves/restores stream format flags.
+        * texinfo.tex, compile, depcomp, missing, ylwrap: 
+        Added some missing files to make a build more convenient.
+
+2023-01-04     Thomas E. Janzen <janzentome@gmail.com>
+
 2022-04-25     Thomas E. Janzen <janzentome@gmail.com>
         * MidiMessages.cc:  Try to fix miditext by fixing
         insert_rests().  Passes prelude1_II.com and sacre tests.
@@ -144,9 +172,9 @@
 2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
         * TextmidiRational.{h,cc}: rename as RhythmRational.{h,cc}
         * Composer.cc, MidiMessages.cc, MidiMessages.h,
-	NoteEvent.cc, NoteEvent.h, SmusTrackEvent.cc,
-	SmusTrackEvent.h, Track.h, buildkit.bash, miditext.cc,
-	rational_support.cc, rational_support.h, smustextmidi.cc:
+        NoteEvent.cc, NoteEvent.h, SmusTrackEvent.cc,
+        SmusTrackEvent.h, Track.h, buildkit.bash, miditext.cc,
+        rational_support.cc, rational_support.h, smustextmidi.cc:
         find all rhythm printing and make them use print_rhythm().
 
 2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
@@ -275,14 +303,14 @@
 
 2021-09-03    Thomas E. Janzen <janzentome@gmail.com>
 
-	* MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
+        * MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
         with the same channel won't set different programs.  This creates functions
         or single-valued relations: track->channel; channel->program.  These are
         in addition to the function channel->pan.
 
 2021-09-02    Thomas E. Janzen <janzentome@gmail.com>
 
-	* MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
+        * MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
         Add comments describing Melody Probabilities as cumulative.  Increase the 
         possible number of voices in a random form to 24.
         * textmidicgm.texi:  Correct description of melody probabilities and update
@@ -290,7 +318,7 @@
 
 2021-09-01    Thomas E. Janzen <janzentome@gmail.com>
 
-	* Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
+        * Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
         to spread for near the left to near the right.  The symptom was that
         idiophone-only random forms were bunching up the instruments way over 
         on the right.  Now a single channel score should put them in the center
@@ -299,102 +327,102 @@
 
 2021-08-31    Thomas E. Janzen <janzentome@gmail.com>
 
-	* Composer.cc: Remove the kluge that put a quiet note at the beginning of the
-	tempo track to force generation of silent starts of tracks by TiMidity++.
-	Loop time by using musical ratios instead of chrono time.  This results in
-	more accurate alignment at the end, but the individual tracks can still
-	be a measure longer than requested because they don't exceed the maximum
-	time until they have generated the last note.
+        * Composer.cc: Remove the kluge that put a quiet note at the beginning of the
+        tempo track to force generation of silent starts of tracks by TiMidity++.
+        Loop time by using musical ratios instead of chrono time.  This results in
+        more accurate alignment at the end, but the individual tracks can still
+        be a measure longer than requested because they don't exceed the maximum
+        time until they have generated the last note.
 
 2021-08-30    Thomas E. Janzen <janzentome@gmail.com>
 
-	* textmidi.l: fix accumulated time defect so that tracks that should be
-	the same length in ticks are or at least only a tick off at the end.
-	This can make very fast tracks a very different length, and was noticed
-	with fast tracks written by textmidicgm.  This was an accumulating
-	floating-point addition error, esp. wrt conversion to int types.
-	* Composer.cc: Removed the forced percussion event (a kluge for
-	separate track recording) part of the music time, so that it is not
-	extra time.
-	Trying to rationalize rhythm due to short tracks from textmidicgm.
-	* NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
+        * textmidi.l: fix accumulated time defect so that tracks that should be
+        the same length in ticks are or at least only a tick off at the end.
+        This can make very fast tracks a very different length, and was noticed
+        with fast tracks written by textmidicgm.  This was an accumulating
+        floating-point addition error, esp. wrt conversion to int types.
+        * Composer.cc: Removed the forced percussion event (a kluge for
+        separate track recording) part of the music time, so that it is not
+        extra time.
+        Trying to rationalize rhythm due to short tracks from textmidicgm.
+        * NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
 
 2021-08-29    Thomas E. Janzen <janzentome@gmail.com>
 
-	* main.cc: remove old block that checks if you would overwrite a file
-	but leave check if --answer is set.
+        * main.cc: remove old block that checks if you would overwrite a file
+        but leave check if --answer is set.
 
 2021-08-26    Thomas E. Janzen <janzentome@gmail.com>
 
-	* MusicalForm.cc: After a random form is created,
-	remove scale notes that are too high or low for any or the
-	General MIDI patches selected in random().  This avoids lots of repeated very 
-	high or low notes when the pitch curve is beyond any instrument's range
-	and the end of the scale.  This could still happen with small-range instruments.
-	* textmidiform.py: add to tree.  Has a file widget, reads in the XML form file
-	and draws the graph of the form.
-	* MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
+        * MusicalForm.cc: After a random form is created,
+        remove scale notes that are too high or low for any or the
+        General MIDI patches selected in random().  This avoids lots of repeated very 
+        high or low notes when the pitch curve is beyond any instrument's range
+        and the end of the scale.  This could still happen with small-range instruments.
+        * textmidiform.py: add to tree.  Has a file widget, reads in the XML form file
+        and draws the graph of the form.
+        * MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
 
 2021-08-23    Thomas E. Janzen <janzentome@gmail.com>
 
-	* textmidicgm.texi: correct description of random selection of channel to
-	coerce channel 10 for idiophones.
+        * textmidicgm.texi: correct description of random selection of channel to
+        coerce channel 10 for idiophones.
 
 2021-08-18    Thomas E. Janzen <janzentome@gmail.com>
 
-	* textmidicgm.cc: handle boost xml serialization exceptions.
+        * textmidicgm.cc: handle boost xml serialization exceptions.
 
 2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
 
-	* Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
-	to return it to its previous meaning of if (0 == pulse_per_rhythm)
-	but not activating a bug.
+        * Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
+        to return it to its previous meaning of if (0 == pulse_per_rhythm)
+        but not activating a bug.
 
 2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
 
-	* Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
-	as a work-around for a crash due to a possible bug in boost::rational.
+        * Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
+        as a work-around for a crash due to a possible bug in boost::rational.
 
 2021-08-12    Thomas E. Janzen <janzentome@gmail.com>
 
-	* textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
-	* miditext: Rewrite/rename from mididisasm.
-	* smustextmidi: Rewrite of SMUSMIDI to output textmidi text.
-	* textmidicgm: Rewrite from AlgoRhythms without a GUI; to produce textmidi text files; use C++20.
-	Change output format to textmidi text output, which can be
-	converted into MIDI Standard MIDI Files by textmidi.
+        * textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
+        * miditext: Rewrite/rename from mididisasm.
+        * smustextmidi: Rewrite of SMUSMIDI to output textmidi text.
+        * textmidicgm: Rewrite from AlgoRhythms without a GUI; to produce textmidi text files; use C++20.
+        Change output format to textmidi text output, which can be
+        converted into MIDI Standard MIDI Files by textmidi.
 
 2003    Thomas E. Janzen <janzentome@gmail.com>
 
-	* smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
-	Remove extra NULL text events; fix key signatures.
+        * smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
+        Remove extra NULL text events; fix key signatures.
 
 2002-12-29 Thomas E. Janzen <janzentome@gmail.com>
 
-	* textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
-	which was published on the Classical MIDI Archive.
-	* mididisasm: First private version.
+        * textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
+        which was published on the Classical MIDI Archive.
+        * mididisasm: First private version.
 
 1999-09-18 Thomas E. Janzen <janzentome@gmail.com>
 
-	* textmidi:  Initial private version.
+        * textmidi:  Initial private version.
 
 1994-- Thomas E. Janzen <janzentome@gmail.com>
 
-	* AlgoRhythms: Version 3.0 for Commodore Amiga computers.
+        * AlgoRhythms: Version 3.0 for Commodore Amiga computers.
 
 1992-- Thomas E. Janzen <janzentome@gmail.com>
 
-	* AlgoRhythms: Version 2.0, now textmidicgm.
-	On Fred Fish Disk 606 for Commodore Amiga computers.
+        * AlgoRhythms: Version 2.0, now textmidicgm.
+        On Fred Fish Disk 606 for Commodore Amiga computers.
 
 1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com>
 
-	* SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
-	Commodore Amiga.
+        * SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
+        Commodore Amiga.
 
 1990-- Thomas E. Janzen <janzentome@gmail.com>
 
-	* AlgoRhythms: Initial revision 1.0
-	on Fred Fish Disk 356 for Commodore Amiga computers.
+        * AlgoRhythms: Initial revision 1.0
+        on Fred Fish Disk 356 for Commodore Amiga computers.
 

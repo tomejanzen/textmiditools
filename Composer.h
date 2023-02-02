@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidicgm 1.0
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -32,7 +32,7 @@ namespace textmidi
             SwapPairs,
             Shuffle,
         };
-    
+
         class Composer
         {
           public:
@@ -43,7 +43,7 @@ namespace textmidi
                   : scramble_(scramble),
                     period_(period)
                 {}
-        
+
                 TrackScrambleEnum scramble_;
                 TicksDuration     period_;
             };
@@ -53,15 +53,15 @@ namespace textmidi
                 track_scramble_(track_scramble)
             {
             }
-    
+
             Composer(const Composer& ) = delete;
             Composer(Composer& ) = delete;
             explicit Composer(Composer&& ) = delete;
             Composer& operator=(const Composer& ) = delete;
             Composer& operator=(Composer&& ) = delete;
-    
+
             void operator()(std::ofstream& textmidi_file, const MusicalForm& xml_form);
-    
+
           private:
             rational::RhythmRational duration_to_rhythm(double duration);
             rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse_per_second);
@@ -73,7 +73,7 @@ namespace textmidi
             bool answer_;
             TrackScramble track_scramble_;
         };
-    
+
         typedef std::map<std::string, TrackScrambleEnum> TrackScrambleMap;
         const TrackScrambleMap track_scramble_map
         {
@@ -86,7 +86,7 @@ namespace textmidi
             {"swappairs", TrackScrambleEnum::SwapPairs},
             {"shuffle", TrackScrambleEnum::Shuffle}
         };
-    
+
     }
 }
 

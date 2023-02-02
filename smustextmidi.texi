@@ -5,7 +5,7 @@
 @documentencoding US-ASCII
 @comment %**end-of-header
 @copying
-Copyright @copyright{} 2022 Thomas E. Janzen.
+Copyright @copyright{} 2023 Thomas E. Janzen.
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2

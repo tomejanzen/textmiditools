@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // RhythmRational 1.0
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -27,13 +27,17 @@ namespace textmidi
         {
             public:
                 typedef std::int64_t value_type;
-                RhythmRational(std::int64_t numerator = 0L, std::int64_t denominator = 1L)
+                RhythmRational(std::int64_t numerator = 0L, std::int64_t denominator = 1L, bool reduce_it = true)
                   : numerator_{numerator},
                     denominator_{denominator}
                 {
                     if (0L == denominator)
                     {
                         throw std::out_of_range("RhythmRational constructor zero denominator");
+                    }
+                    if (reduce_it)
+                    {
+                        reduce();
                     }
                 }
                 RhythmRational(const RhythmRational& ) = default;
@@ -64,6 +68,7 @@ namespace textmidi
                 std::int64_t most_positive_equal_divisor(std::int64_t a, std::int64_t b) const;
                 RhythmRational& unreduced_product(const RhythmRational& multiplier);
                 void make_denominators_coherent(RhythmRational& a, RhythmRational& b) const;
+                void reduce_sign();
         };
         RhythmRational operator+(RhythmRational addend1, RhythmRational addend2);
         RhythmRational operator-(RhythmRational value, RhythmRational subtrahend);

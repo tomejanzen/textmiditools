@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidi 1.0.6
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -20,9 +20,9 @@ namespace textmidi
 {
     namespace cgm
     {
-    
+
     constexpr int RestPitch{129};
-    
+
     class NoteEvent
     {
       public:
@@ -37,7 +37,7 @@ namespace textmidi
         explicit NoteEvent(NoteEvent&& ) = delete;
         NoteEvent& operator=(const NoteEvent& ) = default;
         NoteEvent& operator=(NoteEvent&& ) = delete;
-    
+
         void pitch(int pitch) noexcept
         {
             pitch_ = pitch;
@@ -59,9 +59,9 @@ namespace textmidi
         int vel_;
         textmidi::rational::RhythmRational musical_rhythm_;
     };
-    
+
     std::ostream& operator<<(std::ostream& os, const NoteEvent& ne);
-    
+
     }
 }
 

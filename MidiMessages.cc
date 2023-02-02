@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidi 1.0.6
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -152,14 +152,17 @@ ostream& textmidi::operator<<(ostream& os, const MidiDelayMessagePair& msg_pair)
 void textmidi::MidiSysExEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (start_of_sysex[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+
     int64_t len{variable_len_value(midiiter)};
     int64_t count{};
     do
     {
-        sys_ex_vec_.push_back(*midiiter);
-        ++count;
-    } while ((*midiiter++ != end_of_sysex) && (count < len));
+        data_.push_back(*midiiter);
+    } while ((*midiiter++ != end_of_sysex[0]) && (++count < len));
 }
 
 //
@@ -168,8 +171,8 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << '\n' << hex << "SYSEX";
-    for (auto sys_ex_it(sys_ex_vec_.begin());
-            (sys_ex_it != sys_ex_vec_.end()) && (*sys_ex_it != end_of_sysex);
+    for (auto sys_ex_it(data_.begin());
+            (sys_ex_it != data_.end()) && (*sys_ex_it != end_of_sysex[0]);
             ++sys_ex_it)
     {
         os << ' ' << hex << "0x" << setw(2) << setfill('0')
@@ -186,7 +189,7 @@ void textmidi::MidiSysExRawEvent
     const int64_t len{variable_len_value(midiiter)};
     for (unsigned b{}; b < len; ++b)
     {
-        sys_ex_vec_.push_back(*midiiter++);
+        data_.push_back(*midiiter++);
     };
 }
 
@@ -194,8 +197,8 @@ ostream& textmidi::MidiSysExRawEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << '\n' << hex << "SYSEXRAW";
-    for (auto sys_ex_it(sys_ex_vec_.begin());
-            (sys_ex_it != sys_ex_vec_.end()) && (*sys_ex_it != end_of_sysex);
+    for (auto sys_ex_it(data_.begin());
+            (sys_ex_it != data_.end()) && (*sys_ex_it != end_of_sysex[0]);
             ++sys_ex_it)
     {
         os << ' ' << hex << "0x"
@@ -210,22 +213,12 @@ ostream& textmidi::operator<<(ostream& os, const MidiSysExRawEvent& msg)
     return msg.text(os);
 }
 
-uint8_t textmidi::MidiChannelVoiceMessage::running_status() const
-{
-    return running_status_;
-}
-
-void textmidi::MidiChannelVoiceMessage::running_status(uint8_t running_status)
-{
-    running_status_ = running_status;
-}
-
-uint8_t textmidi::MidiChannelVoiceMessage::channel() const
+MidiStreamAtom textmidi::MidiChannelVoiceMessage::channel() const
 {
     return channel_;
 }
 
-void textmidi::MidiChannelVoiceMessage::channel(uint8_t channel)
+void textmidi::MidiChannelVoiceMessage::channel(MidiStreamAtom channel)
 {
     channel_ = channel;
 }
@@ -238,17 +231,28 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceMessage& msg)
 void textmidi::MidiChannelVoiceNoteMessage
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    // Skip a beginning byte that is an event type byte.
+    if (event_flag & *midiiter)
+    {
+        local_status().running_status(*midiiter);
+        ++midiiter;
+    }
+    else
+    {
+        local_status(running_status());
+    }
     key_ = *midiiter++;
+    channel(local_status().channel() + 1);
     key_string_ = num_to_note(key_);
     velocity_ = static_cast<int>(*midiiter++);
 }
 
-uint8_t textmidi::MidiChannelVoiceNoteMessage::key() const
+MidiStreamAtom textmidi::MidiChannelVoiceNoteMessage::key() const
 {
     return key_;
 }
 
-uint8_t textmidi::MidiChannelVoiceNoteMessage::velocity() const
+MidiStreamAtom textmidi::MidiChannelVoiceNoteMessage::velocity() const
 {
     return velocity_;
 }
@@ -258,12 +262,12 @@ string textmidi::MidiChannelVoiceNoteMessage::key_string() const
     return key_string_;
 }
 
-void textmidi::MidiChannelVoiceNoteMessage::key(uint8_t key)
+void textmidi::MidiChannelVoiceNoteMessage::key(MidiStreamAtom key)
 {
     key_ = key;
 }
 
-void textmidi::MidiChannelVoiceNoteMessage::velocity(uint8_t velocity)
+void textmidi::MidiChannelVoiceNoteMessage::velocity(MidiStreamAtom velocity)
 {
     velocity_ = velocity;
 }
@@ -397,14 +401,51 @@ ostream& textmidi::operator<<(ostream& os,
 void textmidi::MidiChannelVoiceControlChangeMessage
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if ((*midiiter & ~channel_mask) == control[0])
+    {
+        local_status().running_status(*midiiter);
+        ++midiiter;
+    }
+    else
+    {
+        local_status(running_status());
+    }
+    channel(local_status().channel() + 1);
     id_      = *midiiter++;
+#if 0
+    // MSB of 14 bit controllers
+    if ((id_ >= 0) && (id_ <= 31))
+    {
+    }
+    // LSB of 14 bit controllers
+    if ((id_ >= 32) && (id_ <= 63))
+    {
+    }
+    // "Additional" single-byte controllers
+    if ((id_ >= 64) && (id_ <= 95))
+    {
+    }
+    // increment and decrement and parameter numbers
+    if ((id_ >= 96) && (id_ <= 101))
+    {
+    }
+    // Undefined single-byte
+    if ((id_ >= 102) && (id_ <= 119))
+    {
+    }
+#endif
     value_   = *midiiter++;
+    if (value_ & ~byte7_mask)
+    {
+        cerr << "Illegal 8-bit control value: " 
+             << hex << static_cast<int>(value_) << dec << '\n';
+    }
 }
 
 ostream& textmidi::MidiChannelVoiceControlChangeMessage::text(ostream& os) const
 {
     auto flags{os.flags()};
-    if (control_pan == id_)
+    if (control_pan[0] == id_)
     {
         int32_t tempvalue{value_};
         tempvalue -= PanExcess64;
@@ -437,22 +478,22 @@ ostream& textmidi::MidiChannelVoiceControlChangeMessage::text(ostream& os) const
     return os;
 }
 
-uint8_t textmidi::MidiChannelVoiceControlChangeMessage::id() const
+MidiStreamAtom textmidi::MidiChannelVoiceControlChangeMessage::id() const
 {
     return id_;
 }
 
-void textmidi::MidiChannelVoiceControlChangeMessage::id(uint8_t id)
+void textmidi::MidiChannelVoiceControlChangeMessage::id(MidiStreamAtom id)
 {
     id_ = id;
 }
 
-uint8_t textmidi::MidiChannelVoiceControlChangeMessage::value() const
+MidiStreamAtom textmidi::MidiChannelVoiceControlChangeMessage::value() const
 {
     return value_;
 }
 
-void textmidi::MidiChannelVoiceControlChangeMessage::value(uint8_t value)
+void textmidi::MidiChannelVoiceControlChangeMessage::value(MidiStreamAtom value)
 {
     value_ = value;
 }
@@ -466,6 +507,16 @@ ostream& textmidi::operator<<(ostream& os,
 void textmidi::MidiChannelVoiceProgramChangeMessage
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if (textmidi::program[0] == (~channel_mask & *midiiter))
+    {
+        local_status().running_status(*midiiter);
+        ++midiiter;
+    }
+    else
+    {
+        local_status(running_status());
+    }
+    channel(local_status().channel() + 1);
     program_ = *midiiter++;
 }
 
@@ -478,12 +529,12 @@ ostream& textmidi::MidiChannelVoiceProgramChangeMessage::text(ostream& os) const
     return os;
 }
 
-uint8_t textmidi::MidiChannelVoiceProgramChangeMessage::program() const
+MidiStreamAtom textmidi::MidiChannelVoiceProgramChangeMessage::program() const
 {
     return program_;
 }
 
-void textmidi::MidiChannelVoiceProgramChangeMessage::program(uint8_t program)
+void textmidi::MidiChannelVoiceProgramChangeMessage::program(MidiStreamAtom program)
 {
     program_ = program;
 }
@@ -497,6 +548,16 @@ ostream& textmidi::operator<<(ostream& os,
 void textmidi::MidiChannelVoiceChannelPressureMessage
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if (channel_pressure[0] == (~channel_mask & *midiiter))
+    {
+        local_status().running_status(*midiiter);
+        ++midiiter;
+    }
+    else
+    {
+        local_status(running_status());
+    }
+    channel(local_status().channel() + 1);
     pressure_ = *midiiter++;
 }
 
@@ -509,12 +570,12 @@ ostream& textmidi::MidiChannelVoiceChannelPressureMessage::text(ostream& os) con
     return os;
 }
 
-uint8_t textmidi::MidiChannelVoiceChannelPressureMessage::pressure() const
+MidiStreamAtom textmidi::MidiChannelVoiceChannelPressureMessage::pressure() const
 {
     return pressure_;
 }
 
-void textmidi::MidiChannelVoiceChannelPressureMessage::pressure(uint8_t pressure)
+void textmidi::MidiChannelVoiceChannelPressureMessage::pressure(MidiStreamAtom pressure)
 {
     pressure_ = pressure;
 }
@@ -528,9 +589,19 @@ ostream& textmidi::operator<<(ostream& os,
 void textmidi::MidiChannelVoicePitchBendMessage
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    uint8_t pitch_wheel_lsb{*midiiter++};
-    uint8_t pitch_wheel_msb{*midiiter++};
-    pitch_wheel_ = pitch_wheel_lsb | (pitch_wheel_msb << bits_per_byte);
+    if (textmidi::pitch_wheel[0] == (~channel_mask & *midiiter))
+    {
+        local_status().running_status(*midiiter);
+        ++midiiter;
+    }
+    else
+    {
+        local_status(running_status());
+    }
+    MidiStreamAtom pitch_wheel_lsb{*midiiter++};
+    MidiStreamAtom pitch_wheel_msb{*midiiter++};
+    channel(local_status().channel() + 1);
+    pitch_wheel_ = pitch_wheel_lsb | (pitch_wheel_msb << byte7_shift);
 }
 
 ostream& textmidi::MidiChannelVoicePitchBendMessage::text(ostream& os) const
@@ -542,12 +613,12 @@ ostream& textmidi::MidiChannelVoicePitchBendMessage::text(ostream& os) const
     return os;
 }
 
-uint8_t textmidi::MidiChannelVoicePitchBendMessage::pitch_wheel() const
+MidiStreamAtom textmidi::MidiChannelVoicePitchBendMessage::pitch_wheel() const
 {
     return pitch_wheel_;
 }
 
-void textmidi::MidiChannelVoicePitchBendMessage::pitch_wheel(uint8_t pitch_wheel)
+void textmidi::MidiChannelVoicePitchBendMessage::pitch_wheel(MidiStreamAtom pitch_wheel)
 {
     pitch_wheel_ = pitch_wheel;
 }
@@ -571,12 +642,12 @@ ostream& textmidi::MidiChannelModeOmniPolyMessage::text(ostream& os) const
     return os;
 }
 
-uint8_t textmidi::MidiChannelModeOmniPolyMessage::mode() const
+MidiStreamAtom textmidi::MidiChannelModeOmniPolyMessage::mode() const
 {
     return mode_;
 }
 
-void textmidi::MidiChannelModeOmniPolyMessage::mode(uint8_t mode)
+void textmidi::MidiChannelModeOmniPolyMessage::mode(MidiStreamAtom mode)
 {
     mode_ = mode;
 }
@@ -621,7 +692,18 @@ ostream& textmidi::operator<<(ostream& os,
 void textmidi::MidiFileMetaSequenceEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (sequence_number_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (sequence_number_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
     auto msb{*midiiter++};
     auto lsb{*midiiter++};
     sequence_number_ = (msb << bits_per_byte) | lsb;
@@ -648,6 +730,14 @@ uint16_t textmidi::MidiFileMetaSequenceEvent::sequence_number() const
 void textmidi::MidiFileMetaUnknown1Event
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (unknown1_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
     auto len{*midiiter};
     midiiter += len + 1;
 }
@@ -668,6 +758,11 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaSequenceEvent& msg)
 void textmidi::MidiFileMetaStringEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    ++midiiter; // skip whatever type of string it is
     int64_t len{variable_len_value(midiiter)};
     str_.insert(str_.begin(), midiiter, midiiter + len);
     midiiter += len;
@@ -675,13 +770,117 @@ void textmidi::MidiFileMetaStringEvent
 
 ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
 {
-    os << str_;
+    string display_str{str_};
+    string::size_type pos{};
+
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\a', pos)) != str_.npos)
+    {
+        const char control_string[]{R"(\a)"};
+        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2}); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\b', pos)) != str_.npos)
+    {
+        const char control_string[]{R"(\b)"};
+        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2}); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\t', pos)) != str_.npos)
+    {
+        const char control_string[]{R"(\t)"};
+        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2}); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\n')) != str_.npos)
+    {
+        display_str.replace(pos, 1, R"(\n)", 2); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\v')) != str_.npos)
+    {
+        display_str.replace(pos, 1, R"(\v)", 2); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\f')) != str_.npos)
+    {
+        display_str.replace(pos, 1, R"(\f)", 2); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\r', pos)) != str_.npos)
+    {
+        const char control_string[]{R"(\r)"};
+        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2}); 
+        ++pos;
+    }
+    pos = 0;
+    while ((pos < display_str.size()) && (pos = display_str.find('\"', pos)) != str_.npos)
+    {
+        const char control_string[]{R"(\")"};
+        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2}); 
+        pos += 2;
+    }
+
+    os << '\"' << display_str << '\"';
     return os;
 }
 
 ostream& textmidi::MidiFileMetaTextEvent::text(ostream& os) const
 {
     os << "TEXT ";
+    return MidiFileMetaStringEvent::text(os);
+}
+ostream& textmidi::MidiFileMetaText08Event::text(ostream& os) const
+{
+    os << "TEXT08 ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText09Event::text(ostream& os) const
+{
+    os << "TEXT09 ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText0AEvent::text(ostream& os) const
+{
+    os << "TEXT0A ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText0BEvent::text(ostream& os) const
+{
+    os << "TEXT0B ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText0CEvent::text(ostream& os) const
+{
+    os << "TEXT0C ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText0DEvent::text(ostream& os) const
+{
+    os << "TEXT0D ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText0EEvent::text(ostream& os) const
+{
+    os << "TEXT0E ";
+    return MidiFileMetaStringEvent::text(os);
+}
+
+ostream& textmidi::MidiFileMetaText0FEvent::text(ostream& os) const
+{
+    os << "TEXT0F ";
     return MidiFileMetaStringEvent::text(os);
 }
 
@@ -760,8 +959,20 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaCuePointEvent& msg)
 void textmidi::MidiFileMetaMidiChannelEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (midi_channel_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (midi_channel_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
+    channel_ = *midiiter + 1;
     ++midiiter;
-    channel_ = *midiiter++;
 }
 
 ostream& textmidi::MidiFileMetaMidiChannelEvent::text(ostream& os) const
@@ -790,7 +1001,18 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaMidiChannelEvent& m
 void textmidi::MidiFileMetaEndOfTrackEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (end_of_track_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (end_of_track_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
 }
 
 ostream& textmidi::MidiFileMetaEndOfTrackEvent::text(ostream& os) const
@@ -807,7 +1029,18 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaEndOfTrackEvent& ms
 void textmidi::MidiFileMetaSetTempoEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (tempo_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (tempo_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
     tempo_ = *midiiter++;
     tempo_ <<= 8;
     tempo_ |= *midiiter++;
@@ -824,7 +1057,7 @@ ostream& textmidi::MidiFileMetaSetTempoEvent::text(ostream& os) const
     }
     else
     {
-        os << "TEMPO " << dec << ((60 * 1000000) / tempo_);
+        os << "TEMPO " << dec << setprecision(10) << ((60.0 * 1000000.0) / static_cast<double>(tempo_));
     }
     auto oldflags{os.flags(flags)};
     return os;
@@ -848,7 +1081,18 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaSetTempoEvent& msg)
 void textmidi::MidiFileMetaSMPTEOffsetEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (smpte_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (smpte_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
     hours_ = *midiiter++;
     minutes_ = *midiiter++;
     seconds_ = *midiiter++;
@@ -859,8 +1103,8 @@ void textmidi::MidiFileMetaSMPTEOffsetEvent
 ostream& textmidi::MidiFileMetaSMPTEOffsetEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
-    os << "SMPTE_OFFSET " << hours_ << ':' << minutes_
-       << ':' << seconds_ << ':' << fr_ << ':' << ff_;
+    os << "SMPTE_OFFSET " << setfill('0') << setw(2) << hours_ << ':' << setw(2) << minutes_
+       << ':' << setw(2) << seconds_ << ':' << setw(2) << fr_ << ':' << setw(2) << ff_;
     auto oldflags{os.flags(flags)};
     return os;
 }
@@ -873,8 +1117,19 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaSMPTEOffsetEvent& m
 void textmidi::MidiFileMetaMidiPortEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (midi_port_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (midi_port_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
     // 0xFF 0x21 0x01 0xport
-    ++midiiter; // skip 0x01
     midiport_ = *midiiter++;
 }
 
@@ -894,7 +1149,18 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaMidiPortEvent& msg)
 void textmidi::MidiFileMetaTimeSignatureEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (time_signature_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (time_signature_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
     numerator_ = *midiiter++;
     denominator_ = *midiiter++;
     clocks_per_click_ = *midiiter++;
@@ -920,7 +1186,18 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaTimeSignatureEvent&
 void textmidi::MidiFileMetaKeySignatureEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    ++midiiter;
+    if (meta_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (key_signature_prefix[0] == *midiiter)
+    {
+        ++midiiter;
+    }
+    if (key_signature_prefix[1] == *midiiter)
+    {
+        ++midiiter;
+    }
     accidentals_ = static_cast<signed char>(*midiiter++);
     minor_mode_ = (*midiiter++ != 0);
 }
@@ -940,229 +1217,294 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaKeySignatureEvent& 
     return msg.text(os);
 }
 
-void textmidi::MidiFileMetaSequenceSpecificEvent
+void textmidi::MidiFileMetaSequencerSpecificEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
-    // skip 0x37 already found by switch case
-    len_ = variable_len_value(midiiter);
-    if (0 == *midiiter) // if manufacturer ID is 3 long
+    // FF 7F [variable_len] mgfID or 00 mfgid0 mfgid1 
+    if (meta_prefix[0] == *midiiter)
     {
-        len_ -= 3;
         ++midiiter;
-        manufacturer_ = *midiiter++ << 8;
-        manufacturer_ = manufacturer_ | *midiiter++;
     }
-    else
+    if (sequencer_specific_prefix[0] == *midiiter)
     {
-        --len_;
-        manufacturer_ = *midiiter++;
+        ++midiiter;
     }
-    data_.resize(len_);
-    copy(midiiter, midiiter + len_, data_.data());
-    midiiter += len_;
+    int64_t len{variable_len_value(midiiter)};
+    int64_t count{};
+    do
+    {
+        data_.push_back(*midiiter++);
+    } while (++count < len);
 }
 
-ostream& textmidi::MidiFileMetaSequenceSpecificEvent::text(ostream& os) const
+ostream& textmidi::MidiFileMetaSequencerSpecificEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
-    os << "SEQUENCE_SPECIFIC " << manufacturer_ << ' ' << '{';
-    for (unsigned l{0}; l < len_; ++l)
+    os << '\n' << "SEQUENCER_SPECIFIC";
+    for (auto it(data_.begin());
+            (it != data_.end()) && (*it != end_of_sysex[0]);
+            ++it)
     {
-        if (l > 0)
-        {
-            os << ',';
-        }
-        if (isprint(data_[l]))
-        {
-            os << data_[l];
-        }
-        else
-        {
-            os << "0x" << hex << static_cast<int>(data_[l]);
-        }
+        os << ' ' << hex << "0x" << setw(2) << setfill('0')
+           << static_cast<unsigned>(*it);
     }
-    os << '}' << dec << '\n';
     auto oldflags{os.flags(flags)};
     return os;
 }
 
 ostream& textmidi::operator<<(ostream& os,
-        const MidiFileMetaSequenceSpecificEvent& msg)
+        const MidiFileMetaSequencerSpecificEvent& msg)
 {
     return msg.text(os);
 }
 
 MidiDelayMessagePair textmidi::MidiEventFactory::operator()(MidiStreamIterator& midiiter)
 {
-    auto midiitersave{midiiter};
     int64_t delaynum64{variable_len_value(midiiter)};
     MidiDelayMessagePair midi_delay_message_pair(delaynum64, nullptr);
     ticks_accumulated_ += delaynum64;
 
-    uint8_t status{};
-    switch (*midiiter)
+    bool clear_ticks_accumulated{};
+    if (MidiFileMetaSequenceEvent::recognize(midiiter, midi_end_))
     {
-      case meta_prefix:
+        midi_delay_message_pair.second = make_shared<MidiFileMetaSequenceEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaTextEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaTextEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaCopyrightEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaCopyrightEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaTrackEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaTrackEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaInstrumentEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaInstrumentEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaLyricEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaLyricEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaMarkerEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaMarkerEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaCuePointEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaCuePointEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaUnknown1Event::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaUnknown1Event>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaMidiChannelEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaMidiChannelEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaEndOfTrackEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaEndOfTrackEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+        clear_ticks_accumulated = true;
+    }
+    if (MidiFileMetaSetTempoEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaSetTempoEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaSMPTEOffsetEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaSMPTEOffsetEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaTimeSignatureEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaTimeSignatureEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaKeySignatureEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaKeySignatureEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaMidiPortEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaMidiPortEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiFileMetaSequencerSpecificEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiFileMetaSequencerSpecificEvent>(running_status_);
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+#if 0
+        break;
+      [[unlikely]] case midi_time_code_quarter_frame[0]:
+        break;
+      [[unlikely]] case song_position_pointer[0]:
+        break;
+      [[unlikely]] case song_select[0]:
+        break;
+      [[unlikely]] case tune_request[0]:
+        break;
+#endif
+    if (MidiSysExEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiSysExEvent>();
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+    if (MidiSysExRawEvent::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiSysExRawEvent>();
+#if defined(CLEAR_RUNNING_STATUS)
+        running_status_.clear();
+#endif
+    }
+
+    if (MidiChannelVoiceMessage::recognize(midiiter, midi_end_, running_status_.command()))
+    {
+        if (running_status_.running_status_state())
         {
-            ++midiiter; // skip FF meta byte
-            switch (*midiiter)
+            switch(running_status_.command())
             {
-               [[unlikely]] case sequence_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaSequenceEvent>();
+              case note_on[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoiceNoteOnMessage>(running_status_, ticks_per_whole_);
                 break;
-               [[likely]] case text_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaTextEvent>();
+              case note_off[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoiceNoteOffMessage>(running_status_);
                 break;
-              case copyright_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaCopyrightEvent>();
+              case polyphonic_key_pressure[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoicePolyphonicKeyPressureMessage>(running_status_);
                 break;
-               [[unlikely]] case track_name_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaTrackEvent>();
+              case control[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoiceControlChangeMessage>(running_status_);
                 break;
-               [[unlikely]] case instrument_name_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaInstrumentEvent>();
+              case program[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoiceProgramChangeMessage>(running_status_);
                 break;
-               [[unlikely]] case lyric_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaLyricEvent>();
+              case channel_pressure[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoiceChannelPressureMessage>(running_status_);
                 break;
-               [[unlikely]] case marker_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaMarkerEvent>();
-                break;
-               [[unlikely]] case cue_point_prefix:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaCuePointEvent>();
-                break;
-               [[unlikely]] case unknown1_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaUnknown1Event>();
-                break;
-               [[likely]] case midi_channel_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaMidiChannelEvent>();
-                break;
-               [[likely]] case end_of_track_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaEndOfTrackEvent>();
-                break;
-               [[likely]] case tempo_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaSetTempoEvent>();
-                break;
-               [[unlikely]] case smpte_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaSMPTEOffsetEvent>();
-                break;
-               [[likely]] case time_signature_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaTimeSignatureEvent>();
-                break;
-               [[likely]] case key_signature_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaKeySignatureEvent>();
-                break;
-              case midi_port_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaMidiPortEvent>();
-                break;
-               [[unlikely]] case sequence_specific_prefix[0]:
-                midi_delay_message_pair.second
-                    = make_shared<MidiFileMetaSequenceSpecificEvent>();
+              case pitch_wheel[0]:
+                midi_delay_message_pair.second = make_shared<MidiChannelVoicePitchBendMessage >(running_status_);
                 break;
               default:
-                break;
-            }
-            ++midiiter; // skip meta event data length byte
-        }
-        break;
-      [[unlikely]] case midi_time_code_quarter_frame:
-        break;
-      [[unlikely]] case song_position_pointer:
-        break;
-      [[unlikely]] case song_select:
-        break;
-      [[unlikely]] case tune_request:
-        break;
-      case start_of_sysex:
-        midi_delay_message_pair.second = make_shared<MidiSysExEvent>();
-        break;
-      case end_of_sysex: // SYSEX Continuation and out-of-band messages
-        midi_delay_message_pair.second = make_shared<MidiSysExRawEvent>();
-        break;
-      default:
-        {
-            if (*midiiter & event_flag)
-            {
-                status = *midiiter;
-                running_status_ = status;
-                ++midiiter;
-            }
-            else
-            {
-                status = running_status_;
-            }
-            switch (status & ~channel_mask)
-            {
-              [[likely]] case note_on:
-                midi_delay_message_pair.second
-                    = make_shared<MidiChannelVoiceNoteOnMessage>(status, ticks_per_whole_);
-                break;
-              [[likely]] case note_off:
-                midi_delay_message_pair.second
-                    = make_shared<MidiChannelVoiceNoteOffMessage>(status);
-                break;
-              [[likely]] case poly_key_pressure:
-                midi_delay_message_pair.second
-                    = make_shared
-                    <MidiChannelVoicePolyphonicKeyPressureMessage>(status);
-                break;
-              [[likely]] case program:
-                midi_delay_message_pair.second
-                    = make_shared
-                    <MidiChannelVoiceProgramChangeMessage >(status);
-                break;
-              [[likely]] case channel_pressure:
-                midi_delay_message_pair.second
-                    = make_shared
-                    <MidiChannelVoiceChannelPressureMessage>(status);
-                break;
-              case pitch_wheel:
-                midi_delay_message_pair.second
-                    = make_shared<MidiChannelVoicePitchBendMessage>(status);
-                break;
-              case channel_mode:
-                midi_delay_message_pair.second
-                    = make_shared
-                    <MidiChannelVoiceControlChangeMessage>(status);
-                break;
-              default: // is using running status.
-                {
-                    cerr << "UNKNOWN EVENT: " << hex << status << '\n';
-
-                }
+                throw(runtime_error{"unknown bytes parsing running status"});
                 break;
             }
         }
-        break;
     }
+    if (MidiChannelVoiceNoteOnMessage::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiChannelVoiceNoteOnMessage>(running_status_, ticks_per_whole_);
+    }
+    if (MidiChannelVoiceNoteOffMessage::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiChannelVoiceNoteOffMessage>(running_status_);
+    }
+    if (MidiChannelVoicePolyphonicKeyPressureMessage::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiChannelVoicePolyphonicKeyPressureMessage>(running_status_);
+    }
+    if (MidiChannelVoiceProgramChangeMessage::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared <MidiChannelVoiceProgramChangeMessage>(running_status_);
+    }
+    if (MidiChannelVoiceChannelPressureMessage::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiChannelVoiceChannelPressureMessage>(running_status_);
+    }
+    if (MidiChannelVoicePitchBendMessage::recognize(midiiter, midi_end_))
+    {
+        midi_delay_message_pair.second = make_shared<MidiChannelVoicePitchBendMessage>(running_status_);
+    }
+    if (MidiChannelVoiceControlChangeMessage::recognize(midiiter, midi_end_)) 
+    {
+        midi_delay_message_pair.second = make_shared<MidiChannelVoiceControlChangeMessage>(running_status_);
+    }
+
+#undef      DEBUG_MIDITEXT (1)
+#if defined(DEBUG_MIDITEXT)
+    if (!midi_delay_message_pair.second)
+    {
+        for (auto i{0}; i < 32; ++i)
+        {
+            cout << setfill('0') << setw(2) << hex << static_cast<int>(*midiiter++) << ' ';
+        }
+        exit(0);
+    }
+    else
+    {
+#endif
     midi_delay_message_pair.second->consume_stream(midiiter);
     midi_delay_message_pair.second->ticks_accumulated(ticks_accumulated_);
-    if (dynamic_cast<MidiFileMetaEndOfTrackEvent*>
-            (midi_delay_message_pair.second.get()))
+    if (clear_ticks_accumulated)
     {
         ticks_accumulated_ = 0LU;
+        clear_ticks_accumulated = false;
     }
+    MidiChannelVoiceMessage* mcvm{dynamic_cast<MidiChannelVoiceMessage*>(midi_delay_message_pair.second.get())};
+    if (mcvm)
+    {
+        running_status_ = mcvm->local_status();
+    }
+#if defined(DEBUG_MIDITEXT)
+    }
+#endif
     return midi_delay_message_pair;
 }
 
 int64_t  MidiEventFactory::ticks_accumulated_{};
-int8_t   MidiEventFactory::running_status_{};
 uint32_t MidiEventFactory::ticks_per_whole_{};
 
 void textmidi::PrintLazyTrack::ticks_of_note_on()
@@ -1415,7 +1757,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayMessagePair& mdmp)
                     {
                         remove_if(tied_list_.begin(), tied_list_.end(),
                             [tiednote](const MidiChannelVoiceNoteOnMessage& mcvnom)
-                            { return tiednote.running_status() == mcvnom.running_status(); } );
+                            { return tiednote.local_status().running_status_state() == mcvnom.local_status().running_status_state(); } );
                         os << ' ';
                     }
                     tiednote.wholes_to_next_event(tiednote.wholes_to_next_event() - min_wholes_to_next_event);
@@ -1462,11 +1804,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayMessagePair& mdmp)
             const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestMessage*>(mm)};
             if (rest)
             {
-#if 0
-                RhythmRational duration{rest->ticks_to_next_event(), MidiEventFactory::ticks_per_whole_};
-#else
                 RhythmRational duration{rest->wholes_to_next_event()};
-#endif
                 duration.reduce();
                 if (duration > RhythmRational{})
                 {

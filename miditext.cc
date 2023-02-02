@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // miditext 1.0
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -103,8 +103,8 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.28\n";
-        cout << "Copyright © 2022 Thomas E. Janzen\n";
+        cout << "TextMIDITools 1.0.29\n";
+        cout << "Copyright © 2023 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
         cout << "This is free software: "
@@ -237,26 +237,30 @@ int main(int argc, char *argv[])
     while ((midiiter != midivector.end()) && track_qty--)
     {
         midiiter += 4; // skip MTrk
-        int num{};
+        int32_t num{};
         copy(midiiter, midiiter + sizeof(num), io_bytes(num));
         midiiter += sizeof(num);
         num = htobe32(num);
-        int tracklen{num};
+        int32_t tracklen{num};
         text_filestr << "\nSTARTTRACK" << " ; bytes in track: "
                     << tracklen << '\n';
         // event loop
         {
-            MidiEventFactory midi_event_factory;
+            MidiEventFactory midi_event_factory{midivector.end()};
             MidiEventFactory::ticks_per_whole_ = ticksperwhole;
 
             MidiDelayMessagePairs message_pairs;
             MidiDelayMessagePair midi_delay_msg_pair;
             do
             {
+#undef      DEBUG_MIDITEXT 
+#if defined(DEBUG_MIDITEXT)
+                cout << hex << std::distance(midivector.begin(), midiiter) << '\n';
+#endif
                 midi_delay_msg_pair = midi_event_factory(midiiter);
                 message_pairs.push_back(midi_delay_msg_pair);
             }
-            while ((midiiter != midivector.end())
+            while ((midiiter < midivector.end())
                 && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
                                 (midi_delay_msg_pair.second.get()));
             if (lazy)

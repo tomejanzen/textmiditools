@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.21
 //
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -14,8 +14,10 @@
 #include <type_traits> // swap()
 #include <string>
 #include <iostream>
-#include <iomanip>
+#include <cstdlib>
 #include <sstream>
+#include <regex>
+#include <cctype>
 
 #include "RhythmRational.h"
 
@@ -111,8 +113,33 @@ RhythmRational& textmidi::rational::RhythmRational::operator-=(RhythmRational su
     return *this;
 }
 
+void textmidi::rational::RhythmRational::reduce_sign()
+{
+    // If both the denominator and numerator are negative,
+    // coerce them positive.
+    // If only the denominator is negative, swap the negative
+    // sign with the numerator.
+    if (denominator_ < 0)
+    {
+        if (numerator_ < 0)
+        {
+            numerator_   = std::abs(numerator_);
+            denominator_ = std::abs(denominator_);
+        }
+        else
+        {
+            numerator_   = -numerator_;
+            denominator_ = -denominator_;
+        }
+    }
+
+ }
+
 void textmidi::rational::RhythmRational::reduce()
 {
+    reduce_sign();
+
+    // Find the greatest common divisor to reduce.
     const auto mped{most_positive_equal_divisor()};
     if (mped > 1)
     {
@@ -204,29 +231,56 @@ RhythmRational textmidi::rational::operator/(RhythmRational dividend, RhythmRati
 
 std::istream& textmidi::rational::operator>>(std::istream& is, RhythmRational& tr)
 {
-    RhythmRational rtn{};
-    std::string instr{};
-    is >> instr;
-    int64_t n{}, d{1L};
+    auto cnt{is.rdbuf()->in_avail()};
+    const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[[:digit:]]{1,19}))?)(.*))"};
 
-    auto slashpos{instr.find('/')};
-    if (instr.npos == slashpos)
+    enum MatchEnum
+    { 
+        leading_space_match     = 1,
+        rational_match          = 2,
+        numerator_match         = 3,
+        slash_denominator_match = 4,
+        denominator_match       = 6,
+        remainder_match         = 7,
+    }; 
+    char buf[cnt];
+    // not expected to be null-terminated
+    is.rdbuf()->sgetn(buf, cnt);
+    string buf_string{buf, static_cast<long unsigned int>(cnt)};
+    smatch matches{};
+    auto sts{regex_match(buf_string, matches, rhythm_rational_re)};
+    // If there was no numerator
+    int64_t numer{};
+    int64_t denom{1L};
+    // If there is a match for a rational
+    if (!matches[rational_match].str().empty())
     {
-        stringstream numerator_ss(instr);
-        numerator_ss >> n;
-        rtn = RhythmRational{};
+        numer = std::atol(matches[numerator_match].str().c_str());
+        // If there is a slash and denominator
+        if (!matches[slash_denominator_match].str().empty())
+        {
+            // matches[6] is denominator
+            denom = std::atol(matches[denominator_match].str().c_str());
+        }
     }
     else
     {
-        instr[slashpos] = ' ';
-        if (slashpos < instr.length() - 1)
-        {
-            stringstream ss(instr);
-            ss >> n >> d;
-        }
+        // error
+        // set stream error
+        is.setstate(ios_base::failbit);
+        is.clear();
+        string message("bad read of RhythmsRational: ");
+        message += buf_string;
+        throw runtime_error(message);
     }
-    tr.numerator(n);
-    tr.denominator(d);
+    const off_t offs{-matches[remainder_match].str().size()};
+    if (offs != 0)
+    {
+        is.seekg(offs, ios_base::cur);
+    }
+    RhythmRational rtn{numer, denom};
+    tr = rtn;
+
     return is;
 }
 
@@ -242,16 +296,13 @@ std::ostream& textmidi::rational::operator<<(std::ostream& os, RhythmRational tr
 {
     auto flags{os.flags()};
     tr.reduce();
-    // This looks backwards but textmidi has a convention that 1/4 can be written as 4,
-    // but 4/1 has to be written as 4/1.  This is because it's faster to type in scores
-    // in which 1/4 notes and 1/16 notes are far more common than 4/1 notes.
     if (1L == tr.denominator())
     {
         os << dec << tr.numerator();
     }
     else
     {
-        os << dec << tr.numerator() << '/' << dec << tr.denominator();
+        os << dec << tr.numerator() << '/' << tr.denominator();
     }
     auto oldflags{os.flags(flags)};
     return os;
@@ -268,8 +319,8 @@ void textmidi::rational::RhythmRational::make_denominators_coherent(RhythmRation
     const auto lcm{(a.denominator() / mped)* b.denominator()};
     const auto a_factor{lcm / a.denominator()};
     const auto b_factor{lcm / b.denominator()};
-    a.unreduced_product(RhythmRational{a_factor, a_factor});
-    b.unreduced_product(RhythmRational{b_factor, b_factor});
+    a.unreduced_product(RhythmRational{a_factor, a_factor, false});
+    b.unreduced_product(RhythmRational{b_factor, b_factor, false});
 }
 
 //
@@ -278,41 +329,44 @@ void textmidi::rational::RhythmRational::make_denominators_coherent(RhythmRation
 ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
 {
     auto flags{os.flags()};
+    auto tr_temp{tr};
+    tr_temp.reduce();
     // textmidi has a convention for quickness of typing that
     // a 1/4 note is written 4, or 1/4, or 2/8 etc.
-    if ((tr.denominator() == 1L) && (tr.numerator() != 1L))
+    // So a 4-wholenote long rhythm must be written 4/1.
+    if ((tr_temp.denominator() == 1L) && (tr_temp.numerator() != 1L))
     {
-        os << tr.numerator() << '/' << tr.denominator();
+        os << dec << tr_temp.numerator() << '/' << tr_temp.denominator();
     }
     else
     {
-        switch (tr.numerator())
+        switch (tr_temp.numerator())
         {
           case 1L:
-            os << dec << tr.denominator() << ' ';
+            os << tr_temp.denominator() << ' ';
             break;
           case 3L: // single dot possible
-            if ((tr.denominator() % 2L) == 0L)
+            if ((tr_temp.denominator() % 2L) == 0L)
             {
-                os << dec << (tr.denominator() / 2L) << ".";
+                os << (tr_temp.denominator() / 2L) << ".";
             }
             else
             {
-                os << tr;
+                os << tr_temp;
             }
             break;
           case 7L: // double dot possible
-            if ((tr.denominator() % 4L) == 0L)
+            if ((tr_temp.denominator() % 4L) == 0L)
             {
-                os << dec << (tr.denominator() / 4L) << "..";
+                os << (tr_temp.denominator() / 4L) << "..";
             }
             else
             {
-                os << tr;
+                os << tr_temp;
             }
             break;
           default:
-            os << tr;
+            os << tr_temp;
           break;
         }
     }

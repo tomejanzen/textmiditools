@@ -32,3 +32,140 @@
     * Version 1.0.7
       Fix form plot's unside-down mean curves, and add a 
       Postscript menu item.
+      Fix textmidiformedit.py form plots which had upsidedown 
+      mean curves; add a save-postscript menu item.
+    * Version 1.0.8
+
+    * Version 1.0.9
+      2022-01-07
+      Add a keyboard window for scale specification to textmidiformedit.py.
+      Change the default detache (separation between events) to 0 in textmidi.l.
+    * Version 1.0.10
+      2022-01-17
+      Fix TextMIDITools version in sources. Fix spelling of Association.
+    * Version 1.0.11
+      textmidiformedit.py has been made more like a package 
+      that can be installed from github or pypi.org, and run:
+      python3
+            from textmidiformedit import *
+            textmidiformedit()
+            etc.
+    * Version 1.0.12
+      Fixes bugs in reading/writing form files in textmidiformedit.py, 
+      including for scale, length, min/max note length, pulse, 
+      melody probabilities and form name.
+      Add trackscramble feature to textmidicgm with trackscrambleperiod, 
+      so change-up the voice priority periodically under the texture curve.
+    * Version 1.0.13
+      Fixes more bugs in reading/writing form files in textmidiformedit.py, 
+      including for scale, length, min/max note length, pulse, 
+      melody probabilities and form name. Fixed bad assignment of 
+      values to widget variables, which is wrong. Used get/set 
+      on widget variables. Fixed behaviour of
+      voice->follow radio buttons. textmidiformedit is in much 
+      better condition. The number of remaining bugs est. to be < 1,000,000.
+    * Version 1.0.14
+      Fixes more bugs in reading/writing form files in textmidiformedit.py; 
+      added resize to form plot window.  Use GeneralMIDI names in program entry.
+    * Version 1.0.15
+      2022-02-07
+      Fixes more bugs in reading/writing form files in textmidiformedit.py.  
+      Also improved reliability of VoiceWIndow by removing most 
+      widget variables (e.g., StringVar and IntVar) for Spinbox 
+      and Entry as theydid not behave well and copoied data  
+      into the wrong voice.  
+      Added an update_idletasks)( to VoiceWIndow that seems to 
+      help so that data in entries and spinboes are not copied 
+      to other voices.
+    * Version 1.0.16
+      2022-02-10
+    * Version 1.0.17
+      textmidiformedit.py seems to work wel enough now.
+      2022-02-10
+    * Version 1.0.18
+      2022-02-11
+      Update copyright to 2022. Update to version 1.0.18. Reflect 
+      changes to textmidiformedit in textmidiformedit.texi. 
+      Fix ambiguity about quotes in text events in textmidi.texi.
+    * Version 1.0.19
+      2022-02-14
+      No longer crashes due to third-party class library when 
+      compiled with C++20.
+    * Version 1.0.20
+      2022-02-18
+      Fixed RhythmRational print_rhythm to print 4 whole notes 
+      as 4/1, because 4 is a quarter note in textmidi language's 
+      lazy mode.  Fixed SmusTrackEvent.cc mishandling of whole notes.
+    * Version 1.0.21
+      2022-02-21
+      Fix smustextmidi's mishandling of dynamics in which a 
+      velocity of 64 would be used instead of the volume in 
+      an SMUS volume event;
+      also ignore volume events that repeat the same dynamic 
+      as is current. Since MIDI has no volume events but puts 
+      velocity in every note event, this does not affect the 
+      ultimate MIDI file version.
+      Removed a duplicate typedef of MidiStreamVector from Midi.h
+    * Version 1.0.22
+      2022-03-06
+      Disabled --lazy mode for miditext because it just doesn't work.
+      Move io_bytes to a separate header.
+      Remove extra data structures and unused objects.
+      Clean up dependencies.
+      Fix smustextmidi printing 1/1 for a whole note (although this is acceptable) and change to "1".
+      Make Composer a class.
+      Put more namespaces under textmidi namespace.
+      clean up dependencies of includes and on classes.
+    * Version 1.0.23
+      2022-03-06
+      Fixed smustextmidi bug. It produced a tied-in-and-out 
+      note as in -C4- if there had been a previous tied note 
+      of the same pitch tied-over multiple times because it 
+      would add each new occurance in the tied note to tied_vec_ 
+      in SmusTrackEvents.cc.
+      Removed a couple unused things. textmidi would convert 
+      this into excess numbers of note-offs. Detected using MuseScore.
+    * Version 1.0.24
+      2022-03-17
+      Always write the MIDI file format (e.g., MULTITRACK) 
+      when writing textmidi text files.  The programs that 
+      write textmidi text files write more uniform code.
+      Smustextmidi puts the text meta events into the first 
+      MIDI (tempo) track, although SMUS puts them before the track.
+      Improve behavior of miditext --lazy overall and re-enable.
+      Extra delays are gone in miditext --lazy.
+      smustextmidi: Only write a hard-coded END_OF_TRACK if there was no SMUS
+      EndOfTrack in the SMUS track (0xFF). The end-of-track in the SMUS track
+      appears to be optional, since the chunk length is given anyway.
+      Write "LAZY" or "END_LAZY" only when needed.
+      Fix tie in/out mistake in smustextmidi that would add a pitch to the tied_vec_
+      every time it appeared even though it was in the same continuous tied note.
+    * Version 1.0.25
+      2022-03-19
+      Fix Quantization feature of the miditext program.
+    * Version 1.0.26
+      2022-04-25
+      Tried to fix miditext lazy mode conversions wrt rests and detache etc.
+      Insert end-of-lines after each note event.
+      Fix quantization of rests.
+      textmidiformedit.texi: correct spelling, add details
+      about the keyboard and about voice following.
+    * Version 1.0.27
+      2022-01-04
+
+    * Version 1.0.28
+      2022-01-18
+      Stream output now saves/restores stream format flags.
+      Fixed defect in stream output in MidiMessages.cc for 
+      CHANNEL_POLYPRESSURE.  Added some "missing" files to 
+      make a build more convenient.
+    * Version 1.0.29
+      2023-02-01
+      Use 6,334 MIDI files from the old classical MIDI archive
+      to test.  Around 50 files still fail, possibly due to
+      errors in the files, such as 8-bit data.
+      As a result, the conversion programs are much more
+      robust.   Also, straighten out SEQUENCER_SPECIFIC
+      to be like SYSEX.
+
+

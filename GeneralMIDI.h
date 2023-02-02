@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidicgm 1.0
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -43,21 +43,21 @@ namespace textmidi
             All                 = 65535,
             Idiophone           = (1 << 16)
         };
-    
+
         extern std::map<std::string_view, GeneralMIDIGroup> program_group_map;
-    
+
         constexpr auto MaxNoteStrLen{6}; // "Db-1" + null is 5
         constexpr auto MaxMIDIProgramNameLen{48};
-    
+
         struct MIDI_Program
         {
             int Number_;
             const std::string_view Name_;
             std::pair<std::string_view, std::string_view> range_;
         };
-    
+
         const extern MIDI_Program midi_programs[];
-    
+
     }
 }
 

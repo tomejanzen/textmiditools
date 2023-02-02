@@ -17,7 +17,7 @@
 @author Thomas E. Janzen
 @end titlepage
 @copying
-Copyright @copyright{} 2022 Thomas E. Janzen.
+Copyright @copyright{} 2023 Thomas E. Janzen.
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2
@@ -66,6 +66,10 @@ as are all three filetypes (single track, multitrack and multi-sequence).
 
 No attempt is made in @command{textmidi} to support either MIDI show control
 or machine control.
+
+MIDI Running-status is used, but resets if a non-channel voice command
+interrupts the stream.  @command{miditext} permits input files to
+use running-status more freely.
 @menu
 * What is textmidi?::
 * MIDI Summary::
@@ -75,11 +79,11 @@ or machine control.
 @node What is textmidi?
 @section What is textmidi?
 @cindex textmidi
-The program @command{textmidi} reads a text representation of a standard
-MIDI file in what is called here @quotedblleft{}textmidi@quotedblright{} language,
-and converts it to a standard MIDI file, which is binary.
-Each item in the text file corresponds to a sequence of command bytes in the binary MIDI file,
-more or less.
+The program @command{textmidi} reads a text representation of a standard MIDI 
+file in what is called here @quotedblleft{}textmidi@quotedblright{} language,
+and converts it to a standard MIDI file, which is binary.  Each item in the text
+file corresponds to a sequence of command bytes in the binary MIDI file, more or
+less.
 
 Developing MIDI files as text in textmidi language can offer advantages in that
 text files can readily be hand-edited, automatically-generated, searched with search
@@ -107,7 +111,9 @@ units of MIDI ticks.  Since quarter notes are often assigned a duration
 of 240 ticks, either a note or a rest could be as long as 1118481 quarter
 notes or 279620 whole notes.  Since delays are variable-length quantities
 (in byte steps), they can range from 1 byte to 4 bytes in size in the
-MIDI file.  MIDI also specifies controls, such as damper pedals and
+MIDI file, but as only 7 bits of value are permitted in each byte,
+values can be only up to 28 bits long (unsigned).  
+MIDI also specifies controls, such as damper pedals and
 "pressure" (named for pressure-sensitive keyboards that permit making
 a note louder or software by changing the force applied to the key), and
 synthesizer-specific message handling as "SYSEX" or "System Exclusive"
@@ -313,6 +319,7 @@ or in LAZY mode, which makes it possible to type in musical more quickly.
 * Text meta events::
 * Non-text meta events::
 * MIDI Events::
+* SEQUENCER_SPECIFIC::
 * SYSEX::
 @end menu
 
@@ -372,6 +379,9 @@ DELAYS may be zero to 268435455 in MIDI tick units.
 Text meta events (a sort of MIDI pseudo-event that appears only in MIDI files)
 take string arguments.  These events may repeat throughout the track
 within Detail mode.  The string data the follows text event commands must either use the remainder of a line, or be double-quoted.
+Escaped characters in this list may be embedded in string events: \r (carriage return), 
+\n (line-feed), \a (bell), \" (double-quote), \f (formfeed), \b (backspace), 
+\t (tab), \v (vertical tab).
 
 @smallexample
 TEXT "Rewrite this measure" TIME_SIGNATURE 3 4 24
@@ -505,7 +515,7 @@ MIDI_CHANNEL 1
 @item END_OF_TRACK or @rbracechar{}.
 @cindex END_OF_TRACK  
 MIDI tracks must end with either an END_OF_TRACK or @rbracechar{}.
-@item SEQUENCER_SPECIFIC num...
+@item SEQUENCER_SPECIFIC byte byte byte...
 @cindex SEQUENCER_SPECIFIC 
 @end table
 
@@ -615,6 +625,19 @@ Bend values are in 14 bits, 0 to 16383.
 @item MIDI_PORT num
 @cindex MIDI_PORT
 @end table
+
+@node SEQUENCER_SPECIFIC
+@subsubsection SEQUENCER_SPECIFIC
+@cindex SEQUENCER_SPECIFIC
+SEQUENCER_SPECIFIC is a way of inserting proprietary synthesizer commands
+into a standard MIDI file.  It is the command SEQUENCER_SPECIFIC followed by
+1-byte values.  Do not include the length of the data; textmidi will compute
+the length and insert it before the data bytes.
+The values may be either 2-digit hexadecimal byte values prefaced with 
+@quotedblleft{}0x@quotedblright{}, or decimal numbers from 0 to 255.
+@smallexample
+SEQUENCER_SPECIFIC 0x43 0x73 0x7f 0x32 0x11 0x00 0x1B 0x03
+@end smallexample
 
 @node SYSEX
 @subsubsection SYSEX
@@ -835,8 +858,7 @@ replaced by program numbers.
 @chapter File Formats
 The input text file for @command{textmidi} is a free-form text file, with exceptions.
 The @command{textmidi} directives for text to be inserted into the MIDI file
-must either run to the end of the line or have their
-data strings be double-quoted.
+must either run to the end of the line or have data strings that are double-quoted.
 
 @node Gvim Highlighting
 @chapter gvim highlighting for textmidi language

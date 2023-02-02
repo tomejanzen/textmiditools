@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidi 1.0.6
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -42,7 +42,7 @@ namespace textmidi
                   Scalar,
                   Chromatic
               };
-    
+
               Follower()
                :
                  follow_{false},
@@ -87,7 +87,7 @@ namespace textmidi
             explicit VoiceXml(VoiceXml&& ) = default;
             VoiceXml& operator=(const VoiceXml& ) = default;
             VoiceXml& operator=(VoiceXml&& ) = default;
-    
+
             VoiceXml(const cgmlegacy::VoiceOld& v)
               : low_pitch_{textmidi::num_to_note(v.low_pitch_)},
                 high_pitch_{textmidi::num_to_note(v.high_pitch_)},
@@ -132,8 +132,8 @@ namespace textmidi
             }
         };
     #pragma pack()
-    
-    
+
+
     }
 }
 

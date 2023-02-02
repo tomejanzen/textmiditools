@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidicgm 1.0
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -45,7 +45,7 @@ namespace textmidi
           private:
             std::string exception_msg_;
         };
-    
+
         class Sine
         {
             friend class boost::serialization::access;
@@ -69,7 +69,7 @@ namespace textmidi
             Sine(Sine&& ) = default;
             Sine& operator=(const Sine& ) = default;
             Sine& operator=(Sine&& ) = default;
-    
+
             double period() const noexcept;
             void period(double period) noexcept;
             double phase() const noexcept;
@@ -85,7 +85,7 @@ namespace textmidi
             double phase_;
             double amplitude_;
             double offset_;
-    
+
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
             {
@@ -95,7 +95,7 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(offset_);
             }
         };
-    
+
         class MeanRangeSines
         {
             friend class boost::serialization::access;
@@ -109,7 +109,7 @@ namespace textmidi
             explicit MeanRangeSines(MeanRangeSines&& ) = default;
             MeanRangeSines& operator=(const MeanRangeSines& ) = default;
             MeanRangeSines& operator=(MeanRangeSines&& ) = default;
-    
+
             explicit MeanRangeSines(const cgmlegacy::OldFormElement& form_element)
               : mean_sine_ {form_element.mean_period(),
                             form_element.mean_phase()},
@@ -132,7 +132,7 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(range_sine_);
             }
         };
-    
+
         class MelodyProbabilities
         {
           public:
@@ -143,14 +143,14 @@ namespace textmidi
                 Same = 2,
                 Up   = 3
             };
-    
+
             MelodyProbabilities() :
                 down_(0.0),
                 same_(0.33),
                 up_(0.67)
             {
             }
-    
+
             MelodyDirection operator()(double random_variable) const;
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
@@ -159,17 +159,17 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(same_);
                 arc & BOOST_SERIALIZATION_NVP(up_);
             }
-    
+
             void down(double down) noexcept
             {
                 down_ = down;
             }
-    
+
             void same(double same) noexcept
             {
                 same_ = same;
             }
-    
+
             void up(double up) noexcept
             {
                 up_ = up;
@@ -179,7 +179,7 @@ namespace textmidi
             double same_;
             double up_;
         };
-    
+
         struct MusicalCharacter
         {
             MusicalCharacter()
@@ -192,7 +192,7 @@ namespace textmidi
                 texture_range()
             {
             }
-    
+
             MusicalCharacter(const MusicalCharacter& ) = default;
             MusicalCharacter(MusicalCharacter&& ) = default;
             MusicalCharacter& operator=(const MusicalCharacter& ) = default;
@@ -207,7 +207,7 @@ namespace textmidi
             double duration(double rf);
             int pitch_index(double rf);
         };
-    
+
         class MusicalForm
         {
             friend class boost::serialization::access;
@@ -231,7 +231,7 @@ namespace textmidi
             MusicalForm(MusicalForm&& ) = default;
             MusicalForm& operator=(const MusicalForm& ) = default;
             MusicalForm& operator=(MusicalForm&& ) = default;
-    
+
             // A ctor for converting old files
             MusicalForm(const std::string& name, const cgmlegacy::TextForm& form)
               : name_{name},
@@ -256,7 +256,7 @@ namespace textmidi
                 voices_.insert(voices_.begin(), form.voices.begin(),
                                form.voices.begin() + form.voice_qty);
             }
-    
+
             std::string name() const noexcept;
             void name(const std::string_view name) noexcept;
             double len() const noexcept;
@@ -319,10 +319,10 @@ namespace textmidi
                 this->valid();
             }
         };
-    
+
         extern RandomDouble rd;
         extern RandomInt ri;
-    
+
     }
 }
 

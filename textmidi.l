@@ -1,7 +1,7 @@
 %{
 /*
 ** TextMIDITools Version 1.0.10
-** Copyright © 2022 Thomas E. Janzen
+** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
 ** There is NO WARRANTY, to the extent permitted by law.
@@ -83,26 +83,35 @@ namespace
     constexpr double DoubleDotLength(0.25);
     // Map textmidi strings to MIDI file format codes.
     const map<const string_view, uint8_t> text_meta_map{
-                  {"TEXT",         text_prefix},
-                  {"COPYRIGHT",    copyright_prefix},
-                  {"TRACK",        track_name_prefix},
-                  {"INSTRUMENT",   instrument_name_prefix},
-                  {"LYRIC",        lyric_prefix},
-                  {"MARKER",       marker_prefix},
-                  {"CUE_POINT",    cue_point_prefix}
+                  {"TEXT",            text_prefix[0]},
+                  {"COPYRIGHT",       copyright_prefix[0]},
+                  {"TRACK",           track_name_prefix[0]},
+                  {"INSTRUMENT",      instrument_name_prefix[0]},
+                  {"LYRIC",           lyric_prefix[0]},
+                  {"MARKER",          marker_prefix[0]},
+                  {"CUE_POINT",       cue_point_prefix[0]},
+                  {"TEXT_08",         text_08_prefix[0]},
+                  {"TEXT_09",         text_09_prefix[0]},
+                  {"TEXT_0A",         text_0A_prefix[0]},
+                  {"TEXT_0B",         text_0B_prefix[0]},
+                  {"TEXT_0C",         text_0C_prefix[0]},
+                  {"TEXT_0D",         text_0D_prefix[0]},
+                  {"TEXT_0E",         text_0E_prefix[0]},
+                  {"TEXT_0F",         text_0F_prefix[0]},
+                  {"SEQUENCER_SPECIFIC", sequencer_specific_prefix[0]},
               };
     const map<string_view, uint8_t> text_control_map{
-        {"RESETALL",     control_reset_all_ctrl},
-        {"ALLNOTES_OFF", control_all_notes_off},
-        {"ALL_SOUND_OFF", control_all_sound_off},
-        {"BREATH",       control_breath},
-        {"DAMPER",       control_damper},
-        {"SOFTPEDAL",    control_softpedal},
-        {"PORTAMENTO",   control_portamento},
-        {"SOSTENUTO",    control_sostenuto},
+        {"RESETALL",     control_reset_all_ctrl[0]},
+        {"ALLNOTES_OFF", control_all_notes_off[0]},
+        {"ALL_SOUND_OFF", control_all_sound_off[0]},
+        {"BREATH",       control_breath[0]},
+        {"DAMPER",       control_damper[0]},
+        {"SOFTPEDAL",    control_softpedal[0]},
+        {"PORTAMENTO",   control_portamento[0]},
+        {"SOSTENUTO",    control_sostenuto[0]},
     };
     // PORTAMENTO and SOSTENUTO have an "on" or "off" value.
-    const map<string, uint8_t> OnOffMap{{"OFF", control_off}, {"ON", control_full}};
+    const map<string, uint8_t> OnOffMap{{"OFF", control_off[0]}, {"ON", control_full[0]}};
 
     int global_ticks_per_quarter{384};
     // global_channel is part of implementing MIDI running status
@@ -181,41 +190,33 @@ namespace
         bool tie_out_;
     };
 
-
-#if 0
-    char
-    tolowerf(char anycase)
-    {
-        return tolower(anycase);
-    }
-#endif
-
     //
     // int_to_vec
     // converts numbers into MIDI 1.1 spec extended values,
     // which can be a vector of bytes.
     // The first byte is the most-significant and has the 2^7 bit set.
-    vector<uint8_t> int_to_vec(int i)
+    void int_to_vec(int i, vector<uint8_t>& numvec)
     {
-        constexpr size_t bits_per_bite{7};
-        int64_t bites{(((sizeof i) * bits_per_byte) / bits_per_bite) + 1};
-
-        constexpr uint8_t dataflag{0x80};
-        vector<uint8_t> numvec{};
-        for (int64_t ctr{bites - 1}; ctr >= 0; --ctr)
+        auto j{i};
+        int lg2{};
+        while (j != 0)
         {
-            uint8_t tempbite{static_cast<uint8_t>((i >> (7 * ctr) ) & byte7_mask)};
-            if ((tempbite != 0) || (0 == ctr))
-            {
-                if (ctr > 0)
-                {
-                    tempbite |= dataflag;
-                }
-                numvec.push_back(tempbite);
-            }
+            j >>= 1;
+            ++lg2;
         }
-        numvec.back() &= ~dataflag;
-        return numvec;
+        constexpr int bits_per_bite{7};
+        const int byte_qty{(lg2 + bits_per_bite) / bits_per_bite};
+        numvec.resize(byte_qty);
+        for (int groupof7{}; groupof7 < byte_qty; ++groupof7)
+        {
+            uint8_t temp{};
+            temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
+            if (groupof7 != numvec.size() - 1)
+            {
+                temp |= 0x80;
+            }
+            numvec[groupof7] = temp;
+        }
     }
 
     //
@@ -250,7 +251,8 @@ namespace
     void write_delay()
     {
         // Delays must occur between events even if delay is zero.
-        vector<uint8_t> delayvec{int_to_vec(accum_delay)};
+        vector<uint8_t> delayvec{};
+        int_to_vec(accum_delay, delayvec);
         trackchunk.insert(trackchunk.end(), delayvec.begin(), delayvec.end());
         total_beats += (accum_delay / global_ticks_per_quarter);
         accum_delay = 0;
@@ -336,7 +338,8 @@ INTEGER ([-+]?{DIGIT}+)
 UINTEGER ({DIGIT}+)
 XINTEGER 0x([0-9A-Fa-f])+
 UXINTEGER ({UINTEGER}|{XINTEGER})
-SYSEX_BYTES ({SOMESPACE}{UXINTEGER})+
+FLOAT {UINTEGER}(([.]{UINTEGER})?)
+HEX_BYTES ({SOMESPACE}{UXINTEGER})+
 PANVALUE ({INTEGER}|LEFT|CENTER|RIGHT)
 SMPTE_CODE ({UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER})
 
@@ -351,9 +354,8 @@ NOTE_NAME ({NOTE_LETTER}{ACCIDENTAL})
 PITCH_NAME (({NOTE_LETTER}{ACCIDENTAL}(-?){OCTAVE_DIGIT})|(([Kk])([+-]?)([[:digit:]]+)))
 KEY_COMMAND ([-]?K{INTEGER}[-]?)
 LAZY_PITCH_NAME ((-?)(({NOTE_LETTER}{ACCIDENTAL}(-?){OCTAVE_DIGIT})|(([Kk])([+-]?)([[:digit:]]+)))(-?))
-QUOTED_STRING ([^"]+)
 STRING .*
-LINE ([^"\n]*)\n
+LINE (.*)\n
 LETTERUNDER ({LETTER}|_)
 ALPHANUM ({LETTER}|{DIGIT})
 ALPHANUMUNDER ({ALPHANUM}|_)
@@ -363,6 +365,8 @@ TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT)
 CONTROL_CHANNEL (RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
 CONTROL_CHANNEL_INT (BREATH|DAMPER|SOFTPEDAL)
 CONTROL_CHANNEL_ONOFF (PORTAMENTO|SOSTENUTO)
+LBRACE [{]
+RBRACE [}]
 LEFTBRACKET "["
 RIGHTBRACKET "]"
 COMMENTCHAR ";"
@@ -378,7 +382,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 %s LAZY_STATE
 %s DETAIL_STATE
 %s TEXT_META_STATE
-%s QUOTE_STATE
 %option noyywrap
 
 %%
@@ -448,6 +451,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>{STARTTRACKTOKEN} {
     /* Recognize STARTTRACK */
     ++track_counter;
+    if (verbose)
+    {
+        clog << "Found " << yytext << '\n';
+    }
     trackchunk.clear();
     trackchunk.push_back('M');
     trackchunk.push_back('T');
@@ -462,6 +469,69 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     running_status = 0;
   }
 
+<DETAIL_STATE>SEQUENCER_SPECIFIC{HEX_BYTES} {
+    write_delay();
+    istringstream iss{yytext};
+    string next_word{};
+    iss >> next_word;
+    vector<string> byte_strings;
+    while (iss)
+    {
+        iss >> next_word;
+        if (iss && !next_word.empty())
+        {
+            byte_strings.push_back(next_word);
+        }
+    }
+    vector<unsigned> bytes(byte_strings.size());
+    transform(byte_strings.begin(),
+        byte_strings.end(), bytes.begin(), [](const string& str)
+        {
+            unsigned i{};
+            if (str.substr(0, 2) == "0x")
+            {
+                istringstream iss{str};
+                iss >> hex >> i;
+            }
+            else
+            {
+                i = lexical_cast<unsigned>(str);
+            }
+            return i;
+        }
+    );
+    // pushd the length of data plus the F7 at end
+    // of the MIDI file stream.
+    trackchunk.push_back(meta_prefix[0]);
+    trackchunk.push_back(sequencer_specific_prefix[0]);
+    vector<uint8_t> length_seq{};
+    int_to_vec(bytes.size(), length_seq);
+    trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
+    if (bytes.size() > 0)
+    {
+        for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)
+        {
+            trackchunk.push_back(*bi);
+        }
+    }
+    running_status = 0;
+}
+
+<DETAIL_STATE>SEQUENCE_NUMBER{SOMESPACE}{UINTEGER} {
+    /* Recognize SEQUENCE_NUMBER 17 */
+    write_delay();
+    istringstream stringstream(yytext);
+    string meta_name{};
+    int sequence_number{};
+    stringstream >> meta_name >> sequence_number;
+    trackchunk.push_back(sequence_number_prefix[0]);
+    trackchunk.push_back(sequence_number_prefix[1]);
+    uint8_t msb{static_cast<uint8_t>((sequence_number >> 8) & octet_mask)};
+    uint8_t lsb{static_cast<uint8_t> (sequence_number       & octet_mask)};
+    trackchunk.push_back(msb);
+    trackchunk.push_back(lsb);
+  }
+
 <DETAIL_STATE>{TEXT_META}{SOMESPACE} {
     /* Recognize (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT) */
     /* This may be followed by a double-quoted string, or a non-quoted string */
@@ -473,7 +543,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     auto prefix{text_meta_map.find(meta_name)};
     if (prefix != text_meta_map.end())
     {
-        trackchunk.push_back(meta_prefix);
+        trackchunk.push_back(meta_prefix[0]);
         trackchunk.push_back(prefix->second);
     }
     else
@@ -485,45 +555,102 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     BEGIN(TEXT_META_STATE);
   }
 
-<TEXT_META_STATE>[\"] {
-    /* Recognize start of a quoted string. */
-    BEGIN(QUOTE_STATE);
-  }
-
 <TEXT_META_STATE>{LINE} {
     /* Recognize the remainder of the line */
     string yystring{yytext};
+    if ('\"' == yystring[0])
+    {
+        yystring.erase(0, 1);
+    }
+    // remove blanks at end of line
+    if (!yystring.empty())
+    {
+        int pos{};
+#if 1
+        const string blanks{" \t\n\r"};
+#else
+        const string blanks{" \t\r"};
+#endif
+        if ((pos = yystring.find_last_not_of(blanks)) != yystring.npos)
+        {
+            yystring.erase(pos);
+        }
+    }
+    // now the trailing spaces/tabs have been removed.
+
+    // remove quotes
+    if (!yystring.empty())
+    {
+        if ('\"' == yystring[yystring.size() - 1]) 
+        {
+            if (yystring.size() > 1)
+            {
+                if (yystring[yystring.size() - 2] != '\\')
+                {
+                    yystring.erase(yystring.size() - 1, 1);
+                }
+            }
+        }
+    }
+    // now the trailing total quotes have been removed.
+    string::size_type p{};
+    p = 0;
+    while ((p = yystring.find("\\a", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\a", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\b", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\b", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\t", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\t", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\n", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\n", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\v", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\v", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\f", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\f", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\r", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\r", 1);
+    }
+    p = 0;
+    while ((p = yystring.find("\\\"", p, 2)) != string::npos)
+    {
+        yystring.replace(p, 2, "\"", 1);
+    }
+#if 0 
     if (!yystring.empty() && ('\n' == yystring[yystring.length() - 1]))
     {
         yystring.erase(yystring.length() - 1);
     }
-    vector<uint8_t> len_vec{int_to_vec(yystring.length())};
+#endif
+    vector<uint8_t> len_vec{};
+    int_to_vec(yystring.length(), len_vec);
     trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
     trackchunk.insert(trackchunk.end(), yystring.begin(), yystring.end());
-    BEGIN(DETAIL_STATE);
-  }
-
-<QUOTE_STATE>{QUOTED_STRING} {
-    /* Recognize start of a quoted string. */
-    string yystring{yytext};
-    if (!yystring.empty() && ('\n' == yystring[yystring.length() - 1]))
-    {
-        yystring.resize(yystring.length() - 1);
-    }
-    vector<uint8_t> len_vec{int_to_vec(yystring.length())};
-    trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
-    trackchunk.insert(trackchunk.end(), yystring.begin(), yystring.end());
-  }
-
-<QUOTE_STATE>["] {
-    /* Recognize end of quoted string and return to DETAIL state. */
     BEGIN(DETAIL_STATE);
   }
 
 <DETAIL_STATE,LAZY_STATE>{END_OF_TRACKTOKEN} {
     /* Recognize the end of a track. */
     write_delay();
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(end_of_track_prefix[0]);
     trackchunk.push_back(end_of_track_prefix[1]);
     const auto sizetemp{trackchunk.size() - 8};
@@ -537,19 +664,19 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     BEGIN(DETAIL_STATE);
   }
 
-<DETAIL_STATE>TEMPO{SPACE}{INTEGER} {
+<DETAIL_STATE>TEMPO{SPACE}{FLOAT} {
     /* Recognize TEMPO {num} */
     write_delay();
     istringstream stringstream(yytext);
     string discard{};
-    uint32_t mmtempo{60};
+    double mmtempo{60.0};
     stringstream >> discard >> mmtempo;
     running_status = 0;
     // convert ticks per minute to useconds per quarter
-    uint32_t tempo{(60 * 1000000) / mmtempo};
+    uint32_t tempo{static_cast<uint32_t>(round((60.0 * 1000000.0) / mmtempo))};
 
     vector<uint8_t> tempovec{int24_to_vec(tempo)};
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
 
     trackchunk.insert(trackchunk.end(), &tempo_prefix[0], &tempo_prefix[2]);
     trackchunk.insert(trackchunk.end(), tempovec.begin(), tempovec.end());
@@ -593,7 +720,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         last_key = static_cast<int>(key);
     }
 
-    check_running_status(channel | note_on);
+    check_running_status(channel | note_on[0]);
 
     key      &= byte7_mask;
     velocity &= byte7_mask;
@@ -627,7 +754,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         key = static_cast<unsigned>(signed_key);
         last_key = static_cast<int>(key);
     }
-    check_running_status(channel | note_off);
+    check_running_status(channel | note_off[0]);
 
     key &= byte7_mask;
     velocity &= byte7_mask;
@@ -662,7 +789,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
 
     write_delay();
-    check_running_status(channel | poly_key_pressure);
+    check_running_status(channel | polyphonic_key_pressure[0]);
 
     key &= byte7_mask;
     pressure &= byte7_mask;
@@ -683,10 +810,15 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     stringstream >> discard >> channel >> control_id >> control_value;
     shift_channel(channel);
 
-    check_running_status(channel | control);
+    check_running_status(channel | control[0]);
 
     control_id &= byte7_mask;
     trackchunk.push_back(control_id);
+    if (control_value & ~byte7_mask)
+    {
+        cerr << text_filename << ':' << line_ctr << " illegal 8-bit control value: " 
+             << hex << control_value << dec << " will be coerced to 7-bit" << '\n';
+    }
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
   }
@@ -713,7 +845,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         exit(EXIT_SUCCESS);
     }
 
-    check_running_status(channel | control);
+    check_running_status(channel | control[0]);
     trackchunk.push_back(control_id);
     trackchunk.push_back(0);
   }
@@ -740,7 +872,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         exit(EXIT_SUCCESS);
     }
 
-    check_running_status(channel | control);
+    check_running_status(channel | control[0]);
     trackchunk.push_back(control_id);
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
@@ -780,7 +912,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         exit(EXIT_SUCCESS);
     }
 
-    check_running_status(channel | control);
+    check_running_status(channel | control[0]);
     trackchunk.push_back(control_id);
     trackchunk.push_back(control_value);
   }
@@ -808,8 +940,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     {
         pancode = pstvi->second;
     }
-    check_running_status(channel | control);
-    trackchunk.push_back(control_pan);
+    check_running_status(channel | control[0]);
+    trackchunk.push_back(control_pan[0]);
     pancode &= byte7_mask;
     trackchunk.push_back(pancode);
   }
@@ -825,7 +957,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     stringstream >> discard >> channel >> theprogram;
     shift_channel(channel);
 
-    check_running_status(channel | program);
+    check_running_status(channel | program[0]);
     --theprogram;
     theprogram &= byte7_mask;
     trackchunk.push_back(theprogram);
@@ -843,7 +975,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     // looks like a kluge. Does channel_pressure participate in running_status?
     running_status = 0;
-    check_running_status(channel | channel_pressure);
+    check_running_status(channel | channel_pressure[0]);
 
     pressure &= byte7_mask;
     trackchunk.push_back(pressure);
@@ -860,14 +992,14 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     stringstream >> discard >> channel >> bend;
     shift_channel(channel);
 
-    const auto status_byte{channel | pitch_wheel};
+    const auto status_byte{channel | pitch_wheel[0]};
     check_running_status(status_byte);
 
     uint32_t bendlsb{},
              bendmsb{};
     bendlsb = bend & byte7_mask;
     trackchunk.push_back(bendlsb);
-    bendmsb = (bend >> 7) & byte7_mask;
+    bendmsb = (bend >> byte7_shift) & byte7_mask;
     trackchunk.push_back(bendmsb);
   }
 
@@ -890,7 +1022,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
       ++denom_pwr;
     }
 
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
 
     trackchunk.insert(trackchunk.end(),
         &time_signature_prefix[0], &time_signature_prefix[2]);
@@ -903,6 +1035,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     trackchunk.push_back(tempticksperbeat);
     trackchunk.push_back(thirtysecsperqtr);
+    running_status = 0;
   }
 
 <DETAIL_STATE>KEY_SIGNATURE{SPACE}{NOTE_NAME} {
@@ -918,11 +1051,12 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // tie is C++ tie for 2 returns, not musical tie.
     tie(accidentals, themode) = key_sig_name_to_accidentals(key_sig_name);
 
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(key_signature_prefix[0]);
     trackchunk.push_back(key_signature_prefix[1]);
     trackchunk.push_back(static_cast<signed char>(accidentals));
     trackchunk.push_back(themode);
+    running_status = 0;
   }
 
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
@@ -931,28 +1065,24 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     string yystring{yytext},
            discard;
-    size_t colonpos{};
-    vector<int> offsets{0};
-    while ((colonpos = yystring.find(':', colonpos)) != yystring.npos)
+    const regex smpteoffset_re{R"(SMPTE_OFFSET([[:space:]])+([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}))"};
+    //const regex smpteoffset_re{R"(SMPTE_OFFSET[[:space:]]+.*)"};
+    smatch matches{};
+    auto sts{regex_match(yystring, matches, smpteoffset_re)};
+    // values in [2]..
+    vector<uint8_t> offsetvalues;
+    for (auto i{2U}; i < 7U; ++i)
     {
-        ++colonpos;
-        offsets.push_back(colonpos);
+        offsetvalues.push_back(static_cast<int>(lexical_cast<int>(matches[i])));
     }
-    offsets.push_back(colonpos);
-    vector<int> offsetvalues;
-    for (auto i{0U}; i < (offsets.size() - 1); ++i)
-    {
-        string str{yystring.substr(offsets[i],
-            offsets[i + 1] - offsets[i] - 1)};
-        offsetvalues.push_back(lexical_cast<int>(str));
-    }
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(smpte_prefix[0]);
     trackchunk.push_back(smpte_prefix[1]);
     for (auto offsetval : offsetvalues)
     {
         trackchunk.push_back(offsetval);
     }
+    running_status = 0;
   }
 
 <DETAIL_STATE>MIDI_CHANNEL{SPACE}{UINTEGER} {
@@ -965,10 +1095,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     stringstream >> discard >> channel;
     shift_channel(channel);
 
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(midi_channel_prefix[0]);
     trackchunk.push_back(midi_channel_prefix[1]);
     trackchunk.push_back(channel);
+    running_status = 0;
   }
 
 <DETAIL_STATE>MIDI_PORT{SPACE}{UINTEGER} {
@@ -980,13 +1111,14 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     int32_t port{};
     stringstream >> discard >> port;
 
-    trackchunk.push_back(meta_prefix);
+    trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(midi_port_prefix[0]);
     trackchunk.push_back(midi_port_prefix[1]);
     trackchunk.push_back(port);
+    running_status = 0;
   }
 
-<DETAIL_STATE>SYSEX{SYSEX_BYTES} {
+<DETAIL_STATE>SYSEX{HEX_BYTES} {
     /* Recognize SYSEX {byte}... */
     /* The textmidi text file should not have the starting F0 or length */
     /* or the trailing F7. */
@@ -1025,8 +1157,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     );
     // pushd the length of data plus the F7 at end
     // of the MIDI file stream.
-    trackchunk.push_back(start_of_sysex);
-    auto length_seq{int_to_vec(bytes.size() + 1)};
+    trackchunk.push_back(start_of_sysex[0]);
+    vector<uint8_t> length_seq{};
+    int_to_vec(bytes.size() + 1, length_seq);
     trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
     if (bytes.size() > 0)
     {
@@ -1035,10 +1168,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             trackchunk.push_back(*bi);
         }
     }
-    trackchunk.push_back(end_of_sysex);
+    trackchunk.push_back(end_of_sysex[0]);
+    running_status = 0;
   }
 
-<DETAIL_STATE>SYSEXRAW{SYSEX_BYTES} {
+<DETAIL_STATE>SYSEXRAW{HEX_BYTES} {
     /* Recognize SYSEXRAW {byte}... */
     /* The textmidi text file should not have the starting F7 or length. */
     /* textmidi will add the 0xF7 and the length at the front */
@@ -1076,9 +1210,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     );
     // pushd the length of data plus the F7 at end
     // of the MIDI file stream.
-    trackchunk.push_back(end_of_sysex); // Raw SYSEX *starts* with F7
+    trackchunk.push_back(end_of_sysex[0]); // Raw SYSEX *starts* with F7
     // length of data; no implied terminating F0
-    auto length_seq{int_to_vec(bytes.size())};
+    vector<uint8_t> length_seq{};
+    int_to_vec(bytes.size(), length_seq);
     trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
     if (bytes.size() > 0)
     {
@@ -1087,6 +1222,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             trackchunk.push_back(*bi);
         }
     }
+    running_status = 0;
   }
 
 <DETAIL_STATE,LAZY_STATE>ticks{SPACE}{STRING} {
@@ -1100,12 +1236,14 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     cout << ticks_str << '\n';
     {
       write_delay();
-      trackchunk.push_back(meta_prefix);
-      trackchunk.push_back(text_prefix);
-      vector<uint8_t> len_vec{int_to_vec(ticks_str.length())};
+      trackchunk.push_back(meta_prefix[0]);
+      trackchunk.push_back(text_prefix[0]);
+      vector<uint8_t> len_vec{};
+      int_to_vec(ticks_str.length(), len_vec);
       trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
       trackchunk.insert(trackchunk.end(), ticks_str.begin(), ticks_str.end());
     }
+    running_status = 0;
   }
 
 <LAZY_STATE>{DYNAMIC} {
@@ -1170,7 +1308,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     if (!keytie.tie_in_)
     {
       write_delay();
-      check_running_status((global_channel & channel_mask) | note_on);
+      check_running_status((global_channel & channel_mask) | note_on[0]);
       trackchunk.push_back(keytie.key_);
       trackchunk.push_back(lazy::dynamic);
     }
@@ -1276,7 +1414,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         write_delay(); // wait the duration of the note
 
         uint32_t channel{global_channel & channel_mask};
-        const uint8_t note_cmd{lazy::note_off_select ? note_off : note_on};
+        const uint8_t note_cmd{lazy::note_off_select ? note_off[0] : note_on[0]};
         const auto status_byte{channel | note_cmd};
         check_running_status(status_byte);
 

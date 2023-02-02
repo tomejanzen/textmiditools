@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.28
+// TextMIDITools Version 1.0.29
 //
 // textmidi 1.0.6
-// Copyright © 2022 Thomas E. Janzen
+// Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -23,11 +23,13 @@
 #include <map>
 #include <memory>
 #include <ostream>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 #include <list>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/preprocessor.hpp>
 
 #include "RhythmRational.h"
 
@@ -37,8 +39,52 @@ namespace textmidi
 {
     //
     // Holds binary standard MIDI file format data.
-    typedef std::vector<uint8_t> MidiStreamVector;
-    typedef std::vector<uint8_t>::iterator MidiStreamIterator;
+    typedef std::uint8_t MidiStreamAtom;
+    typedef std::vector<MidiStreamAtom> MidiStreamVector;
+    typedef MidiStreamVector::iterator MidiStreamIterator;
+    typedef MidiStreamVector::const_iterator MidiStreamConstIterator;
+    class RunningStatus
+    {
+      public:
+        RunningStatus()
+          : running_status_state_(),
+            running_status_value_{}
+        {
+        }
+        RunningStatus(const RunningStatus& ) = default;
+        RunningStatus& operator=(const RunningStatus& ) = default;
+        void running_status(MidiStreamAtom running_status_value)
+        {
+            running_status_state_ = true;
+            running_status_value_ = running_status_value;
+        }
+
+        void clear()
+        {
+            running_status_state_ = false;
+            running_status_value_ = 0u;
+        }
+        bool running_status_state() const
+        {
+            return running_status_state_;
+        }
+        MidiStreamAtom running_status_value() const
+        {
+            return running_status_value_;
+        }
+        // returns a zero-based channel
+        MidiStreamAtom channel() const
+        {
+            return running_status_value_ & textmidi::channel_mask;
+        }
+        MidiStreamAtom command() const
+        {
+            return running_status_value_ & ~textmidi::channel_mask;
+        }
+      private:
+        bool running_status_state_;
+        MidiStreamAtom running_status_value_;
+    };
 
     typedef std::map<std::pair<std::int32_t, bool>, std::string_view> KeySignatureMap;
     extern KeySignatureMap key_signature_map;
@@ -105,12 +151,21 @@ namespace textmidi
       public:
         MidiSysExEvent()
             : MidiMessage{},
-              sys_ex_vec_{}
+              data_{}
         {}
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(start_of_sysex[0])};
+        static constexpr bool recognize(const MidiStreamConstIterator& chi, const MidiStreamConstIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return start_of_sysex[0] == *chi;
+            }
+            return false;
+        }
       private:
-        std::vector<std::uint8_t> sys_ex_vec_;
+        std::vector<MidiStreamAtom> data_;
     };
 
     // I don't know what this is; maybe it's in spec 1.1.
@@ -122,13 +177,22 @@ namespace textmidi
       public:
         MidiSysExRawEvent()
             : MidiMessage{},
-              sys_ex_vec_{}
+              data_{}
         {}
 
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(end_of_sysex[0])};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return end_of_sysex[0] == *chi;
+            }
+            return false;
+        }
       private:
-        std::vector<std::uint8_t> sys_ex_vec_;
+        std::vector<MidiStreamAtom> data_;
     };
     std::ostream& operator<<(std::ostream& os, const MidiSysExRawEvent& msg);
 
@@ -137,23 +201,66 @@ namespace textmidi
     class MidiChannelVoiceMessage : public MidiMessage
     {
       public:
-        MidiChannelVoiceMessage(std::uint8_t status)
+        MidiChannelVoiceMessage(const RunningStatus& running_status)
           : MidiMessage{},
-            running_status_{status},
-            channel_{static_cast<decltype(channel_)>
-                (((status & channel_mask) + 1) & 0xFF)}
+            running_status_{running_status},
+            local_status_{},
+            channel_{running_status.channel() + 1}
         {
         }
-        void consume_stream(MidiStreamIterator& )
+        MidiStreamAtom channel() const;
+        void channel(MidiStreamAtom channel);
+        RunningStatus& running_status()
         {
+            return running_status_;
         }
-        std::uint8_t running_status() const;
-        void running_status(std::uint8_t running_status);
-        std::uint8_t channel() const;
-        void channel(std::uint8_t channel);
+        const RunningStatus& running_status() const
+        {
+            return running_status_;
+        }
+        const RunningStatus& local_status() const
+        {
+            return local_status_;
+        }
+        void local_status(const RunningStatus& rs)
+        {
+            local_status_ = rs;
+        }
+        RunningStatus& local_status()
+        {
+            return local_status_;
+        }
+        static constexpr long int prefix_len{full_note_length - sizeof(note_on)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end, MidiStreamAtom cmd)
+        {
+            // Recognize an event with running status.
+            // All software evolves during maintenance to make all
+            // data global and asymmetrically handled.
+            // channel_pressure and control change have only 1 byte following the command.
+            // Check if these are data bytes and not commands.
+            if ((cmd == channel_pressure[0]) || (cmd == program[0]))
+            {
+                return (*chi & event_flag) == 0;
+            }
+            else
+            {
+                if (std::distance(chi, the_end) >= prefix_len)
+                {
+                    // look for two bytes in a row with 1 << 8 clear.
+                    if ((*chi & event_flag) == 0)
+                    {
+                        ++chi;
+                        return (*chi & event_flag) == 0;
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
       private:
-        std::uint8_t running_status_;
-        std::uint8_t channel_;
+        RunningStatus running_status_;
+        RunningStatus local_status_;
+        MidiStreamAtom channel_;
     };
     std::ostream& operator<<(std::ostream& os,
         const MidiChannelVoiceMessage& msg);
@@ -163,8 +270,8 @@ namespace textmidi
     class MidiChannelVoiceNoteMessage : public MidiChannelVoiceMessage
     {
       public:
-        MidiChannelVoiceNoteMessage(std::uint8_t status)
-          : MidiChannelVoiceMessage(status),
+        MidiChannelVoiceNoteMessage(const RunningStatus& running_status)
+          : MidiChannelVoiceMessage{running_status},
             key_{},
             velocity_{},
             key_string_{},
@@ -173,19 +280,19 @@ namespace textmidi
         }
 
         void consume_stream(MidiStreamIterator& midiiter) override;
-        std::uint8_t key() const;
-        std::uint8_t velocity() const;
+        MidiStreamAtom key() const;
+        MidiStreamAtom velocity() const;
         std::string key_string() const;
-        void key(std::uint8_t key);
-        void velocity(std::uint8_t velocity);
+        void key(MidiStreamAtom key);
+        void velocity(MidiStreamAtom velocity);
         void key_string(std::string_view key_string);
         std::ostream& text(std::ostream& os) const;
         bool operator==(const MidiChannelVoiceNoteMessage& note) const;
         void wholes_to_noteoff(const rational::RhythmRational& wholes_to_noteoff);
         rational::RhythmRational wholes_to_noteoff() const;
       private:
-        std::uint8_t key_;
-        std::uint8_t velocity_;
+        MidiStreamAtom key_;
+        MidiStreamAtom velocity_;
         std::string key_string_;
         rational::RhythmRational wholes_to_noteoff_;
     };
@@ -195,12 +302,12 @@ namespace textmidi
 
     //
     // Rest Message.  This is not in the MIDI spec;
-    // it is a fiction crafted for textmidi.
+    // it is a fiction specifically crafted for textmidi.
     class MidiChannelVoiceNoteRestMessage final : public MidiChannelVoiceNoteMessage
     {
       public:
-        MidiChannelVoiceNoteRestMessage(std::uint8_t status = 0)
-          : MidiChannelVoiceNoteMessage(status)
+        MidiChannelVoiceNoteRestMessage(const RunningStatus& running_status = RunningStatus{})
+          : MidiChannelVoiceNoteMessage(running_status)
         {
             key_string("R");
         }
@@ -212,11 +319,20 @@ namespace textmidi
     class MidiChannelVoiceNoteOffMessage final : public MidiChannelVoiceNoteMessage
     {
       public:
-        MidiChannelVoiceNoteOffMessage(std::uint8_t status)
-          : MidiChannelVoiceNoteMessage(status)
+        MidiChannelVoiceNoteOffMessage(RunningStatus& running_status)
+          : MidiChannelVoiceNoteMessage{running_status}
         {
         }
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == note_off[0];
+            }
+            return false;
+        }
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -227,8 +343,8 @@ namespace textmidi
     class MidiChannelVoiceNoteOnMessage final : public MidiChannelVoiceNoteMessage
     {
       public:
-        MidiChannelVoiceNoteOnMessage(std::uint8_t status, std::uint32_t ticks_per_whole)
-          : MidiChannelVoiceNoteMessage(status),
+        MidiChannelVoiceNoteOnMessage(const RunningStatus& running_status, std::uint32_t ticks_per_whole)
+          : MidiChannelVoiceNoteMessage(running_status),
             ticks_per_whole_{ticks_per_whole},
             ticks_to_noteoff_{},
             ticks_past_noteoff_{},
@@ -243,6 +359,15 @@ namespace textmidi
         void wholes_past_noteoff(const rational::RhythmRational& wholes_past_noteoff);
         rational::RhythmRational wholes_past_noteoff() const;
         std::uint32_t ticks_per_whole() const;
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == note_on[0];
+            }
+            return false;
+        }
       private:
         std::uint32_t ticks_per_whole_;
         std::int64_t ticks_to_noteoff_;
@@ -259,11 +384,20 @@ namespace textmidi
         final : public MidiChannelVoiceNoteMessage
     {
       public:
-        MidiChannelVoicePolyphonicKeyPressureMessage(std::uint8_t status)
-          : MidiChannelVoiceNoteMessage(status)
+        MidiChannelVoicePolyphonicKeyPressureMessage(const RunningStatus& running_status)
+          : MidiChannelVoiceNoteMessage{running_status}
         {
         }
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == polyphonic_key_pressure[0];
+            }
+            return false;
+        }
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -275,21 +409,30 @@ namespace textmidi
         final : public MidiChannelVoiceMessage
     {
       public:
-        MidiChannelVoiceControlChangeMessage(std::uint8_t status)
-          : MidiChannelVoiceMessage(status),
+        MidiChannelVoiceControlChangeMessage(const RunningStatus& running_status)
+          : MidiChannelVoiceMessage(running_status),
             id_{},
             value_{}
         {
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
-        std::uint8_t id() const;
-        void id(std::uint8_t id);
-        std::uint8_t value() const;
-        void value(std::uint8_t value);
+        MidiStreamAtom id() const;
+        void id(MidiStreamAtom id);
+        MidiStreamAtom value() const;
+        void value(MidiStreamAtom value);
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == control[0];
+            }
+            return false;
+        }
       private:
-        std::uint8_t id_;
-        std::uint8_t value_;
+        MidiStreamAtom id_;
+        MidiStreamAtom value_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -301,17 +444,26 @@ namespace textmidi
         final : public MidiChannelVoiceMessage
     {
       public:
-        MidiChannelVoiceProgramChangeMessage(std::uint8_t status)
-          : MidiChannelVoiceMessage{status},
+        MidiChannelVoiceProgramChangeMessage(const RunningStatus& running_status)
+          : MidiChannelVoiceMessage{running_status},
             program_{}
         {
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
-        std::uint8_t program() const;
-        void program(std::uint8_t program);
+        MidiStreamAtom program() const;
+        void program(MidiStreamAtom program);
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == textmidi::program[0];
+            }
+            return false;
+        }
       private:
-        std::uint8_t program_;
+        MidiStreamAtom program_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -323,18 +475,27 @@ namespace textmidi
         final : public MidiChannelVoiceMessage
     {
       public:
-        MidiChannelVoiceChannelPressureMessage(std::uint8_t status)
-          : MidiChannelVoiceMessage(status),
+        MidiChannelVoiceChannelPressureMessage(const RunningStatus& running_status)
+          : MidiChannelVoiceMessage(running_status),
             pressure_{}
         {
         }
 
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
-        std::uint8_t pressure() const;
-        void pressure(std::uint8_t pressure);
+        MidiStreamAtom pressure() const;
+        void pressure(MidiStreamAtom pressure);
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == channel_pressure[0];
+            }
+            return false;
+        }
       private:
-        std::uint8_t pressure_;
+        MidiStreamAtom pressure_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -345,15 +506,24 @@ namespace textmidi
     class MidiChannelVoicePitchBendMessage final : public MidiChannelVoiceMessage
     {
       public:
-        MidiChannelVoicePitchBendMessage(std::uint8_t status)
-          : MidiChannelVoiceMessage{status},
+        MidiChannelVoicePitchBendMessage(const RunningStatus& running_status)
+          : MidiChannelVoiceMessage{running_status},
             pitch_wheel_{}
         {
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
-        std::uint8_t pitch_wheel() const;
-        void pitch_wheel(std::uint8_t pitch_wheel);
+        MidiStreamAtom pitch_wheel() const;
+        void pitch_wheel(MidiStreamAtom pitch_wheel);
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == textmidi::pitch_wheel[0];
+            }
+            return false;
+        }
       private:
         std::uint16_t pitch_wheel_;
     };
@@ -375,10 +545,19 @@ namespace textmidi
       public:
         void consume_stream(MidiStreamIterator& ) override;
         std::ostream& text(std::ostream& os) const;
-        std::uint8_t mode() const;
-        void mode(std::uint8_t mode);
+        MidiStreamAtom mode() const;
+        void mode(MidiStreamAtom mode);
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == control_onmi_on[0];
+            }
+            return false;
+        }
       private:
-        std::uint8_t mode_;
+        MidiStreamAtom mode_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -393,6 +572,15 @@ namespace textmidi
         {
         }
         std::ostream& text(std::ostream& os) const override;
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == control_mono_on[0];
+            }
+            return false;
+        }
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -407,6 +595,15 @@ namespace textmidi
         {
         }
         std::ostream& text(std::ostream& os) const override;
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == control_poly_on[0];
+            }
+            return false;
+        }
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -421,15 +618,41 @@ namespace textmidi
         {
         }
         std::ostream& text(std::ostream& os) const override;
+        static constexpr long int prefix_len{full_note_length};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (*chi & ~channel_mask) == control_mono_on[0];
+            }
+            return false;
+        }
     };
 
     std::ostream& operator<<(std::ostream& os,
         const MidiChannelModeChannelMonoMessage& msg);
 
     //
-    // An empty class to create a branch  for MIDI Meta Events.
+    // A base class for MIDI Meta Events.
     class MidiFileMetaEvent : public MidiMessage
     {
+      public:
+        MidiFileMetaEvent(RunningStatus& running_status)
+        {
+#if defined(CLEAR_RUNNING_STATUS)
+            running_status.clear();
+#endif
+        }
+        static constexpr long int prefix_len{sizeof(meta_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                return (meta_prefix[0] == *chi);
+            }
+            return false;
+        }
+
     };
 
     //
@@ -437,14 +660,31 @@ namespace textmidi
     class MidiFileMetaSequenceEvent final : public MidiFileMetaEvent
     {
       public:
-          MidiFileMetaSequenceEvent()
-            : MidiFileMetaEvent{},
+          MidiFileMetaSequenceEvent(RunningStatus& running_status)
+            : MidiFileMetaEvent{running_status},
               sequence_number_{}
         {}
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
         void sequence_number(std::uint16_t sequence_number);
         std::uint16_t sequence_number() const;
+        static constexpr long int prefix_len{sizeof(meta_prefix) + sizeof(sequence_number_prefix)};
+        // Meant to recognize 0xFF 0x00 0x02
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (sequence_number_prefix[0] == *chi++)
+                    {
+                        return sequence_number_prefix[1] == *chi;
+                    }
+                }
+            }
+            return false;
+        }
       private:
         std::uint16_t sequence_number_;
     };
@@ -454,11 +694,29 @@ namespace textmidi
     class MidiFileMetaUnknown1Event final : public MidiFileMetaEvent
     {
       public:
-          MidiFileMetaUnknown1Event()
-            : MidiFileMetaEvent{}
+          MidiFileMetaUnknown1Event(RunningStatus& running_status)
+            : MidiFileMetaEvent{running_status}
         {}
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(unknown1_prefix)};
+        // Meant to recognize 0xFF 0x00 0x02
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return unknown1_prefix[0] == *chi++;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -470,8 +728,8 @@ namespace textmidi
     class MidiFileMetaStringEvent : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaStringEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaStringEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             str_{}
         {}
         void consume_stream(MidiStreamIterator& midiiter) override;
@@ -485,22 +743,232 @@ namespace textmidi
     class MidiFileMetaTextEvent final : public MidiFileMetaStringEvent
     {
       public:
+        MidiFileMetaTextEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+    class MidiFileMetaText08Event final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText08Event(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_08_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_08_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+    class MidiFileMetaText09Event final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText09Event(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_09_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_09_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+    class MidiFileMetaText0AEvent final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText0AEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_0A_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_0A_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+    class MidiFileMetaText0BEvent final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText0BEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_0B_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_0B_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
     };
 
-    std::ostream& operator<<(std::ostream& os,
-        const MidiFileMetaTextEvent& msg);
+    class MidiFileMetaText0CEvent final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText0CEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_0C_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_0C_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+
+    class MidiFileMetaText0DEvent final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText0DEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_0D_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_0D_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+
+    class MidiFileMetaText0EEvent final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText0EEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_0E_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_0E_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+
+    class MidiFileMetaText0FEvent final : public MidiFileMetaStringEvent
+    {
+      public:
+        MidiFileMetaText0FEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(text_0F_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return text_0F_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
+    };
+
+    std::ostream& operator<<(std::ostream& os, const MidiFileMetaTextEvent& msg);
 
     //
     // MIDI Copyright support
     class MidiFileMetaCopyrightEvent final : public MidiFileMetaStringEvent
     {
       public:
-        MidiFileMetaCopyrightEvent()
-          : MidiFileMetaStringEvent{},
+        MidiFileMetaCopyrightEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status},
             copyright_{}
-        {}
+        {
+        }
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(copyright_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return copyright_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
       private:
         std::string copyright_;
     };
@@ -513,12 +981,25 @@ namespace textmidi
     class MidiFileMetaTrackEvent final : public MidiFileMetaStringEvent
     {
       public:
-        MidiFileMetaTrackEvent()
-          : MidiFileMetaStringEvent{},
+        MidiFileMetaTrackEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status},
             name_{}
         {
         }
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(track_name_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return track_name_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
       private:
         std::string name_;
     };
@@ -531,6 +1012,23 @@ namespace textmidi
     class MidiFileMetaInstrumentEvent final : public MidiFileMetaStringEvent
     {
       public:
+        MidiFileMetaInstrumentEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(instrument_name_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return instrument_name_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
         std::ostream& text(std::ostream& os) const;
     };
 
@@ -542,6 +1040,23 @@ namespace textmidi
     class MidiFileMetaLyricEvent final : public MidiFileMetaStringEvent
     {
       public:
+        MidiFileMetaLyricEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(lyric_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return lyric_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
         std::ostream& text(std::ostream& os) const;
     };
 
@@ -553,6 +1068,23 @@ namespace textmidi
     class MidiFileMetaMarkerEvent final : public MidiFileMetaStringEvent
     {
       public:
+        MidiFileMetaMarkerEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status}
+        {
+        }
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(marker_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return marker_prefix[0] == *chi++;
+                }
+            }
+            return false;
+        }
         std::ostream& text(std::ostream& os) const;
     };
 
@@ -564,10 +1096,23 @@ namespace textmidi
     class MidiFileMetaCuePointEvent final : public MidiFileMetaStringEvent
     {
       public:
-        MidiFileMetaCuePointEvent()
-          : MidiFileMetaStringEvent{},
+        MidiFileMetaCuePointEvent(RunningStatus& running_status)
+          : MidiFileMetaStringEvent{running_status},
             cue_point_{}
         {
+        }
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(cue_point_prefix) + variable_length_quantity_min_len};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return cue_point_prefix[0] == *chi++;
+                }
+            }
+            return false;
         }
         std::ostream& text(std::ostream& os) const;
       private:
@@ -582,8 +1127,8 @@ namespace textmidi
     class MidiFileMetaMidiChannelEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaMidiChannelEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaMidiChannelEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             channel_{}
         {
         }
@@ -591,6 +1136,26 @@ namespace textmidi
         std::ostream& text(std::ostream& os) const;
         std::uint16_t channel();
         void channel(std::uint16_t channel);
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(midi_channel_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (midi_channel_prefix[0] == *chi++)
+                    {
+                        return midi_channel_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
       private:
         std::uint16_t channel_;
     };
@@ -603,9 +1168,29 @@ namespace textmidi
     class MidiFileMetaEndOfTrackEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaEndOfTrackEvent()
-          : MidiFileMetaEvent{}
+        MidiFileMetaEndOfTrackEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status}
         {
+        }
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(end_of_track_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (end_of_track_prefix[0] == *chi++)
+                    {
+                        return end_of_track_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
@@ -619,8 +1204,8 @@ namespace textmidi
     class MidiFileMetaSetTempoEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaSetTempoEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaSetTempoEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             tempo_{60}
         {
         }
@@ -628,6 +1213,26 @@ namespace textmidi
         std::ostream& text(std::ostream& os) const;
         void tempo(std::uint32_t tempo);
         std::uint32_t tempo() const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(tempo_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (tempo_prefix[0] == *chi++)
+                    {
+                        return tempo_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
       private:
         std::uint32_t tempo_;
     };
@@ -640,8 +1245,8 @@ namespace textmidi
     class MidiFileMetaSMPTEOffsetEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaSMPTEOffsetEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaSMPTEOffsetEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             hours_{},
             minutes_{},
             seconds_{},
@@ -650,6 +1255,26 @@ namespace textmidi
         {
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(smpte_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (smpte_prefix[0] == *chi++)
+                    {
+                        return smpte_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
         std::ostream& text(std::ostream& os) const;
       private:
         std::uint16_t hours_;
@@ -667,13 +1292,33 @@ namespace textmidi
     class MidiFileMetaMidiPortEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaMidiPortEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaMidiPortEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             midiport_{}
         {
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(midi_port_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (midi_port_prefix[0] == *chi++)
+                    {
+                        return midi_port_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
       private:
         std::uint16_t midiport_;
     };
@@ -686,8 +1331,8 @@ namespace textmidi
     class MidiFileMetaTimeSignatureEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaTimeSignatureEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaTimeSignatureEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             numerator_{},
             denominator_{},
             clocks_per_click_{},
@@ -696,6 +1341,26 @@ namespace textmidi
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(time_signature_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (time_signature_prefix[0] == *chi++)
+                    {
+                        return time_signature_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
       private:
         std::uint16_t numerator_;
         std::uint16_t denominator_;
@@ -711,14 +1376,34 @@ namespace textmidi
     class MidiFileMetaKeySignatureEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaKeySignatureEvent()
-          : MidiFileMetaEvent{},
+        MidiFileMetaKeySignatureEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             accidentals_{},
             minor_mode_{}
         {
         }
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(key_signature_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    if (key_signature_prefix[0] == *chi++)
+                    {
+                        return key_signature_prefix[1] == *chi++;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
       private:
         std::int32_t accidentals_;
         bool minor_mode_;
@@ -729,35 +1414,53 @@ namespace textmidi
 
     //
     // MIDI sequence specific event support
-    class MidiFileMetaSequenceSpecificEvent final : public MidiFileMetaEvent
+    class MidiFileMetaSequencerSpecificEvent final : public MidiFileMetaEvent
     {
       public:
-        MidiFileMetaSequenceSpecificEvent()
-          : MidiFileMetaEvent{},
-            len_{},
-            manufacturer_{},
+        MidiFileMetaSequencerSpecificEvent(RunningStatus& running_status)
+          : MidiFileMetaEvent{running_status},
             data_()
         {}
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
+        static constexpr long int prefix_len{sizeof(meta_prefix[0]) + sizeof(sequencer_specific_prefix)};
+        static constexpr bool recognize(MidiStreamIterator chi, MidiStreamIterator the_end)
+        {
+            // page 10 of file format chapter.
+            // FF 7F [variable_len] mgfID or 00 mfgid0 mfgid1 
+            if (std::distance(chi, the_end) >= prefix_len)
+            {
+                if (MidiFileMetaEvent::recognize(chi, the_end))
+                {
+                    ++chi;
+                    return (sequencer_specific_prefix[0] == *chi);
+                }
+            }
+            return false;
+        }
         private:
-            std::size_t len_;
-            std::uint16_t manufacturer_;
             std::vector<uint8_t> data_;
     };
 
     std::ostream& operator<<(std::ostream& os,
-        const MidiFileMetaSequenceSpecificEvent& msg);
+        const MidiFileMetaSequencerSpecificEvent& msg);
 
     //
     // The factory that creates the classes above.
     class MidiEventFactory
     {
       public:
+        MidiEventFactory(MidiStreamIterator midi_end)
+          : midi_end_(midi_end),
+            running_status_{}
+        {
+        }
         MidiDelayMessagePair operator()(MidiStreamIterator& midiiter);
         static std::int64_t ticks_accumulated_;
-        static std::int8_t  running_status_;
         static std::uint32_t ticks_per_whole_;
+      private:
+        MidiStreamIterator midi_end_;
+        RunningStatus running_status_;
     };
 
     // Print the text version of an event in LAZY mode.
@@ -765,13 +1468,13 @@ namespace textmidi
     {
       public:
         PrintLazyTrack(
-            MidiDelayMessagePairs& midi_delay_message_pairs, 
-            const rational::RhythmRational quantum, 
+            MidiDelayMessagePairs& midi_delay_message_pairs,
+            const rational::RhythmRational quantum,
             std::uint32_t ticksperquarter)
           : channel_{0},
             tied_list_{},
             midi_delay_message_pairs_{midi_delay_message_pairs},
-            quantum_{quantum}, 
+            quantum_{quantum},
             ticksperquarter_{ticksperquarter}
         {
             ticks_of_note_on();
@@ -793,7 +1496,7 @@ namespace textmidi
         void wholes_of_note_on();
         void wholes_to_next_event();
 
-        std::uint8_t channel_;
+        MidiStreamAtom channel_;
         static int dynamic_;
         static bool lazy_;
         static std::string lazy_string(bool lazy);

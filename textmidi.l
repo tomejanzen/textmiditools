@@ -1066,13 +1066,19 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     string yystring{yytext},
            discard;
-    const regex smpteoffset_re{R"(SMPTE_OFFSET([[:space:]])+([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}))"};
+    const regex smpteoffset_re{R"(SMPTE_OFFSET([[:space:]])+([[:digit:]]{2,4}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}))"};
     //const regex smpteoffset_re{R"(SMPTE_OFFSET[[:space:]]+.*)"};
     smatch matches{};
     auto sts{regex_match(yystring, matches, smpteoffset_re)};
     // values in [2]..
     vector<uint8_t> offsetvalues;
-    for (auto i{2U}; i < 7U; ++i)
+    const int hours{lexical_cast<int>(matches[2])};
+    if (hours > SMPTE_hours_max)
+    {
+        cerr << "SMPTE_OFFSET hours are restricted to " << SMPTE_hours_max << " but are: " << hours << '\n';
+    }
+    offsetvalues.push_back(hours);
+    for (auto i{3}; i < 7; ++i)
     {
         offsetvalues.push_back(static_cast<int>(lexical_cast<int>(matches[i])));
     }

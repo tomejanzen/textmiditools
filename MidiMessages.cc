@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.31
+// TextMIDITools Version 1.0.32
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -1098,6 +1098,10 @@ void textmidi::MidiFileMetaSMPTEOffsetEvent
         ++midiiter;
     }
     hours_ = *midiiter++;
+    if (hours_ > SMPTE_hours_max)
+    {
+        cerr << "SMPTE_OFFSET hours are restricted to " << SMPTE_hours_max << " but are: " << hours_ << '\n';
+    }
     minutes_ = *midiiter++;
     seconds_ = *midiiter++;
     fr_ = *midiiter++;
@@ -1477,34 +1481,44 @@ MidiDelayMessagePair textmidi::MidiEventFactory::operator()(MidiStreamIterator& 
         midi_delay_message_pair.second = make_shared<MidiChannelVoiceControlChangeMessage>(running_status_);
     }
 
-#undef      DEBUG_MIDITEXT (1)
-#if defined(DEBUG_MIDITEXT)
     if (!midi_delay_message_pair.second)
     {
+        cerr << "Unrecognized byte sequence:\n";
         for (auto i{0}; i < 32; ++i)
         {
-            cout << setfill('0') << setw(2) << hex << static_cast<int>(*midiiter++) << ' ';
+            cerr << setfill('0') << setw(2) << hex << static_cast<int>(*midiiter++) << ' ';
         }
-        exit(0);
+        cerr << '\n';
+        cerr << "seeking next command\n";
+        while ((midiiter != midi_end_) && ((*midiiter & event_flag) == 0))
+        {
+            ++midiiter;
+        }
+        --midiiter; // find any delay
+        midi_delay_message_pair.second = make_shared<MidiFileMetaTextEvent>(running_status_);
+        midi_delay_message_pair.second->ticks_accumulated(ticks_accumulated_);
+        if (clear_ticks_accumulated)
+        {
+            ticks_accumulated_ = 0LU;
+            clear_ticks_accumulated = false;
+        }
+        
     }
     else
     {
-#endif
-    midi_delay_message_pair.second->consume_stream(midiiter);
-    midi_delay_message_pair.second->ticks_accumulated(ticks_accumulated_);
-    if (clear_ticks_accumulated)
-    {
-        ticks_accumulated_ = 0LU;
-        clear_ticks_accumulated = false;
+        midi_delay_message_pair.second->consume_stream(midiiter);
+        midi_delay_message_pair.second->ticks_accumulated(ticks_accumulated_);
+        if (clear_ticks_accumulated)
+        {
+            ticks_accumulated_ = 0LU;
+            clear_ticks_accumulated = false;
+        }
+        MidiChannelVoiceMessage* mcvm{dynamic_cast<MidiChannelVoiceMessage*>(midi_delay_message_pair.second.get())};
+        if (mcvm)
+        {
+            running_status_ = mcvm->local_status();
+        }
     }
-    MidiChannelVoiceMessage* mcvm{dynamic_cast<MidiChannelVoiceMessage*>(midi_delay_message_pair.second.get())};
-    if (mcvm)
-    {
-        running_status_ = mcvm->local_status();
-    }
-#if defined(DEBUG_MIDITEXT)
-    }
-#endif
     return midi_delay_message_pair;
 }
 

@@ -1,4 +1,9 @@
 2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc, Midi.h, textmidi.l: permit 3-digit hours in SMPTE_OFFSET
+        but give an error message from textmidi and miditext for hours over 23.
+        * textmidi.l: Fix SMPTEOffset regression that left off the hours.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
         * MidiMessages.cc textmidi.l Midi.h: Fix defects with SEQUENCE_NUMBER.
         miditext wrote the wrong name.  textmidi neglected to write the meta 
         prefix (0xFF).

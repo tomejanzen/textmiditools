@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.31
+// TextMIDITools Version 1.0.32
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -119,6 +119,7 @@ namespace textmidi
     constexpr std::uint8_t end_of_sysex[]           {0xf7};
     constexpr std::uint8_t yamaha                   {0x43};
 
+    const int SMPTE_hours_max{23};
     typedef std::map<int, std::string> DynamicsReverseMap;
     const DynamicsReverseMap dynamics_reverse_map
     {

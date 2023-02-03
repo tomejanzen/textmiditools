@@ -524,6 +524,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string meta_name{};
     int sequence_number{};
     stringstream >> meta_name >> sequence_number;
+    trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[1]);
     uint8_t msb{static_cast<uint8_t>((sequence_number >> 8) & octet_mask)};

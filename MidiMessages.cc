@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.29
+// TextMIDITools Version 1.0.30
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -712,7 +712,7 @@ void textmidi::MidiFileMetaSequenceEvent
 ostream& textmidi::MidiFileMetaSequenceEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
-    os << "SEQUENCE " << sequence_number_;
+    os << "SEQUENCE_NUMBER " << sequence_number_;
     auto oldflags{os.flags(flags)};
     return os;
 }
@@ -773,6 +773,10 @@ ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
     string display_str{str_};
     string::size_type pos{};
 
+    while (0x0 == display_str[display_str.size() - 1])
+    {
+        display_str.resize(display_str.size() - 1);
+    }
     pos = 0;
     while ((pos < display_str.size()) && (pos = display_str.find('\a', pos)) != str_.npos)
     {
@@ -827,7 +831,7 @@ ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
         pos += 2;
     }
 
-    os << '\"' << display_str << '\"';
+    os << '"' << display_str << '"';
     return os;
 }
 

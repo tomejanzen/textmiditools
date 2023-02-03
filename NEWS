@@ -167,5 +167,7 @@
       As a result, the conversion programs are much more
       robust.   Also, straighten out SEQUENCER_SPECIFIC
       to be like SYSEX.
+    * Version 1.0.30
+      Fix mistakes in SEQUENCE_NUMBER
 
 

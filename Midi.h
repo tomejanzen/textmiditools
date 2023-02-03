@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.29
+// TextMIDITools Version 1.0.30
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -38,7 +38,7 @@ namespace textmidi
     constexpr std::uint8_t variable_len_shift       {7};
     constexpr std::uint8_t octet_mask               {0xff};
     constexpr std::uint8_t meta_prefix[]            {0xff};
-    constexpr std::uint8_t sequence_number_prefix[] {0, 2}; // sequence number
+    constexpr std::uint8_t sequence_number_prefix[] {0x00, 0x02}; // sequence number
     // Variable-length string meta-events.
     constexpr std::uint8_t text_prefix[]            {0x01};
     constexpr std::uint8_t copyright_prefix[]       {0x02};

@@ -2,6 +2,7 @@
         * MidiMessages.cc textmidi.l Midi.h: Fix defects with SEQUENCE_NUMBER.
         miditext wrote the wrong name.  textmidi neglected to write the meta 
         prefix (0xFF).
+        * MidiMessages.cc: fix handling of zero-length string events.
 
 2023-02-01     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.h, MidiMessages.{h,cc}, textmidi.l:  Straighten out

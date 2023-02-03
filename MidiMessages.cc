@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.30
+// TextMIDITools Version 1.0.31
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -773,7 +773,7 @@ ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
     string display_str{str_};
     string::size_type pos{};
 
-    while (0x0 == display_str[display_str.size() - 1])
+    while ((display_str.size() > 0) && (0x0 == display_str[display_str.size() - 1]))
     {
         display_str.resize(display_str.size() - 1);
     }

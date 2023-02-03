@@ -169,5 +169,7 @@
       to be like SYSEX.
     * Version 1.0.30
       Fix mistakes in SEQUENCE_NUMBER
+    * Version 1.0.31
+      Fix handling of zero-length string events.
 
 

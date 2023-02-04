@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.32
+// TextMIDITools Version 1.0.33
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -691,11 +691,13 @@ namespace textmidi
 
     //
     // MIDI Meta Unknown event
-    class MidiFileMetaUnknown1Event final : public MidiFileMetaEvent
+    class MidiFileMetaUnknownEvent final : public MidiFileMetaEvent
     {
       public:
-          MidiFileMetaUnknown1Event(RunningStatus& running_status)
-            : MidiFileMetaEvent{running_status}
+          MidiFileMetaUnknownEvent(RunningStatus& running_status)
+            : MidiFileMetaEvent{running_status}, 
+              meta_code_{}, 
+              data_{}
         {}
         void consume_stream(MidiStreamIterator& midiiter) override;
         std::ostream& text(std::ostream& os) const;
@@ -708,7 +710,7 @@ namespace textmidi
                 if (MidiFileMetaEvent::recognize(chi, the_end))
                 {
                     ++chi;
-                    return unknown1_prefix[0] == *chi++;
+                    return !Initial_Meta.contains(*chi);
                 }
                 else
                 {
@@ -717,6 +719,9 @@ namespace textmidi
             }
             return false;
         }
+      private:
+        MidiStreamAtom meta_code_;
+        std::vector<uint8_t> data_;
     };
 
     std::ostream& operator<<(std::ostream& os,
@@ -1247,6 +1252,7 @@ namespace textmidi
       public:
         MidiFileMetaSMPTEOffsetEvent(RunningStatus& running_status)
           : MidiFileMetaEvent{running_status},
+            fps_{smpte_24fps},
             hours_{},
             minutes_{},
             seconds_{},
@@ -1277,6 +1283,7 @@ namespace textmidi
         }
         std::ostream& text(std::ostream& os) const;
       private:
+        std::uint16_t fps_;
         std::uint16_t hours_;
         std::uint16_t minutes_;
         std::uint16_t seconds_;
@@ -1439,7 +1446,7 @@ namespace textmidi
             return false;
         }
         private:
-            std::vector<uint8_t> data_;
+          std::vector<uint8_t> data_;
     };
 
     std::ostream& operator<<(std::ostream& os,

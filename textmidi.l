@@ -341,7 +341,7 @@ UXINTEGER ({UINTEGER}|{XINTEGER})
 FLOAT {UINTEGER}(([.]{UINTEGER})?)
 HEX_BYTES ({SOMESPACE}{UXINTEGER})+
 PANVALUE ({INTEGER}|LEFT|CENTER|RIGHT)
-SMPTE_CODE ({UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER})
+SMPTE_CODE ([[:print:]]+{SOMESPACE}{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER})
 
 ONOFF (ON|OFF)
 SLASH [\/]
@@ -393,9 +393,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <FILE_HEADER_STATE>{INTEGER}{SOMESPACE}{INTEGER}{SOMESPACE}{FILEFORMAT} {
     /* After FILEHEADER, recognize {number of tracks (discarded)} {ticks per quarter note} {MONOTRACK|MULTITRACK|MULTISEQUENCE} */
     MidiHeader midi_header{};
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string format_str;
-    stringstream >> midi_header.ntrks_ >> midi_header.division_ >> format_str;
+    iss >> midi_header.ntrks_ >> midi_header.division_ >> format_str;
     to_upper(format_str);
     auto fmf{textmidi::format_map.find(format_str)};
     if (fmf != textmidi::format_map.end())
@@ -429,8 +429,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize {number of tracks (discarded)} {ticks per quarter} */
     MidiHeader midi_header{};
     midi_header.format_ = MIDI_Format::MultiTrack;
-    istringstream stringstream(yytext);
-    stringstream >> midi_header.ntrks_ >> midi_header.division_;
+    istringstream iss(yytext);
+    iss >> midi_header.ntrks_ >> midi_header.division_;
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swap();
     midi_filestr.write(io_bytes(midi_header), sizeof(MidiHeader));
@@ -520,10 +520,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>SEQUENCE_NUMBER{SOMESPACE}{UINTEGER} {
     /* Recognize SEQUENCE_NUMBER 17 */
     write_delay();
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string meta_name{};
     int sequence_number{};
-    stringstream >> meta_name >> sequence_number;
+    iss >> meta_name >> sequence_number;
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[1]);
@@ -533,14 +533,61 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(lsb);
   }
 
+<DETAIL_STATE>UNKNOWN_META{HEX_BYTES} {
+    /* Recognize SEQUENCE_NUMBER 17 */
+    write_delay();
+
+    istringstream iss{yytext};
+    string next_word{};
+    iss >> next_word;
+    vector<string> byte_strings;
+
+    while (iss)
+    {
+        iss >> next_word;
+        if (iss && !next_word.empty())
+        {
+            byte_strings.push_back(next_word);
+        }
+    }
+
+    vector<unsigned> bytes(byte_strings.size());
+    transform(byte_strings.begin(),
+        byte_strings.end(), bytes.begin(), [](const string& str)
+        {
+            unsigned i{};
+            if (str.substr(0, 2) == "0x")
+            {
+                istringstream iss{str};
+                iss >> hex >> i;
+            }
+            else
+            {
+                i = lexical_cast<unsigned>(str);
+            }
+            return i;
+        }
+    );
+    // push the data byters onto the MIDI stream.
+    trackchunk.push_back(meta_prefix[0]);
+    if (bytes.size() > 0)
+    {
+        for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)
+        {
+            trackchunk.push_back(*bi);
+        }
+    }
+    running_status = 0;
+  }
+
 <DETAIL_STATE>{TEXT_META}{SOMESPACE} {
     /* Recognize (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT) */
     /* This may be followed by a double-quoted string, or a non-quoted string */
     /* to the end of the line. */
     write_delay();
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string meta_name{};
-    stringstream >> meta_name;
+    iss >> meta_name;
     auto prefix{text_meta_map.find(meta_name)};
     if (prefix != text_meta_map.end())
     {
@@ -668,10 +715,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>TEMPO{SPACE}{FLOAT} {
     /* Recognize TEMPO {num} */
     write_delay();
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard{};
     double mmtempo{60.0};
-    stringstream >> discard >> mmtempo;
+    iss >> discard >> mmtempo;
     running_status = 0;
     // convert ticks per minute to useconds per quarter
     uint32_t tempo{static_cast<uint32_t>(round((60.0 * 1000000.0) / mmtempo))};
@@ -685,10 +732,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
 <DETAIL_STATE>DELAY{SPACE}{INTEGER} {
     /* Recognize DELAY num (the number of ticks) */
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard{};
     uint32_t delay{};
-    stringstream >> discard >> delay;
+    iss >> discard >> delay;
     accum_delay += delay;
     global_total_track_ticks += static_cast<double>(delay);
   }
@@ -697,13 +744,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize NOTE_ON {chan} {pitch} {velocity num}. */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel{}, // [1..16]
              key{},
              velocity{};
     string pitch_name;
-    stringstream >> discard >> channel >> pitch_name >> velocity;
+    iss >> discard >> channel >> pitch_name >> velocity;
 
     shift_channel(channel);
 
@@ -733,13 +780,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize NOTE_OFF {channel} {Pitch} {velocity}. */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel{},
              key{},
              velocity{};
     string pitch_name;
-    stringstream >> discard >> channel >> pitch_name >> velocity;
+    iss >> discard >> channel >> pitch_name >> velocity;
     shift_channel(channel);
 
     bool is_delta{};
@@ -766,13 +813,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
 <DETAIL_STATE>POLY_KEY_PRESSURE{SPACE}{INTEGER}{SPACE}{PITCH_NAME}{SPACE}{INTEGER} {
     /* Recognize POLY_KEY_PRESSURE {channel} {pitchname} {velocity num} */
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel{},
              key{},
              pressure{};
     string pitch_name;
-    stringstream >> discard >> channel >> pitch_name >> pressure;
+    iss >> discard >> channel >> pitch_name >> pressure;
     shift_channel(channel);
 
     bool is_delta{};
@@ -803,12 +850,12 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize CONTROL {channel} {control_id} {control_value} */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel{};
     int32_t control_id{},
             control_value{};
-    stringstream >> discard >> channel >> control_id >> control_value;
+    iss >> discard >> channel >> control_id >> control_value;
     shift_channel(channel);
 
     check_running_status(channel | control[0]);
@@ -831,8 +878,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string namestr{};
     int32_t control_id{};
     uint32_t channel{};
-    istringstream stringstream{yytext};
-    stringstream >> namestr >> channel;
+    istringstream iss{yytext};
+    iss >> namestr >> channel;
     shift_channel(channel);
 
     try
@@ -859,8 +906,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t channel{};
     int32_t control_id{},
         control_value{};
-    istringstream stringstream(yytext);
-    stringstream >> namestr >> channel >> control_value;
+    istringstream iss(yytext);
+    iss >> namestr >> channel >> control_value;
     shift_channel(channel);
     try
     {
@@ -886,8 +933,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string namestr;
     uint32_t channel{};
     string onoff{};
-    istringstream stringstream(yytext);
-    stringstream >> namestr >> channel >> onoff;
+    istringstream iss(yytext);
+    iss >> namestr >> channel >> onoff;
     shift_channel(channel);
     int32_t control_id{};
     try
@@ -926,8 +973,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     write_delay();
 
     uint32_t channel{};
-    istringstream stringstream(yytext);
-    stringstream >> namestr >> channel >> panstring;
+    istringstream iss(yytext);
+    iss >> namestr >> channel >> panstring;
     to_lower(panstring);
     shift_channel(channel);
 
@@ -951,11 +998,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize PROGRAM {channel num} {program number} */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel {},
              theprogram {};
-    stringstream >> discard >> channel >> theprogram;
+    iss >> discard >> channel >> theprogram;
     shift_channel(channel);
 
     check_running_status(channel | program[0]);
@@ -967,11 +1014,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>CHANNEL_PRESSURE{SPACE}{INTEGER}{SPACE}{INTEGER} {
     /* Recognize CHANNEL_PRESSURE {channel} {pressure}*/
     write_delay();
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel {},
                  pressure{};
-    stringstream >> discard >> channel >> pressure;
+    iss >> discard >> channel >> pressure;
     shift_channel(channel);
 
     // looks like a kluge. Does channel_pressure participate in running_status?
@@ -986,11 +1033,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize PITCH_WHEEL {channel} {bend num} */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel {},
              bend{};
-    stringstream >> discard >> channel >> bend;
+    iss >> discard >> channel >> bend;
     shift_channel(channel);
 
     const auto status_byte{channel | pitch_wheel[0]};
@@ -1008,13 +1055,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize TIME_SIGNATURE {beats per bar} {beats per measure} {MIDI ticks per beat} */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t numer{},
              denom{},
              ticksperbeat{};
     constexpr uint32_t thirtysecsperqtr{8};
-    stringstream >> discard >> numer >> denom >> ticksperbeat;
+    iss >> discard >> numer >> denom >> ticksperbeat;
     running_status = 0;
     // convert ticks per minute to useconds per quarter
     uint32_t denom_pwr{};
@@ -1043,10 +1090,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize KEY_SIGNATURE {key as in a for a minor, or Db for D-flat Major */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     string key_sig_name;
-    stringstream >> discard >> key_sig_name;
+    iss >> discard >> key_sig_name;
     int32_t themode{};
     int32_t accidentals;
     // tie is C++ tie for 2 returns, not musical tie.
@@ -1066,19 +1113,37 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     string yystring{yytext},
            discard;
-    const regex smpteoffset_re{R"(SMPTE_OFFSET([[:space:]])+([[:digit:]]{2,4}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}))"};
+    const regex smpteoffset_re{R"(SMPTE_OFFSET([[:space:]]+)(\w+)([[:space:]])+([[:digit:]]{2,4}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}))"};
+    constexpr int full_match{0};
+    constexpr int space1_match{1};
+    constexpr int fps_match{2};
+    constexpr int space2_match{3};
+    constexpr int hours_match{4};
+    constexpr int minutes_match{5};
+    constexpr int seconds_match{6};
+    constexpr int fr_match{7};
+    constexpr int ff_match{8};
+
     //const regex smpteoffset_re{R"(SMPTE_OFFSET[[:space:]]+.*)"};
     smatch matches{};
     auto sts{regex_match(yystring, matches, smpteoffset_re)};
     // values in [2]..
     vector<uint8_t> offsetvalues;
-    const int hours{lexical_cast<int>(matches[2])};
-    if (hours > SMPTE_hours_max)
+#if 0
+    for (auto m : matches)
     {
-        cerr << "SMPTE_OFFSET hours are restricted to " << SMPTE_hours_max << " but are: " << hours << '\n';
+        cout << '#' << m.str() << '#' << '\n';
     }
+#endif
+    std::uint8_t fps{0};
+    if (smpte_fps_reverse_map.contains(matches[fps_match]))
+    {
+        fps = smpte_fps_reverse_map.at(matches[fps_match]);
+    }
+    int hours{lexical_cast<int>(matches[hours_match])};
+    hours |= (fps << smpte_fps_shift);
     offsetvalues.push_back(hours);
-    for (auto i{3}; i < 7; ++i)
+    for (auto i{minutes_match}; i < (ff_match + 1); ++i)
     {
         offsetvalues.push_back(static_cast<int>(lexical_cast<int>(matches[i])));
     }
@@ -1096,10 +1161,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize MIDI_CHANNEL {channel} */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     uint32_t channel{};
-    stringstream >> discard >> channel;
+    iss >> discard >> channel;
     shift_channel(channel);
 
     trackchunk.push_back(meta_prefix[0]);
@@ -1113,10 +1178,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     /* Recognize MIDI_PORT {port} */
     write_delay();
 
-    istringstream stringstream(yytext);
+    istringstream iss(yytext);
     string discard;
     int32_t port{};
-    stringstream >> discard >> port;
+    iss >> discard >> port;
 
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(midi_port_prefix[0]);
@@ -1162,7 +1227,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             return i;
         }
     );
-    // pushd the length of data plus the F7 at end
+    // push the length of data plus the F7 at end
     // of the MIDI file stream.
     trackchunk.push_back(start_of_sysex[0]);
     vector<uint8_t> length_seq{};
@@ -1294,8 +1359,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string channel_str(yytext),
            discard;
     uint32_t channel{1U}; // text channels are in [1..16]
-    istringstream stringstream(channel_str);
-    stringstream >> discard >> channel;
+    istringstream iss(channel_str);
+    iss >> discard >> channel;
     shift_channel(channel);
 
     if ((running_status & channel_mask) != global_channel)

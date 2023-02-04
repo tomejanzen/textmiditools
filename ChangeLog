@@ -1,4 +1,9 @@
 2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.cc MidiMessages.h, textmidi.vim,textmidi.texi, 
+        textmidi.l: Support Unknown Meta events as hexadecimal data.
+        Support SMPTE_OFFSET properly, exposing frames per second in textmidi files.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
         * MidiMessages.cc, Midi.h, textmidi.l: permit 3-digit hours in SMPTE_OFFSET
         but give an error message from textmidi and miditext for hours over 23.
         * textmidi.l: Fix SMPTEOffset regression that left off the hours.

@@ -173,4 +173,6 @@
       Fix handling of zero-length string events.
     * Version 1.0.32
       Fix regression in SMPTEOffset but flag 3-digit hours.
+    * 2023-02-03
+      Support unknown meta events
 

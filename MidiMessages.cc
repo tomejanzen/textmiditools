@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.32
+// TextMIDITools Version 1.0.33
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -727,25 +727,35 @@ uint16_t textmidi::MidiFileMetaSequenceEvent::sequence_number() const
     return sequence_number_;
 }
 
-void textmidi::MidiFileMetaUnknown1Event
+void textmidi::MidiFileMetaUnknownEvent
     ::consume_stream(MidiStreamIterator& midiiter)
 {
     if (meta_prefix[0] == *midiiter)
     {
         ++midiiter;
     }
-    if (unknown1_prefix[0] == *midiiter)
+    if (!Initial_Meta.contains(*midiiter))
     {
+        meta_code_ = *midiiter;
         ++midiiter;
     }
-    auto len{*midiiter};
-    midiiter += len + 1;
+    int64_t len{variable_len_value(midiiter)};
+    for (auto b{0}; b < len; ++b)
+    {
+        data_.push_back(*midiiter++);
+    }
 }
 
-ostream& textmidi::MidiFileMetaUnknown1Event::text(ostream& os) const
+ostream& textmidi::MidiFileMetaUnknownEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
-    os << "UNKNOWN META 0x11";
+    os << "UNKNOWN_META " << hex << setw(2) << setfill('0') << "0x" << static_cast<int>(meta_code_);
+    os << ' ' << hex << setw(2) << setfill('0') << "0x" << data_.size();
+    for (auto it(data_.begin()); it != data_.end(); ++it)
+    {
+        os << ' ' << hex << "0x" << setw(2) << setfill('0')
+           << static_cast<unsigned>(*it);
+    }
     auto oldflags{os.flags(flags)};
     return os;
 }
@@ -1098,10 +1108,8 @@ void textmidi::MidiFileMetaSMPTEOffsetEvent
         ++midiiter;
     }
     hours_ = *midiiter++;
-    if (hours_ > SMPTE_hours_max)
-    {
-        cerr << "SMPTE_OFFSET hours are restricted to " << SMPTE_hours_max << " but are: " << hours_ << '\n';
-    }
+    fps_ = (hours_ >> smpte_fps_shift) & smpte_fps_mask;
+    hours_ &= smpte_hours_mask;
     minutes_ = *midiiter++;
     seconds_ = *midiiter++;
     fr_ = *midiiter++;
@@ -1111,7 +1119,16 @@ void textmidi::MidiFileMetaSMPTEOffsetEvent
 ostream& textmidi::MidiFileMetaSMPTEOffsetEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
-    os << "SMPTE_OFFSET " << setfill('0') << setw(2) << hours_ << ':' << setw(2) << minutes_
+    os << "SMPTE_OFFSET ";
+    if (smpte_fps_map.contains(fps_))
+    {
+        os << smpte_fps_map.at(fps_);
+    } 
+    else
+    {
+        os << "smpte_24fps";
+    } 
+    os << ' ' << setfill('0') << setw(2) << hours_ << ':' << setw(2) << minutes_
        << ':' << setw(2) << seconds_ << ':' << setw(2) << fr_ << ':' << setw(2) << ff_;
     auto oldflags{os.flags(flags)};
     return os;
@@ -1329,9 +1346,9 @@ MidiDelayMessagePair textmidi::MidiEventFactory::operator()(MidiStreamIterator& 
         running_status_.clear();
 #endif
     }
-    if (MidiFileMetaUnknown1Event::recognize(midiiter, midi_end_))
+    if (MidiFileMetaUnknownEvent::recognize(midiiter, midi_end_))
     {
-        midi_delay_message_pair.second = make_shared<MidiFileMetaUnknown1Event>(running_status_);
+        midi_delay_message_pair.second = make_shared<MidiFileMetaUnknownEvent>(running_status_);
 #if defined(CLEAR_RUNNING_STATUS)
         running_status_.clear();
 #endif

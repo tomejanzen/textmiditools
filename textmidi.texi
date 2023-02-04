@@ -317,6 +317,7 @@ or in LAZY mode, which makes it possible to type in musical more quickly.
 * Note Events::
 * DELAY::
 * Text meta events::
+* Unknown meta events::
 * Non-text meta events::
 * MIDI Events::
 * SEQUENCER_SPECIFIC::
@@ -385,6 +386,26 @@ Escaped characters in this list may be embedded in string events: \r (carriage r
 
 @smallexample
 TEXT "Rewrite this measure" TIME_SIGNATURE 3 4 24
+@end smallexample
+
+or
+
+@smallexample
+TEXT Rewrite this measure
+TIME_SIGNATURE 3 4 24
+@end smallexample
+
+@node Unknown meta events
+@subsubsection Unknown meta events
+@cindex Unknown meta events
+Unknown meta events (a sort of MIDI pseudo-event that appears only in MIDI files)
+take byte arguments in the format of SYSEX.  These are META events that the MIDI spec has not assigned.
+These events may repeat throughout the track
+within Detail mode.  Do not include the length; textmidi will compute the length and write it into
+the event in the MIDI file.
+
+@smallexample
+UNKNOWN_META byte byte byte...
 @end smallexample
 
 or
@@ -496,7 +517,7 @@ The value for ticksperbeat is MIDI ticks in a beat.  It is often 240, but 384 is
 @example
 TIME_SIGNATURE 3 4 240
 @end example
-@item SMPTE_OFFSET HH:MM:SS:Frame:framefraction
+@item SMPTE_OFFSET @lbracechar{}smpte_24fps|smpte_25fps|smpte_30fpsdropframe|smpte_30fpsnondropframe@rbracechar{} HH:MM:SS:Frame:framefraction
 @cindex SMPTE_OFFSET  
 @example
 SMPTE_OFFSET 07:47:13:07:11

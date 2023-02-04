@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.32
+// TextMIDITools Version 1.0.33
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include <iostream>
 
 namespace textmidi
@@ -56,11 +57,25 @@ namespace textmidi
     constexpr std::uint8_t text_0E_prefix[]         {0x0E};
     constexpr std::uint8_t text_0F_prefix[]         {0x0F};
     constexpr std::uint8_t unknown1_prefix[]        {0x11};
+
+    const std::set<int> Initial_Meta{sequence_number_prefix[0], text_prefix[0], 
+        copyright_prefix[0], track_name_prefix[0], instrument_name_prefix[0], 
+        lyric_prefix[0], marker_prefix[0], cue_point_prefix[0], text_08_prefix[0],
+        text_09_prefix[0], text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
+        text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0]};
+
     // fixed-length meta-events
     constexpr std::uint8_t midi_channel_prefix[]    {0x20, 1}; // prefix, length
     constexpr std::uint8_t end_of_track_prefix[]    {0x2f, 0}; // prefix, length
     constexpr std::uint8_t tempo_prefix[]           {0x51, 3}; // prefix, length
     constexpr std::uint8_t smpte_prefix[]           {0x54, 5}; // prefix, length
+    constexpr std::uint8_t smpte_24fps{0};
+    constexpr std::uint8_t smpte_25fps{1};
+    constexpr std::uint8_t smpte_30fpsdropframe{2};
+    constexpr std::uint8_t smpte_30fpsnondropframe{3};
+    constexpr std::uint8_t smpte_fps_shift{5};
+    constexpr std::uint8_t smpte_fps_mask{3};
+    constexpr std::uint8_t smpte_hours_mask{0x1f};
     constexpr std::uint8_t time_signature_prefix[]  {0x58, 4}; // prefix, length
     constexpr std::uint8_t key_signature_prefix[]   {0x59, 2}; // prefix, length
     constexpr std::uint8_t sequencer_specific_prefix[]{0x7f};
@@ -120,6 +135,25 @@ namespace textmidi
     constexpr std::uint8_t yamaha                   {0x43};
 
     const int SMPTE_hours_max{23};
+
+    typedef std::map<int, std::string> SmpteFpsMap;
+    const SmpteFpsMap smpte_fps_map
+    {
+        {0, "smpte_24fps"},
+        {1, "smpte_25fps"},
+        {2, "smpte_30fpsdropframe"},
+        {3, "smpte_30fpsnondropframe"}
+    };
+
+    typedef std::map<std::string, int> SmpteFpsReverseMap;
+    const SmpteFpsReverseMap smpte_fps_reverse_map
+    {
+        {"smpte_24fps", 0},
+        {"smpte_25fps", 1},
+        {"smpte_30fpsdropframe", 2},
+        {"smpte_30fpsnondropframe", 3}
+    };
+
     typedef std::map<int, std::string> DynamicsReverseMap;
     const DynamicsReverseMap dynamics_reverse_map
     {

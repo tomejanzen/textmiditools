@@ -317,8 +317,8 @@ or in LAZY mode, which makes it possible to type in musical more quickly.
 * Note Events::
 * DELAY::
 * Text meta events::
-* Unknown meta events::
 * Non-text meta events::
+* Unknown meta events::
 * MIDI Events::
 * SEQUENCER_SPECIFIC::
 * SYSEX::
@@ -386,26 +386,6 @@ Escaped characters in this list may be embedded in string events: \r (carriage r
 
 @smallexample
 TEXT "Rewrite this measure" TIME_SIGNATURE 3 4 24
-@end smallexample
-
-or
-
-@smallexample
-TEXT Rewrite this measure
-TIME_SIGNATURE 3 4 24
-@end smallexample
-
-@node Unknown meta events
-@subsubsection Unknown meta events
-@cindex Unknown meta events
-Unknown meta events (a sort of MIDI pseudo-event that appears only in MIDI files)
-take byte arguments in the format of SYSEX.  These are META events that the MIDI spec has not assigned.
-These events may repeat throughout the track
-within Detail mode.  Do not include the length; textmidi will compute the length and write it into
-the event in the MIDI file.
-
-@smallexample
-UNKNOWN_META byte byte byte...
 @end smallexample
 
 or
@@ -539,6 +519,23 @@ MIDI tracks must end with either an END_OF_TRACK or @rbracechar{}.
 @item SEQUENCER_SPECIFIC byte byte byte...
 @cindex SEQUENCER_SPECIFIC 
 @end table
+
+@node Unknown meta events
+@subsubsection Unknown meta events
+@cindex Unknown meta events
+Unknown meta events (that is, META events using unassigned meta codes)
+take byte arguments in the format of SYSEX.  These are META events that the MIDI spec has not assigned.
+These events may repeat throughout the track
+while within DETAIL mode.  Do not include the length: @command{textmidi} will compute the length and put it in the MIDI file as
+a variable-length integer.
+The individual values may be hexadecimal, prefixed with "0x", or decimal, but must not exceed 255 decimal.
+@smallexample
+UNKNOWN_META meta_code_byte data_byte...
+@end smallexample
+or
+@smallexample
+UNKNOWN_META 0x11 0xFF
+@end smallexample
 
 @node MIDI Events
 @subsubsection MIDI Events

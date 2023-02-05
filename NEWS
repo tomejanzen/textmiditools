@@ -175,4 +175,8 @@
       Fix regression in SMPTEOffset but flag 3-digit hours.
     * 2023-02-03
       Support unknown meta events
+    * 2023-02-04
+      Continue testing on 6000 files.
+      Rationalize UNKNOWN_META to not require the length
+      in the text version in textmidi language.
 

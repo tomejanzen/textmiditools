@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.33
+// TextMIDITools Version 1.0.34
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -750,7 +750,6 @@ ostream& textmidi::MidiFileMetaUnknownEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << "UNKNOWN_META " << hex << setw(2) << setfill('0') << "0x" << static_cast<int>(meta_code_);
-    os << ' ' << hex << setw(2) << setfill('0') << "0x" << data_.size();
     for (auto it(data_.begin()); it != data_.end(); ++it)
     {
         os << ' ' << hex << "0x" << setw(2) << setfill('0')

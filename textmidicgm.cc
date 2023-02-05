@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.33
+// TextMIDITools Version 1.0.34
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
         string str{};
         str.reserve(512);
         (((((((str += "textmidicgm\n")
-            += "TextMIDITools 1.0.33\n")
+            += "TextMIDITools 1.0.34\n")
             += "Copyright © 2023 Thomas E. Janzen\n")
             += "License GPLv3+: GNU GPL version 3 or later ")
             += "<https://gnu.org/licenses/gpl.html>\n")

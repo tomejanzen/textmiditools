@@ -538,10 +538,22 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     write_delay();
 
     istringstream iss{yytext};
-    string next_word{};
-    iss >> next_word;
-    vector<string> byte_strings;
+    string next_word;
+    iss >> next_word; // "UNKNOWN_META"
+    iss >> next_word; // an unassigned meta code
 
+    unsigned meta_code{};
+    if (next_word.substr(0, 2) == "0x")
+    {
+        istringstream iss2{next_word};
+        iss2 >> hex >> meta_code;
+    }
+    else
+    {
+        meta_code = lexical_cast<unsigned>(next_word);
+    }
+
+    vector<string> byte_strings{};
     while (iss)
     {
         iss >> next_word;
@@ -551,6 +563,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
 
+    vector<uint8_t> len_vec{};
+    int_to_vec(byte_strings.size(), len_vec);
+
     vector<unsigned> bytes(byte_strings.size());
     transform(byte_strings.begin(),
         byte_strings.end(), bytes.begin(), [](const string& str)
@@ -558,8 +573,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             unsigned i{};
             if (str.substr(0, 2) == "0x")
             {
-                istringstream iss{str};
-                iss >> hex >> i;
+                istringstream iss3{str};
+                iss3 >> hex >> i;
             }
             else
             {
@@ -570,6 +585,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     );
     // push the data byters onto the MIDI stream.
     trackchunk.push_back(meta_prefix[0]);
+    trackchunk.push_back(meta_code);
+    trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
+
     if (bytes.size() > 0)
     {
         for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)

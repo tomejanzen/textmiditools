@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -13,13 +13,38 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <fstream>
+
+namespace textmidi
+{
+    struct TextMidiFeatures
+    {
+      public:
+        TextMidiFeatures(std::string text_filename, std::ofstream& midi_filestr,
+                std::uint32_t detache, bool note_off_select, bool verbose)
+          : text_filename_{text_filename},
+            midi_filestr_{midi_filestr},
+            line_ctr_{1},
+            detache_{detache},
+            note_off_select_{note_off_select},
+            verbose_{verbose}
+        {}
+        const std::string text_filename_;
+        std::ofstream& midi_filestr_;
+        int line_ctr_;
+        const std::uint32_t detache_;
+        const bool note_off_select_;
+        const bool verbose_;
+    };
+    extern std::shared_ptr<TextMidiFeatures> text_midi_features;
+}
 
 //
 // Globals for textmidi.
 //
 // line_ctr counts the lines in the input text file so that error messages can
 // refer to the line on which the error was encountered.
-extern std::uint32_t line_ctr;
+extern std::int32_t line_ctr;
 //
 // detache is set by a command-line argument for the separation of consecutive
 // notes.  Defaults to 10.

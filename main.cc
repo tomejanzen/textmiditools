@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <string>
 #include <filesystem>
 
@@ -36,6 +37,11 @@ namespace
 
 }
 
+namespace textmidi
+{
+    std::shared_ptr<textmidi::TextMidiFeatures> text_midi_features{};
+}
+
 extern FILE* yyin;
 extern int yylex(void);
 
@@ -45,17 +51,23 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt + ",h").c_str(),                                         HelpTxt)
-        ((VerboseOpt + ",v").c_str(),                                      VerboseTxt)
-        ((VersionOpt + ",V").c_str(),                                      VersionTxt)
-        ((TextmidiOpt + ",i").c_str(), program_options::value<string>(),   TextmidiTxt)
-        ((MidiOpt + ",o").c_str(),     program_options::value<string>(),   MidiTxt)
-        ((AnswerOpt + ",a").c_str(),                                       AnswerTxt)
-        ((DetacheOpt + ",d").c_str(),  program_options::value<uint32_t>(), DetacheTxt)
-        ((LazyNoteOffOpt + ",l").c_str(),                                LazyNoteOffTxt)
+        ((HelpOpt        + ",h").c_str(),                                        HelpTxt)
+        ((VerboseOpt     + ",v").c_str(),                                     VerboseTxt)
+        ((VersionOpt     + ",V").c_str(),                                     VersionTxt)
+        ((TextmidiOpt    + ",i").c_str(), program_options::value<string>(),  TextmidiTxt)
+        ((MidiOpt        + ",o").c_str(), program_options::value<string>(),      MidiTxt)
+        ((AnswerOpt      + ",a").c_str(),                                      AnswerTxt)
+        ((DetacheOpt     + ",d").c_str(), program_options::value<uint32_t>(), DetacheTxt)
+        ((LazyNoteOffOpt + ",l").c_str(),                                 LazyNoteOffTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
+
+    string text_filename{}; // set in main.cc as option
+    uint32_t detache{0};   // set from cmd line; separation between notes
+    ofstream midi_filestr{}; // set in main.cc
+    bool verbose{};          // set in main.cc as option
+    bool note_off_select{};
     try
     {
         pos_opts_desc.add(TextmidiOpt.c_str(), -1);
@@ -83,7 +95,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "textmidi\n";
-        cout << "TextMIDITools 1.0.34\n";
+        cout << "TextMIDITools 1.0.35\n";
         cout << "Copyright © 2023 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << " <https://gnu.org/licenses/gpl.html>\n";
@@ -149,7 +161,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(LazyNoteOffOpt)) [[unlikely]]
     {
-        lazy::note_off_select = true;
+        note_off_select = true;
     }
 
     if (midi_filename.empty()) [[unlikely]]
@@ -168,11 +180,13 @@ int main(int argc, char *argv[])
     {
         cerr << "Can't open " << midi_filename << endl;
     }
+    textmidi::text_midi_features = make_shared<textmidi::TextMidiFeatures>(text_filename, midi_filestr,
+        detache, note_off_select, verbose);
     while (yylex());
     fclose (yyin);
     if (verbose)
     {
-        cout << "Lines processed: " << (line_ctr - 1) << '\n';
+        cout << "Lines processed: " << (textmidi::text_midi_features->line_ctr_ - 1) << '\n';
     }
 
     return EXIT_SUCCESS;

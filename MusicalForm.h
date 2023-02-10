@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -7,8 +7,8 @@
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-#if !defined(TEXTMIDIFORM)
-#    define  TEXTMIDIFORM
+#if !defined(TEXTMIDIFORM_H)
+#    define  TEXTMIDIFORM_H
 
 #include <string>
 #include <vector>
@@ -160,20 +160,9 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(up_);
             }
 
-            void down(double down) noexcept
-            {
-                down_ = down;
-            }
-
-            void same(double same) noexcept
-            {
-                same_ = same;
-            }
-
-            void up(double up) noexcept
-            {
-                up_ = up;
-            }
+            void down(double down) noexcept;
+            void same(double same) noexcept;
+            void up(double up) noexcept;
           private:
             double down_;
             double same_;
@@ -231,6 +220,7 @@ namespace textmidi
             MusicalForm(MusicalForm&& ) = default;
             MusicalForm& operator=(const MusicalForm& ) = default;
             MusicalForm& operator=(MusicalForm&& ) = default;
+            static bool prefer_sharp_;
 
             // A ctor for converting old files
             MusicalForm(const std::string& name, const cgmlegacy::TextForm& form)
@@ -251,7 +241,7 @@ namespace textmidi
                 scale_.resize(form.scale.size());
                 transform(form.scale.begin(), form.scale.end(),
                     scale_.begin(), [](const std::uint32_t notenum)
-                    { return textmidi::num_to_note(notenum); });
+                    { return textmidi::num_to_note(notenum, &prefer_sharp_); });
                 voices_.clear();
                 voices_.insert(voices_.begin(), form.voices.begin(),
                                form.voices.begin() + form.voice_qty);

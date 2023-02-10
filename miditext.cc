@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // miditext 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -31,6 +31,7 @@
 #include <iomanip>
 #include <iterator>
 #include <string>
+#include <thread>
 #include <vector>
 #include <map>
 #include <filesystem>
@@ -39,7 +40,7 @@
 
 #include "rational_support.h"
 #include "TextmidiUtils.h"
-#include "MidiMessages.h"
+#include "MidiEvents.h"
 #include "Options.h"
 
 using namespace std;
@@ -50,26 +51,101 @@ using namespace textmidi::rational;
 
 namespace
 {
-
+    typedef pair<MidiStreamIterator, int> StreamLengthPair;
     const string QuantizeOpt{"quantize"};
     constexpr char QuantizeTxt[]{"quantization ratio in quotes: \"1/32\""};
     const string LazyOpt{"lazy"};
     constexpr char LazyTxt[]{"Try to write in textmidi's lazy mode"};
 
-}
+
+    void find_tracks(MidiStreamIterator midiiter, MidiStreamIterator midiend,
+            vector<StreamLengthPair>& track_iters, size_t expected_track_qty)
+    {
+        track_iters.clear();
+        while (midiiter != midiend)
+        {
+            if (! ((*(midiiter++) == 'M')
+                && (*(midiiter++) == 'T')
+                && (*(midiiter++) == 'r')
+                && (*(midiiter++) == 'k')))
+            {
+                const auto track_num{track_iters.size() + 1};
+                if (track_num > expected_track_qty)
+                {
+                    cerr << "There is extra data after the tracks which will be ignored.\n";
+                }
+                else
+                {
+                    cerr << "No Track header MTrk in track: " << track_num << '\n';
+                }
+                return;
+            }
+            int32_t num{};
+            copy(midiiter, midiiter + sizeof(num), io_bytes(num));
+            midiiter += sizeof(num);
+            num = htobe32(num);
+            if (std::distance(&(*midiiter), &(*midiend)) < num)
+            {
+                cerr << "File too short for track length in track: "
+                     << track_iters.size() << '\n';
+                return;
+            }
+            track_iters.push_back(StreamLengthPair(midiiter, num));
+            midiiter += num;
+        }
+    }
+
+    class ConvertTrack
+    {
+      public:
+        ConvertTrack(StreamLengthPair stream_length_pair,
+            MidiDelayEventPairs& message_pairs,
+            uint32_t ticks_per_whole, RhythmRational quantum, bool lazy)
+          : stream_length_pair_{stream_length_pair},
+            message_pairs_{message_pairs},
+            ticks_per_whole_{ticks_per_whole},
+            quantum_{quantum},
+            lazy_{lazy}
+        {
+        }
+        void operator()()
+        {
+            auto midiiter{stream_length_pair_.first};
+            const auto midiend{stream_length_pair_.first + stream_length_pair_.second};
+            MidiEventFactory midi_event_factory{midiend};
+            MidiEventFactory::ticks_per_whole_ = ticks_per_whole_;
+
+            MidiDelayEventPair midi_delay_msg_pair;
+            do
+            {
+                midi_delay_msg_pair = midi_event_factory(midiiter);
+                message_pairs_.push_back(midi_delay_msg_pair);
+            }
+            while ((midiiter < midiend)
+                && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
+                                (midi_delay_msg_pair.second.get()));
+        }
+     private:
+        const StreamLengthPair stream_length_pair_;
+        MidiDelayEventPairs& message_pairs_;
+        const uint32_t ticks_per_whole_;
+        const RhythmRational& quantum_;
+        const bool lazy_;
+    };
+ }
 
 int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt + ",h").c_str(),                                       HelpTxt)
-        ((VerboseOpt + ",v").c_str(),                                    VerboseTxt)
-        ((VersionOpt + ",V").c_str(),                                    VersionTxt)
-        ((MidiOpt + ",i").c_str(), program_options::value<string>(),     MidiTxt)
-        ((AnswerOpt + ",a").c_str(),                                     AnswerTxt)
+        ((HelpOpt     + ",h").c_str(),                                       HelpTxt)
+        ((VerboseOpt  + ",v").c_str(),                                    VerboseTxt)
+        ((VersionOpt  + ",V").c_str(),                                    VersionTxt)
+        ((MidiOpt     + ",i").c_str(), program_options::value<string>(),     MidiTxt)
+        ((AnswerOpt   + ",a").c_str(),                                     AnswerTxt)
         ((TextmidiOpt + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
         ((QuantizeOpt + ",q").c_str(), program_options::value<string>(), QuantizeTxt)
-        ((LazyOpt + ",l").c_str(),                                       LazyTxt)
+        ((LazyOpt     + ",l").c_str(),                                       LazyTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -103,7 +179,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "miditext\n";
-        cout << "TextMIDITools 1.0.34\n";
+        cout << "TextMIDITools 1.0.35\n";
         cout << "Copyright © 2023 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";
@@ -181,7 +257,7 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    vector<uint8_t> midivector{};
+    MidiStreamVector midivector{};
     try
     {
         ifstream midifilestr;
@@ -191,7 +267,7 @@ int main(int argc, char *argv[])
             std::cerr << "Open failed for " << midi_filename << '\n';
             return EXIT_FAILURE;
         }
-        uint8_t ui{};
+        MidiStreamAtom ui{};
         while (midifilestr.read(reinterpret_cast<char*>(&ui), sizeof ui))
         {
             midivector.push_back(ui);
@@ -226,7 +302,7 @@ int main(int argc, char *argv[])
     text_filestr << "FILEHEADER ";
     midiiter += sizeof(MidiHeader);
     const uint32_t ticksperquarter{midi_header.division_};
-    const uint32_t ticksperwhole{ticksperquarter * 4};
+    uint32_t ticks_per_whole{ticksperquarter * 4};
 
     text_filestr << midi_header.ntrks_ << ' ' << midi_header.division_ << ' ' << midi_header.format_ << '\n';
     if (verbose)
@@ -234,45 +310,37 @@ int main(int argc, char *argv[])
         cout << "FORMAT: " << midi_header.format_ << '\n';
     }
     size_t track_qty{midi_header.ntrks_};
-    while ((midiiter != midivector.end()) && track_qty--)
-    {
-        midiiter += 4; // skip MTrk
-        int32_t num{};
-        copy(midiiter, midiiter + sizeof(num), io_bytes(num));
-        midiiter += sizeof(num);
-        num = htobe32(num);
-        int32_t tracklen{num};
-        text_filestr << "\nSTARTTRACK" << " ; bytes in track: "
-                    << tracklen << '\n';
-        // event loop
-        {
-            MidiEventFactory midi_event_factory{midivector.end()};
-            MidiEventFactory::ticks_per_whole_ = ticksperwhole;
 
-            MidiDelayMessagePairs message_pairs;
-            MidiDelayMessagePair midi_delay_msg_pair;
-            do
-            {
-#undef      DEBUG_MIDITEXT 
-#if defined(DEBUG_MIDITEXT)
-                cout << hex << std::distance(midivector.begin(), midiiter) << '\n';
-#endif
-                midi_delay_msg_pair = midi_event_factory(midiiter);
-                message_pairs.push_back(midi_delay_msg_pair);
-            }
-            while ((midiiter < midivector.end())
-                && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
-                                (midi_delay_msg_pair.second.get()));
-            if (lazy)
-            {
-                PrintLazyTrack print_lazy_track{message_pairs, quantum, ticksperquarter};
-                text_filestr << print_lazy_track << '\n';
-            }
-            else
-            {
-                copy(message_pairs.begin(), message_pairs.end(),
-                    ostream_iterator<MidiDelayMessagePair>(text_filestr, "\n"));
-            }
+    vector<StreamLengthPair> stream_length_pairs{};
+    find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
+    vector<MidiDelayEventPairs> midi_delay_event_pairs(stream_length_pairs.size());
+    vector<thread> track_threads(stream_length_pairs.size());
+
+    for (auto& ti : stream_length_pairs)
+    {
+        const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
+        ConvertTrack convert_track{ti, midi_delay_event_pairs[i], ticks_per_whole, quantum, lazy};
+        thread track_thread{convert_track};
+        track_threads[i] = move(track_thread);
+    }
+    for (auto& thr : track_threads)
+    {
+        thr.join();
+    }
+    for (auto& mdep : midi_delay_event_pairs)
+    {
+        const auto i{std::distance(&(*midi_delay_event_pairs.begin()), &mdep)};
+        text_filestr << "\nSTARTTRACK" << " ; bytes in track: "
+                    << stream_length_pairs[i].second << '\n';
+        if (lazy)
+        {
+            PrintLazyTrack print_lazy_track{mdep, quantum, ticksperquarter};
+            text_filestr << print_lazy_track << '\n';
+        }
+        else
+        {
+            copy(mdep.begin(), mdep.end(),
+                ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
         }
     }
     return EXIT_SUCCESS;

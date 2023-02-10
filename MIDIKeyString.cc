@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // MIDIKeyString.cc
 //
@@ -134,7 +134,7 @@ namespace {
 // Public function.
 // Convert a MIDI key number to a string.
 //
-string textmidi::num_to_note(int num)
+string textmidi::num_to_note(int num, bool* prefer_sharp)
 {
     const int octave{num / 12 - 1};
     //
@@ -144,16 +144,18 @@ string textmidi::num_to_note(int num)
     // written out by miditext as all in flatted notes, and a piece in A major should
     // come out in sharped notes.
     //
+#if 0
     static bool prefer_sharp{true};
+#endif
     string notename;
     switch (num % 12)
     {
       case 0:
         notename = "C";
-        prefer_sharp = false;
+        *prefer_sharp = false;
         break;
       case 1:
-        if (prefer_sharp)
+        if (*prefer_sharp)
         {
             notename = "C#";
         }
@@ -164,10 +166,10 @@ string textmidi::num_to_note(int num)
         break;
       case 2:
         notename = "D";
-        prefer_sharp = true;
+        *prefer_sharp = true;
         break;
       case 3:
-        if (prefer_sharp)
+        if (*prefer_sharp)
         {
             notename = "D#";
         }
@@ -178,14 +180,14 @@ string textmidi::num_to_note(int num)
         break;
       case 4:
         notename = "E";
-        prefer_sharp = true;
+        *prefer_sharp = true;
         break;
       case 5:
         notename = "F";
-        prefer_sharp = false;
+        *prefer_sharp = false;
         break;
       case 6:
-        if (prefer_sharp)
+        if (*prefer_sharp)
         {
             notename = "F#";
         }
@@ -198,7 +200,7 @@ string textmidi::num_to_note(int num)
         notename = "G";
         break;
       case 8:
-        if (prefer_sharp)
+        if (*prefer_sharp)
         {
             notename = "G#";
         }
@@ -209,10 +211,10 @@ string textmidi::num_to_note(int num)
         break;
       case 9:
         notename = "A";
-        prefer_sharp = true;
+        *prefer_sharp = true;
         break;
       case 10:
-        if (prefer_sharp)
+        if (*prefer_sharp)
         {
             notename = "A#";
         }
@@ -223,7 +225,7 @@ string textmidi::num_to_note(int num)
         break;
       case 11:
         notename = "B";
-        prefer_sharp = true;
+        *prefer_sharp = true;
         break;
     }
     notename += lexical_cast<string>(octave);

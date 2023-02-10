@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -115,11 +115,11 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt + ",h").c_str(),                                       HelpTxt)
-        ((VerboseOpt + ",v").c_str(),                                    VerboseTxt)
-        ((VersionOpt + ",V").c_str(),                                    VersionTxt)
-        ((SMUSOpt + ",i").c_str(),     program_options::value<string>(), SMUSTxt)
-        ((AnswerOpt + ",a").c_str(),                                     AnswerTxt)
+        ((HelpOpt     + ",h").c_str(),                                       HelpTxt)
+        ((VerboseOpt  + ",v").c_str(),                                    VerboseTxt)
+        ((VersionOpt  + ",V").c_str(),                                    VersionTxt)
+        ((SMUSOpt     + ",i").c_str(), program_options::value<string>(),     SMUSTxt)
+        ((AnswerOpt   + ",a").c_str(),                                     AnswerTxt)
         ((TextmidiOpt + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
         cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.34\n";
+        cout << "TextMIDITools 1.0.35\n";
         cout << "Copyright © 2023 Thomas E. Janzen\n";
         cout << "License GPLv3+: GNU GPL version 3 or later "
              << "<https://gnu.org/licenses/gpl.html>\n";

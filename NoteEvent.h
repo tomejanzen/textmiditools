@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -9,8 +9,8 @@
 //
 // NoteEvent is used by textmidicgm.
 //
-#if !defined(NOTEVENT)
-#    define  NOTEVENT
+#if !defined(NOTEVENT_H)
+#    define  NOTEVENT_H
 
 #include <cstdint>
 
@@ -38,22 +38,10 @@ namespace textmidi
         NoteEvent& operator=(const NoteEvent& ) = default;
         NoteEvent& operator=(NoteEvent&& ) = delete;
 
-        void pitch(int pitch) noexcept
-        {
-            pitch_ = pitch;
-        }
-        int pitch() const noexcept
-        {
-            return pitch_;
-        }
-        int vel() const noexcept
-        {
-            return vel_;
-        }
-        textmidi::rational::RhythmRational musical_rhythm() const noexcept
-        {
-            return musical_rhythm_;
-        }
+        void pitch(int pitch) noexcept;
+        int pitch() const noexcept;
+        int vel() const noexcept;
+        textmidi::rational::RhythmRational musical_rhythm() const noexcept;
       private:
         int pitch_;
         int vel_;

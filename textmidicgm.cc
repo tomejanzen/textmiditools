@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -129,19 +129,19 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt        + ",h").c_str(), HelpTxt)
-        ((VerboseOpt     + ",v").c_str(), VerboseTxt)
-        ((VersionOpt     + ",V").c_str(), VersionTxt)
-        ((FormOpt        + ",f").c_str(), program_options::value<string>(), FormTxt)
-        ((XML_FormOpt    + ",x").c_str(), program_options::value<string>(), XML_FormTxt)
-        ((AnswerOpt      + ",a").c_str(), AnswerTxt)
-        ((TextmidiOpt    + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
-        ((GnuplotOpt     + ",g").c_str(), GnuplotTxt)
-        ((RandomOpt      + ",r").c_str(), program_options::value<string>(), RandomTxt)
-        ((InstrumentsOpt + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
-        ((ClampScaleOpt  + ",c").c_str(), ClampScaleTxt)
-        ((TrackScrambleOpt + ",z").c_str(), program_options::value<string>(), TrackScrambleTxt)
-        ((TrackScramblePeriodOpt + ",y").c_str(), program_options::value<double>(), TrackScramblePeriodTxt)
+        ((HelpOpt                + ",h").c_str(),                                                                HelpTxt)
+        ((VerboseOpt             + ",v").c_str(),                                                             VerboseTxt)
+        ((VersionOpt             + ",V").c_str(),                                                             VersionTxt)
+        ((FormOpt                + ",f").c_str(), program_options::value<string>(),                              FormTxt)
+        ((XML_FormOpt            + ",x").c_str(), program_options::value<string>(),                          XML_FormTxt)
+        ((AnswerOpt              + ",a").c_str(),                                                              AnswerTxt)
+        ((TextmidiOpt            + ",o").c_str(), program_options::value<string>(),                          TextmidiTxt)
+        ((GnuplotOpt             + ",g").c_str(),                                                             GnuplotTxt)
+        ((RandomOpt              + ",r").c_str(), program_options::value<string>(),                            RandomTxt)
+        ((InstrumentsOpt         + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
+        ((ClampScaleOpt          + ",c").c_str(),                                                          ClampScaleTxt)
+        ((TrackScrambleOpt       + ",z").c_str(), program_options::value<string>(),                     TrackScrambleTxt)
+        ((TrackScramblePeriodOpt + ",y").c_str(), program_options::value<double>(),               TrackScramblePeriodTxt)
     ;
     program_options::variables_map var_map;
     try
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
         string str{};
         str.reserve(512);
         (((((((str += "textmidicgm\n")
-            += "TextMIDITools 1.0.34\n")
+            += "TextMIDITools 1.0.35\n")
             += "Copyright © 2023 Thomas E. Janzen\n")
             += "License GPLv3+: GNU GPL version 3 or later ")
             += "<https://gnu.org/licenses/gpl.html>\n")

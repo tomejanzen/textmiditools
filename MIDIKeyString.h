@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // MIDIKeyString.cc
 //
@@ -10,8 +10,8 @@
 // There is NO WARRANTY, to the extent permitted by law.
 //
 // 2020-08-06
-#if !defined(MIDIKEYSTRING)
-#    define  MIDIKEYSTRING
+#if !defined(MIDIKEYSTRING_H)
+#    define  MIDIKEYSTRING_H
 
 #include <utility>
 #include <string>
@@ -21,7 +21,7 @@ namespace textmidi
     constexpr int halfsteps_per_octave{12};
     extern std::pair<int, bool> key_sig_name_to_accidentals(std::string &key_sig_name);
     extern std::pair<int, bool> pitchname_to_keynumber(const std::string& pitchname);
-    extern std::string num_to_note(int num);
+    extern std::string num_to_note(int num, bool* prefer_sharp);
 
     struct CompareLowerNoteName
     {

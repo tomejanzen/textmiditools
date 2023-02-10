@@ -1,3 +1,26 @@
+2023-02-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.cc MidiEvents,cc, NoteEvent.cc, RhythmRational.cc, main.cc, testmidi.bash,
+        textmidi.{h,l}: Change the globals in textmidi into a global pointer to a
+        struct of features.
+        * miditext.cc: Print error about extra data at the end of the MIDI file.
+        * Composer.h GnuPlot.h MIDIKeyString.h Midi.h MidiEvents.{cc,h} MusicalForm.h 
+        NoteEvent.h Options.h RandomDouble.h RandomInt.h RhythmRational.h Scales.h 
+        Track.h Voice.h cgmlegacy.h miditext.cc rational_support.h textmidi.h textmidi.l:
+        Replace Midi.h's arrays with vectors; this meant they could not be constexpr,
+        so that propagated everywhere.  Also change prefix_len in MidiEvents.h
+        to not be constexpr as a result.  Add _H to include idempotent checks.
+        Add data range checks to input binary MIDI data in miditext.
+        Permit but report over-long MIDI files, that is, that have extra data 
+        after the last track.  Create special constexpr of channel voice commands
+        so that they could be used where needed.  A typed enum class did not compile.
+
+2023-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.in, MidiMessages.{h,cc}}->MidiEvents.{h,cc},
+        miditext.cc: Change name MidiMessages to MidiEvents
+        and all related class names etc.
+        * MidiEvents.{cc,h}: Put function definitions into .cc.
+        Put function definitions in .cc in the same order as in .h.
+
 2023-02-04     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.l, MidiMessages.cc, textmidi.texi: refine UNKNOWN_META.
         * Don't require the length in the text version.

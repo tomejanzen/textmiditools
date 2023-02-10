@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -189,6 +189,7 @@ string SmusTrackEventPitch::textmidi_tempo()
 string SmusTrackEventPitch::textmidi()
 {
     ostringstream oss{};
+    static bool prefer_sharp{};
     if (decision() < Rest)
     {
         oss << i_am_lazy_string(true);
@@ -208,7 +209,7 @@ string SmusTrackEventPitch::textmidi()
                 remove_from_tied();
             }
         }
-        oss << num_to_note(decision());
+        oss << num_to_note(decision(), &prefer_sharp);
         if (is_tiedout())
         {
             if (!tied_back)

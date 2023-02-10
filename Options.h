@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -7,8 +7,8 @@
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-#if !defined(OPTIONS)
-#    define  OPTIONS
+#if !defined(OPTIONS_H)
+#    define  OPTIONS_H
 
 #include <string>
 

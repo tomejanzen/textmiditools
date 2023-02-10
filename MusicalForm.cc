@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -184,6 +184,21 @@ cgm::MelodyProbabilities::MelodyDirection
             }
         }
     }
+}
+
+void MelodyProbabilities::down(double down) noexcept
+{
+    down_ = down;
+}
+
+void MelodyProbabilities::same(double same) noexcept
+{
+    same_ = same;
+}
+
+void MelodyProbabilities::up(double up) noexcept
+{
+    up_ = up;
 }
 
 double cgm::MusicalCharacter::duration(double rf)
@@ -647,4 +662,6 @@ void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
 
 RandomDouble cgm::rd{};
 RandomInt cgm::ri{};
+bool MusicalForm::prefer_sharp_{};
+
 

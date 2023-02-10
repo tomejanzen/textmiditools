@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -7,8 +7,8 @@
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-#if !defined(RANDOMINT)
-#    define  RANDOMINT
+#if !defined(RANDOMINT_H)
+#    define  RANDOMINT_H
 #include <iostream>
 #include <limits>
 #include <random>

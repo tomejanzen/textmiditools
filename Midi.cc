@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -19,7 +19,7 @@
 using namespace textmidi;
 
 void
-textmidi::MidiHeader::to_bytes(std::uint8_t* bytes)
+textmidi::MidiHeader::to_bytes(MidiStreamAtom* bytes)
 {
     MidiHeader* header_bytes{reinterpret_cast<MidiHeader*>(bytes)};
     *header_bytes = *this;
@@ -52,7 +52,7 @@ textmidi::operator<<(std::ostream& os, textmidi::MIDI_Format mf)
     {
         os << "UNKNOWN FORMAT";
     }
-    auto oldflags{os.flags(flags)};
+    static_cast<void>(os.flags(flags));
     return os;
 }
 
@@ -63,7 +63,7 @@ textmidi::operator<<(std::ostream& os, const MidiHeader& mh)
     os << mh.chunk_name_[0] << mh.chunk_name_[1] << mh.chunk_name_[2]
         << mh.chunk_name_[3] << ' ' << mh.chunk_len_ << ' ' << mh.format_
         << ' ' << mh.ntrks_ << ' ' << mh.division_;
-    auto oldflags{os.flags(flags)};
+    static_cast<void>(os.flags(flags));
     return os;
 }
 

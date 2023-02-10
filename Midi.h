@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -21,10 +21,28 @@
 
 namespace textmidi
 {
+    //
+    // Holds binary standard MIDI file format data.
+    typedef std::uint8_t MidiStreamAtom;
+    typedef std::vector<MidiStreamAtom> MidiStreamVector;
+    typedef MidiStreamVector::iterator MidiStreamIterator;
+    typedef MidiStreamVector::const_iterator MidiStreamConstIterator;
+
     constexpr double MinDynamic{30};
     constexpr double MaxDynamic{127};
+    constexpr double MaxPitchBend{127};
+    constexpr int MinSignedPan{-64};
+    constexpr int CenterSignedPan{0};
+    constexpr int MaxSignedPan{63};
+
+    constexpr int MaxSmpteHours{23};
+    constexpr int MaxSmpteMinutes{59};
+    constexpr int MaxSmpteSeconds{59};
+    constexpr int MaxSmpteFrames{29};
+    constexpr int MaxSmpteHundredths{99};
 
     constexpr int MidiPitchQty{128};
+    constexpr double MaxKeyboardKey{127};
     constexpr int MidiChannelQty{16};
     constexpr int MidiIdiophoneChannel{10};
     constexpr std::int32_t PanExcess64{64};
@@ -32,107 +50,115 @@ namespace textmidi
 
     constexpr long int variable_length_quantity_max_len{sizeof(int)};
     constexpr long int variable_length_quantity_min_len{sizeof(int)};
-    constexpr std::uint8_t event_flag               {0x80};
-    constexpr std::uint8_t variable_len_flag        {0x80};
-    constexpr std::uint8_t
-        variable_len_byte_mask   {static_cast<std::uint8_t>(~variable_len_flag)};
-    constexpr std::uint8_t variable_len_shift       {7};
-    constexpr std::uint8_t octet_mask               {0xff};
-    constexpr std::uint8_t meta_prefix[]            {0xff};
-    constexpr std::uint8_t sequence_number_prefix[] {0x00, 0x02}; // sequence number
+    constexpr MidiStreamAtom event_flag               {0x80};
+    constexpr MidiStreamAtom variable_len_flag        {0x80};
+    constexpr MidiStreamAtom
+        variable_len_byte_mask   {static_cast<MidiStreamAtom>(~variable_len_flag)};
+    constexpr MidiStreamAtom variable_len_shift       {7};
+    constexpr MidiStreamAtom octet_mask               {0xff};
+    const MidiStreamVector meta_prefix{0xff};
+    const MidiStreamVector sequence_number_prefix {0x00, 0x02}; // sequence number
     // Variable-length string meta-events.
-    constexpr std::uint8_t text_prefix[]            {0x01};
-    constexpr std::uint8_t copyright_prefix[]       {0x02};
-    constexpr std::uint8_t track_name_prefix[]      {0x03};
-    constexpr std::uint8_t instrument_name_prefix[] {0x04};
-    constexpr std::uint8_t lyric_prefix[]           {0x05};
-    constexpr std::uint8_t marker_prefix[]          {0x06};
-    constexpr std::uint8_t cue_point_prefix[]       {0x07};
-    constexpr std::uint8_t text_08_prefix[]         {0x08};
-    constexpr std::uint8_t text_09_prefix[]         {0x09};
-    constexpr std::uint8_t text_0A_prefix[]         {0x0A};
-    constexpr std::uint8_t text_0B_prefix[]         {0x0B};
-    constexpr std::uint8_t text_0C_prefix[]         {0x0C};
-    constexpr std::uint8_t text_0D_prefix[]         {0x0D};
-    constexpr std::uint8_t text_0E_prefix[]         {0x0E};
-    constexpr std::uint8_t text_0F_prefix[]         {0x0F};
-    constexpr std::uint8_t unknown1_prefix[]        {0x11};
+    const MidiStreamVector text_prefix            {0x01};
+    const MidiStreamVector copyright_prefix       {0x02};
+    const MidiStreamVector track_name_prefix      {0x03};
+    const MidiStreamVector instrument_name_prefix {0x04};
+    const MidiStreamVector lyric_prefix           {0x05};
+    const MidiStreamVector marker_prefix          {0x06};
+    const MidiStreamVector cue_point_prefix       {0x07};
+    const MidiStreamVector text_08_prefix         {0x08};
+    const MidiStreamVector text_09_prefix         {0x09};
+    const MidiStreamVector text_0A_prefix         {0x0A};
+    const MidiStreamVector text_0B_prefix         {0x0B};
+    const MidiStreamVector text_0C_prefix         {0x0C};
+    const MidiStreamVector text_0D_prefix         {0x0D};
+    const MidiStreamVector text_0E_prefix         {0x0E};
+    const MidiStreamVector text_0F_prefix         {0x0F};
+    const MidiStreamVector unknown1_prefix        {0x11};
 
-    const std::set<int> Initial_Meta{sequence_number_prefix[0], text_prefix[0], 
-        copyright_prefix[0], track_name_prefix[0], instrument_name_prefix[0], 
+    const std::set<MidiStreamAtom> Initial_Meta{sequence_number_prefix[0], text_prefix[0],
+        copyright_prefix[0], track_name_prefix[0], instrument_name_prefix[0],
         lyric_prefix[0], marker_prefix[0], cue_point_prefix[0], text_08_prefix[0],
         text_09_prefix[0], text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
         text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0]};
 
     // fixed-length meta-events
-    constexpr std::uint8_t midi_channel_prefix[]    {0x20, 1}; // prefix, length
-    constexpr std::uint8_t end_of_track_prefix[]    {0x2f, 0}; // prefix, length
-    constexpr std::uint8_t tempo_prefix[]           {0x51, 3}; // prefix, length
-    constexpr std::uint8_t smpte_prefix[]           {0x54, 5}; // prefix, length
-    constexpr std::uint8_t smpte_24fps{0};
-    constexpr std::uint8_t smpte_25fps{1};
-    constexpr std::uint8_t smpte_30fpsdropframe{2};
-    constexpr std::uint8_t smpte_30fpsnondropframe{3};
-    constexpr std::uint8_t smpte_fps_shift{5};
-    constexpr std::uint8_t smpte_fps_mask{3};
-    constexpr std::uint8_t smpte_hours_mask{0x1f};
-    constexpr std::uint8_t time_signature_prefix[]  {0x58, 4}; // prefix, length
-    constexpr std::uint8_t key_signature_prefix[]   {0x59, 2}; // prefix, length
-    constexpr std::uint8_t sequencer_specific_prefix[]{0x7f};
-    constexpr std::uint8_t note_on[]                {0x90};
-    constexpr std::uint8_t note_off[]               {0x80};
-    constexpr int          full_note_length         {3};
+    const MidiStreamVector midi_channel_prefix    {0x20, 1}; // prefix, length
+    const MidiStreamVector end_of_track_prefix    {0x2f, 0}; // prefix, length
+    const MidiStreamVector tempo_prefix           {0x51, 3}; // prefix, length
+    const MidiStreamVector smpte_prefix           {0x54, 5}; // prefix, length
+    constexpr MidiStreamAtom smpte_24fps          {0};
+    constexpr MidiStreamAtom smpte_25fps          {1};
+    constexpr MidiStreamAtom smpte_30fpsdropframe {2};
+    constexpr MidiStreamAtom smpte_30fpsnondropframe{3};
+    constexpr MidiStreamAtom smpte_fps_shift      {5};
+    constexpr MidiStreamAtom smpte_fps_mask       {3};
+    constexpr MidiStreamAtom smpte_hours_mask     {0x1f};
+    const MidiStreamVector time_signature_prefix  {0x58, 4}; // prefix, length
+    const MidiStreamVector key_signature_prefix   {0x59, 2}; // prefix, length
+    const MidiStreamVector sequencer_specific_prefix{0x7f};
+
+    constexpr MidiStreamAtom NoteOn                = 0x90;
+    constexpr MidiStreamAtom NoteOff               = 0x80;
+    constexpr MidiStreamAtom PolyphonicKeyPressure = 0xa0;
+    constexpr MidiStreamAtom Control               = 0xb0;
+    constexpr MidiStreamAtom Program               = 0xc0;
+    constexpr MidiStreamAtom ChannelPressure       = 0xd0;
+    constexpr MidiStreamAtom PitchWheel            = 0xe0;
+
+    const MidiStreamVector note_on                {NoteOn};
+    const MidiStreamVector note_off               {NoteOff};
+    constexpr int          full_note_length       {3};
     constexpr int          running_status_note_length{2};
-    constexpr std::uint8_t polyphonic_key_pressure[]{0xa0};
-    constexpr std::uint8_t control[]                {0xb0};
-    constexpr std::uint8_t channel_mode[]           {0xb0};
-    constexpr std::uint8_t program[]                {0xc0};
-    constexpr std::uint8_t channel_pressure[]       {0xd0};
-    constexpr std::uint8_t pitch_wheel[]            {0xe0};
-    constexpr std::uint8_t channel_mask             {0x0F};
-    constexpr std::uint8_t byte7_mask               {0x7F};
-    constexpr std::uint8_t byte7_shift              {7};
-    constexpr std::uint8_t nybble_mask              {0x0F};
-    constexpr std::uint8_t control_pan[]            {0x0A};
-    constexpr std::uint8_t control_damper[]         {0x40};
-    constexpr std::uint8_t control_portamento[]     {0x41};
-    constexpr std::uint8_t control_sostenuto[]      {0x42};
-    constexpr std::uint8_t control_softpedal[]      {0x43};
-    constexpr std::uint8_t control_hold2[]          {0x45};
-    constexpr std::uint8_t control_generalpurpose5[]{0x50};
-    constexpr std::uint8_t control_generalpurpose6[]{0x51};
-    constexpr std::uint8_t control_generalpurpose7[]{0x52};
-    constexpr std::uint8_t control_generalpurpose8[]{0x53};
-    constexpr std::uint8_t control_extern_fx_depth[]{0x5b};
-    constexpr std::uint8_t control_tremolo_depth[]  {0x5c};
-    constexpr std::uint8_t control_chorus_depth[]   {0x5d};
-    constexpr std::uint8_t control_celeste_depth[]  {0x5e};
-    constexpr std::uint8_t control_phaser_depth[]   {0x5f};
-    constexpr std::uint8_t control_data_incr[]      {0x60};
-    constexpr std::uint8_t control_data_decr[]      {0x61};
-    constexpr std::uint8_t control_nonregparmlsb[]  {0x62};
-    constexpr std::uint8_t control_nonregparmmsb[]  {0x63};
-    constexpr std::uint8_t control_regparmlsb[]     {0x64};
-    constexpr std::uint8_t control_regparmmsb[]     {0x65};
-    constexpr std::uint8_t control_all_sound_off[]  {0x78};
-    constexpr std::uint8_t control_reset_all_ctrl[] {0x79};
-    constexpr std::uint8_t control_local_ctrl_on_off{0x7a};
-    constexpr std::uint8_t control_all_notes_off[]  {0x7b};
-    constexpr std::uint8_t control_omni_off[]       {0x7c};
-    constexpr std::uint8_t control_onmi_on[]        {0x7d};
-    constexpr std::uint8_t control_mono_on[]        {0x7e};
-    constexpr std::uint8_t control_poly_on[]        {0x7f};
-    constexpr std::uint8_t control_full[]           {0x7F};
-    constexpr std::uint8_t control_off[]            {};
-    constexpr std::uint8_t midi_port_prefix[]       {0x21, 1};
-    constexpr std::uint8_t control_breath[]         {2};
-    constexpr std::uint8_t midi_time_code_quarter_frame[]{0xf1};
-    constexpr std::uint8_t song_position_pointer[]  {0xf2};
-    constexpr std::uint8_t song_select[]            {0xf3};
-    constexpr std::uint8_t tune_request[]           {0xf6};
-    constexpr std::uint8_t start_of_sysex[]         {0xf0};
-    constexpr std::uint8_t end_of_sysex[]           {0xf7};
-    constexpr std::uint8_t yamaha                   {0x43};
+    const MidiStreamVector polyphonic_key_pressure{PolyphonicKeyPressure};
+    const MidiStreamVector control                {Control};
+    const MidiStreamVector channel_mode           {0xb0};
+    const MidiStreamVector program                {Program};
+    const MidiStreamVector channel_pressure       {ChannelPressure};
+    const MidiStreamVector pitch_wheel            {PitchWheel};
+    constexpr MidiStreamAtom channel_mask         {0x0F};
+    constexpr MidiStreamAtom byte7_mask           {0x7F};
+    constexpr MidiStreamAtom byte7_shift          {7};
+    constexpr MidiStreamAtom nybble_mask          {0x0F};
+    const MidiStreamVector control_pan            {0x0A};
+    const MidiStreamVector control_damper         {0x40};
+    const MidiStreamVector control_portamento     {0x41};
+    const MidiStreamVector control_sostenuto      {0x42};
+    const MidiStreamVector control_softpedal      {0x43};
+    const MidiStreamVector control_hold2          {0x45};
+    const MidiStreamVector control_generalpurpose5{0x50};
+    const MidiStreamVector control_generalpurpose6{0x51};
+    const MidiStreamVector control_generalpurpose7{0x52};
+    const MidiStreamVector control_generalpurpose8{0x53};
+    const MidiStreamVector control_extern_fx_depth{0x5b};
+    const MidiStreamVector control_tremolo_depth  {0x5c};
+    const MidiStreamVector control_chorus_depth   {0x5d};
+    const MidiStreamVector control_celeste_depth  {0x5e};
+    const MidiStreamVector control_phaser_depth   {0x5f};
+    const MidiStreamVector control_data_incr      {0x60};
+    const MidiStreamVector control_data_decr      {0x61};
+    const MidiStreamVector control_nonregparmlsb  {0x62};
+    const MidiStreamVector control_nonregparmmsb  {0x63};
+    const MidiStreamVector control_regparmlsb     {0x64};
+    const MidiStreamVector control_regparmmsb     {0x65};
+    const MidiStreamVector control_all_sound_off  {0x78};
+    const MidiStreamVector control_reset_all_ctrl {0x79};
+    constexpr MidiStreamAtom control_local_ctrl_on_off{0x7a};
+    const MidiStreamVector control_all_notes_off  {0x7b};
+    const MidiStreamVector control_omni_off       {0x7c};
+    const MidiStreamVector control_onmi_on        {0x7d};
+    const MidiStreamVector control_mono_on        {0x7e};
+    const MidiStreamVector control_poly_on        {0x7f};
+    const MidiStreamVector control_full           {0x7F};
+    const MidiStreamVector control_off            {0x00};
+    const MidiStreamVector midi_port_prefix       {0x21, 1};
+    const MidiStreamVector control_breath         {2};
+    const MidiStreamVector midi_time_code_quarter_frame{0xf1};
+    const MidiStreamVector song_position_pointer  {0xf2};
+    const MidiStreamVector song_select            {0xf3};
+    const MidiStreamVector tune_request           {0xf6};
+    const MidiStreamVector start_of_sysex         {0xf0};
+    const MidiStreamVector end_of_sysex           {0xf7};
 
     const int SMPTE_hours_max{23};
 
@@ -188,7 +214,7 @@ namespace textmidi
 
     constexpr auto ChunkNameLen{4};
     constexpr auto HeaderChunkLen{6};
-    constexpr std::uint8_t MidiHeaderChunkName[ChunkNameLen]{'M', 'T', 'h', 'd'};
+    constexpr MidiStreamAtom MidiHeaderChunkName[ChunkNameLen]{'M', 'T', 'h', 'd'};
 
     enum class MIDI_Format : std::uint16_t
     {
@@ -231,7 +257,7 @@ namespace textmidi
             division_{division}
             {}
 
-        MidiHeader(std::uint8_t* bytes)
+        MidiHeader(MidiStreamAtom* bytes)
           : chunk_name_{},
             chunk_len_{},
             format_{},
@@ -242,10 +268,10 @@ namespace textmidi
             swap();
         }
 
-        void to_bytes(std::uint8_t* bytes);
+        void to_bytes(MidiStreamAtom* bytes);
 #pragma pack(push)
 #pragma pack(1)
-        std::uint8_t chunk_name_[ChunkNameLen];
+        MidiStreamAtom chunk_name_[ChunkNameLen];
         std::uint32_t chunk_len_; // big-endian
         // 0: single multichannel track;
         // 1: many tracks;

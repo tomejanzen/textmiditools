@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // RhythmRational 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -11,8 +11,8 @@
 // by Bjarne Stroustrup, 4th ed., page 542, section 18.3.6, for example use of
 // pass-by-value and not reference to const as in the past.
 //
-#if !defined(TEXTMIDI_RATIONAL)
-#    define  TEXTMIDI_RATIONAL
+#if !defined(TEXTMIDI_RATIONAL_H)
+#    define  TEXTMIDI_RATIONAL_H
 
 #include <cstdint>
 #include <iostream>

@@ -304,7 +304,7 @@ std::ostream& textmidi::rational::operator<<(std::ostream& os, RhythmRational tr
     {
         os << dec << tr.numerator() << '/' << tr.denominator();
     }
-    auto oldflags{os.flags(flags)};
+    static_cast<void>(os.flags(flags));
     return os;
 }
 
@@ -370,7 +370,7 @@ ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
           break;
         }
     }
-    auto oldflags{os.flags(flags)};
+    static_cast<void>(os.flags(flags));
     return os;
 }
 

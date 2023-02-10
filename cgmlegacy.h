@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -8,8 +8,8 @@
 // There is NO WARRANTY, to the extent permitted by law.
 // textmidicgm Copyright © 2023 Thomas E. Janzen
 //
-#if !defined(CGMLEGACY)
-#    define  CGMLEGACY
+#if !defined(CGMLEGACY_H)
+#    define  CGMLEGACY_H
 
 #include <cstdlib>
 

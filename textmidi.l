@@ -59,30 +59,24 @@ using namespace textmidi;
 extern "C" int32_t yywrap (void) {};
 #endif
 
-string text_filename{}; // set in main.cc as option
-uint32_t line_ctr{1};   // printed in main.cc as option
-uint32_t detache{0};   // set from cmd line; separation between notes
-ofstream midi_filestr{}; // set in main.cc
-bool verbose{};          // set in main.cc as option
-
 namespace
 {
     // The last MIDI key (note) that was played, init to middle C
     constexpr int middle_c{60};
     int last_key{middle_c};
     uint16_t track_counter{}; // Count the tracks in order to set MIDI header
-    vector<uint8_t> trackchunk; // One track's data bytes.
+    MidiStreamVector trackchunk; // One track's data bytes.
     uint32_t accum_delay{}; // Delay accumulated between events.
     double global_total_track_ticks{}; // accum. tracks ticks to print for "ticks" cmd
     uint32_t total_beats{}; // beat to print for errors.
     // running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
-    uint8_t running_status{};
+    MidiStreamAtom running_status{};
     // To turn off notes using NOTE_ON, use a zero velocity.
-    constexpr uint8_t note_off_velocity{};
+    constexpr MidiStreamAtom note_off_velocity{};
     constexpr double DotLength(0.5);
     constexpr double DoubleDotLength(0.25);
     // Map textmidi strings to MIDI file format codes.
-    const map<const string_view, uint8_t> text_meta_map{
+    const map<const string_view, MidiStreamAtom> text_meta_map{
                   {"TEXT",            text_prefix[0]},
                   {"COPYRIGHT",       copyright_prefix[0]},
                   {"TRACK",           track_name_prefix[0]},
@@ -100,7 +94,7 @@ namespace
                   {"TEXT_0F",         text_0F_prefix[0]},
                   {"SEQUENCER_SPECIFIC", sequencer_specific_prefix[0]},
               };
-    const map<string_view, uint8_t> text_control_map{
+    const map<string_view, MidiStreamAtom> text_control_map{
         {"RESETALL",     control_reset_all_ctrl[0]},
         {"ALLNOTES_OFF", control_all_notes_off[0]},
         {"ALL_SOUND_OFF", control_all_sound_off[0]},
@@ -111,7 +105,7 @@ namespace
         {"SOSTENUTO",    control_sostenuto[0]},
     };
     // PORTAMENTO and SOSTENUTO have an "on" or "off" value.
-    const map<string, uint8_t> OnOffMap{{"OFF", control_off[0]}, {"ON", control_full[0]}};
+    const map<string, MidiStreamAtom> OnOffMap{{string{"OFF"}, control_off[0]}, {string{"ON"}, control_full[0]}};
 
     int global_ticks_per_quarter{384};
     // global_channel is part of implementing MIDI running status
@@ -195,7 +189,7 @@ namespace
     // converts numbers into MIDI 1.1 spec extended values,
     // which can be a vector of bytes.
     // The first byte is the most-significant and has the 2^7 bit set.
-    void int_to_vec(int i, vector<uint8_t>& numvec)
+    void int_to_vec(int i, MidiStreamVector& numvec)
     {
         auto j{i};
         int lg2{};
@@ -209,7 +203,7 @@ namespace
         numvec.resize(byte_qty);
         for (int groupof7{}; groupof7 < byte_qty; ++groupof7)
         {
-            uint8_t temp{};
+            MidiStreamAtom temp{};
             temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
             if (groupof7 != numvec.size() - 1)
             {
@@ -221,11 +215,11 @@ namespace
 
     //
     // int24_to_vec converts 24-bit numbers to MIDI extended values.
-    vector<uint8_t> int24_to_vec(int i)
+    MidiStreamVector int24_to_vec(int i)
     {
-        vector<uint8_t> numvec;
-        uint8_t tempbyte{};
-        constexpr uint8_t byte_mask{0xFF};
+        MidiStreamVector numvec;
+        MidiStreamAtom tempbyte{};
+        constexpr MidiStreamAtom byte_mask{0xFF};
         for (int ctr{2}; ctr >= 0; --ctr)
         {
             tempbyte = (i >> (bits_per_byte * ctr) ) & byte_mask;
@@ -251,7 +245,7 @@ namespace
     void write_delay()
     {
         // Delays must occur between events even if delay is zero.
-        vector<uint8_t> delayvec{};
+        MidiStreamVector delayvec{};
         int_to_vec(accum_delay, delayvec);
         trackchunk.insert(trackchunk.end(), delayvec.begin(), delayvec.end());
         total_beats += (accum_delay / global_ticks_per_quarter);
@@ -266,7 +260,7 @@ namespace
     {
         if (0 == channel)
         {
-            cerr << text_filename << ':' << line_ctr
+            cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
                  << " Channel was zero (0) and left as zero; "
                  << "channels must be in [1..16]\n";
         }
@@ -404,7 +398,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     else
     {
-        cerr << text_filename << ':' << line_ctr
+        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << " File format was: " << format_str << " but must be in {";
         for (const auto& fmp : textmidi::format_map)
         {
@@ -415,13 +409,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     if ((MIDI_Format::MonoTrack == midi_header.format_)
         && (midi_header.ntrks_ > 1))
     {
-        cerr << text_filename << ':' << line_ctr
+        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << " File format was MONOTRACK which allows only one track"
              << " but there are " << midi_header.ntrks_ << '\n';
     }
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swap();
-    midi_filestr.write(io_bytes(midi_header), sizeof(MidiHeader));
+    text_midi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
 
@@ -433,7 +427,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     iss >> midi_header.ntrks_ >> midi_header.division_;
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swap();
-    midi_filestr.write(io_bytes(midi_header), sizeof(MidiHeader));
+    text_midi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
 
@@ -451,7 +445,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>{STARTTRACKTOKEN} {
     /* Recognize STARTTRACK */
     ++track_counter;
-    if (verbose)
+    if (text_midi_features->verbose_)
     {
         clog << "Found " << yytext << '\n';
     }
@@ -504,7 +498,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // of the MIDI file stream.
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(sequencer_specific_prefix[0]);
-    vector<uint8_t> length_seq{};
+    MidiStreamVector length_seq{};
     int_to_vec(bytes.size(), length_seq);
     trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
     if (bytes.size() > 0)
@@ -527,8 +521,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[1]);
-    uint8_t msb{static_cast<uint8_t>((sequence_number >> 8) & octet_mask)};
-    uint8_t lsb{static_cast<uint8_t> (sequence_number       & octet_mask)};
+    MidiStreamAtom msb{static_cast<MidiStreamAtom>((sequence_number >> 8) & octet_mask)};
+    MidiStreamAtom lsb{static_cast<MidiStreamAtom> (sequence_number       & octet_mask)};
     trackchunk.push_back(msb);
     trackchunk.push_back(lsb);
   }
@@ -563,7 +557,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
 
-    vector<uint8_t> len_vec{};
+    MidiStreamVector len_vec{};
     int_to_vec(byte_strings.size(), len_vec);
 
     vector<unsigned> bytes(byte_strings.size());
@@ -614,7 +608,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     else
     {
-        cerr << text_filename << ':' << line_ctr
+        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << " Invalid meta event name " << meta_name << '\n';
 
     }
@@ -647,7 +641,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // remove quotes
     if (!yystring.empty())
     {
-        if ('\"' == yystring[yystring.size() - 1]) 
+        if ('\"' == yystring[yystring.size() - 1])
         {
             if (yystring.size() > 1)
             {
@@ -700,13 +694,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     {
         yystring.replace(p, 2, "\"", 1);
     }
-#if 0 
+#if 0
     if (!yystring.empty() && ('\n' == yystring[yystring.length() - 1]))
     {
         yystring.erase(yystring.length() - 1);
     }
 #endif
-    vector<uint8_t> len_vec{};
+    MidiStreamVector len_vec{};
     int_to_vec(yystring.length(), len_vec);
     trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
     trackchunk.insert(trackchunk.end(), yystring.begin(), yystring.end());
@@ -725,7 +719,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk[6] = (sizetemp >>  8) & 0xFF;
     trackchunk[7] = (sizetemp >>  0) & 0xFF;
     copy(trackchunk.begin(), trackchunk.end(),
-         ostream_iterator<uint8_t>(midi_filestr));
+         ostream_iterator<MidiStreamAtom>(text_midi_features->midi_filestr_));
     accum_delay = 0;
     BEGIN(DETAIL_STATE);
   }
@@ -741,7 +735,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // convert ticks per minute to useconds per quarter
     uint32_t tempo{static_cast<uint32_t>(round((60.0 * 1000000.0) / mmtempo))};
 
-    vector<uint8_t> tempovec{int24_to_vec(tempo)};
+    MidiStreamVector tempovec{int24_to_vec(tempo)};
     trackchunk.push_back(meta_prefix[0]);
 
     trackchunk.insert(trackchunk.end(), &tempo_prefix[0], &tempo_prefix[2]);
@@ -882,7 +876,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(control_id);
     if (control_value & ~byte7_mask)
     {
-        cerr << text_filename << ':' << line_ctr << " illegal 8-bit control value: " 
+        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ << " illegal 8-bit control value: "
              << hex << control_value << dec << " will be coerced to 7-bit" << '\n';
     }
     control_value &= byte7_mask;
@@ -906,7 +900,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control channel: " << text_filename << ':' << line_ctr
+        cerr << "unknown control channel: " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << ' ' << namestr<< oor.what() << '\n';
         exit(EXIT_SUCCESS);
     }
@@ -933,7 +927,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control channel: " << text_filename << ':' << line_ctr
+        cerr << "unknown control channel: " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << ' ' << namestr<< oor.what() << '\n';
         exit(EXIT_SUCCESS);
     }
@@ -961,19 +955,19 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control : " << text_filename << ':' << line_ctr
+        cerr << "unknown control : " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << ' ' << namestr << ' ' << oor.what() << '\n';
         exit(EXIT_SUCCESS);
     }
 
-    uint8_t control_value{};
+    MidiStreamAtom control_value{};
     try
     {
         control_value = OnOffMap.at(onoff);
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control on/off: " << text_filename << ':' << line_ctr
+        cerr << "unknown control on/off: " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << ' ' << onoff << ' ' << oor.what() << '\n';
         exit(EXIT_SUCCESS);
     }
@@ -1095,7 +1089,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(numer);
     trackchunk.push_back(denom_pwr);
     auto tempticksperbeat{ticksperbeat};
-    while (tempticksperbeat > numeric_limits<uint8_t>().max())
+    while (tempticksperbeat > numeric_limits<MidiStreamAtom>().max())
     {
         tempticksperbeat /= 2;
     }
@@ -1146,14 +1140,14 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     smatch matches{};
     auto sts{regex_match(yystring, matches, smpteoffset_re)};
     // values in [2]..
-    vector<uint8_t> offsetvalues;
+    MidiStreamVector offsetvalues;
 #if 0
     for (auto m : matches)
     {
         cout << '#' << m.str() << '#' << '\n';
     }
 #endif
-    std::uint8_t fps{0};
+    MidiStreamAtom fps{0};
     if (smpte_fps_reverse_map.contains(matches[fps_match]))
     {
         fps = smpte_fps_reverse_map.at(matches[fps_match]);
@@ -1248,7 +1242,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // push the length of data plus the F7 at end
     // of the MIDI file stream.
     trackchunk.push_back(start_of_sysex[0]);
-    vector<uint8_t> length_seq{};
+    MidiStreamVector length_seq{};
     int_to_vec(bytes.size() + 1, length_seq);
     trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
     if (bytes.size() > 0)
@@ -1302,7 +1296,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // of the MIDI file stream.
     trackchunk.push_back(end_of_sysex[0]); // Raw SYSEX *starts* with F7
     // length of data; no implied terminating F0
-    vector<uint8_t> length_seq{};
+    MidiStreamVector length_seq{};
     int_to_vec(bytes.size(), length_seq);
     trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
     if (bytes.size() > 0)
@@ -1328,7 +1322,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
       write_delay();
       trackchunk.push_back(meta_prefix[0]);
       trackchunk.push_back(text_prefix[0]);
-      vector<uint8_t> len_vec{};
+      MidiStreamVector len_vec{};
       int_to_vec(ticks_str.length(), len_vec);
       trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
       trackchunk.insert(trackchunk.end(), ticks_str.begin(), ticks_str.end());
@@ -1383,7 +1377,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     if ((running_status & channel_mask) != global_channel)
     {
-        running_status = static_cast<std::uint8_t>(0);
+        running_status = static_cast<MidiStreamAtom>(0);
     }
   }
 
@@ -1408,7 +1402,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
     /* Recognize error grammar bad note letter */
     // ERROR
-    cerr << text_filename << ':' << line_ctr <<
+    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
       " Non Key Letter before Key Name: " << __LINE__ << ' ' << yytext <<
       " in track " << track_counter << " at beat " <<
       (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
@@ -1418,7 +1412,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>(-{PITCH_NAME})|({PITCH_NAME}-) {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_filename << ':' << line_ctr <<
+    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
       " Ties are not allowed in DETAIL mode: " << __LINE__ << ' ' << yytext <<
       " in track " << track_counter << " at beat " <<
       (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
@@ -1428,7 +1422,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>{NON_NOTE_LETTER}{PITCH_NAME} {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_filename << ':' << line_ctr <<
+    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
       " Non Note Letter before Note Name: " << __LINE__ << ' ' << yytext <<
       " in track " << track_counter << " at beat " <<
       (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
@@ -1438,7 +1432,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{LAZY_PITCH_NAME} {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_filename << ':' << line_ctr <<
+    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
       " Key Name without octave: " << __LINE__ << ' ' << yytext <<
       " in track " << track_counter << " at beat " <<
       (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
@@ -1447,7 +1441,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{RHYTHM} {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_filename << ':' << line_ctr <<
+    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
       " Key Name without octave: " << __LINE__ << ' ' << yytext <<
       " in track " << track_counter << " at beat " <<
       (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
@@ -1482,7 +1476,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
       thedivisor = num1;
       if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
       {
-        cerr << text_filename << ':' << line_ctr
+        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << " A duration denominator that is > ticks per whole! "
              << thedivisor << '>' << (global_ticks_per_quarter * QuartersPerWhole) << '\n';
       }
@@ -1493,7 +1487,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     //
     // Subtract detache, to be added back in as a "rest".
     note_duration
-        = total_duration - ((static_cast<double>(detache) < total_duration) ? detache : 0);
+        = total_duration - ((static_cast<double>(text_midi_features->detache_) < total_duration) ? text_midi_features->detache_ : 0);
     // write note offs for each note in the chord with 0 delays
     accum_delay += note_duration;
 
@@ -1504,22 +1498,22 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         write_delay(); // wait the duration of the note
 
         uint32_t channel{global_channel & channel_mask};
-        const uint8_t note_cmd{lazy::note_off_select ? note_off[0] : note_on[0]};
+        const MidiStreamAtom note_cmd{text_midi_features->note_off_select_ ? note_off[0] : note_on[0]};
         const auto status_byte{channel | note_cmd};
         check_running_status(status_byte);
 
         trackchunk.push_back(keytie.key_ & byte7_mask);
 
         // If we are using a note_off, then use the prevailing dynamic; else 0.
-        const uint8_t velocity{lazy::note_off_select
-            ? static_cast<uint8_t>(lazy::dynamic) : note_off_velocity};
+        const MidiStreamAtom velocity{text_midi_features->note_off_select_
+            ? static_cast<MidiStreamAtom>(lazy::dynamic) : note_off_velocity};
         trackchunk.push_back(velocity);
       }
     }
     lazy::chord.clear();
-    if (static_cast<double>(detache) < total_duration)
+    if (static_cast<double>(text_midi_features->detache_) < total_duration)
     {
-        accum_delay += detache;
+        accum_delay += text_midi_features->detache_;
     }
     BEGIN(LAZY_STATE);
   }
@@ -1552,7 +1546,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
       thedivisor = num1;
       if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
       {
-        cerr << text_filename << ':' << line_ctr
+        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
              << " A duration denominator that is > ticks per whole! "
              << thedivisor << '>' << (global_ticks_per_quarter * QuartersPerWhole) << '\n';
       }
@@ -1565,22 +1559,22 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
 <DETAIL_STATE,LAZY_STATE>{COMMENT} {
     /* Recognize comments. */
-    ++line_ctr;
+    ++text_midi_features->line_ctr_;
   }
 ^{SOMESPACE}
 {skip}*
 (\n) {
-    ++line_ctr;
+    ++text_midi_features->line_ctr_;
   }
 <<EOF>> {
-    if (verbose)
+    if (text_midi_features->verbose_)
     {
         clog << "Found " << track_counter
              << " tracks and will set MIDI header accordingly.\n";
     }
-    midi_filestr.seekp(10);
+    text_midi_features->midi_filestr_.seekp(10);
     track_counter = htobe16(track_counter);
-    midi_filestr.write(io_bytes(track_counter), sizeof(track_counter));
+    text_midi_features->midi_filestr_.write(io_bytes(track_counter), sizeof(track_counter));
     yyterminate();
   }
 .

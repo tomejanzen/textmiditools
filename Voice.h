@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.34
+// TextMIDITools Version 1.0.35
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -7,8 +7,8 @@
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-#if !defined(VOICE)
-#    define  VOICE
+#if !defined(VOICE_H)
+#    define  VOICE_H
 
 #include <cstdint>
 #include <cstdio>
@@ -44,8 +44,7 @@ namespace textmidi
               };
 
               Follower()
-               :
-                 follow_{false},
+               : follow_{false},
                  leader_{std::numeric_limits<int>().max()},
                  interval_type_{IntervalType::Neither},
                  interval_{0}
@@ -88,9 +87,10 @@ namespace textmidi
             VoiceXml& operator=(const VoiceXml& ) = default;
             VoiceXml& operator=(VoiceXml&& ) = default;
 
+            bool prefer_sharp{};
             VoiceXml(const cgmlegacy::VoiceOld& v)
-              : low_pitch_{textmidi::num_to_note(v.low_pitch_)},
-                high_pitch_{textmidi::num_to_note(v.high_pitch_)},
+              : low_pitch_{textmidi::num_to_note(v.low_pitch_, &prefer_sharp)},
+                high_pitch_{textmidi::num_to_note(v.high_pitch_, &prefer_sharp)},
                 channel_{v.channel_ + 1},
                 walking_{v.walking_},
                 program_{"1"},

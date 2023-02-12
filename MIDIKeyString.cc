@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // MIDIKeyString.cc
 //
@@ -17,8 +17,12 @@
 #include <regex>
 #include <map>
 
+#include <cstdlib>
+#include <iostream>
+
 #include <boost/lexical_cast.hpp>
 
+#include "Midi.h"
 #include "MIDIKeyString.h"
 
 using namespace std;
@@ -54,33 +58,40 @@ namespace {
         // To find the index into matches[], count the left parantheses
         // in the regular expression, start with 0.
         const regex notename_re{R"(([A-Ga-g])(([b#x]?)|(bb)))"};
-        auto sts{regex_match(notename, matches, notename_re)};
-        constexpr int match_note_letter{1};
-        constexpr int match_accidental_or_double_flat{2};
-        constexpr int match_accidental{3};
-        constexpr int match_double_flat{4};
-        if (!matches[match_note_letter].str().empty()) [[likely]]
+        const auto mat{regex_match(notename, matches, notename_re)};
+        if (!mat)
         {
-            auto iter{noteletter_to_halfstep.find
-                (toupper(matches[match_note_letter].str()[0]) - 'A')};
-            if (iter !=noteletter_to_halfstep.end())
-            {
-                halfstep = iter->second;
-            }
-        }
-        if (!matches[match_accidental].str().empty())
-        {
-            auto iter{accidental_to_deltahalfstep.find(matches[match_accidental_or_double_flat].str()[0])};
-            if (iter !=accidental_to_deltahalfstep.end())
-            {
-                halfstep += iter->second;
-            }
+            cerr << "incorrect note name: " << notename << '\n';
         }
         else
         {
-            if (!matches[match_double_flat].str().empty()) [[unlikely]] // double-flat
+            constexpr int match_note_letter{1};
+            constexpr int match_accidental_or_double_flat{2};
+            constexpr int match_accidental{3};
+            constexpr int match_double_flat{4};
+            if (!matches[match_note_letter].str().empty()) [[likely]]
             {
-                halfstep -= 2;
+                auto iter{noteletter_to_halfstep.find
+                    (toupper(matches[match_note_letter].str()[0]) - 'A')};
+                if (iter !=noteletter_to_halfstep.end())
+                {
+                    halfstep = iter->second;
+                }
+            }
+            if (!matches[match_accidental].str().empty())
+            {
+                auto iter{accidental_to_deltahalfstep.find(matches[match_accidental_or_double_flat].str()[0])};
+                if (iter !=accidental_to_deltahalfstep.end())
+                {
+                    halfstep += iter->second;
+                }
+            }
+            else
+            {
+                if (!matches[match_double_flat].str().empty()) [[unlikely]] // double-flat
+                {
+                    halfstep -= 2;
+                }
             }
         }
         return halfstep;
@@ -134,7 +145,7 @@ namespace {
 // Public function.
 // Convert a MIDI key number to a string.
 //
-string textmidi::num_to_note(int num, bool* prefer_sharp)
+string textmidi::num_to_note(int num, std::shared_ptr<bool> prefer_sharp)
 {
     const int octave{num / 12 - 1};
     //
@@ -304,40 +315,47 @@ pair<int, bool> textmidi::key_sig_name_to_accidentals(string &key_sig_name)
 pair<int, bool> textmidi::pitchname_to_keynumber(const string& pitchname)
 {
     constexpr int keys_per_octave{12};
-    int keynumber{};
+    int keynumber{MiddleC};
     smatch matches{};
     const regex pitchname_re{R"(((([A-Ga-g])(([b#x]?)|(bb)))(-?)([0-9]))|(([Kk])([+-]?)([[:digit:]]+)))"};
-    auto sts{regex_match(pitchname, matches, pitchname_re)};
-    constexpr int match_note{2};
-    constexpr int match_neg_octave{7};
-    constexpr int match_octave{8};
-    constexpr int match_k{10};
-    constexpr int match_key_step{11};
-    constexpr int match_key_number{12};
+    const auto mat{regex_match(pitchname, matches, pitchname_re)};
     bool is_delta{};
-    if (matches[match_k].str().empty()) [[likely]] // is this NOT a K event
+    if (!mat)
     {
-        if (!matches[match_note].str().empty()) [[unlikely]]
-        {
-            keynumber = notename_to_halfstep(matches[match_note].str());
-            int octave{lexical_cast<int>(matches[match_octave].str())};
-            // if negative octave (there is only octave -1)
-            if (!matches[match_neg_octave].str().empty() && (1 == octave))
-            {
-                octave = -octave;
-            }
-            const auto temp_octave = octave + 1;
-            keynumber += (keys_per_octave * temp_octave);
-        }
+        cerr << "Improper pitch name: " << pitchname << '\n';
     }
-    else [[unlikely]] // This is a K for key-number pitchname and might be a delta.
+    else
     {
-        keynumber = lexical_cast<int>(matches[match_key_number]);
-        auto issigned{sign_to_deltahalfstep.find(matches[match_key_step].str()[0])};
-        if(issigned != sign_to_deltahalfstep.end())
+        constexpr int match_note{2};
+        constexpr int match_neg_octave{7};
+        constexpr int match_octave{8};
+        constexpr int match_k{10};
+        constexpr int match_key_step{11};
+        constexpr int match_key_number{12};
+        if (matches[match_k].str().empty()) [[likely]] // is this NOT a K event
         {
-            keynumber *= issigned->second;
-            is_delta = true;
+            if (!matches[match_note].str().empty()) [[unlikely]]
+            {
+                keynumber = notename_to_halfstep(matches[match_note].str());
+                int octave{lexical_cast<int>(matches[match_octave].str())};
+                // if negative octave (there is only octave -1)
+                if (!matches[match_neg_octave].str().empty() && (1 == octave))
+                {
+                    octave = -octave;
+                }
+                const auto temp_octave = octave + 1;
+                keynumber += (keys_per_octave * temp_octave);
+            }
+        }
+        else [[unlikely]] // This is a K for key-number pitchname and might be a delta.
+        {
+            keynumber = lexical_cast<int>(matches[match_key_number]);
+            auto issigned{sign_to_deltahalfstep.find(matches[match_key_step].str()[0])};
+            if(issigned != sign_to_deltahalfstep.end())
+            {
+                keynumber *= issigned->second;
+                is_delta = true;
+            }
         }
     }
     return make_pair(keynumber, is_delta);

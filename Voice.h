@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -87,10 +87,10 @@ namespace textmidi
             VoiceXml& operator=(const VoiceXml& ) = default;
             VoiceXml& operator=(VoiceXml&& ) = default;
 
-            bool prefer_sharp{};
+            std::shared_ptr<bool> prefer_sharp{new bool};
             VoiceXml(const cgmlegacy::VoiceOld& v)
-              : low_pitch_{textmidi::num_to_note(v.low_pitch_, &prefer_sharp)},
-                high_pitch_{textmidi::num_to_note(v.high_pitch_, &prefer_sharp)},
+              : low_pitch_{textmidi::num_to_note(v.low_pitch_, prefer_sharp)},
+                high_pitch_{textmidi::num_to_note(v.high_pitch_, prefer_sharp)},
                 channel_{v.channel_ + 1},
                 walking_{v.walking_},
                 program_{"1"},

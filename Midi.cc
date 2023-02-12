@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -13,9 +13,11 @@
 #include <endian.h>
 
 #include <algorithm>
+#include <ranges>
 
 #include "Midi.h"
 
+using namespace std;
 using namespace textmidi;
 
 void
@@ -41,9 +43,8 @@ textmidi::operator<<(std::ostream& os, textmidi::MIDI_Format mf)
 {
     auto flags{os.flags()};
     textmidi::MIDI_Format mfcopy{mf};
-    auto it{find_if(format_map.begin(), format_map.end(),
-        [mfcopy](const FormatMap::value_type& sm)
-        { return mfcopy == sm.second; })};
+    auto it{ranges::find_if(format_map,
+        [mfcopy](const FormatMap::value_type& sm) { return mfcopy == sm.second; })};
     if (it != format_map.end())
     {
         os << it->first;

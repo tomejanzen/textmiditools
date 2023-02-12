@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -220,7 +221,7 @@ namespace textmidi
             MusicalForm(MusicalForm&& ) = default;
             MusicalForm& operator=(const MusicalForm& ) = default;
             MusicalForm& operator=(MusicalForm&& ) = default;
-            static bool prefer_sharp_;
+            std::shared_ptr<bool> prefer_sharp_{std::make_shared<bool>()};
 
             // A ctor for converting old files
             MusicalForm(const std::string& name, const cgmlegacy::TextForm& form)
@@ -239,9 +240,10 @@ namespace textmidi
                 voices_{}
             {
                 scale_.resize(form.scale.size());
+                auto prefer_sharp{prefer_sharp_};
                 transform(form.scale.begin(), form.scale.end(),
-                    scale_.begin(), [](const std::uint32_t notenum)
-                    { return textmidi::num_to_note(notenum, &prefer_sharp_); });
+                    scale_.begin(), [prefer_sharp](const std::uint32_t notenum)
+                    { return textmidi::num_to_note(notenum, prefer_sharp); });
                 voices_.clear();
                 voices_.insert(voices_.begin(), form.voices.begin(),
                                form.voices.begin() + form.voice_qty);

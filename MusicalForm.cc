@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -32,6 +32,7 @@
 #include <numeric>
 #include <algorithm>
 #include <iostream>
+#include <ranges>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -517,9 +518,9 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         v.follower(VoiceXml::Follower{});
     }
     vector<int> channels(voices_.size());
-    transform(voices_.begin(), voices_.end(), channels.begin(),
+    ranges::transform(voices_, channels.begin(),
            [](const VoiceXml& v) { return v.channel(); });
-    sort(channels.begin(), channels.end());
+    ranges::sort(channels);
     auto uniq_it{unique(channels.begin(), channels.end())};
     channels.erase(uniq_it, channels.end());
     //
@@ -585,11 +586,11 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     // This algorithm assume a monotonically increasng scale.
     // Find the maximum instrument range note.
     CompareLowerNoteName lower_note{};
-    const auto min_instrument_range = *min_element(voices_.begin(), voices_.end(),
+    const auto min_instrument_range = *ranges::min_element(voices_,
         [lower_note](const VoiceXml& vleft,
         const VoiceXml& vright){ return lower_note(vleft.low_pitch(),
         vright.low_pitch()); });
-    const auto max_instrument_range = *max_element(voices_.begin(), voices_.end(),
+    const auto max_instrument_range = *ranges::max_element(voices_,
         [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.high_pitch(), vright.high_pitch()); });
     auto erase_iter{remove_if(scale_.begin(), scale_.end(),
         [max_instrument_range, min_instrument_range, lower_note](const string& scale_pitch){
@@ -647,7 +648,7 @@ void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
 {
     if (!voices_.empty())
     {
-        const auto voice_min_note{min_element(voices_.begin(), voices_.end(),
+        const auto voice_min_note{ranges::min_element(voices_,
             [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
             { return CompareLowerNoteName()(v1.low_pitch(), v2.low_pitch());})->low_pitch()};
         const auto voice_max_note{max_element(voices_.begin(), voices_.end(),
@@ -662,6 +663,5 @@ void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
 
 RandomDouble cgm::rd{};
 RandomInt cgm::ri{};
-bool MusicalForm::prefer_sharp_{};
 
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -42,14 +42,14 @@ textmidi::rational::RhythmRational NoteEvent::musical_rhythm() const noexcept
 std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
 {
     auto flags{os.flags()};
-    static bool prefer_sharp{};
+    std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
     if (RestPitch == ne.pitch())
     {
         os << "R ";
     }
     else
     {
-        const auto note_name(textmidi::num_to_note(ne.pitch(), &prefer_sharp));
+        const auto note_name(textmidi::num_to_note(ne.pitch(), prefer_sharp));
         os << note_name << ' ';
     }
     textmidi::rational::print_rhythm(os, ne.musical_rhythm());

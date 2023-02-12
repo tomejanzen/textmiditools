@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -69,6 +69,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/xml_archive_exception.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 #include "MIDIKeyString.h"
 #include "MusicalForm.h"
@@ -151,35 +152,26 @@ int main(int argc, char *argv[])
     }
     catch (std::logic_error& err)
     {
-        cerr << "Program options error: " << err.what() << '\n';
+        const string errstr{(string{"Program options error: "} += err.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
     if (var_map.count(HelpOpt))
     {
-        cout << "Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\n";
-        string str{};
-        str.reserve(512);
-        (((str += "textmidicgm 1.0\n")
-            += lexical_cast<string>(desc))
-            += "\nReport bugs to: janzentome@gmail.com\n")
-            += "textmidicgm home page: <https://www\n";
-        cout << str;
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm 1.0.35\n"}
+            += lexical_cast<string>(desc)) += '\n')
+            += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
+        cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        string str{};
-        str.reserve(512);
-        (((((((str += "textmidicgm\n")
-            += "TextMIDITools 1.0.35\n")
-            += "Copyright © 2023 Thomas E. Janzen\n")
-            += "License GPLv3+: GNU GPL version 3 or later ")
-            += "<https://gnu.org/licenses/gpl.html>\n")
-            += "This is free software: ")
-            += "you are free to change and redistribute it.\n")
-            += "There is NO WARRANTY, to the extent permitted by law.\n";
-        cout << str;
+
+        cout << "textmidicgm\nTextMIDITools 1.0.36\nCopyright © 2023 Thomas E. Janzen\n"
+            "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+            "This is free software: you are free to change and redistribute it.\n"
+            "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -288,7 +280,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\n";
+        cerr << "Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\n";
         string str{};
         str.reserve(128);
         ((str += "you must have either a form file or an XML form file\n")
@@ -323,15 +315,17 @@ int main(int argc, char *argv[])
                         iarc >> BOOST_SERIALIZATION_NVP(temp_form);
                         if (!temp_form.valid())
                         {
-                            cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__)
-                                 << " Invalid Form.\n";
+                            const string errstr{((string{__FILE__} += ':') += BOOST_PP_STRINGIZE(__LINE__)) += " Invalid Form.\n"};
+                            cerr << errstr;
                         }
                         xml_forms.push_back(temp_form);
                     }
                     catch (MusicalFormException& mfe)
                     {
-                        cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__)
-                             << ' ' << form_filename << " is an Invalid Form " << mfe.what() << '\n';
+                        const string errstr{((((((string{__FILE__} += ':')
+                            += BOOST_PP_STRINGIZE(__LINE__)) += ' ') += form_filename)
+                            += " is an Invalid Form ") += mfe.what()) += '\n'};
+                        cerr << errstr;
                         exit(EXIT_SUCCESS);
                     }
                     catch (std::ios_base::failure &iosfail)
@@ -341,18 +335,18 @@ int main(int argc, char *argv[])
                     }
                     catch (archive::xml_archive_exception& xae)
                     {
-                        cerr << xae.what() <<'\n';
+                        cerr << xae.what() << '\n';
                     }
                     catch (archive::archive_exception& ae)
                     {
-                        cerr << ae.what() <<'\n';
+                        cerr << ae.what() << '\n';
                     }
                 }
             }
         }
         else
         {
-            cout << "Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\n";
+            cerr << "Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\n";
             string str{};
             str.reserve(128);
             ((str += "you must have either a form file or an XML form file\n")
@@ -394,7 +388,7 @@ int main(int argc, char *argv[])
     }
     if (answer && std::filesystem::exists(textmidi_filename))
     {
-        cout << "Overwrite " << textmidi_filename << "?" << '\n';
+        cout << "Overwrite " << textmidi_filename << "?\n";
         string answer{};
         cin >> answer;
         if (!((answer[0] == 'y') || (answer[0] == 'Y')))
@@ -417,7 +411,7 @@ int main(int argc, char *argv[])
             const string form_filename_local(form_filenames[xf]);
             if (answer && std::filesystem::exists(form_filename_local))
             {
-                cout << "Overwrite " << form_filename_local << "?" << '\n';
+                cout << "Overwrite " << form_filename_local << "?\n";
                 string answer{};
                 cin >> answer;
                 if (!((answer[0] == 'y') || (answer[0] == 'Y')))

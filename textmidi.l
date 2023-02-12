@@ -26,6 +26,7 @@
 
 #include <climits>
 #include <cmath>
+#include <cstdlib>
 
 #include <algorithm>
 #include <array> // scale step constant
@@ -41,9 +42,11 @@
 #include <utility> // pair
 #include <tuple>
 #include <stdexcept>
+#include <ranges>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 #include "Midi.h" // MIDI codes and MIDI file header
 #include "TextmidiUtils.h"
@@ -126,23 +129,30 @@ namespace
     int keyevent_to_keynumber(const string& keyevent,
                               bool& tie_in, bool& tie_out, bool& is_delta)
     {
-        int keynumber{};
+        int keynumber{MiddleC};
         smatch matches{};
         //
         // Hard Lessons: you can't break a line with a backslash in the middle of a
         // Raw regular expression
         const regex keyevent_re{R"((-?)(((([A-Ga-g])(([b#x]?)|(bb)))(-?)([0-9]))|(([Kk])([+-]?)([[:digit:]]+)))(-?))"};
-        auto sts{regex_match(keyevent, matches, keyevent_re)};
-        constexpr int match_tie_in{1};
-        constexpr int match_note_or_key{2};
-        constexpr int match_tie_out{15};
-        tie_in  = !matches[match_tie_in].str().empty();
-        tie_out = !matches[match_tie_out].str().empty();
-
-        if (!matches[match_note_or_key].str().empty())
+        const auto mat{regex_match(keyevent, matches, keyevent_re)};
+        if (!mat)
         {
-            tie(keynumber, is_delta)
-                = pitchname_to_keynumber(matches[match_note_or_key]);
+            cerr << "Improper keyevent: " << keyevent << '\n';
+        }
+        else
+        {
+            constexpr int match_tie_in{1};
+            constexpr int match_note_or_key{2};
+            constexpr int match_tie_out{15};
+            tie_in  = !matches[match_tie_in].str().empty();
+            tie_out = !matches[match_tie_out].str().empty();
+
+            if (!matches[match_note_or_key].str().empty())
+            {
+                tie(keynumber, is_delta)
+                    = pitchname_to_keynumber(matches[match_note_or_key]);
+            }
         }
         return keynumber;
     }
@@ -161,8 +171,8 @@ namespace
                              tie_in_, tie_out_, is_delta)};
             if (is_delta)
             {
-               key_ = static_cast<unsigned>(last_key + signed_key);
-               last_key = static_cast<int>(key_);
+                key_ = static_cast<unsigned>(last_key + signed_key);
+                last_key = static_cast<int>(key_);
             }
             else
             {
@@ -205,7 +215,7 @@ namespace
         {
             MidiStreamAtom temp{};
             temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
-            if (groupof7 != numvec.size() - 1)
+            if (static_cast<string::size_type>(groupof7) != numvec.size() - 1)
             {
                 temp |= 0x80;
             }
@@ -260,9 +270,10 @@ namespace
     {
         if (0 == channel)
         {
-            cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-                 << " Channel was zero (0) and left as zero; "
-                 << "channels must be in [1..16]\n";
+            const string errstr{((string{textmidi_features->text_filename_} += ':')
+                += lexical_cast<string>(textmidi_features->line_ctr_))
+                += " Channel was zero (0) and left as zero; channels must be in [1..16]\n"};
+            cerr << errstr;
         }
         global_channel
             = channel = (((channel > 0) ? (channel - 1) : channel) & channel_mask);
@@ -398,24 +409,28 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     else
     {
-        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << " File format was: " << format_str << " but must be in {";
+        string errstr{((((string{textmidi_features->text_filename_} += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_))
+            += "File format was: ") += format_str) += " but must be in {"};
         for (const auto& fmp : textmidi::format_map)
         {
-            cerr << fmp.first << ", ";
+            (errstr += fmp.first) += ", ";
         }
-        cerr << "} or omitted for a default of MULTITRACK\n";
+        errstr += "} or omitted for a default of MULTITRACK\n";
+        cerr << errstr;
     }
     if ((MIDI_Format::MonoTrack == midi_header.format_)
         && (midi_header.ntrks_ > 1))
     {
-        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << " File format was MONOTRACK which allows only one track"
-             << " but there are " << midi_header.ntrks_ << '\n';
+        const string errstr{((((string{textmidi_features->text_filename_} += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_))
+            +=  " File format was MONOTRACK which allows only one track but there are ")
+            += lexical_cast<string>(midi_header.ntrks_)) += '\n'};
+        cerr << errstr;
     }
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swap();
-    text_midi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
+    textmidi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
 
@@ -427,7 +442,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     iss >> midi_header.ntrks_ >> midi_header.division_;
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swap();
-    text_midi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
+    textmidi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
 
@@ -445,7 +460,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <DETAIL_STATE>{STARTTRACKTOKEN} {
     /* Recognize STARTTRACK */
     ++track_counter;
-    if (text_midi_features->verbose_)
+    if (textmidi_features->verbose_)
     {
         clog << "Found " << yytext << '\n';
     }
@@ -478,8 +493,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
     vector<unsigned> bytes(byte_strings.size());
-    transform(byte_strings.begin(),
-        byte_strings.end(), bytes.begin(), [](const string& str)
+    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -561,8 +575,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     int_to_vec(byte_strings.size(), len_vec);
 
     vector<unsigned> bytes(byte_strings.size());
-    transform(byte_strings.begin(),
-        byte_strings.end(), bytes.begin(), [](const string& str)
+    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -608,9 +621,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     else
     {
-        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << " Invalid meta event name " << meta_name << '\n';
-
+        const string errstr{((((string{textmidi_features->text_filename_} += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_))
+            += " Invalid meta event name ") += meta_name) += '\n'};
+        cerr << errstr;
     }
     BEGIN(TEXT_META_STATE);
   }
@@ -625,12 +639,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // remove blanks at end of line
     if (!yystring.empty())
     {
-        int pos{};
-#if 1
+        string::size_type pos{};
         const string blanks{" \t\n\r"};
-#else
-        const string blanks{" \t\r"};
-#endif
         if ((pos = yystring.find_last_not_of(blanks)) != yystring.npos)
         {
             yystring.erase(pos);
@@ -718,8 +728,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk[5] = (sizetemp >> 16) & 0xFF;
     trackchunk[6] = (sizetemp >>  8) & 0xFF;
     trackchunk[7] = (sizetemp >>  0) & 0xFF;
-    copy(trackchunk.begin(), trackchunk.end(),
-         ostream_iterator<MidiStreamAtom>(text_midi_features->midi_filestr_));
+    ranges::copy(trackchunk, ostream_iterator<MidiStreamAtom>(textmidi_features->midi_filestr_));
     accum_delay = 0;
     BEGIN(DETAIL_STATE);
   }
@@ -771,8 +780,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     tie(signed_key, is_delta) = pitchname_to_keynumber(pitch_name);
     if (is_delta)
     {
-       key = static_cast<unsigned>(last_key + signed_key);
-       last_key = static_cast<int>(key);
+        key = static_cast<unsigned>(last_key + signed_key);
+        last_key = static_cast<int>(key);
     }
     else
     {
@@ -806,8 +815,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     tie(signed_key, is_delta) = pitchname_to_keynumber(pitch_name);
     if (is_delta)
     {
-       key = static_cast<unsigned>(last_key + signed_key);
-       last_key = static_cast<int>(key);
+        key = static_cast<unsigned>(last_key + signed_key);
+        last_key = static_cast<int>(key);
     }
     else
     {
@@ -839,8 +848,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     tie(signed_key, is_delta) = pitchname_to_keynumber(pitch_name);
     if (is_delta)
     {
-       key = static_cast<unsigned>(last_key + signed_key);
-       last_key = static_cast<int>(key);
+        key = static_cast<unsigned>(last_key + signed_key);
+        last_key = static_cast<int>(key);
     }
     else
     {
@@ -876,7 +885,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(control_id);
     if (control_value & ~byte7_mask)
     {
-        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ << " illegal 8-bit control value: "
+        cerr << textmidi_features->text_filename_ << ':' << textmidi_features->line_ctr_ << " illegal 8-bit control value: "
              << hex << control_value << dec << " will be coerced to 7-bit" << '\n';
     }
     control_value &= byte7_mask;
@@ -900,8 +909,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control channel: " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << ' ' << namestr<< oor.what() << '\n';
+        const string errstr{((((((string{"unknown control channel: "}
+            += textmidi_features->text_filename_) += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_)) += ' ')
+            += namestr) += oor.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -927,11 +939,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control channel: " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << ' ' << namestr<< oor.what() << '\n';
+        const string errstr{((((((string{"unknown control channel: "}
+            += textmidi_features->text_filename_) += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_)) += ' ')
+            += namestr) += oor.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
-
     check_running_status(channel | control[0]);
     trackchunk.push_back(control_id);
     control_value &= byte7_mask;
@@ -955,8 +969,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control : " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << ' ' << namestr << ' ' << oor.what() << '\n';
+        const string errstr{(((((((string{"unknown control : "}
+            += textmidi_features->text_filename_) += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_))
+            += ' ') += namestr) += ' ') += oor.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -967,8 +984,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     catch (out_of_range &oor)
     {
-        cerr << "unknown control on/off: " << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << ' ' << onoff << ' ' << oor.what() << '\n';
+        const string errstr{(((((((string{"unknown control on/off: " }
+            += textmidi_features->text_filename_) += ':')
+            += lexical_cast<string>(textmidi_features->line_ctr_))
+            += ' ') += onoff) += ' ') += oor.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -1126,47 +1146,49 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string yystring{yytext},
            discard;
     const regex smpteoffset_re{R"(SMPTE_OFFSET([[:space:]]+)(\w+)([[:space:]])+([[:digit:]]{2,4}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}):([[:digit:]]{2}))"};
-    constexpr int full_match{0};
-    constexpr int space1_match{1};
     constexpr int fps_match{2};
-    constexpr int space2_match{3};
     constexpr int hours_match{4};
     constexpr int minutes_match{5};
-    constexpr int seconds_match{6};
-    constexpr int fr_match{7};
     constexpr int ff_match{8};
 
     //const regex smpteoffset_re{R"(SMPTE_OFFSET[[:space:]]+.*)"};
     smatch matches{};
-    auto sts{regex_match(yystring, matches, smpteoffset_re)};
-    // values in [2]..
-    MidiStreamVector offsetvalues;
+    const auto mat{regex_match(yystring, matches, smpteoffset_re)};
+    if (!mat)
+    {
+        cerr << "Improper SMPTE string: " << yystring << '\n';
+    }
+    else
+    {
+        // values in [2]..
+        MidiStreamVector offsetvalues;
 #if 0
-    for (auto m : matches)
-    {
-        cout << '#' << m.str() << '#' << '\n';
-    }
+        for (auto m : matches)
+        {
+            cout << '#' << m.str() << '#' << '\n';
+        }
 #endif
-    MidiStreamAtom fps{0};
-    if (smpte_fps_reverse_map.contains(matches[fps_match]))
-    {
-        fps = smpte_fps_reverse_map.at(matches[fps_match]);
+        MidiStreamAtom fps{0};
+        if (smpte_fps_reverse_map.contains(matches[fps_match]))
+        {
+            fps = smpte_fps_reverse_map.at(matches[fps_match]);
+        }
+        int hours{lexical_cast<int>(matches[hours_match])};
+        hours |= (fps << smpte_fps_shift);
+        offsetvalues.push_back(hours);
+        for (auto i{minutes_match}; i < (ff_match + 1); ++i)
+        {
+            offsetvalues.push_back(static_cast<int>(lexical_cast<int>(matches[i])));
+        }
+        trackchunk.push_back(meta_prefix[0]);
+        trackchunk.push_back(smpte_prefix[0]);
+        trackchunk.push_back(smpte_prefix[1]);
+        for (auto offsetval : offsetvalues)
+        {
+            trackchunk.push_back(offsetval);
+        }
+        running_status = 0;
     }
-    int hours{lexical_cast<int>(matches[hours_match])};
-    hours |= (fps << smpte_fps_shift);
-    offsetvalues.push_back(hours);
-    for (auto i{minutes_match}; i < (ff_match + 1); ++i)
-    {
-        offsetvalues.push_back(static_cast<int>(lexical_cast<int>(matches[i])));
-    }
-    trackchunk.push_back(meta_prefix[0]);
-    trackchunk.push_back(smpte_prefix[0]);
-    trackchunk.push_back(smpte_prefix[1]);
-    for (auto offsetval : offsetvalues)
-    {
-        trackchunk.push_back(offsetval);
-    }
-    running_status = 0;
   }
 
 <DETAIL_STATE>MIDI_CHANNEL{SPACE}{UINTEGER} {
@@ -1223,8 +1245,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
     vector<unsigned> bytes(byte_strings.size());
-    transform(byte_strings.begin(),
-        byte_strings.end(), bytes.begin(), [](const string& str)
+    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -1276,8 +1297,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
     vector<unsigned> bytes(byte_strings.size());
-    transform(byte_strings.begin(),
-         byte_strings.end(), bytes.begin(), [](const string& str)
+    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -1317,16 +1337,17 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string ticks_str{};
     (((ticks_str += "Ticks: ")
         += lexical_cast<string>(global_total_track_ticks)) += ' ') += yytext;
-    cout << ticks_str << '\n';
+    if (textmidi_features->verbose_)
     {
-      write_delay();
-      trackchunk.push_back(meta_prefix[0]);
-      trackchunk.push_back(text_prefix[0]);
-      MidiStreamVector len_vec{};
-      int_to_vec(ticks_str.length(), len_vec);
-      trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
-      trackchunk.insert(trackchunk.end(), ticks_str.begin(), ticks_str.end());
+        cout << ticks_str << '\n';
     }
+    write_delay();
+    trackchunk.push_back(meta_prefix[0]);
+    trackchunk.push_back(text_prefix[0]);
+    MidiStreamVector len_vec{};
+    int_to_vec(ticks_str.length(), len_vec);
+    trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
+    trackchunk.insert(trackchunk.end(), ticks_str.begin(), ticks_str.end());
     running_status = 0;
   }
 
@@ -1391,10 +1412,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // write note event
     if (!keytie.tie_in_)
     {
-      write_delay();
-      check_running_status((global_channel & channel_mask) | note_on[0]);
-      trackchunk.push_back(keytie.key_);
-      trackchunk.push_back(lazy::dynamic);
+        write_delay();
+        check_running_status((global_channel & channel_mask) | note_on[0]);
+        trackchunk.push_back(keytie.key_);
+        trackchunk.push_back(lazy::dynamic);
     }
     lazy::chord.push_back(keytie);    // save key number in lazy::chord;
   }
@@ -1402,49 +1423,69 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
     /* Recognize error grammar bad note letter */
     // ERROR
-    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
-      " Non Key Letter before Key Name: " << __LINE__ << ' ' << yytext <<
-      " in track " << track_counter << " at beat " <<
-      (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
+    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
+        += lexical_cast<string>(textmidi_features->line_ctr_))
+        += " Non Key Letter before Key Name: ")
+        += BOOST_PP_STRINGIZE(__LINE__))
+        += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+        += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+        += '\n'};
+    cerr << errstr;
     exit(EXIT_SUCCESS);
   }
 
 <DETAIL_STATE>(-{PITCH_NAME})|({PITCH_NAME}-) {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
-      " Ties are not allowed in DETAIL mode: " << __LINE__ << ' ' << yytext <<
-      " in track " << track_counter << " at beat " <<
-      (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
+    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
+        += lexical_cast<string>(textmidi_features->line_ctr_))
+        += " Ties are notallowed in DETAIL mode: ")
+        += BOOST_PP_STRINGIZE(__LINE__))
+        += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+        += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+        += '\n'};
+    cerr << errstr;
     exit(EXIT_SUCCESS);
   }
 
 <DETAIL_STATE>{NON_NOTE_LETTER}{PITCH_NAME} {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
-      " Non Note Letter before Note Name: " << __LINE__ << ' ' << yytext <<
-      " in track " << track_counter << " at beat " <<
-      (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
+    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
+        += lexical_cast<string>(textmidi_features->line_ctr_))
+        += " Non-Note Letter before Note Name: ")
+        += BOOST_PP_STRINGIZE(__LINE__))
+        += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+        += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+        += '\n'};
+    cerr << errstr;
     exit(EXIT_SUCCESS);
   }
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{LAZY_PITCH_NAME} {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
-      " Key Name without octave: " << __LINE__ << ' ' << yytext <<
-      " in track " << track_counter << " at beat " <<
-      (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
+    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
+        += lexical_cast<string>(textmidi_features->line_ctr_))
+        += " Key Name without octave: ")
+        += BOOST_PP_STRINGIZE(__LINE__))
+        += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+        += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+        += '\n'};
+    cerr << errstr;
   }
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{RHYTHM} {
     /* Recognize error grammar */
     // ERROR
-    cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_ <<
-      " Key Name without octave: " << __LINE__ << ' ' << yytext <<
-      " in track " << track_counter << " at beat " <<
-      (total_beats + (accum_delay / global_ticks_per_quarter)) << endl;
+    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
+        += lexical_cast<string>(textmidi_features->line_ctr_))
+        += " Key Name without octave: ")
+        += BOOST_PP_STRINGIZE(__LINE__))
+        += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+        += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+        += '\n'};
+    cerr << errstr;
   }
 
 <LAZY_STATE>{SPACE}{RHYTHM} {
@@ -1463,23 +1504,27 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     const size_t slashi{rhythmstr.find('/')};
     if (slashi != rhythmstr.npos)
     {
-      // we have a ratio
-      string num2str{rhythmstr, slashi + 1};
-      istringstream num2stream{num2str};
-      num2stream >> num2;
-      thenumerator = num1;
-      thedivisor   = num2;
+        // we have a ratio
+        string num2str{rhythmstr, slashi + 1};
+        istringstream num2stream{num2str};
+        num2stream >> num2;
+        thenumerator = num1;
+        thedivisor   = num2;
     }
     else
     {
-      // we have a single number, which we divide into 1.0
-      thedivisor = num1;
-      if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
-      {
-        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << " A duration denominator that is > ticks per whole! "
-             << thedivisor << '>' << (global_ticks_per_quarter * QuartersPerWhole) << '\n';
-      }
+        // we have a single number, which we divide into 1.0
+        thedivisor = num1;
+        if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
+        {
+            const string errstr{((((((string{textmidi_features->text_filename_}
+                += ':') += lexical_cast<string>(textmidi_features->line_ctr_))
+                += " A duration denominator that is > ticks per whole! ")
+                += lexical_cast<string>(thedivisor)) += '>')
+                += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole))
+                += '\n' };
+            cerr << errstr;
+        }
     }
     total_duration = delay_and_update_total_ticks(thenumerator, thedivisor,
             ('.' == rhythmstr[rhythmstr.size() - 1]),
@@ -1487,33 +1532,33 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     //
     // Subtract detache, to be added back in as a "rest".
     note_duration
-        = total_duration - ((static_cast<double>(text_midi_features->detache_) < total_duration) ? text_midi_features->detache_ : 0);
+        = total_duration - ((static_cast<double>(textmidi_features->detache_) < total_duration) ? textmidi_features->detache_ : 0);
     // write note offs for each note in the chord with 0 delays
     accum_delay += note_duration;
 
     for (const auto& keytie : lazy::chord)
     {
-      if (!keytie.tie_out_)
-      {
-        write_delay(); // wait the duration of the note
+        if (!keytie.tie_out_)
+        {
+            write_delay(); // wait the duration of the note
 
-        uint32_t channel{global_channel & channel_mask};
-        const MidiStreamAtom note_cmd{text_midi_features->note_off_select_ ? note_off[0] : note_on[0]};
-        const auto status_byte{channel | note_cmd};
-        check_running_status(status_byte);
+            uint32_t channel{global_channel & channel_mask};
+            const MidiStreamAtom note_cmd{textmidi_features->note_off_select_ ? note_off[0] : note_on[0]};
+            const auto status_byte{channel | note_cmd};
+            check_running_status(status_byte);
 
-        trackchunk.push_back(keytie.key_ & byte7_mask);
+            trackchunk.push_back(keytie.key_ & byte7_mask);
 
-        // If we are using a note_off, then use the prevailing dynamic; else 0.
-        const MidiStreamAtom velocity{text_midi_features->note_off_select_
-            ? static_cast<MidiStreamAtom>(lazy::dynamic) : note_off_velocity};
-        trackchunk.push_back(velocity);
-      }
+            // If we are using a note_off, then use the prevailing dynamic; else 0.
+            const MidiStreamAtom velocity{textmidi_features->note_off_select_
+                ? static_cast<MidiStreamAtom>(lazy::dynamic) : note_off_velocity};
+            trackchunk.push_back(velocity);
+        }
     }
     lazy::chord.clear();
-    if (static_cast<double>(text_midi_features->detache_) < total_duration)
+    if (static_cast<double>(textmidi_features->detache_) < total_duration)
     {
-        accum_delay += text_midi_features->detache_;
+        accum_delay += textmidi_features->detache_;
     }
     BEGIN(LAZY_STATE);
   }
@@ -1533,23 +1578,26 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     size_t slashi{rhythmstr.find('/')};
     if (slashi != rhythmstr.npos)
     {
-      // we have a ratio
-      string num2str{rhythmstr, slashi + 1};
-      istringstream num2stream{num2str};
-      num2stream >> num2;
-      thenumerator = num1;
-      thedivisor   = num2;
+        // we have a ratio
+        string num2str{rhythmstr, slashi + 1};
+        istringstream num2stream{num2str};
+        num2stream >> num2;
+        thenumerator = num1;
+        thedivisor   = num2;
     }
     else
     {
-      // we have a single number, which we divide into 1.0
-      thedivisor = num1;
-      if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
-      {
-        cerr << text_midi_features->text_filename_ << ':' << text_midi_features->line_ctr_
-             << " A duration denominator that is > ticks per whole! "
-             << thedivisor << '>' << (global_ticks_per_quarter * QuartersPerWhole) << '\n';
-      }
+        // we have a single number, which we divide into 1.0
+        thedivisor = num1;
+        if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
+        {
+            const string errstr{((((((string{textmidi_features->text_filename_} += ':')
+                += lexical_cast<string>(textmidi_features->line_ctr_))
+                += " A duration denominator that is > ticks per whole! ")
+                += lexical_cast<string>(thedivisor)) += '>')
+                += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole)) += '\n' };
+            cerr << errstr;
+        }
     }
     total_duration = delay_and_update_total_ticks(thenumerator, thedivisor,
             ('.' == rhythmstr[rhythmstr.size() - 1]),
@@ -1559,22 +1607,22 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
 <DETAIL_STATE,LAZY_STATE>{COMMENT} {
     /* Recognize comments. */
-    ++text_midi_features->line_ctr_;
+    ++textmidi_features->line_ctr_;
   }
 ^{SOMESPACE}
 {skip}*
 (\n) {
-    ++text_midi_features->line_ctr_;
+    ++textmidi_features->line_ctr_;
   }
 <<EOF>> {
-    if (text_midi_features->verbose_)
+    if (textmidi_features->verbose_)
     {
         clog << "Found " << track_counter
              << " tracks and will set MIDI header accordingly.\n";
     }
-    text_midi_features->midi_filestr_.seekp(10);
+    textmidi_features->midi_filestr_.seekp(10);
     track_counter = htobe16(track_counter);
-    text_midi_features->midi_filestr_.write(io_bytes(track_counter), sizeof(track_counter));
+    textmidi_features->midi_filestr_.write(io_bytes(track_counter), sizeof(track_counter));
     yyterminate();
   }
 .

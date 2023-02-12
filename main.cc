@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -39,7 +39,7 @@ namespace
 
 namespace textmidi
 {
-    std::shared_ptr<textmidi::TextMidiFeatures> text_midi_features{};
+    std::shared_ptr<textmidi::TextMidiFeatures> textmidi_features{};
 }
 
 extern FILE* yyin;
@@ -84,24 +84,19 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt)) [[unlikely]]
     {
-        cout << "Usage: textmidi [OPTION]... [TEXTMIDIFILE]\n";
-        cout << "textmidi 1.0.6\n";
-        cout << desc << '\n';
-        cout << "Report bugs to: janzentome@gmail.com\n";
-        cout << "textmidi home page: <https://www\n";
+        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi 1.0.35\n"}
+            += lexical_cast<string>(desc)) += '\n')
+            += "Report bugs to: janzentome@gmail.com\ntextmidi home page: <https://www\n"};
+        cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\n";
-        cout << "TextMIDITools 1.0.35\n";
-        cout << "Copyright © 2023 Thomas E. Janzen\n";
-        cout << "License GPLv3+: GNU GPL version 3 or later "
-             << " <https://gnu.org/licenses/gpl.html>\n";
-        cout << "This is free software:"
-             << " you are free to change and redistribute it.\n";
-        cout << "There is NO WARRANTY, to the extent permitted by law.\n";
+        cout << "textmidi\nTextMIDITools 1.0.36\nCopyright © 2023 Thomas E. Janzen\n"
+            "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+            "This is free software: you are free to change and redistribute it.\n"
+            "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -138,7 +133,8 @@ int main(int argc, char *argv[])
         midi_filename = var_map[MidiOpt].as<string>();
         if (answer && std::filesystem::exists(midi_filename))
         {
-            cout << "Overwrite " << midi_filename << "?" << '\n';
+            const string outstr{(string{"Overwrite "} += midi_filename) += "?\n"};
+            cout << outstr;
             string answer{};
             cin >> answer;
             if (!((answer[0] == 'y') || (answer[0] == 'Y')))
@@ -178,15 +174,17 @@ int main(int argc, char *argv[])
     midi_filestr.open(midi_filename.c_str(), ios_base::binary);
     if (!midi_filestr)
     {
-        cerr << "Can't open " << midi_filename << endl;
+        cerr << "Can't open " << midi_filename << '\n';
     }
-    textmidi::text_midi_features = make_shared<textmidi::TextMidiFeatures>(text_filename, midi_filestr,
+    textmidi::textmidi_features = make_shared<textmidi::TextMidiFeatures>(text_filename, midi_filestr,
         detache, note_off_select, verbose);
     while (yylex());
     fclose (yyin);
     if (verbose)
     {
-        cout << "Lines processed: " << (textmidi::text_midi_features->line_ctr_ - 1) << '\n';
+        const string verbose_str{(string{"Lines processed: "} +=
+           lexical_cast<string>(textmidi::textmidi_features->line_ctr_ - 1)) += '\n'};
+        cout << verbose_str;
     }
 
     return EXIT_SUCCESS;

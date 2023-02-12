@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -159,6 +159,8 @@ namespace textmidi
     const MidiStreamVector tune_request           {0xf6};
     const MidiStreamVector start_of_sysex         {0xf0};
     const MidiStreamVector end_of_sysex           {0xf7};
+
+    constexpr MidiStreamAtom MiddleC{60};
 
     const int SMPTE_hours_max{23};
 

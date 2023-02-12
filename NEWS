@@ -179,4 +179,8 @@
       Continue testing on 6000 files.
       Rationalize UNKNOWN_META to not require the length
       in the text version in textmidi language.
-
+    * 2023-02-12
+      Update C++ usage; reduce compiler warnings; 
+      miditext now reads the entire file at once;
+      use C++ 20 ranges; replace thread with jthread;
+      remove last endl's; print more error messages.

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -12,6 +12,8 @@
 #if HAVE_CONFIG_H
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
+
+#include <ranges>
 
 #include <boost/lexical_cast.hpp>
 
@@ -189,7 +191,7 @@ string SmusTrackEventPitch::textmidi_tempo()
 string SmusTrackEventPitch::textmidi()
 {
     ostringstream oss{};
-    static bool prefer_sharp{};
+    std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
     if (decision() < Rest)
     {
         oss << i_am_lazy_string(true);
@@ -209,7 +211,7 @@ string SmusTrackEventPitch::textmidi()
                 remove_from_tied();
             }
         }
-        oss << num_to_note(decision(), &prefer_sharp);
+        oss << num_to_note(decision(), prefer_sharp);
         if (is_tiedout())
         {
             if (!tied_back)
@@ -247,7 +249,7 @@ bool SmusTrackEventPitch::is_tied_back(int tp) const
 {
     bool rtn{};
     const auto tplocal{tp};
-    auto it{find_if(tied_vec_.begin(), tied_vec_.end(), [tplocal](char p)
+    auto it{ranges::find_if(tied_vec_, [tplocal](char p)
         { return tplocal == p; })};
     if (it != tied_vec_.end()) // this is tied back
     {
@@ -259,7 +261,7 @@ bool SmusTrackEventPitch::is_tied_back(int tp) const
 void SmusTrackEventPitch::remove_from_tied()
 {
     const auto tplocal{decision()};
-    auto it{find_if(tied_vec_.begin(), tied_vec_.end(), [tplocal](char p)
+    auto it{ranges::find_if(tied_vec_, [tplocal](char p)
         { return tplocal == p; })};
     if (it != tied_vec_.end()) // this is tied back
     {

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -38,7 +38,7 @@ namespace textmidi
           public:
             struct TrackScramble
             {
-                TrackScramble(TrackScrambleEnum scramble = TrackScrambleEnum::None,
+                explicit TrackScramble(TrackScrambleEnum scramble = TrackScrambleEnum::None,
                               TicksDuration     period = TicksDuration{120LU * TicksPerQuarter})
                   : scramble_(scramble),
                     period_(period)

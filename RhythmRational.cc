@@ -248,39 +248,45 @@ std::istream& textmidi::rational::operator>>(std::istream& is, RhythmRational& t
     is.rdbuf()->sgetn(buf, cnt);
     string buf_string{buf, static_cast<long unsigned int>(cnt)};
     smatch matches{};
-    auto sts{regex_match(buf_string, matches, rhythm_rational_re)};
-    // If there was no numerator
-    int64_t numer{};
-    int64_t denom{1L};
-    // If there is a match for a rational
-    if (!matches[rational_match].str().empty())
+    const auto mat{regex_match(buf_string, matches, rhythm_rational_re)};
+    if (!mat)
     {
-        numer = std::atol(matches[numerator_match].str().c_str());
-        // If there is a slash and denominator
-        if (!matches[slash_denominator_match].str().empty())
-        {
-            // matches[6] is denominator
-            denom = std::atol(matches[denominator_match].str().c_str());
-        }
+        cerr << "Improper rational number: " << buf_string << '\n';
     }
     else
     {
-        // error
-        // set stream error
-        is.setstate(ios_base::failbit);
-        is.clear();
-        string message("bad read of RhythmsRational: ");
-        message += buf_string;
-        throw runtime_error(message);
+        // If there was no numerator
+        int64_t numer{};
+        int64_t denom{1L};
+        // If there is a match for a rational
+        if (!matches[rational_match].str().empty())
+        {
+            numer = std::atol(matches[numerator_match].str().c_str());
+            // If there is a slash and denominator
+            if (!matches[slash_denominator_match].str().empty())
+            {
+                // matches[6] is denominator
+                denom = std::atol(matches[denominator_match].str().c_str());
+            }
+        }
+        else
+        {
+            // error
+            // set stream error
+            is.setstate(ios_base::failbit);
+            is.clear();
+            string message("bad read of RhythmsRational: ");
+            message += buf_string;
+            throw runtime_error(message);
+        }
+        const auto offs{-matches[remainder_match].str().size()};
+        if (offs != 0)
+        {
+            is.seekg(offs, ios_base::cur);
+        }
+        RhythmRational rtn{numer, denom};
+        tr = rtn;
     }
-    const off_t offs{-matches[remainder_match].str().size()};
-    if (offs != 0)
-    {
-        is.seekg(offs, ios_base::cur);
-    }
-    RhythmRational rtn{numer, denom};
-    tr = rtn;
-
     return is;
 }
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -47,6 +47,7 @@
 #include <array>
 #include <vector>
 #include <filesystem>
+#include <ranges>
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
@@ -143,24 +144,19 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        cout << "Usage: smustextmidi [OPTION]... [SMUSFILE]\n";
-        cout << "smustextmidi 1.0.6\n";
-        cout << desc << '\n';
-        cout << "Report bugs to: janzentome@gmail.com\n";
-        cout << "smustextmidi home page: <https://www\n";
+        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi 1.0.35\n"}
+            += lexical_cast<string>(desc)) += '\n')
+            += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: <https://www\n"};
+        cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "smustextmidi\n";
-        cout << "TextMIDITools 1.0.35\n";
-        cout << "Copyright © 2023 Thomas E. Janzen\n";
-        cout << "License GPLv3+: GNU GPL version 3 or later "
-             << "<https://gnu.org/licenses/gpl.html>\n";
-        cout << "This is free software: "
-             << "you are free to change and redistribute it.\n";
-        cout << "There is NO WARRANTY, to the extent permitted by law.\n";
+        cout << "smustextmidi\nTextMIDITools 1.0.36\nCopyright © 2023 Thomas E. Janzen\n"
+            "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+            "This is free software: you are free to change and redistribute it.\n"
+            "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -177,9 +173,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "Usage: smustextmidi [OPTION]... [SMUSFILE]\n";
-        cerr << "You must provide an SMUS input file\n";
-        cerr << desc << '\n';
+        const string errstr{(string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nYou must provide an SMUS input file\n"}
+            += lexical_cast<string>(desc)) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -196,9 +192,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "Usage: smustextmidi [OPTION]... [SMUSFILE]\n";
-        cerr << "You must provide a textmidi output file\n";
-        cerr << desc << '\n';
+        const string errstr{(string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nYou must provide a textmidi output file\n"}
+            += lexical_cast<string>(desc)) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
     if (answer && std::filesystem::exists(textmidi_filename)) [[unlikely]]
@@ -220,7 +216,8 @@ int main(int argc, char *argv[])
         smus_file.open(smus_filename.c_str(), ios_base::binary | ios_base::in);
         if (!smus_file)
         {
-            cerr << "can't open " << smus_filename << '\n';
+            const string errstr{(string{"can't open "} += smus_filename) += '\n'};
+            cerr << errstr;
             exit(EXIT_SUCCESS);
         }
         smus_file.seekg(0);
@@ -272,8 +269,11 @@ int main(int argc, char *argv[])
 
     ofstream textmidi_file{textmidi_filename};
 
-    textmidi_file << "FILEHEADER " << (header.trak_qty + 1) << ' '
-                  << TicksPerQuarter << ' ' << MIDI_Format::MultiTrack << '\n';
+    string textmidi_str{};
+    ((((((textmidi_str +=  "FILEHEADER ") += lexical_cast<string>(header.trak_qty + 1))
+        += ' ') +=  lexical_cast<string>(TicksPerQuarter)) += ' ')
+        += lexical_cast<string>(MIDI_Format::MultiTrack)) += '\n';
+    textmidi_file << textmidi_str;
     smus_index += sizeof(StartThing);
 
     bool in_track{};
@@ -346,9 +346,9 @@ int main(int argc, char *argv[])
     // DO THE TEMPO TRACK
     start_of_tracks_index = smus_index - 8;
 
-    textmidi_file << "\nSTARTTRACK\n";
-    textmidi_file << meta_events_string;
-    textmidi_file << "TRACK Tempo\n";
+    textmidi_str.clear();
+    ((textmidi_str += "\nSTARTTRACK\n") += meta_events_string) += "TRACK Tempo\n";
+    textmidi_file << textmidi_str;
 
     notes_per_track = len / sizeof(SmusTrackEventFilePod);
 
@@ -365,17 +365,15 @@ int main(int argc, char *argv[])
     }
     if (SmusTrackEventBase::delay_accum_)
     {
-        textmidi_file << SmusTrackEventBase::i_am_lazy_string(true);
-        textmidi_file << "R ";
+        textmidi_file << SmusTrackEventBase::i_am_lazy_string(true) << " R ";
         print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_) << '\n';
     }
     SmusTrackEventPitch::flush();
     if ((notes_per_track > 0) && !dynamic_cast<SmusTrackEventEnd*>(track_events[notes_per_track - 1].get()))
     {
-        textmidi_file << SmusTrackEventBase::i_am_lazy_string(false);
-        textmidi_file << "\nEND_OF_TRACK\n";
+        textmidi_file << SmusTrackEventBase::i_am_lazy_string(false) << "\nEND_OF_TRACK\n";
     }
-    for_each(track_events.begin(), track_events.end(), [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
+    ranges::for_each(track_events, [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
     track_events.clear();
     //
     // end of tempo track
@@ -434,7 +432,7 @@ int main(int argc, char *argv[])
             textmidi_file << SmusTrackEventBase::i_am_lazy_string(false);
             textmidi_file << "\nEND_OF_TRACK\n";
         }
-        for_each(track_events.begin(), track_events.end(), [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
+        ranges::for_each(track_events, [](unique_ptr<SmusTrackEventBase>& teb) { teb.reset(); });
         track_events.clear();
     }
     textmidi_file.close();

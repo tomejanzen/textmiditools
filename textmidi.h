@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -36,7 +36,7 @@ namespace textmidi
         const bool note_off_select_;
         const bool verbose_;
     };
-    extern std::shared_ptr<TextMidiFeatures> text_midi_features;
+    extern std::shared_ptr<TextMidiFeatures> textmidi_features;
 }
 
 //

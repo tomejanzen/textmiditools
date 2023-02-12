@@ -1,3 +1,9 @@
+2023-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * General: rewrite most stream output as the buiding of a string, and output
+        of the string.  Start using C++20 ranges.  Reduce compiler warnings.
+        * miditext.cc: replace thread with jthread.  Replace endl with newline.
+        Also change file read to read the entire file at once.
+
 2023-02-09     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.cc MidiEvents,cc, NoteEvent.cc, RhythmRational.cc, main.cc, testmidi.bash,
         textmidi.{h,l}: Change the globals in textmidi into a global pointer to a

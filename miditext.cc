@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.35
+// TextMIDITools Version 1.0.36
 //
 // miditext 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -35,8 +35,10 @@
 #include <vector>
 #include <map>
 #include <filesystem>
+#include <ranges>
 
 #include <boost/program_options.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "rational_support.h"
 #include "TextmidiUtils.h"
@@ -62,6 +64,7 @@ namespace
             vector<StreamLengthPair>& track_iters, size_t expected_track_qty)
     {
         track_iters.clear();
+        track_iters.reserve(20);
         while (midiiter != midiend)
         {
             if (! ((*(midiiter++) == 'M')
@@ -76,7 +79,8 @@ namespace
                 }
                 else
                 {
-                    cerr << "No Track header MTrk in track: " << track_num << '\n';
+                    const string errstr{(string{"No Track header MTrk in track: "} += track_num) += '\n'};
+                    cerr << errstr;
                 }
                 return;
             }
@@ -86,8 +90,8 @@ namespace
             num = htobe32(num);
             if (std::distance(&(*midiiter), &(*midiend)) < num)
             {
-                cerr << "File too short for track length in track: "
-                     << track_iters.size() << '\n';
+                const string errstr{(string{"File too short for track length in track:"} += lexical_cast<string>(track_iters.size())) += '\n'};
+                cerr << errstr;
                 return;
             }
             track_iters.push_back(StreamLengthPair(midiiter, num));
@@ -159,7 +163,8 @@ int main(int argc, char *argv[])
     }
     catch (std::logic_error& err)
     {
-        cerr << "Program options error: " << err.what() << '\n';
+        const string errstr{(string{"Program options error: "} += err.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -168,24 +173,19 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        cout << "Usage: miditext [OPTION]... [MIDIFILE]\n";
-        cout << "miditext 1.0\n";
-        cout << desc << '\n';
-        cout << "Report bugs to: janzentome@gmail.com\n";
-        cout << "miditext home page: <https://www\n";
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext 1.0.35\n"}
+            += lexical_cast<string>(desc)) += '\n')
+            += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
+        cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\n";
-        cout << "TextMIDITools 1.0.35\n";
-        cout << "Copyright © 2023 Thomas E. Janzen\n";
-        cout << "License GPLv3+: GNU GPL version 3 or later "
-             << "<https://gnu.org/licenses/gpl.html>\n";
-        cout << "This is free software: "
-             << "you are free to change and redistribute it.\n";
-        cout << "There is NO WARRANTY, to the extent permitted by law.\n";
+        cout << "miditext\nTextMIDITools 1.0.36\nCopyright © 2023 Thomas E. Janzen\n"
+            "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+            "This is free software: you are free to change and redistribute it.\n"
+            "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -194,14 +194,15 @@ int main(int argc, char *argv[])
         midi_filename = var_map[MidiOpt].as<string>();
         if (!std::filesystem::exists(midi_filename))
         {
-            cerr << MidiOpt << ' ' << midi_filename << " File does not exist.\n";
+            const string errstr{((string{MidiOpt} += ' ') += midi_filename) += " File does not exist.\n"};
+            cerr  << errstr;
             exit(EXIT_SUCCESS);
         }
     }
     else
     {
-        cerr << "You must provide a MIDI input file\n";
-        cerr << desc << '\n';
+        const string errstr{(string{"You must provide a MIDI input file\n"} += lexical_cast<string>(desc)) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
     RhythmRational quantum{0};
@@ -237,12 +238,14 @@ int main(int argc, char *argv[])
         output_filename = midi_filename + ".txt";
         if (verbose)
         {
-            cout << "Will write to " << output_filename << '\n';
+            const string logstr{(string{"Will write to "} += output_filename) += '\n'};
+            cout << logstr;
         }
     }
     if (answer && std::filesystem::exists(midi_filename))
     {
-        cout << "Overwrite " << midi_filename << "?" << '\n';
+        const string answer_string{(string{"Overwrite "} += midi_filename) += "?\n"};
+        cout << answer_string;
         string answer{};
         cin >> answer;
         if (!((answer[0] == 'y') || (answer[0] == 'Y')))
@@ -252,8 +255,7 @@ int main(int argc, char *argv[])
     }
     if (midi_filename == output_filename)
     {
-        std::cerr
-          << "You would have overwritten the source name!; Must exit!" << '\n';
+        std::cerr << "You would have overwritten the source name!; Must exit!\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -264,19 +266,20 @@ int main(int argc, char *argv[])
         midifilestr.open(midi_filename, ios_base::binary);
         if (!midifilestr)
         {
-            std::cerr << "Open failed for " << midi_filename << '\n';
+            const string errstr{(string{"Open failed for "} += midi_filename) += '\n'};
+            cerr << errstr;
             return EXIT_FAILURE;
         }
         MidiStreamAtom ui{};
-        while (midifilestr.read(reinterpret_cast<char*>(&ui), sizeof ui))
-        {
-            midivector.push_back(ui);
-        }
+        const auto len{filesystem::file_size(midi_filename)};
+        midivector.resize(len);
+        midifilestr.read(reinterpret_cast<char*>(midivector.data()), len);
         midifilestr.close();
     }
     catch (std::ios_base::failure &iosfail)
     {
-        cerr << iosfail.what() << '\n';
+        const string errstr{string{iosfail.what()} += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -284,7 +287,8 @@ int main(int argc, char *argv[])
 
     if (!text_filestr)
     {
-        cout << "can't open " << output_filename << '\n';
+        const string logstr{(string{"can't open "} += output_filename) += '\n'};
+        cout << logstr;
     }
 
     MidiStreamVector::iterator midiiter{midivector.begin()};
@@ -297,41 +301,62 @@ int main(int argc, char *argv[])
     MidiHeader midi_header{midivector.data()};
     if (verbose)
     {
-        cout << midi_header << '\n';
+        const string logstr{string{lexical_cast<string>(midi_header)} += '\n'};
+        cout << logstr;
     }
     text_filestr << "FILEHEADER ";
     midiiter += sizeof(MidiHeader);
     const uint32_t ticksperquarter{midi_header.division_};
     uint32_t ticks_per_whole{ticksperquarter * 4};
 
-    text_filestr << midi_header.ntrks_ << ' ' << midi_header.division_ << ' ' << midi_header.format_ << '\n';
+    string textmidi_str{};
+    textmidi_str.reserve(32);
+    (((((textmidi_str += lexical_cast<string>(midi_header.ntrks_)) += ' ')
+       += lexical_cast<string>(midi_header.division_)) += ' ')
+       += lexical_cast<string>(midi_header.format_)) += '\n';
+    text_filestr << textmidi_str;
     if (verbose)
     {
-        cout << "FORMAT: " << midi_header.format_ << '\n';
+        const string logstr{(string{"FORMAT: "} += lexical_cast<string>(midi_header.format_)) += '\n'};
+        cout << logstr;
     }
     size_t track_qty{midi_header.ntrks_};
 
     vector<StreamLengthPair> stream_length_pairs{};
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
     vector<MidiDelayEventPairs> midi_delay_event_pairs(stream_length_pairs.size());
-    vector<thread> track_threads(stream_length_pairs.size());
 
-    for (auto& ti : stream_length_pairs)
     {
-        const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
-        ConvertTrack convert_track{ti, midi_delay_event_pairs[i], ticks_per_whole, quantum, lazy};
-        thread track_thread{convert_track};
-        track_threads[i] = move(track_thread);
+        vector<jthread> track_threads(stream_length_pairs.size());
+
+        for (auto& ti : stream_length_pairs)
+        {
+            const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
+            ConvertTrack convert_track{ti, midi_delay_event_pairs[i], ticks_per_whole, quantum, lazy};
+            jthread track_thread{convert_track};
+            track_threads[i] = move(track_thread);
+        }
     }
-    for (auto& thr : track_threads)
+    if (verbose)
     {
-        thr.join();
+        const string logstr{(string{"Will write to: "} += output_filename) += '\n'};
+        cout << logstr;
+    }
+
+    if (verbose)
+    {
+        cout << "Events per track:\n";
+        for (auto& mdep : midi_delay_event_pairs)
+        {
+            cout << "  Track: " << setw(3) << (std::distance(&(*midi_delay_event_pairs.begin()), &mdep) + 1) << ": " << setw(8) << mdep.size() << '\n';
+        }
     }
     for (auto& mdep : midi_delay_event_pairs)
     {
         const auto i{std::distance(&(*midi_delay_event_pairs.begin()), &mdep)};
-        text_filestr << "\nSTARTTRACK" << " ; bytes in track: "
-                    << stream_length_pairs[i].second << '\n';
+        textmidi_str.clear();
+        ((textmidi_str += "\nSTARTTRACK ; bytes in track: ") += lexical_cast<string>(stream_length_pairs[i].second)) += '\n';
+        text_filestr << textmidi_str;
         if (lazy)
         {
             PrintLazyTrack print_lazy_track{mdep, quantum, ticksperquarter};
@@ -339,8 +364,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            copy(mdep.begin(), mdep.end(),
-                ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
+            ranges::copy(mdep, ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
         }
     }
     return EXIT_SUCCESS;

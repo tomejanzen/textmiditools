@@ -386,6 +386,14 @@ Escaped characters in this list may be embedded in string events: \r (carriage r
 
 @smallexample
 TEXT "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_08 "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_09 "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_0A "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_0B "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_0C "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_0D "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_0E "Rewrite this measure" TIME_SIGNATURE 3 4 24
+TEXT_0F "Rewrite this measure" TIME_SIGNATURE 3 4 24
 @end smallexample
 
 or

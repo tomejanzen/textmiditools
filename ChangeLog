@@ -1,3 +1,16 @@
+2023-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.vim, textmidi., textmidi.texi, MidiEvents.{h,cc}:
+        Fix some found defects.  Primarily C++ usage and design of MidiEvents.
+        Divide responsibilities in miditext between recognize() functions 
+        and consume_stream() functions.  Reduce line count about 35 net lines.
+        Update documentation; properly support TEXT_0[8-F].  Remove running_status
+        from classes for events that don't use it anyway (leave it in the voice 
+        channel events).  Organize code in MidiEvents to put functions in the
+        same order in MidiEvents.h and MidiEvents.cc.
+
+2023-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix print out of out-of-range MIDI data values.
+
 2023-02-11     Thomas E. Janzen <janzentome@gmail.com>
         * General: rewrite most stream output as the buiding of a string, and output
         of the string.  Start using C++20 ranges.  Reduce compiler warnings.

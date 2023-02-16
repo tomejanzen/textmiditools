@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.36
+// TextMIDITools Version 1.0.37
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -74,19 +74,26 @@ namespace textmidi
     const MidiStreamVector text_0D_prefix         {0x0D};
     const MidiStreamVector text_0E_prefix         {0x0E};
     const MidiStreamVector text_0F_prefix         {0x0F};
-    const MidiStreamVector unknown1_prefix        {0x11};
+    const MidiStreamVector unknown_prefix         {0x11};
+    const MidiStreamVector smpte_prefix           {0x54, 5}; // prefix, length
+    const MidiStreamVector midi_channel_prefix    {0x20, 1}; // prefix, length
+    const MidiStreamVector end_of_track_prefix    {0x2f, 0}; // prefix, length
+    const MidiStreamVector tempo_prefix           {0x51, 3}; // prefix, length
+    const MidiStreamVector time_signature_prefix  {0x58, 4}; // prefix, length
+    const MidiStreamVector key_signature_prefix   {0x59, 2}; // prefix, length
+    const MidiStreamVector midi_port_prefix       {0x21, 1};
+    const MidiStreamVector sequencer_specific_prefix{0x7f};
 
+    // To recognize what is an unknown meta event, first check if it is in this list.
     const std::set<MidiStreamAtom> Initial_Meta{sequence_number_prefix[0], text_prefix[0],
         copyright_prefix[0], track_name_prefix[0], instrument_name_prefix[0],
         lyric_prefix[0], marker_prefix[0], cue_point_prefix[0], text_08_prefix[0],
         text_09_prefix[0], text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
-        text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0]};
+        text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0], midi_channel_prefix[0],
+        end_of_track_prefix[0], tempo_prefix[0], smpte_prefix[0], time_signature_prefix[0], 
+        key_signature_prefix[0], sequencer_specific_prefix[0], midi_port_prefix[0]};
 
     // fixed-length meta-events
-    const MidiStreamVector midi_channel_prefix    {0x20, 1}; // prefix, length
-    const MidiStreamVector end_of_track_prefix    {0x2f, 0}; // prefix, length
-    const MidiStreamVector tempo_prefix           {0x51, 3}; // prefix, length
-    const MidiStreamVector smpte_prefix           {0x54, 5}; // prefix, length
     constexpr MidiStreamAtom smpte_24fps          {0};
     constexpr MidiStreamAtom smpte_25fps          {1};
     constexpr MidiStreamAtom smpte_30fpsdropframe {2};
@@ -94,9 +101,6 @@ namespace textmidi
     constexpr MidiStreamAtom smpte_fps_shift      {5};
     constexpr MidiStreamAtom smpte_fps_mask       {3};
     constexpr MidiStreamAtom smpte_hours_mask     {0x1f};
-    const MidiStreamVector time_signature_prefix  {0x58, 4}; // prefix, length
-    const MidiStreamVector key_signature_prefix   {0x59, 2}; // prefix, length
-    const MidiStreamVector sequencer_specific_prefix{0x7f};
 
     constexpr MidiStreamAtom NoteOn                = 0x90;
     constexpr MidiStreamAtom NoteOff               = 0x80;
@@ -151,7 +155,6 @@ namespace textmidi
     const MidiStreamVector control_poly_on        {0x7f};
     const MidiStreamVector control_full           {0x7F};
     const MidiStreamVector control_off            {0x00};
-    const MidiStreamVector midi_port_prefix       {0x21, 1};
     const MidiStreamVector control_breath         {2};
     const MidiStreamVector midi_time_code_quarter_frame{0xf1};
     const MidiStreamVector song_position_pointer  {0xf2};

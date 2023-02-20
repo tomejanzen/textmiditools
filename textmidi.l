@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.37
+** TextMIDITools Version 1.0.38
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -201,25 +201,41 @@ namespace
     // The first byte is the most-significant and has the 2^7 bit set.
     void int_to_vec(int i, MidiStreamVector& numvec)
     {
-        auto j{i};
-        int lg2{};
-        while (j != 0)
+        numvec.clear();
+        if (i)
         {
-            j >>= 1;
-            ++lg2;
-        }
-        constexpr int bits_per_bite{7};
-        const int byte_qty{(lg2 + bits_per_bite) / bits_per_bite};
-        numvec.resize(byte_qty);
-        for (int groupof7{}; groupof7 < byte_qty; ++groupof7)
-        {
-            MidiStreamAtom temp{};
-            temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
-            if (static_cast<string::size_type>(groupof7) != numvec.size() - 1)
+            auto j{i};
+            int lg2{};
+            while (j != 0)
             {
-                temp |= 0x80;
+                j >>= 1;
+                ++lg2;
             }
-            numvec[groupof7] = temp;
+            constexpr int bits_per_bite{7};
+            int byte_qty{1};
+            if (lg2 % bits_per_bite)
+            {
+                byte_qty = (lg2 + bits_per_bite) / bits_per_bite;
+            }
+            else
+            {
+                byte_qty = lg2 / bits_per_bite;
+            }
+            numvec.resize(byte_qty);
+            for (int groupof7{}; groupof7 < byte_qty; ++groupof7)
+            {
+                unsigned char temp{};
+                temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
+                if (static_cast<string::size_type>(groupof7) != numvec.size() - 1)
+                {
+                    temp |= 0x80;
+                }
+                numvec[groupof7] = temp;
+            }
+        }
+        else
+        {
+            numvec.push_back(static_cast<MidiStreamAtom>(0));
         }
     }
 
@@ -475,6 +491,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(0);
     total_beats = 0;
     global_total_track_ticks = 0.0;
+    // Invalidate running_status at the start of a track.
     running_status = 0;
   }
 
@@ -522,7 +539,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             trackchunk.push_back(*bi);
         }
     }
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
 }
 
 <DETAIL_STATE>SEQUENCE_NUMBER{SOMESPACE}{UINTEGER} {
@@ -602,7 +621,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             trackchunk.push_back(*bi);
         }
     }
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE>{TEXT_META}{SOMESPACE} {
@@ -740,7 +761,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string discard{};
     double mmtempo{60.0};
     iss >> discard >> mmtempo;
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
     // convert ticks per minute to useconds per quarter
     uint32_t tempo{static_cast<uint32_t>(round((60.0 * 1000000.0) / mmtempo))};
 
@@ -1054,7 +1077,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     shift_channel(channel);
 
     // looks like a kluge. Does channel_pressure participate in running_status?
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
     check_running_status(channel | channel_pressure[0]);
 
     pressure &= byte7_mask;
@@ -1094,7 +1119,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
              ticksperbeat{};
     constexpr uint32_t thirtysecsperqtr{8};
     iss >> discard >> numer >> denom >> ticksperbeat;
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
     // convert ticks per minute to useconds per quarter
     uint32_t denom_pwr{};
     while (denom >>= 1)
@@ -1115,11 +1142,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     trackchunk.push_back(tempticksperbeat);
     trackchunk.push_back(thirtysecsperqtr);
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE>KEY_SIGNATURE{SPACE}{NOTE_NAME} {
-    /* Recognize KEY_SIGNATURE {key as in a for a minor, or Db for D-flat Major */
+    /* Recognize KEY_SIGNATURE key as in a for a minor, or Db for D-flat Major */
     write_delay();
 
     istringstream iss(yytext);
@@ -1136,7 +1165,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(key_signature_prefix[1]);
     trackchunk.push_back(static_cast<signed char>(accidentals));
     trackchunk.push_back(themode);
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
@@ -1187,7 +1218,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         {
             trackchunk.push_back(offsetval);
         }
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
         running_status = 0;
+#endif
     }
   }
 
@@ -1205,7 +1238,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(midi_channel_prefix[0]);
     trackchunk.push_back(midi_channel_prefix[1]);
     trackchunk.push_back(channel);
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE>MIDI_PORT{SPACE}{UINTEGER} {
@@ -1221,7 +1256,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(midi_port_prefix[0]);
     trackchunk.push_back(midi_port_prefix[1]);
     trackchunk.push_back(port);
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE>SYSEX{HEX_BYTES} {
@@ -1274,7 +1311,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
     trackchunk.push_back(end_of_sysex[0]);
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE>SYSEXRAW{HEX_BYTES} {
@@ -1326,7 +1365,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             trackchunk.push_back(*bi);
         }
     }
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <DETAIL_STATE,LAZY_STATE>ticks{SPACE}{STRING} {
@@ -1348,7 +1389,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     int_to_vec(ticks_str.length(), len_vec);
     trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
     trackchunk.insert(trackchunk.end(), ticks_str.begin(), ticks_str.end());
+#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
+#endif
   }
 
 <LAZY_STATE>{DYNAMIC} {

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.37
+// TextMIDITools Version 1.0.38
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -81,6 +81,8 @@ namespace textmidi
     const MidiStreamVector tempo_prefix           {0x51, 3}; // prefix, length
     const MidiStreamVector time_signature_prefix  {0x58, 4}; // prefix, length
     const MidiStreamVector key_signature_prefix   {0x59, 2}; // prefix, length
+    // Quicktime left out the major/minor mode byte.
+    const MidiStreamVector key_signature_prefix_mode_missing   {0x59, 1}; // prefix, length; 
     const MidiStreamVector midi_port_prefix       {0x21, 1};
     const MidiStreamVector sequencer_specific_prefix{0x7f};
 

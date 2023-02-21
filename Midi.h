@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.38
+// TextMIDITools Version 1.0.39
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -42,6 +42,7 @@ namespace textmidi
     constexpr int MaxSmpteHundredths{99};
 
     constexpr int MidiPitchQty{128};
+    constexpr int MidiProgramQty{128};
     constexpr double MaxKeyboardKey{127};
     constexpr int MidiChannelQty{16};
     constexpr int MidiIdiophoneChannel{10};

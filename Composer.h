@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.38
+// TextMIDITools Version 1.0.39
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -13,6 +13,7 @@
 #include <vector>
 #include <list>
 #include <fstream>
+#include <random>
 
 #include "RhythmRational.h"
 #include "MusicalForm.h"
@@ -50,7 +51,9 @@ namespace textmidi
             Composer(bool gnuplot, bool answer, TrackScramble track_scramble)
               : gnuplot_(gnuplot),
                 answer_(answer),
-                track_scramble_(track_scramble)
+                track_scramble_(track_scramble),
+                random_dev_(),
+                generator_{random_dev_()}
             {
             }
 
@@ -72,6 +75,8 @@ namespace textmidi
             bool gnuplot_;
             bool answer_;
             TrackScramble track_scramble_;
+            std::random_device random_dev_;
+            std::mt19937 generator_;
         };
 
         typedef std::map<std::string, TrackScrambleEnum> TrackScrambleMap;
@@ -81,8 +86,8 @@ namespace textmidi
             {"rotateright", TrackScrambleEnum::RotateRight},
             {"rotateleft", TrackScrambleEnum::RotateLeft},
             {"reverse", TrackScrambleEnum::Reverse},
-            {"previousPermutation", TrackScrambleEnum::PreviousPermutation},
-            {"nextPermutation", TrackScrambleEnum::NextPermutation},
+            {"previouspermutation", TrackScrambleEnum::PreviousPermutation},
+            {"nextpermutation", TrackScrambleEnum::NextPermutation},
             {"swappairs", TrackScrambleEnum::SwapPairs},
             {"shuffle", TrackScrambleEnum::Shuffle}
         };

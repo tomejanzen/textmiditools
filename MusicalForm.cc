@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.38
+// TextMIDITools Version 1.0.39
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -461,15 +461,15 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     vector<int> programs{};
     if (GeneralMIDIGroup::All == static_cast<GeneralMIDIGroup>(instrument_flags))
     {
-        programs.resize(128);
-        iota(programs.begin(), programs.end(), 1);
+        auto program_count = views::iota(1, MidiProgramQty + 1);
+        ranges::copy(program_count, back_inserter(programs));
     }
     else
     {
         if (GeneralMIDIGroup::Melodic == static_cast<GeneralMIDIGroup>(instrument_flags))
         {
-            programs.resize(96);
-            iota(programs.begin(), programs.end(), 1);
+            auto program_count = views::iota(1, 96 + 1);
+            ranges::copy(program_count, back_inserter(programs));
         }
         else
         {

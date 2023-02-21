@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.38
+// TextMIDITools Version 1.0.39
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -188,6 +188,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
         cout << '\n';
     }
 #endif
+    // This is not wrong to resize. 2023-02-20
     leaders_topo_sort.resize(followers_graph.size());
 
     for (int follower_index{}; follower_index < static_cast<int>(followers_graph.size()); ++follower_index)
@@ -247,10 +248,12 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
     int track_qty, TicksDuration total_duration)
 {
-    track_scramble_sequences.resize(1, vector<int>(track_qty));
-    iota(track_scramble_sequences[0].begin(), track_scramble_sequences[0].end(), 0);
-
-    auto previous_sequence{track_scramble_sequences[0]};
+    vector<int> previous_sequence{};
+    {
+        auto counting = views::iota(0, track_qty);
+        ranges::copy(counting, back_inserter(previous_sequence));
+        track_scramble_sequences.push_back(previous_sequence);
+    }
     for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
     {
@@ -259,20 +262,20 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
             case TrackScrambleEnum::RotateRight:
                 if (previous_sequence.size() > 1)
                 {
-                    rotate(previous_sequence.begin(), previous_sequence.begin() + (previous_sequence.size() - 1), previous_sequence.end());
+                    ranges::rotate(previous_sequence, previous_sequence.begin() + (previous_sequence.size() - 1));
                 }
                 break;
             case TrackScrambleEnum::RotateLeft:
                 if (previous_sequence.size() > 1)
                 {
-                    rotate(previous_sequence.begin(), previous_sequence.begin() + 1, previous_sequence.end());
+                    ranges::rotate(previous_sequence, previous_sequence.begin() + 1);
                 }
                 break;
             case TrackScrambleEnum::Reverse:
                 ranges::reverse(previous_sequence);
                 break;
             case TrackScrambleEnum::PreviousPermutation:
-                prev_permutation(previous_sequence.begin(), previous_sequence.end());
+                ranges::prev_permutation(previous_sequence);
                 break;
             case TrackScrambleEnum::NextPermutation:
                 ranges::next_permutation(previous_sequence);
@@ -284,14 +287,16 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
                 }
                 break;
             case TrackScrambleEnum::Shuffle:
-                shuffle(previous_sequence.begin(), previous_sequence.end(), RandomInt(0, previous_sequence.size() - 1));
+                {
+                    ranges::shuffle(previous_sequence, generator_);
+                }
                 break;
             case TrackScrambleEnum::None:
                 break;
             default:
                 break;
         }
-        track_scramble_sequences.insert(track_scramble_sequences.end(), previous_sequence);
+        track_scramble_sequences.push_back(previous_sequence);
     }
 #if defined(TEXTMIDI_PRINT)
     cout << "track_scramble_sequences\n";

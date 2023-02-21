@@ -40,6 +40,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 * Overview::
 * Invoking miditext::
 * Installation::
+* Testing::
 * Known Bugs::
 * GNU Free Documentation License::
 * Bibliography::
@@ -60,6 +61,14 @@ on Standard MIDI Files.  SysEx (system exclusive) is also supported,
 as are all three filetypes (single track, multitrack and multi-sequence).
 
 The textmidi language is described in the info page for @command{textmidi}.
+
+The programs @command{textmidi} and @command{miditext} are not
+written to interpret poorly-formed standard MIDI files, that is,
+files that do not follow the MIDI 1.1 Spec.
+Nevertheless, although at least one popular multimedia program from decades ago
+wrote illegal key signature events, with only a byte for the
+number of sharps or flats, but no mode (major/minor) byte,
+@command{miditext} will accept this idiosyncrasy.
 
 No attempt is made in textmidi to support either MIDI show control 
 or machine control.
@@ -185,6 +194,98 @@ Make yourself superuser (root), or use sudo to run install targets:
 make install
 make install-info
 @end example
+
+@node Testing
+@chapter Testing
+@cindex testing 
+Part of the testing of the conversion utilities @command{miditext}
+and @command{textmidi} is performed on linux with a script similr to this:
+
+@smallexample
+#/usr/bin/env bash
+function testmidi
+@lbracechar{}
+    temporary_directory=$(mktemp -d)
+    bn=$(basename $@lbracechar{}1@rbracechar{} .mid)
+    ~/me/janzent/miscprog/textmidi/miditext --midi $@lbracechar{}1@rbracechar{} --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt
+    sed -i -f ~/me/janzent/sed/starttrack.sed $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt
+    ~/me/janzent/miscprog/textmidi/textmidi --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
+    if [ -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid ]; then
+        echo "new MIDI file is finite length";
+    else
+        echo "new MIDI file is either absent or zero length";
+    fi
+    ~/me/janzent/miscprog/textmidi/miditext --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
+    sed -i -f ~/me/janzent/sed/starttrack.sed $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
+    ls -l $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
+    diff -s $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid 
+    diff -q -bBw -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt 
+@rbracechar{}
+testmidi $@lbracechar{}BASH_ARGV[0]@rbracechar{}
+@end smallexample
+
+This script can be invoked with
+@smallexample
+./testmidi prelude.mid
+@end smallexample
+The result is to create a temporary directory and create the files prelude.txt,
+@itemize
+@item 
+prelude.txt
+@item 
+prelude.mid
+@item 
+prelude_B.txt
+@end itemize
+The original MIDI file and the temporary prelude.mid are compared.
+The two textmidi text files are compared.
+The test set consists of 6340 classical music files.
+64 MIDI files were put aside after having prompting error messages from
+an independent scoring program.
+The remaining 6276 files all compare
+the text files as identical, and about a third of the pairs of
+MIDI files compare as identical.  The differences between MIDI files
+are still being investigated, but causes known so far include the 
+following:
+@itemize
+@item
+Some of the imported MIDI files did not use running status,
+in which voice-channel events can drop the command byte if
+the command and channel are the same in consecutive voice-channel events.
+@command{textmidi} always uses running status.
+Running status as used by @command{textmidi} is marked undefined
+at the beginning of each track, and set by the first voice-channel event.
+From then to the end of the track, running status is set only by
+voice-channel events.  It is not reset by non-voice-channel events,
+including Channel Change.
+Voice-Channel events are one of:
+@itemize
+@item
+Channel Pressure
+@item
+Note On
+@item
+Note Off
+@item
+Polyphonic Key Pressure
+@item
+Pitch Bend
+@item
+Program Change
+@item
+Control Change (including omni/poly on/off)
+@end itemize
+@item
+In text events (including TRACK, INSTRUMENT, COPYRIGHT, etc.)
+@command{miditext} drops both prefacing and trailing spaces, as well 
+as terminating @quotedblleft{}nul@quotedblright{} (a character with a numeric value of zero) bytes.
+Therefore, TEXT events in the round-trip, recreated MIDI file may
+differ from those in the original MIDI file.
+@item
+@command{miditext} recognizes the short key signature event,
+but @command{textmidi} always creates the standard event with five total bytes:
+(0xFF, 0x59, 2, sharps/flats, mode).
+@end itemize
 
 @node Known Bugs
 @chapter Known Bugs

@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.38
+** TextMIDITools Version 1.0.39
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -221,16 +221,15 @@ namespace
             {
                 byte_qty = lg2 / bits_per_bite;
             }
-            numvec.resize(byte_qty);
             for (int groupof7{}; groupof7 < byte_qty; ++groupof7)
             {
                 unsigned char temp{};
                 temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
-                if (static_cast<string::size_type>(groupof7) != numvec.size() - 1)
+                if (static_cast<string::size_type>(groupof7) != (byte_qty - 1))
                 {
                     temp |= 0x80;
                 }
-                numvec[groupof7] = temp;
+                numvec.push_back(temp);
             }
         }
         else

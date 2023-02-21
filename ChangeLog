@@ -1,3 +1,15 @@
+2023-02-20     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: mark consume_stream() private since it's
+        called only by constructors.
+        * miditext.texi: explain testing, and differences in round-trip
+        recreated MIDI files.
+        * Composer.{h,cc}: add a random generator that ranges::shuffles will use.
+        * Composer.cc: Use ranges for track shuffling etc.
+        Also remove defet of leaders_topo_sort.resize().
+        * Composer.h: track scrambling option was spelled wrong with a capital:
+        nextPermutation but s/b nextpermutation and previouspermutation.
+        * smustextmidi.cc: use C++ back_inserter in the transform() of NoteEvents.
+
 2023-02-19     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.l: textmidi will no longer write a leading zero byte
         for variable-length values.  This accounts for most of the

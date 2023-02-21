@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.38
+// TextMIDITools Version 1.0.39
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.38\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.39\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -406,8 +406,7 @@ int main(int argc, char *argv[])
         delay_accum = RhythmRational{0};
         trackEventPtr = reinterpret_cast<SmusTrackEventFilePod*>(&smus_score[smus_index]);
         smus_index += bytes_per_track;
-        track_events.resize(notes_per_track);
-        transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], track_events.begin(), track_event_factory);
+        transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], back_inserter(track_events), track_event_factory);
         // At the beginning of a track
         // default to medium dynamic of 64 unless a Volume event sets it.
         SmusTrackEventBase::channel(0);

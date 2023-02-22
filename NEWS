@@ -187,4 +187,14 @@
     * 2023-02-15
       Partial low-level redesign and text re-arrangement 
       of MidiEvents; complete support for TEXT_0[8-F].  
-
+    * 2023-02-21
+      Modernizing code to C++-20.  
+      Replace typedefs with "using".
+      Apply ranges algorithms as much as possible,
+      as well as back_inserter.
+      Mark almost all single-argument c-tors explicit.
+      Mark consume_stream private in MidiEvents used
+      by miditext.
+      For textmidicgm, internally nextpermutation
+      and prevpermutation were mispelled with capitals,
+      meaning that they would never affect anything.

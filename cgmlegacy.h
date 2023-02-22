@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -60,7 +60,7 @@ namespace cgmlegacy
     class OldFormElement
     {
       public:
-        explicit OldFormElement(const double mean_period = 60,
+        OldFormElement(const double mean_period = 60,
             const double mean_phase = 0, const double range_period = 60,
             const double range_phase = 0)
           : mean_period_{mean_period},

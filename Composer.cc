@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -39,7 +39,6 @@ using namespace textmidi::cgm;
 using namespace textmidi::rational;
 
 // might become settable at a later time.
-constexpr int SecondsPerMinute{60};
 constexpr int TempoBeatsPerMinute{60};
 constexpr int RestPitchIndex{numeric_limits<int>().max()};
 
@@ -55,7 +54,7 @@ RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
     // ------ * ----- * -------
     // minute   beat    seconds
     RhythmRational wholes_per_second{
-      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
+      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
     //wholes_per_second.reduce();
     //  Ticks    Quarters    whole
     // ------- * -------- * -------
@@ -82,7 +81,7 @@ RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
 RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, double pulse_per_second)
 {
     RhythmRational wholes_per_second{
-      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinute} };
+      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
     //wholes_per_second.reduce();
     const RhythmRational TicksPerSecond{
          RhythmRational{TicksPerQuarter} * QuartersPerWholeRat * wholes_per_second};
@@ -222,8 +221,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 #endif
                 if (followers_graph[leader_index][follower_index]) // if this is a follower
                 {
-                    auto it{find(leaders_topo_sort[g - 1].begin(),
-                                 leaders_topo_sort[g - 1].end(), leader_index)};
+                    const auto it{ranges::find(leaders_topo_sort[g - 1], leader_index)};
                     if (it != leaders_topo_sort[g - 1].end())
                     {
                         leaders_topo_sort[g].push_back(follower_index);
@@ -384,7 +382,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     }
                     const RhythmRational wholes_per_second{
                         RhythmRational{TempoBeatsPerMinute} * WholesPerBeat
-                            / RhythmRational{SecondsPerMinute}};
+                            / RhythmRational{SecondsPerMinuteI}};
                     const RhythmRational TicksPerSecond(
                         RhythmRational{TicksPerQuarter} * QuartersPerWholeRat
                                         * wholes_per_second);
@@ -480,8 +478,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         key_number = min(key_number, tessitura[tr].second);
                         int key_index{0U};
                         {
-                            auto key_iter{find(key_scale.begin(),
-                                key_scale.end(), key_number)};
+                            const auto key_iter{ranges::find(key_scale, key_number)};
                             if (key_iter != key_scale.end())
                             {
                                 key_index = std::distance(key_scale.begin(),
@@ -513,8 +510,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         {
                           int key_index{0U};
                           {
-                              auto key_iter{find(key_scale.begin(),
-                                  key_scale.end(), ne.pitch())};
+                              const auto key_iter{ranges::find(key_scale, ne.pitch())};
                               if (key_iter != key_scale.end())
                               {
                                   key_index

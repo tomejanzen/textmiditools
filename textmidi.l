@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.39
+** TextMIDITools Version 1.0.40
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -199,9 +199,9 @@ namespace
     // converts numbers into MIDI 1.1 spec extended values,
     // which can be a vector of bytes.
     // The first byte is the most-significant and has the 2^7 bit set.
-    void int_to_vec(int i, MidiStreamVector& numvec)
+    MidiStreamVector int_to_vec(int i)
     {
-        numvec.clear();
+        MidiStreamVector numvec{};
         if (i)
         {
             auto j{i};
@@ -236,6 +236,7 @@ namespace
         {
             numvec.push_back(static_cast<MidiStreamAtom>(0));
         }
+        return numvec;
     }
 
     //
@@ -270,9 +271,8 @@ namespace
     void write_delay()
     {
         // Delays must occur between events even if delay is zero.
-        MidiStreamVector delayvec{};
-        int_to_vec(accum_delay, delayvec);
-        trackchunk.insert(trackchunk.end(), delayvec.begin(), delayvec.end());
+        const MidiStreamVector delayvec = int_to_vec(accum_delay);
+        ranges::copy(delayvec, back_inserter(trackchunk));
         total_beats += (accum_delay / global_ticks_per_quarter);
         accum_delay = 0;
     }
@@ -358,7 +358,7 @@ INTEGER ([-+]?{DIGIT}+)
 UINTEGER ({DIGIT}+)
 XINTEGER 0x([0-9A-Fa-f])+
 UXINTEGER ({UINTEGER}|{XINTEGER})
-FLOAT {UINTEGER}(([.]{UINTEGER})?)
+FLOAT {UINTEGER}(([.][[:digit:]]+)?)
 HEX_BYTES ({SOMESPACE}{UXINTEGER})+
 PANVALUE ({INTEGER}|LEFT|CENTER|RIGHT)
 SMPTE_CODE ([[:print:]]+{SOMESPACE}{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER})
@@ -480,6 +480,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         clog << "Found " << yytext << '\n';
     }
     trackchunk.clear();
+    trackchunk.reserve(65536);
     trackchunk.push_back('M');
     trackchunk.push_back('T');
     trackchunk.push_back('r');
@@ -508,36 +509,28 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             byte_strings.push_back(next_word);
         }
     }
-    vector<unsigned> bytes(byte_strings.size());
-    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
+    vector<unsigned> bytes{};
+    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
             unsigned i{};
+            // if a hexadecimal byte
             if (str.substr(0, 2) == "0x")
             {
                 istringstream iss{str};
                 iss >> hex >> i;
             }
-            else
+            else // else is decimal
             {
                 i = lexical_cast<unsigned>(str);
             }
             return i;
         }
     );
-    // pushd the length of data plus the F7 at end
-    // of the MIDI file stream.
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(sequencer_specific_prefix[0]);
-    MidiStreamVector length_seq{};
-    int_to_vec(bytes.size(), length_seq);
-    trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
-    if (bytes.size() > 0)
-    {
-        for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)
-        {
-            trackchunk.push_back(*bi);
-        }
-    }
+    const MidiStreamVector length_seq = int_to_vec(bytes.size());
+    ranges::copy(length_seq, back_inserter(trackchunk));
+    ranges::copy(bytes, back_inserter(trackchunk));
 #if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
 #endif
@@ -589,11 +582,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         }
     }
 
-    MidiStreamVector len_vec{};
-    int_to_vec(byte_strings.size(), len_vec);
+    const MidiStreamVector len_vec = int_to_vec(byte_strings.size());
 
-    vector<unsigned> bytes(byte_strings.size());
-    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
+    vector<unsigned> bytes{};
+    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -611,15 +603,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // push the data byters onto the MIDI stream.
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(meta_code);
-    trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
+    ranges::copy(len_vec, back_inserter(trackchunk));
 
-    if (bytes.size() > 0)
-    {
-        for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)
-        {
-            trackchunk.push_back(*bi);
-        }
-    }
+    ranges::copy(bytes, back_inserter(trackchunk));
 #if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
 #endif
@@ -730,10 +716,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         yystring.erase(yystring.length() - 1);
     }
 #endif
-    MidiStreamVector len_vec{};
-    int_to_vec(yystring.length(), len_vec);
-    trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
-    trackchunk.insert(trackchunk.end(), yystring.begin(), yystring.end());
+    MidiStreamVector len_vec = int_to_vec(yystring.length());
+    ranges::copy(len_vec,  back_inserter(trackchunk));
+    ranges::copy(yystring, back_inserter(trackchunk));
     BEGIN(DETAIL_STATE);
   }
 
@@ -764,13 +749,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     running_status = 0;
 #endif
     // convert ticks per minute to useconds per quarter
-    uint32_t tempo{static_cast<uint32_t>(round((60.0 * 1000000.0) / mmtempo))};
+    const uint32_t tempo{static_cast<uint32_t>(std::round((SecondsPerMinute * UsecPerSecond) / mmtempo))};
 
-    MidiStreamVector tempovec{int24_to_vec(tempo)};
+    const MidiStreamVector tempovec{int24_to_vec(tempo)};
     trackchunk.push_back(meta_prefix[0]);
 
-    trackchunk.insert(trackchunk.end(), &tempo_prefix[0], &tempo_prefix[2]);
-    trackchunk.insert(trackchunk.end(), tempovec.begin(), tempovec.end());
+    ranges::copy(tempo_prefix, back_inserter(trackchunk));
+    ranges::copy(tempovec, back_inserter(trackchunk));
   }
 
 <DETAIL_STATE>DELAY{SPACE}{INTEGER} {
@@ -1130,8 +1115,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     trackchunk.push_back(meta_prefix[0]);
 
-    trackchunk.insert(trackchunk.end(),
-        &time_signature_prefix[0], &time_signature_prefix[2]);
+    ranges::copy(time_signature_prefix, back_inserter(trackchunk));
     trackchunk.push_back(numer);
     trackchunk.push_back(denom_pwr);
     auto tempticksperbeat{ticksperbeat};
@@ -1280,8 +1264,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             byte_strings.push_back(next_word);
         }
     }
-    vector<unsigned> bytes(byte_strings.size());
-    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
+    vector<unsigned> bytes{};
+    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -1299,16 +1283,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // push the length of data plus the F7 at end
     // of the MIDI file stream.
     trackchunk.push_back(start_of_sysex[0]);
-    MidiStreamVector length_seq{};
-    int_to_vec(bytes.size() + 1, length_seq);
-    trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
-    if (bytes.size() > 0)
-    {
-        for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)
-        {
-            trackchunk.push_back(*bi);
-        }
-    }
+    const MidiStreamVector length_seq = int_to_vec(bytes.size() + 1);
+    ranges::copy(length_seq, back_inserter(trackchunk));
+    ranges::copy(bytes, back_inserter(trackchunk));
     trackchunk.push_back(end_of_sysex[0]);
 #if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
@@ -1334,8 +1311,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
             byte_strings.push_back(next_word);
         }
     }
-    vector<unsigned> bytes(byte_strings.size());
-    ranges::transform(byte_strings, bytes.begin(), [](const string& str)
+    vector<unsigned> bytes{};
+    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -1354,16 +1331,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // of the MIDI file stream.
     trackchunk.push_back(end_of_sysex[0]); // Raw SYSEX *starts* with F7
     // length of data; no implied terminating F0
-    MidiStreamVector length_seq{};
-    int_to_vec(bytes.size(), length_seq);
-    trackchunk.insert(trackchunk.end(), length_seq.begin(), length_seq.end());
-    if (bytes.size() > 0)
-    {
-        for (auto bi{bytes.begin()}; bi != bytes.end(); ++bi)
-        {
-            trackchunk.push_back(*bi);
-        }
-    }
+    const MidiStreamVector length_seq = int_to_vec(bytes.size());
+    ranges::copy(length_seq, back_inserter(trackchunk));
+    ranges::copy(bytes, back_inserter(trackchunk));
 #if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
 #endif
@@ -1384,10 +1354,9 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     write_delay();
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(text_prefix[0]);
-    MidiStreamVector len_vec{};
-    int_to_vec(ticks_str.length(), len_vec);
-    trackchunk.insert(trackchunk.end(), len_vec.begin(), len_vec.end());
-    trackchunk.insert(trackchunk.end(), ticks_str.begin(), ticks_str.end());
+    const MidiStreamVector len_vec = int_to_vec(ticks_str.length());
+    ranges::copy(len_vec,   back_inserter(trackchunk));
+    ranges::copy(ticks_str, back_inserter(trackchunk));
 #if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
     running_status = 0;
 #endif

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <ranges>
 #include <memory>
 
 #include <boost/archive/xml_iarchive.hpp>
@@ -239,10 +240,10 @@ namespace textmidi
                                    form.texture_form.range_phase()}},
                 voices_{}
             {
-                scale_.resize(form.scale.size());
+                scale_.clear();
                 auto prefer_sharp{prefer_sharp_};
-                transform(form.scale.begin(), form.scale.end(),
-                    scale_.begin(), [prefer_sharp](const std::uint32_t notenum)
+                std::ranges::transform(form.scale, back_inserter(scale_),
+                    [prefer_sharp](const std::uint32_t notenum)
                     { return textmidi::num_to_note(notenum, prefer_sharp); });
                 voices_.clear();
                 voices_.insert(voices_.begin(), form.voices.begin(),

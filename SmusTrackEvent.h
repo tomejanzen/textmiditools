@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -92,7 +92,7 @@ namespace smus
     class SmusTrackEventPitch final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventPitch(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventPitch(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -115,7 +115,7 @@ namespace smus
     class SmusTrackEventRest final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventRest(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventRest(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -127,7 +127,7 @@ namespace smus
     class SmusTrackEventInstrument final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventInstrument(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventInstrument(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -141,7 +141,7 @@ namespace smus
       private:
         std::pair<unsigned, unsigned> time_signature() const;
       public:
-        SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -153,7 +153,7 @@ namespace smus
     class SmusTrackEventKeySignature final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventKeySignature(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventKeySignature(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -167,7 +167,7 @@ namespace smus
     class SmusTrackEventVolume final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventVolume(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventVolume(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -179,7 +179,7 @@ namespace smus
     class SmusTrackEventChannel final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventChannel(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventChannel(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -191,7 +191,7 @@ namespace smus
     class SmusTrackEventPreset final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventPreset(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventPreset(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -205,7 +205,7 @@ namespace smus
       private:
           static std::map<int, std::string> clef_map;
       public:
-        SmusTrackEventClef(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventClef(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -217,7 +217,7 @@ namespace smus
     class SmusTrackEventTempo final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventTempo(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventTempo(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }
@@ -229,7 +229,7 @@ namespace smus
     class SmusTrackEventEnd final : public SmusTrackEventBase
     {
       public:
-        SmusTrackEventEnd(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventEnd(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}
         {
         }

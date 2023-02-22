@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
-// miditext Version 1.0.39
+// miditext Version 1.0.40
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -53,7 +53,7 @@ using namespace textmidi::rational;
 
 namespace
 {
-    typedef pair<MidiStreamIterator, int> StreamLengthPair;
+    using StreamLengthPair = pair<MidiStreamIterator, int>;
     const string QuantizeOpt{"quantize"};
     constexpr char QuantizeTxt[]{"quantization ratio in quotes: \"1/32\""};
     const string LazyOpt{"lazy"};
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.39\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.40\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -270,7 +270,6 @@ int main(int argc, char *argv[])
             cerr << errstr;
             return EXIT_FAILURE;
         }
-        MidiStreamAtom ui{};
         const auto len{filesystem::file_size(midi_filename)};
         midivector.resize(len);
         midifilestr.read(reinterpret_cast<char*>(midivector.data()), len);

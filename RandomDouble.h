@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -22,7 +22,7 @@ namespace textmidi
         class RandomDouble
         {
           public:
-            typedef double result_type;
+            using result_type = double;
             explicit RandomDouble(double low = 0.0, double high = 1.0)
               : re_{},
                 dist_{low, high}

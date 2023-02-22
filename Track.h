@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -26,7 +26,7 @@ namespace textmidi
         const textmidi::rational::RhythmRational WholesPerBeat{1, 4};
         const textmidi::rational::RhythmRational QuarterPerWhole{1, 4};
         const textmidi::rational::RhythmRational QuartersPerWholeRat(4, 1);
-        typedef std::ratio<1L, TicksPerQuarter> TicksRatio;
+        using TicksRatio = std::ratio<1L, TicksPerQuarter>;
         typedef std::chrono::duration<std::int64_t, TicksRatio> TicksDuration;
 
         class Track

@@ -257,7 +257,8 @@ Running status as used by @command{textmidi} is marked undefined
 at the beginning of each track, and set by the first voice-channel event.
 From then to the end of the track, running status is set only by
 voice-channel events.  It is not reset by non-voice-channel events,
-including Channel Change.
+including Channel Change.  In some files running-status is reset
+by a control event.
 Voice-Channel events are one of:
 @itemize
 @item
@@ -278,13 +279,14 @@ Control Change (including omni/poly on/off)
 @item
 In text events (including TRACK, INSTRUMENT, COPYRIGHT, etc.)
 @command{miditext} drops both prefacing and trailing spaces, as well 
-as terminating @quotedblleft{}nul@quotedblright{} (a character with a numeric value of zero) bytes.
+as terminating @quotedblleft{}nul@quotedblright{} (a character with a numeric 
+value of zero) bytes.
 Therefore, TEXT events in the round-trip, recreated MIDI file may
 differ from those in the original MIDI file.
 @item
 @command{miditext} recognizes the short key signature event,
 but @command{textmidi} always creates the standard event with five total bytes:
-(0xFF, 0x59, 2, sharps/flats, mode).
+(0xFF, 0x59, 2 [the following data length], sharps/flats, mode).
 @end itemize
 
 @node Known Bugs
@@ -294,6 +296,9 @@ Although the DETAIL mode representation should be accurate,
 if @minus{}@minus{}lazy is selected, and if a track in the MIDI file has 
 overlapping note events with asynchronous start and stop times, the LAZY
 mode representation may not be accurate.
+@command{miditext} is not meant to support non-conforming MIDI files.
+Neither @command{miditext} nor @command{textmidi} are meant to support
+real-time MIDI messages that are not intended for use in MIDI files.
 
 @node GNU Free Documentation License
 @chapter GNU Free Documentation License

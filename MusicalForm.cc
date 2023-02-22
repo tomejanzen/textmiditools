@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -499,11 +499,11 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     }
 
     // We will count through the melodic channel numbers.
-    // (General MIDI puts idiophones on channel 10.)
-    vector<int> melodic_channels(textmidi::MidiChannelQty);
-    iota(melodic_channels.begin(), melodic_channels.end(), 1);
-    auto mc_it{find(melodic_channels.begin(), melodic_channels.end(),
-        MidiIdiophoneChannel)};
+    // (General MIDI puts idiophones on channel 10 in (1..16).)
+    vector<int> melodic_channels{};
+    auto counter = views::iota(1, textmidi::MidiChannelQty + 1);
+    ranges::copy(counter, back_inserter(melodic_channels));
+    auto mc_it{ranges::find(melodic_channels, MidiIdiophoneChannel)};
     if (mc_it != melodic_channels.end())
     {
         melodic_channels.erase(mc_it);
@@ -521,8 +521,8 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     ranges::transform(voices_, channels.begin(),
            [](const VoiceXml& v) { return v.channel(); });
     ranges::sort(channels);
-    auto uniq_it{unique(channels.begin(), channels.end())};
-    channels.erase(uniq_it, channels.end());
+    const auto [uniq_it, the_end] = ranges::unique(channels);
+    channels.erase(uniq_it, the_end);
     //
     // We don't want voices way over at one side.
     // So we will add a stereo zone to the number of channels.
@@ -592,11 +592,13 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
         vright.low_pitch()); });
     const auto max_instrument_range = *ranges::max_element(voices_,
         [lower_note](const VoiceXml& vleft, const VoiceXml& vright){ return lower_note(vleft.high_pitch(), vright.high_pitch()); });
-    auto erase_iter{remove_if(scale_.begin(), scale_.end(),
+
+    auto rem_if_scale_pitch_is_outside_instrument_range =
         [max_instrument_range, min_instrument_range, lower_note](const string& scale_pitch){
         return lower_note(scale_pitch, min_instrument_range.low_pitch())
-            || lower_note(max_instrument_range.high_pitch(), scale_pitch); })};
-    scale_.erase(erase_iter, scale_.end());
+            || lower_note(max_instrument_range.high_pitch(), scale_pitch); };
+    const auto [erase_iter, the_end2] = ranges::remove_if(scale_, rem_if_scale_pitch_is_outside_instrument_range);
+    scale_.erase(erase_iter, the_end2);
     // scale_ should now just cover the maximum extent of the instruments' ranges.
 }
 
@@ -648,16 +650,17 @@ void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
 {
     if (!voices_.empty())
     {
-        const auto voice_min_note{ranges::min_element(voices_,
-            [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
-            { return CompareLowerNoteName()(v1.low_pitch(), v2.low_pitch());})->low_pitch()};
-        const auto voice_max_note{max_element(voices_.begin(), voices_.end(),
-            [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
-            { return CompareLowerNoteName()(v1.high_pitch(), v2.high_pitch());})->high_pitch()};
-        scale_.erase(remove_if(scale_.begin(), scale_.end(),
-            [voice_min_note, voice_max_note](const string& note_name)
+        auto min_low_pitch = [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
+            { return CompareLowerNoteName()(v1.low_pitch(), v2.low_pitch());};
+        const auto voice_min_note{ranges::min_element(voices_, min_low_pitch)->low_pitch()};
+        auto max_high_pitch = [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
+            { return CompareLowerNoteName()(v1.high_pitch(), v2.high_pitch());};
+        const auto voice_max_note{ranges::max_element(voices_, max_high_pitch)->high_pitch()};
+        auto out_of_range = [voice_min_note, voice_max_note](const string& note_name)
             { return CompareLowerNoteName()(note_name, voice_min_note)
-            || CompareLowerNoteName()(voice_max_note, note_name); }), scale_.end());
+            || CompareLowerNoteName()(voice_max_note, note_name); };
+        const auto [undefined, theend] = ranges::remove_if(scale_, out_of_range);
+        scale_.erase(undefined, theend);
     }
 }
 

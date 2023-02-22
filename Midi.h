@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -23,11 +23,14 @@ namespace textmidi
 {
     //
     // Holds binary standard MIDI file format data.
-    typedef std::uint8_t MidiStreamAtom;
-    typedef std::vector<MidiStreamAtom> MidiStreamVector;
-    typedef MidiStreamVector::iterator MidiStreamIterator;
-    typedef MidiStreamVector::const_iterator MidiStreamConstIterator;
+    using MidiStreamAtom = std::uint8_t;
+    using MidiStreamVector = std::vector<MidiStreamAtom>;
+    using MidiStreamIterator = MidiStreamVector::iterator;
+    using MidiStreamConstIterator = MidiStreamVector::const_iterator;
 
+    constexpr double UsecPerSecond{1000000.0};
+    constexpr double SecondsPerMinute{60.0};
+    constexpr int SecondsPerMinuteI{static_cast<int>(SecondsPerMinute)};
     constexpr double MinDynamic{30};
     constexpr double MaxDynamic{127};
     constexpr double MaxPitchBend{127};
@@ -83,7 +86,7 @@ namespace textmidi
     const MidiStreamVector time_signature_prefix  {0x58, 4}; // prefix, length
     const MidiStreamVector key_signature_prefix   {0x59, 2}; // prefix, length
     // Quicktime left out the major/minor mode byte.
-    const MidiStreamVector key_signature_prefix_mode_missing   {0x59, 1}; // prefix, length; 
+    const MidiStreamVector key_signature_prefix_mode_missing   {0x59, 1}; // prefix, length;
     const MidiStreamVector midi_port_prefix       {0x21, 1};
     const MidiStreamVector sequencer_specific_prefix{0x7f};
 
@@ -93,7 +96,7 @@ namespace textmidi
         lyric_prefix[0], marker_prefix[0], cue_point_prefix[0], text_08_prefix[0],
         text_09_prefix[0], text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
         text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0], midi_channel_prefix[0],
-        end_of_track_prefix[0], tempo_prefix[0], smpte_prefix[0], time_signature_prefix[0], 
+        end_of_track_prefix[0], tempo_prefix[0], smpte_prefix[0], time_signature_prefix[0],
         key_signature_prefix[0], sequencer_specific_prefix[0], midi_port_prefix[0]};
 
     // fixed-length meta-events
@@ -170,7 +173,7 @@ namespace textmidi
 
     const int SMPTE_hours_max{23};
 
-    typedef std::map<int, std::string> SmpteFpsMap;
+    using SmpteFpsMap = std::map<int, std::string>;
     const SmpteFpsMap smpte_fps_map
     {
         {0, "smpte_24fps"},
@@ -179,7 +182,7 @@ namespace textmidi
         {3, "smpte_30fpsnondropframe"}
     };
 
-    typedef std::map<std::string, int> SmpteFpsReverseMap;
+    using SmpteFpsReverseMap = std::map<std::string, int>;
     const SmpteFpsReverseMap smpte_fps_reverse_map
     {
         {"smpte_24fps", 0},
@@ -188,7 +191,7 @@ namespace textmidi
         {"smpte_30fpsnondropframe", 3}
     };
 
-    typedef std::map<int, std::string> DynamicsReverseMap;
+    using DynamicsReverseMap = std::map<int, std::string>;
     const DynamicsReverseMap dynamics_reverse_map
     {
         { 10, "pppp"},
@@ -202,7 +205,7 @@ namespace textmidi
         {120, "fff"},
         {127, "ffff"}
     };
-    typedef std::map<std::string, int> DynamicsMap;
+    using DynamicsMap = std::map<std::string, int>;
     const DynamicsMap dynamics_map
     {
         {"pppp",  10},
@@ -231,7 +234,7 @@ namespace textmidi
         MultiSequence
     };
 
-    typedef std::map<std::string, MIDI_Format> FormatMap;
+    using FormatMap = std::map<std::string, MIDI_Format>;
     const FormatMap format_map
     {
         {"MONOTRACK", MIDI_Format::MonoTrack},

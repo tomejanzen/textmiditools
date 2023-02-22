@@ -1,3 +1,15 @@
+2023-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, Midi.h, textmidi.l:  Change
+        regular expression for recognizing floating-point tempo in textmidi.l
+        Define constants for SecondsPerMinute and UsecPerSecond in Midi.h
+        Apply those names.
+        * Composer.cc MidiEvents.cc MusicalForm.{cc,h} textmidi.l:
+        Apply more ranges and range algorithms, and back_inserters.
+        * MidiEvents.h, RhythmRational.h, SmusTrackEvent.h, cgmlegacy.h:
+        check all single-arguments c-tors are explicit.
+        * Composer.h MidiEvents.{cc,h} Midi.h miditext.cc Random*.h smustextmidi.cc 
+        textmidicgm.cc Track.h: dump the typedefs in favor of using clauses.
+
 2023-02-20     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.h: mark consume_stream() private since it's
         called only by constructors.

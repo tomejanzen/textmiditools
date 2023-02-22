@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -79,7 +79,7 @@ namespace textmidi
             std::mt19937 generator_;
         };
 
-        typedef std::map<std::string, TrackScrambleEnum> TrackScrambleMap;
+        using TrackScrambleMap = std::map<std::string, TrackScrambleEnum>;
         const TrackScrambleMap track_scramble_map
         {
             {"none", TrackScrambleEnum::None},

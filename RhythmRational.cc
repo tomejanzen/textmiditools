@@ -235,14 +235,14 @@ std::istream& textmidi::rational::operator>>(std::istream& is, RhythmRational& t
     const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[[:digit:]]{1,19}))?)(.*))"};
 
     enum MatchEnum
-    { 
+    {
         leading_space_match     = 1,
         rational_match          = 2,
         numerator_match         = 3,
         slash_denominator_match = 4,
         denominator_match       = 6,
         remainder_match         = 7,
-    }; 
+    };
     char buf[cnt];
     // not expected to be null-terminated
     is.rdbuf()->sgetn(buf, cnt);

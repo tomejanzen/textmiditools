@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.39
+// TextMIDITools Version 1.0.40
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -22,7 +22,7 @@ namespace textmidi
         class RandomInt
         {
           public:
-            typedef std::uint64_t result_type;
+            using result_type = std::uint64_t;
             RandomInt(std::uint64_t low = 0LU,
                       std::uint64_t high = std::numeric_limits<std::uint64_t>().max())
               : re_{},

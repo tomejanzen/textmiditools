@@ -198,3 +198,7 @@
       For textmidicgm, internally nextpermutation
       and prevpermutation were mispelled with capitals,
       meaning that they would never affect anything.
+    * 2023-02-22: last night broke conversion from
+      MIDI to lazy mode textmidi in threads.
+      This seems fixed now with threads in miditext.
+

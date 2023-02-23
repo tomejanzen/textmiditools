@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
-// miditext Version 1.0.40
+// miditext Version 1.0.41
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -79,7 +79,8 @@ namespace
                 }
                 else
                 {
-                    const string errstr{(string{"No Track header MTrk in track: "} += track_num) += '\n'};
+                    const string errstr{(string{"No Track header MTrk in track: "}
+                        += track_num) += '\n'};
                     cerr << errstr;
                 }
                 return;
@@ -90,7 +91,8 @@ namespace
             num = htobe32(num);
             if (std::distance(&(*midiiter), &(*midiend)) < num)
             {
-                const string errstr{(string{"File too short for track length in track:"} += lexical_cast<string>(track_iters.size())) += '\n'};
+                const string errstr{(string{"File too short for track length in track:"}
+                    += lexical_cast<string>(track_iters.size())) += '\n'};
                 cerr << errstr;
                 return;
             }
@@ -104,37 +106,35 @@ namespace
       public:
         ConvertTrack(StreamLengthPair stream_length_pair,
             MidiDelayEventPairs& message_pairs,
-            uint32_t ticks_per_whole, RhythmRational quantum, bool lazy)
+            uint32_t ticks_per_whole, RhythmRational quantum)
           : stream_length_pair_{stream_length_pair},
             message_pairs_{message_pairs},
             ticks_per_whole_{ticks_per_whole},
-            quantum_{quantum},
-            lazy_{lazy}
+            quantum_{quantum}
         {
         }
         void operator()()
         {
             auto midiiter{stream_length_pair_.first};
             const auto midiend{stream_length_pair_.first + stream_length_pair_.second};
-            MidiEventFactory midi_event_factory{midiend};
-            MidiEventFactory::ticks_per_whole_ = ticks_per_whole_;
 
+            MidiEventFactory midi_event_factory{midiend, ticks_per_whole_};
             MidiDelayEventPair midi_delay_msg_pair;
+            int64_t ticks_accumulated{};
+
             do
             {
-                midi_delay_msg_pair = midi_event_factory(midiiter);
+                midi_delay_msg_pair = midi_event_factory(midiiter, ticks_accumulated);
                 message_pairs_.push_back(midi_delay_msg_pair);
             }
             while ((midiiter < midiend)
-                && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
-                                (midi_delay_msg_pair.second.get()));
+                && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>(midi_delay_msg_pair.second.get()));
         }
      private:
         const StreamLengthPair stream_length_pair_;
         MidiDelayEventPairs& message_pairs_;
         const uint32_t ticks_per_whole_;
         const RhythmRational& quantum_;
-        const bool lazy_;
     };
  }
 
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.40\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.41\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -323,19 +323,32 @@ int main(int argc, char *argv[])
 
     vector<StreamLengthPair> stream_length_pairs{};
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
-    vector<MidiDelayEventPairs> midi_delay_event_pairs(stream_length_pairs.size());
+    vector<MidiDelayEventPairs> midi_delay_event_tracks(stream_length_pairs.size());
 
+#if 1
+    // threading doesn't work with lazy output, but conversion to lazy output is not
+    // threaded, so cause is unknown.
     {
         vector<jthread> track_threads(stream_length_pairs.size());
 
         for (auto& ti : stream_length_pairs)
         {
             const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
-            ConvertTrack convert_track{ti, midi_delay_event_pairs[i], ticks_per_whole, quantum, lazy};
+            ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
+                quantum};
             jthread track_thread{convert_track};
             track_threads[i] = move(track_thread);
         }
     }
+#else
+    for (auto& ti : stream_length_pairs)
+    {
+        const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
+        ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
+            quantum};
+        convert_track();
+    }
+#endif
     if (verbose)
     {
         const string logstr{(string{"Will write to: "} += output_filename) += '\n'};
@@ -345,16 +358,19 @@ int main(int argc, char *argv[])
     if (verbose)
     {
         cout << "Events per track:\n";
-        for (auto& mdep : midi_delay_event_pairs)
+        for (auto& mdep : midi_delay_event_tracks)
         {
-            cout << "  Track: " << setw(3) << (std::distance(&(*midi_delay_event_pairs.begin()), &mdep) + 1) << ": " << setw(8) << mdep.size() << '\n';
+            cout << "  Track: " << setw(3)
+                 << (std::distance(&(*midi_delay_event_tracks.begin()), &mdep) + 1)
+                 << ": " << setw(8) << mdep.size() << '\n';
         }
     }
-    for (auto& mdep : midi_delay_event_pairs)
+    for (auto& mdep : midi_delay_event_tracks)
     {
-        const auto i{std::distance(&(*midi_delay_event_pairs.begin()), &mdep)};
+        const auto i{std::distance(&(*midi_delay_event_tracks.begin()), &mdep)};
         textmidi_str.clear();
-        ((textmidi_str += "\nSTARTTRACK ; bytes in track: ") += lexical_cast<string>(stream_length_pairs[i].second)) += '\n';
+        ((textmidi_str += "\nSTARTTRACK ; bytes in track: ") += lexical_cast<string>
+           (stream_length_pairs[i].second)) += '\n';
         text_filestr << textmidi_str;
         if (lazy)
         {
@@ -363,7 +379,8 @@ int main(int argc, char *argv[])
         }
         else
         {
-            ranges::copy(mdep, ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
+            ranges::copy(mdep, ostream_iterator<MidiDelayEventPair>(text_filestr,
+               "\n"));
         }
     }
     return EXIT_SUCCESS;

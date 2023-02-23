@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <cstring>
 
+#include <array>
 #include <vector>
 #include <map>
 #include <set>
@@ -27,6 +28,8 @@ namespace textmidi
     using MidiStreamVector = std::vector<MidiStreamAtom>;
     using MidiStreamIterator = MidiStreamVector::iterator;
     using MidiStreamConstIterator = MidiStreamVector::const_iterator;
+    using MidiStreamArray1 = std::array<MidiStreamAtom, 1>;
+    using MidiStreamArray2 = std::array<MidiStreamAtom, 2>;
 
     constexpr double UsecPerSecond{1000000.0};
     constexpr double SecondsPerMinute{60.0};
@@ -60,35 +63,35 @@ namespace textmidi
         variable_len_byte_mask   {static_cast<MidiStreamAtom>(~variable_len_flag)};
     constexpr MidiStreamAtom variable_len_shift       {7};
     constexpr MidiStreamAtom octet_mask               {0xff};
-    const MidiStreamVector meta_prefix{0xff};
-    const MidiStreamVector sequence_number_prefix {0x00, 0x02}; // sequence number
+    const MidiStreamArray1 meta_prefix{0xff};
+    const MidiStreamArray2 sequence_number_prefix {0x00, 0x02}; // sequence number
     // Variable-length string meta-events.
-    const MidiStreamVector text_prefix            {0x01};
-    const MidiStreamVector copyright_prefix       {0x02};
-    const MidiStreamVector track_name_prefix      {0x03};
-    const MidiStreamVector instrument_name_prefix {0x04};
-    const MidiStreamVector lyric_prefix           {0x05};
-    const MidiStreamVector marker_prefix          {0x06};
-    const MidiStreamVector cue_point_prefix       {0x07};
-    const MidiStreamVector text_08_prefix         {0x08};
-    const MidiStreamVector text_09_prefix         {0x09};
-    const MidiStreamVector text_0A_prefix         {0x0A};
-    const MidiStreamVector text_0B_prefix         {0x0B};
-    const MidiStreamVector text_0C_prefix         {0x0C};
-    const MidiStreamVector text_0D_prefix         {0x0D};
-    const MidiStreamVector text_0E_prefix         {0x0E};
-    const MidiStreamVector text_0F_prefix         {0x0F};
-    const MidiStreamVector unknown_prefix         {0x11};
-    const MidiStreamVector smpte_prefix           {0x54, 5}; // prefix, length
-    const MidiStreamVector midi_channel_prefix    {0x20, 1}; // prefix, length
-    const MidiStreamVector end_of_track_prefix    {0x2f, 0}; // prefix, length
-    const MidiStreamVector tempo_prefix           {0x51, 3}; // prefix, length
-    const MidiStreamVector time_signature_prefix  {0x58, 4}; // prefix, length
-    const MidiStreamVector key_signature_prefix   {0x59, 2}; // prefix, length
+    const MidiStreamArray1 text_prefix            {0x01};
+    const MidiStreamArray1 copyright_prefix       {0x02};
+    const MidiStreamArray1 track_name_prefix      {0x03};
+    const MidiStreamArray1 instrument_name_prefix {0x04};
+    const MidiStreamArray1 lyric_prefix           {0x05};
+    const MidiStreamArray1 marker_prefix          {0x06};
+    const MidiStreamArray1 cue_point_prefix       {0x07};
+    const MidiStreamArray1 text_08_prefix         {0x08};
+    const MidiStreamArray1 text_09_prefix         {0x09};
+    const MidiStreamArray1 text_0A_prefix         {0x0A};
+    const MidiStreamArray1 text_0B_prefix         {0x0B};
+    const MidiStreamArray1 text_0C_prefix         {0x0C};
+    const MidiStreamArray1 text_0D_prefix         {0x0D};
+    const MidiStreamArray1 text_0E_prefix         {0x0E};
+    const MidiStreamArray1 text_0F_prefix         {0x0F};
+    const MidiStreamArray1 unknown_prefix         {0x11};
+    const MidiStreamArray2 smpte_prefix           {0x54, 5}; // prefix, length
+    const MidiStreamArray2 midi_channel_prefix    {0x20, 1}; // prefix, length
+    const MidiStreamArray2 end_of_track_prefix    {0x2f, 0}; // prefix, length
+    const MidiStreamArray2 tempo_prefix           {0x51, 3}; // prefix, length
+    const MidiStreamArray2 time_signature_prefix  {0x58, 4}; // prefix, length
+    const MidiStreamArray2 key_signature_prefix   {0x59, 2}; // prefix, length
     // Quicktime left out the major/minor mode byte.
-    const MidiStreamVector key_signature_prefix_mode_missing   {0x59, 1}; // prefix, length;
-    const MidiStreamVector midi_port_prefix       {0x21, 1};
-    const MidiStreamVector sequencer_specific_prefix{0x7f};
+    const MidiStreamArray2 key_signature_prefix_mode_missing   {0x59, 1}; // prefix, length;
+    const MidiStreamArray2 midi_port_prefix       {0x21, 1};
+    const MidiStreamArray1 sequencer_specific_prefix{0x7f};
 
     // To recognize what is an unknown meta event, first check if it is in this list.
     const std::set<MidiStreamAtom> Initial_Meta{sequence_number_prefix[0], text_prefix[0],
@@ -116,58 +119,58 @@ namespace textmidi
     constexpr MidiStreamAtom ChannelPressure       = 0xd0;
     constexpr MidiStreamAtom PitchWheel            = 0xe0;
 
-    const MidiStreamVector note_on                {NoteOn};
-    const MidiStreamVector note_off               {NoteOff};
+    const MidiStreamArray1 note_on                {NoteOn};
+    const MidiStreamArray1 note_off               {NoteOff};
     constexpr int          full_note_length       {3};
     constexpr int          running_status_note_length{2};
-    const MidiStreamVector polyphonic_key_pressure{PolyphonicKeyPressure};
-    const MidiStreamVector control                {Control};
-    const MidiStreamVector channel_mode           {0xb0};
-    const MidiStreamVector program                {Program};
-    const MidiStreamVector channel_pressure       {ChannelPressure};
-    const MidiStreamVector pitch_wheel            {PitchWheel};
+    const MidiStreamArray1 polyphonic_key_pressure{PolyphonicKeyPressure};
+    const MidiStreamArray1 control                {Control};
+    const MidiStreamArray1 channel_mode           {0xb0};
+    const MidiStreamArray1 program                {Program};
+    const MidiStreamArray1 channel_pressure       {ChannelPressure};
+    const MidiStreamArray1 pitch_wheel            {PitchWheel};
     constexpr MidiStreamAtom channel_mask         {0x0F};
     constexpr MidiStreamAtom byte7_mask           {0x7F};
     constexpr MidiStreamAtom byte7_shift          {7};
     constexpr MidiStreamAtom nybble_mask          {0x0F};
-    const MidiStreamVector control_pan            {0x0A};
-    const MidiStreamVector control_damper         {0x40};
-    const MidiStreamVector control_portamento     {0x41};
-    const MidiStreamVector control_sostenuto      {0x42};
-    const MidiStreamVector control_softpedal      {0x43};
-    const MidiStreamVector control_hold2          {0x45};
-    const MidiStreamVector control_generalpurpose5{0x50};
-    const MidiStreamVector control_generalpurpose6{0x51};
-    const MidiStreamVector control_generalpurpose7{0x52};
-    const MidiStreamVector control_generalpurpose8{0x53};
-    const MidiStreamVector control_extern_fx_depth{0x5b};
-    const MidiStreamVector control_tremolo_depth  {0x5c};
-    const MidiStreamVector control_chorus_depth   {0x5d};
-    const MidiStreamVector control_celeste_depth  {0x5e};
-    const MidiStreamVector control_phaser_depth   {0x5f};
-    const MidiStreamVector control_data_incr      {0x60};
-    const MidiStreamVector control_data_decr      {0x61};
-    const MidiStreamVector control_nonregparmlsb  {0x62};
-    const MidiStreamVector control_nonregparmmsb  {0x63};
-    const MidiStreamVector control_regparmlsb     {0x64};
-    const MidiStreamVector control_regparmmsb     {0x65};
-    const MidiStreamVector control_all_sound_off  {0x78};
-    const MidiStreamVector control_reset_all_ctrl {0x79};
+    const MidiStreamArray1 control_pan            {0x0A};
+    const MidiStreamArray1 control_damper         {0x40};
+    const MidiStreamArray1 control_portamento     {0x41};
+    const MidiStreamArray1 control_sostenuto      {0x42};
+    const MidiStreamArray1 control_softpedal      {0x43};
+    const MidiStreamArray1 control_hold2          {0x45};
+    const MidiStreamArray1 control_generalpurpose5{0x50};
+    const MidiStreamArray1 control_generalpurpose6{0x51};
+    const MidiStreamArray1 control_generalpurpose7{0x52};
+    const MidiStreamArray1 control_generalpurpose8{0x53};
+    const MidiStreamArray1 control_extern_fx_depth{0x5b};
+    const MidiStreamArray1 control_tremolo_depth  {0x5c};
+    const MidiStreamArray1 control_chorus_depth   {0x5d};
+    const MidiStreamArray1 control_celeste_depth  {0x5e};
+    const MidiStreamArray1 control_phaser_depth   {0x5f};
+    const MidiStreamArray1 control_data_incr      {0x60};
+    const MidiStreamArray1 control_data_decr      {0x61};
+    const MidiStreamArray1 control_nonregparmlsb  {0x62};
+    const MidiStreamArray1 control_nonregparmmsb  {0x63};
+    const MidiStreamArray1 control_regparmlsb     {0x64};
+    const MidiStreamArray1 control_regparmmsb     {0x65};
+    const MidiStreamArray1 control_all_sound_off  {0x78};
+    const MidiStreamArray1 control_reset_all_ctrl {0x79};
     constexpr MidiStreamAtom control_local_ctrl_on_off{0x7a};
-    const MidiStreamVector control_all_notes_off  {0x7b};
-    const MidiStreamVector control_omni_off       {0x7c};
-    const MidiStreamVector control_onmi_on        {0x7d};
-    const MidiStreamVector control_mono_on        {0x7e};
-    const MidiStreamVector control_poly_on        {0x7f};
-    const MidiStreamVector control_full           {0x7F};
-    const MidiStreamVector control_off            {0x00};
-    const MidiStreamVector control_breath         {2};
-    const MidiStreamVector midi_time_code_quarter_frame{0xf1};
-    const MidiStreamVector song_position_pointer  {0xf2};
-    const MidiStreamVector song_select            {0xf3};
-    const MidiStreamVector tune_request           {0xf6};
-    const MidiStreamVector start_of_sysex         {0xf0};
-    const MidiStreamVector end_of_sysex           {0xf7};
+    const MidiStreamArray1 control_all_notes_off  {0x7b};
+    const MidiStreamArray1 control_omni_off       {0x7c};
+    const MidiStreamArray1 control_onmi_on        {0x7d};
+    const MidiStreamArray1 control_mono_on        {0x7e};
+    const MidiStreamArray1 control_poly_on        {0x7f};
+    const MidiStreamArray1 control_full           {0x7F};
+    const MidiStreamArray1 control_off            {0x00};
+    const MidiStreamArray1 control_breath         {2};
+    const MidiStreamArray1 midi_time_code_quarter_frame{0xf1};
+    const MidiStreamArray1 song_position_pointer  {0xf2};
+    const MidiStreamArray1 song_select            {0xf3};
+    const MidiStreamArray1 tune_request           {0xf6};
+    const MidiStreamArray1 start_of_sysex         {0xf0};
+    const MidiStreamArray1 end_of_sysex           {0xf7};
 
     constexpr MidiStreamAtom MiddleC{60};
 
@@ -296,6 +299,5 @@ namespace textmidi
 
 #pragma pack()
     std::ostream& operator<<(std::ostream& os, const MidiHeader& mh);
-
 }
 #endif // MIDI_H

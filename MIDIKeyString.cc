@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
 // MIDIKeyString.cc
 //
@@ -155,9 +155,6 @@ string textmidi::num_to_note(int num, std::shared_ptr<bool> prefer_sharp)
     // written out by miditext as all in flatted notes, and a piece in A major should
     // come out in sharped notes.
     //
-#if 0
-    static bool prefer_sharp{true};
-#endif
     string notename;
     switch (num % 12)
     {

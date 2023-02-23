@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.40
+** TextMIDITools Version 1.0.41
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -1176,12 +1176,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     {
         // values in [2]..
         MidiStreamVector offsetvalues;
-#if 0
-        for (auto m : matches)
-        {
-            cout << '#' << m.str() << '#' << '\n';
-        }
-#endif
         MidiStreamAtom fps{0};
         if (smpte_fps_reverse_map.contains(matches[fps_match]))
         {
@@ -1450,7 +1444,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // ERROR
     const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
         += lexical_cast<string>(textmidi_features->line_ctr_))
-        += " Ties are notallowed in DETAIL mode: ")
+        += " Ties are not allowed in DETAIL mode: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
         += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))

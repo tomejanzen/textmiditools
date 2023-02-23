@@ -1,3 +1,13 @@
+2023-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * MIDIKeyString.cc, Midi.h, MidiEvents.cc, MidiEvents.h,
+        SmusTrackEvent.cc, Voice.h, cgmlegacy.h, main.cc, miditext.cc,
+        smustextmidi.cc, textmidi.l, textmidicgm.cc:  Last night
+        broke threaded miditext for converting TO lazy mode textmidi.
+        This seems to work and still has the same statistics on
+        ordinary DETAIL-mode-based conversions.
+        There were too many static class members (hidden globals)
+        that created race conditions in threads.
+
 2023-02-21     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, MidiEvents.cc, Midi.h, textmidi.l:  Change
         regular expression for recognizing floating-point tempo in textmidi.l

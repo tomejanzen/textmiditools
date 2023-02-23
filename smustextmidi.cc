@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.40\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.41\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
     notes_per_track = len / sizeof(SmusTrackEventFilePod);
 
     // Read the first track and create a rhythm track.
-    RhythmRational delay_accum{0};
+    RhythmRational delay_accum{};
     auto* trackEventPtr{reinterpret_cast<SmusTrackEventFilePod*>(&smus_score[smus_index])};
 
     SmusTrackEventFactory track_event_factory{};
@@ -403,7 +403,7 @@ int main(int argc, char *argv[])
 
         notes_per_track = bytes_per_track / sizeof(SmusTrackEventFilePod);
 
-        delay_accum = RhythmRational{0};
+        delay_accum = RhythmRational{};
         trackEventPtr = reinterpret_cast<SmusTrackEventFilePod*>(&smus_score[smus_index]);
         smus_index += bytes_per_track;
         transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], back_inserter(track_events), track_event_factory);

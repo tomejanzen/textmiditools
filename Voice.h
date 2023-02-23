@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -47,7 +47,7 @@ namespace textmidi
                : follow_{false},
                  leader_{std::numeric_limits<int>().max()},
                  interval_type_{IntervalType::Neither},
-                 interval_{0}
+                 interval_{}
               {
               }
               template<class Archive>
@@ -94,7 +94,7 @@ namespace textmidi
                 channel_{v.channel_ + 1},
                 walking_{v.walking_},
                 program_{"1"},
-                pan_{0},
+                pan_{},
                 follower_()
             {}
             std::string low_pitch() const noexcept;

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -92,8 +92,8 @@ namespace cgmlegacy
             min_note_len{1.0},
             max_note_len{1.0},
             scale_qty{88},
-            scale{0},
-            voice_qty{0},
+            scale{},
+            voice_qty{},
             pulse{1.0},
             pitch_form{},
             rhythm_form{},

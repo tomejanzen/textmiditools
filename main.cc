@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.40
+// TextMIDITools Version 1.0.41
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     program_options::variables_map var_map;
 
     string text_filename{}; // set in main.cc as option
-    uint32_t detache{0};   // set from cmd line; separation between notes
+    uint32_t detache{};   // set from cmd line; separation between notes
     ofstream midi_filestr{}; // set in main.cc
     bool verbose{};          // set in main.cc as option
     bool note_off_select{};
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.40\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.41\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";

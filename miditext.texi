@@ -199,7 +199,7 @@ make install-info
 @chapter Testing
 @cindex testing 
 Part of the testing of the conversion utilities @command{miditext}
-and @command{textmidi} is performed on linux with a script similr to this:
+and @command{textmidi} is performed on linux with a script similar to this:
 
 @smallexample
 #/usr/bin/env bash

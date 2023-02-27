@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.41
+** TextMIDITools Version 1.0.42
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -531,9 +531,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
 }
 
 <DETAIL_STATE>SEQUENCE_NUMBER{SOMESPACE}{UINTEGER} {
@@ -606,9 +603,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     ranges::copy(len_vec, back_inserter(trackchunk));
 
     ranges::copy(bytes, back_inserter(trackchunk));
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE>{TEXT_META}{SOMESPACE} {
@@ -745,9 +739,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string discard{};
     double mmtempo{60.0};
     iss >> discard >> mmtempo;
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
     // convert ticks per minute to useconds per quarter
     const uint32_t tempo{static_cast<uint32_t>(std::round((SecondsPerMinute * UsecPerSecond) / mmtempo))};
 
@@ -1061,9 +1052,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     shift_channel(channel);
 
     // looks like a kluge. Does channel_pressure participate in running_status?
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
     check_running_status(channel | channel_pressure[0]);
 
     pressure &= byte7_mask;
@@ -1103,9 +1091,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
              ticksperbeat{};
     constexpr uint32_t thirtysecsperqtr{8};
     iss >> discard >> numer >> denom >> ticksperbeat;
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
     // convert ticks per minute to useconds per quarter
     uint32_t denom_pwr{};
     while (denom >>= 1)
@@ -1125,9 +1110,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     trackchunk.push_back(tempticksperbeat);
     trackchunk.push_back(thirtysecsperqtr);
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE>KEY_SIGNATURE{SPACE}{NOTE_NAME} {
@@ -1148,9 +1130,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(key_signature_prefix[1]);
     trackchunk.push_back(static_cast<signed char>(accidentals));
     trackchunk.push_back(themode);
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
@@ -1195,9 +1174,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         {
             trackchunk.push_back(offsetval);
         }
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-        running_status = 0;
-#endif
     }
   }
 
@@ -1215,9 +1191,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(midi_channel_prefix[0]);
     trackchunk.push_back(midi_channel_prefix[1]);
     trackchunk.push_back(channel);
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE>MIDI_PORT{SPACE}{UINTEGER} {
@@ -1233,9 +1206,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(midi_port_prefix[0]);
     trackchunk.push_back(midi_port_prefix[1]);
     trackchunk.push_back(port);
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE>SYSEX{HEX_BYTES} {
@@ -1281,9 +1251,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
     trackchunk.push_back(end_of_sysex[0]);
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE>SYSEXRAW{HEX_BYTES} {
@@ -1328,9 +1295,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <DETAIL_STATE,LAZY_STATE>ticks{SPACE}{STRING} {
@@ -1351,9 +1315,6 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     const MidiStreamVector len_vec = int_to_vec(ticks_str.length());
     ranges::copy(len_vec,   back_inserter(trackchunk));
     ranges::copy(ticks_str, back_inserter(trackchunk));
-#if defined(RESET_RUNNING_STATUS_TOO_OFTEN)
-    running_status = 0;
-#endif
   }
 
 <LAZY_STATE>{DYNAMIC} {

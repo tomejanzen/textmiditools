@@ -1,3 +1,9 @@
+2023-02-26     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix duplicate rests at beginning of tracks in
+        miditext --lazy usage.  The policies for making rests for
+        the end of notes and after meta events are different and interferred
+        with one another.  Also applied more ranges in nearby code.
+
 2023-02-22     Thomas E. Janzen <janzentome@gmail.com>
         * MIDIKeyString.cc, Midi.h, MidiEvents.cc, MidiEvents.h,
         SmusTrackEvent.cc, Voice.h, cgmlegacy.h, main.cc, miditext.cc,

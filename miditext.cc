@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.41
+// TextMIDITools Version 1.0.42
 //
-// miditext Version 1.0.41
+// miditext Version 1.0.42
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.41\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.42\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -325,9 +325,15 @@ int main(int argc, char *argv[])
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
     vector<MidiDelayEventPairs> midi_delay_event_tracks(stream_length_pairs.size());
 
-#if 1
-    // threading doesn't work with lazy output, but conversion to lazy output is not
-    // threaded, so cause is unknown.
+#if defined(DEBUG_THREADLESS)
+    for (auto& ti : stream_length_pairs)
+    {
+        const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
+        ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
+            quantum};
+        convert_track();
+    }
+#else
     {
         vector<jthread> track_threads(stream_length_pairs.size());
 
@@ -339,14 +345,6 @@ int main(int argc, char *argv[])
             jthread track_thread{convert_track};
             track_threads[i] = move(track_thread);
         }
-    }
-#else
-    for (auto& ti : stream_length_pairs)
-    {
-        const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
-        ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
-            quantum};
-        convert_track();
     }
 #endif
     if (verbose)

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -280,7 +280,7 @@ void SmusTrackEventPitch::flush()
     tied_vec_.clear();
 }
 
-std::vector<int> SmusTrackEventPitch::tied_vec_;
+vector<int> SmusTrackEventPitch::tied_vec_;
 int SmusTrackEventBase::channel_{};
 
 string SmusTrackEventRest::textmidi()

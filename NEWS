@@ -203,4 +203,9 @@
       This seems fixed now with threads in miditext.
     * 2023-02-26: fix duplicate rests at the beginning
       of tracks with ./miditext --lazy.
+    * 2023-02-28: Support named control change IDs.
+      Fix truncation of 1 charcter of
+      string event strings if not quoted.
+      Incorporate DEVICE_NAME and PROGRAM_NAME.
+
 

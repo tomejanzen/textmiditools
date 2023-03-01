@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -337,7 +337,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     build_track_scramble_sequences(track_scramble_sequences, xml_form.voices().size(),
         total_duration);
 
-    std::vector<std::vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
+    vector<vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
     for (auto& lts : leaders_topo_sort)
     {

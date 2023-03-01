@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.42\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.43\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
                         cerr << errstr;
                         exit(EXIT_SUCCESS);
                     }
-                    catch (std::ios_base::failure &iosfail)
+                    catch (ios_base::failure &iosfail)
                     {
                         cerr << iosfail.what() << '\n';
                         exit(EXIT_SUCCESS);
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
     {
         textmidi_filename = var_map[TextmidiOpt].as<string>();
     }
-    if (answer && std::filesystem::exists(textmidi_filename))
+    if (answer && filesystem::exists(textmidi_filename))
     {
         cout << "Overwrite " << textmidi_filename << "?\n";
         string answer{};
@@ -415,7 +415,7 @@ int main(int argc, char *argv[])
         for (int xf{}; auto& xml_form : xml_forms)
         {
             const string form_filename_local(form_filenames[xf]);
-            if (answer && std::filesystem::exists(form_filename_local))
+            if (answer && filesystem::exists(form_filename_local))
             {
                 cout << "Overwrite " << form_filename_local << "?\n";
                 string answer{};

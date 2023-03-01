@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.42\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.43\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     if (var_map.count(SMUSOpt)) [[likely]]
     {
         smus_filename = var_map[SMUSOpt].as<string>();
-        if (!std::filesystem::exists(smus_filename))
+        if (!filesystem::exists(smus_filename))
         {
             cerr << SMUSOpt << ' ' << smus_filename << " File does not exist.\n";
             exit(EXIT_SUCCESS);
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
         cerr << errstr;
         exit(EXIT_SUCCESS);
     }
-    if (answer && std::filesystem::exists(textmidi_filename)) [[unlikely]]
+    if (answer && filesystem::exists(textmidi_filename)) [[unlikely]]
     {
         cout << "Overwrite " << textmidi_filename << "?" << '\n';
         string answer{};
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
         // The copy algorithm does not seem to work on a binary file.
         smus_file.read(&smus_score[0], form_len);
     }
-    catch (std::ios_base::failure &iosfail)
+    catch (ios_base::failure &iosfail)
     {
         cerr << iosfail.what() << '\n';
         exit(EXIT_SUCCESS);

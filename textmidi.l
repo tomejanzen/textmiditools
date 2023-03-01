@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.42
+** TextMIDITools Version 1.0.43
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -87,8 +87,8 @@ namespace
                   {"LYRIC",           lyric_prefix[0]},
                   {"MARKER",          marker_prefix[0]},
                   {"CUE_POINT",       cue_point_prefix[0]},
-                  {"TEXT_08",         text_08_prefix[0]},
-                  {"TEXT_09",         text_09_prefix[0]},
+                  {"PROGRAM_NAME",    program_name_prefix[0]},
+                  {"DEVICE_NAME",     device_name_prefix[0]},
                   {"TEXT_0A",         text_0A_prefix[0]},
                   {"TEXT_0B",         text_0B_prefix[0]},
                   {"TEXT_0C",         text_0C_prefix[0]},
@@ -102,10 +102,54 @@ namespace
         {"ALLNOTES_OFF", control_all_notes_off[0]},
         {"ALL_SOUND_OFF", control_all_sound_off[0]},
         {"BREATH",       control_breath[0]},
-        {"DAMPER",       control_damper[0]},
         {"SOFTPEDAL",    control_softpedal[0]},
         {"PORTAMENTO",   control_portamento[0]},
-        {"SOSTENUTO",    control_sostenuto[0]},
+        {"BANK_SELECT", control_bank_select[0]},
+        {"MODULATION", control_modulation[0]},
+        {"FOOT_CONTROLLER", control_foot_controller[0]},
+        {"PORTAMENTO_TIME", control_portamento_time[0]},
+        {"DATA_ENTRY_MSB", control_data_entry_msb[0]},
+        {"CHANNEL_VOLUME", control_channel_volume[0]},
+        {"BALANCE", control_balance[0]},
+        {"PAN", control_pan[0]},
+        {"EXPRESSION", control_expression[0]},
+        {"EFFECT_1", control_effect_1[0]},
+        {"EFFECT_2", control_effect_2[0]},
+        {"GENERAL_PURPOSE_1", control_general_purpose_1[0]},
+        {"GENERAL_PURPOSE_2", control_general_purpose_2[0]},
+        {"GENERAL_PURPOSE_3", control_general_purpose_3[0]},
+        {"GENERAL_PURPOSE_4", control_general_purpose_4[0]},
+        {"DAMPER", control_damper[0]},
+        {"PORTAMENTO_ON_OFF", control_portamento_on_off[0]},
+        {"SOSTENUTO", control_sostenuto[0]},
+        {"LEGATO_FOOT", control_legato_foot[0]},
+        {"HOLD_2", control_hold_2[0]},
+        {"SOUND_VARIATION", control_sound_variation[0]},
+        {"TIMBRE_INTENSITY", control_timbre_intensity[0]},
+        {"RELEASE_TIME", control_release_time[0]},
+        {"ATTACK_TIME", control_attack_time[0]},
+        {"BRIGHTNESS", control_brightness[0]},
+        {"DECAY_TIME", control_decay_time[0]},
+        {"VIBRATO_RATE", control_vibrato_rate[0]},
+        {"VIBRATO_DEPTH", control_vibrato_depth[0]},
+        {"SOUND_CONTROLLER_9", control_sound_controller_9[0]},
+        {"SOUND_CONTROLLER_10", control_sound_controller_10[0]},
+        {"GENERAL_PURPOSE_5", control_general_purpose_5[0]},
+        {"GENERAL_PURPOSE_6", control_general_purpose_6[0]},
+        {"GENERAL_PURPOSE_7", control_general_purpose_7[0]},
+        {"GENERAL_PURPOSE_8", control_general_purpose_8[0]},
+        {"HIRES_VELOCITY_MSB", control_hires_velocity_msb[0]},
+        {"REVERB_SEND_LEVEL", control_reverb_send_level[0]},
+        {"TREMOLO_DEPTH", control_tremolo_depth[0]},
+        {"CHORUS_SEND_LEVEL", control_chorus_send_level[0]},
+        {"CELESTE_DEPTH", control_celeste_depth[0]},
+        {"PHASER_DEPTH", control_phaser_depth[0]},
+        {"DATA_INCREMENT", control_data_increment[0]},
+        {"DATA_DECREMENT", control_data_decrement[0]},
+        {"NON_REGISTERED_PARAMETER_LSB", control_non_registered_parameter_lsb[0]},
+        {"NON_REGISTERED_PARAMETER_MSB", control_non_registered_parameter_msb[0]},
+        {"REGISTERED_PARAMETER_LSB", control_registered_parameter_lsb[0]},
+        {"REGISTERED_PARAMETER_MSB", control_registered_parameter_msb[0]},
     };
     // PORTAMENTO and SOSTENUTO have an "on" or "off" value.
     const map<string, MidiStreamAtom> OnOffMap{{string{"OFF"}, control_off[0]}, {string{"ON"}, control_full[0]}};
@@ -381,7 +425,9 @@ ALPHANUM ({LETTER}|{DIGIT})
 ALPHANUMUNDER ({ALPHANUM}|_)
 IDENT ({LETTERUNDER}{ALPHANUMUNDER}*)
 ASSIGNMENT ({IDENT}{SPACE}={SPACE}{STRING})
-TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|TEXT_08|TEXT_09|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F)
+TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|PROGRAM_NAME|DEVICE_NAME|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F)
+CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB)
+
 CONTROL_CHANNEL (RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
 CONTROL_CHANNEL_INT (BREATH|DAMPER|SOFTPEDAL)
 CONTROL_CHANNEL_ONOFF (PORTAMENTO|SOSTENUTO)
@@ -632,9 +678,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 <TEXT_META_STATE>{LINE} {
     /* Recognize the remainder of the line */
     string yystring{yytext};
+    bool was_a_leading_quote{};
     if ('\"' == yystring[0])
     {
         yystring.erase(0, 1);
+        was_a_leading_quote = true;
     }
     // remove blanks at end of line
     if (!yystring.empty())
@@ -643,7 +691,10 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         const string blanks{" \t\n\r"};
         if ((pos = yystring.find_last_not_of(blanks)) != yystring.npos)
         {
-            yystring.erase(pos);
+            if ((pos + 1) < yystring.size())
+            {
+                yystring.erase(pos + 1);
+            }
         }
     }
     // now the trailing spaces/tabs have been removed.
@@ -651,14 +702,19 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     // remove quotes
     if (!yystring.empty())
     {
-        if ('\"' == yystring[yystring.size() - 1])
+        // is there a trailing quote that matched
+        // a leading quote
+        if (('\"' == yystring[yystring.size() - 1])
+           && was_a_leading_quote)
         {
+            // check if it's our escape of quote
             if (yystring.size() > 1)
             {
-                if (yystring[yystring.size() - 2] != '\\')
-                {
                     yystring.erase(yystring.size() - 1, 1);
-                }
+            }
+            else // it just had one double quote character alone
+            {
+                yystring.clear();
             }
         }
     }
@@ -713,6 +769,8 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     MidiStreamVector len_vec = int_to_vec(yystring.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
     ranges::copy(yystring, back_inserter(trackchunk));
+    ++textmidi_features->line_ctr_;
+
     BEGIN(DETAIL_STATE);
   }
 
@@ -865,16 +923,39 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
   }
 
 
-<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}{INTEGER}{SPACE}{INTEGER} {
+<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}({INTEGER}|{CONTROL_FUNCTION}){SPACE}{INTEGER} {
     /* Recognize CONTROL {channel} {control_id} {control_value} */
     write_delay();
 
     istringstream iss(yytext);
     string discard;
     uint32_t channel{};
+
     int32_t control_id{},
             control_value{};
-    iss >> discard >> channel >> control_id >> control_value;
+    string control_id_str;
+    iss >> discard >> channel >> control_id_str >> control_value;
+
+    const regex int_re{R"([-+]?[[:digit:]]+)"};
+    smatch matches{};
+    const auto mat{regex_match(control_id_str, matches, int_re)};
+    if (mat)
+    {
+        istringstream iss_id(control_id_str);
+        iss_id >> control_id;
+    }
+    else
+    {
+       if (text_control_map.contains(control_id_str))
+       {
+           control_id = text_control_map.at(control_id_str);
+       }
+       else
+       {
+           cerr << "Control invalid ID: " << control_id_str << '\n';
+       }
+    }
+
     shift_channel(channel);
 
     check_running_status(channel | control[0]);

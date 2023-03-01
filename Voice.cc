@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -21,72 +21,72 @@ using namespace std;
 using namespace textmidi;
 using namespace textmidi::cgm;
 
-std::string cgm::VoiceXml::low_pitch() const noexcept
+string VoiceXml::low_pitch() const noexcept
 {
     return low_pitch_;
 }
 
-void cgm::VoiceXml::low_pitch(std::string_view low_pitch) noexcept
+void VoiceXml::low_pitch(string_view low_pitch) noexcept
 {
     low_pitch_ = low_pitch;
 }
 
-std::string cgm::VoiceXml::high_pitch() const noexcept
+string VoiceXml::high_pitch() const noexcept
 {
     return high_pitch_;
 }
 
-void cgm::VoiceXml::high_pitch(std::string_view high_pitch) noexcept
+void VoiceXml::high_pitch(string_view high_pitch) noexcept
 {
     high_pitch_ = high_pitch;
 }
 
-uint32_t cgm::VoiceXml::channel() const noexcept
+uint32_t VoiceXml::channel() const noexcept
 {
     return channel_;
 }
 
-void cgm::VoiceXml::channel(uint32_t channel) noexcept
+void VoiceXml::channel(uint32_t channel) noexcept
 {
     channel_ = channel;
 }
 
-bool cgm::VoiceXml::walking() const noexcept
+bool VoiceXml::walking() const noexcept
 {
     return walking_;
 }
 
-void cgm::VoiceXml::walking(bool walking) noexcept
+void VoiceXml::walking(bool walking) noexcept
 {
     walking_ = walking;
 }
 
-std::string cgm::VoiceXml::program() const noexcept
+string VoiceXml::program() const noexcept
 {
     return program_;
 }
 
-void cgm::VoiceXml::program(std::string program) noexcept
+void VoiceXml::program(string program) noexcept
 {
     program_ = program;
 }
 
-int32_t cgm::VoiceXml::pan() const noexcept
+int32_t VoiceXml::pan() const noexcept
 {
     return pan_;
 }
 
-void cgm::VoiceXml::pan(int32_t pan) noexcept
+void VoiceXml::pan(int32_t pan) noexcept
 {
     pan_ = pan;
 }
 
-const cgm::VoiceXml::Follower& cgm::VoiceXml::follower() const noexcept
+const VoiceXml::Follower& VoiceXml::follower() const noexcept
 {
     return follower_;
 }
 
-void cgm::VoiceXml::follower(const Follower& follower) noexcept
+void VoiceXml::follower(const Follower& follower) noexcept
 {
     follower_ = follower;
 }

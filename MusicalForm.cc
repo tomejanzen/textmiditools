@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -47,51 +47,51 @@ using namespace textmidi;
 using namespace textmidi::cgm;
 using namespace boost;
 
-double cgm::Sine::period() const noexcept
+double Sine::period() const noexcept
 {
     return period_;
 }
 
-void cgm::Sine::period(double period) noexcept
+void Sine::period(double period) noexcept
 {
     period_ = period;
 }
 
-double cgm::Sine::phase() const noexcept
+double Sine::phase() const noexcept
 {
     return phase_;
 }
 
-void cgm::Sine::phase(double phase) noexcept
+void Sine::phase(double phase) noexcept
 {
     phase_ = phase;
 }
 
-double cgm::Sine::amplitude() const noexcept
+double Sine::amplitude() const noexcept
 {
     return amplitude_;
 }
-void cgm::Sine::amplitude(double amplitude) noexcept
+void Sine::amplitude(double amplitude) noexcept
 {
     amplitude_ = amplitude;
 }
-double cgm::Sine::offset() const noexcept
+double Sine::offset() const noexcept
 {
     return offset_;
 }
-void cgm::Sine::offset(double offset) noexcept
+void Sine::offset(double offset) noexcept
 {
     offset_ = offset;
 }
 
-double cgm::Sine::value_now(double the_time) const
+double Sine::value_now(double the_time) const
 {
     const auto the_sine{
         std::sin(2.0 * M_PI * the_time / period_ + phase_)};
     return amplitude_ * the_sine + offset_;
 }
 
-bool cgm::Sine::valid() const
+bool Sine::valid() const
 {
     auto test = [](double period) { return 0.0 != period; };
     if (!test(period_)) [[unlikely]]
@@ -103,27 +103,27 @@ bool cgm::Sine::valid() const
     return test(period_);
 }
 
-const Sine& cgm::MeanRangeSines::mean_sine() const noexcept
+const Sine& MeanRangeSines::mean_sine() const noexcept
 {
     return mean_sine_;
 }
 
-Sine& cgm::MeanRangeSines::mean_sine() noexcept
+Sine& MeanRangeSines::mean_sine() noexcept
 {
     return mean_sine_;
 }
 
-const Sine& cgm::MeanRangeSines::range_sine() const noexcept
+const Sine& MeanRangeSines::range_sine() const noexcept
 {
     return range_sine_;
 }
 
-Sine& cgm::MeanRangeSines::range_sine() noexcept
+Sine& MeanRangeSines::range_sine() noexcept
 {
     return range_sine_;
 }
 
-bool cgm::MeanRangeSines::valid() const
+bool MeanRangeSines::valid() const
 {
     auto test = [](Sine sine) { return sine.valid(); };
     bool rtn{};
@@ -146,8 +146,8 @@ bool cgm::MeanRangeSines::valid() const
     return rtn;
 }
 
-cgm::MelodyProbabilities::MelodyDirection
-    cgm::MelodyProbabilities::operator()(double random_variable) const
+MelodyProbabilities::MelodyDirection
+    MelodyProbabilities::operator()(double random_variable) const
 {
     // The probabilities are cumulative probabilities
     // and like thresholds.
@@ -202,145 +202,144 @@ void MelodyProbabilities::up(double up) noexcept
     up_ = up;
 }
 
-double cgm::MusicalCharacter::duration(double rf)
+double MusicalCharacter::duration(double rf)
 {
     return (rhythm_range * rf) - (rhythm_range / 2.0) + rhythm_mean;
 }
 
-int cgm::MusicalCharacter::pitch_index(double rf)
+int MusicalCharacter::pitch_index(double rf)
 {
     return static_cast<int>(
         round((pitch_range * rf) - (pitch_range / 2.0) + pitch_mean));
 }
 
-std::string cgm::MusicalForm::name() const noexcept
+string MusicalForm::name() const noexcept
 {
     return name_;
 }
 
-void cgm::MusicalForm::name(const std::string_view name) noexcept
+void MusicalForm::name(const string_view name) noexcept
 {
     name_ = name;
 }
 
-double cgm::MusicalForm::len() const noexcept
+double MusicalForm::len() const noexcept
 {
     return len_;
 }
 
-void cgm::MusicalForm::len(double len) noexcept
+void MusicalForm::len(double len) noexcept
 {
     len_ = len;
 }
 
-double cgm::MusicalForm::min_note_len() const noexcept
+double MusicalForm::min_note_len() const noexcept
 {
     return min_note_len_;
 }
 
-void cgm::MusicalForm::min_note_len(double min_note_len) noexcept
+void MusicalForm::min_note_len(double min_note_len) noexcept
 {
     min_note_len_ = min_note_len;
 }
 
-double cgm::MusicalForm::max_note_len() const noexcept
+double MusicalForm::max_note_len() const noexcept
 {
     return max_note_len_;
 }
 
-void cgm::MusicalForm::max_note_len(double max_note_len) noexcept
+void MusicalForm::max_note_len(double max_note_len) noexcept
 {
     max_note_len_ = max_note_len;
 }
 
-const std::vector<std::string>& cgm::MusicalForm::scale() const noexcept
+const vector<string>& MusicalForm::scale() const noexcept
 {
     return scale_;
 }
 
-std::vector<std::string>& cgm::MusicalForm::scale() noexcept
+vector<string>& MusicalForm::scale() noexcept
 {
     return scale_;
 }
 
-double cgm::MusicalForm::pulse() const noexcept
+double MusicalForm::pulse() const noexcept
 {
     return pulse_;
 }
 
-void cgm::MusicalForm::pulse(double pulse) noexcept
+void MusicalForm::pulse(double pulse) noexcept
 {
     pulse_ = pulse;
 }
 
-const MelodyProbabilities& cgm::MusicalForm::melody_probabilities() const noexcept
+const MelodyProbabilities& MusicalForm::melody_probabilities() const noexcept
 {
     return melody_probabilities_;
 }
 
-void cgm::MusicalForm::melody_probabilities(
+void MusicalForm::melody_probabilities(
     const MelodyProbabilities& melody_probabilities) noexcept
 {
     melody_probabilities_ = melody_probabilities;
 }
 
-MeanRangeSines cgm::MusicalForm::pitch_form() const noexcept
+MeanRangeSines MusicalForm::pitch_form() const noexcept
 {
     return pitch_form_;
 }
 
-MeanRangeSines& cgm::MusicalForm::pitch_form() noexcept
+MeanRangeSines& MusicalForm::pitch_form() noexcept
 {
     return pitch_form_;
 }
 
-MeanRangeSines cgm::MusicalForm::rhythm_form() const noexcept
+MeanRangeSines MusicalForm::rhythm_form() const noexcept
 {
     return rhythm_form_;
 }
 
-MeanRangeSines& cgm::MusicalForm::rhythm_form() noexcept
+MeanRangeSines& MusicalForm::rhythm_form() noexcept
 {
     return rhythm_form_;
 }
 
-MeanRangeSines cgm::MusicalForm::dynamic_form() const noexcept
+MeanRangeSines MusicalForm::dynamic_form() const noexcept
 {
     return dynamic_form_;
 }
 
-MeanRangeSines& cgm::MusicalForm::dynamic_form() noexcept
+MeanRangeSines& MusicalForm::dynamic_form() noexcept
 {
     return dynamic_form_;
 }
 
-Sine cgm::MusicalForm::texture_form() const noexcept
+Sine MusicalForm::texture_form() const noexcept
 {
     return texture_form_;
 }
 
-Sine& cgm::MusicalForm::texture_form() noexcept
+Sine& MusicalForm::texture_form() noexcept
 {
     return texture_form_;
 }
 
-void cgm::MusicalForm::texture_form(const Sine& s) noexcept
+void MusicalForm::texture_form(const Sine& s) noexcept
 {
     texture_form_ = s;
 }
 
-std::vector<VoiceXml> cgm::MusicalForm::voices() const noexcept
+vector<VoiceXml> MusicalForm::voices() const noexcept
 {
     return voices_;
 }
 
-std::vector<VoiceXml>& cgm::MusicalForm::voices() noexcept
+vector<VoiceXml>& MusicalForm::voices() noexcept
 {
     return voices_;
 }
 
-void cgm::MusicalForm::string_scale_to_int_scale
-    (std::vector<int>& key_scale) const
+void MusicalForm::string_scale_to_int_scale (vector<int>& key_scale) const
 {
     key_scale.clear();
     for (auto str : scale_)
@@ -353,7 +352,7 @@ void cgm::MusicalForm::string_scale_to_int_scale
 // Compute the instantaneous character, that is
 // the current means and ranges of pitch, duration, dynamic
 // and the number of voices playing.
-void cgm::MusicalForm::character_now(TicksDuration theTime,
+void MusicalForm::character_now(TicksDuration theTime,
         MusicalCharacter& musical_character) const
 {
     const double dblTime(
@@ -388,7 +387,7 @@ void cgm::MusicalForm::character_now(TicksDuration theTime,
 //
 // Generate a random form.
 // This is an optional command-line option in textmidicgm.
-void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
+void MusicalForm::random(string formname, int32_t instrument_flags)
 {
     constexpr int IdiophoneMarker{129};
     name_ = formname;
@@ -602,7 +601,7 @@ void cgm::MusicalForm::random(string formname, int32_t instrument_flags)
     // scale_ should now just cover the maximum extent of the instruments' ranges.
 }
 
-bool cgm::MusicalForm::valid() const
+bool MusicalForm::valid() const
 {
     bool rtn{true};
     if (0.0 == len_)
@@ -646,14 +645,14 @@ bool cgm::MusicalForm::valid() const
     return rtn;
 }
 
-void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
+void MusicalForm::clamp_scale_to_instrument_ranges()
 {
     if (!voices_.empty())
     {
-        auto min_low_pitch = [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
+        auto min_low_pitch = [](const VoiceXml& v1, const VoiceXml& v2)
             { return CompareLowerNoteName()(v1.low_pitch(), v2.low_pitch());};
         const auto voice_min_note{ranges::min_element(voices_, min_low_pitch)->low_pitch()};
-        auto max_high_pitch = [](const cgm::VoiceXml& v1, const cgm::VoiceXml& v2)
+        auto max_high_pitch = [](const VoiceXml& v1, const VoiceXml& v2)
             { return CompareLowerNoteName()(v1.high_pitch(), v2.high_pitch());};
         const auto voice_max_note{ranges::max_element(voices_, max_high_pitch)->high_pitch()};
         auto out_of_range = [voice_min_note, voice_max_note](const string& note_name)
@@ -665,6 +664,6 @@ void cgm::MusicalForm::clamp_scale_to_instrument_ranges()
 }
 
 RandomDouble cgm::rd{};
-RandomInt cgm::ri{};
+RandomInt    cgm::ri{};
 
 

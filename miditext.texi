@@ -51,7 +51,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 @cindex overview
 The @command{miditext} program translates a binary standard MIDI file into
 a text file in textmidi language.
-A file in textmidi language can be edited and processed with 
+A file in textmidi language can be edited and processed with
 text tools and macro
 processors such as m4.  Textmidi files can then be re-translated
 into MIDI using @command{textmidi}.  The goal of @command{miditext}
@@ -70,7 +70,7 @@ wrote illegal key signature events, with only a byte for the
 number of sharps or flats, but no mode (major/minor) byte,
 @command{miditext} will accept this idiosyncrasy.
 
-No attempt is made in textmidi to support either MIDI show control 
+No attempt is made in textmidi to support either MIDI show control
 or machine control.
 @menu
 * What is miditext?::
@@ -83,7 +83,7 @@ or machine control.
 The program @command{miditext} reads a standard
 MIDI file and converts it to a text file, which is in the textmidi language.
 Each item in the text file corresponds to an item in the binary MIDI file,
-more or less.  
+more or less.
 
 @command{miditext} does not record or play over a MIDI interface.
 
@@ -105,14 +105,14 @@ and 2021 in order to add support for more of the MIDI specification.
 @cindex Options
 @smallexample
 miditext [@b{@minus{}i}|@b{@minus{}@minus{}midi}] @var{midi_input_file} @b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{textmidi_output_file}
-[@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}q}|@b{@minus{}@minus{}quantize} @var{musical_ratio in quotes}] [@b{@minus{}l}|@b{@minus{}@minus{}lazy}] [@b{@minus{}h}|@b{@minus{}@minus{}help}] 
+[@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}q}|@b{@minus{}@minus{}quantize} @var{musical_ratio in quotes}] [@b{@minus{}l}|@b{@minus{}@minus{}lazy}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
 [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 @end smallexample
 
 @table @option
 @cindex @command{miditext} command line options.
 @item -h, --help
-@cindex @minus{}@minus{}help  
+@cindex @minus{}@minus{}help
 @cindex @minus{}h
 Print the options summary.
 @item -v, --verbose
@@ -120,12 +120,33 @@ Print the options summary.
 @cindex @minus{}@minus{}verbose
 Write some informative messages to the screen.  Errors are printed
 regardless.
+The items written are:
+@itemize
+@item The name of the output file.
+@item The contents of the MIDI file header.
+@item The format of the MIDI file.
+@item The number of events per track.
+@item The percentage of rigid events.
+@end itemize
+@quotedblleft{}Rigid events@quotedblright{} are events that have a delay preceding
+them that has a simple relationship to the length of a whole note.
+If @minus{}@minus{}verbose is specified, then the delay preceding each event is
+converted into a fraction of a whole note, much the that musical rhythm is expressed.
+If the resulting fraction has a denominator of 1, 2, 4, 6, 8, 12, or 16, then it
+is counted as a rigid rhythm.  For example, 3/4 is a dotted half note, and a 1/12
+note is a triplet eighth.  Delays of zero are not counted in the computation of
+the percentage.  Files with 90% and higher of rigid rhythms are easy for
+@command{miditext} to convert into LAZY format tracks, even if the
+@minus{}@minus{}quantize option is not specified.  MIDI files that were developed
+in a scoring program by mousing note by note tend to have a rigid rhythm.  A more
+fluid performance might still be achieved by frequently adjusting the tempo and
+dynamics, both of which @command{textmidi} makes possible.
 @item -V, --version
 @cindex @minus{}V
 @cindex @minus{}@minus{}version
 Print the version of @command{miditext}.
 @item -i, --midi midi_input_file
-@cindex @minus{}i 
+@cindex @minus{}i
 @cindex @minus{}@minus{}midi
 The input file: a MIDI file.
 @item -o, --textmidi textmidi_output_file
@@ -142,7 +163,7 @@ divisible by a sixteenth-note.
 @item -l, --lazy
 @cindex @minus{}l
 @cindex @minus{}@minus{}lazy
-Will attempt to output track data in textmidi's LAZY mode, an abbreviated 
+Will attempt to output track data in textmidi's LAZY mode, an abbreviated
 text representation.
 @item -a, --answer
 @cindex @minus{}a
@@ -171,7 +192,7 @@ write using the abbreviated LAZY mode representation.
 
 The following converts prelude.mid into prelude.txt,
 and coerces rhythms to be divisible by a thirty-second note.
-If the file prelude.txt exists, the user will be asked whether to 
+If the file prelude.txt exists, the user will be asked whether to
 overwrite it.
 @cindex quantize
 
@@ -197,7 +218,7 @@ make install-info
 
 @node Testing
 @chapter Testing
-@cindex testing 
+@cindex testing
 Part of the testing of the conversion utilities @command{miditext}
 and @command{textmidi} is performed on linux with a script similar to this:
 
@@ -218,8 +239,8 @@ function testmidi
     ~/me/janzent/miscprog/textmidi/miditext --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
     sed -i -f ~/me/janzent/sed/starttrack.sed $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
     ls -l $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
-    diff -s $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid 
-    diff -q -bBw -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt 
+    diff -s $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
+    diff -q -bBw -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
 @rbracechar{}
 testmidi $@lbracechar{}BASH_ARGV[0]@rbracechar{}
 @end smallexample
@@ -230,11 +251,11 @@ This script can be invoked with
 @end smallexample
 The result is to create a temporary directory and create the files prelude.txt,
 @itemize
-@item 
+@item
 prelude.txt
-@item 
+@item
 prelude.mid
-@item 
+@item
 prelude_B.txt
 @end itemize
 The original MIDI file and the temporary prelude.mid are compared.
@@ -245,7 +266,7 @@ an independent scoring program.
 The remaining 6276 files all compare
 the text files as identical, and about a third of the pairs of
 MIDI files compare as identical.  The differences between MIDI files
-are still being investigated, but causes known so far include the 
+are still being investigated, but causes known so far include the
 following:
 @itemize
 @item
@@ -278,8 +299,8 @@ Control Change (including omni/poly on/off)
 @end itemize
 @item
 In text events (including TRACK, INSTRUMENT, COPYRIGHT, etc.)
-@command{miditext} drops both prefacing and trailing spaces, as well 
-as terminating @quotedblleft{}nul@quotedblright{} (a character with a numeric 
+@command{miditext} drops both prefacing and trailing spaces, as well
+as terminating @quotedblleft{}nul@quotedblright{} (a character with a numeric
 value of zero) bytes.
 Therefore, TEXT events in the round-trip, recreated MIDI file may
 differ from those in the original MIDI file.
@@ -291,9 +312,9 @@ but @command{textmidi} always creates the standard event with five total bytes:
 
 @node Known Bugs
 @chapter Known Bugs
-@cindex bugs 
+@cindex bugs
 Although the DETAIL mode representation should be accurate,
-if @minus{}@minus{}lazy is selected, and if a track in the MIDI file has 
+if @minus{}@minus{}lazy is selected, and if a track in the MIDI file has
 overlapping note events with asynchronous start and stop times, the LAZY
 mode representation may not be accurate.
 @command{miditext} is not meant to support non-conforming MIDI files.
@@ -622,7 +643,7 @@ three, merge those two alternatives to suit the situation.
 If your document contains nontrivial examples of program code, we recommend releasing
 these examples in parallel under your choice of free software license, such as the GNU
 General Public License, to permit their use in free software.
- 
+
 
 @node Bibliography
 @chapter Bibliography

@@ -26,22 +26,22 @@ using namespace textmidi;
 using namespace textmidi::rational;
 
 
-std::int64_t textmidi::rational::RhythmRational::numerator() const
+int64_t textmidi::rational::RhythmRational::numerator() const
 {
     return numerator_;
 }
 
-std::int64_t textmidi::rational::RhythmRational::denominator() const
+int64_t textmidi::rational::RhythmRational::denominator() const
 {
     return denominator_;
 }
 
-void textmidi::rational::RhythmRational::numerator(std::int64_t numerator)
+void textmidi::rational::RhythmRational::numerator(int64_t numerator)
 {
     numerator_ = numerator;
 }
 
-void textmidi::rational::RhythmRational::denominator(std::int64_t denominator)
+void textmidi::rational::RhythmRational::denominator(int64_t denominator)
 {
     denominator_ = denominator;
 }
@@ -148,12 +148,12 @@ void textmidi::rational::RhythmRational::reduce()
     }
 }
 
-std::int64_t RhythmRational::most_positive_equal_divisor() const
+int64_t RhythmRational::most_positive_equal_divisor() const
 {
     return most_positive_equal_divisor(numerator_, denominator_);
 }
 
-std::int64_t RhythmRational::most_positive_equal_divisor(int64_t a, int64_t b) const
+int64_t RhythmRational::most_positive_equal_divisor(int64_t a, int64_t b) const
 {
     int64_t twos{1L};
     a = std::abs(a);
@@ -229,7 +229,7 @@ RhythmRational textmidi::rational::operator/(RhythmRational dividend, RhythmRati
     return dividend;
 }
 
-std::istream& textmidi::rational::operator>>(std::istream& is, RhythmRational& tr)
+istream& textmidi::rational::operator>>(istream& is, RhythmRational& tr)
 {
     auto cnt{is.rdbuf()->in_avail()};
     const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[[:digit:]]{1,19}))?)(.*))"};
@@ -298,7 +298,7 @@ textmidi::rational::RhythmRational textmidi::rational::abs(RhythmRational val)
     return val;
 }
 
-std::ostream& textmidi::rational::operator<<(std::ostream& os, RhythmRational tr)
+ostream& textmidi::rational::operator<<(ostream& os, RhythmRational tr)
 {
     auto flags{os.flags()};
     tr.reduce();

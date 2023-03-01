@@ -1,3 +1,22 @@
+2023-02-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.l: change text_09 to device_name.
+        Change text_08 to program_name.
+        Fix text events getting the last character trimmed off
+        if they are not quoted.
+        Support many named control IDs in textmidi.
+        * miditext.cc: support the control change ID strings.
+        Fix mishandling of empty string events with quotes.
+
+2023-02-27     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, GeneralMIDI.cc, MIDIKeyString.cc, Midi.cc, MidiEvents.h, 
+        MusicalForm.cc, RhythmRational.cc, Scales.cc, SmusTrackEvent.cc, 
+        Voice.cc, main.cc, miditext.cc, rational_support.cc, smustextmidi.cc, 
+        textmidicgm.cc, writesmus.cc: remove namespace qualifications
+        esp. "std::" from .cc files mostly; add count of rigid rhythms
+        to miditext --verbose, to make it easier to identify moused-in scores as
+        opposed to played-in scores.
+        * textmidi.l: Make the line counter slightly more accurate.
+
 2023-02-26     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.cc: fix duplicate rests at beginning of tracks in
         miditext --lazy usage.  The policies for making rests for

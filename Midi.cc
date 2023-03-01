@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -20,16 +20,14 @@
 using namespace std;
 using namespace textmidi;
 
-void
-textmidi::MidiHeader::to_bytes(MidiStreamAtom* bytes)
+void textmidi::MidiHeader::to_bytes(MidiStreamAtom* bytes)
 {
     MidiHeader* header_bytes{reinterpret_cast<MidiHeader*>(bytes)};
     *header_bytes = *this;
     header_bytes->swap();
 }
 
-void
-textmidi::MidiHeader::swap()
+void textmidi::MidiHeader::swap()
 {
     chunk_len_ = htobe32(chunk_len_);
     format_    = static_cast<MIDI_Format>(htobe16(static_cast<uint16_t>
@@ -38,8 +36,7 @@ textmidi::MidiHeader::swap()
     division_  = htobe16(division_);
 }
 
-std::ostream&
-textmidi::operator<<(std::ostream& os, textmidi::MIDI_Format mf)
+ostream& textmidi::operator<<(ostream& os, textmidi::MIDI_Format mf)
 {
     auto flags{os.flags()};
     textmidi::MIDI_Format mfcopy{mf};
@@ -57,13 +54,12 @@ textmidi::operator<<(std::ostream& os, textmidi::MIDI_Format mf)
     return os;
 }
 
-std::ostream&
-textmidi::operator<<(std::ostream& os, const MidiHeader& mh)
+ostream& textmidi::operator<<(ostream& os, const MidiHeader& mh)
 {
     auto flags{os.flags()};
-    os << mh.chunk_name_[0] << mh.chunk_name_[1] << mh.chunk_name_[2]
-        << mh.chunk_name_[3] << ' ' << mh.chunk_len_ << ' ' << mh.format_
-        << ' ' << mh.ntrks_ << ' ' << mh.division_;
+    os << mh.chunk_name_[0] << mh.chunk_name_[1]    << mh.chunk_name_[2]
+       << mh.chunk_name_[3] << ' ' << mh.chunk_len_ << ' ' << mh.format_
+       << ' ' << mh.ntrks_  << ' ' << mh.division_;
     static_cast<void>(os.flags(flags));
     return os;
 }

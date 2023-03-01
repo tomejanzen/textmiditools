@@ -575,7 +575,65 @@ pressure.
 @example
 CONTROL 13 64 10
 @end example
-Some MIDI controls have synonyms:
+Some MIDI control ID's have names:
+@itemize
+@item BREATH
+For example, BREATH 1 64
+@item SOFTPEDAL
+Use the synonym below, or 0 for off and 127 for on..
+@item PORTAMENTO
+Use the synonym below, or 0 for off and 127 for on..
+@item BANK_SELECT
+@item MODULATION
+@item FOOT_CONTROLLER
+@item PORTAMENTO_TIME
+@item DATA_ENTRY_MSB
+@item CHANNEL_VOLUME
+@item BALANCE
+@item PAN
+This is a raw binary value;  Use the synonym pan, below, for a signed pan value.
+@item EXPRESSION
+@item EFFECT_1
+@item EFFECT_2
+@item GENERAL_PURPOSE_1
+@item GENERAL_PURPOSE_2
+@item GENERAL_PURPOSE_3
+@item GENERAL_PURPOSE_4
+@item DAMPER
+@item PORTAMENTO_ON_OFF
+@item SOSTENUTO
+Use the synonym below, or 0 for off and 127 for on..
+@item LEGATO_FOOT
+@item HOLD_2
+@item SOUND_VARIATION
+@item TIMBRE_INTENSITY
+@item RELEASE_TIME
+@item ATTACK_TIME
+@item BRIGHTNESS
+@item DECAY_TIME
+@item VIBRATO_RATE
+@item VIBRATO_DEPTH
+@item SOUND_CONTROLLER_9
+@item SOUND_CONTROLLER_10
+@item GENERAL_PURPOSE_5
+@item GENERAL_PURPOSE_6
+@item GENERAL_PURPOSE_7
+@item GENERAL_PURPOSE_8
+@item PORTAMENTO
+@item HIRES_VELOCITY_MSB
+@item REVERB_SEND_LEVEL
+@item TREMOLO_DEPTH
+@item CHORUS_SEND_LEVEL
+@item CELESTE_DEPTH
+@item EFFECTS_5_DEPTH
+@item DATA_INCREMENT
+@item DATA_DECREMENT
+@item NON_REGISTERED_PARAMETER_LSB
+@item NON_REGISTERED_PARAMETER_MSB
+@item REGISTERED_PARAMETER_LSB
+@item REGISTERED_PARAMETER_MSB
+@end itemize
+Some MIDI controls have synonyms (that is, leave off the @quotedblleft{}CONTROL@quotedblright{}):
 @item RESETALL channel_num
 @cindex RESETALL
 This would probably not be used in a MIDI file, but only by a MIDI player.

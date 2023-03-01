@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -17,7 +17,7 @@ using namespace std;
 using namespace textmidi;
 using namespace textmidi::cgm;
 
-vector<vector<std::string>> cgm::scale_strs{
+vector<vector<string>> cgm::scale_strs{
     // 0: DiatonicOnC
     {"C-1", "D-1", "E-1", "F-1", "G-1", "A-1", "B-1",
      "C0", "D0", "E0", "F0", "G0", "A0", "B0",

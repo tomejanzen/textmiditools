@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
-// miditext Version 1.0.42
+// miditext Version 1.0.43
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -33,6 +33,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <set>
 #include <map>
 #include <filesystem>
 #include <ranges>
@@ -182,7 +183,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.42\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.43\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -192,7 +193,7 @@ int main(int argc, char *argv[])
     if (var_map.count(MidiOpt))
     {
         midi_filename = var_map[MidiOpt].as<string>();
-        if (!std::filesystem::exists(midi_filename))
+        if (!filesystem::exists(midi_filename))
         {
             const string errstr{((string{MidiOpt} += ' ') += midi_filename) += " File does not exist.\n"};
             cerr  << errstr;
@@ -242,7 +243,7 @@ int main(int argc, char *argv[])
             cout << logstr;
         }
     }
-    if (answer && std::filesystem::exists(midi_filename))
+    if (answer && filesystem::exists(midi_filename))
     {
         const string answer_string{(string{"Overwrite "} += midi_filename) += "?\n"};
         cout << answer_string;
@@ -255,7 +256,7 @@ int main(int argc, char *argv[])
     }
     if (midi_filename == output_filename)
     {
-        std::cerr << "You would have overwritten the source name!; Must exit!\n";
+        cerr << "You would have overwritten the source name!; Must exit!\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -275,7 +276,7 @@ int main(int argc, char *argv[])
         midifilestr.read(reinterpret_cast<char*>(midivector.data()), len);
         midifilestr.close();
     }
-    catch (std::ios_base::failure &iosfail)
+    catch (ios_base::failure &iosfail)
     {
         const string errstr{string{iosfail.what()} += '\n'};
         cerr << errstr;
@@ -306,7 +307,7 @@ int main(int argc, char *argv[])
     text_filestr << "FILEHEADER ";
     midiiter += sizeof(MidiHeader);
     const uint32_t ticksperquarter{midi_header.division_};
-    uint32_t ticks_per_whole{ticksperquarter * 4};
+    uint32_t ticks_per_whole{ticksperquarter * QuartersPerWhole};
 
     string textmidi_str{};
     textmidi_str.reserve(32);
@@ -363,23 +364,48 @@ int main(int argc, char *argv[])
                  << ": " << setw(8) << mdep.size() << '\n';
         }
     }
-    for (auto& mdep : midi_delay_event_tracks)
+    int64_t rigid_rhythms_count{};
+    int64_t non_rigid_rhythms_count{};
+    int64_t zero_rhythms_count{};
+    for (auto& mdet : midi_delay_event_tracks)
     {
-        const auto i{std::distance(&(*midi_delay_event_tracks.begin()), &mdep)};
+        const auto i{std::distance(&(*midi_delay_event_tracks.begin()), &mdet)};
         textmidi_str.clear();
         ((textmidi_str += "\nSTARTTRACK ; bytes in track: ") += lexical_cast<string>
            (stream_length_pairs[i].second)) += '\n';
         text_filestr << textmidi_str;
+        if (verbose)
+        {
+            // If a score was entered in a scoring program rather than played in,
+            // it should largely contain delays that are simply related to
+            // whole notes and their musical ratios will have low divisors.
+            const set<int64_t> musical_divisors{1, 2, 4, 6, 8, 12, 16};
+            const auto ticks_per_whole{QuartersPerWhole * ticksperquarter};
+            zero_rhythms_count += ranges::count_if(mdet, [](MidiDelayEventPair mde) { return !mde.first; } );
+            rigid_rhythms_count += ranges::count_if(mdet,
+                [ticks_per_whole, musical_divisors](MidiDelayEventPair mde) {
+                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole)};
+                return musical_divisors.contains(rr.denominator()); } );
+            non_rigid_rhythms_count += ranges::count_if(mdet,
+                [ticks_per_whole, musical_divisors](MidiDelayEventPair mde) {
+                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole)};
+                return !musical_divisors.contains(rr.denominator()); } );
+        }
         if (lazy)
         {
-            PrintLazyTrack print_lazy_track{mdep, quantum, ticksperquarter};
+            PrintLazyTrack print_lazy_track{mdet, quantum, ticksperquarter};
             text_filestr << print_lazy_track << '\n';
         }
         else
         {
-            ranges::copy(mdep, ostream_iterator<MidiDelayEventPair>(text_filestr,
-               "\n"));
+            ranges::copy(mdet, ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
         }
+    }
+    if (verbose)
+    {
+        rigid_rhythms_count -= zero_rhythms_count;
+        const double rigid_rhythms_fraction{static_cast<double>(rigid_rhythms_count) / static_cast<double>(non_rigid_rhythms_count + rigid_rhythms_count)};
+        cout << "Rigid rhythms: " << (rigid_rhythms_fraction * 100.0) << '%' << '\n';
     }
     return EXIT_SUCCESS;
 }

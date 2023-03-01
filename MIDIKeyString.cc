@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // MIDIKeyString.cc
 //
@@ -32,21 +32,21 @@ using namespace textmidi;
 namespace {
     // This map is actually from the letter of a note in ASCII - 'A'
     // to a musical note in which C is 0.
-    const std::map<char, int> noteletter_to_halfstep
+    const map<char, int> noteletter_to_halfstep
         {{0, 9}, {1, 11}, {2, 0}, {3, 2}, {4, 4}, {5, 5}, {6, 7} };
     // This map adjusts a pitch number by the effect of an accidental
     // b is flat
     // # is sharp
     // x is double sharp
     // bb as double flat is handled separately.
-    const std::map<char, int> accidental_to_deltahalfstep{{'b', -1},
+    const map<char, int> accidental_to_deltahalfstep{{'b', -1},
                                                           {'#', 1},
                                                           {'x', 2}};
     // Note names that begin with plus or minus (+|-)
     // are deltas.  They can only be "K" key numbers, and step
     // in the direction from the previous note in the current track
     // as specified.
-    const std::map<char, int> sign_to_deltahalfstep{{'-', -1}, {'+', 1}};
+    const map<char, int> sign_to_deltahalfstep{{'-', -1}, {'+', 1}};
 
     //
     // notename_to_halfstep converts a note name string into
@@ -358,7 +358,7 @@ pair<int, bool> textmidi::pitchname_to_keynumber(const string& pitchname)
     return make_pair(keynumber, is_delta);
 }
 
-bool textmidi::CompareLowerNoteName::operator()(const std::string& left, const std::string& right) const
+bool textmidi::CompareLowerNoteName::operator()(const string& left, const string& right) const
 {
     return pitchname_to_keynumber(left) < pitchname_to_keynumber(right);
 }

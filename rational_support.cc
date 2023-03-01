@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.42
+// TextMIDITools Version 1.0.43
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -41,7 +41,7 @@ RhythmRational textmidi::rational::round(RhythmRational ratnum)
    return ratnum;
 }
 
-std::int64_t textmidi::rational::snap_to_int(RhythmRational num, RhythmRational grid)
+int64_t textmidi::rational::snap_to_int(RhythmRational num, RhythmRational grid)
 {
     const auto modnum{(num % grid)};
     RhythmRational snapped{ (modnum >= (grid / RhythmRational{2})) ?

@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.43
+// TextMIDITools Version 1.0.44
 //
-// miditext Version 1.0.43
+// miditext Version 1.0.44
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -65,7 +65,7 @@ namespace
             vector<StreamLengthPair>& track_iters, size_t expected_track_qty)
     {
         track_iters.clear();
-        track_iters.reserve(20);
+        track_iters.reserve(140); // one file had 140 tracks
         while (midiiter != midiend)
         {
             if (! ((*(midiiter++) == 'M')
@@ -113,6 +113,8 @@ namespace
             ticks_per_whole_{ticks_per_whole},
             quantum_{quantum}
         {
+            const auto bytes_per_event{3}; // observed is around 3.3 bytes/event
+            message_pairs_.reserve(stream_length_pair.second / bytes_per_event);
         }
         void operator()()
         {
@@ -183,7 +185,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.43\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.44\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";

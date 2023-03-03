@@ -1,3 +1,12 @@
+2023-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: Make some names case-insensitive:
+        control ID names; text event types; control synonyms, on and off.
+        * miditext.cc, textmidi.l, MidiEvents.cc: use vector reserve on
+        byte vectors and event vectors based on 3.3 bytes/MIDI event.
+        * MidiEvents.cc/2600: fix a bug of missing LAZY command in miditext --lazy.
+        In miditext --lazy conversion, write zero-long notes if a non-note event 
+        occurs with zero delay after a note-on.  Document in miditext.texi.
+
 2023-02-28     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.h, textmidi.l: change text_09 to device_name.
         Change text_08 to program_name.

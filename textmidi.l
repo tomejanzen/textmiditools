@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.43
+** TextMIDITools Version 1.0.44
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -526,7 +526,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         clog << "Found " << yytext << '\n';
     }
     trackchunk.clear();
-    trackchunk.reserve(65536);
+    trackchunk.reserve(33000); // about the longest track I've seen
     trackchunk.push_back('M');
     trackchunk.push_back('T');
     trackchunk.push_back('r');
@@ -659,6 +659,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     istringstream iss(yytext);
     string meta_name{};
     iss >> meta_name;
+    to_upper(meta_name);
     auto prefix{text_meta_map.find(meta_name)};
     if (prefix != text_meta_map.end())
     {
@@ -946,13 +947,14 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     }
     else
     {
-       if (text_control_map.contains(control_id_str))
-       {
-           control_id = text_control_map.at(control_id_str);
-       }
-       else
-       {
-           cerr << "Control invalid ID: " << control_id_str << '\n';
+        to_upper(control_id_str);
+        if (text_control_map.contains(control_id_str))
+        {
+            control_id = text_control_map.at(control_id_str);
+        }
+        else
+        {
+            cerr << "Control invalid ID: " << control_id_str << '\n';
        }
     }
 
@@ -980,6 +982,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t channel{};
     istringstream iss{yytext};
     iss >> namestr >> channel;
+    to_upper(namestr);
     shift_channel(channel);
 
     try
@@ -1040,6 +1043,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string onoff{};
     istringstream iss(yytext);
     iss >> namestr >> channel >> onoff;
+    to_upper(namestr);
     shift_channel(channel);
     int32_t control_id{};
     try

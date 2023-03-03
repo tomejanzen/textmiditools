@@ -313,10 +313,18 @@ but @command{textmidi} always creates the standard event with five total bytes:
 @node Known Bugs
 @chapter Known Bugs
 @cindex bugs
-Although the DETAIL mode representation should be accurate,
-if @minus{}@minus{}lazy is selected, and if a track in the MIDI file has
+Although the DETAIL mode representation is believed to be an accurate
+representation of the Standard MIDI file,
+if @minus{}@minus{}lazy is selected with @command{miditext}, and if a track in the MIDI file has
 overlapping note events with asynchronous start and stop times, the LAZY
 mode representation may not be accurate.
+@command{miditext} can output a duration of zero for some notes if a
+non-note event (for example, CONTROL, or SEQUENCER_SPECIFIC) immediately
+follows a NOTE_ON with no delay, before the NOTE_OFF or NOTE_ON with velocity zero.
+The finite delay will follow the non-note event.  If this is inconvenient, you can
+edit the output of @command{miditext -lazy} to either move the non-note event before or
+after the note, or create a DETAIL section around the note and non-note event to get
+the effect desired during the note's duration.
 @command{miditext} is not meant to support non-conforming MIDI files.
 Neither @command{miditext} nor @command{textmidi} are meant to support
 real-time MIDI messages that are not intended for use in MIDI files.

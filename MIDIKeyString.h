@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // MIDIKeyString.cc
 //
@@ -17,6 +17,8 @@
 #include <string>
 #include <memory>
 
+#include "Midi.h"
+
 namespace textmidi
 {
     constexpr int halfsteps_per_octave{12};
@@ -28,6 +30,9 @@ namespace textmidi
     {
         bool operator()(const std::string& left, const std::string& right) const;
     };
+
+
+    
 }
 #endif
 

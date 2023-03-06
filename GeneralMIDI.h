@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -14,6 +14,8 @@
 #include <utility>
 #include <map>
 
+#include "Midi.h"
+
 namespace textmidi
 {
     namespace cgm
@@ -21,7 +23,7 @@ namespace textmidi
         const std::pair IdiophoneRange{std::string{"Eb1"}, std::string{"Eb6"}};
         constexpr int MIDIInstrumentsPerGroup{8};
         constexpr int IdiophoneChannel{10};
-        enum class GeneralMIDIGroup
+        enum class GeneralMIDIGroup : int
         {
             Piano               = (1 << 0),
             ChromaticPercussion = (1 << 1),
@@ -44,7 +46,7 @@ namespace textmidi
             Idiophone           = (1 << 16)
         };
 
-        extern std::map<std::string_view, GeneralMIDIGroup> program_group_map;
+        extern const NumStringMap<GeneralMIDIGroup> program_group_map;
 
         constexpr auto MaxNoteStrLen{6}; // "Db-1" + null is 5
         constexpr auto MaxMIDIProgramNameLen{48};
@@ -57,7 +59,6 @@ namespace textmidi
         };
 
         const extern MIDI_Program midi_programs[];
-
     }
 }
 

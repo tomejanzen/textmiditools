@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -89,6 +89,13 @@ namespace textmidi
     const MidiStreamArray2 time_signature_prefix  {0x58, 4}; // prefix, length
     const MidiStreamArray2 key_signature_prefix   {0x59, 2}; // prefix, length
     const MidiStreamArray2 xmf_patch_type_prefix  {0x60, 1}; // GM1, or GM2, or DLS.
+    enum class XmfPatchTypeEnum : MidiStreamAtom
+    {
+        GM1 = 1,
+        GM2 = 2,
+        DLS = 3
+    };
+
     const MidiStreamAtom patch_type_gm1{0x01};
     const MidiStreamAtom patch_type_gm2{0x02};
     const MidiStreamAtom patch_type_dls{0x03};
@@ -104,7 +111,7 @@ namespace textmidi
         device_name_prefix[0], text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
         text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0], midi_channel_prefix[0],
         end_of_track_prefix[0], tempo_prefix[0], smpte_prefix[0], time_signature_prefix[0],
-        key_signature_prefix[0], sequencer_specific_prefix[0], midi_port_prefix[0]};
+        key_signature_prefix[0], xmf_patch_type_prefix[0], sequencer_specific_prefix[0], midi_port_prefix[0]};
 
     // fixed-length meta-events
     constexpr MidiStreamAtom smpte_24fps          {0};
@@ -163,6 +170,7 @@ namespace textmidi
     const MidiStreamArray1 control_portamento_on_off{0x41};
     const MidiStreamArray1 control_sostenuto       {0x42};
     const MidiStreamArray1 control_softpedal       {0x43};
+    const MidiStreamAtom   control_pedalthreshold  {0x40};
     const MidiStreamArray1 control_legato_foot     {0x44};
     const MidiStreamArray1 control_hold_2           {0x45};
     const MidiStreamArray1 control_sound_variation {0x46};
@@ -180,7 +188,7 @@ namespace textmidi
     const MidiStreamArray1 control_general_purpose_6{0x51};
     const MidiStreamArray1 control_general_purpose_7{0x52};
     const MidiStreamArray1 control_general_purpose_8{0x53};
-    const MidiStreamArray1 control_portamento     {0x54};
+    const MidiStreamArray1 control_portamento       {0x54};
     const MidiStreamArray1 control_hires_velocity_msb{0x58};
 
     const MidiStreamArray1 control_reverb_send_level {0x5b};
@@ -216,52 +224,89 @@ namespace textmidi
 
     const int SMPTE_hours_max{23};
 
-    using SmpteFpsMap = std::map<int, std::string>;
-    const SmpteFpsMap smpte_fps_map
+    template<typename NumType> class NumStringMap
     {
-        {0, "smpte_24fps"},
-        {1, "smpte_25fps"},
-        {2, "smpte_30fpsdropframe"},
-        {3, "smpte_30fpsnondropframe"}
+      public:
+        NumStringMap(std::initializer_list<std::pair<NumType, std::string_view> > in_initlist)
+          : num_string_map_(),
+            string_num_map_()
+        {
+            for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
+            {
+                num_string_map_.emplace(*mi);
+                string_num_map_.emplace(std::pair<std::string_view, NumType>(mi->second, mi->first));
+            }
+        }
+
+        NumStringMap(std::initializer_list<std::pair<std::string_view, NumType> > in_initlist)
+          : num_string_map_(),
+            string_num_map_()
+        {
+            for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
+            {
+                num_string_map_.emplace(std::pair<NumType, std::string_view>(mi->second, mi->first));
+                string_num_map_.emplace(*mi);
+            }
+        }
+
+        std::string_view at(NumType num) const
+        {
+            return num_string_map_.at(num);
+        }
+
+        std::string_view operator[](NumType num) const
+        {
+            return num_string_map_.at(num);
+        }
+
+        NumType at(const std::string_view& sv) const
+        {
+            return string_num_map_.at(sv);
+        }
+
+        NumType operator[](const std::string_view& sv) const
+        {
+            return string_num_map_.at(sv);
+        }
+
+        bool contains(NumType num) const
+        {
+            return num_string_map_.contains(num);
+        }
+
+        bool contains(std::string_view sv) const
+        {
+            return string_num_map_.contains(sv);
+        }
+
+        bool contains(std::initializer_list<std::string_view> candidates)
+        {
+            bool rtn{};
+            for (auto candi{candidates.begin()}; candi != candidates.end(); ++candi)
+            {
+                if (this->contains(*candi))
+                {
+                    rtn = true;
+                }
+            }
+            return rtn;
+        }
+
+        const std::map<std::string_view, NumType> string_num_map() const
+        {
+            return string_num_map_;
+        }
+      private:
+        std::map<NumType, std::string_view> num_string_map_;
+        std::map<std::string_view, NumType> string_num_map_;
     };
 
-    using SmpteFpsReverseMap = std::map<std::string, int>;
-    const SmpteFpsReverseMap smpte_fps_reverse_map
-    {
-        {"smpte_24fps", 0},
-        {"smpte_25fps", 1},
-        {"smpte_30fpsdropframe", 2},
-        {"smpte_30fpsnondropframe", 3}
-    };
+    extern const NumStringMap<int> smpte_fps_map;
 
-    using DynamicsReverseMap = std::map<int, std::string>;
-    const DynamicsReverseMap dynamics_reverse_map
-    {
-        { 10, "pppp"},
-        { 25, "ppp"},
-        { 40, "pp"},
-        { 50, "p"},
-        { 62, "mp"},
-        { 75, "mf"},
-        { 90, "forte"},
-        {110, "ff"},
-        {120, "fff"},
-        {127, "ffff"}
-    };
-    using DynamicsMap = std::map<std::string, int>;
-    const DynamicsMap dynamics_map
-    {
-        {"pppp",  10},
-        {"ppp",   25},
-        {"pp",    40},
-        {"p",     50},
-        {"mp",    62},
-        {"mf",    75},
-        {"forte", 90},
-        {"ff",    110},
-        {"fff",   120},
-        {"ffff",  127}
-    };
+    extern const NumStringMap<int> dynamics_map;
+
+    extern const NumStringMap<int> pan_map;
+
     constexpr std::int64_t QuartersPerWhole(4);
 
     constexpr size_t bits_per_byte{8};
@@ -277,13 +322,10 @@ namespace textmidi
         MultiSequence
     };
 
-    using FormatMap = std::map<std::string, MIDI_Format>;
-    const FormatMap format_map
-    {
-        {"MONOTRACK", MIDI_Format::MonoTrack},
-        {"MULTITRACK", MIDI_Format::MultiTrack},
-        {"MULTISEQUENCE", MIDI_Format::MultiSequence}
-    };
+    extern const NumStringMap<MIDI_Format> format_map;
+    extern const NumStringMap<MidiStreamAtom> text_meta_map;
+    extern const NumStringMap<MidiStreamAtom> control_function_map;
+    extern const NumStringMap<XmfPatchTypeEnum> xmf_patch_type_map;
 
     std::ostream& operator<<(std::ostream& os, MIDI_Format mf);
 

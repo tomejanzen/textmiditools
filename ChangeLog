@@ -1,3 +1,23 @@
+2023-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, textmidi.l, textmidi.texi:  clean up CONTROL,
+        continue to maintain the abbreviated forms for some controls.
+        * Midi.{h,cc}, MidiEvents.{h,cc}, textmidi.l, textmidi.vim:
+        Support XMF PATCH TYPE and update textmidi.vim editor environment.
+
+2023-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.{.h,cc}, GeneralMIDI.{h,cc}, Midi.{h,cc}, MidiEvents.cc, 
+        * miditext.cc, textmidi.l, textmidi.texi, textmidi.vim, textmidicgm.cc:
+        Eliminate CONTROL synonyms; they all have to be "CONTROL [chan] [id] [value].
+        Propagate use of NumStringMap template; move more maps into Midi.h/cc.
+        This eliminates duplicate maps in different direections at least mostly.
+        Make ON and OFF work with softpedal and sostenuto.
+
+2023-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: use string_view in string/code maps.
+        * MIDIKeyString.h, Midi.cc, Midi.h, MidiEvents.cc, SmusTrackEvent.cc,
+        * SmusTrackEvent.h, textmidi.l, textmidi.texi: use a new bidirectional
+        map for strings and numbers.
+
 2023-03-02     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.l: Make some names case-insensitive:
         control ID names; text event types; control synonyms, on and off.

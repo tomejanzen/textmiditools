@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // MIDIKeyString.cc
 //

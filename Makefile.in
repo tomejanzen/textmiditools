@@ -1208,27 +1208,27 @@ RhythmRational.o: RhythmRational.cc RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o $(AM_LDFLAGS) 
-textmidicgm.o: textmidicgm.cc MIDIKeyString.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Options.h Composer.h RhythmRational.h
+textmidicgm.o: textmidicgm.cc MIDIKeyString.h Midi.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Options.h Composer.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-MIDIKeyString.o : MIDIKeyString.cc MIDIKeyString.h
+MIDIKeyString.o: MIDIKeyString.cc Midi.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MusicalForm.o: MusicalForm.cc MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Midi.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Track.o: Track.cc Track.h NoteEvent.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Voice.o: Voice.cc Voice.h cgmlegacy.h MIDIKeyString.h
+Voice.o: Voice.cc Voice.h cgmlegacy.h MIDIKeyString.h Midi.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Scales.o : Scales.cc Scales.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-NoteEvent.o: NoteEvent.cc NoteEvent.h RhythmRational.h MIDIKeyString.h
+NoteEvent.o: NoteEvent.cc NoteEvent.h RhythmRational.h MIDIKeyString.h Midi.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h RhythmRational.h
+GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Midi.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Composer.o: Composer.cc Midi.h Composer.h RhythmRational.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h GnuPlot.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-GeneralMIDI.o : GeneralMIDI.cc GeneralMIDI.h
+GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
 clean:

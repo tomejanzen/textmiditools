@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
-// miditext Version 1.0.44
+// miditext Version 1.0.45
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.44\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.45\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -328,6 +328,7 @@ int main(int argc, char *argv[])
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
     vector<MidiDelayEventPairs> midi_delay_event_tracks(stream_length_pairs.size());
 
+#define DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
     for (auto& ti : stream_length_pairs)
     {

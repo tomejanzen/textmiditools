@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -411,9 +411,9 @@ string SmusTrackEventVolume::textmidi()
     str += pre_rest();
     if (current_dynamic() != data())
     {
-       if (dynamics_reverse_map.contains(data()))
+       if (dynamics_map.contains(data()))
        {
-           (str += dynamics_reverse_map.at(data())) += '\n';
+           (str += dynamics_map.at(data())) += '\n';
        }
        else
        {
@@ -474,11 +474,13 @@ string SmusTrackEventClef::textmidi()
     return str;
 }
 
-map<int, string> SmusTrackEventClef
-    ::clef_map{{0, string{"Treble"}},
-               {1, string{"Bass"}},
-               {2, string{"Alto"}},
-               {3, string{"Tenor"}}};
+const textmidi::NumStringMap<int> smus::clef_map
+{
+   {0, string{"Treble"}},
+   {1, string{"Bass"}},
+   {2, string{"Alto"}},
+   {3, string{"Tenor"}}
+};
 
 string SmusTrackEventTempo::textmidi()
 {
@@ -549,6 +551,10 @@ std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const Smus
     }
     return teb;
 }
+
+
+
+
 
 int  smus::SmusTrackEventBase::current_dynamic_{64};
 bool smus::SmusTrackEventBase::i_am_lazy_{false};

@@ -505,7 +505,16 @@ The value for ticksperbeat is MIDI ticks in a beat.  It is often 240, but 384 is
 @example
 TIME_SIGNATURE 3 4 240
 @end example
-@item SMPTE_OFFSET @lbracechar{}smpte_24fps|smpte_25fps|smpte_30fpsdropframe|smpte_30fpsnondropframe@rbracechar{} HH:MM:SS:Frame:framefraction
+@item XMF_PATCH_TYPE {GM1|GM2|DLS}
+Selects the XMF patch type: General MIDI 1, General MIDI 2, or DLS, which refer to the
+synthesizer type.  XMF_PATCH_TYPE should appear only as the first event of 
+a given track, but textmidi does not enforce it.
+@example
+XMF_PATCH_TYPE GM1
+XMF_PATCH_TYPE GM2
+XMF_PATCH_TYPE DLS
+@end example
+@item SMPTE_OFFSET @lbracechar{}SMPTE_24FPS|SMPTE_25FPS|SMPTE_30FPSDROPFRAME|SMPTE_30FPSNONDROPFRAME@rbracechar{} HH:MM:SS:Frame:framefraction
 @cindex SMPTE_OFFSET  
 @example
 SMPTE_OFFSET 07:47:13:07:11
@@ -570,123 +579,305 @@ POLY_KEY_PRESSURE 1 G4 100
 A succession of POLY_KEY_PRESSURE commands, with delays between them, can
 create swelling and fading effects if the player used supports poly key
 pressure.
-@item CONTROL channel_num control_num value_num
+@item CONTROL channel_num controller_id value_num
 @cindex CONTROL
+CONTROL allows the setting of various controls on channels.
+The control ID may, optionally, be one of the strings below, or
+any valid number in 0..127, including those represented by strings.
+About a half-dozen of the controls have shorter forms available, but
+the @command{miditext} program always writes the full form using the
+CONTROL keyword.
 @example
 CONTROL 13 64 10
 @end example
-Some MIDI control ID's have names:
+Some MIDI controller ID's have names:
 @itemize
 @item BREATH
-For example, BREATH 1 64
-@item SOFTPEDAL
-Use the synonym below, or 0 for off and 127 for on..
+For example, 
+@example
+CONTROL 1 BREATH 64
+@end example
+An abbreviated form is available.  Leave off the CONTROL:
+@example
+BREATH [chan] [velocity]
+BREATH  11 99
+@end example
+
+@item SOFTPEDAL value
+Use 0 for off and 127 for on.
+@example
+CONTROL 1 SOFTPEDAL OFF
+CONTROL 1 SOFTPEDAL ON
+CONTROL 1 SOFTPEDAL 0
+CONTROL 1 SOFTPEDAL 127
+@end example
+An abbreviated form is supported.  Leave off the CONTROL.
+@example
+SOFTPEDAL [chan in 1..16] [value]
+SOFTPEDAL 13 127
+SOFTPEDAL 13 1
+@end example
+
 @item PORTAMENTO
-Use the synonym below, or 0 for off and 127 for on..
+This is MIDI portamento control.
+@example
+CONTROL PORTAMENTO 0
+CONTROL PORTAMENTO 127
+@end example
+An abbreviated form is supported.  Leave off the CONTROL.
+@example
+PORTAMENTO [chan] [value]
+PORTAMENTO 14 120
+@end example
+
 @item BANK_SELECT
+@example
+CONTROL 2 BANK_SELECT 2
+@end example
 @item MODULATION
+@example
+CONTROL 4 MODULATION 3
+@end example
 @item FOOT_CONTROLLER
+@example
+CONTROL 1 FOOT_CONTROLLER 0 
+@end example
 @item PORTAMENTO_TIME
+@example
+CONTROL 1 PORTAMENTO_TIME 5
+@end example 
 @item DATA_ENTRY_MSB
 @item CHANNEL_VOLUME
+@example
+CONTROL 1 CHANNEL_VOLUME 74
+@end example 
 @item BALANCE
-@item PAN
-This is a raw binary value;  Use the synonym pan, below, for a signed pan value.
+@item PAN channel_num LEFT|CENTER|RIGHT|@lbracechar{}-64..63@rbracechar{}
+@cindex PAN 
+When using the numeric pan values, note that -64 is left-most, 63 is
+right-most, and 0 is in the center.
+@example
+CONTROL 1 PAN CENTER
+CONTROL 1 PAN LEFT
+CONTROL 1 PAN RIGHT
+CONTROL 1 PAN -10
+CONTROL 1 PAN 12
+@end example
 @item EXPRESSION
+@example
+CONTROL 1 EXPRESSION 17
+@end example 
 @item EFFECT_1
+@example
+CONTROL 1 EFFECT_1 18
+@end example 
 @item EFFECT_2
+@example
+CONTROL 1 EFFECT_2 19
+@end example 
 @item GENERAL_PURPOSE_1
+@example
+CONTROL 1 GENERAL_PURPOSE_1 20
+@end example 
 @item GENERAL_PURPOSE_2
+@example
+CONTROL 1 GENERAL_PURPOSE_2 126
+@end example 
 @item GENERAL_PURPOSE_3
+@example
+CONTROL 1 GENERAL_PURPOSE_3 125
+@end example 
 @item GENERAL_PURPOSE_4
+@example
+CONTROL 1 GENERAL_PURPOSE_4 124
+@end example 
 @item DAMPER
-@item PORTAMENTO_ON_OFF
-@item SOSTENUTO
-Use the synonym below, or 0 for off and 127 for on..
-@item LEGATO_FOOT
-@item HOLD_2
-@item SOUND_VARIATION
-@item TIMBRE_INTENSITY
-@item RELEASE_TIME
-@item ATTACK_TIME
-@item BRIGHTNESS
-@item DECAY_TIME
-@item VIBRATO_RATE
-@item VIBRATO_DEPTH
-@item SOUND_CONTROLLER_9
-@item SOUND_CONTROLLER_10
-@item GENERAL_PURPOSE_5
-@item GENERAL_PURPOSE_6
-@item GENERAL_PURPOSE_7
-@item GENERAL_PURPOSE_8
-@item PORTAMENTO
-@item HIRES_VELOCITY_MSB
-@item REVERB_SEND_LEVEL
-@item TREMOLO_DEPTH
-@item CHORUS_SEND_LEVEL
-@item CELESTE_DEPTH
-@item EFFECTS_5_DEPTH
-@item DATA_INCREMENT
-@item DATA_DECREMENT
-@item NON_REGISTERED_PARAMETER_LSB
-@item NON_REGISTERED_PARAMETER_MSB
-@item REGISTERED_PARAMETER_LSB
-@item REGISTERED_PARAMETER_MSB
-@end itemize
-Some MIDI controls have synonyms (that is, leave off the @quotedblleft{}CONTROL@quotedblright{}):
-@item RESETALL channel_num
-@cindex RESETALL
-This would probably not be used in a MIDI file, but only by a MIDI player.
-Nevertheless it is available in @command{textmidi}.
-@item ALLNOTES_OFF channel_num
-@cindex ALLNOTES_OFF
-This would probably not be used in a MIDI file, but only by a MIDI player.
-Nevertheless it is available in @command{textmidi}.
-@item ALL_SOUND_OFF channel_num
-@cindex ALL_SOUND_OFF
-This would probably not be used in a MIDI file, but only by a MIDI player.
-Nevertheless it is available in @command{textmidi}.
-@item DAMPER channelnum value
 @cindex DAMPER
-The damper pedal on a piano.
+The damper pedal on a piano.  It supports a value in 0..127.
 @example
-DAMPER 6 64
+CONTROL 6 DAMPER 0
+CONTROL 6 DAMPER 127
 @end example
-@item SOFTPEDAL channelnum value
-@cindex SOFTPEDAL
-The soft pedal on a piano.
 @example
-SOFTPEDAL 7 121
-@end example
-@item PORTAMENTO channel_num ON|OFF
-@cindex PORTAMENTO
+An abbreviated form is supported.  Leave off the CONTROL.
 @example
-PORTAMENTO 8 ON
-PORTAMENTO 8 OFF
+DAMPER [chan] [value]
+DAMPER 12 122
 @end example
-@item SOSTENUTO channel_num ON|OFF
+
+@end example
+@item PORTAMENTO_ON_OFF
+@example
+CONTROL 1 PORTAMENTO_ON_OFF 0
+CONTROL 1 PORTAMENTO_ON_OFF 127
+@end example 
+@item SOSTENUTO 
 @cindex SOSTENUTO
 The sostenuto pedal on a piano: only the keys being held at the time
 are sustained, not notes following the pedal.
 @example
-SOSTENUTO 11 ON
-SOSTENUTO 11 OFF
+CONTROLLER 1 SOSTENUTO 127
+CONTROLLER 1 SOSTENUTO 0
+CONTROLLER 1 SOSTENUTO ON
+CONTROLLER 1 SOSTENUTO OFF
 @end example
-@item BREATH channel_num value_num
-@cindex BREATH
+There is an abbreviated form.  Leave off the CONTROL.
 @example
-BREATH 12 53
+SOSTENUTO [chan] [ON/OFF]
+SOSTENUTO 16 ON
+SOSTENUTO 16 OFF
 @end example
-@item PAN channel_num left|center|right|@lbracechar{}-64..63@rbracechar{}
-@cindex PAN
-When using the numeric pan values, note that -64 is left-most, 63 is
-right-most, and 0 is in the center.
+@item LEGATO_FOOT
 @example
-PAN 13 left
-PAN 13 center 
-PAN 13 right 
-PAN 13 33
+CONTROL 1 LEGATO_FOOT
+@end example 
+@item HOLD_2
+@example
+CONTROL 1 HOLD_2
+@end example 
+@item SOUND_VARIATION
+@example
+CONTROL 1 SOUND_VARIATION
+@end example 
+@item TIMBRE_INTENSITY
+@example
+CONTROL 1 TIMBRE_INTENSITY
+@end example 
+@item RELEASE_TIME
+@example
+CONTROL 1 RELEASE_TIME 63
 @end example
+@item ATTACK_TIME
+@example
+CONTROL 1 ATTACK_TIME 63
+@end example
+@item BRIGHTNESS
+@example
+CONTROL 1 BRIGHTNESS 63
+@end example
+@item DECAY_TIME
+@example
+CONTROL 1 DECAY_TIME 63
+@end example
+@item VIBRATO_RATE
+@example
+CONTROL 1 VIBRATO_RATE 63
+@end example
+@item VIBRATO_DEPTH
+@example
+CONTROL 1 VIBRATO_DEPTH 63
+@end example
+@item SOUND_CONTROLLER_9
+@example
+CONTROL 1 SOUND_CONTROLLER_9 63
+@end example
+@item SOUND_CONTROLLER_10
+@example
+CONTROL 1 SOUND_CONTROLLER_10 63
+@end example
+@item GENERAL_PURPOSE_5
+@example
+CONTROL 1 GENERAL_PURPOSE_5 63
+@end example
+@item GENERAL_PURPOSE_6
+@example
+CONTROL 1 GENERAL_PURPOSE_6 63
+@end example
+@item GENERAL_PURPOSE_7
+@example
+CONTROL 1 GENERAL_PURPOSE_7 63
+@end example
+@item GENERAL_PURPOSE_8
+@example
+CONTROL 1 GENERAL_PURPOSE_8 63
+@end example
+@item HIRES_VELOCITY_MSB
+@example
+CONTROL 1 HIRES_VELOCITY_MSB 63
+@end example
+@item REVERB_SEND_LEVEL
+@example
+CONTROL 1 REVERB_SEND_LEVEL 63
+@end example
+@item TREMOLO_DEPTH
+@example
+CONTROL 1 TREMOLO_DEPTH 63
+@end example
+@item CHORUS_SEND_LEVEL
+@example
+CONTROL 1 CHORUS_SEND_LEVEL 63
+@end example
+@item CELESTE_DEPTH
+@example
+CONTROL 1 CELESTE_DEPTH 63
+@end example
+@item EFFECTS_5_DEPTH
+@example
+CONTROL 1 EFFECTS_5_DEPTH 63
+@end example
+@item DATA_INCREMENT
+@example
+CONTROL 1 DATA_INCREMENT 63
+@end example
+@item DATA_DECREMENT
+@example
+CONTROL 1 DATA_DECREMENT 63
+@end example
+@item NON_REGISTERED_PARAMETER_LSB
+@example
+CONTROL 1 NON_REGISTERED_PARAMETER_LSB 63
+@end example
+@item NON_REGISTERED_PARAMETER_MSB
+@example
+CONTROL 1 NON_REGISTERED_PARAMETER_MSB 63
+@end example
+@item REGISTERED_PARAMETER_LSB
+@example
+CONTROL 1 REGISTERED_PARAMETER_LSB 63
+@end example
+@item REGISTERED_PARAMETER_MSB
+@example
+CONTROL 1 REGISTERED_PARAMETER_MSB 63
+@end example
+@item ALLNOTES_OFF
+@example
+CONTROL 1 ALLNOTES_OFF 63
+@end example
+An abbreviated form is available.  Leave off the CONTROL:
+@example
+ALLNOTES_OFF [channel in 1..16]
+ALLNOTES_OFF 9
+@end example
+@item RESETALL 
+@cindex RESETALL
+@example
+CONTROL 5 RESETALL 0
+@end example
+An abbreviated form is available.  Omit the CONTROL term:
+@example
+RESTALL [channel in 1..16]
+RESETALL 3
+@end example
+@item ALLNOTES_OFF channel_num
+@cindex ALLNOTES_OFF
+This would probably not be used in a MIDI file, but only by a MIDI player.
+Nevertheless it is available in @command{textmidi}.
+@example
+CONTROL 1 ALLNOTES_OFF 0
+@end example
+@item ALL_SOUND_OFF channel_num
+@cindex ALL_SOUND_OFF
+This would probably not be used in a MIDI file, but only by a MIDI player.
+Nevertheless it is available in @command{textmidi}.
+@example
+CONTROL 1 ALL_SOUND_OFF 0
+@end example
+An abbreviated form is available.  Leave off the CONTROL.
+@example
+ALL_SOUND_OFF [channel]
+ALL_SOUND_OFF 5
+@end example
+@end itemize
 @item PROGRAM channel_num program_num
 @cindex PROGRAM
 PROGRAM selects a General MIDI intrument.

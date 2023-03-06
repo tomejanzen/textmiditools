@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -15,6 +15,7 @@
 #include <fstream>
 #include <random>
 
+#include "Midi.h"
 #include "RhythmRational.h"
 #include "MusicalForm.h"
 
@@ -79,19 +80,7 @@ namespace textmidi
             std::mt19937 generator_;
         };
 
-        using TrackScrambleMap = std::map<std::string, TrackScrambleEnum>;
-        const TrackScrambleMap track_scramble_map
-        {
-            {"none", TrackScrambleEnum::None},
-            {"rotateright", TrackScrambleEnum::RotateRight},
-            {"rotateleft", TrackScrambleEnum::RotateLeft},
-            {"reverse", TrackScrambleEnum::Reverse},
-            {"previouspermutation", TrackScrambleEnum::PreviousPermutation},
-            {"nextpermutation", TrackScrambleEnum::NextPermutation},
-            {"swappairs", TrackScrambleEnum::SwapPairs},
-            {"shuffle", TrackScrambleEnum::Shuffle}
-        };
-
+        extern const NumStringMap<TrackScrambleEnum> track_scramble_map;
     }
 }
 

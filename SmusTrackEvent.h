@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -13,16 +13,15 @@
 #include <cstdint>
 
 #include <memory>
-#include <map>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "Midi.h"
 #include "RhythmRational.h"
 
 namespace smus
 {
-
     struct SmusTrackEventFilePod
     {
         std::uint8_t decision;
@@ -199,11 +198,11 @@ namespace smus
         std::string textmidi() override;
     };
 
+    extern const textmidi::NumStringMap<int> clef_map;
+
     // Clef
     class SmusTrackEventClef final : public SmusTrackEventBase
     {
-      private:
-          static std::map<int, std::string> clef_map;
       public:
         explicit SmusTrackEventClef(const SmusTrackEventFilePod evt)
           : SmusTrackEventBase{evt}

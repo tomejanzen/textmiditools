@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.44
+** TextMIDITools Version 1.0.45
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -79,92 +79,18 @@ namespace
     constexpr double DotLength(0.5);
     constexpr double DoubleDotLength(0.25);
     // Map textmidi strings to MIDI file format codes.
-    const map<const string_view, MidiStreamAtom> text_meta_map{
-                  {"TEXT",            text_prefix[0]},
-                  {"COPYRIGHT",       copyright_prefix[0]},
-                  {"TRACK",           track_name_prefix[0]},
-                  {"INSTRUMENT",      instrument_name_prefix[0]},
-                  {"LYRIC",           lyric_prefix[0]},
-                  {"MARKER",          marker_prefix[0]},
-                  {"CUE_POINT",       cue_point_prefix[0]},
-                  {"PROGRAM_NAME",    program_name_prefix[0]},
-                  {"DEVICE_NAME",     device_name_prefix[0]},
-                  {"TEXT_0A",         text_0A_prefix[0]},
-                  {"TEXT_0B",         text_0B_prefix[0]},
-                  {"TEXT_0C",         text_0C_prefix[0]},
-                  {"TEXT_0D",         text_0D_prefix[0]},
-                  {"TEXT_0E",         text_0E_prefix[0]},
-                  {"TEXT_0F",         text_0F_prefix[0]},
-                  {"SEQUENCER_SPECIFIC", sequencer_specific_prefix[0]},
-              };
-    const map<string_view, MidiStreamAtom> text_control_map{
-        {"RESETALL",     control_reset_all_ctrl[0]},
-        {"ALLNOTES_OFF", control_all_notes_off[0]},
-        {"ALL_SOUND_OFF", control_all_sound_off[0]},
-        {"BREATH",       control_breath[0]},
-        {"SOFTPEDAL",    control_softpedal[0]},
-        {"PORTAMENTO",   control_portamento[0]},
-        {"BANK_SELECT", control_bank_select[0]},
-        {"MODULATION", control_modulation[0]},
-        {"FOOT_CONTROLLER", control_foot_controller[0]},
-        {"PORTAMENTO_TIME", control_portamento_time[0]},
-        {"DATA_ENTRY_MSB", control_data_entry_msb[0]},
-        {"CHANNEL_VOLUME", control_channel_volume[0]},
-        {"BALANCE", control_balance[0]},
-        {"PAN", control_pan[0]},
-        {"EXPRESSION", control_expression[0]},
-        {"EFFECT_1", control_effect_1[0]},
-        {"EFFECT_2", control_effect_2[0]},
-        {"GENERAL_PURPOSE_1", control_general_purpose_1[0]},
-        {"GENERAL_PURPOSE_2", control_general_purpose_2[0]},
-        {"GENERAL_PURPOSE_3", control_general_purpose_3[0]},
-        {"GENERAL_PURPOSE_4", control_general_purpose_4[0]},
-        {"DAMPER", control_damper[0]},
-        {"PORTAMENTO_ON_OFF", control_portamento_on_off[0]},
-        {"SOSTENUTO", control_sostenuto[0]},
-        {"LEGATO_FOOT", control_legato_foot[0]},
-        {"HOLD_2", control_hold_2[0]},
-        {"SOUND_VARIATION", control_sound_variation[0]},
-        {"TIMBRE_INTENSITY", control_timbre_intensity[0]},
-        {"RELEASE_TIME", control_release_time[0]},
-        {"ATTACK_TIME", control_attack_time[0]},
-        {"BRIGHTNESS", control_brightness[0]},
-        {"DECAY_TIME", control_decay_time[0]},
-        {"VIBRATO_RATE", control_vibrato_rate[0]},
-        {"VIBRATO_DEPTH", control_vibrato_depth[0]},
-        {"SOUND_CONTROLLER_9", control_sound_controller_9[0]},
-        {"SOUND_CONTROLLER_10", control_sound_controller_10[0]},
-        {"GENERAL_PURPOSE_5", control_general_purpose_5[0]},
-        {"GENERAL_PURPOSE_6", control_general_purpose_6[0]},
-        {"GENERAL_PURPOSE_7", control_general_purpose_7[0]},
-        {"GENERAL_PURPOSE_8", control_general_purpose_8[0]},
-        {"HIRES_VELOCITY_MSB", control_hires_velocity_msb[0]},
-        {"REVERB_SEND_LEVEL", control_reverb_send_level[0]},
-        {"TREMOLO_DEPTH", control_tremolo_depth[0]},
-        {"CHORUS_SEND_LEVEL", control_chorus_send_level[0]},
-        {"CELESTE_DEPTH", control_celeste_depth[0]},
-        {"PHASER_DEPTH", control_phaser_depth[0]},
-        {"DATA_INCREMENT", control_data_increment[0]},
-        {"DATA_DECREMENT", control_data_decrement[0]},
-        {"NON_REGISTERED_PARAMETER_LSB", control_non_registered_parameter_lsb[0]},
-        {"NON_REGISTERED_PARAMETER_MSB", control_non_registered_parameter_msb[0]},
-        {"REGISTERED_PARAMETER_LSB", control_registered_parameter_lsb[0]},
-        {"REGISTERED_PARAMETER_MSB", control_registered_parameter_msb[0]},
-    };
+
     // PORTAMENTO and SOSTENUTO have an "on" or "off" value.
-    const map<string, MidiStreamAtom> OnOffMap{{string{"OFF"}, control_off[0]}, {string{"ON"}, control_full[0]}};
+    const NumStringMap<MidiStreamAtom> on_off_map
+    {
+        {"OFF", control_off[0]},
+        {"ON", control_full[0]}
+    };
 
     int global_ticks_per_quarter{384};
     // global_channel is part of implementing MIDI running status
     // because channel is part of a command.
     uint32_t global_channel{}; // [0..15]
-
-    // MIDI Pan is actually excess 64,
-    // but textmidi treats it as -64..0..63, where 0 is center.
-    // In addition we allow the words "left", "center", and "right".
-    const map<string_view, int> PanStringToValue{{"left", 0},
-                                                 {"center", 64},
-                                                 {"right", static_cast<int>(round(MaxDynamic))}};
 
     // keyevent_to_keynumber
     // converts a string keyevent, which can include tie-in and tie-out,
@@ -322,10 +248,10 @@ namespace
     }
 
     //
-    // shift_channel
+    // channel_1_to_0
     // transforms a textmidi channel in (1..16)
     // to a MIDI binary channel in (0..15).
-    void shift_channel(uint32_t& channel)
+    void channel_1_to_0(uint32_t& channel)
     {
         if (0 == channel)
         {
@@ -426,11 +352,8 @@ ALPHANUMUNDER ({ALPHANUM}|_)
 IDENT ({LETTERUNDER}{ALPHANUMUNDER}*)
 ASSIGNMENT ({IDENT}{SPACE}={SPACE}{STRING})
 TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|PROGRAM_NAME|DEVICE_NAME|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F)
-CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB)
+CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB|RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
 
-CONTROL_CHANNEL (RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
-CONTROL_CHANNEL_INT (BREATH|DAMPER|SOFTPEDAL)
-CONTROL_CHANNEL_ONOFF (PORTAMENTO|SOSTENUTO)
 LBRACE [{]
 RBRACE [}]
 LEFTBRACKET "["
@@ -443,6 +366,12 @@ FILEHEADERCONTEXT (FILEHEADER{SPACE})
 FILEFORMAT (MONOTRACK|MULTITRACK|MULTISEQUENCE)
 STARTTRACKTOKEN (STARTTRACK|\{)
 END_OF_TRACKTOKEN (END_OF_TRACK|\})
+
+ALTERNATE_CONTROL_CHANNEL (RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
+ALTERNATE_CONTROL_CHANNEL_INT (BREATH|DAMPER|SOFTPEDAL)
+ALTERNATE_CONTROL_CHANNEL_ONOFF (LEGATO_FOOT|PORTAMENTO|SOSTENUTO)
+
+PATCH_TYPE (GM1|GM2|DLS)
 
 %s FILE_HEADER_STATE
 %s LAZY_STATE
@@ -463,17 +392,16 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string format_str;
     iss >> midi_header.ntrks_ >> midi_header.division_ >> format_str;
     to_upper(format_str);
-    auto fmf{textmidi::format_map.find(format_str)};
-    if (fmf != textmidi::format_map.end())
+    if (format_map.contains(format_str))
     {
-        midi_header.format_ = fmf->second;
+        midi_header.format_ = format_map.at(format_str);
     }
     else
     {
         string errstr{((((string{textmidi_features->text_filename_} += ':')
             += lexical_cast<string>(textmidi_features->line_ctr_))
             += "File format was: ") += format_str) += " but must be in {"};
-        for (const auto& fmp : textmidi::format_map)
+        for (const auto& fmp : textmidi::format_map.string_num_map())
         {
             (errstr += fmp.first) += ", ";
         }
@@ -660,11 +588,11 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string meta_name{};
     iss >> meta_name;
     to_upper(meta_name);
-    auto prefix{text_meta_map.find(meta_name)};
-    if (prefix != text_meta_map.end())
+
+    if (text_meta_map.contains(meta_name))
     {
         trackchunk.push_back(meta_prefix[0]);
-        trackchunk.push_back(prefix->second);
+        trackchunk.push_back(text_meta_map.at(meta_name));
     }
     else
     {
@@ -830,7 +758,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string pitch_name;
     iss >> discard >> channel >> pitch_name >> velocity;
 
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     bool is_delta{};
     int signed_key{};
@@ -865,7 +793,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
              velocity{};
     string pitch_name;
     iss >> discard >> channel >> pitch_name >> velocity;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     bool is_delta{};
     int signed_key{};
@@ -898,7 +826,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
              pressure{};
     string pitch_name;
     iss >> discard >> channel >> pitch_name >> pressure;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     bool is_delta{};
     int signed_key{};
@@ -923,8 +851,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(pressure);
   }
 
-
-<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}({INTEGER}|{CONTROL_FUNCTION}){SPACE}{INTEGER} {
+<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}({INTEGER}|{CONTROL_FUNCTION}){SPACE}({INTEGER}|{ONOFF}) {
     /* Recognize CONTROL {channel} {control_id} {control_value} */
     write_delay();
 
@@ -934,8 +861,18 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
     int32_t control_id{},
             control_value{};
-    string control_id_str;
-    iss >> discard >> channel >> control_id_str >> control_value;
+    string control_id_str{},
+           control_value_str{};
+    iss >> discard >> channel >> control_id_str >> control_value_str;
+    to_upper(control_value_str);
+    if (on_off_map.contains(control_value_str))
+    {
+        control_value = on_off_map.at(control_value_str);
+    }
+    else
+    {
+        control_value = lexical_cast<int32_t>(control_value_str);
+    }
 
     const regex int_re{R"([-+]?[[:digit:]]+)"};
     smatch matches{};
@@ -948,55 +885,98 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     else
     {
         to_upper(control_id_str);
-        if (text_control_map.contains(control_id_str))
+        if (control_function_map.contains(control_id_str))
         {
-            control_id = text_control_map.at(control_id_str);
+            control_id = control_function_map.at(control_id_str);
         }
         else
         {
             cerr << "Control invalid ID: " << control_id_str << '\n';
-       }
+        }
     }
-
-    shift_channel(channel);
-
+    channel_1_to_0(channel);
     check_running_status(channel | control[0]);
-
+    control_value &= byte7_mask;
     control_id &= byte7_mask;
     trackchunk.push_back(control_id);
-    if (control_value & ~byte7_mask)
+    if (control_pan[0] == control_id)
     {
-        cerr << textmidi_features->text_filename_ << ':' << textmidi_features->line_ctr_ << " illegal 8-bit control value: "
-             << hex << control_value << dec << " will be coerced to 7-bit" << '\n';
+        control_value += PanExcess64;
     }
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
   }
 
-<DETAIL_STATE>{CONTROL_CHANNEL}{SPACE}{INTEGER} {
+<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}PAN{SPACE}({INTEGER}|{PANVALUE}) {
+    /* Recognize CONTROL {channel} {control_id} {control_value} */
+    write_delay();
+
+    istringstream iss(yytext);
+    string discard;
+    uint32_t channel{};
+
+    int32_t control_id{},
+            control_value{};
+    string control_value_str{};
+    string control_id_str;
+    iss >> discard >> channel >> control_id_str >> control_value_str;
+    if (pan_map.contains(control_value_str))
+    {
+        control_value = pan_map.at(control_value_str);
+    }
+    else
+    {
+        control_value = lexical_cast<int32_t>(control_value_str);
+    }
+
+    const regex int_re{R"([-+]?[[:digit:]]+)"};
+    smatch matches{};
+    const auto mat{regex_match(control_id_str, matches, int_re)};
+    if (mat)
+    {
+        istringstream iss_id(control_id_str);
+        iss_id >> control_id;
+    }
+    else
+    {
+        to_upper(control_id_str);
+        if (control_function_map.contains(control_id_str))
+        {
+            control_id = control_function_map.at(control_id_str);
+        }
+        else
+        {
+            cerr << "Control invalid ID: " << control_id_str << '\n';
+        }
+    }
+    channel_1_to_0(channel);
+    check_running_status(channel | control[0]);
+    control_value &= byte7_mask;
+    control_id &= byte7_mask;
+    trackchunk.push_back(control_id);
+    if (control_pan[0] == control_id)
+    {
+        control_value += PanExcess64;
+    }
+    control_value &= byte7_mask;
+    trackchunk.push_back(control_value);
+  }
+
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL}{SPACE}{INTEGER} {
     /* Recognize {RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF} {channel} */
     write_delay();
 
-    string namestr{};
+    string control_id_str{};
     int32_t control_id{};
     uint32_t channel{};
     istringstream iss{yytext};
-    iss >> namestr >> channel;
-    to_upper(namestr);
-    shift_channel(channel);
+    iss >> control_id_str >> channel;
+    to_upper(control_id_str);
+    channel_1_to_0(channel);
 
-    try
+    if (control_function_map.contains(control_id_str))
     {
-        control_id = text_control_map.at(namestr);
-    }
-    catch (out_of_range &oor)
-    {
-        const string errstr{((((((string{"unknown control channel: "}
-            += textmidi_features->text_filename_) += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_)) += ' ')
-            += namestr) += oor.what()) += '\n'};
-        cerr << errstr;
-        exit(EXIT_SUCCESS);
+        control_id = control_function_map.at(control_id_str);
     }
 
     check_running_status(channel | control[0]);
@@ -1004,29 +984,20 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(0);
   }
 
-<DETAIL_STATE>{CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{INTEGER} {
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{INTEGER} {
     /* Recognize {BREATH|DAMPER|SOFTPEDAL} {channel} {control_value_num} */
     write_delay();
 
-    string namestr;
+    string control_id_str;
     uint32_t channel{};
     int32_t control_id{},
         control_value{};
     istringstream iss(yytext);
-    iss >> namestr >> channel >> control_value;
-    shift_channel(channel);
-    try
+    iss >> control_id_str >> channel >> control_value;
+    channel_1_to_0(channel);
+    if (control_function_map.contains(control_id_str))
     {
-        control_id = text_control_map.at(namestr);
-    }
-    catch (out_of_range &oor)
-    {
-        const string errstr{((((((string{"unknown control channel: "}
-            += textmidi_features->text_filename_) += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_)) += ' ')
-            += namestr) += oor.what()) += '\n'};
-        cerr << errstr;
-        exit(EXIT_SUCCESS);
+        control_id = control_function_map.at(control_id_str);
     }
     check_running_status(channel | control[0]);
     trackchunk.push_back(control_id);
@@ -1034,47 +1005,22 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(control_value);
   }
 
-<DETAIL_STATE>{CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}{ONOFF} {
-    /* Recognize {PORTAMENTO|SOSTENUTO} {channel num} {ON|OFF} */
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}{ONOFF} {
+    /* Recognize {LEGATO_FOOT|PORTAMENTO|SOSTENUTO} {channel num} {ON|OFF} */
     write_delay();
 
-    string namestr;
+    string control_id_str;
     uint32_t channel{};
     string onoff{};
     istringstream iss(yytext);
-    iss >> namestr >> channel >> onoff;
-    to_upper(namestr);
-    shift_channel(channel);
-    int32_t control_id{};
-    try
-    {
-        control_id = text_control_map.at(namestr);
-    }
-    catch (out_of_range &oor)
-    {
-        const string errstr{(((((((string{"unknown control : "}
-            += textmidi_features->text_filename_) += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_))
-            += ' ') += namestr) += ' ') += oor.what()) += '\n'};
-        cerr << errstr;
-        exit(EXIT_SUCCESS);
-    }
+    iss >> control_id_str >> channel >> onoff;
+    to_upper(control_id_str);
+    channel_1_to_0(channel);
+    // Can't fail; the grammar would not have qualified an invalid name.
+    const int32_t control_id{control_function_map.at(control_id_str)};
 
-    MidiStreamAtom control_value{};
-    try
-    {
-        control_value = OnOffMap.at(onoff);
-    }
-    catch (out_of_range &oor)
-    {
-        const string errstr{(((((((string{"unknown control on/off: " }
-            += textmidi_features->text_filename_) += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_))
-            += ' ') += onoff) += ' ') += oor.what()) += '\n'};
-        cerr << errstr;
-        exit(EXIT_SUCCESS);
-    }
-
+    // Can't fail; the grammar would not have qualified an invalid string.
+    const MidiStreamAtom control_value{on_off_map.at(onoff)};
     check_running_status(channel | control[0]);
     trackchunk.push_back(control_id);
     trackchunk.push_back(control_value);
@@ -1091,23 +1037,24 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     istringstream iss(yytext);
     iss >> namestr >> channel >> panstring;
     to_lower(panstring);
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
-    auto pstvi{PanStringToValue.find(panstring)};
-    if (PanStringToValue.end() == pstvi)
+    if (pan_map.contains(panstring))
     {
-        pancode = lexical_cast<int>(panstring);
-        pancode += PanExcess64;
+        pancode = pan_map.at(panstring);
     }
     else
     {
-        pancode = pstvi->second;
+        pancode = lexical_cast<int>(panstring);
     }
+    pancode += PanExcess64;
     check_running_status(channel | control[0]);
     trackchunk.push_back(control_pan[0]);
     pancode &= byte7_mask;
     trackchunk.push_back(pancode);
   }
+
+
 
 <DETAIL_STATE>PROGRAM{SPACE}{INTEGER}{SPACE}{INTEGER} {
     /* Recognize PROGRAM {channel num} {program number} */
@@ -1118,7 +1065,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t channel {},
              theprogram {};
     iss >> discard >> channel >> theprogram;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     check_running_status(channel | program[0]);
     --theprogram;
@@ -1134,7 +1081,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t channel {},
                  pressure{};
     iss >> discard >> channel >> pressure;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     // looks like a kluge. Does channel_pressure participate in running_status?
     check_running_status(channel | channel_pressure[0]);
@@ -1152,7 +1099,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t channel {},
              bend{};
     iss >> discard >> channel >> bend;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     const auto status_byte{channel | pitch_wheel[0]};
     check_running_status(status_byte);
@@ -1217,6 +1164,25 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     trackchunk.push_back(themode);
   }
 
+<DETAIL_STATE>XMF_PATCH_TYPE{SPACE}{PATCH_TYPE} {
+    /* Recognize KEY_SIGNATURE key as in a for a minor, or Db for D-flat Major */
+    write_delay();
+
+    istringstream iss(yytext);
+    string discard;
+    string patch_type_str;
+    iss >> discard >> patch_type_str;
+
+    to_upper(patch_type_str);
+    // This can't fail because the grammar has validated the line.
+    const MidiStreamAtom xmf_patch_type{
+        static_cast<MidiStreamAtom>(xmf_patch_type_map.at(patch_type_str))};
+
+    trackchunk.push_back(meta_prefix[0]);
+    ranges::copy(xmf_patch_type_prefix, back_inserter(trackchunk));
+    trackchunk.push_back(xmf_patch_type);
+  }
+
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
     /* Recognize SMPTE_OFFSET HH:MM:SS:FR:FF (hours:minutes:seconds:frames: 1/100's of frames) */
     write_delay();
@@ -1241,9 +1207,12 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
         // values in [2]..
         MidiStreamVector offsetvalues;
         MidiStreamAtom fps{0};
-        if (smpte_fps_reverse_map.contains(matches[fps_match]))
+        string fps_str(matches[fps_match].str());
+        to_upper(fps_str);
+        string_view fps_strv(fps_str);
+        if (smpte_fps_map.contains(fps_strv))
         {
-            fps = smpte_fps_reverse_map.at(matches[fps_match]);
+            fps = smpte_fps_map.at(string_view(matches[fps_match].str()));
         }
         int hours{lexical_cast<int>(matches[hours_match])};
         hours |= (fps << smpte_fps_shift);
@@ -1270,7 +1239,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     string discard;
     uint32_t channel{};
     iss >> discard >> channel;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(midi_channel_prefix[0]);
@@ -1404,14 +1373,13 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
 <LAZY_STATE>{DYNAMIC} {
     /* Recognize a dynamic as in pppp..mf..forte..ff..ffff */
-    string note_name{yytext};
-    uint32_t dynamic = 64;
+    string dynamic_str{yytext};
 
-    to_lower(note_name);
+    to_lower(dynamic_str);
     // This use of the map must work because we can only
     // be in here if the dynamic marking is one of the ones
     // in the map; we will not call contains().
-    dynamic = dynamics_map.at(note_name);
+    const uint32_t dynamic{dynamics_map.at(dynamic_str)};
     lazy::dynamic = dynamic % 128;
   }
 
@@ -1445,7 +1413,7 @@ END_OF_TRACKTOKEN (END_OF_TRACK|\})
     uint32_t channel{1U}; // text channels are in [1..16]
     istringstream iss(channel_str);
     iss >> discard >> channel;
-    shift_channel(channel);
+    channel_1_to_0(channel);
 
     if ((running_status & channel_mask) != global_channel)
     {

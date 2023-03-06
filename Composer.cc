@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.44
+// TextMIDITools Version 1.0.45
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -24,7 +24,6 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
-#include "Midi.h"
 #include "Composer.h"
 #include "NoteEvent.h"
 #include "RandomDouble.h"
@@ -663,4 +662,16 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
         ++track_index;
     }
 }
+
+const textmidi::NumStringMap<TrackScrambleEnum> textmidi::cgm::track_scramble_map
+{
+    {"none",                TrackScrambleEnum::None},
+    {"rotateright",         TrackScrambleEnum::RotateRight},
+    {"rotateleft",          TrackScrambleEnum::RotateLeft},
+    {"reverse",             TrackScrambleEnum::Reverse},
+    {"previouspermutation", TrackScrambleEnum::PreviousPermutation},
+    {"nextpermutation",     TrackScrambleEnum::NextPermutation},
+    {"swappairs",           TrackScrambleEnum::SwapPairs},
+    {"shuffle",             TrackScrambleEnum::Shuffle}
+};
 

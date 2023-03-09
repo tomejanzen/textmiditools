@@ -436,6 +436,18 @@ INSTRUMENT "Flugel Horn or best substitute"
 @item LYRIC [string]<EOL> or LYRIC "string"
 @cindex LYRIC
 A lyric string.
+The MIDI Manufacturers Assocation publishes "RP17 SMF Luric Events Definition" with guidelines on adding lyrics to MIDI files.
+The guidelines there include the following:
+@itemize
+@item Each LYRIC event should have just one syllable.
+@item Use a space character at the end of a word (not of a syllable).
+@item Any comma or period should appear after the syllable and before the space.
+@item A carriage return can indicate the end of a line.
+@item A line feed often tells karaoke machines to refresh the lyric display.
+@item Do not add dashes between syllables; scoring software can do that.
+On the other hand, use dashes in compound words as spelled in a dictionary.
+@end itemize
+
 @example
 LYRIC "No lyric could be cleared, oh Baby!"
 @end example

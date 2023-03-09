@@ -1,3 +1,7 @@
+2023-03-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: Improve miditext --lazy.
+        * textmidi.texi: Add detail on LYRIC events.
+
 2023-03-08     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.h, GeneralMIDI.{cc,h}, MIDIKeyString.cc, Makefile, Makefile.am, 
         Makefile.in, Midi.{cc,h}, MidiEvents.{cc,h}, SmusTrackEvent.{cc,h}, 

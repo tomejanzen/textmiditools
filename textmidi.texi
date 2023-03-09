@@ -505,7 +505,7 @@ The value for ticksperbeat is MIDI ticks in a beat.  It is often 240, but 384 is
 @example
 TIME_SIGNATURE 3 4 240
 @end example
-@item XMF_PATCH_TYPE {GM1|GM2|DLS}
+@item XMF_PATCH_TYPE @lbracechar{}GM1|GM2|DLS@rbracechar{}
 Selects the XMF patch type: General MIDI 1, General MIDI 2, or DLS, which refer to the
 synthesizer type.  XMF_PATCH_TYPE should appear only as the first event of 
 a given track, but textmidi does not enforce it.
@@ -1502,6 +1502,19 @@ General Public License, to permit their use in free software.
 @chapter Bibliography
 
 @itemize
+
+@item @cite{Recommended Practice (RP-021) Sound Controller Defaults (Revised).}
+2/1999.  Los Angeles.  MIDI Manufacturers Association, Inc.
+
+@item @cite{Recommended Practice (RP-019) SMF Device Name and Program Name Meta Events.}
+1998.  Los Angeles.  MIDI Manufacturers Association, Inc.
+
+@item @cite{AMEI/MMA Recommended Practice RP-032 SMF Meta-Event for XMF Patch Type Prefix.}
+2001.  Los Angeles.  MIDI Manufacturers Association, Inc.
+
+@item @cite{Standard MIDI Files 1.0.}  RP001.
+1996.  Los Angeles.  The MIDI Manufacturers Association, Inc.
+
 @item @cite{The Complete MIDI 1.0 Detailed Specification.}
 Document version 96.1.
 Second edition.

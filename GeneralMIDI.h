@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -15,6 +15,7 @@
 #include <map>
 
 #include "Midi.h"
+#include "MidiMaps.h"
 
 namespace textmidi
 {
@@ -46,7 +47,7 @@ namespace textmidi
             Idiophone           = (1 << 16)
         };
 
-        extern const NumStringMap<GeneralMIDIGroup> program_group_map;
+        extern const midi::NumStringMap<GeneralMIDIGroup> program_group_map;
 
         constexpr auto MaxNoteStrLen{6}; // "Db-1" + null is 5
         constexpr auto MaxMIDIProgramNameLen{48};

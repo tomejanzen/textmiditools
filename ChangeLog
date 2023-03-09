@@ -1,3 +1,15 @@
+2023-03-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.h, GeneralMIDI.{cc,h}, MIDIKeyString.cc, Makefile, Makefile.am, 
+        Makefile.in, Midi.{cc,h}, MidiEvents.{cc,h}, SmusTrackEvent.{cc,h}, 
+        autom4te.cache/requests, miditext.cc, smustextmidi.cc, textmidi.l, 
+        MidiMaps.{h,cc}: Create MidiMaps.{h,cc} and move MIDI maps to MidiMaps.
+        Fix buildkit.sh to copy MidiEvents.{h,cc} instead of MidiMessages.{h,cc}.
+
+2023-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, textmidi.l, textmidi.texi: Put the increment
+        and decrement of channels and program numbers in a named function.
+        * textmidi.texi: fix bare braces.
+
 2023-03-05     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.h, MidiEvents.cc, textmidi.l, textmidi.texi:  clean up CONTROL,
         continue to maintain the abbreviated forms for some controls.

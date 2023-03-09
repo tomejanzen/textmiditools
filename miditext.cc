@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
-// miditext Version 1.0.45
+// miditext Version 1.0.46
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -44,11 +44,13 @@
 #include "rational_support.h"
 #include "TextmidiUtils.h"
 #include "MidiEvents.h"
+#include "MidiMaps.h"
 #include "Options.h"
 
 using namespace std;
 using namespace boost;
 
+using namespace midi;
 using namespace textmidi;
 using namespace textmidi::rational;
 
@@ -185,7 +187,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.45\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.46\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -293,7 +295,7 @@ int main(int argc, char *argv[])
         cout << logstr;
     }
 
-    MidiStreamVector::iterator midiiter{midivector.begin()};
+    MidiStreamIterator midiiter{midivector.begin()};
 
     if (midivector.size() < sizeof(MidiHeader))
     {
@@ -328,7 +330,7 @@ int main(int argc, char *argv[])
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
     vector<MidiDelayEventPairs> midi_delay_event_tracks(stream_length_pairs.size());
 
-#define DEBUG_THREADLESS
+#undef DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
     for (auto& ti : stream_length_pairs)
     {

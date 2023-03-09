@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.45
+** TextMIDITools Version 1.0.46
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -49,6 +49,7 @@
 #include <boost/preprocessor/stringize.hpp>
 
 #include "Midi.h" // MIDI codes and MIDI file header
+#include "MidiMaps.h" // string-number maps
 #include "TextmidiUtils.h"
 #include "MIDIKeyString.h"
 #include "textmidi.h" // For this file's interfaces to main.cc
@@ -56,6 +57,7 @@
 using namespace std;
 using namespace boost;
 using namespace boost::algorithm; // for to_upper(string)
+using namespace midi;
 using namespace textmidi;
 
 #if 0
@@ -248,8 +250,27 @@ namespace
     }
 
     //
+    // program_1_to_0
+    // transforms a textmidi value (usu. program or program) in (1..16)
+    // to a MIDI binary program in (0..15).
+    void program_1_to_0(uint32_t& program)
+    {
+        if (0 == program)
+        {
+            const string errstr{((string{textmidi_features->text_filename_} += ':')
+                += lexical_cast<string>(textmidi_features->line_ctr_))
+                += " Program was zero (0) and left as zero; textmidi program numbers must be in [1..16]\n"};
+            cerr << errstr;
+        }
+        else
+        {
+            --program;
+        }
+    }
+
+    //
     // channel_1_to_0
-    // transforms a textmidi channel in (1..16)
+    // transforms a textmidi value (usu. channel or program) in (1..16)
     // to a MIDI binary channel in (0..15).
     void channel_1_to_0(uint32_t& channel)
     {
@@ -260,8 +281,11 @@ namespace
                 += " Channel was zero (0) and left as zero; channels must be in [1..16]\n"};
             cerr << errstr;
         }
-        global_channel
-            = channel = (((channel > 0) ? (channel - 1) : channel) & channel_mask);
+        else
+        {
+            channel = (((channel > 0) ? (channel - 1) : channel) & channel_mask);
+        }
+        global_channel = channel;
     }
 
     uint32_t delay_and_update_total_ticks(double thenumerator,
@@ -401,7 +425,7 @@ PATCH_TYPE (GM1|GM2|DLS)
         string errstr{((((string{textmidi_features->text_filename_} += ':')
             += lexical_cast<string>(textmidi_features->line_ctr_))
             += "File format was: ") += format_str) += " but must be in {"};
-        for (const auto& fmp : textmidi::format_map.string_num_map())
+        for (const auto& fmp : midi::format_map.string_num_map())
         {
             (errstr += fmp.first) += ", ";
         }
@@ -418,7 +442,7 @@ PATCH_TYPE (GM1|GM2|DLS)
         cerr << errstr;
     }
     global_ticks_per_quarter = midi_header.division_;
-    midi_header.swap();
+    midi_header.swapbytes();
     textmidi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
@@ -430,7 +454,7 @@ PATCH_TYPE (GM1|GM2|DLS)
     istringstream iss(yytext);
     iss >> midi_header.ntrks_ >> midi_header.division_;
     global_ticks_per_quarter = midi_header.division_;
-    midi_header.swap();
+    midi_header.swapbytes();
     textmidi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
@@ -1068,7 +1092,7 @@ PATCH_TYPE (GM1|GM2|DLS)
     channel_1_to_0(channel);
 
     check_running_status(channel | program[0]);
-    --theprogram;
+    program_1_to_0(theprogram);
     theprogram &= byte7_mask;
     trackchunk.push_back(theprogram);
   }

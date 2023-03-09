@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
-// textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -20,7 +19,7 @@
 #include <set>
 #include <iostream>
 
-namespace textmidi
+namespace midi
 {
     //
     // Holds binary standard MIDI file format data.
@@ -224,93 +223,8 @@ namespace textmidi
 
     const int SMPTE_hours_max{23};
 
-    template<typename NumType> class NumStringMap
-    {
-      public:
-        NumStringMap(std::initializer_list<std::pair<NumType, std::string_view> > in_initlist)
-          : num_string_map_(),
-            string_num_map_()
-        {
-            for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
-            {
-                num_string_map_.emplace(*mi);
-                string_num_map_.emplace(std::pair<std::string_view, NumType>(mi->second, mi->first));
-            }
-        }
-
-        NumStringMap(std::initializer_list<std::pair<std::string_view, NumType> > in_initlist)
-          : num_string_map_(),
-            string_num_map_()
-        {
-            for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
-            {
-                num_string_map_.emplace(std::pair<NumType, std::string_view>(mi->second, mi->first));
-                string_num_map_.emplace(*mi);
-            }
-        }
-
-        std::string_view at(NumType num) const
-        {
-            return num_string_map_.at(num);
-        }
-
-        std::string_view operator[](NumType num) const
-        {
-            return num_string_map_.at(num);
-        }
-
-        NumType at(const std::string_view& sv) const
-        {
-            return string_num_map_.at(sv);
-        }
-
-        NumType operator[](const std::string_view& sv) const
-        {
-            return string_num_map_.at(sv);
-        }
-
-        bool contains(NumType num) const
-        {
-            return num_string_map_.contains(num);
-        }
-
-        bool contains(std::string_view sv) const
-        {
-            return string_num_map_.contains(sv);
-        }
-
-        bool contains(std::initializer_list<std::string_view> candidates)
-        {
-            bool rtn{};
-            for (auto candi{candidates.begin()}; candi != candidates.end(); ++candi)
-            {
-                if (this->contains(*candi))
-                {
-                    rtn = true;
-                }
-            }
-            return rtn;
-        }
-
-        const std::map<std::string_view, NumType> string_num_map() const
-        {
-            return string_num_map_;
-        }
-      private:
-        std::map<NumType, std::string_view> num_string_map_;
-        std::map<std::string_view, NumType> string_num_map_;
-    };
-
-    extern const NumStringMap<int> smpte_fps_map;
-
-    extern const NumStringMap<int> dynamics_map;
-
-    extern const NumStringMap<int> pan_map;
-
     constexpr std::int64_t QuartersPerWhole(4);
-
     constexpr size_t bits_per_byte{8};
-
     constexpr auto ChunkNameLen{4};
     constexpr auto HeaderChunkLen{6};
     constexpr MidiStreamAtom MidiHeaderChunkName[ChunkNameLen]{'M', 'T', 'h', 'd'};
@@ -322,12 +236,6 @@ namespace textmidi
         MultiSequence
     };
 
-    extern const NumStringMap<MIDI_Format> format_map;
-    extern const NumStringMap<MidiStreamAtom> text_meta_map;
-    extern const NumStringMap<MidiStreamAtom> control_function_map;
-    extern const NumStringMap<XmfPatchTypeEnum> xmf_patch_type_map;
-
-    std::ostream& operator<<(std::ostream& os, MIDI_Format mf);
 
 #pragma pack(1)
     struct MidiHeader
@@ -361,7 +269,7 @@ namespace textmidi
             division_{}
         {
             std::memcpy(this, bytes, sizeof(MidiHeader));
-            swap();
+            swapbytes();
         }
 
         void to_bytes(MidiStreamAtom* bytes);
@@ -376,10 +284,9 @@ namespace textmidi
         std::uint16_t ntrks_;     // number of tracks
         std::uint16_t division_;  // ticks/quarter (unless SMPTE, check spec)
 #pragma pack(pop)
-        void swap();
+        void swapbytes();
     };
 
 #pragma pack()
-    std::ostream& operator<<(std::ostream& os, const MidiHeader& mh);
 }
 #endif // MIDI_H

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "Midi.h"
+#include "MidiMaps.h"
 #include "RhythmRational.h"
 
 namespace smus
@@ -198,7 +199,7 @@ namespace smus
         std::string textmidi() override;
     };
 
-    extern const textmidi::NumStringMap<int> clef_map;
+    extern const midi::NumStringMap<int> clef_map;
 
     // Clef
     class SmusTrackEventClef final : public SmusTrackEventBase

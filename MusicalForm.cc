@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -44,6 +44,7 @@
 
 using namespace std;
 using namespace textmidi;
+using namespace midi;
 using namespace textmidi::cgm;
 using namespace boost;
 
@@ -375,10 +376,10 @@ void MusicalForm::character_now(TicksDuration theTime,
 
     musical_character.dynamic_mean
         = dynamic_form().mean_sine().value_now(dblTime)
-        * (MaxDynamic - MinDynamic)
-        + MinDynamic;
+        * (midi::MaxDynamic - midi::MinDynamic)
+        + midi::MinDynamic;
     musical_character.dynamic_range
-        = dynamic_form().range_sine().value_now(dblTime) * MaxDynamic;
+        = dynamic_form().range_sine().value_now(dblTime) * midi::MaxDynamic;
 
     musical_character.texture_range
         = texture_form().value_now(dblTime) * double (voices().size());
@@ -460,7 +461,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     vector<int> programs{};
     if (GeneralMIDIGroup::All == static_cast<GeneralMIDIGroup>(instrument_flags))
     {
-        auto program_count = views::iota(1, MidiProgramQty + 1);
+        auto program_count = views::iota(1, midi::MidiProgramQty + 1);
         ranges::copy(program_count, back_inserter(programs));
     }
     else
@@ -500,7 +501,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     // We will count through the melodic channel numbers.
     // (General MIDI puts idiophones on channel 10 in (1..16).)
     vector<int> melodic_channels{};
-    auto counter = views::iota(1, textmidi::MidiChannelQty + 1);
+    auto counter = views::iota(1, midi::MidiChannelQty + 1);
     ranges::copy(counter, back_inserter(melodic_channels));
     auto mc_it{ranges::find(melodic_channels, MidiIdiophoneChannel)};
     if (mc_it != melodic_channels.end())
@@ -538,8 +539,8 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     //     ^     ^     ^
     //
     const int stereo_zones{static_cast<int>(channels.size() + 1)};
-    const auto pan_step{(textmidi::PanExcess64 * 2) / stereo_zones};
-    const auto first_pan{pan_step - textmidi::PanExcess64};
+    const auto pan_step{(midi::PanExcess64 * 2) / stereo_zones};
+    const auto first_pan{pan_step - midi::PanExcess64};
     map<int, int> channel_to_pan;
     int pan(first_pan);
     for (auto ch : channels)

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // MIDIKeyString.cc
 //
@@ -28,6 +28,7 @@
 using namespace std;
 using namespace boost;
 using namespace textmidi;
+using namespace midi;
 
 namespace {
     // This map is actually from the letter of a note in ASCII - 'A'

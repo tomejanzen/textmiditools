@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -30,10 +30,12 @@
 #include "RandomInt.h"
 #include "Track.h"
 #include "GnuPlot.h"
+#include "Midi.h"
 
 using namespace std;
 using namespace boost;
 using namespace textmidi;
+using namespace midi;
 using namespace textmidi::cgm;
 using namespace textmidi::rational;
 
@@ -53,7 +55,7 @@ RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
     // ------ * ----- * -------
     // minute   beat    seconds
     RhythmRational wholes_per_second{
-      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
+      RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{midi::SecondsPerMinuteI} };
     //wholes_per_second.reduce();
     //  Ticks    Quarters    whole
     // ------- * -------- * -------
@@ -563,7 +565,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                           else
                           {
                               if (ne.pitch() + xml_form.voices()[tr]
-                                  .follower().interval_ < textmidi::MidiPitchQty)
+                                  .follower().interval_ < midi::MidiPitchQty)
                               {
                                   ne.pitch(ne.pitch()
                                       + xml_form.voices()[tr]
@@ -663,7 +665,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     }
 }
 
-const textmidi::NumStringMap<TrackScrambleEnum> textmidi::cgm::track_scramble_map
+const midi::NumStringMap<TrackScrambleEnum> textmidi::cgm::track_scramble_map
 {
     {"none",                TrackScrambleEnum::None},
     {"rotateright",         TrackScrambleEnum::RotateRight},

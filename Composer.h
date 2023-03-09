@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -16,6 +16,7 @@
 #include <random>
 
 #include "Midi.h"
+#include "MidiMaps.h"
 #include "RhythmRational.h"
 #include "MusicalForm.h"
 
@@ -80,7 +81,7 @@ namespace textmidi
             std::mt19937 generator_;
         };
 
-        extern const NumStringMap<TrackScrambleEnum> track_scramble_map;
+        extern const midi::NumStringMap<TrackScrambleEnum> track_scramble_map;
     }
 }
 

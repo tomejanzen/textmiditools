@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -18,7 +18,6 @@
 #include <boost/lexical_cast.hpp>
 
 #include "SmusTrackEvent.h"
-#include "Midi.h"
 #include "rational_support.h"
 #include "MIDIKeyString.h"
 
@@ -411,9 +410,9 @@ string SmusTrackEventVolume::textmidi()
     str += pre_rest();
     if (current_dynamic() != data())
     {
-       if (dynamics_map.contains(data()))
+       if (midi::dynamics_map.contains(data()))
        {
-           (str += dynamics_map.at(data())) += '\n';
+           (str += midi::dynamics_map.at(data())) += '\n';
        }
        else
        {
@@ -474,7 +473,7 @@ string SmusTrackEventClef::textmidi()
     return str;
 }
 
-const textmidi::NumStringMap<int> smus::clef_map
+const midi::NumStringMap<int> smus::clef_map
 {
    {0, string{"Treble"}},
    {1, string{"Bass"}},

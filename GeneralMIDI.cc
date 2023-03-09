@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.45
+// TextMIDITools Version 1.0.46
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -20,7 +20,7 @@ using namespace textmidi::cgm;
 // These values reflect the MIDI Specification 1.1,
 // Chapter 5: General MIDI System Level I.
 //
-const textmidi::NumStringMap<cgm::GeneralMIDIGroup> cgm::program_group_map
+const midi::NumStringMap<cgm::GeneralMIDIGroup> cgm::program_group_map
 {
     {"piano",        GeneralMIDIGroup::Piano},
     {"chromaticpercussion", GeneralMIDIGroup::ChromaticPercussion},

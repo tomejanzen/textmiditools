@@ -76,5 +76,11 @@ github.
 How to install
 ======================================================================
 
-Refer INSTALL file in the distribution.
+Refer INSTALL file in the distribution, but try this:
+
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
 

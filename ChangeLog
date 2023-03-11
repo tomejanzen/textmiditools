@@ -1,3 +1,15 @@
+2023-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, MidiEvents.{h,c}, textmidi.l: Move RunningStatus class
+        from MidiEvents to Midi.  Rewrite textmidi.l to use the RunningStatus
+        class.  Clear running status at Meta and Sysex events per spec.
+        "Meta events and sysex events cancel any running status that was in effect."
+        RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
+        * Midi.h, MidiMaps.{h,cc}, textmidi.l, textmidi.texi: Handle some SYSEX standard messages
+        using some symbols in textmidi.l.
+
+2023-03-09b     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMaps.{h,cc}: add common sysex subids.
+
 2023-03-09     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.cc: Improve miditext --lazy.
         * textmidi.texi: Add detail on LYRIC events.

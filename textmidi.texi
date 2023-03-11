@@ -956,6 +956,36 @@ Some manufacturers use SYSEXRAW to continue long messages that start
 with a SYSEX block.
 @end table
 
+There is some symbolic support for SYSEX standard messages.
+@smallexample
+SYSEX_SUBID = NON_COMMERCIAL|NON_REALTIME|REAL_TIME
+SYSEX_NONRT_SUBID1 = NONRT_SAMPLE_DUMP_HEADER|NONRT_SAMPLE_DATA_PACKET
+  |NONRT_SAMPLE_DUMP_REQUEST|NONRT_TIMECODE|NONRT_SAMPLE_DUMP_EXTENSIONS
+  |NONRT_GENERAL_INFO|NONRT_FILE_DUMP|NONRT_TUNING_STD|NONRT_GM|NONRT_END_OF_FILE
+  |NONRT_WAIT|NONRT_CANCEL|NONRT_NAK|NONRT_ACK
+SYSEX_RT_SUBID1 = RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION
+  |RT_DEVICE_CONTROL|RT_MTC_CUEING|RT_MACHINE_CONTROL_COMMANDS
+  |RT_MACHINE_CONTROL_RESPONSES|RT_TUNING_STD
+@end smallexample
+The commands in a textmidi file may be:
+@smallexample
+SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}dest@rbracechar{} @lbracechar{}SYSEX_NONRT_SUBID1@rbracechar{} 0xnn 0xnn...
+SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}dest@rbracechar{} @lbracechar{}SYSEX_RT_SUBID1@rbracechar{} 0xnn 0xnn...
+@end smallexample
+for example:
+@smallexample
+FILEHEADER 1 384 MONOTRACK
+STARTTRACK ; bytes in track: 74
+TEMPO 60
+TIME_SIGNATURE 4 4 24
+SYSEX NON_REALTIME 0x7f NONRT_GM 0x01
+DELAY 768
+END_OF_TRACK
+@end smallexample
+
+dest may be a device ID, or a MIDI channel.
+
+
 
 @node LAZY track mode
 @subsection LAZY track mode

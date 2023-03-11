@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.47
+// TextMIDITools Version 1.0.48
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -219,6 +219,81 @@ namespace midi
     const MidiStreamArray1 start_of_sysex         {0xf0};
     const MidiStreamArray1 end_of_sysex           {0xf7};
 
+    const MidiStreamArray1 sysex_subid_non_commercial {0x7d}; //  "NON_COMMERCIAL"
+    const MidiStreamArray1 sysex_subid_non_realtime {0x7e}; //  "NON_REALTIME"
+    const MidiStreamArray1 sysex_subid_real_time {0x7f}; //  "REAL_TIME"
+    const MidiStreamArray1   sysex_subid_nonrt_sample_dump_header {0x01}; //  "NONRT_SAMPLE_DUMP_HEADER"
+    const MidiStreamArray1   sysex_subid_nonrt_sample_data_packet {0x02}; //  "NONRT_SAMPLE_DATA_PACKET"
+    const MidiStreamArray1   sysex_subid_nonrt_sample_dump_request {0x03}; //  "NONRT_SAMPLE_DUMP_REQUEST"
+
+    const MidiStreamArray1   sysex_subid_nonrt_timecode{0x04}; //  "NONRT_TIMECODE"
+    const MidiStreamArray1     sysex_subid_timecode_special {0x00}; //  "SPECIAL"
+    const MidiStreamArray1     sysex_subid_timecode_punch_in_points {0x01}; //  "TIMECODE_PUNCH_IN_PTS"
+    const MidiStreamArray1     sysex_subid_timecode_punch_out_points {0x02}; //  "TIMECODE_PUNCH_OUT_PTS"
+    const MidiStreamArray1     sysex_subid_timecode_delete_punch_in_point {0x03}; //  "TIMECODE_DELETE_PUNCH_IN_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_delete_punch_out_point {0x04}; //  "TIMECODE_DELETE_PUNCH_OUT_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_event_start_point {0x05}; //  "TIMECODE_EVENT_START_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_event_stop_point {0x06}; //  "TIMECODE_EVENT_STOP_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_event_start_points_with_additional_info {0x07}; //  "TIMECODE_EVENT_START_PTS_WITH_ADDITIONAL_INFO"
+    const MidiStreamArray1     sysex_subid_timecode_event_stop_points_with_additional_info {0x08}; //  "TIMECODE_EVENT_STOP_PTS_WITH_ADDITIONAL_INFO"
+    const MidiStreamArray1     sysex_subid_timecode_delete_event_start_point {0x09}; //  "TIMECODE_DELETE_EVENT_START_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_delete_event_stop_point {0x0a}; //  "TIMECODE_DELETE_EVENT_STOP_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_cue_points {0x0b}; //  "TIMECODE_CUE_PTS"
+    const MidiStreamArray1     sysex_subid_timecode_cue_points_with_additional_info {0x0c}; //  "TIMECODE_CUE_PTS_WITH_ADDITIONAL_INFO"
+    const MidiStreamArray1     sysex_subid_timecode_delete_cue_point {0x0d}; //  "TIMECODE_DELETE_CUE_POINT"
+    const MidiStreamArray1     sysex_subid_timecode_event_name_in_additional_info {0x0e}; //  "TIMECODE_EVENT_NAME_IN_ADDITIONAL_INFO"
+
+    const MidiStreamArray1   sysex_subid_nonrt_sample_dump_extensions{0x05}; //  "NONRT_SAMPLE_DUMP_EXTENSIONS"
+    const MidiStreamArray1     sysex_subid_nonrt_sample_dump_extensions_multiple_loop_points{0x01}; //  "NONRT_SAMPLE_DUMP_EXTENSIONS_MULTIPLE_LOOP_PTS"
+    const MidiStreamArray1     sysex_subid_nonrt_sample_dump_extensions_loop_points_request{0x02}; //  "NONRT_SAMPLE_DUMP_EXTENSIONS_LOOP_PTS_REQUEST"
+
+    const MidiStreamArray1   sysex_subid_nonrt_general_info{0x06}; //  "NONRT_GENERAL_INFO"
+    const MidiStreamArray1     sysex_subid_nonrt_general_info_id_request{0x01}; //  "NONRT_GENERAL_INFO_ID_REQUEST"
+    const MidiStreamArray1     sysex_subid_nonrt_general_info_id_reply{0x02}; //  "NONRT_GENERAL_INFO_ID_REPLY"
+
+    const MidiStreamArray1   sysex_subid_nonrt_file_dump{0x07}; //  "NONRT_FILE_DUMP"
+    const MidiStreamArray1     sysex_subid_nonrt_file_dump_header{0x01}; //  "NONRT_FILE_DUMP_HEADER"
+    const MidiStreamArray1     sysex_subid_nonrt_file_dump_data_packet{0x02}; //  "NONRT_FILE_DUMP_DATA_PACKET"
+    const MidiStreamArray1     sysex_subid_nonrt_file_dump_data_request{0x03}; //  "NONRT_FILE_DUMP_DATA_REQUEST"
+
+    const MidiStreamArray1   sysex_subid_nonrt_tuning_std{0x08}; //  "NONRT_TUNING_STD"
+    const MidiStreamArray1     sysex_subid_nonrt_tuning_std_bulk_dump_request{0x01}; //  "NONRT_TUNING_STD_BULK_DUMP_REQUEST"
+    const MidiStreamArray1     sysex_subid_nonrt_tuning_std_bulk_dump_reply{0x02}; //  "NONRT_TUNING_STD_BULK_DUMP_REPLY"
+
+    const MidiStreamArray1   sysex_subid_nonrt_gm{0x09}; //  "NONRT_GM"
+    const MidiStreamArray1     sysex_subid_nonrt_gm_on{0x01}; //  "NONRT_GM_ON"
+    const MidiStreamArray1     sysex_subid_nonrt_gm_off{0x02}; //  "NONRT_GM_OFF"
+
+    const MidiStreamArray1   sysex_subid_nonrt_end_of_file{0x7b}; //  "NONRT_END_OF_FILE"
+    const MidiStreamArray1   sysex_subid_nonrt_wait{0x7c}; //  "NONRT_WAIT"
+    const MidiStreamArray1   sysex_subid_nonrt_cancel{0x7d}; //  "NONRT_CANCEL"
+    const MidiStreamArray1   sysex_subid_nonrt_nak{0x7e}; //  "NONRT_NAK"
+    const MidiStreamArray1   sysex_subid_nonrt_ack{0x7f}; //  "NONRT_ACK"
+
+    const MidiStreamArray1   sysex_subid_rt_timecode{0x01}; //   "RT_TIMECODE"
+    const MidiStreamArray1     sysex_subid_rt_timecode_full_message {0x01}; //   "RT_TIMECODE_FULL_MESSAGE"
+    const MidiStreamArray1     sysex_subid_rt_timecode_user_bits{0x02}; //  "RT_TIMECODE_USER_BITS"
+
+    const MidiStreamArray1   sysex_subid_rt_show_control{0x02}; //  "RT_SHOW_CONTROL"
+    const MidiStreamArray1     sysex_subid_rt_show_control_extensions {0x00}; //  "RT_SHOW_CONTROL_EXTENSIONS"
+
+    const MidiStreamArray1   sysex_subid_rt_notation_information{0x03}; //  "RT_NOTATION_INFORMATION"
+    const MidiStreamArray1     sysex_subid_rt_notation_information_bar_number{0x01}; //  "RT_NOTATION_INFORMATION_BAR_NUMBER"
+    const MidiStreamArray1     sysex_subid_rt_notation_information_time_signature_immediate{0x02}; //  "RT_NOTATION_INFORMATION_TIME_SIGNATURE_IMMEDIATE"
+    const MidiStreamArray1     sysex_subid_rt_notation_information_time_signature_delayed{0x42}; //  "RT_NOTATION_INFORMATION_TIME_SIGNATURE_DELAYED"
+
+    const MidiStreamArray1   sysex_subid_rt_device_control{0x04}; //  "RT_DEVICE_CONTROL"
+    const MidiStreamArray1     sysex_subid_rt_device_control_main_volume{0x01}; //  "RT_DEVICE_CONTROL_MAIN_VOLUME"
+    const MidiStreamArray1     sysex_subid_rt_device_control_main_balance{0x02}; //  "RT_DEVICE_CONTROL_MAIN_BALANCE"
+
+    const MidiStreamArray1   sysex_subid_rt_mtc_cueing{0x05}; //  "RT_MTC_CUEING"
+    // Use non-RT timecode commands except delete punch, delete event, delete cue point.
+
+    const MidiStreamArray1   sysex_subid_rt_machine_control_commands{0x06}; //  "RT_MACHINE_CONTROL_COMMANDS"
+    const MidiStreamArray1   sysex_subid_rt_machine_control_responses{0x07}; //  "RT_MACHINE_CONTROL_RESPONSES"
+    const MidiStreamArray1   sysex_subid_rt_tuning_std{0x08}; //  "RT_TUNING_STD"
+    const MidiStreamArray1     sysex_subid_rt_tuning_std_note_change{0x02}; //  "RT_TUNING_STD"
+
     constexpr MidiStreamAtom MiddleC{60};
 
     const int SMPTE_hours_max{23};
@@ -288,5 +363,29 @@ namespace midi
     };
 
 #pragma pack()
+
+    class RunningStatus
+    {
+      public:
+        RunningStatus()
+          : running_status_valid_(),
+            running_status_value_{}
+        {
+        }
+        explicit RunningStatus(const RunningStatus& ) = default;
+        RunningStatus& operator=(const RunningStatus& ) = default;
+        void running_status(midi::MidiStreamAtom running_status_value);
+        void clear();
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        bool running_status_valid() const;
+        MidiStreamAtom running_status_value() const;
+        // returns a zero-based channel
+        MidiStreamAtom channel() const;
+        MidiStreamAtom command() const;
+      private:
+        bool running_status_valid_;
+        MidiStreamAtom running_status_value_;
+    };
+
 }
 #endif // MIDI_H

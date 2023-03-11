@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.47
+// TextMIDITools Version 1.0.48
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -110,38 +110,6 @@ ostream& textmidi::operator<<(ostream& os, const MidiDelayEventPair& msg_pair)
     return os;
 }
 
-
-void RunningStatus::running_status(MidiStreamAtom running_status_value)
-{
-    running_status_valid_ = true;
-    running_status_value_ = running_status_value;
-}
-
-void RunningStatus::clear()
-{
-    running_status_valid_ = false;
-    running_status_value_ = 0u;
-}
-
-bool RunningStatus::running_status_valid() const
-{
-    return running_status_valid_;
-}
-
-midi::MidiStreamAtom RunningStatus::running_status_value() const
-{
-    return running_status_value_;
-}
-
-MidiStreamAtom RunningStatus::channel() const
-{
-    return running_status_value_ & midi::channel_mask;
-}
-
-MidiStreamAtom RunningStatus::command() const
-{
-    return running_status_value_ & ~midi::channel_mask;
-}
 
 //
 // return the accumulated MIDI ticks.

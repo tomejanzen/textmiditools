@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.47
+// TextMIDITools Version 1.0.48
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -102,6 +102,10 @@ namespace midi
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;
     extern const NumStringMap<midi::MidiStreamAtom> control_function_map;
     extern const NumStringMap<midi::XmfPatchTypeEnum> xmf_patch_type_map;
+
+    extern const NumStringMap<midi::MidiStreamAtom> sysex_subid_map;
+    extern const NumStringMap<midi::MidiStreamAtom> sysex_nonrt_id1_map;
+    extern const NumStringMap<midi::MidiStreamAtom> sysex_rt_id1_map;
 
     std::ostream& operator<<(std::ostream& os, midi::MIDI_Format mf);
 

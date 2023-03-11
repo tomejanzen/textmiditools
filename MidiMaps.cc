@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.47
+// TextMIDITools Version 1.0.48
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -16,10 +16,10 @@ using namespace midi;
 
 const midi::NumStringMap<int> midi::smpte_fps_map
 {
-    {0, std::string_view("SMPTE_24FPS")},
-    {1, std::string_view("SMPTE_25FPS")},
-    {2, std::string_view("SMPTE_30FPSDROPFRAME")},
-    {3, std::string_view("SMPTE_30FPSNONDROPFRAME")}
+    {0, "SMPTE_24FPS"},
+    {1, "SMPTE_25FPS"},
+    {2, "SMPTE_30FPSDROPFRAME"},
+    {3, "SMPTE_30FPSNONDROPFRAME"}
 };
 
 const midi::NumStringMap<int> midi::dynamics_map
@@ -38,9 +38,9 @@ const midi::NumStringMap<int> midi::dynamics_map
 
 const midi::NumStringMap<midi::MIDI_Format> midi::format_map
 {
-        {"MONOTRACK", midi::MIDI_Format::MonoTrack},
-        {"MULTITRACK", midi::MIDI_Format::MultiTrack},
-        {"MULTISEQUENCE", midi::MIDI_Format::MultiSequence}
+    {"MONOTRACK", midi::MIDI_Format::MonoTrack},
+    {"MULTITRACK", midi::MIDI_Format::MultiTrack},
+    {"MULTISEQUENCE", midi::MIDI_Format::MultiSequence}
 };
 
 // MIDI Pan is actually excess 64,
@@ -53,7 +53,7 @@ const midi::NumStringMap<int> midi::pan_map
     {"RIGHT",  MaxSignedPan}
 };
 
-const midi::NumStringMap<midi::MidiStreamAtom> midi::text_meta_map 
+const midi::NumStringMap<midi::MidiStreamAtom> midi::text_meta_map
 {
     {"TEXT",            midi::text_prefix[0]},
     {"COPYRIGHT",       midi::copyright_prefix[0]},
@@ -131,8 +131,8 @@ const midi:: NumStringMap<midi::MidiStreamAtom> midi::control_function_map
 
 const NumStringMap<XmfPatchTypeEnum> midi::xmf_patch_type_map
 {
-    {"GM1", midi::XmfPatchTypeEnum::GM1}, 
-    {"GM2", midi::XmfPatchTypeEnum::GM2}, 
+    {"GM1", midi::XmfPatchTypeEnum::GM1},
+    {"GM2", midi::XmfPatchTypeEnum::GM2},
     {"DLS", midi::XmfPatchTypeEnum::DLS}
 };
 
@@ -160,4 +160,41 @@ ostream& midi::operator<<(ostream& os, const midi::MidiHeader& mh)
     static_cast<void>(os.flags(flags));
     return os;
 }
+
+const NumStringMap<MidiStreamAtom> midi::sysex_subid_map
+{
+    {"NON_COMMERCIAL", sysex_subid_non_commercial[0]},
+    {"NON_REALTIME", sysex_subid_non_realtime[0]},
+    {"REAL_TIME", sysex_subid_real_time[0]}
+};
+
+const NumStringMap<MidiStreamAtom> midi::sysex_nonrt_id1_map
+{
+    {"NONRT_SAMPLE_DUMP_HEADER", sysex_subid_nonrt_sample_dump_header[0]},
+    {"NONRT_SAMPLE_DATA_PACKET", sysex_subid_nonrt_sample_data_packet[0]},
+    {"NONRT_SAMPLE_DUMP_REQUEST", sysex_subid_nonrt_sample_dump_request[0]},
+    {"NONRT_TIMECODE", sysex_subid_nonrt_timecode[0]},
+    {"NONRT_SAMPLE_DUMP_EXTENSIONS", sysex_subid_nonrt_sample_dump_extensions[0]},
+    {"NONRT_GENERAL_INFO", sysex_subid_nonrt_general_info[0]},
+    {"NONRT_FILE_DUMP", sysex_subid_nonrt_file_dump[0]},
+    {"NONRT_TUNING_STD", sysex_subid_nonrt_tuning_std[0]},
+    {"NONRT_GM", sysex_subid_nonrt_gm[0]},
+    {"NONRT_END_OF_FILE", sysex_subid_nonrt_end_of_file[0]},
+    {"NONRT_WAIT", sysex_subid_nonrt_wait[0]},
+    {"NONRT_CANCEL", sysex_subid_nonrt_cancel[0]},
+    {"NONRT_NAK", sysex_subid_nonrt_nak[0]},
+    {"NONRT_ACK", sysex_subid_nonrt_ack[0]}
+};
+
+const NumStringMap<MidiStreamAtom> midi::sysex_rt_id1_map
+{
+    {"RT_TIMECODE", sysex_subid_rt_timecode[0]},
+    {"RT_SHOW_CONTROL", sysex_subid_rt_show_control[0]},
+    {"RT_NOTATION_INFORMATION", sysex_subid_rt_notation_information[0]},
+    {"RT_DEVICE_CONTROL", sysex_subid_rt_device_control[0]},
+    {"RT_MTC_CUEING", sysex_subid_rt_mtc_cueing[0]},
+    {"RT_MACHINE_CONTROL_COMMANDS", sysex_subid_rt_machine_control_commands[0]},
+    {"RT_MACHINE_CONTROL_RESPONSES", sysex_subid_rt_machine_control_responses[0]},
+    {"RT_TUNING_STD", sysex_subid_rt_tuning_std[0]}
+};
 

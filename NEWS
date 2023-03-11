@@ -207,5 +207,9 @@
       Fix truncation of 1 charcter of
       string event strings if not quoted.
       Incorporate DEVICE_NAME and PROGRAM_NAME.
-
+    * 2023-03-10: Improve miditext --lazy.
+      Add Control ID name strings.  Create NumStringMap template
+      to make bidirectional maps for strings and codes.
+      Add support for XMF patch Type, device name, and program name.
+      Restore behavior of resetting running status for meta and sysex events.
 

@@ -1,3 +1,9 @@
+2023-03-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, MidiMaps.cc, textmidi.gdb, textmidi.l:
+        Rewrite textidi handling of SYSEX to allow use of names for
+        subids, and sudid1s.  Probably won't add vendors.
+        * Midi.h: make array<>'s constexpr.
+
 2023-03-10     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.{h,cc}, MidiEvents.{h,c}, textmidi.l: Move RunningStatus class
         from MidiEvents to Midi.  Rewrite textmidi.l to use the RunningStatus

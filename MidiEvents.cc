@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.48
+// TextMIDITools Version 1.0.49
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -188,7 +188,11 @@ void textmidi::MidiSysExEvent::consume_stream(MidiStreamIterator& midiiter)
     do
     {
         data_.push_back(*midiiter);
-    } while ((*midiiter++ != end_of_sysex[0]) && (++count < len));
+    } while ((*(++midiiter) != end_of_sysex[0]) && (++count < len));
+    if (*midiiter == end_of_sysex[0])
+    {
+        ++midiiter;
+    }
 }
 
 //
@@ -197,12 +201,47 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << hex << "SYSEX";
-    for (auto sys_ex_it(data_.begin());
-            (sys_ex_it != data_.end()) && (*sys_ex_it != end_of_sysex[0]);
-            ++sys_ex_it)
+    int i{};
+    if (sysex_subid_map.contains(data_[i]))
     {
+        // subid
+        os << ' ' << sysex_subid_map.at(data_[i]);
+        ++i;
+        // device id
         os << ' ' << hex << "0x" << setw(2) << setfill('0')
-           << static_cast<unsigned>(*sys_ex_it);
+               << static_cast<unsigned>(data_[i]);
+        ++i;
+        // subid1
+        switch (data_[0])
+        {
+          case sysex_subid_non_commercial[0]:
+            break;
+          case sysex_subid_non_realtime[0]:
+            if (sysex_nonrt_id1_map.contains(data_[i]))
+            {
+                os << ' ' << sysex_nonrt_id1_map.at(data_[i]);
+                ++i;
+            }
+            break;
+          case sysex_subid_realtime[0]:
+            if (sysex_rt_id1_map.contains(data_[i]))
+            {
+                os << ' ' << sysex_rt_id1_map.at(data_[i]);
+                ++i;
+            }
+            break;
+        }
+    }
+
+    if (i < data_.size())
+    {
+        for (auto it(data_.begin() + i);
+                (it != data_.end()) && (*it != end_of_sysex[0]);
+                ++it)
+        {
+            os << ' ' << hex << "0x" << setw(2) << setfill('0')
+               << static_cast<unsigned>(*it);
+        }
     }
     static_cast<void>(os.flags(flags));
     return os;

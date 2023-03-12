@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.48
+** TextMIDITools Version 1.0.49
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -321,6 +321,73 @@ namespace
         global_total_track_ticks += ticks;
         return ticks;
     }
+
+    class SysExEventSequence
+    {
+      public:
+        SysExEventSequence()
+          : sysex_seq_{},
+            subid_{},
+            device_id_{},
+            subid1_{}
+        {
+        }
+        void clear()
+        {
+            sysex_seq_.clear();
+            subid_.clear();
+            device_id_.clear();
+            subid1_.clear();
+            remaining_.clear();
+        }
+        void write_length()
+        {
+        }
+        const MidiStreamVector& sysex_seq() const
+        {
+            return sysex_seq_;
+        }
+        void subid(MidiStreamVector subid)
+        {
+            subid_ = subid;
+        }
+        void device_id(const MidiStreamVector& device_id)
+        {
+            device_id_ = device_id;
+        }
+        void subid1(const MidiStreamVector& subid1)
+        {
+            subid1_ = subid1;
+        }
+        void remaining(const MidiStreamVector& remaining)
+        {
+            remaining_ = remaining;
+        }
+        void build_msg()
+        {
+            sysex_seq_.push_back(start_of_sysex[0]);
+            // sysex=subid.size() + device_id.size() + subid1=1 + subid2=1 + remaining.size() + end_of_sysex=1
+            const MidiStreamVector length_seq{int_to_vec(subid_.size() + device_id_.size() + subid1_.size() + remaining_.size() + 1)};
+            ranges::copy(length_seq, back_inserter(sysex_seq_));
+            ranges::copy(subid_, back_inserter(sysex_seq_));
+            ranges::copy(device_id_, back_inserter(sysex_seq_));
+            ranges::copy(subid1_, back_inserter(sysex_seq_));
+            ranges::copy(remaining_, back_inserter(sysex_seq_));
+            sysex_seq_.push_back(end_of_sysex[0]);
+        }
+        void append(MidiStreamVector& track)
+        {
+            ranges::copy(sysex_seq_, back_inserter(track));
+            this->clear();
+        }
+      private:
+        MidiStreamVector sysex_seq_;
+        MidiStreamVector subid_;
+        MidiStreamVector device_id_;
+        MidiStreamVector subid1_;
+        MidiStreamVector remaining_;
+    };
+    SysExEventSequence sysex_event_sequence{};
 }
 
 namespace lazy
@@ -341,10 +408,11 @@ LETTER [a-zA-Z]
 INTEGER ([-+]?{DIGIT}+)
 UINTEGER ({DIGIT}+)
 XINTEGER 0x([0-9A-Fa-f])+
-XINTEGER2 0x([0-9A-Fa-f]){2}
 UXINTEGER ({UINTEGER}|{XINTEGER})
 FLOAT {UINTEGER}(([.][[:digit:]]+)?)
-HEX_BYTES ({SOMESPACE}{UXINTEGER})+
+HEX_BYTES {XINTEGER}({SOMESPACE}{XINTEGER})*
+ZERO_BYTE (0x00|0x0)
+THIRTYTWO_BYTE (0x20|32)
 PANVALUE ({INTEGER}|LEFT|CENTER|RIGHT)
 SMPTE_CODE ([[:print:]]+{SOMESPACE}{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER})
 
@@ -388,7 +456,7 @@ ALTERNATE_CONTROL_CHANNEL_ONOFF (LEGATO_FOOT|PORTAMENTO|SOSTENUTO)
 
 PATCH_TYPE (GM1|GM2|DLS)
 
-SYSEX_SUBID (NON_COMMERCIAL|NON_REALTIME|REAL_TIME)
+SYSEX_SUBID (NON_COMMERCIAL|NON_REALTIME|REALTIME)
 SYSEX_NONRT_SUBID1 (NONRT_SAMPLE_DUMP_HEADER|NONRT_SAMPLE_DATA_PACKET|NONRT_SAMPLE_DUMP_REQUEST|NONRT_TIMECODE|NONRT_SAMPLE_DUMP_EXTENSIONS|NONRT_GENERAL_INFO|NONRT_FILE_DUMP|NONRT_TUNING_STD|NONRT_GM|NONRT_END_OF_FILE|NONRT_WAIT|NONRT_CANCEL|NONRT_NAK|NONRT_ACK)
 SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_CONTROL|RT_MTC_CUEING|RT_MACHINE_CONTROL_COMMANDS|RT_MACHINE_CONTROL_RESPONSES|RT_TUNING_STD)
 
@@ -396,16 +464,19 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
 %s LAZY_STATE
 %s DETAIL_STATE
 %s TEXT_META_STATE
+%s SYSEX_SUBID_STATE
+%s SYSEX_DEVICEID_STATE
+%s SYSEX_SUBID1_STATE
+%s SYSEX_REMAINDER_STATE
+
 %option noyywrap
 
 %%
 <INITIAL>{FILEHEADERCONTEXT} {
-    /* Recognize FILEHEADER */
     BEGIN(FILE_HEADER_STATE);
   }
 
 <FILE_HEADER_STATE>{INTEGER}{SOMESPACE}{INTEGER}{SOMESPACE}{FILEFORMAT} {
-    /* After FILEHEADER, recognize {number of tracks (discarded)} {ticks per quarter note} {MONOTRACK|MULTITRACK|MULTISEQUENCE} */
     MidiHeader midi_header{};
     istringstream iss(yytext);
     string format_str;
@@ -443,7 +514,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <FILE_HEADER_STATE>{INTEGER}{SOMESPACE}{INTEGER} {
-    /* Recognize {number of tracks (discarded)} {ticks per quarter} */
     MidiHeader midi_header{};
     midi_header.format_ = MIDI_Format::MultiTrack;
     istringstream iss(yytext);
@@ -456,17 +526,14 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
 
 
 <DETAIL_STATE>LAZY|BRIEF {
-    /* Enter LAZY mode. */
     BEGIN(LAZY_STATE);
   }
 
 <LAZY_STATE>END_LAZY|DETAIL|END_BRIEF {
-    /* Enter DETAIL mode. */
     BEGIN(DETAIL_STATE);
   }
 
 <DETAIL_STATE>{STARTTRACKTOKEN} {
-    /* Recognize STARTTRACK */
     ++track_counter;
     if (textmidi_features->verbose_)
     {
@@ -488,7 +555,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     running_status.clear();
   }
 
-<DETAIL_STATE>SEQUENCER_SPECIFIC{HEX_BYTES} {
+<DETAIL_STATE>SEQUENCER_SPECIFIC{SOMESPACE}{HEX_BYTES} {
     write_delay();
     istringstream iss{yytext};
     string next_word{};
@@ -505,7 +572,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     vector<unsigned> bytes{};
     ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
-            unsigned i{};
+            int i{};
             // if a hexadecimal byte
             if (str.substr(0, 2) == "0x")
             {
@@ -530,7 +597,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
 }
 
 <DETAIL_STATE>SEQUENCE_NUMBER{SOMESPACE}{UINTEGER} {
-    /* Recognize SEQUENCE_NUMBER 17 */
     write_delay();
     istringstream iss(yytext);
     string meta_name{};
@@ -548,8 +614,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     running_status.clear();
   }
 
-<DETAIL_STATE>UNKNOWN_META{HEX_BYTES} {
-    /* Recognize SEQUENCE_NUMBER 17 */
+<DETAIL_STATE>UNKNOWN_META{SOMESPACE}{HEX_BYTES} {
     write_delay();
 
     istringstream iss{yytext};
@@ -583,7 +648,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     vector<unsigned> bytes{};
     ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
-            unsigned i{};
+            int i{};
             if (str.substr(0, 2) == "0x")
             {
                 istringstream iss3{str};
@@ -608,9 +673,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>{TEXT_META}{SOMESPACE} {
-    /* Recognize (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT) */
-    /* This may be followed by a double-quoted string, or a non-quoted string */
-    /* to the end of the line. */
     write_delay();
     istringstream iss(yytext);
     string meta_name{};
@@ -636,7 +698,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <TEXT_META_STATE>{LINE} {
-    /* Recognize the remainder of the line */
     string yystring{yytext};
     bool was_a_leading_quote{};
     if ('\"' == yystring[0])
@@ -735,7 +796,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE,LAZY_STATE>{END_OF_TRACKTOKEN} {
-    /* Recognize the end of a track. */
     write_delay();
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(end_of_track_prefix[0]);
@@ -754,7 +814,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>TEMPO{SPACE}{FLOAT} {
-    /* Recognize TEMPO {num} */
     write_delay();
     istringstream iss(yytext);
     string discard{};
@@ -774,7 +833,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>DELAY{SPACE}{INTEGER} {
-    /* Recognize DELAY num (the number of ticks) */
     istringstream iss(yytext);
     string discard{};
     uint32_t delay{};
@@ -784,7 +842,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>NOTE_ON{SOMESPACE}{INTEGER}{SOMESPACE}{PITCH_NAME}{SOMESPACE}{INTEGER} {
-    /* Recognize NOTE_ON {chan} {pitch} {velocity num}. */
     write_delay();
 
     istringstream iss(yytext);
@@ -820,7 +877,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>NOTE_OFF{SPACE}{INTEGER}{SPACE}{PITCH_NAME}{SPACE}{INTEGER} {
-    /* Recognize NOTE_OFF {channel} {Pitch} {velocity}. */
     write_delay();
 
     istringstream iss(yytext);
@@ -855,7 +911,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
 
 
 <DETAIL_STATE>POLY_KEY_PRESSURE{SPACE}{INTEGER}{SPACE}{PITCH_NAME}{SPACE}{INTEGER} {
-    /* Recognize POLY_KEY_PRESSURE {channel} {pitchname} {velocity num} */
     istringstream iss(yytext);
     string discard;
     uint32_t channel{},
@@ -889,7 +944,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}({INTEGER}|{CONTROL_FUNCTION}){SPACE}({INTEGER}|{ONOFF}) {
-    /* Recognize CONTROL {channel} {control_id} {control_value} */
     write_delay();
 
     istringstream iss(yytext);
@@ -945,7 +999,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}PAN{SPACE}({INTEGER}|{PANVALUE}) {
-    /* Recognize CONTROL {channel} {control_id} {control_value} */
     write_delay();
 
     istringstream iss(yytext);
@@ -1000,7 +1053,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL}{SPACE}{INTEGER} {
-    /* Recognize {RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF} {channel} */
     write_delay();
 
     string control_id_str{};
@@ -1022,7 +1074,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{INTEGER} {
-    /* Recognize {BREATH|DAMPER|SOFTPEDAL} {channel} {control_value_num} */
     write_delay();
 
     string control_id_str;
@@ -1043,7 +1094,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}{ONOFF} {
-    /* Recognize {LEGATO_FOOT|PORTAMENTO|SOSTENUTO} {channel num} {ON|OFF} */
     write_delay();
 
     string control_id_str;
@@ -1064,7 +1114,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>PAN{SPACE}{INTEGER}{SPACE}{PANVALUE} {
-    /* Recognize PAN {channel num} {LEFT|CENTER|RIGHT|-64 to 63} */
     string namestr{};
     string panstring{};
     int32_t pancode{};
@@ -1094,7 +1143,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
 
 
 <DETAIL_STATE>PROGRAM{SPACE}{INTEGER}{SPACE}{INTEGER} {
-    /* Recognize PROGRAM {channel num} {program number} */
     write_delay();
 
     istringstream iss(yytext);
@@ -1111,7 +1159,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>CHANNEL_PRESSURE{SPACE}{INTEGER}{SPACE}{INTEGER} {
-    /* Recognize CHANNEL_PRESSURE {channel} {pressure}*/
     write_delay();
     istringstream iss(yytext);
     string discard;
@@ -1128,7 +1175,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>PITCH_WHEEL{SPACE}{INTEGER}{SPACE}{INTEGER} {
-    /* Recognize PITCH_WHEEL {channel} {bend num} */
     write_delay();
 
     istringstream iss(yytext);
@@ -1150,7 +1196,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>TIME_SIGNATURE{SPACE}{INTEGER}{SPACE}{INTEGER}{SPACE}{INTEGER} {
-    /* Recognize TIME_SIGNATURE {beats per bar} {beats per measure} {MIDI ticks per beat} */
     write_delay();
 
     istringstream iss(yytext);
@@ -1185,7 +1230,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>KEY_SIGNATURE{SPACE}{NOTE_NAME} {
-    /* Recognize KEY_SIGNATURE key as in a for a minor, or Db for D-flat Major */
     write_delay();
 
     istringstream iss(yytext);
@@ -1208,7 +1252,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>XMF_PATCH_TYPE{SPACE}{PATCH_TYPE} {
-    /* Recognize KEY_SIGNATURE key as in a for a minor, or Db for D-flat Major */
     write_delay();
 
     istringstream iss(yytext);
@@ -1230,7 +1273,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
-    /* Recognize SMPTE_OFFSET HH:MM:SS:FR:FF (hours:minutes:seconds:frames: 1/100's of frames) */
     write_delay();
 
     string yystring{yytext},
@@ -1281,7 +1323,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>MIDI_CHANNEL{SPACE}{UINTEGER} {
-    /* Recognize MIDI_CHANNEL {channel} */
     write_delay();
 
     istringstream iss(yytext);
@@ -1300,7 +1341,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>MIDI_PORT{SPACE}{UINTEGER} {
-    /* Recognize MIDI_PORT {port} */
     write_delay();
 
     istringstream iss(yytext);
@@ -1317,12 +1357,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     running_status.clear();
   }
 
-<DETAIL_STATE>SYSEX{HEX_BYTES} {
-    /* Recognize SYSEX {byte}... */
-    /* The textmidi text file should not have the starting F0 or length */
-    /* or the trailing F7. */
-    /* textmidi will add the SYSEX (0xF0) and the length at the front */
-    /* as well as well the end-of-sysex (F7) at the end. */
+<DETAIL_STATE>SYSEX{SOMESPACE}{HEX_BYTES} {
     write_delay();
 
     istringstream iss{yytext};
@@ -1337,8 +1372,8 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
             byte_strings.push_back(next_word);
         }
     }
-    vector<unsigned> bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
+    vector<unsigned> byte_ints{};
+    ranges::transform(byte_strings, back_inserter(byte_ints), [](const string& str)
         {
             unsigned i{};
             if (str.substr(0, 2) == "0x")
@@ -1355,57 +1390,128 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     );
     // push the length of data plus the F7 at end
     // of the MIDI file stream.
-    trackchunk.push_back(start_of_sysex[0]);
-    const MidiStreamVector length_seq = int_to_vec(bytes.size() + 1);
-    ranges::copy(length_seq, back_inserter(trackchunk));
-    ranges::copy(bytes, back_inserter(trackchunk));
-    trackchunk.push_back(end_of_sysex[0]);
+    MidiStreamVector bytes{};
+    ranges::transform(byte_ints, back_inserter(bytes), 
+        [](int i) { return static_cast<MidiStreamAtom>(i); } );
+    sysex_event_sequence.remaining(bytes);
+    sysex_event_sequence.build_msg();
+    sysex_event_sequence.append(trackchunk);
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
     running_status.clear();
   }
 
-<DETAIL_STATE>SYSEX{SOMESPACE}{SYSEX_SUBID}{SOMESPACE}{XINTEGER2}{SOMESPACE}{SYSEX_NONRT_SUBID1}{HEX_BYTES} {
+<DETAIL_STATE>SYSEX{SOMESPACE}{SYSEX_SUBID} {
     write_delay();
+    string str{};
+    istringstream iss{yytext};
+    iss >> str;
+    iss >> str;
+    MidiStreamVector vec;
+    // this can't fail because flex's analyzer
+    // has already identified this as a subid.
+    vec.push_back(sysex_subid_map.at(str));
+    sysex_event_sequence.subid(vec);
+    BEGIN(SYSEX_DEVICEID_STATE);
+  }
 
+<SYSEX_SUBID_STATE>{SOMESPACE}({ZERO_BYTE}{SOMESPACE}({ZERO_BYTE}|{THIRTYTWO_BYTE}))?{SOMESPACE}{XINTEGER} {
+    string str{yytext};
     istringstream iss{yytext};
     string next_word{};
-    string sysex_str{},
-           subid_str{},
-           channel_str{},
-           subid1_str{};
-    iss >> sysex_str >> subid_str >> channel_str >> subid1_str;
-    MidiStreamAtom subid{};
-    if (sysex_subid_map.contains(subid_str))
+    vector<string> byte_strings{};
+    while (iss)
     {
-        subid = sysex_subid_map.at(subid_str);
+        iss >> next_word;
+        if (iss && !next_word.empty())
+        {
+            byte_strings.push_back(next_word);
+        }
     }
-    else
-    {
-        cerr << "Incorrect SYSTEX SUBID." << '\n';
-        subid = sysex_subid_non_realtime[0];
-    }
-    int channel{};
-    if (channel_str.substr(0, 2) == "0x")
-    {
-        istringstream iss{channel_str};
-        iss >> hex >> channel;
-    }
-    else
-    {
-        channel = lexical_cast<unsigned>(channel_str);
-    }
-    MidiStreamAtom subid1{};
-    if (sysex_nonrt_id1_map.contains(subid1_str))
-    {
-        subid1 = sysex_nonrt_id1_map.at(subid1_str);
-    }
-    else
-    {
-        cerr << "Incorrect SYSTEX NONRT SUBID1." << '\n';
-        subid = sysex_subid_nonrt_timecode[0];
-    }
+    MidiStreamVector bytes{};
+    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
+        {
+            int i{};
+            // if a hexadecimal byte
+            if (str.substr(0, 2) == "0x")
+            {
+                istringstream iss{str};
+                iss >> hex >> i;
+            }
+            else // else is decimal
+            {
+                i = lexical_cast<unsigned>(str);
+            }
+            return i;
+        }
+    );
 
+    sysex_event_sequence.subid(bytes);
+    BEGIN(SYSEX_SUBID1_STATE);
+  }
+
+<SYSEX_DEVICEID_STATE>{SOMESPACE}{UXINTEGER} {
+    unsigned xb{};
+    string yystr(yytext);
+    const auto nonspace{yystr.find_first_not_of(" \t")};
+    const string token{yystr.substr(nonspace)};
+    if (token.substr(0, 2) == "0x")
+    {
+        istringstream iss{token.substr(2)};
+        iss >> hex >> xb;
+    }
+    else // decimal
+    {
+        xb = lexical_cast<unsigned>(token);
+    }
+    MidiStreamVector xbvec{xb};
+    sysex_event_sequence.device_id(xbvec);
+    BEGIN(SYSEX_SUBID1_STATE);
+  }
+
+<SYSEX_SUBID1_STATE>{SOMESPACE}{UXINTEGER} {
+    string yystr(yytext);
+    const auto pos{yystr.find_first_not_of(" \t")};
+    const string token{yystr.substr(pos)};
+    unsigned xb{};
+    if (token.substr(0, 2) == "0x")
+    {
+        istringstream iss{token.substr(2)};
+        iss >> hex >> xb;
+    }
+    else // decimal
+    {
+        xb = lexical_cast<unsigned>(token);
+    }
+    MidiStreamVector xbvec{xb};
+    sysex_event_sequence.subid1(xbvec);
+    BEGIN(SYSEX_REMAINDER_STATE);
+  }
+
+<SYSEX_SUBID1_STATE>{SOMESPACE}{SYSEX_NONRT_SUBID1} {
+    string yystr{yytext};
+    const auto pos{yystr.find_first_not_of(" \t")};
+    const string token{yystr.substr(pos)};
+    const MidiStreamVector token_vec{sysex_nonrt_id1_map.at(token)};
+    sysex_event_sequence.subid1(token_vec);
+    BEGIN(SYSEX_REMAINDER_STATE);
+  }
+
+<SYSEX_SUBID1_STATE>{SOMESPACE}{SYSEX_RT_SUBID1} {
+    string yystr{yytext};
+    const auto pos{yystr.find_first_not_of(" \t")};
+    const string token{yystr.substr(pos)};
+    const MidiStreamVector token_vec{sysex_rt_id1_map.at(token)};
+    sysex_event_sequence.subid1(token_vec);
+    BEGIN(SYSEX_REMAINDER_STATE);
+  }
+
+<SYSEX_REMAINDER_STATE>{SOMESPACE}{HEX_BYTES} {
+    istringstream iss{yytext};
+    string yystr{yytext};
+    const auto pos{yystr.find_first_not_of(" \t")};
+    yystr.erase(0, pos);
+    string next_word{};
     vector<string> byte_strings;
     while (iss)
     {
@@ -1415,10 +1521,10 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
             byte_strings.push_back(next_word);
         }
     }
-    vector<unsigned> bytes{};
+    MidiStreamVector bytes{};
     ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
         {
-            unsigned i{};
+            int i{};
             if (str.substr(0, 2) == "0x")
             {
                 istringstream iss{str};
@@ -1431,111 +1537,17 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
             return i;
         }
     );
-    // push the length of data plus the F7 at end
-    // of the MIDI file stream.
-    trackchunk.push_back(start_of_sysex[0]);
-    const MidiStreamVector length_seq = int_to_vec(bytes.size() + 1 + 3);
-    ranges::copy(length_seq, back_inserter(trackchunk));
+    sysex_event_sequence.remaining(bytes);
+    sysex_event_sequence.build_msg();
+    sysex_event_sequence.append(trackchunk);
 
-    trackchunk.push_back(subid);
-    trackchunk.push_back(channel);
-    trackchunk.push_back(subid1);
-    ranges::copy(bytes, back_inserter(trackchunk));
-    trackchunk.push_back(end_of_sysex[0]);
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
     running_status.clear();
+    BEGIN(DETAIL_STATE);
   }
 
-<DETAIL_STATE>SYSEX{SOMESPACE}{SYSEX_SUBID}{SOMESPACE}{XINTEGER2}{SOMESPACE}{SYSEX_RT_SUBID1}{HEX_BYTES} {
-    write_delay();
-
-    istringstream iss{yytext};
-    string next_word{};
-    string sysex_str{},
-           subid_str{},
-           channel_str{},
-           subid1_str{};
-    iss >> sysex_str >> subid_str >> channel_str >> subid1_str;
-    MidiStreamAtom subid{};
-    if (sysex_subid_map.contains(subid_str))
-    {
-        subid = sysex_subid_map.at(subid_str);
-    }
-    else
-    {
-        cerr << "Incorrect SYSTEX SUBID." << '\n';
-        subid = sysex_subid_non_realtime[0];
-    }
-    int channel{};
-    if (channel_str.substr(0, 2) == "0x")
-    {
-        istringstream iss{channel_str};
-        iss >> hex >> channel;
-    }
-    else
-    {
-        channel = lexical_cast<unsigned>(channel_str);
-    }
-    MidiStreamAtom subid1{};
-    if (sysex_rt_id1_map.contains(subid1_str))
-    {
-        subid1 = sysex_rt_id1_map.at(subid1_str);
-    }
-    else
-    {
-        cerr << "Incorrect SYSTEX NONRT SUBID1." << '\n';
-        subid = sysex_subid_nonrt_timecode[0];
-    }
-
-    vector<string> byte_strings;
-    while (iss)
-    {
-        iss >> next_word;
-        if (iss && !next_word.empty())
-        {
-            byte_strings.push_back(next_word);
-        }
-    }
-    vector<unsigned> bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
-        {
-            unsigned i{};
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss{str};
-                iss >> hex >> i;
-            }
-            else
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
-    // push the length of data plus the F7 at end
-    // of the MIDI file stream.
-    trackchunk.push_back(start_of_sysex[0]);
-    const MidiStreamVector length_seq = int_to_vec(bytes.size() + 1 + 3);
-    ranges::copy(length_seq, back_inserter(trackchunk));
-    trackchunk.push_back(subid);
-    trackchunk.push_back(channel);
-    trackchunk.push_back(subid1);
-    ranges::copy(bytes, back_inserter(trackchunk));
-    trackchunk.push_back(end_of_sysex[0]);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
-  }
-
-
-
-
-<DETAIL_STATE>SYSEXRAW{HEX_BYTES} {
-    /* Recognize SYSEXRAW {byte}... */
-    /* The textmidi text file should not have the starting F7 or length. */
-    /* textmidi will add the 0xF7 and the length at the front */
-    /* There is NO end-of-sysex (F7) at the end. */
+<DETAIL_STATE>SYSEXRAW{SOMESPACE}{HEX_BYTES} {
     write_delay();
 
     string next_word{};
@@ -1576,10 +1588,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE,LAZY_STATE>ticks{SPACE}{STRING} {
-    /* Recognize ticks {string to end of line} */
-    /* This will print to the screen, the accumulated ticks at this point
-    ** in the current track for auditing purposes (such as tracks
-    ** being different lengths in ticks). */
     string ticks_str{};
     (((ticks_str += "Ticks: ")
         += lexical_cast<string>(global_total_track_ticks)) += ' ') += yytext;
@@ -1596,7 +1604,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>{DYNAMIC} {
-    /* Recognize a dynamic as in pppp..mf..forte..ff..ffff */
     string dynamic_str{yytext};
 
     to_lower(dynamic_str);
@@ -1608,9 +1615,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>vel{SPACE}{INTEGER} {
-    // A velocity value with a sign, + or -,
-    // is a delta change in the current lazy::dynamic.
-    // Otherwise it is an absolute setting for lazy dynamic.
     string velocity_str(yytext), directive;
     string intstr;
     istringstream iss(velocity_str);
@@ -1631,7 +1635,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>chan{SPACE}{INTEGER} {
-    /* Recognize chan {channel} */
     string channel_str(yytext),
            discard;
     uint32_t channel{1U}; // text channels are in [1..16]
@@ -1646,7 +1649,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>{STARTLINE_OR_SPACE}{LAZY_PITCH_NAME} {
-    /* Recognize pitch name with optional ties */
     string note_name{};
     istringstream iss(yytext);
     iss >> note_name;
@@ -1659,13 +1661,12 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
         running_status((global_channel & channel_mask) | note_on[0], trackchunk);
         trackchunk.push_back(keytie.key_);
         trackchunk.push_back(lazy::dynamic);
+    /* Recognize chan {channel} */
     }
     lazy::chord.push_back(keytie);    // save key number in lazy::chord;
   }
 
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
-    /* Recognize error grammar bad note letter */
-    // ERROR
     const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
         += lexical_cast<string>(textmidi_features->line_ctr_))
         += " Non Key Letter before Key Name: ")
@@ -1678,8 +1679,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>(-{PITCH_NAME})|({PITCH_NAME}-) {
-    /* Recognize error grammar */
-    // ERROR
     const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
         += lexical_cast<string>(textmidi_features->line_ctr_))
         += " Ties are not allowed in DETAIL mode: ")
@@ -1692,8 +1691,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE>{NON_NOTE_LETTER}{PITCH_NAME} {
-    /* Recognize error grammar */
-    // ERROR
     const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
         += lexical_cast<string>(textmidi_features->line_ctr_))
         += " Non-Note Letter before Note Name: ")
@@ -1706,8 +1703,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{LAZY_PITCH_NAME} {
-    /* Recognize error grammar */
-    // ERROR
     const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
         += lexical_cast<string>(textmidi_features->line_ctr_))
         += " Key Name without octave: ")
@@ -1719,8 +1714,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{RHYTHM} {
-    /* Recognize error grammar */
-    // ERROR
     const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
         += lexical_cast<string>(textmidi_features->line_ctr_))
         += " Key Name without octave: ")
@@ -1732,7 +1725,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>{SPACE}{RHYTHM} {
-    /* Recognize a duration fraction in LAZY mode.  */
     const string rhythmstr{yytext};
     istringstream iss(rhythmstr);
     double num1{1.0},
@@ -1807,7 +1799,6 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <LAZY_STATE>(r|R){SPACE}{RHYTHM} {
-    /* Recognize a rest. */
     string rhythmstr{yytext},
            discard{};
 
@@ -1849,11 +1840,11 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
   }
 
 <DETAIL_STATE,LAZY_STATE>{COMMENT} {
-    /* Recognize comments. */
     ++textmidi_features->line_ctr_;
   }
 ^{SOMESPACE}
-{skip}*
+{skip}* {
+        }
 (\n) {
     ++textmidi_features->line_ctr_;
   }

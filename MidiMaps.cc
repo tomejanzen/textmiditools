@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.48
+// TextMIDITools Version 1.0.49
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -165,7 +165,7 @@ const NumStringMap<MidiStreamAtom> midi::sysex_subid_map
 {
     {"NON_COMMERCIAL", sysex_subid_non_commercial[0]},
     {"NON_REALTIME", sysex_subid_non_realtime[0]},
-    {"REAL_TIME", sysex_subid_real_time[0]}
+    {"REALTIME", sysex_subid_realtime[0]}
 };
 
 const NumStringMap<MidiStreamAtom> midi::sysex_nonrt_id1_map

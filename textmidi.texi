@@ -946,16 +946,6 @@ SYSEX 0x43 0x73 0x7f 0x32 0x11 0x00 0x1B 0x03
 The @command{textmidi} program will add F0 and a length of 9 to the front of
 the message, and an F7 to the end.  (The length includes only the
 functional data and the terminating F7).
-@item SYSEXRAW byte byte byte...
-SYSEXRAW also takes either decimal or hexadecimal byte values.  It permits
-sending a more freely-formatted block of data, and is fully specified
-by the synthesizer or effects box vendor.  Do not include the F7 at the
-start, or a length unless the synthesizer manufacturer specifies it,
-or an F7 at the end unless the synthesizer manufacturer requires it.
-Some manufacturers use SYSEXRAW to continue long messages that start
-with a SYSEX block.
-@end table
-
 There is some symbolic support for SYSEX standard messages.
 @smallexample
 SYSEX_SUBID = NON_COMMERCIAL|NON_REALTIME|REAL_TIME
@@ -984,6 +974,16 @@ END_OF_TRACK
 @end smallexample
 
 dest may be a device ID, or a MIDI channel.
+
+@item SYSEXRAW byte byte byte...
+SYSEXRAW also takes either decimal or hexadecimal byte values.  It permits
+sending a more freely-formatted block of data, and is fully specified
+by the synthesizer or effects box vendor.  Do not include the F7 at the
+start, or a length unless the synthesizer manufacturer specifies it,
+or an F7 at the end unless the synthesizer manufacturer requires it.
+Some manufacturers use SYSEXRAW to continue long messages that start
+with a SYSEX block.
+@end table
 
 
 

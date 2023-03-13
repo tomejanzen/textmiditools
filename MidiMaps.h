@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.49
+// TextMIDITools Version 1.0.50
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -106,6 +106,7 @@ namespace midi
     extern const NumStringMap<midi::MidiStreamAtom> sysex_subid_map;
     extern const NumStringMap<midi::MidiStreamAtom> sysex_nonrt_id1_map;
     extern const NumStringMap<midi::MidiStreamAtom> sysex_rt_id1_map;
+    extern const NumStringMap<midi::MidiStreamAtom> sysex_device_id_map;
 
     std::ostream& operator<<(std::ostream& os, midi::MIDI_Format mf);
 

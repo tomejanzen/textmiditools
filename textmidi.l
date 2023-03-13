@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.49
+** TextMIDITools Version 1.0.50
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -400,18 +400,21 @@ namespace lazy
 %}
 /* definitions */
 DYNAMIC (pppp|ppp|pp|p|mp|mf|forte|ff|fff|ffff|PPPP|PPP|PP|P|MP|MF|FORTE|FF|FFF|FFFF)[-\+]?
-DIGIT [0-9]
+DIGIT [[:digit:]]
 SPACE [\t ]*
 STARTLINE_OR_SPACE (^|{SPACE})
 SOMESPACE ([\t ]+)
 LETTER [a-zA-Z]
 INTEGER ([-+]?{DIGIT}+)
 UINTEGER ({DIGIT}+)
+DECBYTE [12]?{DIGIT}{1,2}
 XINTEGER 0x([0-9A-Fa-f])+
+HEXBYTE 0x([0-9A-Fa-f]){1,2}
 UXINTEGER ({UINTEGER}|{XINTEGER})
+BYTE ({DECBYTE}|{HEXBYTE})
 FLOAT {UINTEGER}(([.][[:digit:]]+)?)
-HEX_BYTES {XINTEGER}({SOMESPACE}{XINTEGER})*
-ZERO_BYTE (0x00|0x0)
+BYTE_SEQ {BYTE}({SOMESPACE}{BYTE})*
+ZERO_HEX_BYTE (0x00|0x0)
 THIRTYTWO_BYTE (0x20|32)
 PANVALUE ({INTEGER}|LEFT|CENTER|RIGHT)
 SMPTE_CODE ([[:print:]]+{SOMESPACE}{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER})
@@ -459,13 +462,14 @@ PATCH_TYPE (GM1|GM2|DLS)
 SYSEX_SUBID (NON_COMMERCIAL|NON_REALTIME|REALTIME)
 SYSEX_NONRT_SUBID1 (NONRT_SAMPLE_DUMP_HEADER|NONRT_SAMPLE_DATA_PACKET|NONRT_SAMPLE_DUMP_REQUEST|NONRT_TIMECODE|NONRT_SAMPLE_DUMP_EXTENSIONS|NONRT_GENERAL_INFO|NONRT_FILE_DUMP|NONRT_TUNING_STD|NONRT_GM|NONRT_END_OF_FILE|NONRT_WAIT|NONRT_CANCEL|NONRT_NAK|NONRT_ACK)
 SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_CONTROL|RT_MTC_CUEING|RT_MACHINE_CONTROL_COMMANDS|RT_MACHINE_CONTROL_RESPONSES|RT_TUNING_STD)
+DEVICE_ID (ALL_CALL|{BYTE})
 
 %s FILE_HEADER_STATE
 %s LAZY_STATE
 %s DETAIL_STATE
 %s TEXT_META_STATE
 %s SYSEX_SUBID_STATE
-%s SYSEX_DEVICEID_STATE
+%s SYSEX_DEVICE_ID_STATE
 %s SYSEX_SUBID1_STATE
 %s SYSEX_REMAINDER_STATE
 
@@ -555,7 +559,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     running_status.clear();
   }
 
-<DETAIL_STATE>SEQUENCER_SPECIFIC{SOMESPACE}{HEX_BYTES} {
+<DETAIL_STATE>SEQUENCER_SPECIFIC{SOMESPACE}{BYTE_SEQ} {
     write_delay();
     istringstream iss{yytext};
     string next_word{};
@@ -614,7 +618,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     running_status.clear();
   }
 
-<DETAIL_STATE>UNKNOWN_META{SOMESPACE}{HEX_BYTES} {
+<DETAIL_STATE>UNKNOWN_META{SOMESPACE}{BYTE_SEQ} {
     write_delay();
 
     istringstream iss{yytext};
@@ -1357,7 +1361,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     running_status.clear();
   }
 
-<DETAIL_STATE>SYSEX{SOMESPACE}{HEX_BYTES} {
+<DETAIL_STATE>SYSEX{SOMESPACE}{BYTE_SEQ} {
     write_delay();
 
     istringstream iss{yytext};
@@ -1412,10 +1416,10 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     // has already identified this as a subid.
     vec.push_back(sysex_subid_map.at(str));
     sysex_event_sequence.subid(vec);
-    BEGIN(SYSEX_DEVICEID_STATE);
+    BEGIN(SYSEX_DEVICE_ID_STATE);
   }
 
-<SYSEX_SUBID_STATE>{SOMESPACE}({ZERO_BYTE}{SOMESPACE}({ZERO_BYTE}|{THIRTYTWO_BYTE}))?{SOMESPACE}{XINTEGER} {
+<SYSEX_SUBID_STATE>{SOMESPACE}({ZERO_HEX_BYTE}{SOMESPACE}({ZERO_HEX_BYTE}|{THIRTYTWO_BYTE}))?{SOMESPACE}{XINTEGER} {
     string str{yytext};
     istringstream iss{yytext};
     string next_word{};
@@ -1450,19 +1454,27 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     BEGIN(SYSEX_SUBID1_STATE);
   }
 
-<SYSEX_DEVICEID_STATE>{SOMESPACE}{UXINTEGER} {
+<SYSEX_DEVICE_ID_STATE>{SOMESPACE}{DEVICE_ID} {
     unsigned xb{};
     string yystr(yytext);
     const auto nonspace{yystr.find_first_not_of(" \t")};
     const string token{yystr.substr(nonspace)};
-    if (token.substr(0, 2) == "0x")
+    if (sysex_device_id_map.contains(token))
     {
-        istringstream iss{token.substr(2)};
-        iss >> hex >> xb;
+        xb = sysex_device_id_map.at(token);
     }
-    else // decimal
+    else
     {
-        xb = lexical_cast<unsigned>(token);
+        // is it hexadecimal?
+        if (token.substr(0, 2) == "0x")
+        {
+            istringstream iss{token.substr(2)};
+            iss >> hex >> xb;
+        }
+        else // or decimal
+        {
+            xb = lexical_cast<unsigned>(token);
+        }
     }
     MidiStreamVector xbvec{xb};
     sysex_event_sequence.device_id(xbvec);
@@ -1506,7 +1518,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     BEGIN(SYSEX_REMAINDER_STATE);
   }
 
-<SYSEX_REMAINDER_STATE>{SOMESPACE}{HEX_BYTES} {
+<SYSEX_REMAINDER_STATE>{SOMESPACE}{BYTE_SEQ} {
     istringstream iss{yytext};
     string yystr{yytext};
     const auto pos{yystr.find_first_not_of(" \t")};
@@ -1547,7 +1559,7 @@ SYSEX_RT_SUBID1 (RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION|RT_DEVICE_C
     BEGIN(DETAIL_STATE);
   }
 
-<DETAIL_STATE>SYSEXRAW{SOMESPACE}{HEX_BYTES} {
+<DETAIL_STATE>SYSEXRAW{SOMESPACE}{BYTE_SEQ} {
     write_delay();
 
     string next_word{};

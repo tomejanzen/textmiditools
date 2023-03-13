@@ -959,21 +959,26 @@ SYSEX_RT_SUBID1 = RT_TIMECODE|RT_SHOW_CONTROL|RT_NOTATION_INFORMATION
 @end smallexample
 The commands in a textmidi file may be:
 @smallexample
-SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}dest@rbracechar{} @lbracechar{}SYSEX_NONRT_SUBID1@rbracechar{} 0xnn 0xnn...
-SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}dest@rbracechar{} @lbracechar{}SYSEX_RT_SUBID1@rbracechar{} 0xnn 0xnn...
+SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}Device ID@rbracechar{} @lbracechar{}SYSEX_NONRT_SUBID1@rbracechar{} 0xnn 0xnn...
+SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}Device ID@rbracechar{} @lbracechar{}SYSEX_RT_SUBID1@rbracechar{} 0xnn 0xnn...
 @end smallexample
-for example:
+The device ID may be a hexadecimal or decimal positive byte value, "ALL_CALL" 
+or a MIDI channel.
+See @quotedblleft{}MIDI 1.0 Detailed Specification@quotedblright{}: M1_v4-2-1_MIDI_1-0_Detailed_Specification_96-1-4.pdf,
+page 35, @quotedblleft{}Device ID@quotedblright{} 0x7f is @quotedblleft{}All Call@quotedblright{} or, on page 57, @quotedblleft{}Broadcast@quotedblright{}.
+
+For example:
 @smallexample
 FILEHEADER 1 384 MONOTRACK
 STARTTRACK ; bytes in track: 74
 TEMPO 60
 TIME_SIGNATURE 4 4 24
 SYSEX NON_REALTIME 0x7f NONRT_GM 0x01
+SYSEX NON_REALTIME ALL_CALL NONRT_GM 0x1
+SYSEX NON_REALTIME ALL_CALL NONRT_GM 2
 DELAY 768
 END_OF_TRACK
 @end smallexample
-
-dest may be a device ID, or a MIDI channel.
 
 @item SYSEXRAW byte byte byte...
 SYSEXRAW also takes either decimal or hexadecimal byte values.  It permits

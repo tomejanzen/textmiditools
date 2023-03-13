@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.49
+// TextMIDITools Version 1.0.50
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -208,8 +208,15 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
         os << ' ' << sysex_subid_map.at(data_[i]);
         ++i;
         // device id
-        os << ' ' << hex << "0x" << setw(2) << setfill('0')
+        if (sysex_device_id_map.contains(data_[i]))
+        {
+            os << ' ' << sysex_device_id_map.at(data_[i]);
+        }
+        else
+        {
+            os << ' ' << hex << "0x" << setw(2) << setfill('0')
                << static_cast<unsigned>(data_[i]);
+        }
         ++i;
         // subid1
         switch (data_[0])

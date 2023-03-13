@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.49
+// TextMIDITools Version 1.0.50
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -219,6 +219,9 @@ namespace midi
     constexpr MidiStreamArray1 start_of_sysex         {0xf0};
     constexpr MidiStreamArray1 end_of_sysex           {0xf7};
 
+    // MIDI 1.0 Detailed Specification M1_v4-2-1_MIDI_1-0_Detailed_Specification_96-1-4.pdf
+    // page 35, "Device ID" 0x7f is "All Call" or, on page 57, "Broadcast".
+    constexpr MidiStreamArray1 sysex_deviceid_all_call {0x7f};
     constexpr MidiStreamArray1 sysex_subid_non_commercial {0x7d}; //  "NON_COMMERCIAL"
     constexpr MidiStreamArray1 sysex_subid_non_realtime {0x7e}; //  "NON_REALTIME"
     constexpr MidiStreamArray1 sysex_subid_realtime {0x7f}; //  "REAL_TIME"

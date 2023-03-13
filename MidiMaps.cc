@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.49
+// TextMIDITools Version 1.0.50
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -196,5 +196,10 @@ const NumStringMap<MidiStreamAtom> midi::sysex_rt_id1_map
     {"RT_MACHINE_CONTROL_COMMANDS", sysex_subid_rt_machine_control_commands[0]},
     {"RT_MACHINE_CONTROL_RESPONSES", sysex_subid_rt_machine_control_responses[0]},
     {"RT_TUNING_STD", sysex_subid_rt_tuning_std[0]}
+};
+
+const NumStringMap<midi::MidiStreamAtom> midi::sysex_device_id_map
+{
+    {"ALL_CALL", sysex_deviceid_all_call[0]}
 };
 

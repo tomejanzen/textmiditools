@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -34,7 +34,8 @@ namespace
     constexpr char DetacheTxt[]{"number of ticks to cheat notes to separate consecutive notes"};
     const string LazyNoteOffOpt{"lazynoteoff"};
     constexpr char LazyNoteOffTxt[]{"To end notes, write MIDI note-offs with current dynamic rather than note-ons with velocity 0"};
-
+    const string NoRunningStatusOpt{"norunningstatus"};
+    constexpr char NoRunningStatusTxt[]{"to always have a status byte; otherwise follows MIDI Spec"};
 }
 
 namespace textmidi
@@ -59,15 +60,14 @@ int main(int argc, char *argv[])
         ((AnswerOpt      + ",a").c_str(),                                      AnswerTxt)
         ((DetacheOpt     + ",d").c_str(), program_options::value<uint32_t>(), DetacheTxt)
         ((LazyNoteOffOpt + ",l").c_str(),                                 LazyNoteOffTxt)
+        ((NoRunningStatusOpt + ",n").c_str(),                         NoRunningStatusTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
 
-    string text_filename{}; // set in main.cc as option
-    uint32_t detache{};   // set from cmd line; separation between notes
     ofstream midi_filestr{}; // set in main.cc
     bool verbose{};          // set in main.cc as option
-    bool note_off_select{};
+
     try
     {
         pos_opts_desc.add(TextmidiOpt.c_str(), -1);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.50\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.52\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
-    string midi_filename{};
+    string text_filename{}; // set in main.cc as option
     if (var_map.count(TextmidiOpt))
     {
         text_filename = var_map[TextmidiOpt].as<string>();
@@ -120,7 +120,6 @@ int main(int argc, char *argv[])
             cerr << TextmidiOpt << ' ' << text_filename << " File does not exist.\n";
             exit(EXIT_SUCCESS);
         }
-
     }
     else
     {
@@ -128,6 +127,8 @@ int main(int argc, char *argv[])
         cerr << desc << '\n';
         exit(EXIT_SUCCESS);
     }
+
+    string midi_filename{};
     if (var_map.count(MidiOpt))
     {
         midi_filename = var_map[MidiOpt].as<string>();
@@ -142,6 +143,11 @@ int main(int argc, char *argv[])
                 exit(0);
             }
         }
+        if (midi_filename == text_filename)
+        {
+            cerr << "The text and MIDI filenames are the same!  You would have overwritten the text file!; Must exit!\n";
+            exit(EXIT_SUCCESS);
+        }
     }
     else
     {
@@ -150,14 +156,21 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
+    uint32_t detache{};   // set from cmd line; separation between notes
     if (var_map.count(DetacheOpt)) [[unlikely]]
     {
         detache = var_map[DetacheOpt].as<uint32_t>();
     }
 
+    bool note_off_select{};
     if (var_map.count(LazyNoteOffOpt)) [[unlikely]]
     {
         note_off_select = true;
+    }
+
+    if (var_map.count(NoRunningStatusOpt)) [[unlikely]]
+    {
+        running_status.policy(midi::RunningStatus::RunningStatusPolicy::Never); 
     }
 
     if (midi_filename.empty()) [[unlikely]]

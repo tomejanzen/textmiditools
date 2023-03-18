@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
-// miditext Version 1.0.50
+// miditext Version 1.0.52
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -173,8 +173,6 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    string output_filename,
-           midi_filename;
 
     if (var_map.count(HelpOpt))
     {
@@ -187,13 +185,14 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.50\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.52\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
 
+    string midi_filename;
     if (var_map.count(MidiOpt))
     {
         midi_filename = var_map[MidiOpt].as<string>();
@@ -234,16 +233,17 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
+    string text_filename;
     if (var_map.count(TextmidiOpt))
     {
-        output_filename = var_map[TextmidiOpt].as<string>();
+        text_filename = var_map[TextmidiOpt].as<string>();
     }
     else
     {
-        output_filename = midi_filename + ".txt";
+        text_filename = midi_filename + ".txt";
         if (verbose)
         {
-            const string logstr{(string{"Will write to "} += output_filename) += '\n'};
+            const string logstr{(string{"Will write to "} += text_filename) += '\n'};
             cout << logstr;
         }
     }
@@ -258,9 +258,9 @@ int main(int argc, char *argv[])
             exit(EXIT_SUCCESS);
         }
     }
-    if (midi_filename == output_filename)
+    if (midi_filename == text_filename)
     {
-        cerr << "You would have overwritten the source name!; Must exit!\n";
+        cerr << "The text and MIDI filenames are the same!  You would have overwritten the MIDI file!; Must exit!\n";
         exit(EXIT_SUCCESS);
     }
 
@@ -287,11 +287,11 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    ofstream text_filestr(output_filename.c_str());
+    ofstream text_filestr(text_filename.c_str());
 
     if (!text_filestr)
     {
-        const string logstr{(string{"can't open "} += output_filename) += '\n'};
+        const string logstr{(string{"can't open "} += text_filename) += '\n'};
         cout << logstr;
     }
 
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
 #endif
     if (verbose)
     {
-        const string logstr{(string{"Will write to: "} += output_filename) += '\n'};
+        const string logstr{(string{"Will write to: "} += text_filename) += '\n'};
         cout << logstr;
     }
 

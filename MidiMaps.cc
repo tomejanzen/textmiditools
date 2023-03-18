@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -75,30 +75,74 @@ const midi::NumStringMap<midi::MidiStreamAtom> midi::text_meta_map
 
 const midi:: NumStringMap<midi::MidiStreamAtom> midi::control_function_map
 {
-    {"RESETALL",     midi::control_reset_all_ctrl[0]},
-    {"ALLNOTES_OFF", midi::control_all_notes_off[0]},
-    {"ALL_SOUND_OFF", midi::control_all_sound_off[0]},
-    {"BREATH",       midi::control_breath[0]},
-    {"SOFTPEDAL",    midi::control_softpedal[0]},
-    {"PORTAMENTO",   midi::control_portamento[0]},
     {"BANK_SELECT", midi::control_bank_select[0]},
     {"MODULATION", midi::control_modulation[0]},
+    {"BREATH",       midi::control_breath_controller[0]},
+    {"UNDEFINED_03", midi::control_undefined_03[0]},
     {"FOOT_CONTROLLER", midi::control_foot_controller[0]},
-    {"PORTAMENTO_TIME", midi::control_portamento_time[0]},
+    {"PORTAMENTO_TIME",   midi::control_portamento_time[0]},
     {"DATA_ENTRY_MSB", midi::control_data_entry_msb[0]},
     {"CHANNEL_VOLUME", midi::control_channel_volume[0]},
     {"BALANCE", midi::control_balance[0]},
+    {"UNDEFINED_09", midi::control_undefined_09[0]},
     {"PAN", midi::control_pan[0]},
     {"EXPRESSION", midi::control_expression[0]},
     {"EFFECT_1", midi::control_effect_1[0]},
     {"EFFECT_2", midi::control_effect_2[0]},
+    {"UNDEFINED_14", midi::control_undefined_14[0]},
+    {"UNDEFINED_15", midi::control_undefined_15[0]},
     {"GENERAL_PURPOSE_1", midi::control_general_purpose_1[0]},
     {"GENERAL_PURPOSE_2", midi::control_general_purpose_2[0]},
     {"GENERAL_PURPOSE_3", midi::control_general_purpose_3[0]},
     {"GENERAL_PURPOSE_4", midi::control_general_purpose_4[0]},
+    {"UNDEFINED_20", midi::control_undefined_20[0]},
+    {"UNDEFINED_21", midi::control_undefined_21[0]},
+    {"UNDEFINED_22", midi::control_undefined_22[0]},
+    {"UNDEFINED_23", midi::control_undefined_23[0]},
+    {"UNDEFINED_24", midi::control_undefined_24[0]},
+    {"UNDEFINED_25", midi::control_undefined_25[0]},
+    {"UNDEFINED_26", midi::control_undefined_26[0]},
+    {"UNDEFINED_27", midi::control_undefined_27[0]},
+    {"UNDEFINED_28", midi::control_undefined_28[0]},
+    {"UNDEFINED_29", midi::control_undefined_29[0]},
+    {"UNDEFINED_30", midi::control_undefined_30[0]},
+    {"UNDEFINED_31", midi::control_undefined_31[0]},
+    {"LSB_00", midi::control_lsb_00[0]},
+    {"LSB_01", midi::control_lsb_01[0]},
+    {"LSB_02", midi::control_lsb_02[0]},
+    {"LSB_03", midi::control_lsb_03[0]},
+    {"LSB_04", midi::control_lsb_04[0]},
+    {"LSB_05", midi::control_lsb_05[0]},
+    {"LSB_06", midi::control_lsb_06[0]},
+    {"LSB_07", midi::control_lsb_07[0]},
+    {"LSB_08", midi::control_lsb_08[0]},
+    {"LSB_09", midi::control_lsb_09[0]},
+    {"LSB_10", midi::control_lsb_10[0]},
+    {"LSB_11", midi::control_lsb_11[0]},
+    {"LSB_12", midi::control_lsb_12[0]},
+    {"LSB_13", midi::control_lsb_13[0]},
+    {"LSB_14", midi::control_lsb_14[0]},
+    {"LSB_15", midi::control_lsb_15[0]},
+    {"LSB_16", midi::control_lsb_16[0]},
+    {"LSB_17", midi::control_lsb_17[0]},
+    {"LSB_18", midi::control_lsb_18[0]},
+    {"LSB_19", midi::control_lsb_19[0]},
+    {"LSB_20", midi::control_lsb_20[0]},
+    {"LSB_21", midi::control_lsb_21[0]},
+    {"LSB_22", midi::control_lsb_22[0]},
+    {"LSB_23", midi::control_lsb_23[0]},
+    {"LSB_24", midi::control_lsb_24[0]},
+    {"LSB_25", midi::control_lsb_25[0]},
+    {"LSB_26", midi::control_lsb_26[0]},
+    {"LSB_27", midi::control_lsb_27[0]},
+    {"LSB_28", midi::control_lsb_28[0]},
+    {"LSB_29", midi::control_lsb_29[0]},
+    {"LSB_30", midi::control_lsb_30[0]},
+    {"LSB_31", midi::control_lsb_31[0]},
     {"DAMPER", midi::control_damper[0]},
     {"PORTAMENTO_ON_OFF", midi::control_portamento_on_off[0]},
     {"SOSTENUTO", midi::control_sostenuto[0]},
+    {"SOFTPEDAL",    midi::control_softpedal[0]},
     {"LEGATO_FOOT", midi::control_legato_foot[0]},
     {"HOLD_2", midi::control_hold_2[0]},
     {"SOUND_VARIATION", midi::control_sound_variation[0]},
@@ -115,6 +159,7 @@ const midi:: NumStringMap<midi::MidiStreamAtom> midi::control_function_map
     {"GENERAL_PURPOSE_6", midi::control_general_purpose_6[0]},
     {"GENERAL_PURPOSE_7", midi::control_general_purpose_7[0]},
     {"GENERAL_PURPOSE_8", midi::control_general_purpose_8[0]},
+    {"PORTAMENTO", midi::control_portamento[0]},
     {"HIRES_VELOCITY_MSB", midi::control_hires_velocity_msb[0]},
     {"REVERB_SEND_LEVEL", midi::control_reverb_send_level[0]},
     {"TREMOLO_DEPTH", midi::control_tremolo_depth[0]},
@@ -126,7 +171,21 @@ const midi:: NumStringMap<midi::MidiStreamAtom> midi::control_function_map
     {"NON_REGISTERED_PARAMETER_LSB", midi::control_non_registered_parameter_lsb[0]},
     {"NON_REGISTERED_PARAMETER_MSB", midi::control_non_registered_parameter_msb[0]},
     {"REGISTERED_PARAMETER_LSB", midi::control_registered_parameter_lsb[0]},
-    {"REGISTERED_PARAMETER_MSB", midi::control_registered_parameter_msb[0]}
+    {"REGISTERED_PARAMETER_MSB", midi::control_registered_parameter_msb[0]},
+    {"ALL_SOUND_OFF", midi::control_all_sound_off[0]},
+    {"RESET_ALL_CONTROLLERS", midi::control_reset_all_controllers[0]},
+    {"LOCAL_CONTROL", midi::control_local_control[0]},
+    {"ALL_NOTES_OFF", midi::control_all_notes_off[0]},
+    {"OMNI_OFF",     midi::control_omni_off[0]},
+    {"OMNI_ON",      midi::control_omni_on[0]},
+    {"MONO_ON",      midi::control_mono_on[0]},
+    {"POLY_ON",      midi::control_poly_on[0]},
+};
+
+const NumStringMap<MidiStreamAtom> midi::control_on_off_map
+{
+    {"ON",  midi::control_full[0]},
+    {"OFF", midi::control_off[0]}
 };
 
 const NumStringMap<XmfPatchTypeEnum> midi::xmf_patch_type_map
@@ -201,5 +260,27 @@ const NumStringMap<MidiStreamAtom> midi::sysex_rt_id1_map
 const NumStringMap<midi::MidiStreamAtom> midi::sysex_device_id_map
 {
     {"ALL_CALL", sysex_deviceid_all_call[0]}
+};
+
+const NumStringMap<Registered00ParameterLsbs> midi::parm_00_map
+{
+    {"PITCH_BEND_SENSITIVITY", Registered00ParameterLsbs::pitch_bend_sensitivity},
+    {"FINE_TUNING",            Registered00ParameterLsbs::fine_tuning},
+    {"COARSE_TUNING",          Registered00ParameterLsbs::coarse_tuning},
+    {"TUNING_PROGRAM_SELECT",  Registered00ParameterLsbs::tuning_program_select},
+    {"TUNING_BANK_SELECT",     Registered00ParameterLsbs::tuning_bank_select},
+};
+
+const NumStringMap<Registered3dParameterLsbs> midi::parm_3d_map
+{
+    {"AZIMUTH",                  Registered3dParameterLsbs::azimuth},
+    {"ELEVATION",                Registered3dParameterLsbs::elevation},
+    {"GAIN",                     Registered3dParameterLsbs::gain},
+    {"DISTANCE",                 Registered3dParameterLsbs::distance},
+    {"MAXIMUM_DISTANCE",         Registered3dParameterLsbs::maximum_distance},
+    {"GAIN_AT_MAX_DISTANCE",     Registered3dParameterLsbs::gain_at_max_distance},
+    {"REFERENCE_DISTANCE_RATIO", Registered3dParameterLsbs::reference_distance_ratio},
+    {"PAN_SPREAD_ANGLE",         Registered3dParameterLsbs::pan_spread_angle},
+    {"ROLL_ANGLE",               Registered3dParameterLsbs::roll_angle}
 };
 

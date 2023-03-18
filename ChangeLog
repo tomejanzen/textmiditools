@@ -1,3 +1,37 @@
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+	* Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
+        Add symbols for MIDI 3D to textmidi.  miditext does not support them
+        fully because it would require a threadable state machine to do it.
+
+2023-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc,miditext.cc: protect against overwriting the input file
+        because of giving the same name for both the input and output files.
+        * textmidi.l,textmidi.h: add policy to RunningStatus.  Add use of 
+        RunningStatus policy to textmidi.l.  This permits getting a 
+        true comparison on a round-trip of MIDI files that never use
+        running status to abbreviate the commands.
+        * Midi.h, MidiMaps.{h,cc}: Add MIDI 3D constants.
+
+        * MidiEvents.cc,MidiMaps.h,SmusTrackEvent.cc,main.cc,textmidi.l,textmidi.texi:
+        Apply std::optional to the bidirectional map NumStringMap in Midi.h.
+
+2023-03-16     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.texi,textmidi.l,MidiMaps.h,MidiEvents.cc,SmusTrackEvent.cc:
+        Give MidiMaps an operator() that 
+        returns validity with the mapped result.  Found a bug in which the pan 
+        code was mapped using Excess64 even if the CONTROL event was not written
+        using the string "PAN".  It should not add Excess64 if the CONTROL was 
+        written with a numeric control ID.  There was also a mistake in the 
+        abbreviated form for PAN to down-cased the value (left-center-right).
+        * MidiMaps.cc: fill in more constants for controller values.
+        * textmidi.texi: clean up CONTROL synonyms.
+
+2023-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.{h,cc},MidiMaps.{h,cc},textmidi.l,textmidi.texi,textmidi.vim:
+        Revamp handling of modes from Table IV in the MIDI spec.  Add LOCAL_CONTROL,
+        OMNI_{ON,OFF}, MONO_ON, POLY_ON.  Clean up and permite using values ON, OFF,
+        hexadecimal or decimal; support the abbreviated forms for modes.  Document in textmidi.l.
+
 2023-03-13     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.h, MidiEvents.cc, MidiMaps.{h,cc}, textmidi.l, textmidi.vim,
         textmidi.texi:

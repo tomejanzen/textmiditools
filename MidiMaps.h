@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -11,6 +11,7 @@
 #    define  MIDIMAPS_H
 
 #include <ostream>
+#include <optional>
 
 #include "Midi.h"
 
@@ -86,6 +87,30 @@ namespace midi
             return rtn;
         }
 
+        std::optional<NumType> operator()(std::string_view str) const
+        {
+            if (this->contains(str))
+            {
+                return this->at(str);
+            }
+            else
+            {
+                return {};
+            }
+        }
+
+        std::optional<std::string_view> operator()(NumType num) const
+        {
+            if (this->contains(num))
+            {
+                return this->at(num);
+            }
+            else
+            {
+                return {};
+            }
+        }
+
         const std::map<std::string_view, NumType> string_num_map() const
         {
             return string_num_map_;
@@ -101,14 +126,17 @@ namespace midi
     extern const NumStringMap<midi::MIDI_Format> format_map;
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;
     extern const NumStringMap<midi::MidiStreamAtom> control_function_map;
+    extern const NumStringMap<MidiStreamAtom> control_on_off_map;
     extern const NumStringMap<midi::XmfPatchTypeEnum> xmf_patch_type_map;
 
     extern const NumStringMap<midi::MidiStreamAtom> sysex_subid_map;
     extern const NumStringMap<midi::MidiStreamAtom> sysex_nonrt_id1_map;
     extern const NumStringMap<midi::MidiStreamAtom> sysex_rt_id1_map;
-    extern const NumStringMap<midi::MidiStreamAtom> sysex_device_id_map;
-
     std::ostream& operator<<(std::ostream& os, midi::MIDI_Format mf);
+
+    extern const NumStringMap<midi::MidiStreamAtom> sysex_device_id_map;
+    extern const NumStringMap<midi::Registered00ParameterLsbs> parm_00_map;
+    extern const NumStringMap<midi::Registered3dParameterLsbs> parm_3d_map;
 
 }
 

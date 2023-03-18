@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -794,84 +794,6 @@ namespace textmidi
     };
 
     std::ostream& operator<<(std::ostream& , const MidiChannelVoicePitchBendEvent& );
-
-    class MidiChannelModeOmniPolyEvent final : public MidiChannelVoiceModeEvent
-    {
-      public:
-        MidiChannelModeOmniPolyEvent(midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
-            : MidiChannelVoiceModeEvent(running_status),
-              mode_{}
-        {
-            consume_stream(midiiter);
-        }
-        std::ostream& text(std::ostream& ) const;
-        void mode(midi::MidiStreamAtom );
-        midi::MidiStreamAtom mode() const;
-        static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
-      private:
-        void consume_stream(midi::MidiStreamIterator& ) override;
-        midi::MidiStreamAtom mode_;
-    };
-
-    std::ostream& operator<<(std::ostream& , const MidiChannelModeOmniPolyEvent& );
-
-    class MidiChannelModeOmniMonoEvent final : public MidiChannelVoiceModeEvent
-    {
-      public:
-        MidiChannelModeOmniMonoEvent(midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
-            : MidiChannelVoiceModeEvent(running_status)
-        {
-            consume_stream(midiiter);
-        }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
-      private:
-        void consume_stream(midi::MidiStreamIterator& )
-        {
-        }
-    };
-
-    std::ostream& operator<<(std::ostream& , const MidiChannelModeOmniMonoEvent& );
-
-    class MidiChannelModeChannelPolyEvent final : public MidiChannelVoiceModeEvent
-    {
-      public:
-        MidiChannelModeChannelPolyEvent(midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
-            : MidiChannelVoiceModeEvent(running_status)
-        {
-            consume_stream(midiiter);
-        }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
-      private:
-        void consume_stream(midi::MidiStreamIterator& )
-        {
-        }
-    };
-
-    std::ostream& operator<<(std::ostream& , const MidiChannelModeChannelPolyEvent& );
-
-    class MidiChannelModeChannelMonoEvent final : public MidiChannelVoiceModeEvent
-    {
-      public:
-        MidiChannelModeChannelMonoEvent(midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
-            : MidiChannelVoiceModeEvent(running_status)
-        {
-            consume_stream(midiiter);
-        }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
-      private:
-        void consume_stream(midi::MidiStreamIterator& )
-        {
-        }
-    };
-
-    std::ostream& operator<<(std::ostream& , const MidiChannelModeChannelMonoEvent& );
 
     class MidiChannelVoiceControlChangeEvent final : public MidiChannelVoiceModeEvent
     {

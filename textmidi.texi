@@ -40,7 +40,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 * Overview::
 * Invoking textmidi::
 * @command{textmidi} Language::
-* Using m4 with textmidi::
+* Using m4 with @command{textmidi}::
 * File Formats::
 * Gvim Highlighting::
 * Installation::
@@ -153,7 +153,7 @@ Archive at that time.
 textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} @b{@minus{}o}|@b{@minus{}@minus{}midi} @var{standard_midi_output_file}
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}d}|@b{@minus{}@minus{}detache} @var{numticks}]
 [@b{@minus{}l}|@b{@minus{}@minus{}lazynoteoff}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
-[@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
+[@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}norunningstatus}]
 @end smallexample
 
 @table @option
@@ -190,6 +190,13 @@ with the global velocity rather than a note-on with a velocity of zero.
 @item -a, --answer
 @cindex @minus{}a, @minus{}@minus{}answer
 If the output textmidi file already exists, ask before overwriting it.
+@item -n, --norunningstauts
+@cindex  @minus{}n, @minus{}@minus{}norunningstatus
+Never apply running status; that is, always write the status byte.
+This helps in round-trip tests because some other MIDI software does not
+use running status according to the MIDI Spec.  The default is to
+apply the MIDI Spec rule: running status is cleared only by
+@b{sysex}, @b{meta} events, and @b{end-of-track}.
 @end table
 
 @node Invocation Examples
@@ -594,6 +601,7 @@ pressure.
 @item CONTROL channel_num controller_id value_num
 @cindex CONTROL
 CONTROL allows the setting of various controls on channels.
+The channel is in decimal from 1 to 16.
 The control ID may, optionally, be one of the strings below, or
 any valid number in 0..127, including those represented by strings.
 About a half-dozen of the controls have shorter forms available, but
@@ -604,6 +612,14 @@ CONTROL 13 64 10
 @end example
 Some MIDI controller ID's have names:
 @itemize
+@item BANK_SELECT
+@example
+CONTROL 2 BANK_SELECT 2
+@end example
+@item MODULATION
+@example
+CONTROL 4 MODULATION 3
+@end example
 @item BREATH
 For example, 
 @example
@@ -614,42 +630,7 @@ An abbreviated form is available.  Leave off the CONTROL:
 BREATH [chan] [velocity]
 BREATH  11 99
 @end example
-
-@item SOFTPEDAL value
-Use 0 for off and 127 for on.
-@example
-CONTROL 1 SOFTPEDAL OFF
-CONTROL 1 SOFTPEDAL ON
-CONTROL 1 SOFTPEDAL 0
-CONTROL 1 SOFTPEDAL 127
-@end example
-An abbreviated form is supported.  Leave off the CONTROL.
-@example
-SOFTPEDAL [chan in 1..16] [value]
-SOFTPEDAL 13 127
-SOFTPEDAL 13 1
-@end example
-
-@item PORTAMENTO
-This is MIDI portamento control.
-@example
-CONTROL PORTAMENTO 0
-CONTROL PORTAMENTO 127
-@end example
-An abbreviated form is supported.  Leave off the CONTROL.
-@example
-PORTAMENTO [chan] [value]
-PORTAMENTO 14 120
-@end example
-
-@item BANK_SELECT
-@example
-CONTROL 2 BANK_SELECT 2
-@end example
-@item MODULATION
-@example
-CONTROL 4 MODULATION 3
-@end example
+@item UNDEFINED_03
 @item FOOT_CONTROLLER
 @example
 CONTROL 1 FOOT_CONTROLLER 0 
@@ -664,6 +645,7 @@ CONTROL 1 PORTAMENTO_TIME 5
 CONTROL 1 CHANNEL_VOLUME 74
 @end example 
 @item BALANCE
+@item UNDEFINED_09
 @item PAN channel_num LEFT|CENTER|RIGHT|@lbracechar{}-64..63@rbracechar{}
 @cindex PAN 
 When using the numeric pan values, note that -64 is left-most, 63 is
@@ -675,6 +657,8 @@ CONTROL 1 PAN RIGHT
 CONTROL 1 PAN -10
 CONTROL 1 PAN 12
 @end example
+Note that if a CONTROL for pan was written using the number for PAN (=10, =0x0A) instead
+of the string PAN then Excess64 (=64) will not be added.
 @item EXPRESSION
 @example
 CONTROL 1 EXPRESSION 17
@@ -687,6 +671,8 @@ CONTROL 1 EFFECT_1 18
 @example
 CONTROL 1 EFFECT_2 19
 @end example 
+@item UNDEFINED_14
+@item UNDEFINED_15
 @item GENERAL_PURPOSE_1
 @example
 CONTROL 1 GENERAL_PURPOSE_1 20
@@ -703,6 +689,8 @@ CONTROL 1 GENERAL_PURPOSE_3 125
 @example
 CONTROL 1 GENERAL_PURPOSE_4 124
 @end example 
+@item UNDEFINED_20 to UNDEFINED_31
+@item LSB_00 to LSB_31
 @item DAMPER
 @cindex DAMPER
 The damper pedal on a piano.  It supports a value in 0..127.
@@ -710,13 +698,10 @@ The damper pedal on a piano.  It supports a value in 0..127.
 CONTROL 6 DAMPER 0
 CONTROL 6 DAMPER 127
 @end example
-@example
 An abbreviated form is supported.  Leave off the CONTROL.
 @example
 DAMPER [chan] [value]
 DAMPER 12 122
-@end example
-
 @end example
 @item PORTAMENTO_ON_OFF
 @example
@@ -738,6 +723,20 @@ There is an abbreviated form.  Leave off the CONTROL.
 SOSTENUTO [chan] [ON/OFF]
 SOSTENUTO 16 ON
 SOSTENUTO 16 OFF
+@end example
+@item SOFTPEDAL value
+Use 0 for off and 127 for on.
+@example
+CONTROL 1 SOFTPEDAL OFF
+CONTROL 1 SOFTPEDAL ON
+CONTROL 1 SOFTPEDAL 0
+CONTROL 1 SOFTPEDAL 127
+@end example
+An abbreviated form is supported.  Leave off the CONTROL.
+@example
+SOFTPEDAL [chan in 1..16] [value]
+SOFTPEDAL 13 127
+SOFTPEDAL 13 1
 @end example
 @item LEGATO_FOOT
 @example
@@ -803,6 +802,17 @@ CONTROL 1 GENERAL_PURPOSE_7 63
 @example
 CONTROL 1 GENERAL_PURPOSE_8 63
 @end example
+@item PORTAMENTO
+This is MIDI portamento control.
+@example
+CONTROL PORTAMENTO 0
+CONTROL PORTAMENTO 127
+@end example
+An abbreviated form is supported.  Leave off the CONTROL.
+@example
+PORTAMENTO [chan] [value]
+PORTAMENTO 14 120
+@end example
 @item HIRES_VELOCITY_MSB
 @example
 CONTROL 1 HIRES_VELOCITY_MSB 63
@@ -823,9 +833,9 @@ CONTROL 1 CHORUS_SEND_LEVEL 63
 @example
 CONTROL 1 CELESTE_DEPTH 63
 @end example
-@item EFFECTS_5_DEPTH
+@item PHASER_DEPTH
 @example
-CONTROL 1 EFFECTS_5_DEPTH 63
+CONTROL 2 PHASER_DEPTH 17
 @end example
 @item DATA_INCREMENT
 @example
@@ -851,45 +861,161 @@ CONTROL 1 REGISTERED_PARAMETER_LSB 63
 @example
 CONTROL 1 REGISTERED_PARAMETER_MSB 63
 @end example
-@item ALLNOTES_OFF
-@example
-CONTROL 1 ALLNOTES_OFF 63
-@end example
-An abbreviated form is available.  Leave off the CONTROL:
-@example
-ALLNOTES_OFF [channel in 1..16]
-ALLNOTES_OFF 9
-@end example
-@item RESETALL 
-@cindex RESETALL
-@example
-CONTROL 5 RESETALL 0
-@end example
-An abbreviated form is available.  Omit the CONTROL term:
-@example
-RESTALL [channel in 1..16]
-RESETALL 3
-@end example
-@item ALLNOTES_OFF channel_num
-@cindex ALLNOTES_OFF
-This would probably not be used in a MIDI file, but only by a MIDI player.
-Nevertheless it is available in @command{textmidi}.
-@example
-CONTROL 1 ALLNOTES_OFF 0
-@end example
-@item ALL_SOUND_OFF channel_num
+@item ALL_SOUND_OFF
 @cindex ALL_SOUND_OFF
 This would probably not be used in a MIDI file, but only by a MIDI player.
 Nevertheless it is available in @command{textmidi}.
+The value is always zero.
 @example
 CONTROL 1 ALL_SOUND_OFF 0
 @end example
-An abbreviated form is available.  Leave off the CONTROL.
+An abbreviated form is available.  Omit the CONTROL and the value.
 @example
 ALL_SOUND_OFF [channel]
 ALL_SOUND_OFF 5
 @end example
+@item RESET_ALL_CONTROLLERS
+@cindex RESET_ALL_CONTROLLERS
+Previously @command{textmidi} called this RESETALL.
+The value must be zero.
+@example
+CONTROL 5 RESET_ALL_CONTROLLERS 0
+@end example
+An abbreviated form is available.  Omit the CONTROL term and the value, which is always zero:
+@example
+RESET_ALL_CONTROLLERS [channel in 1..16]
+RESET_ALL_CONTROLLERS 3
+@end example
+@item LOCAL_CONTROL
+This sets whether a piece of MIDI hardware's front panel controls are locked out.
+You can use ON and OFF, or the respective values of 127 and zero.
+@example
+CONTROL 1 LOCAL_CONTROL ON
+CONTROL 1 LOCAL_CONTROL OFF
+CONTROL 1 LOCAL_CONTROL 0x7f
+CONTROL 1 LOCAL_CONTROL 0x00
+CONTROL 1 LOCAL_CONTROL 127
+CONTROL 1 LOCAL_CONTROL 0
+@end example
+An abbreivated form is available:
+@example
+LOCAL_CONTROL 2 ON
+@end example
+@item ALL_NOTES_OFF
+Turn off all notes on the channel.  The value is always zero.
+Previously @command{textmidi} called this ALLNOTES_OFF.
+@example
+CONTROL 1 ALL_NOTES_OFF 0
+CONTROL 1 ALL_NOTES_OFF 0
+@end example
+An abbreviated form is available.  Leave off the CONTROL:
+@example
+ALL_NOTES_OFF [channel in 1..16]
+ALL_NOTES_OFF 9
+ALL_NOTES_OFF 9
+ALL_NOTES_OFF 9
+@end example
+@item OMNI_OFF (all notes off)
+@example
+The value must be zero.
+CONTROL 11 OMNI_OFF 0
+@end example
+An abbreviated form is available; omit CONTROL and the value:
+@example
+OMNI_OFF 11
+@end example
+@item OMNI_ON
+The value must be zero:
+@example
+CONTROL 11 OMNI_ON 0
+@end example
+An abbreviated form is available:
+@example
+OMNI_ON 11
+@end example
+@item MONO_ON
+The value is the number of channels:
+@example
+CONTROL 11 MONO_ON 4
+@end example
+An abbreviated form is available; provide the base channel and the number of channels:
+@example
+MONO_ON 12 5
+@end example
+@item POLY_ON
+@example
+CONTROL 11 POLY_ON 0
+@end example
+An abbreviated form is available:
+@example
+POLY_ON 15
+@end example
 @end itemize
+MIDI 3D is implemented via registered parameters.  The @command{textmidi} 
+program can translate some 3D parameter names.  However, @command{miditext}
+does not output the parameter LSB names; it prints the hexadecimal values instead.
+Below is an example of a 3D MIDI set-up.  It has not been verified on MIDI hardware.
+Consult the MIDI 3D memorandum for the arithmetic expressions that convert
+degrees to the integer values required in the MIDI stream.
+@smallexample
+FILEHEADER 1 240
+STARTTRACK
+; horizontal azimuth angle of 0 degrees.
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB AZIMUTH
+CONTROL 1 DATA_ENTRY_MSB 0x40
+CONTROL 1 LSB_06 0x00
+
+; elevation angle of 0 degrees.
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB ELEVATION
+CONTROL 1 DATA_ENTRY_MSB 0x40
+CONTROL 1 LSB_06 0x00
+
+; gain of 0dB.
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB GAIN
+CONTROL 1 DATA_ENTRY_MSB 0x7f
+CONTROL 1 LSB_06 0x7f
+
+; distance of 0.001
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB DISTANCE
+CONTROL 1 DATA_ENTRY_MSB 0x00
+CONTROL 1 LSB_06 0x10
+
+; maximum distance of 1000 units
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB MAXIMUM_DISTANCE
+CONTROL 1 DATA_ENTRY_MSB 0x7f
+CONTROL 1 LSB_06 0x7f
+
+; gain at maximum distance of 1000 units -60dB
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB GAIN_AT_MAX_DISTANCE
+CONTROL 1 DATA_ENTRY_MSB 0x51
+CONTROL 1 LSB_06 0x0f
+
+; reference distance ratio of .001 
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB REFERENCE_DISTANCE_RATIO
+CONTROL 1 DATA_ENTRY_MSB 0x00
+CONTROL 1 LSB_06 0x10
+
+; pan spread angle of 30 deg. 
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB PAN_SPREAD_ANGLE
+CONTROL 1 DATA_ENTRY_MSB 0x4a
+CONTROL 1 LSB_06 0x55
+
+; roll angle of 0.0 deg
+CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
+CONTROL 1 REGISTERED_PARAMETER_LSB ROLL_ANGLE
+CONTROL 1 DATA_ENTRY_MSB 0x40
+CONTROL 1 LSB_06 0x00
+
+END_OF_TRACK
+@end smallexample
 @item PROGRAM channel_num program_num
 @cindex PROGRAM
 PROGRAM selects a General MIDI intrument.
@@ -918,7 +1044,7 @@ Bend values are in 14 bits, 0 to 16383.
 @cindex SEQUENCER_SPECIFIC
 SEQUENCER_SPECIFIC is a way of inserting proprietary synthesizer commands
 into a standard MIDI file.  It is the command SEQUENCER_SPECIFIC followed by
-1-byte values.  Do not include the length of the data; textmidi will compute
+1-byte values.  Do not include the length of the data; @command{textmidi} will compute
 the length and insert it before the data bytes.
 The values may be either 2-digit hexadecimal byte values prefaced with 
 @quotedblleft{}0x@quotedblright{}, or decimal numbers from 0 to 255.
@@ -1150,8 +1276,8 @@ notes until another directive changes them.
 c#4 e4- 4. chan 3 d4 f4 8 e4 g4 4. ff f4 ab4 8 g4 b4 4. vel -5 a4 c5 8 -e4 b4 d5 4. c5 eb5 8
 @end smallexample
 
-@node Using m4 with textmidi
-@chapter Using m4 with textmidi
+@node Using m4 with @command{textmidi}
+@chapter Using m4 with @command{textmidi}
 @cindex m4
 It can be convenient to use the m4 macro processor.  A trill that is defined
 as an m4 macro need not be painstakingly written by hand.
@@ -1555,6 +1681,9 @@ General Public License, to permit their use in free software.
 
 @item @cite{Recommended Practice (RP-019) SMF Device Name and Program Name Meta Events.}
 1998.  Los Angeles.  MIDI Manufacturers Association, Inc.
+
+@item @cite{Three Dimensional Sound Controllers (RP-049).}  
+2009.  Version 1.0.  MIDI Manufacturers Association, Inc.
 
 @item @cite{AMEI/MMA Recommended Practice RP-032 SMF Meta-Event for XMF Patch Type Prefix.}
 2001.  Los Angeles.  MIDI Manufacturers Association, Inc.

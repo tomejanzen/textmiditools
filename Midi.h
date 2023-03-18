@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -147,24 +147,69 @@ namespace midi
     constexpr MidiStreamArray1 control_bank_select     {0x00};
     constexpr MidiStreamArray1 control_modulation      {0x01};
     constexpr MidiStreamArray1 control_breath_controller{0x02};
-    constexpr MidiStreamArray1 control_undefined_3     {0x03};
+    constexpr MidiStreamArray1 control_undefined_03    {0x03};
     constexpr MidiStreamArray1 control_foot_controller {0x04};
     constexpr MidiStreamArray1 control_portamento_time {0x05};
     constexpr MidiStreamArray1 control_data_entry_msb  {0x06};
     constexpr MidiStreamArray1 control_channel_volume  {0x07};
     constexpr MidiStreamArray1 control_balance         {0x08};
-    constexpr MidiStreamArray1 control_undefined_9     {0x09};
+    constexpr MidiStreamArray1 control_undefined_09    {0x09};
 
     constexpr MidiStreamArray1 control_pan             {0x0A};
 
     constexpr MidiStreamArray1 control_expression      {0x0b};
     constexpr MidiStreamArray1 control_effect_1        {0x0c};
     constexpr MidiStreamArray1 control_effect_2        {0x0d};
+    constexpr MidiStreamArray1 control_undefined_14    {0x0e};
+    constexpr MidiStreamArray1 control_undefined_15    {0x0f};
     constexpr MidiStreamArray1 control_general_purpose_1{0x10};
     constexpr MidiStreamArray1 control_general_purpose_2{0x11};
     constexpr MidiStreamArray1 control_general_purpose_3{0x12};
     constexpr MidiStreamArray1 control_general_purpose_4{0x13};
-
+    constexpr MidiStreamArray1 control_undefined_20     {0x14};
+    constexpr MidiStreamArray1 control_undefined_21     {0x15};
+    constexpr MidiStreamArray1 control_undefined_22     {0x16};
+    constexpr MidiStreamArray1 control_undefined_23     {0x17};
+    constexpr MidiStreamArray1 control_undefined_24     {0x18};
+    constexpr MidiStreamArray1 control_undefined_25     {0x19};
+    constexpr MidiStreamArray1 control_undefined_26     {0x1a};
+    constexpr MidiStreamArray1 control_undefined_27     {0x1b};
+    constexpr MidiStreamArray1 control_undefined_28     {0x1c};
+    constexpr MidiStreamArray1 control_undefined_29     {0x1d};
+    constexpr MidiStreamArray1 control_undefined_30     {0x1e};
+    constexpr MidiStreamArray1 control_undefined_31     {0x1f};
+    constexpr MidiStreamArray1 control_lsb_00           {0x20};
+    constexpr MidiStreamArray1 control_lsb_01           {0x21};
+    constexpr MidiStreamArray1 control_lsb_02           {0x22};
+    constexpr MidiStreamArray1 control_lsb_03           {0x23};
+    constexpr MidiStreamArray1 control_lsb_04           {0x24};
+    constexpr MidiStreamArray1 control_lsb_05           {0x25};
+    constexpr MidiStreamArray1 control_lsb_06           {0x26};
+    constexpr MidiStreamArray1 control_lsb_07           {0x27};
+    constexpr MidiStreamArray1 control_lsb_08           {0x28};
+    constexpr MidiStreamArray1 control_lsb_09           {0x29};
+    constexpr MidiStreamArray1 control_lsb_10           {0x2a};
+    constexpr MidiStreamArray1 control_lsb_11           {0x2b};
+    constexpr MidiStreamArray1 control_lsb_12           {0x2c};
+    constexpr MidiStreamArray1 control_lsb_13           {0x2d};
+    constexpr MidiStreamArray1 control_lsb_14           {0x2e};
+    constexpr MidiStreamArray1 control_lsb_15           {0x2f};
+    constexpr MidiStreamArray1 control_lsb_16           {0x30};
+    constexpr MidiStreamArray1 control_lsb_17           {0x31};
+    constexpr MidiStreamArray1 control_lsb_18           {0x32};
+    constexpr MidiStreamArray1 control_lsb_19           {0x33};
+    constexpr MidiStreamArray1 control_lsb_20           {0x34};
+    constexpr MidiStreamArray1 control_lsb_21           {0x35};
+    constexpr MidiStreamArray1 control_lsb_22           {0x36};
+    constexpr MidiStreamArray1 control_lsb_23           {0x37};
+    constexpr MidiStreamArray1 control_lsb_24           {0x38};
+    constexpr MidiStreamArray1 control_lsb_25           {0x39};
+    constexpr MidiStreamArray1 control_lsb_26           {0x3a};
+    constexpr MidiStreamArray1 control_lsb_27           {0x3b};
+    constexpr MidiStreamArray1 control_lsb_28           {0x3c};
+    constexpr MidiStreamArray1 control_lsb_29           {0x3d};
+    constexpr MidiStreamArray1 control_lsb_30           {0x3e};
+    constexpr MidiStreamArray1 control_lsb_31           {0x3f};
     constexpr MidiStreamArray1 control_damper          {0x40};
     constexpr MidiStreamArray1 control_portamento_on_off{0x41};
     constexpr MidiStreamArray1 control_sostenuto       {0x42};
@@ -201,17 +246,20 @@ namespace midi
     constexpr MidiStreamArray1 control_non_registered_parameter_msb {0x63};
     constexpr MidiStreamArray1 control_registered_parameter_lsb {0x64};
     constexpr MidiStreamArray1 control_registered_parameter_msb {0x65};
+
+    // Reserved by MIDI Spec:
     constexpr MidiStreamArray1 control_all_sound_off  {0x78};
-    constexpr MidiStreamArray1 control_reset_all_ctrl {0x79};
-    constexpr MidiStreamAtom control_local_ctrl_on_off{0x7a};
+    constexpr MidiStreamArray1 control_reset_all_controllers {0x79};
+    constexpr MidiStreamArray1 control_local_control{0x7a};
+    constexpr MidiStreamAtom   local_control_off{0x00};
+    constexpr MidiStreamAtom   local_control_on{0x7f};
     constexpr MidiStreamArray1 control_all_notes_off  {0x7b};
     constexpr MidiStreamArray1 control_omni_off       {0x7c};
-    constexpr MidiStreamArray1 control_onmi_on        {0x7d};
+    constexpr MidiStreamArray1 control_omni_on        {0x7d};
     constexpr MidiStreamArray1 control_mono_on        {0x7e};
     constexpr MidiStreamArray1 control_poly_on        {0x7f};
     constexpr MidiStreamArray1 control_full           {0x7F};
     constexpr MidiStreamArray1 control_off            {0x00};
-    constexpr MidiStreamArray1 control_breath         {2};
     constexpr MidiStreamArray1 midi_time_code_quarter_frame{0xf1};
     constexpr MidiStreamArray1 song_position_pointer  {0xf2};
     constexpr MidiStreamArray1 song_select            {0xf3};
@@ -307,6 +355,34 @@ namespace midi
     constexpr auto HeaderChunkLen{6};
     constexpr MidiStreamAtom MidiHeaderChunkName[ChunkNameLen]{'M', 'T', 'h', 'd'};
 
+    enum class RegisteredParameterMsbs : MidiStreamAtom
+    {
+        parameter_00_msb = 0x00,
+        parameter_3d_msb = 0x3d,
+    };
+
+    enum class Registered00ParameterLsbs : MidiStreamAtom
+    {
+         pitch_bend_sensitivity = 0x00,
+         fine_tuning            = 0x01,
+         coarse_tuning          = 0x02,
+         tuning_program_select  = 0x03,
+         tuning_bank_select     = 0x04,
+    };
+
+    enum class Registered3dParameterLsbs : MidiStreamAtom
+    {
+         azimuth                  = 0x00,
+         elevation                = 0x01,
+         gain                     = 0x02,
+         distance                 = 0x03,
+         maximum_distance         = 0x04,
+         gain_at_max_distance     = 0x05,
+         reference_distance_ratio = 0x06,
+         pan_spread_angle         = 0x07,
+         roll_angle               = 0x08,
+    };
+
     enum class MIDI_Format : std::uint16_t
     {
         MonoTrack,
@@ -370,12 +446,19 @@ namespace midi
     class RunningStatus
     {
       public:
+        enum class RunningStatusPolicy : int
+        {
+            WhenCleared = 1,
+            Never
+        };
         RunningStatus()
           : running_status_valid_(),
-            running_status_value_{}
+            running_status_value_{},
+            policy_{RunningStatusPolicy::WhenCleared}
         {
         }
         explicit RunningStatus(const RunningStatus& ) = default;
+        void policy(RunningStatusPolicy policy);
         RunningStatus& operator=(const RunningStatus& ) = default;
         void running_status(midi::MidiStreamAtom running_status_value);
         void clear();
@@ -388,6 +471,7 @@ namespace midi
       private:
         bool running_status_valid_;
         MidiStreamAtom running_status_value_;
+        RunningStatusPolicy policy_;
     };
 
 }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -20,6 +20,7 @@
 #include "SmusTrackEvent.h"
 #include "rational_support.h"
 #include "MIDIKeyString.h"
+#include "MidiMaps.h"
 
 using namespace std;
 using namespace boost;
@@ -410,15 +411,16 @@ string SmusTrackEventVolume::textmidi()
     str += pre_rest();
     if (current_dynamic() != data())
     {
-       if (midi::dynamics_map.contains(data()))
-       {
-           (str += midi::dynamics_map.at(data())) += '\n';
-       }
-       else
-       {
-           ((str += "vel ") += lexical_cast<string>(data())) += ' ';
-       }
-       current_dynamic(data());
+        const auto dynamic = midi::dynamics_map(data());
+        if (dynamic)
+        {
+            (str += *dynamic) += '\n';
+        }
+        else
+        {
+            ((str += "vel ") += lexical_cast<string>(data())) += ' ';
+        }
+        current_dynamic(data());
     }
     return str;
 }

@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.50
+** TextMIDITools Version 1.0.52
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -64,6 +64,11 @@ using namespace textmidi;
 extern "C" int32_t yywrap (void) {};
 #endif
 
+// running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
+// "Meta events and sysex events cancel any running status that was in effect."
+// RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
+RunningStatus running_status{};
+
 namespace
 {
     // The last MIDI key (note) that was played, init to middle C
@@ -74,22 +79,11 @@ namespace
     uint32_t accum_delay{}; // Delay accumulated between events.
     double global_total_track_ticks{}; // accum. tracks ticks to print for "ticks" cmd
     uint32_t total_beats{}; // beat to print for errors.
-    // running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    RunningStatus running_status{};
     // To turn off notes using NOTE_ON, use a zero velocity.
     constexpr MidiStreamAtom note_off_velocity{};
     constexpr double DotLength(0.5);
     constexpr double DoubleDotLength(0.25);
     // Map textmidi strings to MIDI file format codes.
-
-    // PORTAMENTO and SOSTENUTO have an "on" or "off" value.
-    const NumStringMap<MidiStreamAtom> on_off_map
-    {
-        {"OFF", control_off[0]},
-        {"ON", control_full[0]}
-    };
 
     int global_ticks_per_quarter{384};
     // global_channel is part of implementing MIDI running status
@@ -108,7 +102,7 @@ namespace
         //
         // Hard Lessons: you can't break a line with a backslash in the middle of a
         // Raw regular expression
-        const regex keyevent_re{R"((-?)(((([A-Ga-g])(([b#x]?)|(bb)))(-?)([0-9]))|(([Kk])([+-]?)([[:digit:]]+)))(-?))"};
+        const regex keyevent_re{R"((-?)(((([A-Ga-g])(([b#x]?)|(bb)))(-?)([[:digit:]]))|(([Kk])([+-]?)([[:digit:]]+)))(-?))"};
         const auto mat{regex_match(keyevent, matches, keyevent_re)};
         if (!mat)
         {
@@ -408,8 +402,8 @@ LETTER [a-zA-Z]
 INTEGER ([-+]?{DIGIT}+)
 UINTEGER ({DIGIT}+)
 DECBYTE [12]?{DIGIT}{1,2}
-XINTEGER 0x([0-9A-Fa-f])+
-HEXBYTE 0x([0-9A-Fa-f]){1,2}
+XINTEGER 0x([[:xdigit:]])+
+HEXBYTE 0x([[:xdigit:]]){1,2}
 UXINTEGER ({UINTEGER}|{XINTEGER})
 BYTE ({DECBYTE}|{HEXBYTE})
 FLOAT {UINTEGER}(([.][[:digit:]]+)?)
@@ -438,7 +432,8 @@ ALPHANUMUNDER ({ALPHANUM}|_)
 IDENT ({LETTERUNDER}{ALPHANUMUNDER}*)
 ASSIGNMENT ({IDENT}{SPACE}={SPACE}{STRING})
 TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|PROGRAM_NAME|DEVICE_NAME|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F)
-CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB|RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
+CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|UNDEFINED_([[:digit:]]){2}|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB|ALL_SOUND_OFF|RESET_ALL_CONTROLLERS|LOCAL_CONTROL|ALL_NOTES_OFF|OMNI_OFF|OMNI_ON|MONO_ON|POLY_ON|LSB_([[:digit:]]{2}))
+CONTROL_VALUE (AZIMUTH|ELEVATION|GAIN|DISTANCE|MAXIMUM_DISTANCE|GAIN_AT_MAX_DISTANCE|REFERENCE_DISTANCE_RATIO|PAN_SPREAD_ANGLE|ROLL_ANGLE)
 
 LBRACE [{]
 RBRACE [}]
@@ -453,9 +448,9 @@ FILEFORMAT (MONOTRACK|MULTITRACK|MULTISEQUENCE)
 STARTTRACKTOKEN (STARTTRACK|\{)
 END_OF_TRACKTOKEN (END_OF_TRACK|\})
 
-ALTERNATE_CONTROL_CHANNEL (RESETALL|ALLNOTES_OFF|ALL_SOUND_OFF)
-ALTERNATE_CONTROL_CHANNEL_INT (BREATH|DAMPER|SOFTPEDAL)
-ALTERNATE_CONTROL_CHANNEL_ONOFF (LEGATO_FOOT|PORTAMENTO|SOSTENUTO)
+ALTERNATE_CONTROL_CHANNEL (ALL_SOUND_OFF|RESET_ALL_CONTROLLERS|ALL_NOTES_OFF|OMNI_OFF|OMNI_ON|POLY_ON)
+ALTERNATE_CONTROL_CHANNEL_INT (BREATH|DAMPER|SOFTPEDAL|MONO_ON)
+ALTERNATE_CONTROL_CHANNEL_ONOFF (LEGATO_FOOT|PORTAMENTO|SOSTENUTO|LOCAL_CONTROL)
 
 PATCH_TYPE (GM1|GM2|DLS)
 
@@ -486,9 +481,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     string format_str;
     iss >> midi_header.ntrks_ >> midi_header.division_ >> format_str;
     to_upper(format_str);
-    if (format_map.contains(format_str))
+    const auto format = format_map(format_str);
+    if (format)
     {
-        midi_header.format_ = format_map.at(format_str);
+        midi_header.format_ = *format;
     }
     else
     {
@@ -683,10 +679,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> meta_name;
     to_upper(meta_name);
 
-    if (text_meta_map.contains(meta_name))
+    const auto code = text_meta_map(meta_name);
+    if (code)
     {
         trackchunk.push_back(meta_prefix[0]);
-        trackchunk.push_back(text_meta_map.at(meta_name));
+        trackchunk.push_back(*code);
     }
     else
     {
@@ -947,54 +944,89 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(pressure);
   }
 
-<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}({INTEGER}|{CONTROL_FUNCTION}){SPACE}({INTEGER}|{ONOFF}) {
+<DETAIL_STATE>CONTROL{SPACE}{BYTE}{SPACE}({BYTE}|{CONTROL_FUNCTION}){SPACE}({CONTROL_VALUE}|{BYTE}|{ONOFF}) {
     write_delay();
 
     istringstream iss(yytext);
     string discard;
     uint32_t channel{};
 
-    int32_t control_id{},
-            control_value{};
     string control_id_str{},
            control_value_str{};
     iss >> discard >> channel >> control_id_str >> control_value_str;
-    to_upper(control_value_str);
-    if (on_off_map.contains(control_value_str))
-    {
-        control_value = on_off_map.at(control_value_str);
-    }
-    else
-    {
-        control_value = lexical_cast<int32_t>(control_value_str);
-    }
 
-    const regex int_re{R"([-+]?[[:digit:]]+)"};
-    smatch matches{};
-    const auto mat{regex_match(control_id_str, matches, int_re)};
-    if (mat)
-    {
-        istringstream iss_id(control_id_str);
-        iss_id >> control_id;
-    }
-    else
-    {
-        to_upper(control_id_str);
-        if (control_function_map.contains(control_id_str))
-        {
-            control_id = control_function_map.at(control_id_str);
-        }
-        else
-        {
-            cerr << "Control invalid ID: " << control_id_str << '\n';
-        }
-    }
     channel_1_to_0(channel);
     running_status(channel | control[0], trackchunk);
-    control_value &= byte7_mask;
+
+    string control_id_strv{control_id_str};
+    to_upper(control_id_strv);
+    const auto id_code = control_function_map(control_id_strv);
+    int32_t control_id{};
+    if (id_code)
+    {
+        control_id = *id_code;
+    }
+    else
+    {
+        if (control_id_str.substr(0, 2) == "0x") // hexadecimal
+        {
+            istringstream iss2{control_id_str};
+            int i{};
+            iss2 >> hex >> i;
+            control_id = i;
+        }
+        else // decimal
+        {
+            control_id = lexical_cast<unsigned>(control_id_str);
+        }
+    }
     control_id &= byte7_mask;
     trackchunk.push_back(control_id);
-    if (control_pan[0] == control_id)
+
+    bool was_mapped{};
+    auto upper_control_value_str{control_value_str};
+    to_upper(upper_control_value_str);
+    const auto on_off_code = control_on_off_map(upper_control_value_str);
+    int32_t control_value{};
+    if (on_off_code)
+    {
+        control_value = *on_off_code;
+        was_mapped = true;
+    }
+    else
+    {
+        if (control_registered_parameter_lsb[0] == control_id)
+        {
+            if (const auto control_value_code = parm_3d_map(upper_control_value_str))
+            {
+                control_value = static_cast<int>(*control_value_code);
+                was_mapped = true;
+            }
+            else
+            {
+                if (const auto control_value_code = parm_00_map(upper_control_value_str))
+                {
+                    control_value = static_cast<int>(*control_value_code);
+                    was_mapped = true;
+                }
+            }
+        }
+        // handle MIDI 3D
+        if (!was_mapped)
+        {
+            if (control_value_str.substr(0, 2) == "0x")
+            {
+                istringstream iss2{control_value_str};
+                iss2 >> hex >> control_value;
+            }
+            else
+            {
+                control_value = lexical_cast<unsigned>(control_value_str);
+            }
+        }
+    }
+    // If "PAN" was used, add Excess64
+    if (id_code && (control_pan[0] == control_id))
     {
         control_value += PanExcess64;
     }
@@ -1007,51 +1039,28 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     istringstream iss(yytext);
     string discard;
-    uint32_t channel{};
 
-    int32_t control_id{},
-            control_value{};
+    const auto control_id{control_pan[0]};
+    int32_t control_value{};
     string control_value_str{};
-    string control_id_str;
-    iss >> discard >> channel >> control_id_str >> control_value_str;
-    if (pan_map.contains(control_value_str))
+    string discard_control_id_str;
+    uint32_t channel{};
+    iss >> discard >> channel >> discard_control_id_str >> control_value_str;
+    channel_1_to_0(channel);
+    running_status(channel | control[0], trackchunk);
+    trackchunk.push_back(control_id);
+
+    to_upper(control_value_str);
+    const auto position = pan_map(control_value_str);
+    if (position)
     {
-        control_value = pan_map.at(control_value_str);
+        control_value = *position;
     }
     else
     {
         control_value = lexical_cast<int32_t>(control_value_str);
     }
-
-    const regex int_re{R"([-+]?[[:digit:]]+)"};
-    smatch matches{};
-    const auto mat{regex_match(control_id_str, matches, int_re)};
-    if (mat)
-    {
-        istringstream iss_id(control_id_str);
-        iss_id >> control_id;
-    }
-    else
-    {
-        to_upper(control_id_str);
-        if (control_function_map.contains(control_id_str))
-        {
-            control_id = control_function_map.at(control_id_str);
-        }
-        else
-        {
-            cerr << "Control invalid ID: " << control_id_str << '\n';
-        }
-    }
-    channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
-    control_value &= byte7_mask;
-    control_id &= byte7_mask;
-    trackchunk.push_back(control_id);
-    if (control_pan[0] == control_id)
-    {
-        control_value += PanExcess64;
-    }
+    control_value += PanExcess64;
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
   }
@@ -1066,97 +1075,130 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> control_id_str >> channel;
     to_upper(control_id_str);
     channel_1_to_0(channel);
-
-    if (control_function_map.contains(control_id_str))
-    {
-        control_id = control_function_map.at(control_id_str);
-    }
-
     running_status(channel | control[0], trackchunk);
+
+    const auto id = control_function_map(control_id_str);
+    if (id)
+    {
+        control_id = *id;
+    }
     trackchunk.push_back(control_id);
     trackchunk.push_back(0);
   }
 
-<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{INTEGER} {
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{UXINTEGER} {
     write_delay();
 
     string control_id_str;
     uint32_t channel{};
-    int32_t control_id{},
-        control_value{};
+    string control_value_str{};
     istringstream iss(yytext);
-    iss >> control_id_str >> channel >> control_value;
+    iss >> control_id_str >> channel >> control_value_str;
     channel_1_to_0(channel);
-    if (control_function_map.contains(control_id_str))
-    {
-        control_id = control_function_map.at(control_id_str);
-    }
     running_status(channel | control[0], trackchunk);
+
+    to_upper(control_id_str);
+    const auto id = control_function_map(control_id_str);
+    int32_t control_id{};
+    if (id)
+    {
+        control_id = *id;
+    }
     trackchunk.push_back(control_id);
+
+    int32_t control_value{};
+    if (control_value_str.substr(0, 2) == "0x")
+    {
+        istringstream iss2{control_value_str};
+        iss2 >> hex >> control_value;
+    }
+    else
+    {
+        control_value = lexical_cast<unsigned>(control_value_str);
+    }
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
   }
 
-<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}{ONOFF} {
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}({UXINTEGER}|{ONOFF}) {
     write_delay();
 
     string control_id_str;
     uint32_t channel{};
-    string onoff{};
+    string control_value_str{};
     istringstream iss(yytext);
-    iss >> control_id_str >> channel >> onoff;
+    iss >> control_id_str >> channel >> control_value_str;
+    // Can't upcase the "x" in hexadecimal 0x00 and use stream conversion on it.
+    auto upper_control_value_str{control_value_str};
+    to_upper(upper_control_value_str);
     to_upper(control_id_str);
     channel_1_to_0(channel);
-    // Can't fail; the grammar would not have qualified an invalid name.
-    const int32_t control_id{control_function_map.at(control_id_str)};
-
-    // Can't fail; the grammar would not have qualified an invalid string.
-    const MidiStreamAtom control_value{on_off_map.at(onoff)};
     running_status(channel | control[0], trackchunk);
-    trackchunk.push_back(control_id);
+
+    // Can't fail; the grammar would not have qualified an invalid name.
+    const auto id = control_function_map(control_id_str);
+    trackchunk.push_back(*id);
+
+    int control_value{};
+    const auto val = control_on_off_map(upper_control_value_str);
+    if (val)
+    {
+        control_value = *val;
+    }
+    else
+    {
+        if (control_value_str.substr(0, 2) == "0x")
+        {
+            istringstream iss2{control_value_str.substr(2)};
+            iss2 >> hex >> control_value;
+        }
+        else
+        {
+            control_value = lexical_cast<unsigned>(control_value_str);
+        }
+    }
     trackchunk.push_back(control_value);
   }
 
 <DETAIL_STATE>PAN{SPACE}{INTEGER}{SPACE}{PANVALUE} {
-    string namestr{};
-    string panstring{};
-    int32_t pancode{};
     write_delay();
 
+    string discard{};
+    string panstring{};
     uint32_t channel{};
     istringstream iss(yytext);
-    iss >> namestr >> channel >> panstring;
-    to_lower(panstring);
+    iss >> discard >> channel >> panstring;
     channel_1_to_0(channel);
+    running_status(channel | control[0], trackchunk);
+    trackchunk.push_back(control_pan[0]);
 
-    if (pan_map.contains(panstring))
+    to_upper(panstring);
+    const auto pan = pan_map(panstring);
+    int32_t pancode{};
+    if (pan)
     {
-        pancode = pan_map.at(panstring);
+        pancode = *pan;
     }
     else
     {
         pancode = lexical_cast<int>(panstring);
     }
     pancode += PanExcess64;
-    running_status(channel | control[0], trackchunk);
-    trackchunk.push_back(control_pan[0]);
     pancode &= byte7_mask;
     trackchunk.push_back(pancode);
   }
-
-
 
 <DETAIL_STATE>PROGRAM{SPACE}{INTEGER}{SPACE}{INTEGER} {
     write_delay();
 
     istringstream iss(yytext);
     string discard;
-    uint32_t channel {},
-             theprogram {};
+    uint32_t channel{},
+             theprogram{};
     iss >> discard >> channel >> theprogram;
     channel_1_to_0(channel);
-
     running_status(channel | program[0], trackchunk);
+
     program_1_to_0(theprogram);
     theprogram &= byte7_mask;
     trackchunk.push_back(theprogram);
@@ -1166,12 +1208,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     write_delay();
     istringstream iss(yytext);
     string discard;
-    uint32_t channel {},
-                 pressure{};
+    uint32_t channel{},
+             pressure{};
     iss >> discard >> channel >> pressure;
     channel_1_to_0(channel);
-
-    // looks like a kluge. Does channel_pressure participate in running_status?
     running_status(channel | channel_pressure[0], trackchunk);
 
     pressure &= byte7_mask;
@@ -1188,8 +1228,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel >> bend;
     channel_1_to_0(channel);
 
-    const auto status_byte{channel | pitch_wheel[0]};
-    running_status(status_byte, trackchunk);
+    running_status(channel | pitch_wheel[0], trackchunk);
 
     uint32_t bendlsb{},
              bendmsb{};
@@ -1298,13 +1337,13 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         // values in [2]..
         MidiStreamVector offsetvalues;
-        MidiStreamAtom fps{0};
+        MidiStreamAtom fps{};
         string fps_str(matches[fps_match].str());
         to_upper(fps_str);
-        string_view fps_strv(fps_str);
-        if (smpte_fps_map.contains(fps_strv))
+        const auto the_fps = smpte_fps_map(fps_str);
+        if (the_fps)
         {
-            fps = smpte_fps_map.at(string_view(matches[fps_match].str()));
+            fps = *the_fps;
         }
         int hours{lexical_cast<int>(matches[hours_match])};
         hours |= (fps << smpte_fps_shift);
@@ -1395,7 +1434,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // push the length of data plus the F7 at end
     // of the MIDI file stream.
     MidiStreamVector bytes{};
-    ranges::transform(byte_ints, back_inserter(bytes), 
+    ranges::transform(byte_ints, back_inserter(bytes),
         [](int i) { return static_cast<MidiStreamAtom>(i); } );
     sysex_event_sequence.remaining(bytes);
     sysex_event_sequence.build_msg();
@@ -1459,9 +1498,12 @@ DEVICE_ID (ALL_CALL|{BYTE})
     string yystr(yytext);
     const auto nonspace{yystr.find_first_not_of(" \t")};
     const string token{yystr.substr(nonspace)};
-    if (sysex_device_id_map.contains(token))
+    string token_upper{token};
+    to_upper(token_upper);
+    const auto id = sysex_device_id_map(token_upper);
+    if (id)
     {
-        xb = sysex_device_id_map.at(token);
+        xb = *id;
     }
     else
     {

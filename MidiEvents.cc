@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <cstdlib>
 
+#include <set>
 #include <map>
 #include <vector>
 #include <string>
@@ -202,15 +203,17 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
     auto flags{os.flags()};
     os << hex << "SYSEX";
     int i{};
-    if (sysex_subid_map.contains(data_[i]))
+    const auto subid = sysex_subid_map(data_[i]);
+    if (subid)
     {
         // subid
-        os << ' ' << sysex_subid_map.at(data_[i]);
+        os << ' ' << *subid;
         ++i;
         // device id
-        if (sysex_device_id_map.contains(data_[i]))
+        const auto id = sysex_device_id_map(data_[i]);
+        if (id)
         {
-            os << ' ' << sysex_device_id_map.at(data_[i]);
+            os << ' ' << *id;
         }
         else
         {
@@ -224,17 +227,23 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
           case sysex_subid_non_commercial[0]:
             break;
           case sysex_subid_non_realtime[0]:
-            if (sysex_nonrt_id1_map.contains(data_[i]))
             {
-                os << ' ' << sysex_nonrt_id1_map.at(data_[i]);
-                ++i;
+                const auto id1 = sysex_nonrt_id1_map(data_[i]);
+                if (id1)
+                {
+                    os << ' ' << *id1;
+                    ++i;
+                }
             }
             break;
           case sysex_subid_realtime[0]:
-            if (sysex_rt_id1_map.contains(data_[i]))
             {
-                os << ' ' << sysex_rt_id1_map.at(data_[i]);
-                ++i;
+                const auto id1 = sysex_rt_id1_map(data_[i]);
+                if (id1)
+                {
+                    os << ' ' << *id1;
+                    ++i;
+                }
             }
             break;
         }
@@ -578,9 +587,10 @@ ostream& textmidi::MidiFileMetaSMPTEOffsetEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << "SMPTE_OFFSET ";
-    if (smpte_fps_map.contains(fps_))
+    const auto fps = smpte_fps_map(fps_);
+    if (fps)
     {
-        os << smpte_fps_map.at(fps_);
+        os << *fps;
     }
     else
     {
@@ -1748,107 +1758,6 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoicePitchBendEvent&
 
 const long MidiChannelVoicePitchBendEvent::prefix_len{full_note_length};
 
-shared_ptr<MidiEvent> MidiChannelModeOmniPolyEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
-{
-    bool recognized{};
-    if (distance(midiiter, the_end) >= prefix_len)
-    {
-        recognized = ((*midiiter & ~channel_mask) == control_onmi_on[0]);
-    }
-    if (recognized)
-    {
-        ++midiiter;
-    }
-    return (recognized ? make_shared<MidiChannelModeOmniPolyEvent>(running_status, midiiter)
-        : shared_ptr<MidiChannelModeOmniPolyEvent>{});
-}
-
-ostream& textmidi::MidiChannelModeOmniMonoEvent::text(ostream& os) const
-{
-    return os;
-}
-
-ostream& textmidi::operator<<(ostream& os, const MidiChannelModeOmniMonoEvent& msg)
-{
-    return msg.text(os);
-}
-
-shared_ptr<MidiEvent> MidiChannelModeOmniMonoEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
-{
-    bool recognized{};
-    if (distance(midiiter, the_end) >= prefix_len)
-    {
-        recognized = ((*midiiter & ~channel_mask) == control_mono_on[0]);
-    }
-    if (recognized)
-    {
-        ++midiiter;
-    }
-    return (recognized ? make_shared<MidiChannelModeOmniMonoEvent>(running_status, midiiter)
-        : shared_ptr<MidiChannelModeOmniMonoEvent>{});
-}
-
-const long MidiChannelModeOmniMonoEvent::prefix_len{full_note_length};
-
-ostream& textmidi::MidiChannelModeChannelPolyEvent::text(ostream& os) const
-{
-    return os;
-}
-
-shared_ptr<MidiEvent> MidiChannelModeChannelPolyEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
-{
-    bool recognized{};
-    if (distance(midiiter, the_end) >= prefix_len)
-    {
-        recognized = ((*midiiter & ~channel_mask) == control_poly_on[0]);
-    }
-    if (recognized)
-    {
-        ++midiiter;
-    }
-    return (recognized ? make_shared<MidiChannelModeChannelPolyEvent>(running_status, midiiter)
-        : shared_ptr<MidiChannelModeChannelPolyEvent>{});
-}
-
-ostream& textmidi::operator<<(ostream& os,
-        const MidiChannelModeChannelPolyEvent& msg)
-{
-    return msg.text(os);
-}
-
-const long MidiChannelModeChannelPolyEvent::prefix_len{full_note_length};
-
-ostream& MidiChannelModeChannelMonoEvent::text(ostream& os) const
-{
-    return os;
-}
-
-shared_ptr<MidiEvent> MidiChannelModeChannelMonoEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
-{
-    bool recognized{};
-    if (distance(midiiter, the_end) >= prefix_len)
-    {
-        recognized = ((*midiiter & ~channel_mask) == control_mono_on[0]);
-    }
-    if (recognized)
-    {
-        ++midiiter;
-    }
-    return (recognized ? make_shared<MidiChannelModeChannelMonoEvent>(running_status, midiiter)
-        : shared_ptr<MidiChannelModeChannelMonoEvent>{});
-}
-
-ostream& textmidi::operator<<(ostream& os, const MidiChannelModeChannelMonoEvent& msg)
-{
-    return msg.text(os);
-}
-
-const long MidiChannelModeChannelMonoEvent::prefix_len{full_note_length};
-
 shared_ptr<MidiEvent> MidiChannelVoiceControlChangeEvent::recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end, RunningStatus& running_status)
 {
@@ -1897,7 +1806,7 @@ void textmidi::MidiChannelVoiceControlChangeEvent::consume_stream(MidiStreamIter
     if (value_ & ~byte7_mask)
     {
         cerr << "Illegal 8-bit control value: "
-             << hex << static_cast<int>(value_) << dec << '\n';
+             << hex << "0x" << setw(2) << setfill('0') << static_cast<int>(value_) << dec << '\n';
     }
 }
 
@@ -1915,28 +1824,32 @@ ostream& textmidi::MidiChannelVoiceControlChangeEvent::text(ostream& os) const
                  << temp_pan << " <= " << MaxSignedPan << '\n';
         }
         string panstring{};
-        if (pan_map.contains(temp_pan))
-        {
-            panstring = pan_map.at(temp_pan);
-        }
-        else
-        {
-            panstring = boost::lexical_cast<string>(temp_pan);
-        }
+        const auto pan = pan_map(temp_pan);
+        panstring = (pan ? *pan : boost::lexical_cast<string>(temp_pan));
         os << "PAN " << ' ' << panstring << ' ';
     }
     else
     {
-        if (control_function_map.contains(id_))
+        const auto control_str = control_function_map(id_);
+        if (control_str)
         {
-            os << control_function_map.at(id_);
+            os << *control_str;
         }
         else
         {
-            os << static_cast<unsigned>(id_);
+            if (static_cast<int>(RegisteredParameterMsbs::parameter_3d_msb) == id_)
+            {
+                os << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(id_) << dec;
+            }
+            else
+            {
+                os << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(id_) << dec;
+            }
         }
         os << ' ';
-        if (control_portamento_on_off[0] == id_)
+        set<MidiStreamAtom> on_off_controls{control_portamento_on_off[0],
+            control_legato_foot[0], control_sostenuto[0], control_local_control[0]};
+        if (on_off_controls.contains(id_))
         {
             if (value_ >= control_pedalthreshold)
             {
@@ -1951,7 +1864,7 @@ ostream& textmidi::MidiChannelVoiceControlChangeEvent::text(ostream& os) const
         }
         else
         {
-            os << static_cast<unsigned>(value_);
+            os << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(value_);
         }
     }
     os << ' ';
@@ -2157,37 +2070,6 @@ ostream& textmidi::operator<<(ostream& os,
 }
 
 const long MidiChannelVoiceProgramChangeEvent::prefix_len{full_note_length};
-
-void textmidi::MidiChannelModeOmniPolyEvent
-    ::consume_stream(MidiStreamIterator& )
-{
-}
-
-ostream& textmidi::MidiChannelModeOmniPolyEvent::text(ostream& os) const
-{
-    auto flags{os.flags()};
-    os << "CHANNEL_MODE " << static_cast<int>(channel())
-       << ' ' << static_cast<int>(mode_);
-    static_cast<void>(os.flags(flags));
-    return os;
-}
-
-void textmidi::MidiChannelModeOmniPolyEvent::mode(MidiStreamAtom mode)
-{
-    mode_ = mode;
-}
-
-MidiStreamAtom textmidi::MidiChannelModeOmniPolyEvent::mode() const
-{
-    return mode_;
-}
-
-ostream& textmidi::operator<<(ostream& os, const MidiChannelModeOmniPolyEvent& msg)
-{
-    return msg.text(os);
-}
-
-const long MidiChannelModeOmniPolyEvent::prefix_len{full_note_length};
 
 MidiDelayEventPair textmidi::MidiEventFactory::operator()(MidiStreamIterator& midiiter, int64_t& ticks_accumulated)
 {
@@ -2561,9 +2443,10 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
             if (dynamic_ != note_on->velocity())
             {
                 os << lazy_string(true);
-                if (dynamics_map.contains(note_on->velocity()))
+                const auto dynamic = dynamics_map(note_on->velocity());
+                if (dynamic)
                 {
-                    os << dynamics_map.at(note_on->velocity()) << '\n';
+                    os << *dynamic << '\n';
                 }
                 else
                 {

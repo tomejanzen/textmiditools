@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -14,6 +14,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+
+#include "Midi.h"
 
 namespace textmidi
 {
@@ -69,5 +71,6 @@ extern std::ofstream midi_filestr;
 //
 // Verbose flag taken from command-line options
 extern bool verbose;
+extern midi::RunningStatus running_status;
 
 #endif

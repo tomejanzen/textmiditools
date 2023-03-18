@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.50
+// TextMIDITools Version 1.0.52
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -34,6 +34,11 @@ void midi::MidiHeader::swapbytes()
                 (format_)));
     ntrks_     = htobe16(ntrks_);
     division_  = htobe16(division_);
+}
+
+void RunningStatus::policy(RunningStatusPolicy policy)
+{
+    policy_ = policy;
 }
 
 void RunningStatus::running_status(MidiStreamAtom running_status_value)
@@ -71,7 +76,7 @@ MidiStreamAtom RunningStatus::command() const
 void RunningStatus::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
 {
     const bool same{running_status_value_ == status_byte};
-    if (!same)
+    if ((!same) || (RunningStatusPolicy::Never == policy_))
     {
         this->running_status(status_byte);
         track.push_back(status_byte);

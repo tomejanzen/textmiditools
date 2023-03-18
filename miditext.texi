@@ -223,26 +223,37 @@ Part of the testing of the conversion utilities @command{miditext}
 and @command{textmidi} is performed on linux with a script similar to this:
 
 @smallexample
-#/usr/bin/env bash
+
+#!/usr/bin/env bash
 function testmidi
 @lbracechar{}
+    /usr/bin/env ls $@lbracechar{}1@rbracechar{}
     temporary_directory=$(mktemp -d)
     bn=$(basename $@lbracechar{}1@rbracechar{} .mid)
-    ~/me/janzent/miscprog/textmidi/miditext --midi $@lbracechar{}1@rbracechar{} --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt
-    sed -i -f ~/me/janzent/sed/starttrack.sed $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt
-    ~/me/janzent/miscprog/textmidi/textmidi --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
-    if [ -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid ]; then
-        echo "new MIDI file is finite length";
-    else
-        echo "new MIDI file is either absent or zero length";
-    fi
-    ~/me/janzent/miscprog/textmidi/miditext --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
-    sed -i -f ~/me/janzent/sed/starttrack.sed $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
-    ls -l $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
-    diff -s $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
-    diff -q -bBw -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
+    miditext --verbose --midi $@lbracechar{}1@rbracechar{} --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt
+    /usr/bin/env sed -i -f starttrack.sed \
+        $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt
+    textmidi --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt \
+        --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
+    miditext --midi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid \
+        --textmidi $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
+    /usr/bin/env sed -i -f starttrack.sed $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt
+    /usr/bin/env ls -l $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
+    /usr/bin/env diff -s $@lbracechar{}1@rbracechar{} $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid 
+    /usr/bin/env diff -q -bBw -s $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt \
+        $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt 
+    /usr/bin/env rm $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}_B.txt \
+        $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.txt $@lbracechar{}temporary_directory@rbracechar{}/$@lbracechar{}bn@rbracechar{}.mid
+    /usr/bin/env rmdir $@lbracechar{}temporary_directory@rbracechar{}
 @rbracechar{}
+
 testmidi $@lbracechar{}BASH_ARGV[0]@rbracechar{}
+
+@end smallexample
+where starttrack.sed is:
+@smallexample
+#!/bin/sed
+s/; bytes in track.*$//g
 @end smallexample
 
 This script can be invoked with
@@ -308,6 +319,8 @@ differ from those in the original MIDI file.
 @command{miditext} recognizes the short key signature event,
 but @command{textmidi} always creates the standard event with five total bytes:
 (0xFF, 0x59, 2 [the following data length], sharps/flats, mode).
+@item
+@command{miditext} always produces the full CONTROL command forms and not the abbreviated forms.
 @end itemize
 
 @node Known Bugs

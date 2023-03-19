@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -29,7 +29,7 @@ namespace midi
             for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
             {
                 num_string_map_.emplace(*mi);
-                string_num_map_.emplace(std::pair<std::string_view, NumType>(mi->second, mi->first));
+                string_num_map_.emplace(std::make_pair(mi->second, mi->first));
             }
         }
 
@@ -39,7 +39,7 @@ namespace midi
         {
             for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
             {
-                num_string_map_.emplace(std::pair<NumType, std::string_view>(mi->second, mi->first));
+                num_string_map_.emplace(std::make_pair(mi->second, mi->first));
                 string_num_map_.emplace(*mi);
             }
         }

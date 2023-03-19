@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -39,13 +39,18 @@ using namespace midi;
 using namespace textmidi::cgm;
 using namespace textmidi::rational;
 
-// might become settable at a later time.
-constexpr int TempoBeatsPerMinute{60};
-constexpr int RestPitchIndex{numeric_limits<int>().max()};
+namespace
+{
+    // might become settable at a later time.
+    constexpr int TempoBeatsPerMinute{60};
+    constexpr int RestPitchIndex{numeric_limits<int>().max()};
+    
+    using KeyScaleSeq = std::vector<int>;
+}
 
 //
 // Convert a double duration in seconds to a musical ratio.
-RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
+RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration) const
 {
     //  beat    quarter   whole   minute
     // ------ * ------- * ----- * -------
@@ -79,7 +84,7 @@ RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
 
 //
 // Coerce a duration to be in multiples of the pulse/second value.
-RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, double pulse_per_second)
+RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, double pulse_per_second) const
 {
     RhythmRational wholes_per_second{
       RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
@@ -323,7 +328,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             (textmidi::pitchname_to_keynumber(v.low_pitch()).first,
             textmidi::pitchname_to_keynumber(v.high_pitch()).first));
     }
-    vector<int> key_scale;
+    KeyScaleSeq key_scale;
     xml_form.string_scale_to_int_scale(key_scale);
     const TicksDuration time_step{xml_form.pulse()
         ? (static_cast<int64_t>(static_cast<double>
@@ -479,11 +484,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         key_number = min(key_number, tessitura[tr].second);
                         int key_index{0U};
                         {
-                            const auto key_iter{ranges::find(key_scale, key_number)};
-                            if (key_iter != key_scale.end())
+                            KeyScaleSeq::const_iterator key_iter{ranges::find(key_scale, key_number)};
+                            if (key_iter != key_scale.cend())
                             {
-                                key_index = std::distance(key_scale.begin(),
-                                            key_iter);
+                                key_index = std::distance(key_scale.cbegin(), key_iter);
                             }
                         }
                         if (pitch_index != RestPitchIndex)
@@ -511,11 +515,11 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         {
                           int key_index{0U};
                           {
-                              const auto key_iter{ranges::find(key_scale, ne.pitch())};
-                              if (key_iter != key_scale.end())
+                              KeyScaleSeq::const_iterator key_iter{ranges::find(key_scale, ne.pitch())};
+                              if (key_iter != key_scale.cend())
                               {
                                   key_index
-                                      = std::distance(key_scale.begin(),
+                                      = std::distance(key_scale.cbegin(),
                                         key_iter);
                                   if (xml_form.voices()[tr]
                                       .follower().interval_ < 0)

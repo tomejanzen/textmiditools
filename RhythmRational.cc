@@ -26,22 +26,22 @@ using namespace textmidi;
 using namespace textmidi::rational;
 
 
-int64_t textmidi::rational::RhythmRational::numerator() const
+int64_t textmidi::rational::RhythmRational::numerator() const noexcept
 {
     return numerator_;
 }
 
-int64_t textmidi::rational::RhythmRational::denominator() const
+int64_t textmidi::rational::RhythmRational::denominator() const noexcept
 {
     return denominator_;
 }
 
-void textmidi::rational::RhythmRational::numerator(int64_t numerator)
+void textmidi::rational::RhythmRational::numerator(int64_t numerator) noexcept
 {
     numerator_ = numerator;
 }
 
-void textmidi::rational::RhythmRational::denominator(int64_t denominator)
+void textmidi::rational::RhythmRational::denominator(int64_t denominator) noexcept
 {
     denominator_ = denominator;
 }
@@ -132,8 +132,7 @@ void textmidi::rational::RhythmRational::reduce_sign()
             denominator_ = -denominator_;
         }
     }
-
- }
+}
 
 void textmidi::rational::RhythmRational::reduce()
 {

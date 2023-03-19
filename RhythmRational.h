@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // RhythmRational 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -27,7 +27,7 @@ namespace textmidi
         {
             public:
                 typedef std::int64_t value_type;
-                explicit RhythmRational(std::int64_t numerator = 0L, std::int64_t denominator = 1L, bool reduce_it = true)
+                explicit constexpr RhythmRational(std::int64_t numerator = 0L, std::int64_t denominator = 1L, bool reduce_it = true)
                   : numerator_{numerator},
                     denominator_{denominator}
                 {
@@ -40,15 +40,15 @@ namespace textmidi
                         reduce();
                     }
                 }
-                RhythmRational(const RhythmRational& ) = default;
+                constexpr RhythmRational(const RhythmRational& ) = default;
                 RhythmRational(RhythmRational& ) = default;
                 explicit RhythmRational(RhythmRational&& ) = default;
                 RhythmRational& operator=(const RhythmRational& ) = default;
                 RhythmRational& operator=(RhythmRational&& ) = default;
-                std::int64_t numerator() const;
-                std::int64_t denominator() const;
-                void numerator(std::int64_t numerator);
-                void denominator(std::int64_t denominator);
+                std::int64_t numerator() const noexcept;
+                std::int64_t denominator() const noexcept;
+                void numerator(std::int64_t numerator) noexcept;
+                void denominator(std::int64_t denominator) noexcept;
                 operator bool() const;
                 bool operator==(const RhythmRational& comparand) const;
                 bool operator!=(const RhythmRational& comparand) const;

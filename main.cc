@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -78,7 +78,8 @@ int main(int argc, char *argv[])
     }
     catch (std::logic_error& err)
     {
-        cerr << "Program options error: " << err.what() << '\n';
+        const string errstr{(string("Program options error: " ) += err.what()) += '\n'};
+        cerr << errstr;
         exit(EXIT_SUCCESS);
     }
 
@@ -93,7 +94,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.52\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.53\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -117,7 +118,8 @@ int main(int argc, char *argv[])
         text_filename = var_map[TextmidiOpt].as<string>();
         if (!filesystem::exists(text_filename))
         {
-            cerr << TextmidiOpt << ' ' << text_filename << " File does not exist.\n";
+            const string errstr{((string(TextmidiOpt) + ' ') += text_filename) += " File does not exist.\n"};
+            cerr << errstr;
             exit(EXIT_SUCCESS);
         }
     }
@@ -170,7 +172,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(NoRunningStatusOpt)) [[unlikely]]
     {
-        running_status.policy(midi::RunningStatus::RunningStatusPolicy::Never); 
+        running_status.policy(midi::RunningStatus::RunningStatusPolicy::Never);
     }
 
     if (midi_filename.empty()) [[unlikely]]
@@ -187,7 +189,8 @@ int main(int argc, char *argv[])
     midi_filestr.open(midi_filename.c_str(), ios_base::binary);
     if (!midi_filestr)
     {
-        cerr << "Can't open " << midi_filename << '\n';
+        const string errstr{(string("Can't open ") += midi_filename) += '\n'};
+        cerr << errstr;
     }
     textmidi::textmidi_features = make_shared<textmidi::TextMidiFeatures>(text_filename, midi_filestr,
         detache, note_off_select, verbose);
@@ -202,4 +205,3 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
-#

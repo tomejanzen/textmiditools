@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // MIDIKeyString.cc
 //
@@ -31,8 +31,6 @@ namespace textmidi
         bool operator()(const std::string& left, const std::string& right) const;
     };
 
-
-    
 }
 #endif
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -62,5 +62,4 @@ RhythmRational textmidi::rational::snap(RhythmRational num, RhythmRational grid)
         return num;
     }
 }
-
 

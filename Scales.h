@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -17,9 +17,7 @@ namespace textmidi
 {
     namespace cgm
     {
-
-    extern std::vector<std::vector<std::string>> scale_strs;
-
+        extern std::vector<std::vector<std::string_view>> scale_strs;
     }
 }
 

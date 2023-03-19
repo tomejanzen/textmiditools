@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -241,13 +241,14 @@ namespace textmidi
                 voices_{}
             {
                 scale_.clear();
+                scale_.reserve(form.scale.size());
                 auto prefer_sharp{prefer_sharp_};
                 std::ranges::transform(form.scale, back_inserter(scale_),
                     [prefer_sharp](const std::uint32_t notenum)
                     { return textmidi::num_to_note(notenum, prefer_sharp); });
                 voices_.clear();
-                voices_.insert(voices_.begin(), form.voices.begin(),
-                               form.voices.begin() + form.voice_qty);
+                voices_.insert(voices_.begin(), form.voices.cbegin(),
+                               form.voices.cbegin() + form.voice_qty);
             }
 
             std::string name() const noexcept;

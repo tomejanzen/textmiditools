@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -41,7 +41,7 @@ namespace textmidi
           public:
             struct TrackScramble
             {
-                explicit TrackScramble(TrackScrambleEnum scramble = TrackScrambleEnum::None,
+                explicit constexpr TrackScramble(TrackScrambleEnum scramble = TrackScrambleEnum::None,
                               TicksDuration     period = TicksDuration{120LU * TicksPerQuarter})
                   : scramble_(scramble),
                     period_(period)
@@ -50,6 +50,7 @@ namespace textmidi
                 TrackScrambleEnum scramble_;
                 TicksDuration     period_;
             };
+
             Composer(bool gnuplot, bool answer, TrackScramble track_scramble)
               : gnuplot_(gnuplot),
                 answer_(answer),
@@ -68,8 +69,8 @@ namespace textmidi
             void operator()(std::ofstream& textmidi_file, const MusicalForm& xml_form);
 
           private:
-            rational::RhythmRational duration_to_rhythm(double duration);
-            rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse_per_second);
+            rational::RhythmRational duration_to_rhythm(double duration) const;
+            rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse_per_second) const;
             void build_track_scramble_sequences(std::vector<std::vector<int>>& track_scramble_sequences,
                 int track_qty, TicksDuration total_duration);
             void build_composition_priority_graph(const MusicalForm& xml_form,
@@ -86,3 +87,4 @@ namespace textmidi
 }
 
 #endif
+

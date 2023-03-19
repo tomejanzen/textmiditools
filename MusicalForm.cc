@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -456,8 +456,9 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     const int MaxRandomVoiceQty{24};
     voices_.resize(ri() % MaxRandomVoiceQty + 1);
 
-    scale_ = scale_strs[ri() % scale_strs.size()];
-
+    scale_.clear();
+    ranges::transform(scale_strs[ri() % scale_strs.size()], back_inserter(scale_), 
+        [](const string_view& strv) { return string{strv.data(), strv.length()}; } );
     vector<int> programs{};
     if (GeneralMIDIGroup::All == static_cast<GeneralMIDIGroup>(instrument_flags))
     {
@@ -666,5 +667,4 @@ void MusicalForm::clamp_scale_to_instrument_ranges()
 
 RandomDouble cgm::rd{};
 RandomInt    cgm::ri{};
-
 

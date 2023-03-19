@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -26,22 +26,22 @@ namespace textmidi
     class NoteEvent
     {
       public:
-        NoteEvent(int pitch, int vel, textmidi::rational::RhythmRational musical_rhythm)
+        constexpr NoteEvent(int pitch, int vel, textmidi::rational::RhythmRational musical_rhythm)
           : pitch_{pitch},
             vel_{vel},
             musical_rhythm_{musical_rhythm}
         {
         }
-        NoteEvent() = default;
-        NoteEvent(const NoteEvent& ) = default;
-        explicit NoteEvent(NoteEvent&& ) = delete;
-        NoteEvent& operator=(const NoteEvent& ) = default;
+        constexpr NoteEvent() = default;
+        constexpr NoteEvent(const NoteEvent& ) = default;
+        NoteEvent(NoteEvent&& ) = delete;
+        constexpr NoteEvent& operator=(const NoteEvent& ) = default;
         NoteEvent& operator=(NoteEvent&& ) = delete;
 
         void pitch(int pitch) noexcept;
         int pitch() const noexcept;
         int vel() const noexcept;
-        textmidi::rational::RhythmRational musical_rhythm() const noexcept;
+        constexpr textmidi::rational::RhythmRational musical_rhythm() const noexcept;
       private:
         int pitch_;
         int vel_;

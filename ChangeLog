@@ -1,3 +1,20 @@
+2023-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMaps.h,textmidi.l,Composer.cc,MidiEvents.cc,MusicalForm.h,main.cc,
+        miditext.cc,smustextmidi.cc: C++ tactics and cleanup.
+        Concatenate strings for output esp. to cerr.
+        Reserve room in vectors prior to using back_inserter.
+        Procedurize conversion of hex and decimal strings for textmidi.l
+        Remove types from pair, replace with make_pair().
+        Use cbegin() and cend() with applicable.
+        Replace use of distance() with for-initialized variable.
+
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc,Composer.h,MIDIKeyString.h,MidiEvents.cc,MidiEvents.h,
+        MusicalForm.cc,NoteEvent.cc,NoteEvent.h,RhythmRational.cc,RhythmRational.h,
+        Scales.cc,Scales.h,Track.h,main.cc,rational_support.cc,textmidi.vim:
+        Apply constexpr where possible.  Make Scales.h use string_view.
+
 2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
 	* Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
         Add symbols for MIDI 3D to textmidi.  miditext does not support them

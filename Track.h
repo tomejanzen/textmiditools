@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -20,7 +20,6 @@ namespace textmidi
 {
     namespace cgm
     {
-
         constexpr std::int64_t TicksPerQuarter(240);
         // MIDI specifies tempo as per quarter note.
         const textmidi::rational::RhythmRational WholesPerBeat{1, 4};
@@ -52,7 +51,6 @@ namespace textmidi
             TicksDuration the_next_time_;
             int last_pitch_index_;
         };
-
     }
 }
 

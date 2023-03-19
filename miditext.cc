@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
-// miditext Version 1.0.52
+// miditext Version 1.0.53
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.52\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.53\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -332,24 +332,24 @@ int main(int argc, char *argv[])
 
 #undef DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
-    for (auto& ti : stream_length_pairs)
+    for (int i{}; auto& ti : stream_length_pairs)
     {
-        const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
         ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
             quantum};
         convert_track();
+        ++i;
     }
 #else
     {
         vector<jthread> track_threads(stream_length_pairs.size());
 
-        for (auto& ti : stream_length_pairs)
+        for (int i{}; auto& ti : stream_length_pairs)
         {
-            const auto i{std::distance(&(*stream_length_pairs.begin()), &ti)};
             ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
                 quantum};
             jthread track_thread{convert_track};
             track_threads[i] = move(track_thread);
+            ++i;
         }
     }
 #endif
@@ -362,19 +362,18 @@ int main(int argc, char *argv[])
     if (verbose)
     {
         cout << "Events per track:\n";
-        for (auto& mdep : midi_delay_event_tracks)
+        for (int i{}; auto& mdep : midi_delay_event_tracks)
         {
-            cout << "  Track: " << setw(3)
-                 << (std::distance(&(*midi_delay_event_tracks.begin()), &mdep) + 1)
+            cout << "  Track: " << setw(3) << (i + 1)
                  << ": " << setw(8) << mdep.size() << '\n';
+            ++i;
         }
     }
     int64_t rigid_rhythms_count{};
     int64_t non_rigid_rhythms_count{};
     int64_t zero_rhythms_count{};
-    for (auto& mdet : midi_delay_event_tracks)
+    for (int i{}; auto& mdet : midi_delay_event_tracks)
     {
-        const auto i{std::distance(&(*midi_delay_event_tracks.begin()), &mdet)};
         textmidi_str.clear();
         ((textmidi_str += "\nSTARTTRACK ; bytes in track: ") += lexical_cast<string>
            (stream_length_pairs[i].second)) += '\n';
@@ -405,12 +404,13 @@ int main(int argc, char *argv[])
         {
             ranges::copy(mdet, ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
         }
+        ++i;
     }
     if (verbose)
     {
         rigid_rhythms_count -= zero_rhythms_count;
         const double rigid_rhythms_fraction{static_cast<double>(rigid_rhythms_count) / static_cast<double>(non_rigid_rhythms_count + rigid_rhythms_count)};
-        cout << "Rigid rhythms: " << (rigid_rhythms_fraction * 100.0) << '%' << '\n';
+        cout << "Rigid rhythms: " << (rigid_rhythms_fraction * 100.0) << "%\n";
     }
     return EXIT_SUCCESS;
 }

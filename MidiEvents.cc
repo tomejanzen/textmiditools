@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.52
+// TextMIDITools Version 1.0.53
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -87,7 +87,7 @@ textmidi::KeySignatureMap textmidi::key_signature_map{
 
 //
 // Create a variable-length value.
-int64_t textmidi::variable_len_value(MidiStreamIterator& midiiter)
+constexpr int64_t textmidi::variable_len_value(MidiStreamIterator& midiiter)
 {
     uint64_t len{};
     while (*midiiter & variable_len_flag)
@@ -114,7 +114,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiDelayEventPair& msg_pair)
 
 //
 // return the accumulated MIDI ticks.
-int64_t textmidi::MidiEvent::ticks_accumulated() const
+constexpr int64_t textmidi::MidiEvent::ticks_accumulated() const
 {
     return ticks_accumulated_;
 }
@@ -128,7 +128,7 @@ void textmidi::MidiEvent::ticks_accumulated(int64_t ticks_accumulated)
 
 //
 // return the MIDI ticks to the next event.
-int64_t textmidi::MidiEvent::ticks_to_next_event() const
+constexpr int64_t textmidi::MidiEvent::ticks_to_next_event() const
 {
     return ticks_to_next_event_;
 }
@@ -140,7 +140,7 @@ void textmidi::MidiEvent::ticks_to_next_event(int64_t ticks_to_next_event)
     ticks_to_next_event_ = ticks_to_next_event;
 }
 
-int64_t textmidi::MidiEvent::ticks_to_next_note_on() const
+constexpr int64_t textmidi::MidiEvent::ticks_to_next_note_on() const
 {
     return ticks_to_next_note_on_;
 }
@@ -150,7 +150,7 @@ void textmidi::MidiEvent::ticks_to_next_note_on(int64_t ticks_to_next_note_on)
     ticks_to_next_note_on_ = ticks_to_next_note_on;
 }
 
-RhythmRational textmidi::MidiEvent::wholes_to_next_event() const
+constexpr RhythmRational textmidi::MidiEvent::wholes_to_next_event() const
 {
     return wholes_to_next_event_;
 }
@@ -251,8 +251,8 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
 
     if (i < data_.size())
     {
-        for (auto it(data_.begin() + i);
-                (it != data_.end()) && (*it != end_of_sysex[0]);
+        for (auto it(data_.cbegin() + i);
+                (it != data_.cend()) && (*it != end_of_sysex[0]);
                 ++it)
         {
             os << ' ' << hex << "0x" << setw(2) << setfill('0')
@@ -292,8 +292,8 @@ ostream& textmidi::MidiSysExRawEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << hex << "SYSEXRAW";
-    for (auto sys_ex_it(data_.begin());
-            (sys_ex_it != data_.end()) && (*sys_ex_it != end_of_sysex[0]);
+    for (auto sys_ex_it(data_.cbegin());
+            (sys_ex_it != data_.cend()) && (*sys_ex_it != end_of_sysex[0]);
             ++sys_ex_it)
     {
         os << ' ' << hex << "0x"
@@ -330,7 +330,7 @@ shared_ptr<MidiEvent> MidiFileMetaSequenceEvent::recognize(MidiStreamIterator& m
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(sequence_number_prefix.begin(), sequence_number_prefix.end(),
+            if (equal(sequence_number_prefix.cbegin(), sequence_number_prefix.cend(),
                         midiiter + 1))
             {
                 recognized = true;
@@ -425,7 +425,7 @@ shared_ptr<MidiEvent> MidiFileMetaMidiChannelEvent::recognize(
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(midi_channel_prefix.begin(), midi_channel_prefix.end(), midiiter + 1))
+            if (equal(midi_channel_prefix.cbegin(), midi_channel_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
             }
@@ -445,8 +445,11 @@ void textmidi::MidiFileMetaMidiChannelEvent::consume_stream(MidiStreamIterator& 
     channel_ = channel_0_to_1(channel_);
     if (channel_ > MidiChannelQty)
     {
-        cerr << "MIDI channel (" << static_cast<int>(channel_) << ") exceeded MIDI limit ("
-             << MidiChannelQty << ")\n";
+        const string errstr{(((string{"MIDI channel ("}
+            += boost::lexical_cast<string>(static_cast<int>(channel_)))
+            += ") exceeded MIDI limit (") += boost::lexical_cast<string>(MidiChannelQty))
+            += ")\n"};
+        cerr << errstr;
     }
 }
 
@@ -463,7 +466,7 @@ void textmidi::MidiFileMetaMidiChannelEvent::channel(uint16_t channel)
     channel_ = channel;
 }
 
-uint16_t textmidi::MidiFileMetaMidiChannelEvent::channel()
+constexpr uint16_t textmidi::MidiFileMetaMidiChannelEvent::channel()
 {
     return channel_;
 }
@@ -484,7 +487,7 @@ shared_ptr<MidiEvent> MidiFileMetaSetTempoEvent::recognize(MidiStreamIterator& m
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(tempo_prefix.begin(), tempo_prefix.end(), midiiter + 1))
+            if (equal(tempo_prefix.cbegin(), tempo_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
             }
@@ -549,7 +552,7 @@ shared_ptr<MidiEvent> MidiFileMetaSMPTEOffsetEvent::recognize(MidiStreamIterator
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(smpte_prefix.begin(), smpte_prefix.end(), midiiter + 1))
+            if (equal(smpte_prefix.cbegin(), smpte_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
             }
@@ -618,7 +621,7 @@ shared_ptr<MidiEvent> MidiFileMetaMidiPortEvent::recognize(MidiStreamIterator& m
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(midi_port_prefix.begin(), midi_port_prefix.end(), midiiter + 1))
+            if (equal(midi_port_prefix.cbegin(), midi_port_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
             }
@@ -661,7 +664,7 @@ shared_ptr<MidiEvent> MidiFileMetaTimeSignatureEvent::recognize(
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(time_signature_prefix.begin(), time_signature_prefix.end(),
+            if (equal(time_signature_prefix.cbegin(), time_signature_prefix.cend(),
                 midiiter + 1))
             {
                 recognized = true;
@@ -712,14 +715,14 @@ shared_ptr<MidiEvent> MidiFileMetaKeySignatureEvent::recognize(
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(key_signature_prefix.begin(), key_signature_prefix.end(), midiiter + 1))
+            if (equal(key_signature_prefix.cbegin(), key_signature_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
                 midiiter += meta_prefix.size() + sizeof(key_signature_prefix[0]);
             }
             else
             {
-                if (equal(key_signature_prefix_mode_missing.begin(), key_signature_prefix_mode_missing.end(), midiiter + 1))
+                if (equal(key_signature_prefix_mode_missing.cbegin(), key_signature_prefix_mode_missing.cend(), midiiter + 1))
                 {
                     // some programs that were obsolete when they were written left
                     // off the mode byte, so the consume
@@ -773,7 +776,7 @@ shared_ptr<MidiEvent> MidiFileMetaXmfPatchTypeEvent::recognize(
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(xmf_patch_type_prefix.begin(), xmf_patch_type_prefix.end(), midiiter + 1))
+            if (equal(xmf_patch_type_prefix.cbegin(), xmf_patch_type_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
                 midiiter += meta_prefix.size() + sizeof(xmf_patch_type_prefix[0]);
@@ -846,8 +849,8 @@ ostream& textmidi::MidiFileMetaSequencerSpecificEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << '\n' << "SEQUENCER_SPECIFIC";
-    for (auto it(data_.begin());
-            (it != data_.end()) && (*it != end_of_sysex[0]);
+    for (auto it(data_.cbegin());
+            (it != data_.cend()) && (*it != end_of_sysex[0]);
             ++it)
     {
         os << ' ' << hex << "0x" << setw(2) << setfill('0')
@@ -873,7 +876,7 @@ shared_ptr<MidiEvent> MidiFileMetaEndOfTrackEvent::recognize(MidiStreamIterator&
     {
         if (MidiFileMetaEvent::recognize(midiiter, the_end))
         {
-            if (equal(end_of_track_prefix.begin(), end_of_track_prefix.end(), midiiter + 1))
+            if (equal(end_of_track_prefix.cbegin(), end_of_track_prefix.cend(), midiiter + 1))
             {
                 recognized = true;
             }
@@ -1489,7 +1492,7 @@ void textmidi::MidiChannelVoiceModeEvent::channel(MidiStreamAtom channel)
     channel_ = channel;
 }
 
-RunningStatus& MidiChannelVoiceModeEvent::running_status()
+constexpr RunningStatus& MidiChannelVoiceModeEvent::running_status()
 {
     return running_status_;
 }
@@ -1532,20 +1535,24 @@ void textmidi::MidiChannelVoiceNoteEvent::consume_stream(MidiStreamIterator& mid
     key_ = *midiiter++;
     if (key_ > MaxKeyboardKey)
     {
-        cerr << "MIDI Key Number (" << static_cast<int>(key_) << ") exceeded MIDI limit ("
-             << MaxKeyboardKey << ")\n";
+        const string errstr{((string("MIDI Key Number (")
+            += boost::lexical_cast<string>(static_cast<int>(key_)))
+            += ") exceeded MIDI limit (") += boost::lexical_cast<string>(MaxKeyboardKey) };
+        cerr << errstr;
     }
     channel(local_status().channel() + 1);
     key_string_ = num_to_note(key_, prefer_sharp_);
     velocity_ = static_cast<int>(*midiiter++);
     if (velocity_ > MaxDynamic)
     {
-        cerr << "MIDI velocity (" << static_cast<int>(velocity_) << ") exceeded MIDI limit ("
-             << MaxDynamic << ")\n";
+        const string errstr{(((string("MIDI velocity (")
+            += boost::lexical_cast<string>(static_cast<int>(velocity_)))
+            += ") exceeded MIDI limit (") += boost::lexical_cast<string>(MaxDynamic)) += ")\n"};
+        cerr << errstr;
     }
 }
 
-MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::key() const
+constexpr MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::key() const
 {
     return key_;
 }
@@ -1570,7 +1577,7 @@ void textmidi::MidiChannelVoiceNoteEvent::velocity(MidiStreamAtom velocity)
     velocity_ = velocity;
 }
 
-MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::velocity() const
+constexpr MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::velocity() const
 {
     return velocity_;
 }
@@ -1584,7 +1591,7 @@ ostream& textmidi::MidiChannelVoiceNoteEvent::text(ostream& os) const
     return os;
 }
 
-bool textmidi::MidiChannelVoiceNoteEvent
+constexpr bool textmidi::MidiChannelVoiceNoteEvent
     ::operator==(const MidiChannelVoiceNoteEvent& note) const
 {
     return (key_ == note.key() && channel() == note.channel());
@@ -1619,7 +1626,7 @@ void textmidi::MidiChannelVoiceNoteOnEvent
     ticks_to_noteoff_ = ticks_to_noteoff;
 }
 
-int64_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_to_noteoff() const
+constexpr int64_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_to_noteoff() const
 {
     return ticks_to_noteoff_;
 }
@@ -1630,7 +1637,7 @@ void textmidi::MidiChannelVoiceNoteOnEvent
     ticks_past_noteoff_ = ticks_past_noteoff;
 }
 
-int64_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_past_noteoff() const
+constexpr int64_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_past_noteoff() const
 {
     return ticks_past_noteoff_;
 }
@@ -1642,12 +1649,12 @@ void textmidi::MidiChannelVoiceNoteOnEvent
     wholes_past_noteoff_.reduce();
 }
 
-RhythmRational textmidi::MidiChannelVoiceNoteOnEvent::wholes_past_noteoff() const
+constexpr RhythmRational textmidi::MidiChannelVoiceNoteOnEvent::wholes_past_noteoff() const
 {
     return wholes_past_noteoff_;
 }
 
-uint32_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_per_whole() const
+constexpr uint32_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_per_whole() const
 {
     return ticks_per_whole_;
 }
@@ -1719,14 +1726,20 @@ void textmidi::MidiChannelVoicePitchBendEvent::consume_stream(MidiStreamIterator
     MidiStreamAtom pitch_wheel_lsb{*midiiter++};
     if (pitch_wheel_lsb > MaxPitchBend)
     {
-        cerr << "MIDI Pitch Bend LSB (" << static_cast<int>(pitch_wheel_lsb) << ") exceeded MIDI limit ("
-             << MaxPitchBend << ")\n";
+        const string errstr{((string("MIDI Pitch Bend LSB (")
+            += boost::lexical_cast<string>(static_cast<int>(pitch_wheel_lsb)))
+            +=  ") exceeded MIDI limit (")
+            += boost::lexical_cast<string>(MaxPitchBend) += ")\n"};
+        cerr << errstr;
     }
     MidiStreamAtom pitch_wheel_msb{*midiiter++};
     if (pitch_wheel_msb > MaxPitchBend)
     {
-        cerr << "MIDI Pitch Bend MSB (" << static_cast<int>(pitch_wheel_msb) << ") exceeded MIDI limit ("
-             << MaxPitchBend << ")\n";
+        const string errstr{((string("MIDI Pitch Bend MSB (")
+            += boost::lexical_cast<string>(static_cast<int>(pitch_wheel_msb)))
+            +=  ") exceeded MIDI limit (")
+            += boost::lexical_cast<string>(MaxPitchBend) += ")\n"};
+        cerr << errstr;
     }
     channel(local_status().channel() + 1);
     pitch_wheel_ = pitch_wheel_lsb | (pitch_wheel_msb << byte7_shift);
@@ -1820,8 +1833,11 @@ ostream& textmidi::MidiChannelVoiceControlChangeEvent::text(ostream& os) const
         temp_pan -= PanExcess64;
         if (!((MinSignedPan <= temp_pan) && (temp_pan <= MaxSignedPan)))
         {
-            cerr << "Illegal pan value fails range: " << MinSignedPan << " <= "
-                 << temp_pan << " <= " << MaxSignedPan << '\n';
+            const string errstr{(((((string("Illegal pan value fails range: ")
+                += boost::lexical_cast<string>(MinSignedPan)) += " <= ")
+                += boost::lexical_cast<string>(temp_pan)) += " <= ")
+                += boost::lexical_cast<string>(MaxSignedPan)) += '\n'};
+            cerr << errstr;
         }
         string panstring{};
         const auto pan = pan_map(temp_pan);
@@ -1923,8 +1939,11 @@ void textmidi::MidiChannelVoiceChannelPressureEvent::consume_stream(MidiStreamIt
     pressure_ = *midiiter++;
     if (pressure_ > MaxDynamic)
     {
-        cerr << "MIDI pressure (" << static_cast<int>(pressure_) << ") exceeded MIDI limit ("
-             << MaxDynamic << ")\n";
+        const string errstr{(((string("MIDI pressure (")
+            += boost::lexical_cast<string>(static_cast<int>(pressure_)))
+            += ") exceeded MIDI limit (") += boost::lexical_cast<string>(MaxDynamic))
+            += ")\n" };
+        cerr << errstr;
     }
 }
 
@@ -2058,13 +2077,12 @@ void textmidi::MidiChannelVoiceProgramChangeEvent::program(MidiStreamAtom progra
     program_ = program;
 }
 
-MidiStreamAtom textmidi::MidiChannelVoiceProgramChangeEvent::program() const
+constexpr MidiStreamAtom textmidi::MidiChannelVoiceProgramChangeEvent::program() const
 {
     return program_;
 }
 
-ostream& textmidi::operator<<(ostream& os,
-        const MidiChannelVoiceProgramChangeEvent& msg)
+ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceProgramChangeEvent& msg)
 {
     return msg.text(os);
 }
@@ -2245,8 +2263,8 @@ MidiDelayEventPair textmidi::MidiEventFactory::operator()(MidiStreamIterator& mi
 
 void textmidi::PrintLazyTrack::ticks_of_note_on()
 {
-    for (auto delaymsgiter{midi_delay_event_pairs_.begin()};
-        (delaymsgiter != midi_delay_event_pairs_.end())
+    for (auto delaymsgiter{midi_delay_event_pairs_.cbegin()};
+        (delaymsgiter != midi_delay_event_pairs_.cend())
         && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
               (delaymsgiter->second.get()); ++delaymsgiter)
     {
@@ -2258,7 +2276,7 @@ void textmidi::PrintLazyTrack::ticks_of_note_on()
             auto offiter{delaymsgiter};
             ++offiter;
             for ( ;
-                 (offiter != midi_delay_event_pairs_.end())
+                 (offiter != midi_delay_event_pairs_.cend())
                          && (!dynamic_cast<MidiFileMetaEndOfTrackEvent*>
                                  (offiter->second.get()));
                  ++offiter)
@@ -2376,8 +2394,8 @@ void textmidi::PrintLazyTrack::wholes_to_next_event()
     const auto ticksperquantum{quantum_
         ? (quantum_ * rational::RhythmRational{QuartersPerWhole} * rational::RhythmRational{ticksperquarter_})
         : rational::RhythmRational{1L}};
-    for (auto delaymsgiter{midi_delay_event_pairs_.begin()};
-        (delaymsgiter != midi_delay_event_pairs_.end())
+    for (auto delaymsgiter{midi_delay_event_pairs_.cbegin()};
+        (delaymsgiter != midi_delay_event_pairs_.cend())
         && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
                      (delaymsgiter->second.get());
          ++delaymsgiter)
@@ -2398,8 +2416,8 @@ void textmidi::PrintLazyTrack::wholes_to_next_event()
 
 void textmidi::PrintLazyTrack::wholes_of_note_on()
 {
-    for (auto delaymsgiter{midi_delay_event_pairs_.begin()};
-        (delaymsgiter != midi_delay_event_pairs_.end())
+    for (auto delaymsgiter{midi_delay_event_pairs_.cbegin()};
+        (delaymsgiter != midi_delay_event_pairs_.cend())
         && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>
                 (delaymsgiter->second.get()); ++delaymsgiter)
     {
@@ -2575,15 +2593,14 @@ ostream& textmidi::operator<<(ostream& os, PrintLazyTrack& print_lazy_track)
     return os;
 }
 
-string textmidi::PrintLazyTrack::lazy_string(bool lazy)
+constexpr string_view textmidi::PrintLazyTrack::lazy_string(bool lazy)
 {
-    string str{};
     if (lazy)
     {
         if (!lazy_)
         {
             lazy_ = true;
-            return string{"LAZY "};
+            return "LAZY ";
         }
     }
     else
@@ -2591,11 +2608,10 @@ string textmidi::PrintLazyTrack::lazy_string(bool lazy)
         if (lazy_)
         {
             lazy_ = false;
-            return string{"END_LAZY "};
+            return "END_LAZY ";
         }
     }
-    return str;
-
+    return "";
 }
 
 void textmidi::PrintLazyTrack::insert_rests()
@@ -2610,10 +2626,13 @@ void textmidi::PrintLazyTrack::insert_rests()
     using ChannelKeyBoards = vector<KeyBoard>;
     ChannelKeyBoards channel_keyboards(MidiChannelQty);
 
+    // This works on building a copy of events plus added rests
+    // Because insereting the rests in situ would invalidate the iterators.
+    //
     int64_t rest_start_ticks_accumulated{};
     bool inrest{false};
-    for (auto delaymsgiter{midi_delay_event_pairs_.begin()};
-              delaymsgiter != midi_delay_event_pairs_.end();
+    for (auto delaymsgiter{midi_delay_event_pairs_.cbegin()};
+              delaymsgiter != midi_delay_event_pairs_.cend();
             ++delaymsgiter)
     {
         auto note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>

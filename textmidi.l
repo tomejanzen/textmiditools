@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.52
+** TextMIDITools Version 1.0.53
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -45,7 +45,7 @@
 #include <ranges>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string/case_conv.hpp> // to_upper
 #include <boost/preprocessor/stringize.hpp>
 
 #include "Midi.h" // MIDI codes and MIDI file header
@@ -106,7 +106,8 @@ namespace
         const auto mat{regex_match(keyevent, matches, keyevent_re)};
         if (!mat)
         {
-            cerr << "Improper keyevent: " << keyevent << '\n';
+            const string errstr{(string{"Improper keyevent: "} += keyevent) += '\n'};
+            cerr << errstr;
         }
         else
         {
@@ -359,9 +360,13 @@ namespace
         }
         void build_msg()
         {
-            sysex_seq_.push_back(start_of_sysex[0]);
             // sysex=subid.size() + device_id.size() + subid1=1 + subid2=1 + remaining.size() + end_of_sysex=1
-            const MidiStreamVector length_seq{int_to_vec(subid_.size() + device_id_.size() + subid1_.size() + remaining_.size() + 1)};
+            const int data_length{subid_.size() + device_id_.size() + subid1_.size() + remaining_.size() + 1};
+            const MidiStreamVector length_seq{int_to_vec(data_length)};
+
+            sysex_seq_.reserve(data_length + length_seq.size());
+
+            sysex_seq_.push_back(start_of_sysex[0]);
             ranges::copy(length_seq, back_inserter(sysex_seq_));
             ranges::copy(subid_, back_inserter(sysex_seq_));
             ranges::copy(device_id_, back_inserter(sysex_seq_));
@@ -381,6 +386,26 @@ namespace
         MidiStreamVector subid1_;
         MidiStreamVector remaining_;
     };
+
+    struct HexOrDec
+    {
+        int operator()(const std::string& str) const
+        {
+            int i{};
+            // if a hexadecimal byte
+            if (str.substr(0, 2) == "0x")
+            {
+                istringstream iss{str};
+                iss >> hex >> i;
+            }
+            else // else is decimal
+            {
+                i = lexical_cast<unsigned>(str);
+            }
+            return i;
+        }
+    };
+
     SysExEventSequence sysex_event_sequence{};
 }
 
@@ -570,22 +595,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
     }
     vector<unsigned> bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
-        {
-            int i{};
-            // if a hexadecimal byte
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss{str};
-                iss >> hex >> i;
-            }
-            else // else is decimal
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
+    bytes.reserve(byte_strings.size());
+    ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
+
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(sequencer_specific_prefix[0]);
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
@@ -623,15 +635,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> next_word; // an unassigned meta code
 
     unsigned meta_code{};
-    if (next_word.substr(0, 2) == "0x")
-    {
-        istringstream iss2{next_word};
-        iss2 >> hex >> meta_code;
-    }
-    else
-    {
-        meta_code = lexical_cast<unsigned>(next_word);
-    }
+    meta_code = HexOrDec()(next_word);
 
     vector<string> byte_strings{};
     while (iss)
@@ -646,21 +650,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
     const MidiStreamVector len_vec = int_to_vec(byte_strings.size());
 
     vector<unsigned> bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
-        {
-            int i{};
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss3{str};
-                iss3 >> hex >> i;
-            }
-            else
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
+    bytes.reserve(byte_strings.size());
+    ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
     // push the data byters onto the MIDI stream.
     trackchunk.push_back(meta_prefix[0]);
     trackchunk.push_back(meta_code);
@@ -968,17 +959,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-        if (control_id_str.substr(0, 2) == "0x") // hexadecimal
-        {
-            istringstream iss2{control_id_str};
-            int i{};
-            iss2 >> hex >> i;
-            control_id = i;
-        }
-        else // decimal
-        {
-            control_id = lexical_cast<unsigned>(control_id_str);
-        }
+        control_id = HexOrDec()(control_id_str);
     }
     control_id &= byte7_mask;
     trackchunk.push_back(control_id);
@@ -1014,15 +995,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         // handle MIDI 3D
         if (!was_mapped)
         {
-            if (control_value_str.substr(0, 2) == "0x")
-            {
-                istringstream iss2{control_value_str};
-                iss2 >> hex >> control_value;
-            }
-            else
-            {
-                control_value = lexical_cast<unsigned>(control_value_str);
-            }
+            control_value = HexOrDec()(control_value_str);
         }
     }
     // If "PAN" was used, add Excess64
@@ -1107,15 +1080,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(control_id);
 
     int32_t control_value{};
-    if (control_value_str.substr(0, 2) == "0x")
-    {
-        istringstream iss2{control_value_str};
-        iss2 >> hex >> control_value;
-    }
-    else
-    {
-        control_value = lexical_cast<unsigned>(control_value_str);
-    }
+    control_value = HexOrDec()(control_value_str);
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
   }
@@ -1147,15 +1112,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-        if (control_value_str.substr(0, 2) == "0x")
-        {
-            istringstream iss2{control_value_str.substr(2)};
-            iss2 >> hex >> control_value;
-        }
-        else
-        {
-            control_value = lexical_cast<unsigned>(control_value_str);
-        }
+        control_value = HexOrDec()(control_value_str);
     }
     trackchunk.push_back(control_value);
   }
@@ -1416,24 +1373,12 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
     }
     vector<unsigned> byte_ints{};
-    ranges::transform(byte_strings, back_inserter(byte_ints), [](const string& str)
-        {
-            unsigned i{};
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss{str};
-                iss >> hex >> i;
-            }
-            else
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
+    byte_ints.reserve(byte_strings.size());
+    ranges::transform(byte_strings, back_inserter(byte_ints), HexOrDec());
     // push the length of data plus the F7 at end
     // of the MIDI file stream.
     MidiStreamVector bytes{};
+    bytes.reserve(byte_ints.size());
     ranges::transform(byte_ints, back_inserter(bytes),
         [](int i) { return static_cast<MidiStreamAtom>(i); } );
     sysex_event_sequence.remaining(bytes);
@@ -1472,23 +1417,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
     }
     MidiStreamVector bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
-        {
-            int i{};
-            // if a hexadecimal byte
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss{str};
-                iss >> hex >> i;
-            }
-            else // else is decimal
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
-
+    bytes.reserve(byte_strings.size());
+    ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
     sysex_event_sequence.subid(bytes);
     BEGIN(SYSEX_SUBID1_STATE);
   }
@@ -1508,15 +1438,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     else
     {
         // is it hexadecimal?
-        if (token.substr(0, 2) == "0x")
-        {
-            istringstream iss{token.substr(2)};
-            iss >> hex >> xb;
-        }
-        else // or decimal
-        {
-            xb = lexical_cast<unsigned>(token);
-        }
+        xb = HexOrDec()(token);
     }
     MidiStreamVector xbvec{xb};
     sysex_event_sequence.device_id(xbvec);
@@ -1527,16 +1449,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     string yystr(yytext);
     const auto pos{yystr.find_first_not_of(" \t")};
     const string token{yystr.substr(pos)};
-    unsigned xb{};
-    if (token.substr(0, 2) == "0x")
-    {
-        istringstream iss{token.substr(2)};
-        iss >> hex >> xb;
-    }
-    else // decimal
-    {
-        xb = lexical_cast<unsigned>(token);
-    }
+    const unsigned xb{HexOrDec()(token)};
     MidiStreamVector xbvec{xb};
     sysex_event_sequence.subid1(xbvec);
     BEGIN(SYSEX_REMAINDER_STATE);
@@ -1576,21 +1489,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
     }
     MidiStreamVector bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
-        {
-            int i{};
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss{str};
-                iss >> hex >> i;
-            }
-            else
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
+    bytes.reserve(byte_strings.size());
+    ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
     sysex_event_sequence.remaining(bytes);
     sysex_event_sequence.build_msg();
     sysex_event_sequence.append(trackchunk);
@@ -1616,22 +1516,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
             byte_strings.push_back(next_word);
         }
     }
+
     vector<unsigned> bytes{};
-    ranges::transform(byte_strings, back_inserter(bytes), [](const string& str)
-        {
-            unsigned i{};
-            if (str.substr(0, 2) == "0x")
-            {
-                istringstream iss{str};
-                iss >> hex >> i;
-            }
-            else
-            {
-                i = lexical_cast<unsigned>(str);
-            }
-            return i;
-        }
-    );
+    bytes.reserve(byte_strings.size());
+    ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
+
     // pushd the length of data plus the F7 at end
     // of the MIDI file stream.
     trackchunk.push_back(end_of_sysex[0]); // Raw SYSEX *starts* with F7

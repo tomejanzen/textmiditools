@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.53
+** TextMIDITools Version 1.0.54
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -1544,6 +1544,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     const MidiStreamVector len_vec = int_to_vec(ticks_str.length());
     ranges::copy(len_vec,   back_inserter(trackchunk));
     ranges::copy(ticks_str, back_inserter(trackchunk));
+    running_status.clear();
   }
 
 <LAZY_STATE>{DYNAMIC} {

@@ -1,3 +1,11 @@
+2023-03-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: ticks command didn't clear running status,
+        even though it writes a text meta event.
+        Changed to clear running status as required by MIDI spec.
+
+2023-03-21     Thomas E. Janzen <janzentome@gmail.com>
+        * midi3d.pl: Add a script to compute MIDI 3-D values for textmidi.
+
 2023-03-19     Thomas E. Janzen <janzentome@gmail.com>
         * MidiMaps.h,textmidi.l,Composer.cc,MidiEvents.cc,MusicalForm.h,main.cc,
         miditext.cc,smustextmidi.cc: C++ tactics and cleanup.
@@ -5,7 +13,7 @@
         Reserve room in vectors prior to using back_inserter.
         Procedurize conversion of hex and decimal strings for textmidi.l
         Remove types from pair, replace with make_pair().
-        Use cbegin() and cend() with applicable.
+        Use cbegin() and cend() when applicable.
         Replace use of distance() with for-initialized variable.
 
 
@@ -59,7 +67,7 @@
 2023-03-12     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.cc, MidiMaps.cc, textmidi.gdb, textmidi.l:
         Rewrite textidi handling of SYSEX to allow use of names for
-        subids, and sudid1s.  Probably won't add vendors.
+        subids, and subid1s.  Probably won't add vendors.
         * Midi.h: make array<>'s constexpr.
 
 2023-03-10     Thomas E. Janzen <janzentome@gmail.com>

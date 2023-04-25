@@ -58,7 +58,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 @cindex overview
 The @command{textmidicgm} program generates works of music in textmidi
 language,
-which can be converted by textmidi into standard MIDI file formats.
+which can be converted by @command{textmidi} into standard MIDI file formats.
 Using @command{textmidicgm}, it is possible to generate pieces of music
 in a text file using textmidi language, which can in turn be converted by
 @command{textmidi} into a standard MIDI file .
@@ -90,7 +90,7 @@ moving up,down or repeating the key number; amplitudes and offsets for the form
 sinusoids.
 
 Aside from a few simple added features,
-the compositional engine of textmidicgm is described in
+the compositional engine of @command{textmidicgm} is described in
 AlgoRhythms: Real-Time Algorithmic Composition for a Microcomputer,
 by Thomas E. Janzen, pp. 109-210,
 Readings in Computer-Generated Music, Denis Baggi, ed.
@@ -123,10 +123,10 @@ language.
 
 Unlike the original AlgoRhythms program, which had a real-time GUI
 and permitted changes to a Form while playing,
-@command{textmidicgm} is a "batch" program and does not record or play over
-a MIDI interface.
+@command{textmidicgm} is a "batch" program which reads and writes files,
+but does not record or play over a MIDI interface.
 
-The rationale for textmidicgm comprises several incentives:
+The rationale for @command{textmidicgm} comprises several incentives:
 @itemize
 @cindex Use of statistical distributions
 @item The use of simple statistical distributions as a source of musical
@@ -134,7 +134,7 @@ choices has not been fully exploited.
 Iannis Xenakis's Akrata used a Gaussian density distribution,
 and LeJaren Hiller started with random
 notes before moving on to Markov chains, but further experimentation might
-be productive.
+have been productive before proceeding to advanced and exotic techniques.
 @command{textmidicgm} provides a tool for continued exploration of
 evenly-distributed random notes etc.
 @cindex Use of sinusoids
@@ -206,19 +206,19 @@ textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
 | all | melodic | idiophone...@rbracechar{}]
 [@b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{output textmidi file}] [@b{@minus{}g}|@b{@minus{}@minus{}gnuplot}]
 [@b{@minus{}c}|@b{@minus{}@minus{}clampscale}]
-[@b{@minus{}z}|@b{@minus{}@minus{}trackscramble} @lbracechar{}rotateright | rotateleft | reverse 
-| previouspermutation | nextpermutation | swappairs | shuffle @rbracechar{}
-[@b{@minus{}y}|@b{@minus{}@minus{}trackscrambleperiod} @lbracechar{}time in seconds@rbracechar{}
+[@b{@minus{}z}|@b{@minus{}@minus{}arrangements} @lbracechar{}rotateright | rotateleft | reverse 
+| previouspermutation | nextpermutation | swappairs | shuffle | skip | heaps @rbracechar{}
+[@b{@minus{}y}|@b{@minus{}@minus{}arrangementsperiod} @lbracechar{}time in seconds@rbracechar{}
 [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 @end smallexample
 
 @table @option
 @cindex @command{textmidicgm} command line options.
-@item -f, --form text_form_file
+@item -f, --form @var{text_form_file}
 The input file: a text file in the format used in the original 1990 version, probably.
 Use of this file format is deprecated.
 @cindex form
-@item -x, --xmlform xml_form_file
+@item -x, --xmlform @var{xml_form_file}
 @cindex xmlform
 The input file: an XML file supporting more features.  If @minus{}@minus{}random is
 specified, the form's output file.
@@ -323,49 +323,217 @@ without moving at all until such time as the pitch curve starts to edge up
 above that low pitch for the voice.  Because it is not a per-voice adjustment
 it is not a complete solution, but is coherent with the original technique.
 This option does not assume an rising-ordered scale.
-@item -z, --trackscramble rotateright | rotateleft | reverse | previouspermutation | nextpermutation | swappairs | shuffle
-Periodically reorder the track priority for the purposes of applying the texture curve, which determines how large a portion of the complement (the ensemble) is playing.
-Without this feature, when the texture curve was thin, and a solo instrument played, it would always be the same track and instrument playing.
-By re-ordering the tracks now and then, a different voice can be the soloist at those times.
-For example, if trackscrambleperiod is set to the same duration as the texture period, then each time the texture permits only one track to play,
-possibly a different track and instrument will play the solo.
-This has no effect on which track follows another; those remain as they were at the start.
+@item -z, --arrangements rotateright | rotateleft | reverse | previouspermutation | nextpermutation | swappairs | shuffle | skip | heaps
+Periodically reorder the voice priority for the purposes of applying the texture curve, which determines how large a portion of the complement (the ensemble) is playing.
+Without this feature, when the texture curve was thin, and a solo instrument played, it would always be the same voice and instrument playing.
+By re-ordering the voices now and then, a different voice can be the soloist at those times.
+For example, if arrangementsperiod is set to the same duration as the texture period, then each time the texture permits only one track to play,
+a different voice and instrument will play the solo.
+This has no effect on which voice follows another; those remain as they were at the start.
 The algorithms are based (with the exception of swappairs) on C++ standard library algorithms for containers.
-@itemize
+For example, if a form has four voices and use apply @minus{}@minus{}arrangements rotateright and @minus{}@minus{}arrangementsperiod 15, then every 15 seconds
+the voice orders will be
+@smallexample
+0 1 2 3
+3 0 1 2
+2 3 0 1
+1 2 3 0
+...
+@end smallexample
+In this example, the solo would be from voice 0 for 15 seconds, then from voice 
+1 for 15 seconds, then from voice 2, then voice 1.  During a time when only 2 voices 
+are playing, first voices 0 and 1 would play, then in the next 15 seconeds voice 3 
+and 0 would play, and so on.  This might be different from what it did before 
+April 2023 (I'm not sure), but is probably more intuitive than before.
+@table @samp
+@item identity 
+@cindex identity
+The identity arrangement never changes the voice priority.
+If @samp{@minus{}@minus{}arrangementsperiod 15} the voice arrangements will just remain the same:
+@smallexample
+00:00 0 1 2 3 
+00:15 0 1 2 3 
+00:30 0 1 2 3 
+@dots{}
+@end smallexample
 @item rotateright
 @cindex rotateright
-Rotate right pushes the tracks down in priority and brings the last voice to the top.  The new top voice plays the solo when the texture curve is thin.
-
+Rotate right pushes the voices down in priority and brings the last voice to the top.  The new top voice plays the solo when the texture curve is thin.
+If @samp{@minus{}@minus{}arrangementsperiod 15} the voice arrangements will change every 15 seconds and be:
+@smallexample
+00:00 0 1 2 3 
+00:15 3 0 1 2 
+00:30 2 3 0 1 
+00:45 1 2 3 0 
+01:00 0 1 2 3 
+01:15 3 0 1 2 
+@end smallexample
 @item rotateleft
 @cindex rotateleft
-Rotate left pulls the tracks up in priority and pushes the top voice to the last position.
-
+Rotate left pulls the voices up in priority and pushes the top voice to the last position.
+@smallexample
+0 1 2 3 
+1 2 3 0 
+2 3 0 1 
+3 0 1 2 
+0 1 2 3 
+1 2 3 0 
+@end smallexample
 @item reverse
 @cindex reverse
-Reverse the order of tracks.  The last voice becomes first in priority, and vis versa.
+Reverse the order of voices.  The last voice becomes first in priority, and vis versa.
 Alternate periods produce the same priority order.
-
+@smallexample
+0 1 2 3 
+3 2 1 0 
+0 1 2 3 
+@end smallexample
 @item previouspermutation
 @cindex previouspermutation
-Find and apply the previous permutation of the voice/track pairs in terms of the integer priority, where 0 is the highest and plays the solo when the texture curve is thinest.
-
+Find and apply the previous permutation of the voice in terms of the integer priority, where 0 is the highest and plays the solo when the texture curve is thinest.
+These are lexicographically sorted descending permutations.
+@smallexample
+0 1 2 3 
+3 2 1 0 
+3 2 0 1 
+3 1 2 0 
+3 1 0 2 
+3 0 2 1 
+3 0 1 2 
+2 3 1 0 
+2 3 0 1 
+2 1 3 0 
+2 1 0 3 
+2 0 3 1 
+2 0 1 3 
+1 3 2 0 
+1 3 0 2 
+1 2 3 0 
+1 2 0 3 
+1 0 3 2 
+1 0 2 3 
+0 3 2 1 
+0 3 1 2 
+0 2 3 1 
+0 2 1 3 
+0 1 3 2 
+@end smallexample
 @item nextpermutation
 @cindex nextpermutation
-Permute the voice/track pairs in terms of the integer priority to the next permutation.
-
+Permute the voices in terms of the integer priority to the next permutation.
+These are lexicographically sorted ascending permutations.
+@smallexample
+0 1 2 3 
+0 1 3 2 
+0 2 1 3 
+0 2 3 1 
+0 3 1 2 
+0 3 2 1 
+1 0 2 3 
+1 0 3 2 
+1 2 0 3 
+1 2 3 0 
+1 3 0 2 
+1 3 2 0 
+2 0 1 3 
+2 0 3 1 
+2 1 0 3 
+2 1 3 0 
+2 3 0 1 
+2 3 1 0 
+3 0 1 2 
+3 0 2 1 
+3 1 0 2 
+3 1 2 0 
+3 2 0 1 
+3 2 1 0 
+@end smallexample
 @item swappairs
 @cindex swappairs
-Swap neighboring pairs of voice/tracks.  Every other swap gets the same priority order.
-
+Swap neighboring voices.  Every other swap gets the same priority order.
+@smallexample
+0 1 2 3 
+1 0 3 2 
+0 1 2 3 
+@end smallexample
 @item shuffle
 @cindex shuffle
-Randomly shuffle the tracks each scramble period.
+Randomly shuffle the voices each scramble period.  There's no guarantee of producing all permutations.
+@smallexample
+0 1 2 3 
+3 0 1 2 
+3 0 1 2 
+3 0 2 1 
+3 0 2 1 
+0 2 1 3 
+0 1 3 2 
+2 1 0 3 
+3 1 2 0 
+3 0 2 1 
+@end smallexample
+@item skip
+@cindex skip
+Shifts the first, third, fifth, etc. voices to the right and the second, fourth, sixth, tracks to the left.
+@smallexample
+0 1 2 3 4 
+1 0 3 2 4 
+1 3 0 4 2 
+3 1 4 0 2 
+3 4 1 2 0 
+4 3 2 1 0 
+4 2 3 0 1 
+2 4 0 3 1 
+2 0 4 1 3 
+0 2 1 4 3 
+@end smallexample
+For an even number of voices it's a little more nuanced.
+@smallexample
+0 1 2 3 
+1 0 3 2 
+2 3 0 1 
+3 2 1 0 
+0 1 2 3 
+1 0 3 2 
+2 3 0 1 
+3 2 1 0 
+0 1 2 3 
+1 0 3 2 
+@end smallexample
 
-@end itemize
+@item heaps
+@cindex heaps
+Applies Heap's Algorithm to scramble voices in such a way that only 2 voices swap in each successive permutation.
+@smallexample
+0 1 2 3 
+1 0 2 3 
+2 0 1 3 
+0 2 1 3 
+1 2 0 3 
+2 1 0 3 
+3 1 0 2 
+1 3 0 2 
+0 3 1 2 
+3 0 1 2 
+1 0 3 2 
+0 1 3 2 
+0 2 3 1 
+2 0 3 1 
+3 0 2 1 
+0 3 2 1 
+2 3 0 1 
+3 2 0 1 
+3 2 1 0 
+2 3 1 0 
+1 3 2 0 
+3 1 2 0 
+2 1 3 0 
+1 2 3 0 
+@end smallexample
+@end table
 
-@item -y, --trackscrambleperiod time_in_seconds
+@item -y, --arrangementsperiod time_in_seconds
 The time period in seconds at which to apply the track scramble algorithm.
-
+The default is 1000 minutes.
 @item -v, --verbose
 @cindex verbose
 Write some informative messages to the screen.  Errors are printed
@@ -387,22 +555,22 @@ The following command will read the XML form file graduallyitsmorning.xml and
 generate the textmidi text file graduallyitsmorning.txt:
 
 @smallexample
-@command{textmidicgm} --xmlform graduallyitsmorning.mid --textmidi graduallyitsmorning.txt
+@command{textmidicgm} --xmlform @var{graduallyitsmorning.mid} --textmidi @var{graduallyitsmorning.txt}
 @end smallexample
 
 The following generates a randomized form file for generation in another step, and then
 converted into a MIDI file:
 
 @smallexample
-@command{textmidicgm} --random --xmlform newpiece.xml
-@command{textmidicgm} --xmlform newpiece.xml --textmidi newpiece.txt
-@command{textmidi} --textmidi newpiece.txt --midi newpiece.mid
+@command{textmidicgm} --random --xmlform @var{newpiece.xml}
+@command{textmidicgm} --xmlform @var{newpiece.xml} --textmidi @var{newpiece.txt}
+@command{textmidi} --textmidi @var{newpiece.txt} --midi @var{newpiece.mid}
 @end smallexample
 
 The following example generates a data file that can be plotted as a statistical plot with
 error bars:
 @smallexample
-@command{textmidicgm} --xmlform newpiece.xml --textmidi newpiece.txt --gnuplot
+@command{textmidicgm} --xmlform @var{newpiece.xml} --textmidi @var{newpiece.txt} --gnuplot
 @end smallexample
 The gnuplot data file will be named from the name inside the XML form file, with
 @quotedblleft{}.plot@quotedblright{} appended.
@@ -1023,7 +1191,7 @@ any notes.  A following circle is created by any of the following:
 @chapter The textmidi File
 @cindex  The textmidi File
 
-The output of textmidicgm is a textmidi text file with tracks in LAZY mode.
+The output of @command{textmidicgm} is a textmidi text file with tracks in LAZY mode.
 It can be converted into a standard MIDI file by using
 the @command{textmidi} program.
 While a text file, the textmidi output can be edited

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.54
+// TextMIDITools Version 1.0.55
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -19,42 +19,33 @@
 #include "MidiMaps.h"
 #include "RhythmRational.h"
 #include "MusicalForm.h"
+#include "Arrangements.h"
 
 namespace textmidi
 {
     namespace cgm
     {
-        enum class TrackScrambleEnum : int
-        {
-            None,
-            RotateRight,
-            RotateLeft,
-            Reverse,
-            PreviousPermutation,
-            NextPermutation,
-            SwapPairs,
-            Shuffle,
-        };
-
         class Composer
         {
           public:
             struct TrackScramble
             {
-                explicit constexpr TrackScramble(TrackScrambleEnum scramble = TrackScrambleEnum::None,
-                              TicksDuration     period = TicksDuration{120LU * TicksPerQuarter})
+                explicit constexpr TrackScramble(arrangements::PermutationEnum scramble = arrangements::PermutationEnum::Identity,
+                    TicksDuration period = TicksDuration{120LU * TicksPerQuarter})
                   : scramble_(scramble),
-                    period_(period)
+                    period_(period),
+                    arrangements_{}
                 {}
 
-                TrackScrambleEnum scramble_;
+                arrangements::PermutationEnum scramble_;
                 TicksDuration     period_;
+                std::shared_ptr<arrangements::Arrangements> arrangements_;
             };
 
-            Composer(bool gnuplot, bool answer, TrackScramble track_scramble)
+            Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble, TicksDuration track_scramble_period)
               : gnuplot_(gnuplot),
                 answer_(answer),
-                track_scramble_(track_scramble),
+                track_scramble_(track_scramble, track_scramble_period),
                 random_dev_(),
                 generator_{random_dev_()}
             {
@@ -82,7 +73,7 @@ namespace textmidi
             std::mt19937 generator_;
         };
 
-        extern const midi::NumStringMap<TrackScrambleEnum> track_scramble_map;
+        extern const midi::NumStringMap<arrangements::PermutationEnum> track_scramble_map;
     }
 }
 

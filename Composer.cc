@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.54
+// TextMIDITools Version 1.0.55
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -38,13 +38,14 @@ using namespace textmidi;
 using namespace midi;
 using namespace textmidi::cgm;
 using namespace textmidi::rational;
+using namespace arrangements;
 
 namespace
 {
     // might become settable at a later time.
     constexpr int TempoBeatsPerMinute{60};
     constexpr int RestPitchIndex{numeric_limits<int>().max()};
-    
+
     using KeyScaleSeq = std::vector<int>;
 }
 
@@ -186,7 +187,8 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
             }
         }
     }
-#if defined(TEXTMIDI_PRINT)
+#undef TEXTMIDICGM_PRINT
+#if defined(TEXTMIDICGM_PRINT)
     for (auto& row : followers_graph)
     {
         ranges::copy(row, ostream_iterator<bool>(cout, " "));
@@ -211,9 +213,9 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
             leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
         }
     }
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
     cout << "List of non-followers: ";
-    copy(ranges::leaders_topo_sort[0], ostream_iterator<int>(cout, " "));
+    ranges::copy(leaders_topo_sort[0], ostream_iterator<int>(cout, " "));
     cout << '\n';
 #endif
     for (int g{1}; g < static_cast<int>(followers_graph.size()); ++g)
@@ -222,7 +224,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
         {
             for (int leader_index{}; leader_index < static_cast<int>(followers_graph.size()); ++leader_index)
              {
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
                 cout << "** " << leader_index << ' ' << follower_index << ' ' << followers_graph[leader_index][follower_index] << '\n';
 #endif
                 if (followers_graph[leader_index][follower_index]) // if this is a follower
@@ -234,12 +236,12 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
                     }
                 }
             }
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
             cout << '\n';
 #endif
         }
     }
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
     cout << "order of composing:\n";
     for (auto& lts : leaders_topo_sort)
     {
@@ -252,57 +254,14 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
     int track_qty, TicksDuration total_duration)
 {
-    vector<int> previous_sequence{};
-    {
-        auto counting = views::iota(0, track_qty);
-        ranges::copy(counting, back_inserter(previous_sequence));
-        track_scramble_sequences.push_back(previous_sequence);
-    }
     for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
     {
-        switch(track_scramble_.scramble_)
-        {
-            case TrackScrambleEnum::RotateRight:
-                if (previous_sequence.size() > 1)
-                {
-                    ranges::rotate(previous_sequence, previous_sequence.begin() + (previous_sequence.size() - 1));
-                }
-                break;
-            case TrackScrambleEnum::RotateLeft:
-                if (previous_sequence.size() > 1)
-                {
-                    ranges::rotate(previous_sequence, previous_sequence.begin() + 1);
-                }
-                break;
-            case TrackScrambleEnum::Reverse:
-                ranges::reverse(previous_sequence);
-                break;
-            case TrackScrambleEnum::PreviousPermutation:
-                ranges::prev_permutation(previous_sequence);
-                break;
-            case TrackScrambleEnum::NextPermutation:
-                ranges::next_permutation(previous_sequence);
-                break;
-            case TrackScrambleEnum::SwapPairs:
-                for (int i(0); i < static_cast<int>(previous_sequence.size() - (previous_sequence.size() % 2LU)); i += 2)
-                {
-                    swap(previous_sequence[i], previous_sequence[i + 1]);
-                }
-                break;
-            case TrackScrambleEnum::Shuffle:
-                {
-                    ranges::shuffle(previous_sequence, generator_);
-                }
-                break;
-            case TrackScrambleEnum::None:
-                break;
-            default:
-                break;
-        }
-        track_scramble_sequences.push_back(previous_sequence);
+        track_scramble_sequences.push_back(track_scramble_.arrangements_->arrangement());
+        track_scramble_.arrangements_->next();
     }
-#if defined(TEXTMIDI_PRINT)
+#undef TEXTMIDICGM_PRINT
+#if defined(TEXTMIDICGM_PRINT)
     cout << "track_scramble_sequences\n";
     for (auto tss : track_scramble_sequences)
     {
@@ -310,6 +269,7 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
         cout << '\n';
     }
 #endif
+#undef TEXTMIDICGM_PRINT
 }
 
 //
@@ -322,11 +282,16 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     RandomDouble random_double{};
     vector<Track> tracks(xml_form.voices().size()/*, Track{ xml_form.scale().size() / 2 }*/);
     vector<pair<int, int>> tessitura;
+
+    const auto permutation_qty{chrono::duration<double>(xml_form.len()) / track_scramble_.period_};
+    track_scramble_.arrangements_ = ArrangementsFactory(track_scramble_.scramble_,
+        xml_form.voices().size());
+
     for (auto v : xml_form.voices())
     {
         tessitura.push_back(make_pair
             (textmidi::pitchname_to_keynumber(v.low_pitch()).first,
-            textmidi::pitchname_to_keynumber(v.high_pitch()).first));
+             textmidi::pitchname_to_keynumber(v.high_pitch()).first));
     }
     KeyScaleSeq key_scale;
     xml_form.string_scale_to_int_scale(key_scale);
@@ -345,12 +310,13 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 
     vector<vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
+
     for (auto& lts : leaders_topo_sort)
     {
         // loop over the list of voice indices
         for (int i{}; auto tr : lts)
         {
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
             cout << "tr: " << tr << " i: " << i << '\n';
 #endif
             auto& track{tracks[tr]};
@@ -361,11 +327,17 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     auto scramble_index{track.the_next_time() / track_scramble_.period_};
                     scramble_index = ((scramble_index < static_cast<long int>(track_scramble_sequences.size()))
                         ?  scramble_index : track_scramble_sequences.size() - 1);
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
                     cout << "scramble_index: " << scramble_index << '\n';
 #endif
                     MusicalCharacter musical_character{};
                     xml_form.character_now(track.the_next_time(), musical_character);
+                    int number_of_voices = static_cast<int>(musical_character.texture_range) + 1;
+                    number_of_voices = (number_of_voices > xml_form.voices().size()) ? xml_form.voices().size() : number_of_voices;
+                    number_of_voices = (number_of_voices < 1) ? 1 : number_of_voices;
+#if defined(TEXTMIDICGM_PRINT)
+                    cout << "texture_range: " << musical_character.texture_range << " number_of_voices: " << number_of_voices << '\n';
+#endif
 
                     double dynamicd{(musical_character.dynamic_range
                                    * random_double())
@@ -475,9 +447,12 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         track.last_pitch_index(pitch_index);
                     }
 
+                    // use number_of_voices to subset track_scramble_sequences[scramble_index].
+                    // If you can find tr in the sub sequence, then play.
+
+                    auto trit{ranges::find(track_scramble_sequences[scramble_index].begin(), track_scramble_sequences[scramble_index].begin() + number_of_voices, tr)};
                     if ((pitch_index != RestPitchIndex)
-                        && (track_scramble_sequences[scramble_index][tr]
-                            <= musical_character.texture_range))
+                        && (trit != (track_scramble_sequences[scramble_index].begin() + number_of_voices)))
                     {
                         auto key_number(key_scale[pitch_index]);
                         key_number = max(key_number, tessitura[tr].first);
@@ -634,7 +609,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 
     for (int track_index{}; auto voice : xml_form.voices())
     {
-#if defined(TEXTMIDI_PRINT)
+#if defined(TEXTMIDICGM_PRINT)
         cout << "STARTTRACK\nTRACK " << track_index << "\n"
             << "PROGRAM " << voice.channel()
             << ' ' << voice.program() << "\n"
@@ -669,15 +644,17 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     }
 }
 
-const midi::NumStringMap<TrackScrambleEnum> textmidi::cgm::track_scramble_map
+const midi::NumStringMap<PermutationEnum> textmidi::cgm::track_scramble_map
 {
-    {"none",                TrackScrambleEnum::None},
-    {"rotateright",         TrackScrambleEnum::RotateRight},
-    {"rotateleft",          TrackScrambleEnum::RotateLeft},
-    {"reverse",             TrackScrambleEnum::Reverse},
-    {"previouspermutation", TrackScrambleEnum::PreviousPermutation},
-    {"nextpermutation",     TrackScrambleEnum::NextPermutation},
-    {"swappairs",           TrackScrambleEnum::SwapPairs},
-    {"shuffle",             TrackScrambleEnum::Shuffle}
+    {"none",                PermutationEnum::Identity},
+    {"rotateright",         PermutationEnum::RotateRight},
+    {"rotateleft",          PermutationEnum::RotateLeft},
+    {"reverse",             PermutationEnum::Reverse},
+    {"previouspermutation", PermutationEnum::LexicographicBackward},
+    {"nextpermutation",     PermutationEnum::LexicographicForward},
+    {"swappairs",           PermutationEnum::SwapPairs},
+    {"shuffle",             PermutationEnum::Shuffle},
+    {"skip",                PermutationEnum::Skip},
+    {"heaps",               PermutationEnum::Heaps}
 };
 

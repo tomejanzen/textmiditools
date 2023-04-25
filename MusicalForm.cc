@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.54
+// TextMIDITools Version 1.0.55
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -382,7 +382,7 @@ void MusicalForm::character_now(TicksDuration theTime,
         = dynamic_form().range_sine().value_now(dblTime) * midi::MaxDynamic;
 
     musical_character.texture_range
-        = texture_form().value_now(dblTime) * double (voices().size());
+        = voices().empty() ? 0.0 : texture_form().value_now(dblTime) * double (voices().size());
 }
 
 //

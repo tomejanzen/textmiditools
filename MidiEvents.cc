@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.54
+// TextMIDITools Version 1.0.55
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -31,6 +31,7 @@
 #include "MidiMaps.h"
 #include "rational_support.h"
 #include "MIDIKeyString.h"
+#include "MidiString.h"
 
 using namespace std;
 using namespace textmidi;
@@ -920,64 +921,7 @@ ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
     string display_str{str_};
     string::size_type pos{};
 
-    while ((display_str.size() > 0) && (0x0 == display_str[display_str.size() - 1]))
-    {
-        display_str.resize(display_str.size() - 1);
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\a', pos)) != str_.npos)
-    {
-        const char control_string[]{R"(\a)"};
-        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\b', pos)) != str_.npos)
-    {
-        const char control_string[]{R"(\b)"};
-        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\t', pos)) != str_.npos)
-    {
-        const char control_string[]{R"(\t)"};
-        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\n')) != str_.npos)
-    {
-        display_str.replace(pos, 1, R"(\n)", 2);
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\v')) != str_.npos)
-    {
-        display_str.replace(pos, 1, R"(\v)", 2);
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\f')) != str_.npos)
-    {
-        display_str.replace(pos, 1, R"(\f)", 2);
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\r', pos)) != str_.npos)
-    {
-        const char control_string[]{R"(\r)"};
-        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
-        ++pos;
-    }
-    pos = 0;
-    while ((pos < display_str.size()) && (pos = display_str.find('\"', pos)) != str_.npos)
-    {
-        const char control_string[]{R"(\")"};
-        display_str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
-        pos += 2;
-    }
-
+    textmidi::make_human_string(display_str);
     os << '"' << display_str << '"';
     return os;
 }
@@ -1793,28 +1737,6 @@ void textmidi::MidiChannelVoiceControlChangeEvent::consume_stream(MidiStreamIter
     local_status(running_status());
     channel(local_status().channel() + 1);
     id_      = *midiiter++;
-#if 0
-    // MSB of 14 bit controllers
-    if ((id_ >= 0) && (id_ <= 31))
-    {
-    }
-    // LSB of 14 bit controllers
-    if ((id_ >= 32) && (id_ <= 63))
-    {
-    }
-    // "Additional" single-byte controllers
-    if ((id_ >= 64) && (id_ <= 95))
-    {
-    }
-    // increment and decrement and parameter numbers
-    if ((id_ >= 96) && (id_ <= 101))
-    {
-    }
-    // Undefined single-byte
-    if ((id_ >= 102) && (id_ <= 119))
-    {
-    }
-#endif
     value_   = *midiiter++;
     if (value_ & ~byte7_mask)
     {

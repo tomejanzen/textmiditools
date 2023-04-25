@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.54
+// TextMIDITools Version 1.0.55
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -75,6 +75,7 @@
 #include "MusicalForm.h"
 #include "cgmlegacy.h"
 
+#include "Arrangements.h"
 #include "Track.h"
 #include "Voice.h"
 #include "Options.h"
@@ -85,6 +86,7 @@ using namespace boost;
 using namespace textmidi;
 using namespace textmidi::cgm;
 using namespace cgmlegacy;
+using namespace arrangements;
 
 // This isn't really necessary but i wrote it in a
 // quest to get glob to compile, which wouldn't because
@@ -119,11 +121,11 @@ namespace {
         "melodic idiophone"};
     const string ClampScaleOpt{"clampscale"};
     constexpr char ClampScaleTxt[]{"in each form, clamp the scale to the union of the voice ranges"};
-    const string TrackScrambleOpt{"trackscramble"};
-    constexpr char TrackScrambleTxt[]{"rotateright rotateleft reverse previouspermutation "
-        "nextpermutation swappairs shuffle"};
-    const string TrackScramblePeriodOpt{"trackscrambleperiod"};
-    constexpr char TrackScramblePeriodTxt[]{"floating seconds"};
+    const string ArrangementsOpt{"arrangements"};
+    constexpr char ArrangementsTxt[]{"rotateright rotateleft reverse previouspermutation "
+        "nextpermutation swappairs shuffle skip heaps identity"};
+    const string ArrangementsPeriodOpt{"arrangementsperiod"};
+    constexpr char ArrangementsPeriodTxt[]{"floating seconds"};
 }
 
 int main(int argc, char *argv[])
@@ -141,8 +143,8 @@ int main(int argc, char *argv[])
         ((RandomOpt              + ",r").c_str(), program_options::value<string>(),                            RandomTxt)
         ((InstrumentsOpt         + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
         ((ClampScaleOpt          + ",c").c_str(),                                                          ClampScaleTxt)
-        ((TrackScrambleOpt       + ",z").c_str(), program_options::value<string>(),                     TrackScrambleTxt)
-        ((TrackScramblePeriodOpt + ",y").c_str(), program_options::value<double>(),               TrackScramblePeriodTxt)
+        ((ArrangementsOpt       + ",z").c_str(), program_options::value<string>(),                     ArrangementsTxt)
+        ((ArrangementsPeriodOpt + ",y").c_str(), program_options::value<double>(),               ArrangementsPeriodTxt)
     ;
     program_options::variables_map var_map;
     try
@@ -168,7 +170,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.54\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.55\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -361,28 +363,26 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
-    Composer::TrackScramble track_scramble;
+    PermutationEnum track_scramble_type{PermutationEnum::Identity};
+    TicksDuration track_scramble_period{60000 * TicksPerQuarter};
 
-    if (var_map.count(TrackScrambleOpt)) [[unlikely]]
+    if (var_map.count(ArrangementsOpt)) [[unlikely]]
     {
-        const string scramble_string{var_map[TrackScrambleOpt].as<string>()};
-        TrackScrambleEnum track_scramble_type{TrackScrambleEnum::None};
+        const string scramble_string{var_map[ArrangementsOpt].as<string>()};
         if (track_scramble_map.contains(scramble_string))
         {
             track_scramble_type = track_scramble_map.at(scramble_string);
         }
         else
         {
-            const string logstr{(string{"Track scrambling selections are: "} += TrackScrambleTxt) += '\n'};
+            const string logstr{(string{"Track scrambling selections are: "} += ArrangementsTxt) += '\n'};
             cout << logstr;
             exit(EXIT_SUCCESS);
         }
-        TicksDuration track_scramble_period{120 * TicksPerQuarter};
-        if (var_map.count(TrackScramblePeriodOpt))
+        if (var_map.count(ArrangementsPeriodOpt))
         {
-            track_scramble_period = TicksDuration{static_cast<int64_t>(floor(var_map[TrackScramblePeriodOpt].as<double>())) * TicksPerQuarter};
+            track_scramble_period = TicksDuration{static_cast<int64_t>(floor(var_map[ArrangementsPeriodOpt].as<double>())) * TicksPerQuarter};
         }
-        track_scramble = Composer::TrackScramble(track_scramble_type, track_scramble_period);
     }
 
     string textmidi_filename;
@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    Composer composer{gnuplot, answer, track_scramble};
+    Composer composer{gnuplot, answer, track_scramble_type, track_scramble_period};
     for (auto& xml_form : xml_forms)
     {
         if (var_map.count(ClampScaleOpt))

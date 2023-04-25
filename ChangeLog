@@ -1,3 +1,39 @@
+2023-04-24     Thomas E. Janzen <janzentome@gmail.com>
+       	* Arrangements.{cc,h}, Composer.{cc,h}, textmidicgm.cc, textmidicgm.texi:
+        rename track scrambling to arrangements.  Improve documentation of
+        arrangements.  Change arrangement "None" to "Identity" and document.
+        * textmidi.l: Remove the linefeed from definition of LINE.
+ 
+2023-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{h,cc}, textmidicgm.texi, HeapsAlgorithmTemplate.h:
+        Change HeapsAlgorithmTemplate.h to construct from the
+        array to permute and its length.  Document all of the Arrangers.
+
+2023-04-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MusicalForm.cc, textmidicgm.texi:
+        Redefine track scrambling to be easier to see what it will do.
+        It will play a track if it is in the list in the track scrambled
+        vector, for the number of voices playing, from element 0 on.
+        I don't know how it worked before, it was haphazardly written.
+
+2023-04-19     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{cc,h}, Composer.cc, HeapsAlgorithmTemplate.h: Replace
+        Heaps Algorithm with one developed from original paper.
+
+2023-04-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc, Arrangements.h, Composer.cc:
+        Integrate Arrangements in order to accomodate Heaps permutation algorithm.
+
+2023-04-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h, Makefile.am, buildkit.bash,
+       textmidicgm.cc textmidicgm.texi: Integrate Arrangements
+       for track scrambling.  Sort of working.
+
+2023-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, Makefile.am textmidi.l MidiString.{h,cc}: move
+        string escape and quotes handling out of textmidi
+        and miditext.
+
 2023-03-31     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.l: ticks command didn't clear running status,
         even though it writes a text meta event.
@@ -24,7 +60,7 @@
         Apply constexpr where possible.  Make Scales.h use string_view.
 
 2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
-	* Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
+        * Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
         Add symbols for MIDI 3D to textmidi.  miditext does not support them
         fully because it would require a threadable state machine to do it.
 

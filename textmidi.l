@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.54
+** TextMIDITools Version 1.0.55
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -52,6 +52,7 @@
 #include "MidiMaps.h" // string-number maps
 #include "TextmidiUtils.h"
 #include "MIDIKeyString.h"
+#include "MidiString.h"
 #include "textmidi.h" // For this file's interfaces to main.cc
 
 using namespace std;
@@ -450,13 +451,13 @@ PITCH_NAME (({NOTE_LETTER}{ACCIDENTAL}(-?){OCTAVE_DIGIT})|(([Kk])([+-]?)([[:digi
 KEY_COMMAND ([-]?K{INTEGER}[-]?)
 LAZY_PITCH_NAME ((-?)(({NOTE_LETTER}{ACCIDENTAL}(-?){OCTAVE_DIGIT})|(([Kk])([+-]?)([[:digit:]]+)))(-?))
 STRING .*
-LINE (.*)\n
+LINE (.*)
 LETTERUNDER ({LETTER}|_)
 ALPHANUM ({LETTER}|{DIGIT})
 ALPHANUMUNDER ({ALPHANUM}|_)
 IDENT ({LETTERUNDER}{ALPHANUMUNDER}*)
 ASSIGNMENT ({IDENT}{SPACE}={SPACE}{STRING})
-TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|PROGRAM_NAME|DEVICE_NAME|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F)
+TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|PROGRAM_NAME|DEVICE_NAME|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F|TICKS)
 CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|UNDEFINED_([[:digit:]]){2}|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB|ALL_SOUND_OFF|RESET_ALL_CONTROLLERS|LOCAL_CONTROL|ALL_NOTES_OFF|OMNI_OFF|OMNI_ON|MONO_ON|POLY_ON|LSB_([[:digit:]]{2}))
 CONTROL_VALUE (AZIMUTH|ELEVATION|GAIN|DISTANCE|MAXIMUM_DISTANCE|GAIN_AT_MAX_DISTANCE|REFERENCE_DISTANCE_RATIO|PAN_SPREAD_ANGLE|ROLL_ANGLE)
 
@@ -488,6 +489,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 %s LAZY_STATE
 %s DETAIL_STATE
 %s TEXT_META_STATE
+%s TICKS_STATE
 %s SYSEX_SUBID_STATE
 %s SYSEX_DEVICE_ID_STATE
 %s SYSEX_SUBID1_STATE
@@ -675,18 +677,28 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         trackchunk.push_back(meta_prefix[0]);
         trackchunk.push_back(*code);
+        BEGIN(TEXT_META_STATE);
     }
     else
     {
-        const string errstr{((((string{textmidi_features->text_filename_} += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_))
-            += " Invalid meta event name ") += meta_name) += '\n'};
-        cerr << errstr;
+        if (string_view("TICKS") == meta_name)
+        {
+            trackchunk.push_back(meta_prefix[0]);
+            trackchunk.push_back(text_0F_prefix[0]);
+            running_status.clear();
+            BEGIN(TICKS_STATE);
+        }
+        else
+        {
+            const string errstr{((((string{textmidi_features->text_filename_} += ':')
+                += lexical_cast<string>(textmidi_features->line_ctr_))
+                += " Invalid meta event name ") += meta_name) += '\n'};
+            cerr << errstr;
+        }
     }
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
     running_status.clear();
-    BEGIN(TEXT_META_STATE);
   }
 
 <TEXT_META_STATE>{LINE} {
@@ -697,91 +709,28 @@ DEVICE_ID (ALL_CALL|{BYTE})
         yystring.erase(0, 1);
         was_a_leading_quote = true;
     }
-    // remove blanks at end of line
-    if (!yystring.empty())
-    {
-        string::size_type pos{};
-        const string blanks{" \t\n\r"};
-        if ((pos = yystring.find_last_not_of(blanks)) != yystring.npos)
-        {
-            if ((pos + 1) < yystring.size())
-            {
-                yystring.erase(pos + 1);
-            }
-        }
-    }
-    // now the trailing spaces/tabs have been removed.
-
-    // remove quotes
-    if (!yystring.empty())
-    {
-        // is there a trailing quote that matched
-        // a leading quote
-        if (('\"' == yystring[yystring.size() - 1])
-           && was_a_leading_quote)
-        {
-            // check if it's our escape of quote
-            if (yystring.size() > 1)
-            {
-                    yystring.erase(yystring.size() - 1, 1);
-            }
-            else // it just had one double quote character alone
-            {
-                yystring.clear();
-            }
-        }
-    }
-    // now the trailing total quotes have been removed.
-    string::size_type p{};
-    p = 0;
-    while ((p = yystring.find("\\a", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\a", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\b", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\b", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\t", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\t", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\n", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\n", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\v", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\v", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\f", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\f", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\r", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\r", 1);
-    }
-    p = 0;
-    while ((p = yystring.find("\\\"", p, 2)) != string::npos)
-    {
-        yystring.replace(p, 2, "\"", 1);
-    }
-#if 0
-    if (!yystring.empty() && ('\n' == yystring[yystring.length() - 1]))
-    {
-        yystring.erase(yystring.length() - 1);
-    }
-#endif
+    make_raw_string(yystring);
     MidiStreamVector len_vec = int_to_vec(yystring.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
     ranges::copy(yystring, back_inserter(trackchunk));
+    ++textmidi_features->line_ctr_;
+
+    BEGIN(DETAIL_STATE);
+  }
+
+<TICKS_STATE>{LINE} {
+    string yystring{yytext};
+    string ticks_str{};
+    (((ticks_str += "Ticks: ")
+        += lexical_cast<string>(global_total_track_ticks)) += ' ') += yytext;
+    make_raw_string(ticks_str);
+    if (textmidi_features->verbose_)
+    {
+        cout << ticks_str << '\n';
+    }
+    MidiStreamVector len_vec = int_to_vec(ticks_str.length());
+    ranges::copy(len_vec,  back_inserter(trackchunk));
+    ranges::copy(ticks_str, back_inserter(trackchunk));
     ++textmidi_features->line_ctr_;
 
     BEGIN(DETAIL_STATE);
@@ -1528,23 +1477,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
-  }
-
-<DETAIL_STATE,LAZY_STATE>ticks{SPACE}{STRING} {
-    string ticks_str{};
-    (((ticks_str += "Ticks: ")
-        += lexical_cast<string>(global_total_track_ticks)) += ' ') += yytext;
-    if (textmidi_features->verbose_)
-    {
-        cout << ticks_str << '\n';
-    }
-    write_delay();
-    trackchunk.push_back(meta_prefix[0]);
-    trackchunk.push_back(text_prefix[0]);
-    const MidiStreamVector len_vec = int_to_vec(ticks_str.length());
-    ranges::copy(len_vec,   back_inserter(trackchunk));
-    ranges::copy(ticks_str, back_inserter(trackchunk));
-    running_status.clear();
   }
 
 <LAZY_STATE>{DYNAMIC} {

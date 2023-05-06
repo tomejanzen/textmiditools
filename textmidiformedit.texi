@@ -116,6 +116,7 @@ voices, which is done on the Voices window.
 * Min/Max Note Len::
 * Pulse/Sec::
 * Melodic Probabilities::
+* Arrangements::
 * Scale Transpose and From Keyboard::
 * Pitch Form::
 * Rhythm Form::
@@ -168,7 +169,32 @@ Because these are cumulative probabilities, the following inequalities must hold
 If you don't want the voice to drift off down or up, then the probabilities for up and down should be
 equal, but by differences:  (Up - Same) == (Same - Down).
 These probabilities apply only if a voice is in walking mode.
-
+@node Arrangements
+@section Arrangements
+@cindex Arrangements
+Arrangements, if set, can change the priority of voices under the texture curve.
+Each arrangement algorithm permutes the voice priorities in a different way.
+Some of the algorithms do not produce all possible permutations, but others do.
+These algorithms are described in the documentation for textmidicgm.
+The settable items for Arrangements are:
+@itemize
+@item Algorithm
+@itemize
+@item Undefined
+@item Identity
+@item LexicographicForward
+@item LexicographicBackward
+@item RotateRight
+@item RotateLeft
+@item Reverse
+@item SwapPairs
+@item Skip
+@item Shuffle
+@item Heaps
+@end itemize
+@item Period
+The period of time before going to the next permutation.
+@end itemize
 @node Scale Transpose and From Keyboard
 @section Scale Transpose and From Keyboard
 @cindex Scale Transpose and From Keyboard
@@ -251,6 +277,9 @@ To suggest a solist, the solo voice should probably be in voice 0 position in th
 * Pan::
 * Follow/Leader::
 * Interval Type/Interval::
+* Follower Delay::
+* Follower Retrograde::
+* Follower Inversion::
 @end menu
 The Instrumental Voices Window has several items.
 @node Number of Voices
@@ -320,6 +349,29 @@ The follower's Interval Type defines whether the follower stays in the scale for
 if it follows on a chromatic interval.  If the interval type is scaler, then the interval is the
 number of steps up or down the scale that the follower appears.  If the interval type is chromatic,
 then the follower will be "Interval" number of chromatic steps away from the voice it is following.
+
+@node Follower Delay
+@section Follower Delay
+@cindex Follower Delay
+The follower's Delay creates a canon effect in that it 
+delays the start of the following voice for the duration given as an ordinary
+rational number.  It can be set to 1/4 for a quarter note, or 13/17, or
+4/1 or 4 for four whole notes delay and so on.  It interprets 4 as four whole notes and not
+as a quarter note the way @command{textmidi} does in LAZY mode.
+
+@node Follower Inversion
+@section Follower Inversion
+@cindex Follower Inversion
+The follower can be an inversion of the leader voice, for the entire duration 
+of the piece.  Transposition interval still applies.
+The selection of either chromatic or scalar following also applies.
+
+@node Follower Retrograde
+@section Follower Retrograde
+@cindex Follower Retrograde
+The follower will be a retrograde (that is, a backwards copy) of the leader voice, 
+for the entire duration of the piece.  Transposition interval still applies.
+The selection of either chromatic or scalar following also applies.
 
 @node Form Plot Window
 @chapter Form Plot Window

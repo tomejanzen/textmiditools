@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -26,6 +26,7 @@ namespace arrangements
     using ArrangementVec = std::vector<Arrangement>;
     enum class PermutationEnum : int
     {
+        Undefined,
         Identity,
         LexicographicForward,
         LexicographicBackward,

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -250,7 +250,7 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
         }
     }
 
-    if (i < data_.size())
+    if (static_cast<size_t>(i) < data_.size())
     {
         for (auto it(data_.cbegin() + i);
                 (it != data_.cend()) && (*it != end_of_sysex[0]);
@@ -919,7 +919,6 @@ void textmidi::MidiFileMetaStringEvent::consume_stream(MidiStreamIterator& midii
 ostream& textmidi::MidiFileMetaStringEvent::text(ostream& os) const
 {
     string display_str{str_};
-    string::size_type pos{};
 
     textmidi::make_human_string(display_str);
     os << '"' << display_str << '"';

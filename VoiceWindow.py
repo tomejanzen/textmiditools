@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.55
+# TextMIDITools Version 1.0.56
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -11,11 +11,12 @@ import tkinter.ttk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+import string
+from string import *
 from GeneralMIDI import *
 import re
 
 class VoiceWindow(tkinter.Toplevel):
-    max_voice_number = 23
     general_midi_list = list(GeneralMIDIInstrumentDict)
     def __init__(self, xml_form):
         super().__init__()
@@ -114,7 +115,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.walking_label = tkinter.ttk.Label(self.frame, text='Walking')
         self.walking_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.walking = tkinter.IntVar()
-        self.walking = self.xml_form['voices'][vox]['walking']
+        self.walking.set(self.xml_form['voices'][vox]['walking'])
         self.walking_checkbutton = tkinter.ttk.Checkbutton(self.frame, text='walking',
             variable=self.walking, command=self.walking_callback)
         self.walking_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
@@ -193,6 +194,38 @@ class VoiceWindow(tkinter.Toplevel):
         self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
         the_row = the_row + 1
 
+        self.follow_delay_label = tkinter.ttk.Label(self.frame, text='Delay')
+        self.follow_delay_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
+        self.follow_delay_entry = tkinter.ttk.Entry(self.frame)
+        delay_ratio = "/"
+        delay_ratio = delay_ratio.join([self.xml_form['voices'][vox]['follower']['delay']['numerator'], self.xml_form['voices'][vox]['follower']['delay']['denominator']])
+        self.follow_delay_entry.insert(0, delay_ratio)
+        self.follow_delay_entry['state'] = 'disabled'
+        self.follow_delay_entry.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
+        self.follow_delay_entry.bind('<Key-Return>', self.follow_delay_callback)
+        self.follow_delay_entry.bind('<FocusOut>', self.follow_delay_callback)
+        the_row = the_row + 1
+
+        self.inversion_label = tkinter.ttk.Label(self.frame, text='Inversion')
+        self.inversion_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
+        self.inversion = tkinter.IntVar()
+        self.inversion.set(self.xml_form['voices'][vox]['follower']['inversion'])
+        self.inversion_checkbutton = tkinter.ttk.Checkbutton(self.frame, text='inversion',
+            variable=self.inversion, command=self.inversion_callback)
+        self.inversion_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
+        self.inversion_checkbutton['state'] = 'disabled'
+        the_row = the_row + 1
+
+        self.retrograde_label = tkinter.ttk.Label(self.frame, text='Retrograde')
+        self.retrograde_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
+        self.retrograde = tkinter.IntVar()
+        self.retrograde.set(self.xml_form['voices'][vox]['follower']['retrograde'])
+        self.retrograde_checkbutton = tkinter.ttk.Checkbutton(self.frame, text='retrograde',
+            variable=self.retrograde, command=self.retrograde_callback)
+        self.retrograde_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
+        self.retrograde_checkbutton['state'] = 'disabled'
+        the_row = the_row + 1
+
     def low_pitch_callback(self, event):
         vox = int(self.voice_number_spinbox.get())
         self.xml_form['voices'][vox]['low_pitch'] = self.low_pitch_entry.get()
@@ -201,13 +234,36 @@ class VoiceWindow(tkinter.Toplevel):
         vox = int(self.voice_number_spinbox.get())
         self.xml_form['voices'][vox]['high_pitch'] = self.high_pitch_entry.get()
 
+    def interval_type_callback(self):
+        vox = int(self.voice_number_spinbox.get())
+        self.xml_form['voices'][vox]['follower']['interval_type'] = self.frame.interval_type.get()
+
     def follow_interval_callback(self, event=None):
         vox = int(self.voice_number_spinbox.get())
         self.xml_form['voices'][vox]['follower']['interval'] = self.follow_interval_spinbox.get()
 
-    def interval_type_callback(self):
+    def follow_delay_callback(self, event=None):
         vox = int(self.voice_number_spinbox.get())
-        self.xml_form['voices'][vox]['follower']['interval_type'] = self.frame.interval_type.get()
+        delay_quotient = self.follow_delay_entry.get()
+        slash_index = delay_quotient.find("/")
+        num_list = delay_quotient.split("/")
+        if (len(num_list) == 2):
+            self.xml_form['voices'][vox]['follower']['delay']['numerator'] = num_list[0]
+            self.xml_form['voices'][vox]['follower']['delay']['denominator'] = num_list[1]
+
+    def inversion_callback(self):
+        vox = int(self.voice_number_spinbox.get())
+        if (self.inversion_checkbutton.instate(['selected'])):
+            self.xml_form['voices'][vox]['follower']['inversion'] = 1
+        else:
+            self.xml_form['voices'][vox]['follower']['inversion'] = 0
+
+    def retrograde_callback(self):
+        vox = int(self.voice_number_spinbox.get())
+        if (self.retrograde_checkbutton.instate(['selected'])):
+            self.xml_form['voices'][vox]['follower']['retrograde'] = 1
+        else:
+            self.xml_form['voices'][vox]['follower']['retrograde'] = 0
 
     def number_of_voices_callback(self, event=None):
         vox = int(self.voice_number_spinbox.get())
@@ -218,6 +274,7 @@ class VoiceWindow(tkinter.Toplevel):
         if (len(self.xml_form['voices']) > number_of_voices):
             self.xml_form['voices'] = self.xml_form['voices'][0:(number_of_voices - 1)]
         if (len(self.xml_form['voices']) < number_of_voices):
+            # default the voices above the voices we're using
             for v in range(len(self.xml_form['voices']), number_of_voices):
                 vd = {}
                 vd['low_pitch'] = 'A0'
@@ -231,6 +288,12 @@ class VoiceWindow(tkinter.Toplevel):
                 fd['leader'] = 2147483647
                 fd['interval_type'] = 0
                 fd['interval'] = 0
+                dd = {}
+                dd['numerator'] = 0
+                dd['denominator'] = 0
+                fd['delay'] = dd
+                fd['inversion'] = 0
+                fd['retrograde'] = 0
                 vd['follower'] = fd
                 self.xml_form['voices'].append(vd)
         self.voice_number_spinbox['to'] = len(self.xml_form['voices']) - 1
@@ -255,20 +318,20 @@ class VoiceWindow(tkinter.Toplevel):
         self.high_pitch_entry.insert(0, self.xml_form['voices'][vox]['high_pitch'])
         self.high_pitch_entry.update()
 
-        self.walking = self.xml_form['voices'][vox]['walking']
-        if (self.walking_checkbutton.instate(['selected']) and not self.walking):
+        self.walking.set(self.xml_form['voices'][vox]['walking'])
+        if (self.walking_checkbutton.instate(['selected']) and not self.walking.get()):
             self.walking_checkbutton.invoke()
-        if (not self.walking_checkbutton.instate(['selected']) and self.walking):
+        if (not self.walking_checkbutton.instate(['selected']) and self.walking.get()):
             self.walking_checkbutton.invoke()
 
         the_pan = float(self.xml_form['voices'][vox]['pan']) / 128.0 + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)
         self.pan_scrollbar.update()
 
-        self.follow = self.xml_form['voices'][vox]['follower']['follow']
-        if (self.follow_checkbutton.instate(['selected']) and not self.follow):
+        self.follow.set(self.xml_form['voices'][vox]['follower']['follow'])
+        if (self.follow_checkbutton.instate(['selected']) and not self.follow.get()):
             self.follow_checkbutton.invoke()
-        if (not self.follow_checkbutton.instate(['selected']) and self.follow):
+        if (not self.follow_checkbutton.instate(['selected']) and self.follow.get()):
             self.follow_checkbutton.invoke()
 
         self.leader_spinbox.set(self.xml_form['voices'][vox]['follower']['leader'])
@@ -279,16 +342,54 @@ class VoiceWindow(tkinter.Toplevel):
             self.leader_spinbox['state'] = 'enabled'
             self.scaler_interval_type_radiobutton['state'] = 'enabled'
             self.chromatic_interval_type_radiobutton['state'] = 'enabled'
+            self.follow_interval_spinbox['state'] = 'enabled'
+            self.follow_delay_entry['state'] = 'enabled'
+            self.inversion_checkbutton['state'] = 'enabled' 
+            self.retrograde_checkbutton['state'] = 'enabled'
+            self.walking_checkbutton['state'] = 'disabled'
+
             self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
             self.frame.interval_type.set(self.xml_form['voices'][vox]['follower']['interval_type'])
+            self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
+            delay_ratio = "/"
+            delay_ratio = delay_ratio.join([str(self.xml_form['voices'][vox]['follower']['delay']['numerator']), str(self.xml_form['voices'][vox]['follower']['delay']['denominator'])])
+            self.follow_delay_entry.delete(0, 1024)
+            self.follow_delay_entry.insert(0, delay_ratio)
+
+            self.inversion.set(self.xml_form['voices'][vox]['follower']['inversion'])
+            if (self.inversion_checkbutton.instate(['selected']) and not self.inversion.get()):
+                self.inversion_checkbutton.invoke()
+            if (not self.inversion_checkbutton.instate(['selected']) and self.inversion.get()):
+                self.inversion_checkbutton.invoke()
+
+            self.retrograde.set(self.xml_form['voices'][vox]['follower']['retrograde'])
+            if (self.retrograde_checkbutton.instate(['selected']) and not self.retrograde.get()):
+                self.retrograde_checkbutton.invoke()
+            if (not self.retrograde_checkbutton.instate(['selected']) and self.retrograde.get()):
+                self.retrograde_checkbutton.invoke()
+
             self.scaler_interval_type_radiobutton.update()
             self.chromatic_interval_type_radiobutton.update()
             self.follow_interval_spinbox.update()
+            self.follow_delay_entry.update()
+            self.inversion_checkbutton.update()
+            self.retrograde_checkbutton.update()
         else:
             self.leader_spinbox['state'] = 'disabled'
             self.scaler_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
             self.leader_spinbox.set('2147483647')
+            self.follow_delay_entry['state'] = 'disabled'
+            self.follow_interval_spinbox['state'] = 'disabled'
+            self.inversion_checkbutton['state'] = 'disabled'
+            self.retrograde_checkbutton['state'] = 'disabled'
+            self.scaler_interval_type_radiobutton.update()
+            self.chromatic_interval_type_radiobutton.update()
+            self.follow_interval_spinbox.update()
+            self.follow_delay_entry.update()
+            self.inversion_checkbutton.update()
+            self.retrograde_checkbutton.update()
+            self.walking_checkbutton['state'] = 'normal'
 
     def leader_callback(self, event=None):
         self.xml_form['voices'][int(self.voice_number_spinbox.get())]['follower']['leader'] = self.leader_spinbox.get()
@@ -346,20 +447,20 @@ class VoiceWindow(tkinter.Toplevel):
             self.general_midi_list[self.xml_form['voices'][vox]['program'] - 1])
         self.program_spinbox.update()
 
-        self.walking = self.xml_form['voices'][vox]['walking']
-        if (self.walking_checkbutton.instate(['selected']) and not self.walking):
+        self.walking.set(self.xml_form['voices'][vox]['walking'])
+        if (self.walking_checkbutton.instate(['selected']) and not self.walking.get()):
             self.walking_checkbutton.invoke()
-        if (not self.walking_checkbutton.instate(['selected']) and self.walking):
+        if (not self.walking_checkbutton.instate(['selected']) and self.walking.get()):
             self.walking_checkbutton.invoke()
 
         the_pan = (float(self.xml_form['voices'][0]['pan']) / 128) + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)
         self.pan_scrollbar.update()
 
-        self.follow = self.xml_form['voices'][vox]['follower']['follow']
-        if (self.follow_checkbutton.instate(['selected']) and not self.follow):
+        self.follow.set(self.xml_form['voices'][vox]['follower']['follow'])
+        if (self.follow_checkbutton.instate(['selected']) and not self.follow.get()):
             self.follow_checkbutton.invoke()
-        if (not self.follow_checkbutton.instate(['selected']) and self.follow):
+        if (not self.follow_checkbutton.instate(['selected']) and self.follow.get()):
             self.follow_checkbutton.invoke()
 
         self.leader_spinbox.set(self.xml_form['voices'][vox]['follower']['leader'])
@@ -376,6 +477,20 @@ class VoiceWindow(tkinter.Toplevel):
         self.scaler_interval_type_radiobutton.update()
         self.follow_interval_spinbox.set(self.xml_form['voices'][vox]['follower']['interval'])
         self.follow_interval_spinbox.update()
+        self.follow_delay_entry.update()
+
+        self.inversion.set(self.xml_form['voices'][vox]['follower']['inversion'])
+        if (self.inversion_checkbutton.instate(['selected']) and not self.inversion.get()):
+            self.inversion_checkbutton.invoke()
+        if (not self.inversion_checkbutton.instate(['selected']) and self.inversion.get()):
+            self.inversion_checkbutton.invoke()
+
+        self.retrograde.set(self.xml_form['voices'][vox]['follower']['retrograde'])
+        if (self.retrograde_checkbutton.instate(['selected']) and not self.retrograde.get()):
+            self.retrograde_checkbutton.invoke()
+        if (not self.retrograde_checkbutton.instate(['selected']) and self.retrograde.get()):
+            self.retrograde_checkbutton.invoke()
+
         self.frame.update()
 
     def follow_callback(self):
@@ -387,6 +502,9 @@ class VoiceWindow(tkinter.Toplevel):
             self.scaler_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
             self.follow_interval_spinbox['state'] = 'normal'
+            self.follow_delay_entry['state'] = 'normal'
+            self.inversion_checkbutton['state'] = 'disabled'
+            self.retrograde_checkbutton['state'] = 'disabled'
         else:
             self.xml_form['voices'][vox]['follower']['follow'] = 0
             self.walking_checkbutton['state'] = 'normal'
@@ -394,8 +512,11 @@ class VoiceWindow(tkinter.Toplevel):
             self.scaler_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
             self.follow_interval_spinbox['state'] = 'disabled'
+            self.follow_delay_entry['state'] = 'disabled'
+            self.inversion_checkbutton['state'] = 'disabled'
+            self.retrograde_checkbutton['state'] = 'disabled'
 
-    def pan_callback(self, action, sign, unitspage):
+    def pan_callback(self, action, sign, unitspage='None'):
         vox = int(self.voice_number_spinbox.get())
         firstlastlist = self.pan_scrollbar.get()
         setting = 0

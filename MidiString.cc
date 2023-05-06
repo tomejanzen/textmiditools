@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -125,28 +125,34 @@ void strip_quotes(string& str)
 {
     if (!str.empty())
     {
-        if ('\"' == str[0])
+        if (str == string(R"("\")"))
         {
-            str.erase(0, 1);
-        }
-
-        if (str.size() >= 2)
-        {
-            // if a non-escape double quote at end
-            if (('\"' == str[str.size() - 1]) && ('\\' != str[str.size() - 2]))
-            {
-                str.erase(str.size() - 1);
-            }
+            str = R"(\)";
         }
         else
         {
-            // erase a single double quote by itself.
-            if (str == "\"")
+            if ('\"' == str[0])
             {
-                str.clear();
+                str.erase(0, 1);
+            }
+    
+            if (str.size() >= 2)
+            {
+                // if a non-escape double quote at end
+                if (('\"' == str[str.size() - 1]) && ('\\' != str[str.size() - 2]))
+                {
+                    str.erase(str.size() - 1);
+                }
+            }
+            else
+            {
+                // erase a single double quote by itself.
+                if (str == "\"")
+                {
+                    str.clear();
+                }
             }
         }
-
     }
 }
 

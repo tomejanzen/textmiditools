@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -28,6 +28,7 @@
 #include "Scales.h"
 #include "GeneralMIDI.h"
 #include "MIDIKeyString.h"
+#include "Arrangements.h"
 
 namespace textmidi
 {
@@ -171,6 +172,25 @@ namespace textmidi
             double up_;
         };
 
+        struct ArrangementDefinition
+        {
+            explicit ArrangementDefinition(arrangements::PermutationEnum 
+                algorithm = arrangements::PermutationEnum::Identity, 
+                double period = 100000.0)
+              : algorithm_{algorithm},
+                period_{period}
+            {
+            }
+            arrangements::PermutationEnum algorithm_;
+            double period_;
+            template<class Archive>
+                void serialize(Archive& arc, const unsigned int )
+            {
+                arc & BOOST_SERIALIZATION_NVP(algorithm_);
+                arc & BOOST_SERIALIZATION_NVP(period_);
+            }
+        };
+
         struct MusicalCharacter
         {
             MusicalCharacter()
@@ -215,7 +235,8 @@ namespace textmidi
                 rhythm_form_{},
                 dynamic_form_{},
                 texture_form_{},
-                voices_{}
+                voices_{},
+                arrangement_definition_{}
             {
             }
             MusicalForm(const MusicalForm& )  = default;
@@ -238,7 +259,8 @@ namespace textmidi
                 dynamic_form_{form.dynamic_form},
                 texture_form_{Sine{form.texture_form.range_period(),
                                    form.texture_form.range_phase()}},
-                voices_{}
+                voices_{},
+                arrangement_definition_{arrangements::PermutationEnum::Identity, 10000.0}
             {
                 scale_.clear();
                 scale_.reserve(form.scale.size());
@@ -276,6 +298,8 @@ namespace textmidi
             void texture_form(const Sine& s) noexcept;
             std::vector<VoiceXml> voices() const noexcept;
             std::vector<VoiceXml>& voices() noexcept;
+            ArrangementDefinition arrangement_definition() const noexcept;
+            void arrangement_definition(ArrangementDefinition arrangement_definition) noexcept;
             void string_scale_to_int_scale(std::vector<int>& key_scale) const;
             void character_now(TicksDuration theTime,
                     MusicalCharacter& musical_character) const;
@@ -295,8 +319,9 @@ namespace textmidi
             MeanRangeSines dynamic_form_;
             Sine                 texture_form_;
             std::vector<VoiceXml>    voices_;
+            ArrangementDefinition arrangement_definition_;
             template<class Archive>
-                void serialize(Archive& arc, const unsigned int )
+                void serialize(Archive& arc, const unsigned int version)
             {
                 arc & BOOST_SERIALIZATION_NVP(name_);
                 arc & BOOST_SERIALIZATION_NVP(len_);
@@ -310,6 +335,10 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(dynamic_form_);
                 arc & BOOST_SERIALIZATION_NVP(texture_form_);
                 arc & BOOST_SERIALIZATION_NVP(voices_);
+                if (version > 1)
+                {
+                    arc & BOOST_SERIALIZATION_NVP(arrangement_definition_);
+                }
                 this->valid();
             }
         };
@@ -319,5 +348,6 @@ namespace textmidi
 
     }
 }
+BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 2)
 
 #endif

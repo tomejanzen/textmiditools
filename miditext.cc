@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
-// miditext Version 1.0.55
+// miditext Version 1.0.56
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.55\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.56\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
     text_filestr << "FILEHEADER ";
     midiiter += sizeof(MidiHeader);
     const uint32_t ticksperquarter{midi_header.division_};
-    uint32_t ticks_per_whole{ticksperquarter * QuartersPerWhole};
+    uint32_t ticks_per_whole{static_cast<uint32_t>(ticksperquarter * QuartersPerWhole)};
 
     string textmidi_str{};
     textmidi_str.reserve(32);
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
             ConvertTrack convert_track{ti, midi_delay_event_tracks[i], ticks_per_whole,
                 quantum};
             jthread track_thread{convert_track};
-            track_threads[i] = move(track_thread);
+            track_threads[i] = std::move(track_thread);
             ++i;
         }
     }

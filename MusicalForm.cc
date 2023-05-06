@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -340,6 +340,16 @@ vector<VoiceXml>& MusicalForm::voices() noexcept
     return voices_;
 }
 
+ArrangementDefinition MusicalForm::arrangement_definition() const noexcept
+{
+    return arrangement_definition_;
+}
+
+void MusicalForm::arrangement_definition(ArrangementDefinition arrangement_definition) noexcept
+{
+    arrangement_definition_ = arrangement_definition;
+}
+
 void MusicalForm::string_scale_to_int_scale (vector<int>& key_scale) const
 {
     key_scale.clear();
@@ -392,6 +402,11 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
 {
     constexpr int IdiophoneMarker{129};
     name_ = formname;
+    const auto suffixpos{name_.find(".form.xml")};
+    if (suffixpos != name_.npos)
+    {
+        name_.erase(suffixpos);
+    }
     len_  = 1800;
     min_note_len_ = 0.0;
     max_note_len_ = 2.0;

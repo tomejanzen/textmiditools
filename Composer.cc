@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -252,7 +252,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 }
 
 void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
-    int track_qty, TicksDuration total_duration)
+    TicksDuration total_duration)
 {
     for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
@@ -279,11 +279,18 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
 //
 void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalForm& xml_form)
 {
+    // If the command line did not set arrangements, then set them from the XML file.
+    track_scramble_.period_ = ((PermutationEnum::Undefined == track_scramble_.scramble_)
+        ? (static_cast<TicksDuration>(static_cast<int>(round(xml_form.arrangement_definition().period_))) * TicksPerQuarter)
+        : track_scramble_.period_);
+
+    track_scramble_.scramble_
+        = (track_scramble_.scramble_ == arrangements::PermutationEnum::Undefined)
+        ? xml_form.arrangement_definition().algorithm_ : track_scramble_.scramble_;
     RandomDouble random_double{};
     vector<Track> tracks(xml_form.voices().size()/*, Track{ xml_form.scale().size() / 2 }*/);
     vector<pair<int, int>> tessitura;
 
-    const auto permutation_qty{chrono::duration<double>(xml_form.len()) / track_scramble_.period_};
     track_scramble_.arrangements_ = ArrangementsFactory(track_scramble_.scramble_,
         xml_form.voices().size());
 
@@ -305,8 +312,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     build_composition_priority_graph(xml_form, leaders_topo_sort);
 
     vector<vector<int>> track_scramble_sequences;
-    build_track_scramble_sequences(track_scramble_sequences, xml_form.voices().size(),
-        total_duration);
+    build_track_scramble_sequences(track_scramble_sequences, total_duration);
 
     vector<vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
@@ -333,7 +339,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     MusicalCharacter musical_character{};
                     xml_form.character_now(track.the_next_time(), musical_character);
                     int number_of_voices = static_cast<int>(musical_character.texture_range) + 1;
-                    number_of_voices = (number_of_voices > xml_form.voices().size()) ? xml_form.voices().size() : number_of_voices;
+                    number_of_voices = (static_cast<size_t>(number_of_voices) > xml_form.voices().size()) ? xml_form.voices().size() : number_of_voices;
                     number_of_voices = (number_of_voices < 1) ? 1 : number_of_voices;
 #if defined(TEXTMIDICGM_PRINT)
                     cout << "texture_range: " << musical_character.texture_range << " number_of_voices: " << number_of_voices << '\n';
@@ -383,37 +389,44 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         (random_double())};
                     if (xml_form.voices()[tr].walking())
                     {
-                        switch (direction)
+                        // first walking note should be in mid-scale
+                        if (track_note_events[i].empty()) [[unlikely]] 
                         {
-                            case MelodyProbabilities::MelodyDirection::Up:
-                                if (track.last_pitch_index()
-                                    < static_cast<int>(xml_form.scale().size() - 1))
-                                {
-                                    pitch_index
-                                        = track.last_pitch_index() + 1;
-                                }
-                                else
-                                {
+                            pitch_index = xml_form.scale().size() / 2;
+                        }
+                        else
+                        {
+                            switch (direction)
+                            {
+                                case MelodyProbabilities::MelodyDirection::Up:
+                                    if (track.last_pitch_index()
+                                        < static_cast<int>(xml_form.scale().size() - 1))
+                                    {
+                                        pitch_index = track.last_pitch_index() + 1;
+                                    }
+                                    else
+                                    {
+                                        pitch_index = track.last_pitch_index();
+                                    }
+                                    break;
+                                case MelodyProbabilities::MelodyDirection::Same:
                                     pitch_index = track.last_pitch_index();
-                                }
-                                break;
-                            case MelodyProbabilities::MelodyDirection::Same:
-                                pitch_index = track.last_pitch_index();
-                                break;
-                            case MelodyProbabilities::MelodyDirection::Down:
-                                if (track.last_pitch_index() > 0)
-                                {
-                                    pitch_index = track.last_pitch_index()
-                                                - 1;
-                                }
-                                else
-                                {
-                                    pitch_index = track.last_pitch_index();
-                                }
-                                break;
-                            case MelodyProbabilities::MelodyDirection::Rest:
-                                pitch_index = RestPitchIndex;
-                                break;
+                                    break;
+                                case MelodyProbabilities::MelodyDirection::Down:
+                                    if (track.last_pitch_index() > 0)
+                                    {
+                                        pitch_index = track.last_pitch_index()
+                                                    - 1;
+                                    }
+                                    else
+                                    {
+                                        pitch_index = track.last_pitch_index();
+                                    }
+                                    break;
+                                case MelodyProbabilities::MelodyDirection::Rest:
+                                    pitch_index = RestPitchIndex;
+                                    break;
+                            }
                         }
                     }
                     else
@@ -421,8 +434,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         if (direction
                             != MelodyProbabilities::MelodyDirection::Rest)
                         {
-                            pitch_index
-                                = musical_character.pitch_index
+                            pitch_index = musical_character.pitch_index
                                 (random_double());
                         }
                         else
@@ -480,76 +492,109 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             }
             else [[unlikely]] // it is a follower
             {
-                track_note_events[tr] = track_note_events[xml_form.voices()[tr].follower().leader_];
+                try
+                {
+                    track_note_events[tr] = track_note_events.at(xml_form.voices()[tr].follower().leader_);
+                }
+                catch (out_of_range& exc)
+                {
+                    cerr << __FILE__ << ':' << BOOST_PP_STRINGIZE(__LINE__) << ':'
+                         << " follower leader must be in (0..# of tracks-1) " << exc.what() << '\n';
+                    exit(0);
+                }
+                int pivot_key{RestPitch};
+                int pivot_key_index{key_scale.size()};
                 for (auto& ne : track_note_events[tr])
                 {
-                    switch (xml_form.voices()[tr]
-                            .follower().interval_type_)
+                    switch (xml_form.voices()[tr].follower().interval_type_)
                     {
                       [[likely]] case VoiceXml::Follower::IntervalType::Scalar:
                         {
-                          int key_index{0U};
-                          {
-                              KeyScaleSeq::const_iterator key_iter{ranges::find(key_scale, ne.pitch())};
-                              if (key_iter != key_scale.cend())
-                              {
-                                  key_index
-                                      = std::distance(key_scale.cbegin(),
-                                        key_iter);
-                                  if (xml_form.voices()[tr]
-                                      .follower().interval_ < 0)
-                                  {
-                                      if (abs(xml_form.voices()[tr]
-                                          .follower().interval_)
-                                              < key_index)
-                                      {
-                                         ne.pitch(key_scale[
-                                             xml_form.voices()[tr]
-                                             .follower().interval_
-                                             + key_index]);
-                                      }
-                                  }
-                                  else
-                                  {
-                                      if ((xml_form.voices()[tr]
-                                          .follower().interval_
-                                          + key_index)
-                                              < static_cast<int>(key_scale.size()))
-                                      {
-                                         auto pitch{
-                                             key_scale[key_index
-                                             + xml_form.voices()[tr]
-                                             .follower().interval_]};
-                                         ne.pitch(pitch);
-                                      }
+                            int key_index{0U};
 
-                                  }
-                              }
-                          }
+                            KeyScaleSeq::const_iterator key_iter{ranges::find(key_scale, ne.pitch())};
+                            if (key_iter != key_scale.cend())
+                            {
+                                key_index = std::distance(key_scale.cbegin(), key_iter);
+                                if (xml_form.voices()[tr].follower().interval_ < 0)
+                                {
+                                    // Check there's room down the scale
+                                    if (abs(xml_form.voices()[tr]
+                                        .follower().interval_) < key_index)
+                                    {
+                                        key_index += xml_form.voices()[tr].follower().interval_;
+                                    }
+                                    if (key_scale.size() == pivot_key_index)
+                                    {
+                                        pivot_key_index = key_index;
+                                    }
+                                }
+                                else // follower interval is 0 or positive
+                                {
+                                    // Check there's room up the scale
+                                    if ((xml_form.voices()[tr]
+                                        .follower().interval_ + key_index)
+                                           < static_cast<int>(key_scale.size()))
+                                    {
+                                        key_index += xml_form.voices()[tr]
+                                            .follower().interval_;
+                                        if (key_scale.size() == pivot_key_index)
+                                        {
+                                            pivot_key_index = key_index;
+                                        }
+                                        if (RestPitch == pivot_key)
+                                        {
+                                            pivot_key = key_scale[key_index];
+                                        }
+                                    }
+                                }
+                                if (xml_form.voices()[tr].follower().inversion_)
+                                {
+                                    const int shift{2 * (key_index - pivot_key_index)};
+                                    if ((  (shift > 0) && (key_index >= shift))
+                                       || ((shift < 0) && (key_index < (key_scale.size() - shift))))
+                                    {
+                                        key_index -= shift;
+                                    }
+                                }
+                                const auto pitch{key_scale[key_index]};
+                                ne.pitch(pitch);
+                            }
                         }
                         break;
                       case VoiceXml::Follower::IntervalType::Chromatic:
                         {
-                          if (xml_form.voices()[tr]
-                              .follower().interval_ < 0)
+                          int key{ne.pitch()};
+
+                          if (xml_form.voices()[tr].follower().interval_ < 0)
                           {
                               if (abs(xml_form.voices()[tr]
-                                 .follower().interval_) < ne.pitch())
+                                 .follower().interval_) < key)
                               {
-                                  ne.pitch(ne.pitch()
-                                      + xml_form.voices()[tr]
+                                  ne.pitch(key + xml_form.voices()[tr]
                                       .follower().interval_);
+                                  if (RestPitch == pivot_key)
+                                  {
+                                      pivot_key = ne.pitch();
+                                  }
                               }
                           }
                           else
                           {
-                              if (ne.pitch() + xml_form.voices()[tr]
+                              if (key + xml_form.voices()[tr]
                                   .follower().interval_ < midi::MidiPitchQty)
                               {
-                                  ne.pitch(ne.pitch()
-                                      + xml_form.voices()[tr]
+                                  ne.pitch(key + xml_form.voices()[tr]
                                       .follower().interval_);
+                                  if (RestPitch == pivot_key)
+                                  {
+                                      pivot_key = ne.pitch();
+                                  }
                               }
+                          }
+                          if (xml_form.voices()[tr].follower().inversion_)
+                          {
+                              ne.pitch(ne.pitch() - 2 * (ne.pitch() - pivot_key));
                           }
                         }
                         break;
@@ -557,6 +602,16 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                           break;
                     }
                 }
+            }
+            if (xml_form.voices()[tr].follower().retrograde_)
+            {
+                ranges::reverse(track_note_events[tr]);
+            }
+            if (xml_form.voices()[tr].follower().delay_)
+            {
+                // Insert a rest for delay for canon effects.
+                const auto start_delay = cgm::NoteEvent{RestPitch, 0, xml_form.voices()[tr].follower().delay_};
+                track_note_events[tr].insert(track_note_events[tr].cbegin(), start_delay);
             }
             ++i;
         }
@@ -644,8 +699,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     }
 }
 
-const midi::NumStringMap<PermutationEnum> textmidi::cgm::track_scramble_map
+const midi::NumStringMap<PermutationEnum> textmidi::cgm::arrangement_map
 {
+    {"undefined",           PermutationEnum::Undefined},
     {"none",                PermutationEnum::Identity},
     {"rotateright",         PermutationEnum::RotateRight},
     {"rotateleft",          PermutationEnum::RotateLeft},

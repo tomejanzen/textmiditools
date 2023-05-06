@@ -199,6 +199,7 @@ graphical program as AlgoRhythms was.
 textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
  @var{text_form_file}|
 @b{@minus{}x}|@b{@minus{}@minus{}xmlform} @var{xml_form_file}
+[@b{@minus{}r}|@b{@minus{}@minus{}update}]
 [@b{@minus{}r}|@b{@minus{}@minus{}random}]
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}]
 [@b{@minus{}i}|@b{@minus{}@minus{}instruments} @lbracechar{}piano | chromaticpercussion | organ | guitar | bass | strings | ensemble | brass
@@ -222,9 +223,17 @@ Use of this file format is deprecated.
 @cindex xmlform
 The input file: an XML file supporting more features.  If @minus{}@minus{}random is
 specified, the form's output file.
+@item -r, --update
+@cindex update
+Update a version 0 XML form file to version 2.  Has no effect on version 2 files.
+for 
+@smallexample
+textmidicgm --xmlformfile symphony.form.xml --update
+@end smallexample
+produces a file called update_symphony.form.xml that is a version 2 XML form file.
 @item -r, --random
-Make a random form, write it to the base filename given, adding @quotedblleft{}.form.xml@quotedblright{} and exit.
 @cindex random xml_form_file_base
+Make a random form, write it to the base filename given, adding @quotedblleft{}.form.xml@quotedblright{} and exit.
 @itemize
 @cindex random length
 @item The duration is 30 minutes.  The min and max note lengths
@@ -1033,6 +1042,14 @@ The tag <interval_> specifies how many
 scale steps or half-steps above (positive values)
 or below (negative values)
 the follower should be.
+The follower voice can be set as the inversion of
+the leader voice.  The selection of scalar or chromatic following
+is obverved for the inversion.
+
+Lastly, the follower voice can be set as the retrograde (time-reversal) of
+the leader voice. 
+The pitch_follower field is always a 1; all followers follow
+the pitch of the leader.
 If there is a following circle, the voices in the circle will not have
 any notes.  A following circle is created by any of the following:
 @itemize
@@ -1041,7 +1058,7 @@ any notes.  A following circle is created by any of the following:
 @item A chain of follows ultimately follow a member in the chain.
 @end itemize
 @end itemize
-
+The version 1 format is:
 @example
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!DOCTYPE boost_serialization>
@@ -1185,6 +1202,200 @@ any notes.  A following circle is created by any of the following:
 </xml_form>
 </boost_serialization>
 
+@end example
+The version 2 format after 1 May 2023 is:
+@example
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="18">
+	<xml_form class_id="0" tracking_level="0" version="2">
+		<name_>inversion</name_>
+		<len_>60</len_>
+		<min_note_len_>0.0</min_note_len_>
+		<max_note_len_>2.0</max_note_len_>
+		<scale_ class_id="1" tracking_level="0" version="0">
+			<count>75</count>
+			<item_version>0</item_version>
+			<item>C-1</item>
+			<item>D-1</item>
+			<item>E-1</item>
+			<item>F-1</item>
+			<item>G-1</item>
+			<item>A-1</item>
+			<item>B-1</item>
+			<item>C0</item>
+			<item>D0</item>
+			<item>E0</item>
+			<item>F0</item>
+			<item>G0</item>
+			<item>A0</item>
+			<item>B0</item>
+			<item>C1</item>
+			<item>D1</item>
+			<item>E1</item>
+			<item>F1</item>
+			<item>G1</item>
+			<item>A1</item>
+			<item>B1</item>
+			<item>C2</item>
+			<item>D2</item>
+			<item>E2</item>
+			<item>F2</item>
+			<item>G2</item>
+			<item>A2</item>
+			<item>B2</item>
+			<item>C3</item>
+			<item>D3</item>
+			<item>E3</item>
+			<item>F3</item>
+			<item>G3</item>
+			<item>A3</item>
+			<item>B3</item>
+			<item>C4</item>
+			<item>D4</item>
+			<item>E4</item>
+			<item>F4</item>
+			<item>G4</item>
+			<item>A4</item>
+			<item>B4</item>
+			<item>C5</item>
+			<item>D5</item>
+			<item>E5</item>
+			<item>F5</item>
+			<item>G5</item>
+			<item>A5</item>
+			<item>B5</item>
+			<item>C6</item>
+			<item>D6</item>
+			<item>E6</item>
+			<item>F6</item>
+			<item>G6</item>
+			<item>A6</item>
+			<item>B6</item>
+			<item>C7</item>
+			<item>D7</item>
+			<item>E7</item>
+			<item>F7</item>
+			<item>G7</item>
+			<item>A7</item>
+			<item>B7</item>
+			<item>C8</item>
+			<item>D8</item>
+			<item>E8</item>
+			<item>F8</item>
+			<item>G8</item>
+			<item>A8</item>
+			<item>B8</item>
+			<item>C9</item>
+			<item>D9</item>
+			<item>E9</item>
+			<item>F9</item>
+			<item>G9</item>
+		</scale_>
+		<pulse_>8.0</pulse_>
+		<melody_probabilities_ class_id="2" tracking_level="0" version="0">
+			<down_>0.25</down_>
+			<same_>0.5</same_>
+			<up_>0.75</up_>
+		</melody_probabilities_>
+		<pitch_form_ class_id="3" tracking_level="0" version="0">
+			<mean_sine_ class_id="4" tracking_level="0" version="0">
+				<period_>180.0</period_>
+				<phase_>0.0</phase_>
+				<amplitude_>0.5</amplitude_>
+				<offset_>0.5</offset_>
+			</mean_sine_>
+			<range_sine_>
+				<period_>180.0</period_>
+				<phase_>0.0</phase_>
+				<amplitude_>0.5</amplitude_>
+				<offset_>0.5</offset_>
+			</range_sine_>
+		</pitch_form_>
+		<rhythm_form_>
+			<mean_sine_>
+				<period_>180.0</period_>
+				<phase_>0.0</phase_>
+				<amplitude_>0.5</amplitude_>
+				<offset_>0.5</offset_>
+			</mean_sine_>
+			<range_sine_>
+				<period_>180.0</period_>
+				<phase_>0.0</phase_>
+				<amplitude_>0.5</amplitude_>
+				<offset_>0.5</offset_>
+			</range_sine_>
+		</rhythm_form_>
+		<dynamic_form_>
+			<mean_sine_>
+				<period_>180.0</period_>
+				<phase_>0.0</phase_>
+				<amplitude_>0.5</amplitude_>
+				<offset_>0.5</offset_>
+			</mean_sine_>
+			<range_sine_>
+				<period_>180.0</period_>
+				<phase_>0.0</phase_>
+				<amplitude_>0.5</amplitude_>
+				<offset_>0.5</offset_>
+			</range_sine_>
+		</dynamic_form_>
+		<texture_form_>
+			<period_>180.0</period_>
+			<phase_>0.0</phase_>
+			<amplitude_>0.5</amplitude_>
+			<offset_>0.5</offset_>
+		</texture_form_>
+		<voices_ class_id="5" tracking_level="0" version="0">
+			<count>2</count>
+			<item_version>0</item_version>
+			<item class_id="6" tracking_level="0" version="0">
+				<low_pitch_>A0</low_pitch_>
+				<high_pitch_>C8</high_pitch_>
+				<channel_>1</channel_>
+				<walking_>0</walking_>
+				<program_>1</program_>
+				<pan_>0</pan_>
+				<follower_ class_id="7" tracking_level="0" version="2">
+					<follow_>0</follow_>
+					<leader_>2147483647</leader_>
+					<interval_type_>0</interval_type_>
+					<interval_>0</interval_>
+					<delay_ class_id="8" tracking_level="0" version="0">
+						<numerator_>0</numerator_>
+						<denominator_>0</denominator_>
+					</delay_>
+					<inversion_>0</inversion_>
+					<retrograde_>0</retrograde_>
+				</follower_>
+			</item>
+			<item>
+				<low_pitch_>A0</low_pitch_>
+				<high_pitch_>C8</high_pitch_>
+				<channel_>1</channel_>
+				<walking_>0</walking_>
+				<program_>1</program_>
+				<pan_>0</pan_>
+				<follower_>
+					<follow_>1</follow_>
+					<leader_>0</leader_>
+					<interval_type_>1</interval_type_>
+					<interval_>0</interval_>
+					<delay_>
+						<numerator_>0</numerator_>
+						<denominator_>0</denominator_>
+					</delay_>
+					<inversion_>1</inversion_>
+					<retrograde_>0</retrograde_>
+				</follower_>
+			</item>
+		</voices_>
+		<arrangement_definition_ class_id="9" tracking_level="0" version="0">
+			<algorithm_>1</algorithm_>
+			<period_>100000.0</period_>
+		</arrangement_definition_>
+	</xml_form>
+</boost_serialization>
 @end example
 
 @node The textmidi File

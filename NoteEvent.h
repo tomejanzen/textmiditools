@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -34,9 +34,9 @@ namespace textmidi
         }
         constexpr NoteEvent() = default;
         constexpr NoteEvent(const NoteEvent& ) = default;
-        NoteEvent(NoteEvent&& ) = delete;
+        NoteEvent(NoteEvent&& ) = default;
         constexpr NoteEvent& operator=(const NoteEvent& ) = default;
-        NoteEvent& operator=(NoteEvent&& ) = delete;
+        NoteEvent& operator=(NoteEvent&& ) = default;
 
         void pitch(int pitch) noexcept;
         int pitch() const noexcept;

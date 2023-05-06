@@ -238,3 +238,23 @@
       use of distance() to make a loop counter with for-inited variables.
 
     * 2023-03-21: 
+      Add script to compute MIDI 3D values.
+
+    * 2023-03-31:
+      Fix ticks command to reset running status.    
+
+    * 2023-04-07:
+      Adjust string handling in textmidi.
+
+    * 2023-04-19:
+      Integrate Arrangements for voice priority swapping.
+      Add Heap's Algorithm for 1 swap at a time.
+
+    * 2023-04-19:
+      Handle exception of leader being out of range.
+      Catch up textmidiformedit.py to reflect added fields in Form XML.
+
+    * 2023-05-04:
+      Add support for follower voice inversion and retrograde.
+
+      

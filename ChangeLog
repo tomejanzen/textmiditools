@@ -1,5 +1,52 @@
+2023-05-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, defaults.form.xml, defaults_1_voice_range_0.form.xml, 
+        defaults_2_voice_follow.form.xml, defaults_2_voice_follow_walk.form.xml,
+        defaults_2_voice_follow_walk_scalar.form.xml,
+        defaults_2_voice_follow_walk_tritone.form.xml, 
+        notes20230506.txt, textmidiformedit.py:
+        Test. Put default name into save form file and save Postscript file
+        dialogs.  Add default extensions into each.
+        Set first note of walking voice to mid-scale.
+        * textmidiformedit.py, VoiceWindow.py: repair usage of IntVar. Use get/set.
+        Repair disable/enable of follow-only widgets, and walking, which is
+        anti-follow.
+
+2023-05-05     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: Make form plot lines more readable.
+        Add boundaries for excess thresholds.
+
+2023-05-04     Thomas E. Janzen <janzentome@gmail.com>
+        * VoiceWindow.py, textmidiformedit.py: overhaul draw_form().
+        * Composer.cc, Voice.h, VoiceWindow.py, textmidiformedit.py:
+        Add support for follower voice inversion.
+
+2023-05-03     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Composer.cc, FormFrame.py, Sine.py, Voice.h, 
+        VoiceWindow.py, textmidiformedit.py: Add voice/follow/retrograde and
+        voice/follow/follow_pitch (default true). Retrograde seems to work
+        but follow_pitch disable is not implemented yet.
+
+2023-05-02     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, Sine.py: overhaul
+        Form Window to add widgets for sine offset and amplitude.
+
+2023-05-01     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiString.cc, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py:
+        Straighten out interoperability of XML form files from
+        and to textmidicgm and from and to textmidiformedit.py.
+
+2023-04-30     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, textmidiformedit.py, VoiceWindow.py:
+        Catch up python GUI with additions of follower delay and
+        arrangements in XML.
+
+2023-04-29     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, NoteEvent.h:  Activate follower delay (for canons).
+        Add exception for out of range leader_ as index.
+        Test and fix new XML format in the C++ code.
+
 2023-04-24     Thomas E. Janzen <janzentome@gmail.com>
-       	* Arrangements.{cc,h}, Composer.{cc,h}, textmidicgm.cc, textmidicgm.texi:
+               * Arrangements.{cc,h}, Composer.{cc,h}, textmidicgm.cc, textmidicgm.texi:
         rename track scrambling to arrangements.  Improve documentation of
         arrangements.  Change arrangement "None" to "Identity" and document.
         * textmidi.l: Remove the linefeed from definition of LINE.

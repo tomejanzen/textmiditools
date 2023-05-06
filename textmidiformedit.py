@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.55
+# TextMIDITools Version 1.0.56
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -19,6 +19,7 @@ from xml.dom import minidom
 from xml.dom.minidom import parse, Node, getDOMImplementation
 from VoiceWindow import VoiceWindow
 from AllFormsWindow import AllFormsWindow
+from AllFormsWindow import *
 from AllFormsWindow import ScaleFrame
 
 class XmlForm(tkinter.Tk):
@@ -32,8 +33,7 @@ class XmlForm(tkinter.Tk):
         self.voice_window = VoiceWindow(self.xml_form_dict)
         self.win_height = 600
         self.win_width = 1000
-        self.canvas = Canvas(self, bg='white', height=self.win_height, width=self.win_width, background='#88AAFF')
-        self.canvas.grid(row=0, column=0, sticky=(N,S,E,W))
+        self.canvas = Canvas(self, bg='#88AAFF', height=self.win_height, width=self.win_width, background='#88AAFF')
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
@@ -73,33 +73,44 @@ class XmlForm(tkinter.Tk):
         duration = float(self.xml_form_dict['len'])
 
         self.canvas.delete('all')
+        axis_color = '#000000'
         self.canvas.grid(row=0, column=0, sticky=NSEW)
-
-        self.canvas.grid(sticky=NSEW)
+        seconds_per_pixel = duration / float(self.win_width)
 
         poly_lr = []
         poly_rl = []
+        y_real_estate = float(self.win_height) / 16.0
+        y_zero = 3 * y_real_estate
+        y_midline = y_zero - 0.5 * y_real_estate
+        y_label = y_midline - 60
+        self.canvas.create_text(30, y_label, text='Pitch', fill=axis_color)
+        self.canvas.create_line(0, y_midline, self.win_width, y_midline, fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
+        self.canvas.create_line(0, y_midline + 0.5 * y_real_estate, self.win_width, y_midline + 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
+        self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
         for i in range(1, self.win_width, 1):
             mean_freq  = 1.0 / float(self.xml_form_dict['pitch_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['pitch_form']['range']['period'])
-            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
             # omega * t = twopi * mean_freq  * the_time
-            # the phase = self.xml_form_dict['pitch_form']['mean']['phase']
+            # The phase = self.xml_form_dict['pitch_form']['mean']['phase']
             # omega * t + phase = twopi * mean_freq  * the_time + self.xml_form_dict['pitch_form']['mean']['phase']
-            # take sin(omega*t + phase) which ranges -1.0 to 1.0
-            # make it work with the form model by making it range from 0 to 1.
-            # 0.5 + sin(omega * t + phase) / 2
-            # scale it for graphical plotting on the canvas
-            # 0.5 + sin(omega * t + phase) / 2 * self.win_height / 16
-            # but window coordinates are left-handed, so invert the mean curve
-            # -(0.5 + sin(omega * t + phase) / 2 * self.win_height / 16)
+            # Take sin(omega*t + phase) which ranges -1.0 to 1.0:
+            # Scale with gain, or "amplitude"
+            # sin(omega * t + phase) * amplitude
+            # Add in the offset
+            # sin(omega * t + phase) * amplitude + offset
+            # Scale and invert for left-handed coordinates for graphical plotting on the canvas
+            # (sin(omega * t + phase) * amplitude + offset) * (-self.win_height / 16)
             # position it on the canvas
             # 0.5 + sin(omega * t + phase) / 2 * self.win_height / 16 + 1 * self.win_height / 16
             # oi la!
-            y_mean  = (.5 - math.sin(self.twopi * mean_freq  * the_time + float(self.xml_form_dict['pitch_form']['mean']['phase']))  / 2.0) * (float(self.win_height) / 12.0) + (1.0 * float(self.win_height) / 16.0)
-            y_range = (.5 + math.sin(self.twopi * range_freq * the_time + float(self.xml_form_dict['pitch_form']['range']['phase'])) / 2.0) * (float(self.win_height) / 12.0)
+            twopi_t = self.twopi * the_time;
 
+            y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['pitch_form']['mean']['phase'])) * float(self.xml_form_dict['pitch_form']['mean']['amplitude']) + float(self.xml_form_dict['pitch_form']['mean']['offset'])) * (-y_real_estate) + y_zero
+            y_range = (math.sin(twopi_t * range_freq + float(self.xml_form_dict['pitch_form']['range']['phase'])) * float(self.xml_form_dict['pitch_form']['range']['amplitude']) + float(self.xml_form_dict['pitch_form']['range']['offset'])) * y_real_estate
+
+            if (y_range < 1.0):
+                y_range = 1.0
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
@@ -107,102 +118,96 @@ class XmlForm(tkinter.Tk):
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
         fill_color = '#004400'
-        pitch_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
-        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (1.0 * float(self.win_height) / 16.0)
-        axis_color = '#000000'
-        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
+        pitch_plot_id = self.canvas.create_polygon(polygon, fill=fill_color, width=1, activewidth=1, disabledwidth=1, dash='_')
 
+        y_zero = 6.5 * y_real_estate
+        y_midline = y_zero - 0.5 * y_real_estate
+        y_label = y_midline - 60
+        self.canvas.create_text(30, y_label, text='Rhythm', fill=axis_color)
+        self.canvas.create_line(0, y_midline, self.win_width, y_midline, fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
+        self.canvas.create_line(0, y_midline + 0.5 * y_real_estate, self.win_width, y_midline + 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
+        self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
         poly_lr = []
         poly_rl = []
-        polygon = []
         for i in range(1, self.win_width):
-            mean_freq = 1.0 / float(self.xml_form_dict['rhythm_form']['mean']['period'])
+            mean_freq  = 1.0 / float(self.xml_form_dict['rhythm_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['rhythm_form']['range']['period'])
-            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
-            y_mean  = (.5
-                       - math.sin(self.twopi * mean_freq  * the_time
-                                  + float(self.xml_form_dict['rhythm_form']['mean']['phase']))
-                       / 2.0) * float(self.win_height) / 12.0 + 5.0 * float(self.win_height / 16.0)
-            y_range = (.5
-                      + math.sin(self.twopi * range_freq * the_time
-                                 + float(self.xml_form_dict['rhythm_form']['range']['phase']))
-                      / 2.0) * float(self.win_height) / 12.0
+            twopi_t = self.twopi * the_time;
+            y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['rhythm_form']['mean']['phase'])) * float(self.xml_form_dict['rhythm_form']['mean']['amplitude']) + float(self.xml_form_dict['rhythm_form']['mean']['offset'])) * (-y_real_estate) + y_zero
+            y_range = (math.sin(twopi_t * range_freq + float(self.xml_form_dict['rhythm_form']['range']['phase'])) * float(self.xml_form_dict['rhythm_form']['range']['amplitude']) + float(self.xml_form_dict['rhythm_form']['range']['offset'])) * y_real_estate
+            if (y_range < 1.0):
+                y_range = 1.0
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        rhythm_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
-        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (5.0 * float(self.win_height) / 16.0)
-        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
+        rhythm_plot_id = self.canvas.create_polygon(polygon, fill=fill_color, width=2, activewidth=2, disabledwidth=2, dash='_')
 
+        y_zero = 10 * y_real_estate
+        y_midline = y_zero - 0.5 * y_real_estate
+        y_label = y_midline - 60
+        self.canvas.create_text(30, y_label, text='Dynamic', fill=axis_color)
+        self.canvas.create_line(0, y_midline, self.win_width, y_midline, fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
+        self.canvas.create_line(0, y_midline + 0.5 * y_real_estate, self.win_width, y_midline + 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
+        self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
         poly_lr = []
         poly_rl = []
-        polygon = []
         for i in range(1, self.win_width):
             mean_freq = 1.0 / float(self.xml_form_dict['dynamic_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['dynamic_form']['range']['period'])
-            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
-            y_mean  = (.5
-                       - math.sin(self.twopi * mean_freq  * the_time
-                                  + float(self.xml_form_dict['dynamic_form']['mean']['phase']))
-                       / 2.0) * float(self.win_height) / 12.0 + 9.0 * float(self.win_height / 16.0)
-            y_range = (.5
-                      + math.sin(self.twopi * range_freq * the_time
-                                 + float(self.xml_form_dict['dynamic_form']['range']['phase']))
-                      / 2.0) * float(self.win_height) / 12.0
+            twopi_t = self.twopi * the_time;
+            y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['dynamic_form']['mean']['phase'])) * float(self.xml_form_dict['dynamic_form']['mean']['amplitude']) + float(self.xml_form_dict['dynamic_form']['mean']['offset'])) * (-y_real_estate) + y_zero
+            y_range = (math.sin(twopi_t * range_freq + float(self.xml_form_dict['dynamic_form']['range']['phase'])) * float(self.xml_form_dict['dynamic_form']['range']['amplitude']) + float(self.xml_form_dict['dynamic_form']['range']['offset'])) * y_real_estate
+            if (y_range < 1.0):
+                y_range = 1.0
+
             poly_lr.append(i)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        dynamic_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
-        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (9.0 * float(self.win_height) / 16.0)
-        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
+        dynamic_plot_id = self.canvas.create_polygon(polygon, fill=fill_color, width=2, activewidth=2, disabledwidth=2, dash='_')
 
-        poly_lr = []
-        poly_rl = []
-        polygon = []
         # Texture (number of voices playing) was misdefined as the mean alone,
         # but really it is the range.  So there is a reversal of roles here.
+        y_zero = 13.5 * y_real_estate
+        y_midline = y_zero - 0.5 * y_real_estate
+        y_label = y_midline - 60
+        self.canvas.create_text(30, y_label, text='Texture', fill=axis_color)
+        self.canvas.create_line(0, y_midline, self.win_width, y_midline, fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
+        self.canvas.create_line(0, y_midline + 0.5 * y_real_estate, self.win_width, y_midline + 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
+        self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
+        poly_lr = []
+        poly_rl = []
         for i in range(1, self.win_width):
             mean_freq = 1.0 / float(self.xml_form_dict['texture_form']['period'])
-            seconds_per_pixel = duration / float(self.win_width)
             the_time = float(i) * seconds_per_pixel
-            y_mean  = (.5
-                      + math.sin(self.twopi * mean_freq  * the_time
-                                 + float(self.xml_form_dict['texture_form']['phase']))
-                      / 2.0) * float(self.win_height / 12.0)
-            y_range = float(self.win_height) / 12.0 + (13.0 * float(self.win_height) / 16.0)
+            twopi_t = self.twopi * the_time;
+            y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['texture_form']['phase'])) * float(self.xml_form_dict['texture_form']['amplitude']) + float(self.xml_form_dict['texture_form']['offset'])) * (-y_real_estate)
+            y_range = y_midline
             poly_lr.append(i)
             poly_lr.append(y_range - y_mean / 2)
             poly_rl.append(y_range + y_mean / 2)
             poly_rl.append(i)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
-        texture_plot_id = self.canvas.create_polygon(polygon, fill=fill_color)
-        y_zero = (.5 - 0  / 2.0) * (float(self.win_height) / 12.0) + (float(self.win_height) / 16.0)
-        self.canvas.create_line(0, y_zero, self.win_width, y_zero, fill=axis_color, dash='.')
+        texture_plot_id = self.canvas.create_polygon(polygon, fill=fill_color, width=2, activewidth=2, disabledwidth=2, dash='_')
 
+        if (y_range < 1.0):
+            y_range = 1.0
         # Draw minute markers
-        scale_height = self.win_height * 55 / 100
-        #self.canvas.create_line(0, scale_height, self.win_width, scale_height)
         for s in range(0, int(duration), 60):
             tickx = s / seconds_per_pixel
-            self.canvas.create_line(tickx, 0, tickx, self.win_height, fill=axis_color, dash='.')
+            self.canvas.create_line(tickx, 0, tickx, self.win_height, fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
+            self.canvas.create_line(0, y_midline + 0.5 * y_real_estate, self.win_width, y_midline + 0.5 * y_real_estate, fill=axis_color, dash='.', width=2, activewidth=2, disabledwidth=2)
+            self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=2, activewidth=2, disabledwidth=2)
 
-        widget = tkinter.ttk.Label(self.canvas, text='Pitch', style='BW.TLabel')
-
-        self.canvas.create_window(self.win_width, self.win_width, window=widget)
         self.canvas.create_text(self.win_width / 2, 20, text=self.xml_form_dict['name'], fill=axis_color)
-        self.canvas.create_text(30, self.win_height * 1 / 16 - 30, text='Pitch', fill=axis_color)
-        self.canvas.create_text(30, self.win_height * 5 / 16 - 30, text='Rhythm', fill=axis_color)
-        self.canvas.create_text(30, self.win_height * 9 / 16  - 30, text='Dynamic', fill=axis_color)
-        self.canvas.create_text(30, self.win_height * 13 / 16 - 30, text='Texture', fill=axis_color)
 
     def default_melody_probabilities(self):
         # These probabilities are cumulative.
@@ -226,52 +231,64 @@ class XmlForm(tkinter.Tk):
         return melody_probabilities_dict
 
     def default_form(self):
-        pd = {}
-        pmd = {}
-        pmd['period'] = 180.0
-        pmd['phase']  = 0.0
-        pmd['amplitude'] = 0.50
-        pmd['offset'] = 0.50
-        pd['mean'] = pmd
+        parameter_dict = {}
+        param_mean_dict = {}
+        param_mean_dict['period'] = 180.0
+        param_mean_dict['phase']  = 0.0
+        param_mean_dict['amplitude'] = 0.50
+        param_mean_dict['offset'] = 0.50
+        parameter_dict['mean'] = param_mean_dict
 
-        prd = {}
-        prd['period'] = 180.0
-        prd['phase'] = 0.0
-        prd['amplitude'] = 0.50
-        prd['offset'] = 0.50
-        pd['range'] = prd
-        return pd
+        param_range_dict = {}
+        param_range_dict['period'] = 180.0
+        param_range_dict['phase'] = 0.0
+        param_range_dict['amplitude'] = 0.50
+        param_range_dict['offset'] = 0.50
+        parameter_dict['range'] = param_range_dict
+        return parameter_dict
 
     def default_texture_form(self):
-        td = {}
-        td['period'] = 180.0
-        td['phase'] = 0.0
-        td['amplitude'] = 0.50
-        td['offset'] = 0.50
-        return td
+        texture_dict = {}
+        texture_dict['period'] = 180.0
+        texture_dict['phase'] = 0.0
+        texture_dict['amplitude'] = 0.50
+        texture_dict['offset'] = 0.50
+        return texture_dict
 
     def default_voices(self):
         vl = []
         for v in range(1, 24):
-            vd = {}
-            vd['low_pitch'] = 'A0'
-            vd['high_pitch'] = 'C8'
-            vd['channel'] = 1
-            vd['walking'] = 0
-            vd['program'] = 1
-            vd['pan'] = 0
-            fd = {}
-            fd['follow'] = 0
-            fd['leader'] = 2147483647
-            fd['interval_type'] = 0
-            fd['interval'] = 0
-            vd['follower'] = fd
-            vl.append(vd)
+            voice_dict = {}
+            voice_dict['low_pitch'] = 'A0'
+            voice_dict['high_pitch'] = 'C8'
+            voice_dict['channel'] = 1
+            voice_dict['walking'] = 0
+            voice_dict['program'] = 1
+            voice_dict['pan'] = 0
+            follower_dict = {}
+            follower_dict['follow'] = 0
+            follower_dict['leader'] = 2147483647
+            follower_dict['interval_type'] = 0
+            follower_dict['interval'] = 0
+            delay_dict = {}
+            delay_dict['numerator'] = '0'
+            delay_dict['denominator'] = '1'
+            follower_dict['delay'] = delay_dict
+            follower_dict['inversion'] = '0';
+            follower_dict['retrograde'] = '0';
+            voice_dict['follower'] = follower_dict
+            vl.append(voice_dict)
 
         return vl
 
+    def default_arrangement_definition(self):
+        arrangement_definition_dict = {}
+        arrangement_definition_dict['algorithm'] = 1
+        arrangement_definition_dict['period'] = 100000.0
+        return arrangement_definition_dict
+
     def default_xml_form(self):
-        self.xml_form_dict['name'] = 'Wave Sonata'
+        self.xml_form_dict['name'] = 'defaults'
         self.xml_form_dict['len'] = 600.0
         self.xml_form_dict['min_note_len'] = 0.0
         self.xml_form_dict['max_note_len'] = 2.0
@@ -283,6 +300,7 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['dynamic_form'] = self.default_form()
         self.xml_form_dict['texture_form'] = self.default_texture_form()
         self.xml_form_dict['voices'] = self.default_voices()
+        self.xml_form_dict['arrangement_definition'] = self.default_arrangement_definition()
 
     def traverse_scale(self, scale):
         scale_array = []
@@ -303,167 +321,186 @@ class XmlForm(tkinter.Tk):
         return melody_probabilities_dict
 
     def traverse_pitch_form(self, pitch_form):
-        pd = {}
-        pmd = {}
+        pitch_dict = {}
+        pitch_mean_dict = {}
         mean_sine_node = pitch_form.getElementsByTagName('mean_sine_')[0]
         mean_period_node    = mean_sine_node.getElementsByTagName('period_')[0]
         mean_period = mean_period_node.firstChild.data
-        pmd['period'] = float(mean_period)
+        pitch_mean_dict['period'] = float(mean_period)
         mean_phase_node     = mean_sine_node.getElementsByTagName('phase_')[0]
         mean_phase = mean_phase_node.firstChild.data
-        pmd['phase'] = float(mean_phase)
+        pitch_mean_dict['phase'] = float(mean_phase)
         mean_amplitude_node = mean_sine_node.getElementsByTagName('amplitude_')[0]
         mean_amplitude = mean_amplitude_node.firstChild.data
-        pmd['amplitude'] = float(mean_amplitude)
+        pitch_mean_dict['amplitude'] = float(mean_amplitude)
         mean_offset_node    = mean_sine_node.getElementsByTagName('offset_')[0]
         mean_offset = mean_offset_node.firstChild.data
-        pmd['offset'] = float(mean_offset)
-        pd['mean'] = pmd
+        pitch_mean_dict['offset'] = float(mean_offset)
+        pitch_dict['mean'] = pitch_mean_dict
 
-        prd = {}
+        pitch_range_dict = {}
         range_sine_node = pitch_form.getElementsByTagName('range_sine_')[0]
         range_period_node    = range_sine_node.getElementsByTagName('period_')[0]
         range_period = range_period_node.firstChild.data
-        prd['period'] = float(range_period)
+        pitch_range_dict['period'] = float(range_period)
         range_phase_node     = range_sine_node.getElementsByTagName('phase_')[0]
         range_phase = range_phase_node.firstChild.data
-        prd['phase'] = float(range_phase)
+        pitch_range_dict['phase'] = float(range_phase)
         range_amplitude_node = range_sine_node.getElementsByTagName('amplitude_')[0]
         range_amplitude = range_amplitude_node.firstChild.data
-        prd['amplitude'] = float(range_amplitude)
+        pitch_range_dict['amplitude'] = float(range_amplitude)
         range_offset_node    = range_sine_node.getElementsByTagName('offset_')[0]
         range_offset = range_offset_node.firstChild.data
-        prd['offset'] = float(range_offset)
-        pd['range'] = prd
-        return pd
+        pitch_range_dict['offset'] = float(range_offset)
+        pitch_dict['range'] = pitch_range_dict
+        return pitch_dict
 
     def traverse_rhythm_form(self, rhythm_form):
-        rd = {}
-        rmd = {}
+        rhythm_dict = {}
+        rhythm_mean_dict = {}
         mean_sine_node = rhythm_form.getElementsByTagName('mean_sine_')[0]
         mean_period_node    = mean_sine_node.getElementsByTagName('period_')[0]
         mean_period = mean_period_node.firstChild.data
-        rmd['period'] = float(mean_period)
+        rhythm_mean_dict['period'] = float(mean_period)
         mean_phase_node     = mean_sine_node.getElementsByTagName('phase_')[0]
         mean_phase = mean_phase_node.firstChild.data
-        rmd['phase'] = float(mean_phase)
+        rhythm_mean_dict['phase'] = float(mean_phase)
         mean_amplitude_node = mean_sine_node.getElementsByTagName('amplitude_')[0]
         mean_amplitude = mean_amplitude_node.firstChild.data
-        rmd['amplitude'] = float(mean_amplitude)
+        rhythm_mean_dict['amplitude'] = float(mean_amplitude)
         mean_offset_node    = mean_sine_node.getElementsByTagName('offset_')[0]
         mean_offset = mean_offset_node.firstChild.data
-        rmd['offset'] = float(mean_offset)
-        rd['mean'] = rmd
+        rhythm_mean_dict['offset'] = float(mean_offset)
+        rhythm_dict['mean'] = rhythm_mean_dict
 
-        rrd = {}
+        rhythm_range_dict = {}
         range_sine_node = rhythm_form.getElementsByTagName('range_sine_')[0]
         range_period_node    = range_sine_node.getElementsByTagName('period_')[0]
         range_period = range_period_node.firstChild.data
-        rrd['period'] = float(range_period)
+        rhythm_range_dict['period'] = float(range_period)
         range_phase_node     = range_sine_node.getElementsByTagName('phase_')[0]
         range_phase = range_phase_node.firstChild.data
-        rrd['phase'] = float(range_phase)
+        rhythm_range_dict['phase'] = float(range_phase)
         range_amplitude_node = range_sine_node.getElementsByTagName('amplitude_')[0]
         range_amplitude = range_amplitude_node.firstChild.data
-        rrd['amplitude'] = float(range_amplitude)
+        rhythm_range_dict['amplitude'] = float(range_amplitude)
         range_offset_node    = range_sine_node.getElementsByTagName('offset_')[0]
         range_offset = range_offset_node.firstChild.data
-        rrd['offset'] = float(range_offset)
-        rd['range'] = rrd
-        return rd
+        rhythm_range_dict['offset'] = float(range_offset)
+        rhythm_dict['range'] = rhythm_range_dict
+        return rhythm_dict
 
     def traverse_dynamic_form(self, dynamic_form):
-        dd = {}
-        dmd = {}
+        dynamic_dict = {}
+        dynamic_mean_dict = {}
         mean_sine_node = dynamic_form.getElementsByTagName('mean_sine_')[0]
         mean_period_node    = mean_sine_node.getElementsByTagName('period_')[0]
         mean_period = mean_period_node.firstChild.data
-        dmd['period'] = float(mean_period)
+        dynamic_mean_dict['period'] = float(mean_period)
         mean_phase_node     = mean_sine_node.getElementsByTagName('phase_')[0]
         mean_phase = mean_phase_node.firstChild.data
-        dmd['phase'] = float(mean_phase)
+        dynamic_mean_dict['phase'] = float(mean_phase)
         mean_amplitude_node = mean_sine_node.getElementsByTagName('amplitude_')[0]
         mean_amplitude = mean_amplitude_node.firstChild.data
-        dmd['amplitude'] = float(mean_amplitude)
+        dynamic_mean_dict['amplitude'] = float(mean_amplitude)
         mean_offset_node    = mean_sine_node.getElementsByTagName('offset_')[0]
         mean_offset = mean_offset_node.firstChild.data
-        dmd['offset'] = float(mean_offset)
-        dd['mean'] = dmd
+        dynamic_mean_dict['offset'] = float(mean_offset)
+        dynamic_dict['mean'] = dynamic_mean_dict
 
-        drd = {}
+        dynamic_range_dict = {}
         range_sine_node = dynamic_form.getElementsByTagName('range_sine_')[0]
         range_period_node    = range_sine_node.getElementsByTagName('period_')[0]
         range_period = range_period_node.firstChild.data
-        drd['period'] = float(range_period)
+        dynamic_range_dict['period'] = float(range_period)
         range_phase_node     = range_sine_node.getElementsByTagName('phase_')[0]
         range_phase = range_phase_node.firstChild.data
-        drd['phase'] = float(range_phase)
+        dynamic_range_dict['phase'] = float(range_phase)
         range_amplitude_node = range_sine_node.getElementsByTagName('amplitude_')[0]
         range_amplitude = range_amplitude_node.firstChild.data
-        drd['amplitude'] = float(range_amplitude)
+        dynamic_range_dict['amplitude'] = float(range_amplitude)
         range_offset_node    = range_sine_node.getElementsByTagName('offset_')[0]
         range_offset = range_offset_node.firstChild.data
-        drd['offset'] = float(range_offset)
-        dd['range'] = drd
-        return dd
+        dynamic_range_dict['offset'] = float(range_offset)
+        dynamic_dict['range'] = dynamic_range_dict
+        return dynamic_dict
 
     def traverse_texture_form(self, texture_form):
-        td = {}
+        texture_dict = {}
         period_node    = texture_form.getElementsByTagName('period_')[0]
         period = period_node.firstChild.data
-        td['period'] = float(period)
+        texture_dict['period'] = float(period)
         phase_node     = texture_form.getElementsByTagName('phase_')[0]
         phase = phase_node.firstChild.data
-        td['phase'] = float(phase)
+        texture_dict['phase'] = float(phase)
         amplitude_node = texture_form.getElementsByTagName('amplitude_')[0]
         amplitude = amplitude_node.firstChild.data
-        td['amplitude'] = float(amplitude)
+        texture_dict['amplitude'] = float(amplitude)
         offset_node    = texture_form.getElementsByTagName('offset_')[0]
         offset = offset_node.firstChild.data
-        td['offset'] = float(offset)
-        return td
+        texture_dict['offset'] = float(offset)
+        return texture_dict
 
     def traverse_voices(self, voices):
-        voice_list = voices.getElementsByTagName('item')
-        vl = []
-        for v in voice_list:
-            vd = {}
+        xml_voice_list = voices.getElementsByTagName('item')
+        voice_list = []
+        for v in xml_voice_list:
+            voice_dict = {}
             low_pitch_node = v.getElementsByTagName('low_pitch_')[0]
             low_pitch = low_pitch_node.firstChild.data
-            vd['low_pitch'] = low_pitch
+            voice_dict['low_pitch'] = low_pitch
             high_pitch_node = v.getElementsByTagName('high_pitch_')[0]
             high_pitch = high_pitch_node.firstChild.data
-            vd['high_pitch'] = high_pitch
+            voice_dict['high_pitch'] = high_pitch
             channel_node = v.getElementsByTagName('channel_')[0]
             channel = channel_node.firstChild.data
-            vd['channel'] = int(channel)
+            voice_dict['channel'] = int(channel)
             walking_node = v.getElementsByTagName('walking_')[0]
             walking = walking_node.firstChild.data
-            vd['walking'] = int(walking)
+            voice_dict['walking'] = int(walking)
             program_node = v.getElementsByTagName('program_')[0]
             program = program_node.firstChild.data
-            vd['program'] = int(program)
+            voice_dict['program'] = int(program)
             pan_node = v.getElementsByTagName('pan_')[0]
             pan = pan_node.firstChild.data
-            vd['pan'] = pan
-            fd = {}
+            voice_dict['pan'] = pan
+            follower_dict = {}
             follower_node = v.getElementsByTagName('follower_')[0]
             follow_node = follower_node.getElementsByTagName('follow_')[0]
             follow = follow_node.firstChild.data
-            fd['follow'] = int(follow)
+            follower_dict['follow'] = int(follow)
             leader_node = follower_node.getElementsByTagName('leader_')[0]
             leader = leader_node.firstChild.data
-            fd['leader'] = int(leader)
+            follower_dict['leader'] = int(leader)
             interval_type_node = follower_node.getElementsByTagName('interval_type_')[0]
             interval_type = interval_type_node.firstChild.data
-            fd['interval_type'] = int(interval_type)
+            follower_dict['interval_type'] = int(interval_type)
             interval_node = follower_node.getElementsByTagName('interval_')[0]
             interval = interval_node.firstChild.data
-            fd['interval'] = int(interval)
-            vd['follower'] = fd
-            vl.append(vd)
+            follower_dict['interval'] = int(interval)
+            delay_node = follower_node.getElementsByTagName('delay_')[0]
+            numerator_node = delay_node.getElementsByTagName('numerator_')[0]
+            numerator = numerator_node.firstChild.data
+            denominator_node = delay_node.getElementsByTagName('denominator_')[0]
+            denominator = denominator_node.firstChild.data
+            delay_dict = {}
+            delay_dict['numerator'] = numerator
+            delay_dict['denominator'] = denominator
+            follower_dict['delay'] = delay_dict
+            follower_dict['inversion'] = follower_node.getElementsByTagName('inversion_')[0].firstChild.data;
+            follower_dict['retrograde'] = follower_node.getElementsByTagName('retrograde_')[0].firstChild.data;
+            voice_dict['follower'] = follower_dict
+            voice_list.append(voice_dict)
 
-        return vl
+        return voice_list
+
+    def traverse_arrangement_definition(self, arrangement_definition):
+        arrangement_definition_dict = {}
+        algorithm_list = arrangement_definition.getElementsByTagName('algorithm_')
+        arrangement_definition_dict['algorithm'] = algorithm_list[0].firstChild.data
+        period_list = arrangement_definition.getElementsByTagName('period_')
+        arrangement_definition_dict['period'] = period_list[0].firstChild.data
+        return arrangement_definition_dict
 
     def traverse_xml_form(self):
         self.xml_form_dict['name'] = self.dom.getElementsByTagName('name_')[0].firstChild.data
@@ -480,9 +517,10 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['dynamic_form'] = self.traverse_dynamic_form(self.dom.getElementsByTagName('dynamic_form_')[0])
         self.xml_form_dict['texture_form'] = self.traverse_texture_form(self.dom.getElementsByTagName('texture_form_')[0])
         self.xml_form_dict['voices'] = self.traverse_voices(self.dom.getElementsByTagName('voices_')[0])
+        self.xml_form_dict['arrangement_definition'] = self.traverse_arrangement_definition(self.dom.getElementsByTagName('arrangement_definition_')[0])
 
     def postscript_callback(self):
-        afilename=tkinter.filedialog.asksaveasfilename(initialdir = '.',title = 'Save Postscript File', filetypes=(('ps files','*.ps'),('all files','*.*')))
+        afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.ps', initialfile = self.all_forms_window.xml_form['name'], initialdir = '.',title = 'Save Postscript File', filetypes=(('ps files','*.ps'),('all files','*.*')))
         self.canvas.postscript(file=afilename, colormode='gray', pageheight='8i', pagewidth='8i')
 
     def makemenu(self, toplevelwin):
@@ -505,7 +543,7 @@ class XmlForm(tkinter.Tk):
         self.all_forms_window.install_xml_form(self.xml_form_dict)
 
     def save_callback(self):
-        afilename=tkinter.filedialog.asksaveasfilename(initialdir = '.',title = 'Select XML Form File', filetypes=(('xml files','*.xml'),('all files','*.*')))
+        afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.form.xml', initialfile = self.all_forms_window.xml_form['name'], initialdir = '.', title = 'Select XML Form File', filetypes=(('xml files','*.xml'),('all files','*.*')))
         dom_impl = getDOMImplementation()
         # copy form parts of xml_form_dict from AllForms
         # copy voice parts from Voice
@@ -560,11 +598,11 @@ class XmlForm(tkinter.Tk):
         form_document = dom_impl.createDocument(None, 'boost_serialization', form_document_type)
         top = form_document.documentElement
         top.setAttribute('signature', 'serialization::archive')
-        top.setAttribute('version', '14')
+        top.setAttribute('version', '18')
         xml_form_element = form_document.createElement('xml_form')
         xml_form_element.setAttribute('class_id', '0')
         xml_form_element.setAttribute('tracking_level', '0')
-        xml_form_element.setAttribute('version', '0')
+        xml_form_element.setAttribute('version', '2')
         top.appendChild(xml_form_element)
 
         self.add_text_element(form_document, xml_form_element, 'name')
@@ -621,9 +659,18 @@ class XmlForm(tkinter.Tk):
 
         xml_form_element.appendChild(voices_element)
 
+        arrangement_definition_element = form_document.createElement('arrangement_definition_')
+        arrangement_definition_element.setAttribute('class_id', '9')
+        arrangement_definition_element.setAttribute('tracking_level', '0')
+        arrangement_definition_element.setAttribute('version', '0')
+
+        self.add_text_element(form_document, arrangement_definition_element, 'algorithm', 'algorithm_', str(self.xml_form_dict['arrangement_definition']['algorithm']))
+        self.add_text_element(form_document, arrangement_definition_element, 'period', 'period_', str(self.xml_form_dict['arrangement_definition']['period']))
+
+        xml_form_element.appendChild(arrangement_definition_element)
+
         form_document.writexml(open(afilename, 'w'), indent='', addindent='\t', newl='\n', encoding='UTF-8', standalone=True)
         form_document.unlink()
-
 
     def add_voice_element(self, doc, parent, voice_dict, write_version):
         item_element = doc.createElement('item')
@@ -642,12 +689,24 @@ class XmlForm(tkinter.Tk):
         if (write_version):
             follower_element.setAttribute('class_id', '7')
             follower_element.setAttribute('tracking_level', '0')
-            follower_element.setAttribute('version', '0')
+            follower_element.setAttribute('version', '2')
 
         self.add_text_element(doc, follower_element, 'follow', 'follow_', str(int(voice_dict['follower']['follow'])))
         self.add_text_element(doc, follower_element, 'leader', 'leader_', str(int(voice_dict['follower']['leader'])))
         self.add_text_element(doc, follower_element, 'interval_type', 'interval_type_', str(int(voice_dict['follower']['interval_type'])))
         self.add_text_element(doc, follower_element, 'interval', 'interval_', str(int(voice_dict['follower']['interval'])))
+
+        delay_element = doc.createElement('delay_')
+        if (write_version):
+            delay_element.setAttribute('class_id', '8')
+            delay_element.setAttribute('tracking_level', '0')
+            delay_element.setAttribute('version', '0')
+
+        self.add_text_element(doc, delay_element, 'numerator', 'numerator_', str(voice_dict['follower']['delay']['numerator']))
+        self.add_text_element(doc, delay_element, 'denominator', 'denominator_', str(voice_dict['follower']['delay']['denominator']))
+        follower_element.appendChild(delay_element)
+        self.add_text_element(doc, follower_element, 'inversion', 'inversion_', str(int(voice_dict['follower']['inversion'])))
+        self.add_text_element(doc, follower_element, 'retrograde', 'retrograde_', str(int(voice_dict['follower']['retrograde'])))
         item_element.appendChild(follower_element)
         parent.appendChild(item_element)
 

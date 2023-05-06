@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -18,9 +18,11 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/version.hpp>
 
 #include "cgmlegacy.h"
 #include "MIDIKeyString.h"
+#include "RhythmRational.h"
 
 namespace textmidi
 {
@@ -47,22 +49,34 @@ namespace textmidi
                : follow_{false},
                  leader_{std::numeric_limits<int>().max()},
                  interval_type_{IntervalType::Neither},
-                 interval_{}
+                 interval_{},
+                 delay_{rational::RhythmRational{0L}},
+                 inversion_{true},
+                 retrograde_{}
               {
               }
               template<class Archive>
-                  void serialize(Archive& arc, const unsigned int )
+                  void serialize(Archive& arc, const unsigned int version)
               {
                   arc & BOOST_SERIALIZATION_NVP(follow_);
                   arc & BOOST_SERIALIZATION_NVP(leader_);
                   arc & BOOST_SERIALIZATION_NVP(interval_type_);
                   arc & BOOST_SERIALIZATION_NVP(interval_);
+                  if (version > 1)
+                  {
+                      arc & BOOST_SERIALIZATION_NVP(delay_);
+                      arc & BOOST_SERIALIZATION_NVP(inversion_);
+                      arc & BOOST_SERIALIZATION_NVP(retrograde_);
+                  }
               }
               public:
                 bool follow_;
                 int leader_;
                 IntervalType interval_type_;
                 int interval_;
+                rational::RhythmRational delay_;
+                bool inversion_;
+                bool retrograde_;
             };
             // There is no serialize for string_view, so these have to be strings.
             explicit VoiceXml(
@@ -105,6 +119,7 @@ namespace textmidi
             void channel(std::uint32_t channel) noexcept;
             bool walking() const noexcept;
             void walking(bool walking) noexcept;
+
             std::string program() const noexcept;
             void program(std::string program) noexcept;
             std::int32_t pan() const noexcept;
@@ -131,10 +146,9 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(follower_);
             }
         };
-    #pragma pack()
-
-
+#pragma pack()
     }
 }
+BOOST_CLASS_VERSION(textmidi::cgm::VoiceXml::Follower, 2)
 
 #endif

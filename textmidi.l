@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.55
+** TextMIDITools Version 1.0.56
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -43,6 +43,7 @@
 #include <tuple>
 #include <stdexcept>
 #include <ranges>
+#include <concepts>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/case_conv.hpp> // to_upper
@@ -169,7 +170,9 @@ namespace
     // converts numbers into MIDI 1.1 spec extended values,
     // which can be a vector of bytes.
     // The first byte is the most-significant and has the 2^7 bit set.
-    MidiStreamVector int_to_vec(int i)
+    // Note that MIDI does not specify variable length numbers of more than 28 bits.
+    template <integral IntType>
+    MidiStreamVector int_to_vec(IntType i)
     {
         MidiStreamVector numvec{};
         if (i)
@@ -195,7 +198,7 @@ namespace
             {
                 unsigned char temp{};
                 temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
-                if (static_cast<string::size_type>(groupof7) != (byte_qty - 1))
+                if (groupof7 != (byte_qty - 1))
                 {
                     temp |= 0x80;
                 }
@@ -325,7 +328,8 @@ namespace
           : sysex_seq_{},
             subid_{},
             device_id_{},
-            subid1_{}
+            subid1_{},
+            remaining_{}
         {
         }
         void clear()
@@ -362,7 +366,7 @@ namespace
         void build_msg()
         {
             // sysex=subid.size() + device_id.size() + subid1=1 + subid2=1 + remaining.size() + end_of_sysex=1
-            const int data_length{subid_.size() + device_id_.size() + subid1_.size() + remaining_.size() + 1};
+            const size_t data_length{subid_.size() + device_id_.size() + subid1_.size() + remaining_.size() + 1};
             const MidiStreamVector length_seq{int_to_vec(data_length)};
 
             sysex_seq_.reserve(data_length + length_seq.size());
@@ -703,12 +707,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <TEXT_META_STATE>{LINE} {
     string yystring{yytext};
-    bool was_a_leading_quote{};
-    if ('\"' == yystring[0])
-    {
-        yystring.erase(0, 1);
-        was_a_leading_quote = true;
-    }
     make_raw_string(yystring);
     MidiStreamVector len_vec = int_to_vec(yystring.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
@@ -1373,7 +1371,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <SYSEX_DEVICE_ID_STATE>{SOMESPACE}{DEVICE_ID} {
-    unsigned xb{};
+    unsigned int xb{};
     string yystr(yytext);
     const auto nonspace{yystr.find_first_not_of(" \t")};
     const string token{yystr.substr(nonspace)};
@@ -1389,7 +1387,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         // is it hexadecimal?
         xb = HexOrDec()(token);
     }
-    MidiStreamVector xbvec{xb};
+    MidiStreamVector xbvec{static_cast<uint8_t>(xb)};
     sysex_event_sequence.device_id(xbvec);
     BEGIN(SYSEX_SUBID1_STATE);
   }
@@ -1398,8 +1396,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
     string yystr(yytext);
     const auto pos{yystr.find_first_not_of(" \t")};
     const string token{yystr.substr(pos)};
-    const unsigned xb{HexOrDec()(token)};
-    MidiStreamVector xbvec{xb};
+    const int xb{HexOrDec()(token)};
+    MidiStreamVector xbvec{static_cast<uint8_t>(xb)};
     sysex_event_sequence.subid1(xbvec);
     BEGIN(SYSEX_REMAINDER_STATE);
   }
@@ -1486,7 +1484,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // This use of the map must work because we can only
     // be in here if the dynamic marking is one of the ones
     // in the map; we will not call contains().
-    const uint32_t dynamic{dynamics_map.at(dynamic_str)};
+    const auto dynamic{dynamics_map.at(dynamic_str)};
     lazy::dynamic = dynamic % 128;
   }
 

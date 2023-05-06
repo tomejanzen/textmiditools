@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // RhythmRational 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -17,6 +17,11 @@
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
+
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/version.hpp>
 
 namespace textmidi
 {
@@ -61,6 +66,12 @@ namespace textmidi
                 RhythmRational& operator/=(RhythmRational divisor);
                 RhythmRational& operator*=(RhythmRational multiplier);
                 void reduce();
+                template<class Archive>
+                    void serialize(Archive& arc, const unsigned int )
+                {
+                    arc & BOOST_SERIALIZATION_NVP(numerator_);
+                    arc & BOOST_SERIALIZATION_NVP(denominator_);
+                }
             private:
                 std::int64_t numerator_;
                 std::int64_t denominator_;

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.55
+# TextMIDITools Version 1.0.56
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -19,9 +19,25 @@ from FormFrame import FormFrame
 from Sine import Sine
 from KeyboardWindow import KeyboardWindow
 
+AlgorithmDict = { 
+   'Undefined' : 0,
+   'Identity' : 1,
+   'LexicographicForward' : 2,
+   'LexicographicBackward' : 3,
+   'RotateRight' : 4,
+   'RotateLeft' : 5,
+   'Reverse' : 6,
+   'SwapPairs' : 7,
+   'Skip' : 8,
+   'Shuffle' : 9,
+   'Heaps' : 10
+}
+
+algorithm_list = list(AlgorithmDict)
+
 class ScaleFrame(tkinter.Frame):
     scale_names = []
-    scale_steps_dict = {'Unnamed'    : [0, 2, 4, 5, 7, 9, 11],
+    scale_steps_dict = {'Unnamed'    : [0, 10, 2, 4, 5, 7, 9, 11],
                         'Diatonic'   : [0, 2, 4, 5, 7, 9, 11],
                         'Minor'      : [0, 2, 3, 5, 7, 8, 11],
                         'WholeTone'  : [0, 2, 4, 6, 8, 10],
@@ -48,7 +64,7 @@ class ScaleFrame(tkinter.Frame):
 
     def __init__(self, topwin):
         super().__init__(topwin)
-        self.grid(row=0, padx=10, pady=10)
+        self.grid(row=0, padx=1, pady=1)
         self.scale_names = list(self.scale_steps_dict)
         self.scales_dict = {}
         self.scale_untransposed = []
@@ -216,7 +232,8 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=0, weight=1)
         self.title('Musical Form')
-        self.geometry('400x850+20+50')
+        # width by height
+        self.geometry('600x1000+20+50')
 
     def create_widgets(self):
         the_row = 0
@@ -313,26 +330,46 @@ class AllFormsWindow(tkinter.Toplevel):
         self.scale_frame.rowconfigure(index=0, weight=1)
         self.scale_frame.columnconfigure(index=0, weight=1)
 
-        the_row = the_row + 2
-
         the_row = the_row + 1
-        self.pitch_form = FormFrame(parent=self, form_title='PITCH', mean_period_callback=self.pitch_mean_period_callback, mean_phase_callback=self.pitch_mean_phase_callback, range_period_callback=self.pitch_range_period_callback, range_phase_callback=self.pitch_range_phase_callback, xml_subform=self.xml_form['pitch_form'])
+        self.pitch_form = FormFrame(parent=self, form_title='PITCH', mean_period_callback=self.pitch_mean_period_callback, mean_phase_callback=self.pitch_mean_phase_callback, range_period_callback=self.pitch_range_period_callback, range_phase_callback=self.pitch_range_phase_callback, mean_amplitude_callback=self.pitch_mean_amplitude_callback, mean_offset_callback=self.pitch_mean_offset_callback, range_amplitude_callback=self.pitch_range_amplitude_callback, range_offset_callback=self.pitch_range_offset_callback, xml_subform=self.xml_form['pitch_form'])
         self.pitch_form.grid(row=the_row, column=0, sticky=NSEW)
-        the_row = the_row + 1
 
         the_row = the_row + 1
-        self.rhythm_form = FormFrame(parent=self, form_title='RHYTHM', mean_period_callback=self.rhythm_mean_period_callback, mean_phase_callback=self.rhythm_mean_phase_callback, range_period_callback=self.rhythm_range_period_callback, range_phase_callback=self.rhythm_range_phase_callback, xml_subform=self.xml_form['rhythm_form'])
+        self.rhythm_form = FormFrame(parent=self, form_title='RHYTHM', mean_period_callback=self.rhythm_mean_period_callback, mean_phase_callback=self.rhythm_mean_phase_callback, range_period_callback=self.rhythm_range_period_callback, range_phase_callback=self.rhythm_range_phase_callback, mean_amplitude_callback=self.rhythm_mean_amplitude_callback, mean_offset_callback=self.rhythm_mean_offset_callback, range_amplitude_callback=self.rhythm_range_amplitude_callback, range_offset_callback=self.rhythm_range_offset_callback, xml_subform=self.xml_form['rhythm_form'])
         self.rhythm_form.grid(row=the_row, column=0, sticky=NSEW)
-        the_row = the_row + 1
 
         the_row = the_row + 1
-        self.dynamic_form = FormFrame(parent=self, form_title='DYNAMIC', mean_period_callback=self.dynamic_mean_period_callback, mean_phase_callback=self.dynamic_mean_phase_callback, range_period_callback=self.dynamic_range_period_callback, range_phase_callback=self.dynamic_range_phase_callback, xml_subform=self.xml_form['dynamic_form'])
+        self.dynamic_form = FormFrame(parent=self, form_title='DYNAMIC', mean_period_callback=self.dynamic_mean_period_callback, mean_phase_callback=self.dynamic_mean_phase_callback, range_period_callback=self.dynamic_range_period_callback, range_phase_callback=self.dynamic_range_phase_callback, mean_amplitude_callback=self.dynamic_mean_amplitude_callback, mean_offset_callback=self.dynamic_mean_offset_callback, range_amplitude_callback=self.dynamic_range_amplitude_callback, range_offset_callback=self.dynamic_range_offset_callback, xml_subform=self.xml_form['dynamic_form'])
         self.dynamic_form.grid(row=the_row, column=0, sticky=NSEW)
-        the_row = the_row + 1
 
         the_row = the_row + 1
-        self.texture_form = Sine(parent=self, sine_title='TEXTURE', period_callback=self.texture_range_period_callback, phase_callback=self.texture_range_phase_callback, xml_sine=self.xml_form['texture_form'])
+        self.texture_form = Sine(parent=self, sine_title='Texture', period_callback=self.texture_range_period_callback, phase_callback=self.texture_range_phase_callback, amplitude_callback=self.texture_range_amplitude_callback, offset_callback=self.texture_range_offset_callback, xml_sine=self.xml_form['texture_form'])
         self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
+
+        the_row = the_row + 1
+        self.arrangement_label = tkinter.ttk.Label(self.frame, text='ARRANGEMENTS')
+        self.arrangement_label.grid(row=the_row, column=0, stick=NSEW)
+        the_row = the_row + 1
+        self.algorithm_label = tkinter.ttk.Label(self.frame, text='Algorithm')
+        self.algorithm_label.grid(row=the_row, column=0, stick=NSEW)
+        self.algorithm_spinbox = tkinter.ttk.Spinbox(self.frame, values=algorithm_list, command=self.algorithm_callback, state='readonly', wrap=True)
+        self.algorithm_spinbox.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.period_label = tkinter.ttk.Label(self.frame, text='Period')
+        self.period_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.period_entry = tkinter.ttk.Entry(self.frame)
+        self.period_entry.bind('<Key-Return>', self.period_callback)
+        self.period_entry.bind('<FocusOut>', self.period_callback)
+        self.period_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.period_entry.insert(0, self.xml_form['arrangement_definition']['period'])
+
+        self.algorithm_spinbox['increment'] = 1
+        self.algorithm_spinbox['from']      = 0
+        self.algorithm_spinbox['to'] = 10
+        self.algorithm_spinbox.bind('<ButtonRelease-1>', self.algorithm_callback)
+        self.algorithm_spinbox['state'] = 'readonly'
+        self.algorithm_spinbox.set('Identity')
+        the_row = the_row + 1
 
     def name_callback(self, event):
         self.xml_form['name'] = self.name_entry.get()
@@ -395,6 +432,43 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['pitch_form']['mean']['phase'] = value
 
+    def pitch_mean_amplitude_callback(self, event):
+        self.xml_form['pitch_form']['mean']['amplitude'] = self.pitch_form.mean.amplitude_entry.get()
+
+    def pitch_mean_offset_callback(self, action, sign, unitspage=None):
+        self.pitch_form.mean.offset_scrollbar.update()
+        firstlastlist = self.pitch_form.mean.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[0]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.pitch_form.mean.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['pitch_form']['mean']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[0]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.pitch_form.mean.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['pitch_form']['mean']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                self.pitch_form.mean.offset_scrollbar.set(setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['pitch_form']['mean']['offset'] = value
+
     def pitch_range_period_callback(self, event):
         self.xml_form['pitch_form']['range']['period'] = self.pitch_form.range.period_entry.get()
 
@@ -431,10 +505,47 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['pitch_form']['range']['phase'] = value
 
+    def pitch_range_amplitude_callback(self, event):
+        self.xml_form['pitch_form']['range']['amplitude'] = self.pitch_form.range.amplitude_entry.get()
+
+    def pitch_range_offset_callback(self, action, sign, unitspage=None):
+        self.pitch_form.range.offset_scrollbar.update()
+        firstlastlist = self.pitch_form.range.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[0]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.pitch_form.range.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['pitch_form']['range']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[0]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.pitch_form.range.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['pitch_form']['range']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                self.pitch_form.range.offset_scrollbar.set(setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['pitch_form']['range']['offset'] = value
+
     def rhythm_mean_period_callback(self, event):
         self.xml_form['rhythm_form']['mean']['period'] = self.rhythm_form.mean.period_entry.get()
 
-    def rhythm_mean_phase_callback(self, action, sign, unitspage):
+    def rhythm_mean_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.rhythm_form.mean.phase_scrollbar.get()
         if (action == 'scroll'):
             if (unitspage == 'pages'):
@@ -466,6 +577,42 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.pitch_form.range.phase_scrollbar.set(setting, setting)
                 self.xml_form['rhythm_form']['mean']['phase'] = value
+
+    def rhythm_mean_amplitude_callback(self, event):
+        self.xml_form['rhythm_form']['mean']['amplitude'] = self.rhythm_form.mean.amplitude_entry.get()
+
+    def rhythm_mean_offset_callback(self, action, sign, unitspage):
+        firstlastlist = self.rhythm_form.mean.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[0]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.rhythm_form.mean.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['rhythm_form']['mean']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[0]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.rhythm_form.mean.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['rhythm_form']['mean']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                value = (setting - 0.5) * 2.0
+                self.pitch_form.range.offset_scrollbar.set(setting, setting)
+                self.xml_form['rhythm_form']['mean']['offset'] = value
 
     def rhythm_range_period_callback(self, event):
         self.xml_form['rhythm_form']['range']['period'] = self.rhythm_form.range.period_entry.get()
@@ -503,10 +650,46 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['rhythm_form']['range']['phase'] = value
 
+    def rhythm_range_amplitude_callback(self, event):
+        self.xml_form['rhythm_form']['range']['amplitude'] = self.rhythm_form.range.amplitude_entry.get()
+
+    def rhythm_range_offset_callback(self, action, sign, unitspage):
+        firstlastlist = self.rhythm_form.range.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[0]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.rhythm_form.range.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['rhythm_form']['range']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[0]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.rhythm_form.range.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['rhythm_form']['range']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                value = (setting - 0.5) * 2.0
+                self.pitch_form.range.offset_scrollbar.set(setting, setting)
+                self.xml_form['rhythm_form']['range']['offset'] = value
+
     def dynamic_mean_period_callback(self, event):
         self.xml_form['dynamic_form']['mean']['period'] = self.dynamic_form.mean.period_entry.get()
 
-    def dynamic_mean_phase_callback(self, action, sign, unitspage):
+    def dynamic_mean_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.dynamic_form.mean.phase_scrollbar.get()
         if (action == 'scroll'):
             if (unitspage == 'pages'):
@@ -539,6 +722,42 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['mean']['phase'] = value
 
+    def dynamic_mean_amplitude_callback(self, event):
+        self.xml_form['dynamic_form']['mean']['amplitude'] = self.dynamic_form.mean.amplitude_entry.get()
+
+    def dynamic_mean_offset_callback(self, action, sign, unitspage):
+        firstlastlist = self.dynamic_form.mean.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[0]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.dynamic_form.mean.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['dynamic_form']['mean']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[0]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.dynamic_form.mean.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['dynamic_form']['mean']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                self.dynamic_form.mean.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['dynamic_form']['mean']['offset'] = value
+
     def dynamic_range_period_callback(self, event):
         self.xml_form['dynamic_form']['range']['period'] = self.dynamic_form.range.period_entry.get()
 
@@ -553,7 +772,7 @@ class AllFormsWindow(tkinter.Toplevel):
                 if ((setting >= 1.0) and (delta > 0.0)):
                     delta = 0.0
                 setting = setting + delta
-                self.dynamic_form.range.phase_scrollbar.set(firstlastlist[0] + delta, firstlastlist[0] + delta)
+                self.dynamic_form.range.phase_scrollbar.set(setting, setting)
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['range']['phase'] = value
             else:
@@ -565,15 +784,51 @@ class AllFormsWindow(tkinter.Toplevel):
                     if ((setting >= 1.0) and (delta > 0.0)):
                         delta = 0.0
                     setting = setting + delta
-                    self.dynamic_form.range.phase_scrollbar.set(firstlastlist[0] + delta, firstlastlist[0] + delta)
+                    self.dynamic_form.range.phase_scrollbar.set(setting, setting)
                     value = (setting - 0.5) * self.twopi
                     self.xml_form['dynamic_form']['range']['phase'] = value
         else:
             if (action == 'goto'):
                 setting = firstlastlist[0]
-                self.dynamic_form.range.phase_scrollbar.set(firstlastlist[0])
+                self.dynamic_form.range.phase_scrollbar.set(setting, setting)
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['range']['phase'] = value
+
+    def dynamic_range_amplitude_callback(self, event):
+        self.xml_form['dynamic_form']['range']['amplitude'] = self.dynamic_form.range.amplitude_entry.get()
+
+    def dynamic_range_offset_callback(self, action, sign, unitspage):
+        firstlastlist = self.dynamic_form.range.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[0]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.dynamic_form.range.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['dynamic_form']['range']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[0]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.dynamic_form.range.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['dynamic_form']['range']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                self.dynamic_form.range.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['dynamic_form']['range']['offset'] = value
 
     def texture_range_period_callback(self, event):
         self.xml_form['texture_form']['period'] = self.texture_form.period_entry.get()
@@ -610,6 +865,48 @@ class AllFormsWindow(tkinter.Toplevel):
                 self.texture_form.range.phase_scrollbar.set(firstlastlist[0])
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['texture_form']['phase'] = value
+
+    def texture_range_amplitude_callback(self, event):
+        self.xml_form['texture_form']['amplitude'] = self.texture_form.amplitude_entry.get()
+
+    def texture_range_offset_callback(self, action, sign, unitspage=None):
+        firstlastlist = self.texture_form.offset_scrollbar.get()
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) * 1.0 / 4
+                setting = firstlastlist[1]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.texture_form.offset_scrollbar.set(setting, setting)
+                value = (setting - 0.5) * 2.0
+                self.xml_form['texture_form']['offset'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) * 1.0 / 32
+                    setting = firstlastlist[1]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.texture_form.offset_scrollbar.set(setting, setting)
+                    value = (setting - 0.5) * 2.0
+                    self.xml_form['texture_form']['offset'] = value
+        else:
+            if (action == 'goto'):
+                setting = firstlastlist[0]
+                self.texture_form.range.offset_scrollbar.set(firstlastlist[0])
+                value = (setting - 0.5) * 2.0
+                self.xml_form['texture_form']['offset'] = value
+
+    def algorithm_callback(self, event=None):
+        self.xml_form['arrangement_definition']['algorithm'] = AlgorithmDict[self.algorithm_spinbox.get()]
+
+    def period_callback(self, event):
+        self.xml_form['arrangement_definition']['period'] = str(self.period_entry.get())
 
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
@@ -656,5 +953,13 @@ class AllFormsWindow(tkinter.Toplevel):
         self.texture_form.update()
         self.scale_frame.set_keyboard_from_xml(self.xml_form)
         self.scale_frame.update()
+
+        self.period_entry.insert(0, self.xml_form['arrangement_definition']['period'])
+        algorithm_num = self.xml_form['arrangement_definition']['algorithm']
+        for algo in AlgorithmDict:
+            if int(AlgorithmDict[algo]) == int(algorithm_num):
+                self.algorithm_spinbox.set(algo)
+        self.algorithm_spinbox.update()
+
         self.update()
 

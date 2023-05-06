@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -110,6 +110,8 @@ namespace {
         "input plain text Form files; double-quote wildcards"};
     const string XML_FormOpt{"xmlform"};
     constexpr char XML_FormTxt[]{"alternate input XML Form file"};
+    const string XML_UpdateOpt{"update"};
+    constexpr char XML_UpdateTxt[]{"new file name for updated XML form file"};
     const string GnuplotOpt{"gnuplot"};
     constexpr char GnuplotTxt[]{"gnuplot data output file"};
     const string RandomOpt{"random"};
@@ -137,6 +139,7 @@ int main(int argc, char *argv[])
         ((VersionOpt             + ",V").c_str(),                                                             VersionTxt)
         ((FormOpt                + ",f").c_str(), program_options::value<string>(),                              FormTxt)
         ((XML_FormOpt            + ",x").c_str(), program_options::value<string>(),                          XML_FormTxt)
+        ((XML_UpdateOpt          + ",x").c_str(),                                                          XML_UpdateTxt)
         ((AnswerOpt              + ",a").c_str(),                                                              AnswerTxt)
         ((TextmidiOpt            + ",o").c_str(), program_options::value<string>(),                          TextmidiTxt)
         ((GnuplotOpt             + ",g").c_str(),                                                             GnuplotTxt)
@@ -170,7 +173,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.55\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.56\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -320,6 +323,15 @@ int main(int argc, char *argv[])
                             cerr << errstr;
                         }
                         xml_forms.push_back(temp_form);
+                        if (var_map.count(XML_UpdateOpt) && temp_form.valid())
+                        {
+                            auto update_name{string{"update_"} + form_filename};
+                            ofstream xml_form_stream{update_name.c_str()};
+                            {
+                                archive::xml_oarchive oarc(xml_form_stream);
+                                oarc << BOOST_SERIALIZATION_NVP(temp_form);
+                            }
+                        }
                     }
                     catch (MusicalFormException& mfe)
                     {
@@ -363,15 +375,15 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
-    PermutationEnum track_scramble_type{PermutationEnum::Identity};
+    PermutationEnum track_scramble_type{PermutationEnum::Undefined};
     TicksDuration track_scramble_period{60000 * TicksPerQuarter};
 
     if (var_map.count(ArrangementsOpt)) [[unlikely]]
     {
         const string scramble_string{var_map[ArrangementsOpt].as<string>()};
-        if (track_scramble_map.contains(scramble_string))
+        if (arrangement_map.contains(scramble_string))
         {
-            track_scramble_type = track_scramble_map.at(scramble_string);
+            track_scramble_type = arrangement_map.at(scramble_string);
         }
         else
         {

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.55
+// TextMIDITools Version 1.0.56
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -63,7 +63,7 @@ namespace textmidi
             rational::RhythmRational duration_to_rhythm(double duration) const;
             rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse_per_second) const;
             void build_track_scramble_sequences(std::vector<std::vector<int>>& track_scramble_sequences,
-                int track_qty, TicksDuration total_duration);
+                TicksDuration total_duration);
             void build_composition_priority_graph(const MusicalForm& xml_form,
                 std::vector<std::list<int>>& leaders_topo_sort);
             bool gnuplot_;
@@ -73,7 +73,7 @@ namespace textmidi
             std::mt19937 generator_;
         };
 
-        extern const midi::NumStringMap<arrangements::PermutationEnum> track_scramble_map;
+        extern const midi::NumStringMap<arrangements::PermutationEnum> arrangement_map;
     }
 }
 

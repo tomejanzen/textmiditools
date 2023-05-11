@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.56
+# TextMIDITools Version 1.0.57
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -19,7 +19,7 @@ from FormFrame import FormFrame
 from Sine import Sine
 from KeyboardWindow import KeyboardWindow
 
-AlgorithmDict = { 
+AlgorithmDict = {
    'Undefined' : 0,
    'Identity' : 1,
    'LexicographicForward' : 2,
@@ -33,12 +33,10 @@ AlgorithmDict = {
    'Heaps' : 10
 }
 
-algorithm_list = list(AlgorithmDict)
+arrangement_algorithm_list = list(AlgorithmDict)
 
 class ScaleFrame(tkinter.Frame):
-    scale_names = []
-    scale_steps_dict = {'Unnamed'    : [0, 10, 2, 4, 5, 7, 9, 11],
-                        'Diatonic'   : [0, 2, 4, 5, 7, 9, 11],
+    scale_steps_dict = {'Diatonic'   : [0, 2, 4, 5, 7, 9, 11],
                         'Minor'      : [0, 2, 3, 5, 7, 8, 11],
                         'WholeTone'  : [0, 2, 4, 6, 8, 10],
                         'Diminished' : [0, 2, 3, 5, 6, 8, 9, 11],
@@ -79,7 +77,9 @@ class ScaleFrame(tkinter.Frame):
         for k in self.scales_dict['Chromatic'] :
             self.scale_untransposed.append(k)
             self.scale_transposed.append(k)
-        self.transpose_num = 0
+
+        self.scale_name = StringVar()
+        self.transpose = IntVar()  # Spinbox
         self.create_widgets()
 
     def set_keyboard(self):
@@ -127,40 +127,38 @@ class ScaleFrame(tkinter.Frame):
         self.transpose_scale()
 
     def create_widgets(self):
-        the_row = 0
-
         self.keyboard_window = KeyboardWindow()
         self.keyboard_window.geometry('1500x162+50-50')
         self.set_keyboard()
 
-        self.rowconfigure(index=the_row, weight=1)
-        self.columnconfigure(index=0, weight=1)
-        self.columnconfigure(index=1, weight=1)
         self.scale_name_label = tkinter.ttk.Label(self, text='Scale')
-        self.scale_name_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.scale_name_spinbox = tkinter.ttk.Spinbox(self, wrap=True)
-        self.scale_name_spinbox['values'] = self.scale_names
-        self.scale_name_spinbox.grid(row=the_row, column=1, sticky=NSEW)
-        self.scale_name_spinbox.bind('<ButtonRelease-1>', self.scale_name_callback)
-        self.scale_name_spinbox.set('Unnamed')
-        self.scale_name_spinbox['state'] = 'readonly'
-        the_row = the_row + 1
+        self.scale_name_spinbox = tkinter.ttk.Spinbox(self, wrap=True, textvariable=self.scale_name, values=self.scale_names, state='readonly')
+        self.scale_name.set('Chromatic')
 
-        self.rowconfigure(index=the_row, weight=1)
         self.transpose_label = tkinter.ttk.Label(self, text='Transpose')
-        self.transpose_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.transpose_spinbox = tkinter.ttk.Spinbox(self, wrap=True)
+        self.transpose_spinbox = tkinter.ttk.Spinbox(self, wrap=True, textvariable=self.transpose)
         self.transpose_spinbox['increment'] = 1
         self.transpose_spinbox['from']      = -5
         self.transpose_spinbox['to']        = 6
-        self.transpose_spinbox.grid(row=the_row, column=1, sticky=NSEW)
-        self.transpose_spinbox.bind('<ButtonRelease-1>', self.transpose_callback)
-        self.transpose_spinbox.set(0)
         self.transpose_spinbox['state'] = 'readonly'
         self.from_keyboard_button = tkinter.ttk.Button(self, text='From Keyboard',
             command=self.from_keyboard_callback)
-        self.from_keyboard_button.grid(row=the_row, column=2, stick=NSEW)
+
+        the_row = 0
+        self.columnconfigure(index=the_row, weight=1)
+        self.rowconfigure(index=the_row, weight=1)
+        self.scale_name_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.scale_name_spinbox.grid(row=the_row, column=1, sticky=NSEW)
         the_row = the_row + 1
+        self.columnconfigure(index=the_row, weight=1)
+        self.rowconfigure(index=the_row, weight=1)
+        self.transpose_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.transpose_spinbox.grid(row=the_row, column=1, sticky=NSEW)
+        self.from_keyboard_button.grid(row=the_row, column=2, stick=NSEW)
+
+        self.scale_name.trace('w', self.scale_name_callback)
+        self.transpose.trace('w', self.transpose_callback)
+        self.transpose.set(0)
 
     def from_keyboard_callback(self):
         key_ints = self.keyboard_window.keyboard_frame.get_key_ints()
@@ -176,15 +174,19 @@ class ScaleFrame(tkinter.Frame):
         self.transpose_spinbox.set(0)
         self.transpose_spinbox['state'] = 'readonly'
 
-    def transpose_callback(self, event):
-        self.transpose_num = int(self.transpose_spinbox.get())
+    def transpose_callback(self, event, *args):
         self.transpose_scale()
         self.set_keyboard()
 
-    def scale_name_callback(self, event):
-        self.scale_name_spinbox.update()
-        scale_name = self.scale_name_spinbox.get()
+    def scale_name_callback(self, event, *args):
+        scale_name = self.scale_name.get()
         self.scale_untransposed = []
+        scale_ctr = 0
+        final_scale_num = 0
+        for s in self.scale_names:
+            if (s == scale_name):
+                final_scale_num = scale_ctr
+            scale_ctr = scale_ctr + 1 
         for keynum in self.scales_dict[scale_name]:
             self.scale_untransposed.append(keynum)
         self.transpose_scale()
@@ -193,7 +195,7 @@ class ScaleFrame(tkinter.Frame):
     def transpose_scale(self):
         self.scale_transposed = []
         for keynum in self.scale_untransposed:
-            key_index = keynum + self.transpose_num
+            key_index = keynum + int(self.transpose.get())
             self.scale_transposed.append(key_index)
 
         for k in range(0, len(self.scale_transposed)):
@@ -227,6 +229,20 @@ class AllFormsWindow(tkinter.Toplevel):
         super().__init__()
         self.frame = ttk.Frame(self, padding='1 1 1 1')
         self.xml_form = xml_form
+
+        self.name = StringVar()
+
+        self.len  = StringVar()
+        self.min_note_len = StringVar()
+        self.max_note_len = StringVar()
+        self.pulse = StringVar()
+        self.down = StringVar()
+        self.same = StringVar()
+        self.up = StringVar()
+
+        self.arrangement_algorithm = StringVar()
+        self.arrangement_period = StringVar()
+
         self.create_widgets()
         self.frame.grid(sticky='nw', row=0, column=0)
         self.frame.rowconfigure(index=0, weight=1)
@@ -236,167 +252,163 @@ class AllFormsWindow(tkinter.Toplevel):
         self.geometry('600x1000+20+50')
 
     def create_widgets(self):
-        the_row = 0
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.name_label = tkinter.ttk.Label(self.frame, text='Name')
-        self.name_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.name_entry = tkinter.ttk.Entry(self.frame)
-        self.name_entry.insert(0, self.xml_form['name'])
-        self.name_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.name_entry.bind('<Key-Return>', self.name_callback)
-        self.name_entry.bind('<FocusOut>', self.name_callback)
-        the_row = the_row + 1
+        self.name = StringVar()
+        self.name_entry = tkinter.ttk.Entry(self.frame, textvariable=self.name)
+        self.name.set(self.xml_form['name'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
         self.len_label = tkinter.ttk.Label(self.frame, text='Len')
-        self.len_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.len_entry = tkinter.ttk.Entry(self.frame)
-        self.len_entry.insert(0, self.xml_form['len'])
-        self.len_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.len_entry.bind('<Key-Return>', self.len_callback)
-        self.len_entry.bind('<FocusOut>', self.len_callback)
-        the_row = the_row + 1
+        self.len_entry = tkinter.ttk.Entry(self.frame, textvariable=self.len)
+        self.len.set(self.xml_form['len'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.min_note_len_label = tkinter.ttk.Label(self.frame, text='Min Note Len')
-        self.min_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.min_note_len_entry = tkinter.ttk.Entry(self.frame)
-        self.min_note_len_entry.insert(0, self.xml_form['min_note_len'])
-        self.min_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.min_note_len_entry.bind('<Key-Return>', self.min_note_len_callback)
-        self.min_note_len_entry.bind('<FocusOut>', self.min_note_len_callback)
-        the_row = the_row + 1
+        self.min_note_len_entry = tkinter.ttk.Entry(self.frame, textvariable=self.min_note_len)
+        self.min_note_len.set(self.xml_form['min_note_len'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.max_note_len_label = tkinter.ttk.Label(self.frame, text='Max Note Len')
-        self.max_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.max_note_len_entry = tkinter.ttk.Entry(self.frame)
-        self.max_note_len_entry.insert(0, self.xml_form['max_note_len'])
-        self.max_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.max_note_len_entry.bind('<Key-Return>', self.max_note_len_callback)
-        self.max_note_len_entry.bind('<FocusOut>', self.max_note_len_callback)
-        the_row = the_row + 1
+        self.max_note_len_entry = tkinter.ttk.Entry(self.frame, textvariable=self.max_note_len)
+        self.max_note_len.set(self.xml_form['max_note_len'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.pulse_label = tkinter.ttk.Label(self.frame, text='Pulse/Sec')
-        self.pulse_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.pulse_entry = tkinter.ttk.Entry(self.frame)
-        self.pulse_entry.insert(0, self.xml_form['pulse'])
-        self.pulse_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.pulse_entry.bind('<Key-Return>', self.pulse_callback)
-        self.pulse_entry.bind('<FocusOut>', self.pulse_callback)
-        the_row = the_row + 1
+        self.pulse_entry = tkinter.ttk.Entry(self.frame, textvariable=self.pulse)
+        self.pulse.set(self.xml_form['pulse'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
-        self.melody_probabilities_label = tkinter.ttk.Label(self.frame, text='Melody Probabilities')
-        self.melody_probabilities_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.melody_probabilities_entry = tkinter.ttk.Entry(self.frame)
+        self.melody_probabilities_label = tkinter.ttk.Label(self.frame, text='MELODY PROBABILITIES')
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.down_label = tkinter.ttk.Label(self.frame, text='Down')
-        self.down_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.down_entry = tkinter.ttk.Entry(self.frame)
-        self.down_entry.insert(0, self.xml_form['melody_probabilities']['down'])
-        self.down_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.down_entry.bind('<Key-Return>', self.melody_down_callback)
-        self.down_entry.bind('<FocusOut>', self.melody_down_callback)
-        the_row = the_row + 1
+        self.down_entry = tkinter.ttk.Entry(self.frame, textvariable=self.down)
+        self.down.set(self.xml_form['melody_probabilities']['down'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.same_label = tkinter.ttk.Label(self.frame, text='Same')
-        self.same_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.same_entry = tkinter.ttk.Entry(self.frame)
-        self.same_entry.insert(0, self.xml_form['melody_probabilities']['same'])
-        self.same_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.same_entry.bind('<Key-Return>', self.melody_same_callback)
-        self.same_entry.bind('<FocusOut>', self.melody_same_callback)
-        the_row = the_row + 1
+        self.same_entry = tkinter.ttk.Entry(self.frame, textvariable=self.same)
+        self.same.set(self.xml_form['melody_probabilities']['same'])
 
-        self.frame.rowconfigure(index=the_row, weight=1)
         self.up_label = tkinter.ttk.Label(self.frame, text='Up')
-        self.up_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.up_entry = tkinter.ttk.Entry(self.frame)
-        self.up_entry.insert(0, self.xml_form['melody_probabilities']['up'])
-        self.up_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.up_entry.bind('<Key-Return>', self.melody_up_callback)
-        self.up_entry.bind('<FocusOut>', self.melody_up_callback)
-        the_row = the_row + 1
+        self.up_entry = tkinter.ttk.Entry(self.frame, textvariable=self.up)
+        self.up.set(self.xml_form['melody_probabilities']['up'])
 
         self.scale_frame = ScaleFrame(self)
-        self.scale_frame.grid(sticky='w', row=the_row, column=0)
         self.scale_frame.rowconfigure(index=0, weight=1)
         self.scale_frame.columnconfigure(index=0, weight=1)
 
-        the_row = the_row + 1
         self.pitch_form = FormFrame(parent=self, form_title='PITCH', mean_period_callback=self.pitch_mean_period_callback, mean_phase_callback=self.pitch_mean_phase_callback, range_period_callback=self.pitch_range_period_callback, range_phase_callback=self.pitch_range_phase_callback, mean_amplitude_callback=self.pitch_mean_amplitude_callback, mean_offset_callback=self.pitch_mean_offset_callback, range_amplitude_callback=self.pitch_range_amplitude_callback, range_offset_callback=self.pitch_range_offset_callback, xml_subform=self.xml_form['pitch_form'])
-        self.pitch_form.grid(row=the_row, column=0, sticky=NSEW)
 
-        the_row = the_row + 1
         self.rhythm_form = FormFrame(parent=self, form_title='RHYTHM', mean_period_callback=self.rhythm_mean_period_callback, mean_phase_callback=self.rhythm_mean_phase_callback, range_period_callback=self.rhythm_range_period_callback, range_phase_callback=self.rhythm_range_phase_callback, mean_amplitude_callback=self.rhythm_mean_amplitude_callback, mean_offset_callback=self.rhythm_mean_offset_callback, range_amplitude_callback=self.rhythm_range_amplitude_callback, range_offset_callback=self.rhythm_range_offset_callback, xml_subform=self.xml_form['rhythm_form'])
-        self.rhythm_form.grid(row=the_row, column=0, sticky=NSEW)
 
-        the_row = the_row + 1
         self.dynamic_form = FormFrame(parent=self, form_title='DYNAMIC', mean_period_callback=self.dynamic_mean_period_callback, mean_phase_callback=self.dynamic_mean_phase_callback, range_period_callback=self.dynamic_range_period_callback, range_phase_callback=self.dynamic_range_phase_callback, mean_amplitude_callback=self.dynamic_mean_amplitude_callback, mean_offset_callback=self.dynamic_mean_offset_callback, range_amplitude_callback=self.dynamic_range_amplitude_callback, range_offset_callback=self.dynamic_range_offset_callback, xml_subform=self.xml_form['dynamic_form'])
-        self.dynamic_form.grid(row=the_row, column=0, sticky=NSEW)
 
-        the_row = the_row + 1
         self.texture_form = Sine(parent=self, sine_title='Texture', period_callback=self.texture_range_period_callback, phase_callback=self.texture_range_phase_callback, amplitude_callback=self.texture_range_amplitude_callback, offset_callback=self.texture_range_offset_callback, xml_sine=self.xml_form['texture_form'])
-        self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
 
-        the_row = the_row + 1
         self.arrangement_label = tkinter.ttk.Label(self.frame, text='ARRANGEMENTS')
+        self.arrangement_algorithm_label = tkinter.ttk.Label(self.frame, text='Algorithm')
+        self.arrangement_algorithm_spinbox = tkinter.ttk.Spinbox(self.frame, values=arrangement_algorithm_list, state='readonly', wrap=True, textvariable=self.arrangement_algorithm)
+        self.arrangement_period_label = tkinter.ttk.Label(self.frame, text='Period')
+        self.arrangement_period_entry = tkinter.ttk.Entry(self.frame, textvariable=self.arrangement_period)
+        self.arrangement_period.set(self.xml_form['arrangement_definition']['period'])
+
+        self.arrangement_algorithm_spinbox['increment'] = 1
+        self.arrangement_algorithm_spinbox['from']      = 0
+        self.arrangement_algorithm_spinbox['to'] = 10
+        self.arrangement_algorithm_spinbox['state'] = 'readonly'
+        self.arrangement_algorithm_spinbox.set('Identity')
+
+        the_row = 0
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.name_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.name_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.len_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.len_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.min_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.min_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.max_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.max_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.pulse_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.pulse_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.melody_probabilities_label.grid(row=the_row, column=0, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.down_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.down_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.same_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.same_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
+        self.up_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.up_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.scale_frame.grid(sticky='w', row=the_row, column=0)
+        the_row = the_row + 1
+        self.pitch_form.grid(row=the_row, column=0, sticky=NSEW)
+        the_row = the_row + 1
+        self.rhythm_form.grid(row=the_row, column=0, sticky=NSEW)
+        the_row = the_row + 1
+        self.dynamic_form.grid(row=the_row, column=0, sticky=NSEW)
+        the_row = the_row + 1
+        self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
+        the_row = the_row + 1
         self.arrangement_label.grid(row=the_row, column=0, stick=NSEW)
         the_row = the_row + 1
-        self.algorithm_label = tkinter.ttk.Label(self.frame, text='Algorithm')
-        self.algorithm_label.grid(row=the_row, column=0, stick=NSEW)
-        self.algorithm_spinbox = tkinter.ttk.Spinbox(self.frame, values=algorithm_list, command=self.algorithm_callback, state='readonly', wrap=True)
-        self.algorithm_spinbox.grid(row=the_row, column=1, sticky=NSEW)
+        self.arrangement_algorithm_label.grid(row=the_row, column=0, stick=NSEW)
+        self.arrangement_algorithm_spinbox.grid(row=the_row, column=1, sticky=NSEW)
         the_row = the_row + 1
-        self.period_label = tkinter.ttk.Label(self.frame, text='Period')
-        self.period_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.period_entry = tkinter.ttk.Entry(self.frame)
-        self.period_entry.bind('<Key-Return>', self.period_callback)
-        self.period_entry.bind('<FocusOut>', self.period_callback)
-        self.period_entry.grid(row=the_row, column=1, sticky=NSEW)
-        self.period_entry.insert(0, self.xml_form['arrangement_definition']['period'])
+        self.arrangement_period_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.arrangement_period_entry.grid(row=the_row, column=1, sticky=NSEW)
 
-        self.algorithm_spinbox['increment'] = 1
-        self.algorithm_spinbox['from']      = 0
-        self.algorithm_spinbox['to'] = 10
-        self.algorithm_spinbox.bind('<ButtonRelease-1>', self.algorithm_callback)
-        self.algorithm_spinbox['state'] = 'readonly'
-        self.algorithm_spinbox.set('Identity')
-        the_row = the_row + 1
+        self.name.trace('w', self.name_callback)
+        self.len.trace('w', self.len_callback)
+        self.min_note_len.trace('w', self.min_note_len_callback)
+        self.max_note_len.trace('w', self.max_note_len_callback)
+        self.pulse.trace('w', self.pulse_callback)
+        self.down.trace('w', self.melody_down_callback)
+        self.same.trace('w', self.melody_same_callback)
+        self.up.trace('w', self.melody_up_callback)
+        self.arrangement_algorithm.trace('w', self.arrangement_algorithm_callback)
+        self.pitch_form.install_callbacks()
+        self.rhythm_form.install_callbacks()
+        self.dynamic_form.install_callbacks()
+        self.texture_form.install_callbacks()
 
-    def name_callback(self, event):
-        self.xml_form['name'] = self.name_entry.get()
+    def name_callback(self, event, *args):
+        self.xml_form['name'] = self.name.get()
 
-    def len_callback(self, event):
-        self.xml_form['len'] = self.len_entry.get()
+    def len_callback(self, event, *args):
+        self.xml_form['len'] = self.len.get()
 
-    def min_note_len_callback(self, event):
-        self.xml_form['min_note_len'] = self.min_note_len_entry.get()
+    def min_note_len_callback(self, event, *args):
+        self.xml_form['min_note_len'] = self.min_note_len.get()
 
-    def max_note_len_callback(self, event):
-        self.xml_form['max_note_len'] = self.max_note_len_entry.get()
+    def max_note_len_callback(self, event, *args):
+        self.xml_form['max_note_len'] = self.max_note_len.get()
 
-    def pulse_callback(self, event):
-        self.xml_form['pulse'] = self.pulse_entry.get()
+    def pulse_callback(self, event, *args):
+        self.xml_form['pulse'] = self.pulse.get()
 
-    def melody_down_callback(self, event):
-        self.xml_form['melody_probabilities']['down'] = self.down_entry.get()
+    def melody_down_callback(self, event, *args):
+        self.xml_form['melody_probabilities']['down'] = self.down.get()
 
-    def melody_same_callback(self, event):
-        self.xml_form['melody_probabilities']['same'] = self.same_entry.get()
+    def melody_same_callback(self, event, *args):
+        self.xml_form['melody_probabilities']['same'] = self.same.get()
 
-    def melody_up_callback(self, event):
-        self.xml_form['melody_probabilities']['up'] = self.up_entry.get()
+    def melody_up_callback(self, event, *args):
+        self.xml_form['melody_probabilities']['up'] = self.up.get()
 
-    def pitch_mean_period_callback(self, event):
-        self.xml_form['pitch_form']['mean']['period'] = self.pitch_form.mean.period_entry.get()
+    def pitch_mean_period_callback(self, event, *args):
+        self.xml_form['pitch_form']['mean']['period'] = self.pitch_form.mean.period.get()
 
     def pitch_mean_phase_callback(self, action, sign, unitspage=None):
         self.pitch_form.mean.phase_scrollbar.update()
@@ -432,8 +444,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['pitch_form']['mean']['phase'] = value
 
-    def pitch_mean_amplitude_callback(self, event):
-        self.xml_form['pitch_form']['mean']['amplitude'] = self.pitch_form.mean.amplitude_entry.get()
+    def pitch_mean_amplitude_callback(self, event, *args):
+        self.xml_form['pitch_form']['mean']['amplitude'] = self.pitch_form.mean.amplitude.get()
 
     def pitch_mean_offset_callback(self, action, sign, unitspage=None):
         self.pitch_form.mean.offset_scrollbar.update()
@@ -469,8 +481,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * 2.0
                 self.xml_form['pitch_form']['mean']['offset'] = value
 
-    def pitch_range_period_callback(self, event):
-        self.xml_form['pitch_form']['range']['period'] = self.pitch_form.range.period_entry.get()
+    def pitch_range_period_callback(self, event, *args):
+        self.xml_form['pitch_form']['range']['period'] = self.pitch_form.range.period.get()
 
     def pitch_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.pitch_form.range.phase_scrollbar.get()
@@ -505,8 +517,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['pitch_form']['range']['phase'] = value
 
-    def pitch_range_amplitude_callback(self, event):
-        self.xml_form['pitch_form']['range']['amplitude'] = self.pitch_form.range.amplitude_entry.get()
+    def pitch_range_amplitude_callback(self, event, *args):
+        self.xml_form['pitch_form']['range']['amplitude'] = self.pitch_form.range.amplitude.get()
 
     def pitch_range_offset_callback(self, action, sign, unitspage=None):
         self.pitch_form.range.offset_scrollbar.update()
@@ -542,8 +554,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * 2.0
                 self.xml_form['pitch_form']['range']['offset'] = value
 
-    def rhythm_mean_period_callback(self, event):
-        self.xml_form['rhythm_form']['mean']['period'] = self.rhythm_form.mean.period_entry.get()
+    def rhythm_mean_period_callback(self, event, *args):
+        self.xml_form['rhythm_form']['mean']['period'] = self.rhythm_form.mean.period.get()
 
     def rhythm_mean_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.rhythm_form.mean.phase_scrollbar.get()
@@ -578,8 +590,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 self.pitch_form.range.phase_scrollbar.set(setting, setting)
                 self.xml_form['rhythm_form']['mean']['phase'] = value
 
-    def rhythm_mean_amplitude_callback(self, event):
-        self.xml_form['rhythm_form']['mean']['amplitude'] = self.rhythm_form.mean.amplitude_entry.get()
+    def rhythm_mean_amplitude_callback(self, event, *args):
+        self.xml_form['rhythm_form']['mean']['amplitude'] = self.rhythm_form.mean.amplitude.get()
 
     def rhythm_mean_offset_callback(self, action, sign, unitspage):
         firstlastlist = self.rhythm_form.mean.offset_scrollbar.get()
@@ -614,8 +626,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 self.pitch_form.range.offset_scrollbar.set(setting, setting)
                 self.xml_form['rhythm_form']['mean']['offset'] = value
 
-    def rhythm_range_period_callback(self, event):
-        self.xml_form['rhythm_form']['range']['period'] = self.rhythm_form.range.period_entry.get()
+    def rhythm_range_period_callback(self, event, *args):
+        self.xml_form['rhythm_form']['range']['period'] = self.rhythm_form.range.period.get()
 
     def rhythm_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.rhythm_form.range.phase_scrollbar.get()
@@ -650,8 +662,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['rhythm_form']['range']['phase'] = value
 
-    def rhythm_range_amplitude_callback(self, event):
-        self.xml_form['rhythm_form']['range']['amplitude'] = self.rhythm_form.range.amplitude_entry.get()
+    def rhythm_range_amplitude_callback(self, event, *args):
+        self.xml_form['rhythm_form']['range']['amplitude'] = self.rhythm_form.range.amplitude.get()
 
     def rhythm_range_offset_callback(self, action, sign, unitspage):
         firstlastlist = self.rhythm_form.range.offset_scrollbar.get()
@@ -686,8 +698,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 self.pitch_form.range.offset_scrollbar.set(setting, setting)
                 self.xml_form['rhythm_form']['range']['offset'] = value
 
-    def dynamic_mean_period_callback(self, event):
-        self.xml_form['dynamic_form']['mean']['period'] = self.dynamic_form.mean.period_entry.get()
+    def dynamic_mean_period_callback(self, event, *args):
+        self.xml_form['dynamic_form']['mean']['period'] = self.dynamic_form.mean.period.get()
 
     def dynamic_mean_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.dynamic_form.mean.phase_scrollbar.get()
@@ -722,8 +734,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['mean']['phase'] = value
 
-    def dynamic_mean_amplitude_callback(self, event):
-        self.xml_form['dynamic_form']['mean']['amplitude'] = self.dynamic_form.mean.amplitude_entry.get()
+    def dynamic_mean_amplitude_callback(self, event, *args):
+        self.xml_form['dynamic_form']['mean']['amplitude'] = self.dynamic_form.mean.amplitude.get()
 
     def dynamic_mean_offset_callback(self, action, sign, unitspage):
         firstlastlist = self.dynamic_form.mean.offset_scrollbar.get()
@@ -758,8 +770,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * 2.0
                 self.xml_form['dynamic_form']['mean']['offset'] = value
 
-    def dynamic_range_period_callback(self, event):
-        self.xml_form['dynamic_form']['range']['period'] = self.dynamic_form.range.period_entry.get()
+    def dynamic_range_period_callback(self, event, *args):
+        self.xml_form['dynamic_form']['range']['period'] = self.dynamic_form.range.period.get()
 
     def dynamic_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.dynamic_form.range.phase_scrollbar.get()
@@ -794,8 +806,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['dynamic_form']['range']['phase'] = value
 
-    def dynamic_range_amplitude_callback(self, event):
-        self.xml_form['dynamic_form']['range']['amplitude'] = self.dynamic_form.range.amplitude_entry.get()
+    def dynamic_range_amplitude_callback(self, event, *args):
+        self.xml_form['dynamic_form']['range']['amplitude'] = self.dynamic_form.range.amplitude.get()
 
     def dynamic_range_offset_callback(self, action, sign, unitspage):
         firstlastlist = self.dynamic_form.range.offset_scrollbar.get()
@@ -830,8 +842,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * 2.0
                 self.xml_form['dynamic_form']['range']['offset'] = value
 
-    def texture_range_period_callback(self, event):
-        self.xml_form['texture_form']['period'] = self.texture_form.period_entry.get()
+    def texture_range_period_callback(self, event, *args):
+        self.xml_form['texture_form']['period'] = self.texture_form.period.get()
 
     def texture_range_phase_callback(self, action, sign, unitspage=None):
         firstlastlist = self.texture_form.phase_scrollbar.get()
@@ -866,8 +878,8 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * self.twopi
                 self.xml_form['texture_form']['phase'] = value
 
-    def texture_range_amplitude_callback(self, event):
-        self.xml_form['texture_form']['amplitude'] = self.texture_form.amplitude_entry.get()
+    def texture_range_amplitude_callback(self, event, *args):
+        self.xml_form['texture_form']['amplitude'] = self.texture_form.amplitude.get()
 
     def texture_range_offset_callback(self, action, sign, unitspage=None):
         firstlastlist = self.texture_form.offset_scrollbar.get()
@@ -902,64 +914,32 @@ class AllFormsWindow(tkinter.Toplevel):
                 value = (setting - 0.5) * 2.0
                 self.xml_form['texture_form']['offset'] = value
 
-    def algorithm_callback(self, event=None):
-        self.xml_form['arrangement_definition']['algorithm'] = AlgorithmDict[self.algorithm_spinbox.get()]
+    def arrangement_algorithm_callback(self, event=None, *args):
+        self.xml_form['arrangement_definition']['algorithm'] = self.arrangement_algorithm.get()
 
-    def period_callback(self, event):
-        self.xml_form['arrangement_definition']['period'] = str(self.period_entry.get())
+    def arrangement_period_callback(self, event, *args):
+        self.xml_form['arrangement_definition']['period'] = str(self.period.get())
 
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
+        self.name.set(self.xml_form['name'])
+        self.len.set(self.xml_form['len'])
+        self.min_note_len.set(self.xml_form['min_note_len'])
+        self.max_note_len.set(self.xml_form['max_note_len'])
+        self.pulse.set(self.xml_form['pulse'])
 
-        self.name_entry.delete(0, 1024)
-        self.name_entry.insert(0, self.xml_form['name'])
-        self.name_entry.update()
-        
-        self.len_entry.delete(0, 1024)
-        self.len_entry.insert(0, self.xml_form['len'])
-        self.len_entry.update()
-
-        self.min_note_len_entry.delete(0, 1024)
-        self.min_note_len_entry.insert(0, self.xml_form['min_note_len'])
-        self.min_note_len_entry.update()
-
-        self.max_note_len_entry.delete(0, 1024)
-        self.max_note_len_entry.insert(0, self.xml_form['max_note_len'])
-        self.max_note_len_entry.update()
-
-        self.pulse_entry.delete(0, 1024)
-        self.pulse_entry.insert(0, self.xml_form['pulse'])
-        self.pulse_entry.update()
-
-        self.down_entry.delete(0, 1024)
-        self.down_entry.insert(0, self.xml_form['melody_probabilities']['down'])
-        self.down_entry.update()
-
-        self.same_entry.delete(0, 1024)
-        self.same_entry.insert(0, self.xml_form['melody_probabilities']['same'])
-        self.same_entry.update()
-
-        self.up_entry.delete(0, 1024)
-        self.up_entry.insert(0, self.xml_form['melody_probabilities']['up'])
-        self.up_entry.update()
+        self.down.set(self.xml_form['melody_probabilities']['down'])
+        self.same.set(self.xml_form['melody_probabilities']['same'])
+        self.up.set(self.xml_form['melody_probabilities']['up'])
 
         self.pitch_form.install_xml_subform(self.xml_form['pitch_form'])
-        self.pitch_form.update()
         self.rhythm_form.install_xml_subform(self.xml_form['rhythm_form'])
-        self.rhythm_form.update()
         self.dynamic_form.install_xml_subform(self.xml_form['dynamic_form'])
-        self.dynamic_form.update()
         self.texture_form.install_xml_sine(self.xml_form['texture_form'])
-        self.texture_form.update()
         self.scale_frame.set_keyboard_from_xml(self.xml_form)
-        self.scale_frame.update()
 
-        self.period_entry.insert(0, self.xml_form['arrangement_definition']['period'])
-        algorithm_num = self.xml_form['arrangement_definition']['algorithm']
-        for algo in AlgorithmDict:
-            if int(AlgorithmDict[algo]) == int(algorithm_num):
-                self.algorithm_spinbox.set(algo)
-        self.algorithm_spinbox.update()
+        self.arrangement_period.set(self.xml_form['arrangement_definition']['period'])
+        algorithm = self.xml_form['arrangement_definition']['algorithm']
+        self.arrangement_algorithm.set(algorithm)
 
-        self.update()
 

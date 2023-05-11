@@ -301,6 +301,155 @@ The low pitch is the low pitch for the voice.  If the Form Pitch curve goes belo
 the low pitch will be played.  This can be monotonous; textmidicgm has an option on the command that
 trims the scale to the range for all the instruments together to help with this, but this is not a 
 perfect fix.
+The @quotedblleft{}From Program@quotedblright{} push button will set the Low Pitch suitable for the
+patch.  The instrument ranges were taken from textbooks or from en.wikipedia.org.
+
+@multitable @columnfractions .4 .20 .20
+@headitem Patch @tab Low Pitch @tab High Pitch
+@item Acoustic_Grand_Piano @tab A0 @tab C8
+@item Bright_Acoustic_Piano @tab A0 @tab C8
+@item Electric_Grand_Piano @tab E1 @tab E7
+@item Honky-tonk_Piano @tab A0 @tab C8
+@item Electric_Piano_1(Fender_Rhodes) @tab A0 @tab C8
+@item Electric_Piano_2(DX-7_EP) @tab A0 @tab C8
+@item Harpsichord @tab F1 @tab F6
+@item Clavi @tab F1 @tab F6
+@item Chromatic Percussion
+@item Celesta @tab C4 @tab C8
+@item Glockenspiel @tab F5 @tab C8
+@item Music_Box @tab F6 @tab C8
+@item Vibraphone @tab F3 @tab F6
+@item Marimba @tab C2 @tab C7
+@item Xylophone @tab C3 @tab C7
+@item Tubular @tab 15 @tab C4 G5
+@item Dulcimer @tab C3 @tab C5
+@item Organ @tab @tab
+@item Drawbar_Organ @tab A0 @tab C8
+@item Percussive_Organ @tab A0 @tab C8
+@item Rock_Organ @tab A0 @tab C8
+@item Church_Organ @tab A0 @tab C8
+@item Reed_Organ @tab C2 @tab C6
+@item Accordion @tab E1 @tab D6
+@item Harmonica @tab C3 @tab G5
+@item Tango @tab 24 @tab E1 D6
+@item Guitar @tab @tab
+@item Acoustic_Guitar_(nylon) @tab E3 @tab D6
+@item Acoustic_Guitar_(steel) @tab E3 @tab D6
+@item Electric_Guitar_(jazz) @tab E3 @tab D6
+@item Electric_Guitar_(clean) @tab E3 @tab D6
+@item Electric_Guitar_(muted) @tab E3 @tab D6
+@item Overdriven_Guitar @tab E3 @tab D6
+@item Distortion_Guitar @tab E3 @tab D6
+@item Guitar_Harmonics @tab E4 @tab D7
+@item Bass @tab @tab
+@item Acoustic_Bass @tab E1 @tab E4
+@item Electric_Bass_(finger) @tab E1 @tab E4
+@item Electric_Bass_(pick) @tab E1 @tab E4
+@item Fretless_Bass @tab E1 @tab E4
+@item Slap_Bass_1 @tab E1 @tab E4
+@item Slap_Bass_2 @tab E1 @tab E4
+@item Synth_Bass_1 @tab E1 @tab E4
+@item Synth_Bass_2 @tab E1 @tab E4
+@item Strings @tab @tab
+@item Violin @tab G3 @tab C7
+@item Viola @tab C3 @tab D7
+@item Cello @tab C2 @tab A5
+@item Contrabass @tab E1 @tab G4
+@item Tremolo_Strings @tab E1 @tab C7
+@item Pizzicato_Strings @tab E1 @tab C7
+@item Orchestral_Harp @tab B0 @tab G#7
+@item Timpani @tab C2 @tab D4
+@item Ensemble @tab @tab
+@item String_Ensemble_1 @tab C0 @tab C8
+@item String_Ensemble_2 @tab C0 @tab C8
+@item Synth_Strings_1 @tab C0 @tab C8
+@item Synth_Strings_2 @tab C0 @tab C8
+@item Choir_Aahs @tab D2 @tab C6
+@item Voice_Oohs @tab D2 @tab C6
+@item Synth_Voice @tab D2 @tab C6
+@item Orchestra_Hit @tab C0 @tab C8
+@item Brass @tab @tab
+@item Trumpet @tab F#3 @tab C6
+@item Trombone @tab C2 @tab C5
+@item Tuba @tab Eb2 @tab A4
+@item Muted_Trumpet @tab F#3 @tab C6
+@item French_Horn @tab C2 @tab C6
+@item Brass_Section @tab C2 @tab C6
+@item Synth_Brass_1 @tab C2 @tab C6
+@item Synth_Brass_2 @tab C2 @tab C6
+@item Reed @tab @tab
+@item Soprano_Sax @tab Ab3 @tab Eb6
+@item Alto_Sax @tab Db3 @tab Ab5
+@item Tenor_Sax @tab Ab2 @tab Eb5
+@item Baritone_Sax @tab Db2 @tab Ab4
+@item Oboe @tab Bb3 @tab G6
+@item English_Horn @tab E3 @tab A5
+@item Bassoon @tab Bb1 @tab E5
+@item Clarinet @tab D3 @tab Bb6
+@item Pipe @tab @tab
+@item Piccolo @tab D5 @tab C8
+@item Flute @tab C4 @tab C7
+@item Recorder @tab C-1 @tab G9
+@item Pan_Flute @tab C-1 @tab G9
+@item Blown_bottle @tab C-1 @tab G9
+@item Shakuhachi @tab C-1 @tab G9
+@item Whistle @tab C-1 @tab G9
+@item Ocarina @tab C-1 @tab G9
+@item Synth Lead @tab @tab
+@item Lead_1_(square) @tab C0 @tab C8
+@item Lead_2_(sawtooth) @tab C0 @tab C8
+@item Lead_3_(calliope) @tab C0 @tab C8
+@item Lead_4_(chiff) @tab C0 @tab C8
+@item Lead_5_(charang) @tab C0 @tab C8
+@item Lead_6_(voice) @tab C0 @tab C8
+@item Lead_7_(fifths) @tab C0 @tab C8
+@item Lead_8_(bass_+_lead) @tab C0 @tab C8
+@item Synth Pad @tab @tab
+@item Pad_1_(new_age) @tab C0 @tab C8
+@item Pad_2_(warm) @tab C0 @tab C8
+@item Pad_3_(polysynth) @tab C0 @tab C8
+@item Pad_4_(choir) @tab C2 @tab G5
+@item Pad_5_(bowed) @tab C0 @tab C8
+@item Pad_6_(metallic) @tab C0 @tab C8
+@item Pad_7_(halo) @tab C0 @tab C8
+@item Pad_8_(sweep) @tab C0 @tab C8
+@item Synth Effects @tab @tab
+@item FX_1_(rain) @tab C0 @tab C8
+@item FX_2_(soundtrack) @tab C0 @tab C8
+@item FX_3_(crystal) @tab C0 @tab C8
+@item FX_4_(atmosphere) @tab C0 @tab C8
+@item FX_5_(brightness) @tab C0 @tab C8
+@item FX_6_(goblins) @tab C0 @tab C8
+@item FX_7_(echoes) @tab C0 @tab C8
+@item FX_8_(sci-fi) @tab C0 @tab C8
+@item Ethnic @tab @tab
+@item Sitar @tab C2 @tab C6
+@item Banjo @tab D3 @tab C6
+@item Shamisen @tab E3 @tab C6
+@item Koto @tab C2 @tab C6
+@item Kalimba @tab G3 @tab G6
+@item Bag @tab 110 @tab C3 C6
+@item Fiddle @tab G3 @tab C7
+@item Shanai @tab Bb3 @tab G6
+@item Percussive @tab @tab
+@item Tinkle @tab C-1 @tab G9
+@item Agogô @tab C-1 @tab G9
+@item Steel_Drums @tab C-1 @tab G9
+@item Woodblock @tab C-1 @tab G9
+@item Taiko_Drum @tab C-1 @tab G9
+@item Melodic_Tom @tab C-1 @tab G9
+@item Synth_Drum @tab C-1 @tab G9
+@item Reverse_Cymbal @tab C-1 @tab G9
+@item Sound Effects @tab @tab
+@item Guitar_Fret_Noise @tab C-1 @tab G9
+@item Breath_Noise @tab C-1 @tab G9
+@item Seashore @tab C-1 @tab G9
+@item Bird_Tweet @tab C-1 @tab G9
+@item Telephone_Ring @tab C-1 @tab G9
+@item Helicopter @tab C-1 @tab G9
+@item Applause @tab C-1 @tab G9
+@item Gunshot @tab C-1 @tab G9
+@end multitable
 
 @node High Pitch
 @section High Pitch
@@ -309,6 +458,8 @@ The high pitch is the high pitch for the voice.  If the Form Pitch curve goes ab
 the high pitch will be played.  This can be monotonous; textmidicgm has an option on the command that
 trims the scale to the range for all the instruments together to help with this, but this is not a 
 perfect fix.
+The @quotedblleft{}From Program@quotedblright{} push button will set the High Pitch suitable for the
+patch.
 
 @node Channel
 @section Channel

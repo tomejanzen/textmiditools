@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.56
+// TextMIDITools Version 1.0.57
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -51,7 +51,7 @@ namespace textmidi
                  interval_type_{IntervalType::Neither},
                  interval_{},
                  delay_{rational::RhythmRational{0L}},
-                 inversion_{true},
+                 inversion_{},
                  retrograde_{}
               {
               }

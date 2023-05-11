@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.56
+# TextMIDITools Version 1.0.57
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -17,7 +17,6 @@ class Sine(tkinter.Frame):
 
     def __init__(self, parent, sine_title, period_callback, phase_callback, amplitude_callback, offset_callback, xml_sine):
         # assignment of class data must be first
-        self.the_row = 0
         self.period_callback = period_callback
         self.phase_callback = phase_callback
         self.amplitude_callback = amplitude_callback
@@ -25,6 +24,10 @@ class Sine(tkinter.Frame):
         super().__init__(parent)
         self.sine_title = sine_title
         self.xml_sine = xml_sine
+
+        self.period    = StringVar();
+        self.amplitude = StringVar();
+
         self.grid(sticky=NSEW, padx=10)
         self.create_widgets()
 
@@ -46,65 +49,63 @@ class Sine(tkinter.Frame):
         validate_command = (self.register(self.validate_length),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.phase_scroll_label = tkinter.ttk.Label(self, text='-pi..................0..................pi')
-        self.phase_scroll_label.rowconfigure(index=self.the_row, weight=1)
-        self.phase_scroll_label.grid(row=self.the_row, column=5, sticky=NSEW)
-        self.the_row = self.the_row + 1
-
-        self.rowconfigure(index=self.the_row, weight=1)
         self.period_label = tkinter.ttk.Label(self, text='Period')
-        self.period_label.grid(row=self.the_row, column=1, sticky=NSEW)
-
-        self.period_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate='focusout')
-        self.period_entry.delete(0, 1024)
-        self.period_entry.insert(0, self.xml_sine['period'])
-        self.period_entry.update()
-        self.period_entry.grid(row=self.the_row, column=2, sticky=NSEW)
-        self.period_entry.bind('<Key-Return>', self.period_callback)
-        self.period_entry.bind('<FocusOut>', self.period_callback)
+        self.period_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate='focusout', textvariable=self.period)
 
         self.phase_label = tkinter.ttk.Label(self, text='Phase')
-        self.phase_label.grid(row=self.the_row, column=4, sticky=NSEW)
         self.phase_scrollbar = tkinter.ttk.Scrollbar(self, command=self.phase_callback)
         self.phase_scrollbar['orient'] = 'horizontal'
-        self.phase_scrollbar.grid(row=self.the_row, column=5, sticky=NSEW)
-        self.phase_scrollbar.rowconfigure(index=self.the_row, weight=1)
         phase = self.xml_sine['phase'] / (2.0 * self.pi) + 0.5
         self.phase_scrollbar.set(phase, phase)
-        self.the_row = self.the_row + 1
 
-        self.rowconfigure(index=self.the_row, weight=1)
         self.amplitude_label = tkinter.ttk.Label(self, text='Gain')
-        self.amplitude_label.grid(row=self.the_row, column=1, sticky=NSEW)
-
-        self.amplitude_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate='focusout')
-        self.amplitude_entry.delete(0, 1024)
-        self.amplitude_entry.insert(0, self.xml_sine['amplitude'])
-        self.amplitude_entry.update()
-        self.amplitude_entry.grid(row=self.the_row, column=2, sticky=NSEW)
-        self.amplitude_entry.bind('<Key-Return>', self.amplitude_callback)
-        self.amplitude_entry.bind('<FocusOut>', self.amplitude_callback)
+        self.amplitude_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate='focusout', textvariable=self.amplitude)
 
         self.offset_label = tkinter.ttk.Label(self, text='Offset')
-        self.offset_label.grid(row=self.the_row, column=4, sticky=NSEW)
         self.offset_scrollbar = tkinter.ttk.Scrollbar(self, command=self.offset_callback)
         self.offset_scrollbar['orient'] = 'horizontal'
-        self.offset_scrollbar.grid(row=self.the_row, column=5, sticky=NSEW)
-        self.offset_scrollbar.rowconfigure(index=self.the_row, weight=1)
         offset = self.xml_sine['offset'] / 2.0 + 0.5
         self.offset_scrollbar.set(offset, offset)
-        self.the_row = self.the_row + 1
         self.phase_scroll_label = tkinter.ttk.Label(self, text='-1...................0...................1')
-        self.phase_scroll_label.rowconfigure(index=self.the_row, weight=1)
-        self.phase_scroll_label.grid(row=self.the_row, column=5, sticky=NSEW)
+
+        the_row = 0
+        self.phase_scroll_label.rowconfigure(index=the_row, weight=1)
+        self.phase_scroll_label.grid(row=the_row, column=5, sticky=NSEW)
+        the_row = the_row + 1
+        self.rowconfigure(index=the_row, weight=1)
+        self.period_label.grid(row=the_row, column=1, sticky=NSEW)
+        self.period_entry.grid(row=the_row, column=2, sticky=NSEW)
+        self.phase_label.grid(row=the_row, column=4, sticky=NSEW)
+        self.phase_scrollbar.grid(row=the_row, column=5, sticky=NSEW)
+        self.phase_scrollbar.rowconfigure(index=the_row, weight=1)
+        the_row = the_row + 1
+        self.rowconfigure(index=the_row, weight=1)
+        self.amplitude_label.grid(row=the_row, column=1, sticky=NSEW)
+        self.amplitude_entry.grid(row=the_row, column=2, sticky=NSEW)
+        self.offset_label.grid(row=the_row, column=4, sticky=NSEW)
+        self.offset_scrollbar.grid(row=the_row, column=5, sticky=NSEW)
+        self.offset_scrollbar.rowconfigure(index=the_row, weight=1)
+        the_row = the_row + 1
+        self.phase_scroll_label.rowconfigure(index=the_row, weight=1)
+        self.phase_scroll_label.grid(row=the_row, column=5, sticky=NSEW)
+
+        self.period.set(self.xml_sine['period'])
+        self.amplitude.set(self.xml_sine['amplitude'])
+
+    def install_callbacks(self):
+        self.period.trace('w', self.period_callback)
+        self.amplitude.trace('w', self.amplitude_callback)
 
     def install_xml_sine(self, xml_sine):
         self.xml_sine = xml_sine
-        self.period_entry.delete(0, 1024)
-        self.period_entry.insert(0, self.xml_sine['period'])
-        self.period_entry.update()
+        self.period.set(self.xml_sine['period'])
         phase = self.xml_sine['phase'] / (2.0 * self.pi) + 0.5
         self.phase_scrollbar.set(phase, phase)
         self.phase_scrollbar.update()
+        self.amplitude.set(self.xml_sine['amplitude'])
+        offset = self.xml_sine['offset'] / 2.0 + 0.5
+        self.offset_scrollbar.set(offset, offset)
+        self.offset_scrollbar.update()
         self.update()
     def validate_length(self, d, i, P, s, S, v, V, W):
         # 1-insert, 0=del, -1 if forced

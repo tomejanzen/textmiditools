@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.56
+// TextMIDITools Version 1.0.57
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -529,7 +529,6 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     {
         v.channel(melodic_channels[ri() % melodic_channels.size()]);
         v.walking((ri() % 2) == 1);
-
         // No Followers in a random form.
         v.follower(VoiceXml::Follower{});
     }

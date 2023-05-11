@@ -257,4 +257,16 @@
     * 2023-05-04:
       Add support for follower voice inversion and retrograde.
 
-      
+    * Version 1.0.56: 
+      Add to textmidicgm and textmidiformedit:
+          Support for follower voice retrograde and inversion.
+          Support for follow delay.
+      Rewrite track scrambling as voice arrangements.  Add
+      Redefine the behaviour to be easier to explain.
+      Fix some python and Tk usage in textmidiformedit.py
+      Heap's Algorithm for one-swap-at-a-time.
+
+    * Version
+      Overhaul textmidiformedit.py and *.py to use widget variables
+      more effectively.
+

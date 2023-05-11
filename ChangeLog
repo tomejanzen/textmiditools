@@ -1,3 +1,21 @@
+2023-05-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        Fix issue with file load setting program low/high_pitch by adding buttons
+        to the Voice Window marked "From Program", meaning, if the program is
+        a clarinet, then pushing "From Program" will set a low pitch or high pitch
+        suitable for a clarinet patch.  Add "Defaults" menu item to the plot window.
+        Repair defects that were revealed by a load file test.
+
+2023-05-09     Thomas E. Janzen <janzentome@gmail.com>
+         * AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
+         Continue applying Python TCL/Tk widget variables (StringVar and IntVar),
+         and applying the callbacks to those and not the widgets.
+
+2023-05-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, VoiceWindow.py, textmidiformedit.py:
+        Modernize and correct and rewrite usage of Python TCL/Tk, esp. wrt 
+        use of widget variables correctly.
+
 2023-05-06     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, defaults.form.xml, defaults_1_voice_range_0.form.xml, 
         defaults_2_voice_follow.form.xml, defaults_2_voice_follow_walk.form.xml,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.56
+# TextMIDITools Version 1.0.57
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -55,7 +55,6 @@ class XmlForm(tkinter.Tk):
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=2, weight=1)
         self.geometry('1000x600+435+50')
-        #self.frame.grab_set()
 
     def install_file(self, afilename):
         self.the_filename = afilename
@@ -104,7 +103,7 @@ class XmlForm(tkinter.Tk):
             # position it on the canvas
             # 0.5 + sin(omega * t + phase) / 2 * self.win_height / 16 + 1 * self.win_height / 16
             # oi la!
-            twopi_t = self.twopi * the_time;
+            twopi_t = self.twopi * the_time
 
             y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['pitch_form']['mean']['phase'])) * float(self.xml_form_dict['pitch_form']['mean']['amplitude']) + float(self.xml_form_dict['pitch_form']['mean']['offset'])) * (-y_real_estate) + y_zero
             y_range = (math.sin(twopi_t * range_freq + float(self.xml_form_dict['pitch_form']['range']['phase'])) * float(self.xml_form_dict['pitch_form']['range']['amplitude']) + float(self.xml_form_dict['pitch_form']['range']['offset'])) * y_real_estate
@@ -133,7 +132,7 @@ class XmlForm(tkinter.Tk):
             mean_freq  = 1.0 / float(self.xml_form_dict['rhythm_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['rhythm_form']['range']['period'])
             the_time = float(i) * seconds_per_pixel
-            twopi_t = self.twopi * the_time;
+            twopi_t = self.twopi * the_time
             y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['rhythm_form']['mean']['phase'])) * float(self.xml_form_dict['rhythm_form']['mean']['amplitude']) + float(self.xml_form_dict['rhythm_form']['mean']['offset'])) * (-y_real_estate) + y_zero
             y_range = (math.sin(twopi_t * range_freq + float(self.xml_form_dict['rhythm_form']['range']['phase'])) * float(self.xml_form_dict['rhythm_form']['range']['amplitude']) + float(self.xml_form_dict['rhythm_form']['range']['offset'])) * y_real_estate
             if (y_range < 1.0):
@@ -159,7 +158,7 @@ class XmlForm(tkinter.Tk):
             mean_freq = 1.0 / float(self.xml_form_dict['dynamic_form']['mean']['period'])
             range_freq = 1.0 / float(self.xml_form_dict['dynamic_form']['range']['period'])
             the_time = float(i) * seconds_per_pixel
-            twopi_t = self.twopi * the_time;
+            twopi_t = self.twopi * the_time
             y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['dynamic_form']['mean']['phase'])) * float(self.xml_form_dict['dynamic_form']['mean']['amplitude']) + float(self.xml_form_dict['dynamic_form']['mean']['offset'])) * (-y_real_estate) + y_zero
             y_range = (math.sin(twopi_t * range_freq + float(self.xml_form_dict['dynamic_form']['range']['phase'])) * float(self.xml_form_dict['dynamic_form']['range']['amplitude']) + float(self.xml_form_dict['dynamic_form']['range']['offset'])) * y_real_estate
             if (y_range < 1.0):
@@ -187,7 +186,7 @@ class XmlForm(tkinter.Tk):
         for i in range(1, self.win_width):
             mean_freq = 1.0 / float(self.xml_form_dict['texture_form']['period'])
             the_time = float(i) * seconds_per_pixel
-            twopi_t = self.twopi * the_time;
+            twopi_t = self.twopi * the_time
             y_mean  = (math.sin(twopi_t * mean_freq + float(self.xml_form_dict['texture_form']['phase'])) * float(self.xml_form_dict['texture_form']['amplitude']) + float(self.xml_form_dict['texture_form']['offset'])) * (-y_real_estate)
             y_range = y_midline
             poly_lr.append(i)
@@ -257,7 +256,7 @@ class XmlForm(tkinter.Tk):
 
     def default_voices(self):
         vl = []
-        for v in range(1, 24):
+        for v in range(1, 25):
             voice_dict = {}
             voice_dict['low_pitch'] = 'A0'
             voice_dict['high_pitch'] = 'C8'
@@ -274,8 +273,8 @@ class XmlForm(tkinter.Tk):
             delay_dict['numerator'] = '0'
             delay_dict['denominator'] = '1'
             follower_dict['delay'] = delay_dict
-            follower_dict['inversion'] = '0';
-            follower_dict['retrograde'] = '0';
+            follower_dict['inversion'] = '0'
+            follower_dict['retrograde'] = '0'
             voice_dict['follower'] = follower_dict
             vl.append(voice_dict)
 
@@ -457,7 +456,7 @@ class XmlForm(tkinter.Tk):
             voice_dict['channel'] = int(channel)
             walking_node = v.getElementsByTagName('walking_')[0]
             walking = walking_node.firstChild.data
-            voice_dict['walking'] = int(walking)
+            voice_dict['walking'] = walking
             program_node = v.getElementsByTagName('program_')[0]
             program = program_node.firstChild.data
             voice_dict['program'] = int(program)
@@ -472,9 +471,7 @@ class XmlForm(tkinter.Tk):
             leader_node = follower_node.getElementsByTagName('leader_')[0]
             leader = leader_node.firstChild.data
             follower_dict['leader'] = int(leader)
-            interval_type_node = follower_node.getElementsByTagName('interval_type_')[0]
-            interval_type = interval_type_node.firstChild.data
-            follower_dict['interval_type'] = int(interval_type)
+            follower_dict['interval_type'] = int(follower_node.getElementsByTagName('interval_type_')[0].firstChild.data)
             interval_node = follower_node.getElementsByTagName('interval_')[0]
             interval = interval_node.firstChild.data
             follower_dict['interval'] = int(interval)
@@ -487,8 +484,8 @@ class XmlForm(tkinter.Tk):
             delay_dict['numerator'] = numerator
             delay_dict['denominator'] = denominator
             follower_dict['delay'] = delay_dict
-            follower_dict['inversion'] = follower_node.getElementsByTagName('inversion_')[0].firstChild.data;
-            follower_dict['retrograde'] = follower_node.getElementsByTagName('retrograde_')[0].firstChild.data;
+            follower_dict['inversion'] = follower_node.getElementsByTagName('inversion_')[0].firstChild.data
+            follower_dict['retrograde'] = follower_node.getElementsByTagName('retrograde_')[0].firstChild.data
             voice_dict['follower'] = follower_dict
             voice_list.append(voice_dict)
 
@@ -525,11 +522,12 @@ class XmlForm(tkinter.Tk):
 
     def makemenu(self, toplevelwin):
         top_menu = Menu(toplevelwin)
-        toplevelwin['menu'] = top_menu;
+        toplevelwin['menu'] = top_menu
         file_menu = Menu(top_menu)
         top_menu.add_cascade(label='File', menu=file_menu, underline=0)
         file_menu.add_command(label='Open...',   command=self.get_file_callback, underline=0, accelerator='O')
         file_menu.add_command(label='Save...',   command=self.save_callback, underline=0, accelerator='S')
+        file_menu.add_command(label='Defaults...',   command=self.defaults_callback, underline=0, accelerator='D')
         file_menu.add_command(label='Redraw', command=self.redraw_callback, underline=0, accelerator='R')
         file_menu.add_command(label='Save Postscript...', command=self.postscript_callback,
             underline=0, accelerator='S')
@@ -541,6 +539,13 @@ class XmlForm(tkinter.Tk):
         self.install_file(afilename)
         self.voice_window.install_xml_form(self.xml_form_dict)
         self.all_forms_window.install_xml_form(self.xml_form_dict)
+
+    def defaults_callback(self):
+        self.all_forms_window.install_xml_form(self.xml_form_dict)
+        self.default_xml_form()
+        self.draw_form()
+        self.voice_window.install_xml_form(self.xml_form_dict)
+        self.title('Form Plot')
 
     def save_callback(self):
         afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.form.xml', initialfile = self.all_forms_window.xml_form['name'], initialdir = '.', title = 'Select XML Form File', filetypes=(('xml files','*.xml'),('all files','*.*')))
@@ -682,7 +687,7 @@ class XmlForm(tkinter.Tk):
         self.add_text_element(doc, item_element, 'low_pitch', 'low_pitch_', str(voice_dict['low_pitch']))
         self.add_text_element(doc, item_element, 'high_pitch', 'high_pitch_', str(voice_dict['high_pitch']))
         self.add_text_element(doc, item_element, 'channel', 'channel_', str(int(voice_dict['channel'])))
-        self.add_text_element(doc, item_element, 'walking', 'walking_', str(int(voice_dict['walking'])))
+        self.add_text_element(doc, item_element, 'walking', 'walking_', str(voice_dict['walking']))
         self.add_text_element(doc, item_element, 'program', 'program_', str(voice_dict['program']))
         self.add_text_element(doc, item_element, 'pan', 'pan_', str(int(voice_dict['pan'])))
         follower_element = doc.createElement('follower_')

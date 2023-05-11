@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.56
+# TextMIDITools Version 1.0.57
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -91,7 +91,7 @@ GeneralMIDIInstrumentDict = {
     'English_Horn'                     : ( 70, 'E3',  'A5'),
     'Bassoon'                          : ( 71, 'Bb1', 'E5'),
     'Clarinet'                         : ( 72, 'D3',  'Bb6'),
-    # Pip e
+    # Pipe
     'Piccolo'                          : ( 73, 'D5',  'C8'),
     'Flute'                            : ( 74, 'C4',  'C7'),
     'Recorder'                         : ( 75, 'C-1', 'G9'),
@@ -155,3 +155,7 @@ GeneralMIDIInstrumentDict = {
     'Applause'                         : (127, 'C-1', 'G9'),
     'Gunshot'                          : (128, 'C-1', 'G9'),
 }
+gm_program_index = 0
+gm_low_pitch_index = 1
+gm_high_pitch_index = 2
+

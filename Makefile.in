@@ -413,7 +413,7 @@ textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.c
 textmidi_LDADD = @LEXLIB@
 info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
-AM_CXXFLAGS = -std=c++20 -Wall -Wextra -Weffc++ -g -O2
+AM_CXXFLAGS = -std=c++20 -Wall -Wpedantic -Wextra -Weffc++ -g -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i
 LEX = /usr/bin/env lex

@@ -1,3 +1,7 @@
+2023-05-28     Thomas E. Janzen <janzentome@gmail.com>
+	* Composer.cc, MidiEvents.cc, RhythmRational.cc, cgmlegacy.cc,
+	textmidi.l, textmidicgm.cc: Build with -pedantic and fix.
+
 2023-05-10     Thomas E. Janzen <janzentome@gmail.com>
         * AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
         Fix issue with file load setting program low/high_pitch by adding buttons

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.57
+// TextMIDITools Version 1.0.58
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -793,7 +793,8 @@ void textmidi::MidiFileMetaXmfPatchTypeEvent::consume_stream(MidiStreamIterator&
     // Some programs that were obsolete when they were written left off the mode byte,
     // so this consume_stream function has to see the length byte to know that.
     // So this consume_stream takes a bigger byte off the apple than others.
-    const auto len{*midiiter++};
+    // Skipping a byte.  len = *midiiter++;
+    *midiiter++;
     xmf_patch_type_ = static_cast<signed char>(*midiiter++);
 }
 
@@ -2323,8 +2324,8 @@ void textmidi::PrintLazyTrack::wholes_to_next_event()
     {
         if ((delaymsgiter + 1) != midi_delay_event_pairs_.end())
         {
-            RhythmRational ratio_to_next_event{static_cast<int64_t>
-                (delaymsgiter->second->ticks_to_next_event()),
+            RhythmRational ratio_to_next_event{
+                delaymsgiter->second->ticks_to_next_event(),
                     QuartersPerWhole * ticksperquarter_};
             delaymsgiter->second->wholes_to_next_event(
                     rational::snap(ratio_to_next_event, quantum_));
@@ -2359,8 +2360,8 @@ void textmidi::PrintLazyTrack::wholes_of_note_on()
             (delaymsgiter->second.get())};
         if (rest)
         {
-            RhythmRational ratio_to_note_off{static_cast<int64_t>
-                (rest->ticks_to_next_event()), ticksperquarter_ * QuartersPerWhole};
+            RhythmRational ratio_to_note_off{
+                rest->ticks_to_next_event(), ticksperquarter_ * QuartersPerWhole};
             ratio_to_note_off.reduce();
             rest->wholes_to_noteoff(rational::snap(ratio_to_note_off, quantum_));
         }

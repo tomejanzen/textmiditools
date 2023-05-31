@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.57
+// TextMIDITools Version 1.0.58
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -503,7 +503,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     exit(0);
                 }
                 int pivot_key{RestPitch};
-                int pivot_key_index{key_scale.size()};
+                int pivot_key_index{static_cast<int>(key_scale.size())};
                 for (auto& ne : track_note_events[tr])
                 {
                     switch (xml_form.voices()[tr].follower().interval_type_)
@@ -524,7 +524,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                                     {
                                         key_index += xml_form.voices()[tr].follower().interval_;
                                     }
-                                    if (key_scale.size() == pivot_key_index)
+                                    if (key_scale.size() == static_cast<long unsigned>(pivot_key_index))
                                     {
                                         pivot_key_index = key_index;
                                     }
@@ -538,7 +538,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                                     {
                                         key_index += xml_form.voices()[tr]
                                             .follower().interval_;
-                                        if (key_scale.size() == pivot_key_index)
+                                        if (key_scale.size() == static_cast<long unsigned>(pivot_key_index))
                                         {
                                             pivot_key_index = key_index;
                                         }
@@ -552,7 +552,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                                 {
                                     const int shift{2 * (key_index - pivot_key_index)};
                                     if ((  (shift > 0) && (key_index >= shift))
-                                       || ((shift < 0) && (key_index < (key_scale.size() - shift))))
+                                       || ((shift < 0) && (static_cast<size_t>(key_index) < (key_scale.size() - shift))))
                                     {
                                         key_index -= shift;
                                     }

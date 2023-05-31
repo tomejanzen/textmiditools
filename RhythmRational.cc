@@ -242,10 +242,13 @@ istream& textmidi::rational::operator>>(istream& is, RhythmRational& tr)
         denominator_match       = 6,
         remainder_match         = 7,
     };
-    char buf[cnt];
+    string buf_string(cnt + 1, '\0');
     // not expected to be null-terminated
-    is.rdbuf()->sgetn(buf, cnt);
-    string buf_string{buf, static_cast<long unsigned int>(cnt)};
+    is.rdbuf()->sgetn(buf_string.data(), cnt);
+    if (buf_string.size())
+    {
+        buf_string[buf_string.size() - 1] = '\0';
+    }
     smatch matches{};
     const auto mat{regex_match(buf_string, matches, rhythm_rational_re)};
     if (!mat)

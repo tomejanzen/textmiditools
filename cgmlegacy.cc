@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.57
+// TextMIDITools Version 1.0.58
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -30,22 +30,22 @@ istream& cgmlegacy::operator>>(istream& is, cgmlegacy::VoiceOld& v)
 double cgmlegacy::OldFormElement::mean_period() const
 {
     return mean_period_;
-};
+}
 
 double cgmlegacy::OldFormElement::mean_phase() const
 {
     return mean_phase_;
-};
+}
 
 double cgmlegacy::OldFormElement::range_period() const
 {
     return range_period_;
-};
+}
 
 double cgmlegacy::OldFormElement::range_phase() const
 {
     return range_phase_;
-};
+}
 
 void cgmlegacy::TextForm::read_from_file(const string& form_filename)
 {

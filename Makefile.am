@@ -10,7 +10,7 @@ info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi t
 
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
 CXX = /usr/bin/env g++
-AM_CXXFLAGS  = -std=c++20 -Wall -Wextra -Weffc++ -g
+AM_CXXFLAGS  = -std=c++20 -Wall -Wpedantic -Wextra -Weffc++ -g
 AM_CXXFLAGS += -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i

@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.57
+** TextMIDITools Version 1.0.58
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -289,8 +289,7 @@ namespace
           // Musical values are in whole notes, as a 1/4 note
           // is 1/4 of a whole note, but MIDI specifies ticks per quarter.
           ticks = (static_cast<double>(QuartersPerWhole) * thenumerator
-                 * static_cast<double>(global_ticks_per_quarter))
-                 / static_cast<double>(thedivisor);
+                 * static_cast<double>(global_ticks_per_quarter)) / thedivisor;
         }
         if (dotted) // dotted notes
         {
@@ -1254,7 +1253,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         offsetvalues.push_back(hours);
         for (auto i{minutes_match}; i < (ff_match + 1); ++i)
         {
-            offsetvalues.push_back(static_cast<int>(lexical_cast<int>(matches[i])));
+            offsetvalues.push_back(lexical_cast<int>(matches[i]));
         }
         trackchunk.push_back(meta_prefix[0]);
         trackchunk.push_back(smpte_prefix[0]);

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -48,24 +48,95 @@ namespace textmidi
     //
     // A base class for MIDI events, such as key events.
     // This is a inherit implementation design.
-    class MidiEvent
+    // Meant to be a bridge pattern.
+    // MidiEventsABC is abstract base.
+    // MidiEventsImpl has some musical time values.
+    // MidiEvent has a member of MidiEventImpl and forwards calls to it.
+    class MidiEventABC
     {
       public:
-        MidiEvent()
+        MidiEventABC()
+        {
+        }
+
+        // Rule of 5: If you delete or declare any of assign, copy, move,
+        // move copy, d-tor, then delete or declare all of them.
+        MidiEventABC(const MidiEventABC& ) = default;
+        MidiEventABC(MidiEventABC&& ) = default;
+        MidiEventABC& operator=(const MidiEventABC& ) = default;
+        MidiEventABC& operator=(MidiEventABC&& ) = default;
+        virtual ~MidiEventABC() = default;
+        //
+        // Write the textmidi version of a MIDI event to os.
+        virtual std::ostream& text(std::ostream& ) const = 0;
+        //
+        // Report the accumulated number of ticks so far in this track.
+        virtual constexpr std::int64_t ticks_accumulated() const = 0;
+        virtual void ticks_accumulated(std::int64_t ) = 0;
+        // Report the number of ticks before the next event.
+        virtual constexpr std::int64_t ticks_to_next_event() const = 0;
+        virtual void ticks_to_next_event(std::int64_t ) = 0;
+        // Report the number of ticks before the next note-on.
+        virtual constexpr std::int64_t ticks_to_next_note_on() const = 0;
+        virtual void ticks_to_next_note_on(std::int64_t ) = 0;
+        // Report the number of whole notes before the next event.
+        virtual constexpr rational::RhythmRational wholes_to_next_event() const = 0;
+        virtual void wholes_to_next_event(const rational::RhythmRational& ) = 0;
+    };
+
+    class MidiEventImpl
+    {
+      public:
+        MidiEventImpl()
           : ticks_accumulated_{},
             ticks_to_next_event_{},
             ticks_to_next_note_on_{},
             wholes_to_next_event_{}
         {
         }
-        constexpr explicit MidiEvent(const MidiEvent& ) = default;
-        constexpr MidiEvent& operator=(const MidiEvent& ) = default;
-        constexpr MidiEvent&& move(MidiEvent&& ) = delete;
-        constexpr MidiEvent& operator=(MidiEvent&& ) = default;
+
+        //
+        // Report the accumulated number of ticks so far in this track.
+        constexpr std::int64_t ticks_accumulated() const;
+        void ticks_accumulated(std::int64_t );
+        // Report the number of ticks before the next event.
+        constexpr std::int64_t ticks_to_next_event() const;
+        void ticks_to_next_event(std::int64_t );
+        // Report the number of ticks before the next note-on.
+        constexpr std::int64_t ticks_to_next_note_on() const;
+        void ticks_to_next_note_on(std::int64_t );
+        // Report the number of whole notes before the next event.
+        constexpr rational::RhythmRational wholes_to_next_event() const;
+        void wholes_to_next_event(const rational::RhythmRational& );
+        void reduce();
+      private:
+        //
+        // Interpret the bytes of the MIDI binary stream and save
+        // the data in the class.
+        std::int64_t ticks_accumulated_;
+        std::int64_t ticks_to_next_event_;
+        std::int64_t ticks_to_next_note_on_;
+        rational::RhythmRational wholes_to_next_event_;
+    };
+
+    class MidiEvent : MidiEventABC
+    {
+      public:
+        MidiEvent()
+          : midi_event_impl_{}
+        {
+        }
+
+        // Rule of 5: If you delete or declare any of assign, copy, move,
+        // move copy, d-tor, then delete or declare all of them.
+        MidiEvent(const MidiEvent& ) = default;
+        MidiEvent(MidiEvent&& ) = default;
+        MidiEvent& operator=(const MidiEvent& ) = default;
+        MidiEvent& operator=(MidiEvent&& ) = default;
+        virtual ~MidiEvent() = default;
         //
         // Write the textmidi version of a MIDI event to os.
         virtual std::ostream& text(std::ostream& ) const = 0;
-        virtual ~MidiEvent() = default;
         //
         // Report the accumulated number of ticks so far in this track.
         constexpr std::int64_t ticks_accumulated() const;
@@ -80,14 +151,11 @@ namespace textmidi
         constexpr rational::RhythmRational wholes_to_next_event() const;
         void wholes_to_next_event(const rational::RhythmRational& );
       private:
+        MidiEventImpl midi_event_impl_;
         //
         // Interpret the bytes of the MIDI binary stream and save
         // the data in the class.
         virtual void consume_stream(midi::MidiStreamIterator& ) = 0;
-        std::int64_t ticks_accumulated_;
-        std::int64_t ticks_to_next_event_;
-        std::int64_t ticks_to_next_note_on_;
-        rational::RhythmRational wholes_to_next_event_;
     };
 
     std::ostream& operator<<(std::ostream& , const MidiEvent& );

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -37,10 +37,6 @@ namespace textmidi
                 last_pitch_index_(last_pitch_index)
             {
             }
-            explicit Track(const Track& ) = default;
-            explicit Track(Track&& ) = delete;
-            Track& operator=(const Track& ) = default;
-            Track& operator=(Track&& ) = delete;
             TicksDuration the_next_time() const;
             int last_pitch_index() const;
             void the_last_time(const TicksDuration the_last_time);

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -51,9 +51,10 @@ namespace textmidi
             {
             }
 
+            // Rule of 5: If you delete or declare any of assign, copy, move, move copy, d-tor,
+            // then delete or declare all of them.
             Composer(const Composer& ) = delete;
-            Composer(Composer& ) = delete;
-            explicit Composer(Composer&& ) = delete;
+            Composer(Composer&& ) = delete;
             Composer& operator=(const Composer& ) = delete;
             Composer& operator=(Composer&& ) = delete;
 

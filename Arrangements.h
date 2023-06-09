@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -49,11 +49,13 @@ namespace arrangements
         virtual void counter(int counter) = 0;
         virtual void inc() = 0;
         virtual bool counter_finite() const = 0;
-        virtual ~ArrangementsABC()
-        {
-        }
         virtual void next() = 0;
         virtual const Arrangement& arrangement() = 0;
+        ArrangementsABC(const ArrangementsABC& ) = default;
+        ArrangementsABC(ArrangementsABC&& ) = default;
+        ArrangementsABC& operator=(const ArrangementsABC& ) = default;
+        ArrangementsABC& operator=(ArrangementsABC&& ) = default;
+        virtual ~ArrangementsABC() = default;
     };
 
     class ArrangementsImpl
@@ -67,9 +69,6 @@ namespace arrangements
         void counter(int counter);
         void inc();
         bool counter_finite() const;
-        ~ArrangementsImpl()
-        {
-        }
       private:
         int counter_;
     };
@@ -85,9 +84,6 @@ namespace arrangements
         void counter(int counter);
         void inc();
         bool counter_finite() const;
-        virtual ~Arrangements()
-        {
-        }
         virtual void next() = 0;
         virtual const Arrangement& arrangement() = 0;
       private:
@@ -97,7 +93,7 @@ namespace arrangements
     class ArrangementsInSitu : public Arrangements
     {
         public:
-            ArrangementsInSitu(int length)
+            explicit ArrangementsInSitu(int length)
               : Arrangements(), arrangement_()
             {
                 auto counting = std::views::iota(0, length);
@@ -112,7 +108,7 @@ namespace arrangements
     class ArrangementsSequence : public Arrangements
     {
         public:
-            ArrangementsSequence(int length)
+            explicit ArrangementsSequence(int length)
                 : Arrangements(), arrangements_(), length_(length)
             {
             }
@@ -127,7 +123,7 @@ namespace arrangements
     class ArrangementsIdentity : public ArrangementsInSitu
     {
       public:
-        ArrangementsIdentity(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsIdentity(int length) : ArrangementsInSitu(length)
         {
         }
         const Arrangement& arrangement() const;
@@ -137,7 +133,7 @@ namespace arrangements
     class ArrangementsLexicographicForward : public ArrangementsInSitu
     {
       public:
-        ArrangementsLexicographicForward(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsLexicographicForward(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -146,7 +142,7 @@ namespace arrangements
     class ArrangementsLexicographicBackward : public ArrangementsInSitu
     {
       public:
-        ArrangementsLexicographicBackward(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsLexicographicBackward(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -155,7 +151,7 @@ namespace arrangements
     class ArrangementsRotateRight : public ArrangementsInSitu
     {
       public:
-        ArrangementsRotateRight(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsRotateRight(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -164,7 +160,7 @@ namespace arrangements
     class ArrangementsRotateLeft : public ArrangementsInSitu
     {
       public:
-        ArrangementsRotateLeft(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsRotateLeft(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -173,7 +169,7 @@ namespace arrangements
     class ArrangementsReverse : public ArrangementsInSitu
     {
       public:
-        ArrangementsReverse(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsReverse(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -182,7 +178,7 @@ namespace arrangements
     class ArrangementsSwapPairs : public ArrangementsInSitu
     {
       public:
-        ArrangementsSwapPairs(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsSwapPairs(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -191,7 +187,7 @@ namespace arrangements
     class ArrangementsSkip : public ArrangementsInSitu
     {
       public:
-        ArrangementsSkip(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsSkip(int length) : ArrangementsInSitu(length)
         {
         }
         void next();
@@ -200,7 +196,8 @@ namespace arrangements
     class ArrangementsShuffle : public ArrangementsInSitu
     {
       public:
-        ArrangementsShuffle(int length) : ArrangementsInSitu(length), random_dev_(), generator_(random_dev_())
+        explicit ArrangementsShuffle(int length) 
+          : ArrangementsInSitu(length), random_dev_(), generator_(random_dev_())
         {
         }
         void next();
@@ -215,7 +212,7 @@ namespace arrangements
     class ArrangementsHeaps : public ArrangementsInSitu
     {
       public:
-        ArrangementsHeaps(int length = 1)
+        explicit ArrangementsHeaps(int length = 1)
           : ArrangementsInSitu(length),
             heaps_algorithm_template_{length, arrangement()}
         {

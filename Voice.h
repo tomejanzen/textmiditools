@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -96,10 +96,6 @@ namespace textmidi
                 follower_{follower}
             {
             }
-            VoiceXml(const VoiceXml& ) = default;
-            explicit VoiceXml(VoiceXml&& ) = default;
-            VoiceXml& operator=(const VoiceXml& ) = default;
-            VoiceXml& operator=(VoiceXml&& ) = default;
 
             std::shared_ptr<bool> prefer_sharp{new bool};
             VoiceXml(const cgmlegacy::VoiceOld& v)

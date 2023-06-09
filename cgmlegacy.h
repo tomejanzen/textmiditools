@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -43,11 +43,6 @@ namespace cgmlegacy
         {
         }
 
-        explicit VoiceOld(const VoiceOld& ) = default;
-        explicit VoiceOld(VoiceOld&& ) = default;
-        VoiceOld& operator=(const VoiceOld& ) = default;
-        VoiceOld& operator=(VoiceOld&& ) = default;
-
         std::uint32_t low_pitch_;
         std::uint32_t high_pitch_;
         std::uint32_t channel_; // zero-based in VoiceOld
@@ -69,10 +64,6 @@ namespace cgmlegacy
             range_phase_{range_phase}
         {
         }
-        OldFormElement(const OldFormElement& ) = default;
-        OldFormElement(OldFormElement&& ) = default;
-        OldFormElement& operator=(const OldFormElement& ) = default;
-        OldFormElement& operator=(OldFormElement&& ) = default;
         double mean_period() const;
         double mean_phase() const;
         double range_period() const;
@@ -102,11 +93,6 @@ namespace cgmlegacy
             voices()
         {
         };
-
-        TextForm(const TextForm& ) = default;
-        TextForm(TextForm&& ) = default;
-        TextForm& operator=(const TextForm& ) = default;
-        TextForm& operator=(TextForm&& ) = default;
 
         void read_from_file(const std::string& form_filename);
         double len;

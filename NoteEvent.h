@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -32,12 +32,6 @@ namespace textmidi
             musical_rhythm_{musical_rhythm}
         {
         }
-        constexpr NoteEvent() = default;
-        constexpr NoteEvent(const NoteEvent& ) = default;
-        NoteEvent(NoteEvent&& ) = default;
-        constexpr NoteEvent& operator=(const NoteEvent& ) = default;
-        NoteEvent& operator=(NoteEvent&& ) = default;
-
         void pitch(int pitch) noexcept;
         int pitch() const noexcept;
         int vel() const noexcept;

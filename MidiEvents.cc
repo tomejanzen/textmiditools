@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -112,51 +112,105 @@ ostream& textmidi::operator<<(ostream& os, const MidiDelayEventPair& msg_pair)
     return os;
 }
 
-
 //
 // return the accumulated MIDI ticks.
 constexpr int64_t textmidi::MidiEvent::ticks_accumulated() const
 {
-    return ticks_accumulated_;
+    return midi_event_impl_.ticks_accumulated();
 }
 
 //
 // set the accumulated MIDI ticks.
 void textmidi::MidiEvent::ticks_accumulated(int64_t ticks_accumulated)
 {
-    ticks_accumulated_ = ticks_accumulated;
+    midi_event_impl_.ticks_accumulated(ticks_accumulated);
 }
 
 //
 // return the MIDI ticks to the next event.
 constexpr int64_t textmidi::MidiEvent::ticks_to_next_event() const
 {
-    return ticks_to_next_event_;
+    return midi_event_impl_.ticks_to_next_event();
 }
 
 //
 // set the MIDI ticks to the next event.
 void textmidi::MidiEvent::ticks_to_next_event(int64_t ticks_to_next_event)
 {
-    ticks_to_next_event_ = ticks_to_next_event;
+    midi_event_impl_.ticks_to_next_event(ticks_to_next_event);
 }
 
 constexpr int64_t textmidi::MidiEvent::ticks_to_next_note_on() const
 {
-    return ticks_to_next_note_on_;
+    return midi_event_impl_.ticks_to_next_note_on();
 }
 
 void textmidi::MidiEvent::ticks_to_next_note_on(int64_t ticks_to_next_note_on)
 {
-    ticks_to_next_note_on_ = ticks_to_next_note_on;
+    midi_event_impl_.ticks_to_next_note_on(ticks_to_next_note_on);
 }
 
 constexpr RhythmRational textmidi::MidiEvent::wholes_to_next_event() const
 {
-    return wholes_to_next_event_;
+    return midi_event_impl_.wholes_to_next_event();
 }
 
 void textmidi::MidiEvent::wholes_to_next_event(
+        const RhythmRational& wholes_to_next_event)
+{
+    midi_event_impl_.wholes_to_next_event(wholes_to_next_event);
+    midi_event_impl_.reduce();
+}
+
+void textmidi::MidiEventImpl::reduce()
+{
+    wholes_to_next_event_.reduce();
+}
+
+//
+// return the accumulated MIDI ticks.
+constexpr int64_t textmidi::MidiEventImpl::ticks_accumulated() const
+{
+    return ticks_accumulated_;
+}
+
+//
+// set the accumulated MIDI ticks.
+void textmidi::MidiEventImpl::ticks_accumulated(int64_t ticks_accumulated)
+{
+    ticks_accumulated_ = ticks_accumulated;
+}
+
+//
+// return the MIDI ticks to the next event.
+constexpr int64_t textmidi::MidiEventImpl::ticks_to_next_event() const
+{
+    return ticks_to_next_event_;
+}
+
+//
+// set the MIDI ticks to the next event.
+void textmidi::MidiEventImpl::ticks_to_next_event(int64_t ticks_to_next_event)
+{
+    ticks_to_next_event_ = ticks_to_next_event;
+}
+
+constexpr int64_t textmidi::MidiEventImpl::ticks_to_next_note_on() const
+{
+    return ticks_to_next_note_on_;
+}
+
+void textmidi::MidiEventImpl::ticks_to_next_note_on(int64_t ticks_to_next_note_on)
+{
+    ticks_to_next_note_on_ = ticks_to_next_note_on;
+}
+
+constexpr RhythmRational textmidi::MidiEventImpl::wholes_to_next_event() const
+{
+    return wholes_to_next_event_;
+}
+
+void textmidi::MidiEventImpl::wholes_to_next_event(
         const RhythmRational& wholes_to_next_event)
 {
     wholes_to_next_event_ = wholes_to_next_event;
@@ -755,8 +809,17 @@ ostream& textmidi::MidiFileMetaKeySignatureEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     // -1 is one flat, 1, is one sharp, 0 is C or a.
-    os << "KEY_SIGNATURE "
-       << key_signature_map[KeySignatureMap::key_type{accidentals_, minor_mode_}];
+
+    if (key_signature_map.contains(KeySignatureMap::key_type{accidentals_, minor_mode_}))
+    {
+        os << "KEY_SIGNATURE "
+           << key_signature_map[KeySignatureMap::key_type{accidentals_, minor_mode_}];
+    }
+    else
+    {
+        os << "KEY_SIGNATURE "
+           << key_signature_map[KeySignatureMap::key_type{0, false}] << " ; illegal accidentals: " << accidentals_;
+    }
     static_cast<void>(os.flags(flags));
     return os;
 }

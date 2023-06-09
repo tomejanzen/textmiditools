@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -55,8 +55,6 @@ namespace smus
             data_{evt.data}
         {
         }
-        SmusTrackEventBase& operator=(SmusTrackEventBase&& ) = delete;
-        SmusTrackEventBase&& move(SmusTrackEventBase&& ) = delete;
         auto decision() const;
         auto data() const;
         void add_to_delay_accum(const textmidi::rational::RhythmRational& delay);
@@ -74,6 +72,12 @@ namespace smus
         static void flush();
         virtual std::string textmidi() = 0;
         virtual std::string textmidi_tempo() = 0;
+        // Rule of 5: Abstract base classes with virtual d-tor should get 
+        // defaults.
+        SmusTrackEventBase(const SmusTrackEventBase& ) = default;
+        SmusTrackEventBase(SmusTrackEventBase&& ) = default;
+        SmusTrackEventBase& operator=(const SmusTrackEventBase& ) = default;
+        SmusTrackEventBase& operator=(SmusTrackEventBase&& ) = default;
         virtual ~SmusTrackEventBase() = default;
         static textmidi::rational::RhythmRational delay_accum_;
       private:

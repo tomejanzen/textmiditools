@@ -1,6 +1,16 @@
+2023-06-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, Composer.h, Midi.h, MidiEvents.h, MusicalForm.h,
+        NoteEvent.h, RhythmRational.h, SmusTrackEvent.h, Track.h, Voice.h, cgmlegacy.h:
+        Apply rule of 5: virtual base classes should have all 5 special functions defaulted.
+        * MidiEvents{h,cc}: apply bridge pattern by creating separate implementation class
+        for MidiEvent.
+
+2023-06-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc:  handle improper key signatures.
+
 2023-05-28     Thomas E. Janzen <janzentome@gmail.com>
-	* Composer.cc, MidiEvents.cc, RhythmRational.cc, cgmlegacy.cc,
-	textmidi.l, textmidicgm.cc: Build with -pedantic and fix.
+        * Composer.cc, MidiEvents.cc, RhythmRational.cc, cgmlegacy.cc,
+        textmidi.l, textmidicgm.cc: Build with -pedantic and fix.
 
 2023-05-10     Thomas E. Janzen <janzentome@gmail.com>
         * AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:

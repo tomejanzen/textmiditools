@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // RhythmRational 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -32,7 +32,8 @@ namespace textmidi
         {
             public:
                 typedef std::int64_t value_type;
-                explicit constexpr RhythmRational(std::int64_t numerator = 0L, std::int64_t denominator = 1L, bool reduce_it = true)
+                explicit constexpr RhythmRational(std::int64_t numerator = 0L,
+                    std::int64_t denominator = 1L, bool reduce_it = true)
                   : numerator_{numerator},
                     denominator_{denominator}
                 {
@@ -45,11 +46,6 @@ namespace textmidi
                         reduce();
                     }
                 }
-                constexpr RhythmRational(const RhythmRational& ) = default;
-                RhythmRational(RhythmRational& ) = default;
-                explicit RhythmRational(RhythmRational&& ) = default;
-                RhythmRational& operator=(const RhythmRational& ) = default;
-                RhythmRational& operator=(RhythmRational&& ) = default;
                 std::int64_t numerator() const noexcept;
                 std::int64_t denominator() const noexcept;
                 void numerator(std::int64_t numerator) noexcept;

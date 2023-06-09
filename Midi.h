@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -457,9 +457,9 @@ namespace midi
             policy_{RunningStatusPolicy::WhenCleared}
         {
         }
-        explicit RunningStatus(const RunningStatus& ) = default;
+        // Rule of zero: if no custom D-tor, copy, assign, move, move copy, 
+        // then define none of them.
         void policy(RunningStatusPolicy policy);
-        RunningStatus& operator=(const RunningStatus& ) = default;
         void running_status(midi::MidiStreamAtom running_status_value);
         void clear();
         void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);

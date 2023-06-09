@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.58
+// TextMIDITools Version 1.0.59
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -68,10 +68,6 @@ namespace textmidi
                 offset_{offset}
             {
             }
-            Sine(const Sine& ) = default;
-            Sine(Sine&& ) = default;
-            Sine& operator=(const Sine& ) = default;
-            Sine& operator=(Sine&& ) = default;
 
             double period() const noexcept;
             void period(double period) noexcept;
@@ -108,10 +104,6 @@ namespace textmidi
                 range_sine_{}
             {
             }
-            MeanRangeSines(const MeanRangeSines& ) = default;
-            explicit MeanRangeSines(MeanRangeSines&& ) = default;
-            MeanRangeSines& operator=(const MeanRangeSines& ) = default;
-            MeanRangeSines& operator=(MeanRangeSines&& ) = default;
 
             explicit MeanRangeSines(const cgmlegacy::OldFormElement& form_element)
               : mean_sine_ {form_element.mean_period(),
@@ -174,8 +166,8 @@ namespace textmidi
 
         struct ArrangementDefinition
         {
-            explicit ArrangementDefinition(arrangements::PermutationEnum 
-                algorithm = arrangements::PermutationEnum::Identity, 
+            explicit ArrangementDefinition(arrangements::PermutationEnum
+                algorithm = arrangements::PermutationEnum::Identity,
                 double period = 100000.0)
               : algorithm_{algorithm},
                 period_{period}
@@ -204,10 +196,6 @@ namespace textmidi
             {
             }
 
-            MusicalCharacter(const MusicalCharacter& ) = default;
-            MusicalCharacter(MusicalCharacter&& ) = default;
-            MusicalCharacter& operator=(const MusicalCharacter& ) = default;
-            MusicalCharacter& operator=(MusicalCharacter&& ) = default;
             double pitch_mean;
             double pitch_range;
             double rhythm_mean;
@@ -239,10 +227,6 @@ namespace textmidi
                 arrangement_definition_{}
             {
             }
-            MusicalForm(const MusicalForm& )  = default;
-            MusicalForm(MusicalForm&& ) = default;
-            MusicalForm& operator=(const MusicalForm& ) = default;
-            MusicalForm& operator=(MusicalForm&& ) = default;
             std::shared_ptr<bool> prefer_sharp_{std::make_shared<bool>()};
 
             // A ctor for converting old files

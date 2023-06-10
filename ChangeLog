@@ -1,3 +1,7 @@
+2023-06-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: fix compiler error "used but not defined" on ticks 
+        functions by removing the base class's declarations of them.
+
 2023-06-08     Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.h, Composer.h, Midi.h, MidiEvents.h, MusicalForm.h,
         NoteEvent.h, RhythmRational.h, SmusTrackEvent.h, Track.h, Voice.h, cgmlegacy.h:

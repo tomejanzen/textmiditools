@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.59
+// TextMIDITools Version 1.0.60
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -13,8 +13,8 @@
 //
 // 2020-07-15 fix crash.  byte counting in MidiEvents.h
 //
-#if !defined(MIDI_EVENTS_H)
-#    define  MIDI_EVENTS_H
+#if !defined(MIDIEVENTS_H)
+#    define  MIDIEVENTS_H
 
 #include <cstdint>
 #include <cstdlib>
@@ -69,19 +69,6 @@ namespace textmidi
         //
         // Write the textmidi version of a MIDI event to os.
         virtual std::ostream& text(std::ostream& ) const = 0;
-        //
-        // Report the accumulated number of ticks so far in this track.
-        virtual constexpr std::int64_t ticks_accumulated() const = 0;
-        virtual void ticks_accumulated(std::int64_t ) = 0;
-        // Report the number of ticks before the next event.
-        virtual constexpr std::int64_t ticks_to_next_event() const = 0;
-        virtual void ticks_to_next_event(std::int64_t ) = 0;
-        // Report the number of ticks before the next note-on.
-        virtual constexpr std::int64_t ticks_to_next_note_on() const = 0;
-        virtual void ticks_to_next_note_on(std::int64_t ) = 0;
-        // Report the number of whole notes before the next event.
-        virtual constexpr rational::RhythmRational wholes_to_next_event() const = 0;
-        virtual void wholes_to_next_event(const rational::RhythmRational& ) = 0;
     };
 
     class MidiEventImpl

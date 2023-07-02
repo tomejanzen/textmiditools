@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.60
+// TextMIDITools Version 1.0.61
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -77,7 +77,7 @@ int ArrangementsSequence::length() const
 
 const Arrangement& ArrangementsIdentity::arrangement() const
 {
-    return arrangement();
+    return ArrangementsInSitu::arrangement();
 }
 
 void ArrangementsLexicographicForward::next()

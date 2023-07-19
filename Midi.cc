@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,6 +12,7 @@
 
 #include <endian.h>
 
+#include <set>
 #include <algorithm>
 #include <ranges>
 
@@ -36,50 +37,165 @@ void midi::MidiHeader::swapbytes()
     division_  = htobe16(division_);
 }
 
-void RunningStatus::policy(RunningStatusPolicy policy)
-{
-    policy_ = policy;
-}
-
-void RunningStatus::running_status(MidiStreamAtom running_status_value)
+void RunningStatusImpl::running_status(MidiStreamAtom running_status_value)
 {
     running_status_valid_ = true;
     running_status_value_ = running_status_value;
 }
 
-void RunningStatus::clear()
+void RunningStatusImpl::clear()
 {
     running_status_valid_ = false;
     running_status_value_ = 0u;
 }
 
-bool RunningStatus::running_status_valid() const
+bool RunningStatusImpl::running_status_valid() const
 {
     return running_status_valid_;
 }
 
-midi::MidiStreamAtom RunningStatus::running_status_value() const
+midi::MidiStreamAtom RunningStatusImpl::running_status_value() const
 {
     return running_status_value_;
 }
 
-MidiStreamAtom RunningStatus::channel() const
-{
-    return running_status_value_ & midi::channel_mask;
-}
-
-MidiStreamAtom RunningStatus::command() const
+MidiStreamAtom RunningStatusImpl::command() const
 {
     return running_status_value_ & ~midi::channel_mask;
 }
 
-void RunningStatus::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+MidiStreamAtom RunningStatusImpl::channel() const
 {
-    const bool same{running_status_value_ == status_byte};
-    if ((!same) || (RunningStatusPolicy::Never == policy_))
+    return running_status_value_ & midi::channel_mask;
+}
+
+void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+{
+    // "Meta events and sysex events cancel any running status that was in effect."
+    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
+    const bool is_same{this->running_status_value() == status_byte};
+    const bool is_meta{ meta_prefix[0]       == status_byte};
+    const bool is_sysex{start_of_sysex[0]    == status_byte};
+    const bool is_end_of_track{end_of_track_prefix[0] == status_byte};
+
+    if (is_end_of_track || is_meta || is_sysex)
     {
-        this->running_status(status_byte);
+        this->clear();
+    }
+    if (!is_same && !is_sysex || is_meta)
+    {
+        track.push_back(status_byte);
+    }
+    if (!is_sysex || !is_meta)
+    {
+        running_status(status_byte);
+    }
+}
+
+void RunningStatusNever::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+{
+    // Used for testing using old MIDI SMF files that are mal-formed.
+    const bool is_sysex{start_of_sysex[0]    == status_byte};
+
+    this->clear();
+    if (!is_sysex)
+    {
         track.push_back(status_byte);
     }
 }
+
+void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+{
+    // Supporting broken old MIDI files for testing purposes.
+    const bool is_same{this->running_status_value() == status_byte};
+    const bool is_meta{ meta_prefix[0]       == status_byte};
+    const bool is_sysex{start_of_sysex[0]    == status_byte};
+    const bool is_end_of_track{end_of_track_prefix[0] == status_byte};
+
+    if (is_end_of_track || is_meta)
+    {
+        this->clear();
+    }
+    if (!is_same && !is_sysex || is_meta)
+    {
+        track.push_back(status_byte);
+    }
+    // Never save sysex or meta as running status
+    if (!is_sysex || !is_meta)
+    {
+        running_status(status_byte);
+    }
+}
+
+void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+{
+    // Supporting broken old MIDI files for testing purposes.
+    const bool is_same{this->running_status_value() == status_byte};
+    const bool is_meta{ meta_prefix[0]       == status_byte};
+    const bool is_sysex{start_of_sysex[0]    == status_byte};
+    const bool is_end_of_track{end_of_track_prefix[0] == status_byte};
+
+    if (is_end_of_track || is_sysex)
+    {
+        this->clear();
+    }
+    if (!is_same && !is_sysex || is_meta)
+    {
+        track.push_back(status_byte);
+    }
+    // Never save sysex or meta as running status
+    if (!is_sysex || !is_meta)
+    {
+        running_status(status_byte);
+    }
+}
+
+void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+{
+    // Supporting broken old MIDI files for testing purposes.
+    const bool is_same{this->running_status_value() == status_byte};
+    const bool is_meta{ meta_prefix[0]       == status_byte};
+    const bool is_sysex{start_of_sysex[0]    == status_byte};
+    const bool is_end_of_track{end_of_track_prefix[0] == status_byte};
+
+    if (is_end_of_track)
+    {
+        this->clear();
+    }
+    if (!is_same && !is_sysex || is_meta)
+    {
+        track.push_back(status_byte);
+    }
+    // Never save sysex or meta as running status
+    if (!is_sysex || !is_meta)
+    {
+        running_status(status_byte);
+    }
+}
+
+std::shared_ptr<RunningStatusBase> RunningStatusFactory::operator()(RunningStatusPolicy policy)
+{
+    switch (policy)
+    {
+      case RunningStatusPolicy::Standard:
+        return std::make_shared<RunningStatusStandard>();
+        break;
+      case RunningStatusPolicy::Never:
+        return std::make_shared<RunningStatusNever>();
+        break;
+      case RunningStatusPolicy::PersistentAfterMeta:
+        return std::make_shared<RunningStatusPersistentAfterMeta>();
+        break;
+      case RunningStatusPolicy::PersistentAfterSysex:
+        return std::make_shared<RunningStatusPersistentAfterSysex>();
+        break;
+      case RunningStatusPolicy::PersistentAfterSysexOrMeta:
+        return std::make_shared<RunningStatusPersistentAfterSysexOrMeta>();
+        break;
+      default:
+        return std::make_shared<RunningStatusStandard>();
+        break;
+    }
+}
+
 

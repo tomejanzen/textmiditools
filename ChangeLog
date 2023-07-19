@@ -1,3 +1,11 @@
+2023-07-18     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h, MidiMaps.{h,cc}, textmidi.cc, MidiMaps.cc,
+        MidiEvents.{h,cc}, Midi.{h,cc}, main.cc:
+        Add support to textmidi for a variety of misuse of MIDI running status
+        in order to support testing with input files that had been created 
+        by incorrectly written MIDI file software.
+        Changed the runningstatus option in textmidi.
+
 2023-07-01     Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.cc: Fix unbounded recursion.
         * add debian/ packaging support

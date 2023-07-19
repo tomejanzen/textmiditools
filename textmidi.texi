@@ -153,7 +153,7 @@ Archive at that time.
 textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} @b{@minus{}o}|@b{@minus{}@minus{}midi} @var{standard_midi_output_file}
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}d}|@b{@minus{}@minus{}detache} @var{numticks}]
 [@b{@minus{}l}|@b{@minus{}@minus{}lazynoteoff}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
-[@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}norunningstatus}]
+[@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}runningstatus}] @var{standard|never|persistentaftermeta|persistentaftersysex|persistentaftersysexormeta)}
 @end smallexample
 
 @table @option
@@ -190,12 +190,22 @@ with the global velocity rather than a note-on with a velocity of zero.
 @item -a, --answer
 @cindex @minus{}a, @minus{}@minus{}answer
 If the output textmidi file already exists, ask before overwriting it.
-@item -n, --norunningstauts
-@cindex  @minus{}n, @minus{}@minus{}norunningstatus
-Never apply running status; that is, always write the status byte.
-This helps in round-trip tests because some other MIDI software does not
-use running status according to the MIDI Spec.  The default is to
-apply the MIDI Spec rule: running status is cleared only by
+@item -n, --runningstauts @lbracechar{}standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
+@cindex  @minus{}n, @minus{}@minus{}runningstatus @lbracechar{} standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
+For the purposes of testing with old MIDI files,
+specify the policy for running status.  By default, the MIDI SMF standard is followed:
+running status is used but cleared at the appearance of meta and SYSEX events.
+Specifying @quotedblleft{}never@quotedblright{} means that status bytes always are written.
+Specifying @quotedblleft{}persistentaftermeta@quotedblright{} means that meta events do not clear running status.
+Specifying @quotedblleft{}persistentaftersysex@quotedblright{} means that SYSEX events do not clear running status.
+Specifying @quotedblleft{}persistentaftersysexormeta@quotedblright{} means that neither meta nor SYSEX events clear running status.
+The purpose of @quotedblleft{}never@quotedblright{} and @quotedblleft{}persistentafter*@quotedblright{} is to emulate the misbehaviour of some MIDI file
+writing software, so that a round-trip test can be performed 
+in which a MIDI file can be converted to textmidi text, then back to MIDI 
+and be identical to the original file.  This aids testing.
+From the spec:
+@quotedblleft{}Meta events and sysex events cancel any running status that was in effect.@quotedblright{}
+RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
 @b{sysex}, @b{meta} events, and @b{end-of-track}.
 @end table
 

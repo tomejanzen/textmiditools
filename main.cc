@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -21,8 +21,10 @@
 #include <unistd.h>
 
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string/case_conv.hpp> // to_upper
 
 #include "textmidi.h"
+#include "MidiMaps.h"
 #include "Options.h"
 
 using namespace std;
@@ -34,8 +36,8 @@ namespace
     constexpr char DetacheTxt[]{"number of ticks to cheat notes to separate consecutive notes"};
     const string LazyNoteOffOpt{"lazynoteoff"};
     constexpr char LazyNoteOffTxt[]{"To end notes, write MIDI note-offs with current dynamic rather than note-ons with velocity 0"};
-    const string NoRunningStatusOpt{"norunningstatus"};
-    constexpr char NoRunningStatusTxt[]{"to always have a status byte; otherwise follows MIDI Spec"};
+    const string RunningStatusOpt{"runningstatus"};
+    constexpr char RunningStatusTxt[]{"with {standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta }; default is standard"};
 }
 
 namespace textmidi
@@ -52,15 +54,15 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt        + ",h").c_str(),                                        HelpTxt)
-        ((VerboseOpt     + ",v").c_str(),                                     VerboseTxt)
-        ((VersionOpt     + ",V").c_str(),                                     VersionTxt)
-        ((TextmidiOpt    + ",i").c_str(), program_options::value<string>(),  TextmidiTxt)
-        ((MidiOpt        + ",o").c_str(), program_options::value<string>(),      MidiTxt)
-        ((AnswerOpt      + ",a").c_str(),                                      AnswerTxt)
-        ((DetacheOpt     + ",d").c_str(), program_options::value<uint32_t>(), DetacheTxt)
-        ((LazyNoteOffOpt + ",l").c_str(),                                 LazyNoteOffTxt)
-        ((NoRunningStatusOpt + ",n").c_str(),                         NoRunningStatusTxt)
+        ((HelpOpt        + ",h").c_str(),                                       HelpTxt)
+        ((VerboseOpt     + ",v").c_str(),                                       VerboseTxt)
+        ((VersionOpt     + ",V").c_str(),                                       VersionTxt)
+        ((TextmidiOpt    + ",i").c_str(),   program_options::value<string>(),   TextmidiTxt)
+        ((MidiOpt        + ",o").c_str(),   program_options::value<string>(),   MidiTxt)
+        ((AnswerOpt      + ",a").c_str(),                                       AnswerTxt)
+        ((DetacheOpt     + ",d").c_str(),   program_options::value<uint32_t>(), DetacheTxt)
+        ((LazyNoteOffOpt + ",l").c_str(),                                       LazyNoteOffTxt)
+        ((RunningStatusOpt + ",n").c_str(), program_options::value<string>(),   RunningStatusTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -94,7 +96,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.61\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.62\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -170,9 +172,23 @@ int main(int argc, char *argv[])
         note_off_select = true;
     }
 
-    if (var_map.count(NoRunningStatusOpt)) [[unlikely]]
+    if (var_map.count(RunningStatusOpt)) [[unlikely]]
     {
-        running_status.policy(midi::RunningStatus::RunningStatusPolicy::Never);
+        string running_status_str{var_map[RunningStatusOpt].as<string>()};
+        to_upper(running_status_str);
+        if (midi::running_status_policy_map.contains(running_status_str))
+        {
+            running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[running_status_str]);
+        }
+        else
+        {
+            cerr << desc << '\n';
+            exit(EXIT_SUCCESS);
+        }
+    }
+    else
+    {
+        running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[string{"standard"}]);
     }
 
     if (midi_filename.empty()) [[unlikely]]

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -283,4 +283,14 @@ const NumStringMap<Registered3dParameterLsbs> midi::parm_3d_map
     {"PAN_SPREAD_ANGLE",         Registered3dParameterLsbs::pan_spread_angle},
     {"ROLL_ANGLE",               Registered3dParameterLsbs::roll_angle}
 };
+
+const NumStringMap<midi::RunningStatusPolicy> midi::running_status_policy_map
+{
+    {"STANDARD",             midi::RunningStatusPolicy::Standard},
+    {"NEVER",                midi::RunningStatusPolicy::Never},
+    {"PERSISTENTAFTERMETA",  midi::RunningStatusPolicy::PersistentAfterMeta},
+    {"PERSISTENTAFTERSYSEX", midi::RunningStatusPolicy::PersistentAfterSysex},
+    {"PERSISTENTAFTERSYSEXORMETA", midi::RunningStatusPolicy::PersistentAfterSysexOrMeta},
+};
+
 

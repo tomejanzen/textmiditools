@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -689,7 +689,7 @@ namespace textmidi
     class MidiChannelVoiceModeEvent : public MidiEvent
     {
       public:
-        explicit MidiChannelVoiceModeEvent(const midi::RunningStatus& running_status)
+        explicit MidiChannelVoiceModeEvent(const midi::RunningStatusStandard& running_status)
           : MidiEvent{},
             running_status_{running_status},
             local_status_{},
@@ -698,16 +698,16 @@ namespace textmidi
         }
         midi::MidiStreamAtom channel() const;
         void channel(midi::MidiStreamAtom );
-        constexpr midi::RunningStatus& running_status();
-        const midi::RunningStatus& running_status() const;
-        const midi::RunningStatus& local_status() const;
-        void local_status(const midi::RunningStatus& );
-        midi::RunningStatus& local_status();
+        constexpr midi::RunningStatusStandard& running_status();
+        const midi::RunningStatusStandard& running_status() const;
+        const midi::RunningStatusStandard& local_status() const;
+        void local_status(const midi::RunningStatusStandard& );
+        midi::RunningStatusStandard& local_status();
         static const long prefix_len;
-        static bool recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& running_status);
+        static bool recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& running_status);
       private:
-        midi::RunningStatus running_status_;
-        midi::RunningStatus local_status_;
+        midi::RunningStatusStandard running_status_;
+        midi::RunningStatusStandard local_status_;
         midi::MidiStreamAtom channel_;
     };
 
@@ -718,7 +718,7 @@ namespace textmidi
     class MidiChannelVoiceNoteEvent : public MidiChannelVoiceModeEvent
     {
       public:
-        MidiChannelVoiceNoteEvent(const midi::RunningStatus& running_status, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
+        MidiChannelVoiceNoteEvent(const midi::RunningStatusStandard& running_status, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceModeEvent{running_status},
             key_{},
             velocity_{},
@@ -729,7 +729,7 @@ namespace textmidi
             consume_stream(midiiter);
         }
         // needed to make rests and have rests in the same hierarchy.
-        MidiChannelVoiceNoteEvent(const midi::RunningStatus& running_status, std::shared_ptr<bool> prefer_sharp)
+        MidiChannelVoiceNoteEvent(const midi::RunningStatusStandard& running_status, std::shared_ptr<bool> prefer_sharp)
           : MidiChannelVoiceModeEvent{running_status},
             key_{},
             velocity_{},
@@ -764,7 +764,7 @@ namespace textmidi
     class MidiChannelVoiceNoteOnEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        MidiChannelVoiceNoteOnEvent(const midi::RunningStatus& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
+        MidiChannelVoiceNoteOnEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent(running_status, prefer_sharp, midiiter),
             ticks_per_whole_{ticks_per_whole},
             ticks_to_noteoff_{},
@@ -784,7 +784,7 @@ namespace textmidi
         constexpr std::uint32_t ticks_per_whole() const;
         static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter,
-            midi::MidiStreamIterator the_end, midi::RunningStatus& , std::shared_ptr<bool> prefer_sharp, std::uint32_t ticks_per_whole);
+            midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp, std::uint32_t ticks_per_whole);
       private:
         std::uint32_t ticks_per_whole_;
         std::int64_t ticks_to_noteoff_;
@@ -797,14 +797,14 @@ namespace textmidi
     class MidiChannelVoiceNoteOffEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        MidiChannelVoiceNoteOffEvent(midi::RunningStatus& running_status, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
+        MidiChannelVoiceNoteOffEvent(midi::RunningStatusStandard& running_status, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent{running_status, prefer_sharp, midiiter}
         {
         }
         std::ostream& text(std::ostream& ) const;
         static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter,
-            midi::MidiStreamIterator the_end, midi::RunningStatus& , std::shared_ptr<bool> prefer_sharp);
+            midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp);
     };
 
     std::ostream& operator<<(std::ostream& , const MidiChannelVoiceNoteOffEvent& );
@@ -812,7 +812,7 @@ namespace textmidi
     class MidiChannelVoiceProgramChangeEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceProgramChangeEvent(const midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
+        explicit MidiChannelVoiceProgramChangeEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceModeEvent{running_status},
             program_{}
         {
@@ -822,7 +822,7 @@ namespace textmidi
         void program(midi::MidiStreamAtom );
         constexpr midi::MidiStreamAtom program() const;
         static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
+        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& );
       private:
         void consume_stream(midi::MidiStreamIterator& ) override;
         midi::MidiStreamAtom program_;
@@ -833,7 +833,7 @@ namespace textmidi
     class MidiChannelVoicePitchBendEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoicePitchBendEvent(const midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
+        explicit MidiChannelVoicePitchBendEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceModeEvent{running_status},
             pitch_wheel_{}
         {
@@ -843,7 +843,7 @@ namespace textmidi
         void pitch_wheel(midi::MidiStreamAtom );
         midi::MidiStreamAtom pitch_wheel() const;
         static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
+        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& );
       private:
         void consume_stream(midi::MidiStreamIterator& ) override;
         std::uint16_t pitch_wheel_;
@@ -854,7 +854,7 @@ namespace textmidi
     class MidiChannelVoiceControlChangeEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceControlChangeEvent(const midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
+        explicit MidiChannelVoiceControlChangeEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceModeEvent(running_status),
             id_{},
             value_{}
@@ -867,7 +867,7 @@ namespace textmidi
         midi::MidiStreamAtom value() const;
         void value(midi::MidiStreamAtom );
         static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
+        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& );
       private:
         void consume_stream(midi::MidiStreamIterator& midiiter) override;
         midi::MidiStreamAtom id_;
@@ -879,7 +879,7 @@ namespace textmidi
     class MidiChannelVoiceChannelPressureEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceChannelPressureEvent(const midi::RunningStatus& running_status, midi::MidiStreamIterator& midiiter)
+        explicit MidiChannelVoiceChannelPressureEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceModeEvent(running_status),
             pressure_{}
         {
@@ -890,7 +890,7 @@ namespace textmidi
         void pressure(midi::MidiStreamAtom );
         midi::MidiStreamAtom pressure() const;
         static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& );
+        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& );
       private:
         void consume_stream(midi::MidiStreamIterator& ) override;
         midi::MidiStreamAtom pressure_;
@@ -901,13 +901,13 @@ namespace textmidi
     class MidiChannelVoicePolyphonicKeyPressureEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        MidiChannelVoicePolyphonicKeyPressureEvent(const midi::RunningStatus& running_status, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
+        MidiChannelVoicePolyphonicKeyPressureEvent(const midi::RunningStatusStandard& running_status, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent{running_status, prefer_sharp, midiiter}
         {
         }
         std::ostream& text(std::ostream& ) const;
         static const long prefix_len;
-        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatus& , std::shared_ptr<bool> prefer_sharp);
+        static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp);
     };
 
     std::ostream& operator<<(std::ostream& , const MidiChannelVoicePolyphonicKeyPressureEvent& );
@@ -918,7 +918,7 @@ namespace textmidi
     class MidiChannelVoiceNoteRestEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        explicit MidiChannelVoiceNoteRestEvent(midi::RunningStatus& running_status, std::uint32_t ticks_per_whole,
+        explicit MidiChannelVoiceNoteRestEvent(midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole,
             std::shared_ptr<bool> prefer_sharp = std::shared_ptr<bool>{}, midi::MidiStreamIterator midiiter = midi::MidiStreamIterator{})
           : MidiChannelVoiceNoteEvent{running_status, prefer_sharp},
             ticks_per_whole_{ticks_per_whole}
@@ -948,7 +948,7 @@ namespace textmidi
       private:
         const std::uint32_t ticks_per_whole_;
         midi::MidiStreamIterator midi_end_;
-        midi::RunningStatus running_status_;
+        midi::RunningStatusStandard running_status_;
         std::shared_ptr<bool> prefer_sharp_;
     };
 
@@ -998,7 +998,7 @@ namespace textmidi
         rational::RhythmRational quantum_;
         std::uint32_t ticksperquarter_;
         std::shared_ptr<bool> prefer_sharp_;
-        midi::RunningStatus running_status_;
+        midi::RunningStatusStandard running_status_;
 
         friend std::ostream& operator<<(std::ostream&, PrintLazyTrack& );
     };

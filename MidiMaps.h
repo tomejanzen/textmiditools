@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -138,6 +138,7 @@ namespace midi
     extern const NumStringMap<midi::Registered00ParameterLsbs> parm_00_map;
     extern const NumStringMap<midi::Registered3dParameterLsbs> parm_3d_map;
 
+    extern const NumStringMap<midi::RunningStatusPolicy> running_status_policy_map;
 }
 
 #endif

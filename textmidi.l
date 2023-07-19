@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.61
+** TextMIDITools Version 1.0.62
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -69,7 +69,7 @@ extern "C" int32_t yywrap (void) {};
 // running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
 // "Meta events and sysex events cancel any running status that was in effect."
 // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-RunningStatus running_status{};
+std::shared_ptr<midi::RunningStatusBase> running_status{};
 
 namespace
 {
@@ -582,7 +582,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     total_beats = 0;
     global_total_track_ticks = 0.0;
     // Invalidate running_status at the start of a track.
-    running_status.clear();
+    running_status->clear();
   }
 
 <DETAIL_STATE>SEQUENCER_SPECIFIC{SOMESPACE}{BYTE_SEQ} {
@@ -603,14 +603,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
     bytes.reserve(byte_strings.size());
     ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
 
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     trackchunk.push_back(sequencer_specific_prefix[0]);
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
 }
 
 <DETAIL_STATE>SEQUENCE_NUMBER{SOMESPACE}{UINTEGER} {
@@ -619,16 +616,13 @@ DEVICE_ID (ALL_CALL|{BYTE})
     string meta_name{};
     int sequence_number{};
     iss >> meta_name >> sequence_number;
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     trackchunk.push_back(sequence_number_prefix[0]);
     trackchunk.push_back(sequence_number_prefix[1]);
     MidiStreamAtom msb{static_cast<MidiStreamAtom>((sequence_number >> 8) & octet_mask)};
     MidiStreamAtom lsb{static_cast<MidiStreamAtom> (sequence_number       & octet_mask)};
     trackchunk.push_back(msb);
     trackchunk.push_back(lsb);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>UNKNOWN_META{SOMESPACE}{BYTE_SEQ} {
@@ -658,14 +652,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
     bytes.reserve(byte_strings.size());
     ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
     // push the data byters onto the MIDI stream.
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     trackchunk.push_back(meta_code);
     ranges::copy(len_vec, back_inserter(trackchunk));
 
     ranges::copy(bytes, back_inserter(trackchunk));
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>{TEXT_META}{SOMESPACE} {
@@ -676,9 +667,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
     to_upper(meta_name);
 
     const auto code = text_meta_map(meta_name);
+    (*running_status)(meta_prefix[0], trackchunk);
     if (code)
     {
-        trackchunk.push_back(meta_prefix[0]);
         trackchunk.push_back(*code);
         BEGIN(TEXT_META_STATE);
     }
@@ -686,9 +677,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         if (string_view("TICKS") == meta_name)
         {
-            trackchunk.push_back(meta_prefix[0]);
             trackchunk.push_back(text_0F_prefix[0]);
-            running_status.clear();
             BEGIN(TICKS_STATE);
         }
         else
@@ -699,9 +688,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
             cerr << errstr;
         }
     }
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <TEXT_META_STATE>{LINE} {
@@ -747,7 +733,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     accum_delay = 0;
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
+    running_status->clear();
     BEGIN(DETAIL_STATE);
   }
 
@@ -761,13 +747,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     const uint32_t tempo{static_cast<uint32_t>(std::round((SecondsPerMinute * UsecPerSecond) / mmtempo))};
 
     const MidiStreamVector tempovec{int24_to_vec(tempo)};
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
 
     ranges::copy(tempo_prefix, back_inserter(trackchunk));
     ranges::copy(tempovec, back_inserter(trackchunk));
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>DELAY{SPACE}{INTEGER} {
@@ -806,7 +789,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         last_key = static_cast<int>(key);
     }
 
-    running_status(channel | note_on[0], trackchunk);
+    (*running_status)(channel | note_on[0], trackchunk);
 
     key      &= byte7_mask;
     velocity &= byte7_mask;
@@ -839,7 +822,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         key = static_cast<unsigned>(signed_key);
         last_key = static_cast<int>(key);
     }
-    running_status(channel | note_off[0], trackchunk);
+    (*running_status)(channel | note_off[0], trackchunk);
 
     key &= byte7_mask;
     velocity &= byte7_mask;
@@ -873,7 +856,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
 
     write_delay();
-    running_status(channel | polyphonic_key_pressure[0], trackchunk);
+    (*running_status)(channel | polyphonic_key_pressure[0], trackchunk);
 
     key &= byte7_mask;
     pressure &= byte7_mask;
@@ -893,7 +876,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel >> control_id_str >> control_value_str;
 
     channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
+    (*running_status)(channel | control[0], trackchunk);
 
     string control_id_strv{control_id_str};
     to_upper(control_id_strv);
@@ -966,7 +949,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     uint32_t channel{};
     iss >> discard >> channel >> discard_control_id_str >> control_value_str;
     channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
+    (*running_status)(channel | control[0], trackchunk);
     trackchunk.push_back(control_id);
 
     to_upper(control_value_str);
@@ -994,7 +977,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> control_id_str >> channel;
     to_upper(control_id_str);
     channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
+    (*running_status)(channel | control[0], trackchunk);
 
     const auto id = control_function_map(control_id_str);
     if (id)
@@ -1014,7 +997,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     istringstream iss(yytext);
     iss >> control_id_str >> channel >> control_value_str;
     channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
+    (*running_status)(channel | control[0], trackchunk);
 
     to_upper(control_id_str);
     const auto id = control_function_map(control_id_str);
@@ -1044,7 +1027,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     to_upper(upper_control_value_str);
     to_upper(control_id_str);
     channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
+    (*running_status)(channel | control[0], trackchunk);
 
     // Can't fail; the grammar would not have qualified an invalid name.
     const auto id = control_function_map(control_id_str);
@@ -1072,7 +1055,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     istringstream iss(yytext);
     iss >> discard >> channel >> panstring;
     channel_1_to_0(channel);
-    running_status(channel | control[0], trackchunk);
+    (*running_status)(channel | control[0], trackchunk);
     trackchunk.push_back(control_pan[0]);
 
     to_upper(panstring);
@@ -1100,7 +1083,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
              theprogram{};
     iss >> discard >> channel >> theprogram;
     channel_1_to_0(channel);
-    running_status(channel | program[0], trackchunk);
+    (*running_status)(channel | program[0], trackchunk);
 
     program_1_to_0(theprogram);
     theprogram &= byte7_mask;
@@ -1115,7 +1098,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
              pressure{};
     iss >> discard >> channel >> pressure;
     channel_1_to_0(channel);
-    running_status(channel | channel_pressure[0], trackchunk);
+    (*running_status)(channel | channel_pressure[0], trackchunk);
 
     pressure &= byte7_mask;
     trackchunk.push_back(pressure);
@@ -1131,7 +1114,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel >> bend;
     channel_1_to_0(channel);
 
-    running_status(channel | pitch_wheel[0], trackchunk);
+    (*running_status)(channel | pitch_wheel[0], trackchunk);
 
     uint32_t bendlsb{},
              bendmsb{};
@@ -1158,7 +1141,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
       ++denom_pwr;
     }
 
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
 
     ranges::copy(time_signature_prefix, back_inserter(trackchunk));
     trackchunk.push_back(numer);
@@ -1170,9 +1153,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     trackchunk.push_back(tempticksperbeat);
     trackchunk.push_back(thirtysecsperqtr);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>KEY_SIGNATURE{SPACE}{NOTE_NAME} {
@@ -1187,14 +1167,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // tie is C++ tie for 2 returns, not musical tie.
     tie(accidentals, themode) = key_sig_name_to_accidentals(key_sig_name);
 
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     trackchunk.push_back(key_signature_prefix[0]);
     trackchunk.push_back(key_signature_prefix[1]);
     trackchunk.push_back(static_cast<signed char>(accidentals));
     trackchunk.push_back(themode);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>XMF_PATCH_TYPE{SPACE}{PATCH_TYPE} {
@@ -1210,12 +1187,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
     const MidiStreamAtom xmf_patch_type{
         static_cast<MidiStreamAtom>(xmf_patch_type_map.at(patch_type_str))};
 
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     ranges::copy(xmf_patch_type_prefix, back_inserter(trackchunk));
     trackchunk.push_back(xmf_patch_type);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
@@ -1255,7 +1229,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         {
             offsetvalues.push_back(lexical_cast<int>(matches[i]));
         }
-        trackchunk.push_back(meta_prefix[0]);
+        (*running_status)(meta_prefix[0], trackchunk);
         trackchunk.push_back(smpte_prefix[0]);
         trackchunk.push_back(smpte_prefix[1]);
         for (auto offsetval : offsetvalues)
@@ -1263,9 +1237,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
             trackchunk.push_back(offsetval);
         }
     }
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>MIDI_CHANNEL{SPACE}{UINTEGER} {
@@ -1277,13 +1248,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel;
     channel_1_to_0(channel);
 
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     trackchunk.push_back(midi_channel_prefix[0]);
     trackchunk.push_back(midi_channel_prefix[1]);
     trackchunk.push_back(channel);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>MIDI_PORT{SPACE}{UINTEGER} {
@@ -1294,13 +1262,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     int32_t port{};
     iss >> discard >> port;
 
-    trackchunk.push_back(meta_prefix[0]);
+    (*running_status)(meta_prefix[0], trackchunk);
     trackchunk.push_back(midi_port_prefix[0]);
     trackchunk.push_back(midi_port_prefix[1]);
     trackchunk.push_back(port);
-    // "Meta events and sysex events cancel any running status that was in effect."
-    // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
   }
 
 <DETAIL_STATE>SYSEX{SOMESPACE}{BYTE_SEQ} {
@@ -1332,7 +1297,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     sysex_event_sequence.append(trackchunk);
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
+    (*running_status)(start_of_sysex[0], trackchunk);
   }
 
 <DETAIL_STATE>SYSEX{SOMESPACE}{SYSEX_SUBID} {
@@ -1443,7 +1408,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-    running_status.clear();
+    (*running_status)(start_of_sysex[0], trackchunk);
     BEGIN(DETAIL_STATE);
   }
 
@@ -1474,6 +1439,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
+    (*running_status)(start_of_sysex[0], trackchunk);
   }
 
 <LAZY_STATE>{DYNAMIC} {
@@ -1515,9 +1481,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel;
     channel_1_to_0(channel);
 
-    if (running_status.channel() != global_channel)
+    if (running_status->channel() != global_channel)
     {
-        running_status.clear();
+        running_status->clear();
     }
   }
 
@@ -1531,7 +1497,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     if (!keytie.tie_in_)
     {
         write_delay();
-        running_status((global_channel & channel_mask) | note_on[0], trackchunk);
+        (*running_status)((global_channel & channel_mask) | note_on[0], trackchunk);
         trackchunk.push_back(keytie.key_);
         trackchunk.push_back(lazy::dynamic);
     /* Recognize chan {channel} */
@@ -1653,7 +1619,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
             uint32_t channel{global_channel & channel_mask};
             const MidiStreamAtom note_cmd{textmidi_features->note_off_select_ ? note_off[0] : note_on[0]};
             const auto status_byte{channel | note_cmd};
-            running_status(status_byte, trackchunk);
+            (*running_status)(status_byte, trackchunk);
 
             trackchunk.push_back(keytie.key_ & byte7_mask);
 

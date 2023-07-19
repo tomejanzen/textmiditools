@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -71,6 +71,6 @@ extern std::ofstream midi_filestr;
 //
 // Verbose flag taken from command-line options
 extern bool verbose;
-extern midi::RunningStatus running_status;
+extern std::shared_ptr<midi::RunningStatusBase> running_status;
 
 #endif

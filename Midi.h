@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <cstring>
 
+#include <memory>
 #include <array>
 #include <vector>
 #include <map>
@@ -443,28 +444,40 @@ namespace midi
 
 #pragma pack()
 
-    class RunningStatus
+    enum class RunningStatusPolicy : int
+    {
+        Standard                   = 1,
+        Never                      = 2,
+        PersistentAfterMeta        = 3,
+        PersistentAfterSysex       = 4,
+        PersistentAfterSysexOrMeta = 5,
+    };
+    class RunningStatusImplBase
     {
       public:
-        enum class RunningStatusPolicy : int
-        {
-            WhenCleared = 1,
-            Never
-        };
-        RunningStatus()
+        virtual void running_status(MidiStreamAtom running_status_value) = 0;
+        virtual bool running_status_valid() const = 0;
+        virtual MidiStreamAtom running_status_value() const = 0;
+        // returns a zero-based channel
+        virtual void clear() = 0;
+        virtual MidiStreamAtom channel() const = 0;
+        virtual MidiStreamAtom command() const = 0;
+        virtual ~RunningStatusImplBase() = default;
+    };
+
+    class RunningStatusImpl : public RunningStatusImplBase
+    {
+      public:
+        RunningStatusImpl()
           : running_status_valid_(),
             running_status_value_{},
-            policy_{RunningStatusPolicy::WhenCleared}
+            policy_{RunningStatusPolicy::Standard}
         {
         }
-        // Rule of zero: if no custom D-tor, copy, assign, move, move copy, 
-        // then define none of them.
-        void policy(RunningStatusPolicy policy);
-        void running_status(midi::MidiStreamAtom running_status_value);
-        void clear();
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        virtual void running_status(MidiStreamAtom running_status_value);
         bool running_status_valid() const;
         MidiStreamAtom running_status_value() const;
+        void clear();
         // returns a zero-based channel
         MidiStreamAtom channel() const;
         MidiStreamAtom command() const;
@@ -474,5 +487,76 @@ namespace midi
         RunningStatusPolicy policy_;
     };
 
+    class RunningStatusBase
+    {
+      public:
+        RunningStatusBase()
+          : running_status_impl_{std::make_shared<RunningStatusImpl>()}
+        {
+        }
+        // Rule of zero: if no custom D-tor, copy, assign, move, move copy,
+        // then define none of them.
+        virtual void running_status(midi::MidiStreamAtom running_status_value)
+        {
+            running_status_impl_->running_status(running_status_value);
+        }
+        void clear()
+        {
+            running_status_impl_->clear();
+        }
+        virtual void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) = 0;
+        virtual bool running_status_valid() const
+        {
+            return running_status_impl_->running_status_valid();
+        }
+        virtual MidiStreamAtom running_status_value() const
+        {
+            return running_status_impl_->running_status_value();
+        }
+        // returns a zero-based channel
+        virtual MidiStreamAtom channel() const
+        {
+            return running_status_impl_->channel();
+        }
+        virtual MidiStreamAtom command() const
+        {
+            return running_status_impl_->command();
+        }
+
+        virtual ~RunningStatusBase() = default;
+      private:
+        std::shared_ptr<RunningStatusImplBase> running_status_impl_;
+    };
+
+    class RunningStatusStandard : public RunningStatusBase
+    {
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+    };
+
+    class RunningStatusNever : public RunningStatusBase
+    {
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+    };
+
+    class RunningStatusPersistentAfterMeta : public RunningStatusBase
+    {
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+    };
+
+    class RunningStatusPersistentAfterSysex : public RunningStatusBase
+    {
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+    };
+
+    class RunningStatusPersistentAfterSysexOrMeta : public RunningStatusBase
+    {
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+    };
+
+    class RunningStatusFactory
+    {
+      public:
+        std::shared_ptr<RunningStatusBase> operator()(RunningStatusPolicy policy);
+    };
 }
 #endif // MIDI_H

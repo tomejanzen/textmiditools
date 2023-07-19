@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.61
+// TextMIDITools Version 1.0.62
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -1448,7 +1448,7 @@ const long MidiFileMetaCuePointEvent::prefix_len{static_cast<long>(meta_prefix.s
     + static_cast<long>(cue_point_prefix.size()) + variable_length_quantity_min_len};
 
 bool MidiChannelVoiceModeEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status)
 {
     bool recognized{};
     // Recognize an event with running status.
@@ -1499,25 +1499,25 @@ void textmidi::MidiChannelVoiceModeEvent::channel(MidiStreamAtom channel)
     channel_ = channel;
 }
 
-constexpr RunningStatus& MidiChannelVoiceModeEvent::running_status()
+constexpr RunningStatusStandard& MidiChannelVoiceModeEvent::running_status()
 {
     return running_status_;
 }
 
-const RunningStatus& MidiChannelVoiceModeEvent::running_status() const
+const RunningStatusStandard& MidiChannelVoiceModeEvent::running_status() const
 {
     return running_status_;
 }
 
-const RunningStatus& MidiChannelVoiceModeEvent::local_status() const
+const RunningStatusStandard& MidiChannelVoiceModeEvent::local_status() const
 {
     return local_status_;
 }
-void MidiChannelVoiceModeEvent::local_status(const RunningStatus& rs)
+void MidiChannelVoiceModeEvent::local_status(const RunningStatusStandard& rs)
 {
     local_status_ = rs;
 }
-RunningStatus& MidiChannelVoiceModeEvent::local_status()
+RunningStatusStandard& MidiChannelVoiceModeEvent::local_status()
 {
     return local_status_;
 }
@@ -1672,7 +1672,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteOnEvent& ms
 }
 
 shared_ptr<MidiEvent> MidiChannelVoiceNoteOnEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1692,7 +1692,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceNoteOnEvent::recognize(MidiStreamIterator&
 const long MidiChannelVoiceNoteOnEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status, shared_ptr<bool> prefer_sharp)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1711,7 +1711,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamIterator
 const long MidiChannelVoiceNoteOffEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoicePitchBendEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1779,7 +1779,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoicePitchBendEvent&
 const long MidiChannelVoicePitchBendEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceControlChangeEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatus& running_status)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1901,7 +1901,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceControlChangeEv
 const long MidiChannelVoiceControlChangeEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceChannelPressureEvent::recognize(
-    MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatus& running_status)
+    MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatusStandard& running_status)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1967,7 +1967,7 @@ ostream& textmidi::MidiChannelVoicePolyphonicKeyPressureEvent::text(ostream& os)
 
 shared_ptr<MidiEvent> MidiChannelVoicePolyphonicKeyPressureEvent
     ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end,
-    RunningStatus& running_status, shared_ptr<bool> prefer_sharp)
+    RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -2020,7 +2020,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteOffEvent& m
 const size_t prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceProgramChangeEvent
-   ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatus& running_status)
+   ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatusStandard& running_status)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)

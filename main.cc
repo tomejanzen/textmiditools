@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.62
+// TextMIDITools Version 1.0.63
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.62\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.63\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[string{"standard"}]);
+        running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[string{"STANDARD"}]);
     }
 
     if (midi_filename.empty()) [[unlikely]]

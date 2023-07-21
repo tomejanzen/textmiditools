@@ -1,3 +1,7 @@
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc : fix mishandling of default runningstatus="STANDARD,
+        not "standard".
+
 2023-07-18     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.h, MidiMaps.{h,cc}, textmidi.cc, MidiMaps.cc,
         MidiEvents.{h,cc}, Midi.{h,cc}, main.cc:

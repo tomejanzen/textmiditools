@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -31,16 +31,16 @@ namespace smus
 
     // decision:
     // 0-127 pitches
-    constexpr int Rest{128};
-    constexpr int InstrumentNumber{129};
-    constexpr int TimeSignature{130};
-    constexpr int KeySignature{131};
-    constexpr int Volume{132};
-    constexpr int Channel{133};
-    constexpr int Preset{134};
-    constexpr int Clef{135}; // 0 treble , 1 bass, 2 alto , 3 tenor  (unknown)
-    constexpr int Tempo{136};
-    constexpr int EndOfTrack{255};
+    inline constexpr int Rest{128};
+    inline constexpr int InstrumentNumber{129};
+    inline constexpr int TimeSignature{130};
+    inline constexpr int KeySignature{131};
+    inline constexpr int Volume{132};
+    inline constexpr int Channel{133};
+    inline constexpr int Preset{134};
+    inline constexpr int Clef{135}; // 0 treble , 1 bass, 2 alto , 3 tenor  (unknown)
+    inline constexpr int Tempo{136};
+    inline constexpr int EndOfTrack{255};
 
     class SmusTrackEventBase
     {

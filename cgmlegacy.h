@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -19,7 +19,7 @@
 
 namespace cgmlegacy
 {
-    constexpr auto DEFAULT_PULSE{100.0};
+    inline constexpr auto DEFAULT_PULSE{100.0};
 
 #pragma pack(4) // crashes without alignment after the bool.
     struct VoiceOld

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -22,8 +22,8 @@ namespace textmidi
     namespace cgm
     {
         const std::pair IdiophoneRange{std::string{"Eb1"}, std::string{"Eb6"}};
-        constexpr int MIDIInstrumentsPerGroup{8};
-        constexpr int IdiophoneChannel{10};
+        inline constexpr int MIDIInstrumentsPerGroup{8};
+        inline constexpr int IdiophoneChannel{10};
         enum class GeneralMIDIGroup : int
         {
             Piano               = (1 << 0),
@@ -49,8 +49,8 @@ namespace textmidi
 
         extern const midi::NumStringMap<GeneralMIDIGroup> program_group_map;
 
-        constexpr auto MaxNoteStrLen{6}; // "Db-1" + null is 5
-        constexpr auto MaxMIDIProgramNameLen{48};
+        inline constexpr auto MaxNoteStrLen{6}; // "Db-1" + null is 5
+        inline constexpr auto MaxMIDIProgramNameLen{48};
 
         struct MIDI_Program
         {

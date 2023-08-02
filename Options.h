@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -13,16 +13,16 @@
 #include <string>
 
 const std::string HelpOpt{"help"};
-constexpr char HelpTxt[]{"Write help text"};
+inline constexpr char HelpTxt[]{"Write help text"};
 const std::string VerboseOpt{"verbose"};
-constexpr char VerboseTxt[]{"write more trace information"};
+inline constexpr char VerboseTxt[]{"write more trace information"};
 const std::string VersionOpt{"version"};
-constexpr char VersionTxt[]{"Write version information"};
+inline constexpr char VersionTxt[]{"Write version information"};
 const std::string MidiOpt{"midi"};
-constexpr char MidiTxt[]{"binary MIDI file"};
+inline constexpr char MidiTxt[]{"binary MIDI file"};
 const std::string AnswerOpt{"answer"};
-constexpr char AnswerTxt[]{"Ask before overwriting a file"};
+inline constexpr char AnswerTxt[]{"Ask before overwriting a file"};
 const std::string TextmidiOpt{"textmidi"};
-constexpr char TextmidiTxt[]{"textmidi file"};
+inline constexpr char TextmidiTxt[]{"textmidi file"};
 
 #endif

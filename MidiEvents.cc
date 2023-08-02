@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -314,6 +314,7 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
                << static_cast<unsigned>(*it);
         }
     }
+    os << dec;
     static_cast<void>(os.flags(flags));
     return os;
 }
@@ -354,6 +355,7 @@ ostream& textmidi::MidiSysExRawEvent::text(ostream& os) const
         os << ' ' << hex << "0x"
            << setw(2) << setfill('0') << static_cast<unsigned>(*sys_ex_it);
     }
+    os << dec;
     static_cast<void>(os.flags(flags));
     return os;
 }
@@ -465,6 +467,7 @@ ostream& textmidi::MidiFileMetaUnknownEvent::text(ostream& os) const
     {
         os << ' ' << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(it);
     }
+    os << dec;
     static_cast<void>(os.flags(flags));
     return os;
 }
@@ -919,7 +922,7 @@ ostream& textmidi::MidiFileMetaSequencerSpecificEvent::text(ostream& os) const
             ++it)
     {
         os << ' ' << hex << "0x" << setw(2) << setfill('0')
-           << static_cast<unsigned>(*it);
+           << static_cast<unsigned>(*it) << dec;
     }
     static_cast<void>(os.flags(flags));
     return os;
@@ -1865,7 +1868,7 @@ ostream& textmidi::MidiChannelVoiceControlChangeEvent::text(ostream& os) const
         }
         else
         {
-            os << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(value_);
+            os << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(value_) << dec;
         }
     }
     os << ' ';
@@ -2211,7 +2214,7 @@ MidiDelayEventPair textmidi::MidiEventFactory::operator()(MidiStreamIterator& mi
         cerr << "Unrecognized byte sequence:\n";
         for (auto i{0}; i < 32; ++i)
         {
-            cerr << setfill('0') << setw(2) << hex << static_cast<int>(*midiiter++) << ' ';
+            cerr << setfill('0') << setw(2) << hex << static_cast<int>(*midiiter++) << ' ' << dec;
         }
         cerr << '\n';
         cerr << "seeking next command\n";

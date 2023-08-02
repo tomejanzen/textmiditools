@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // RhythmRational 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -10,6 +10,8 @@
 // Patterned as a concrete class after the Complex example in "The C++ Programming Language"
 // by Bjarne Stroustrup, 4th ed., page 542, section 18.3.6, for example use of
 // pass-by-value and not reference to const as in the past.
+// Lastly it is broadly similar to generic Ada-83 packages Tom Janzen wrote in about 1987 or 1988
+// for complex numbers and basic vector and matrix operations.
 //
 #if !defined(TEXTMIDI_RATIONAL_H)
 #    define  TEXTMIDI_RATIONAL_H

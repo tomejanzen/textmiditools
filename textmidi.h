@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -22,55 +22,108 @@ namespace textmidi
     struct TextMidiFeatures
     {
       public:
-        TextMidiFeatures(std::string text_filename, std::ofstream& midi_filestr,
-                std::uint32_t detache, bool note_off_select, bool verbose)
-          : text_filename_{text_filename},
-            midi_filestr_{midi_filestr},
+        static std::unique_ptr<TextMidiFeatures>& me()
+        {
+            if (!me_)
+            {
+                me_.reset(new TextMidiFeatures);
+            }
+            return me_;
+        }
+
+        TextMidiFeatures(const TextMidiFeatures& ) = delete;
+
+        void text_filename(std::string text_filename)
+        {
+            this->text_filename_ = text_filename;
+        }
+
+        void line_ctr(int line_ctr)
+        {
+            this->line_ctr_ = line_ctr;
+        }
+
+        void detache(std::uint32_t detache)
+        {
+            this->detache_ = detache;
+        }
+
+        void note_off_select(bool note_off_select)
+        {
+            this->note_off_select_ = note_off_select;
+        }
+
+        void verbose(bool verbose)
+        {
+            this->verbose_ = verbose;
+        }
+
+        std::string text_filename() const
+        {
+            return this->text_filename_;
+        }
+
+        std::ofstream& midi_filestr()
+        {
+            return this->midi_filestr_;
+        }
+
+        int line_ctr() const
+        {
+            return this->line_ctr_;
+        }
+
+        void inc_line_ctr()
+        {
+            ++(this->line_ctr_);
+        }
+
+        std::uint32_t detache() const
+        {
+            return this->detache_;
+        }
+
+        bool note_off_select() const
+        {
+            return this->note_off_select_;
+        }
+
+        bool verbose() const 
+        {
+            return this->verbose_;
+        }
+      private:
+        static std::unique_ptr<TextMidiFeatures> me_;
+
+        TextMidiFeatures()
+          : text_filename_{"prelude.txt"},
+            midi_filestr_{},
             line_ctr_{1},
-            detache_{detache},
-            note_off_select_{note_off_select},
-            verbose_{verbose}
+            detache_{0},
+            note_off_select_{},
+            verbose_{}
         {}
-        const std::string text_filename_;
-        std::ofstream& midi_filestr_;
+        // The input file name, selected by command-line options, is used in error
+        // messages.
+        std::string text_filename_;
+        // The ofstream of the binary standard MIDI output file.
+        std::ofstream midi_filestr_;
+        // line_ctr counts the lines in the input text file so that error messages can
+        // refer to the line on which the error was encountered.
         int line_ctr_;
-        const std::uint32_t detache_;
-        const bool note_off_select_;
-        const bool verbose_;
+        // detache is set by a command-line argument for the separation of consecutive
+        // notes.  Defaults to 10.
+        std::uint32_t detache_;
+        // lazy_note_off_select is set by a command-line argument.  If true, then
+        // in LAZY or BRIEF mode, note_off events (with the global velocity) are
+        // written as the endings of notes; else note_ons (with a zero velocity) are
+        // used to end notes.
+        bool note_off_select_;
+        // Verbose flag taken from command-line options
+        bool verbose_;
     };
-    extern std::shared_ptr<TextMidiFeatures> textmidi_features;
 }
 
-//
-// Globals for textmidi.
-//
-// line_ctr counts the lines in the input text file so that error messages can
-// refer to the line on which the error was encountered.
-extern std::int32_t line_ctr;
-//
-// detache is set by a command-line argument for the separation of consecutive
-// notes.  Defaults to 10.
-extern std::uint32_t detache;
-//
-// lazy_note_off_select is set by a command-line argument.  If true, then
-// in LAZY or BRIEF mode, note_off events (with the global velocity) are
-// written as the endings of notes; else note_ons (with a zero velocity) are
-// used to end notes.
-namespace lazy
-{
-    extern bool note_off_select;
-}
-//
-// The input file name, selected by command-line options, is used in error
-// messages.
-extern std::string text_filename;
-//
-// The ofstream of the binary standard MIDI output file.
-extern std::ofstream midi_filestr;
-
-//
-// Verbose flag taken from command-line options
-extern bool verbose;
-extern std::shared_ptr<midi::RunningStatusBase> running_status;
+extern std::unique_ptr<midi::RunningStatusBase> running_status;
 
 #endif

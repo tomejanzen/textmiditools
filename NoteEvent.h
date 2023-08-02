@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -21,7 +21,7 @@ namespace textmidi
     namespace cgm
     {
 
-    constexpr int RestPitch{129};
+    inline constexpr int RestPitch{129};
 
     class NoteEvent
     {

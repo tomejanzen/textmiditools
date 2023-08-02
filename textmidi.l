@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.63
+** TextMIDITools Version 1.0.64
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -69,7 +69,9 @@ extern "C" int32_t yywrap (void) {};
 // running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
 // "Meta events and sysex events cancel any running status that was in effect."
 // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
-std::shared_ptr<midi::RunningStatusBase> running_status{};
+std::unique_ptr<midi::RunningStatusBase> running_status{};
+
+std::unique_ptr<TextMidiFeatures> textmidi::TextMidiFeatures::me_{};
 
 namespace
 {
@@ -246,8 +248,8 @@ namespace
     {
         if (0 == program)
         {
-            const string errstr{((string{textmidi_features->text_filename_} += ':')
-                += lexical_cast<string>(textmidi_features->line_ctr_))
+            const string errstr{((string{TextMidiFeatures::me()->text_filename()} += ':')
+                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Program was zero (0) and left as zero; textmidi program numbers must be in [1..16]\n"};
             cerr << errstr;
         }
@@ -265,8 +267,8 @@ namespace
     {
         if (0 == channel)
         {
-            const string errstr{((string{textmidi_features->text_filename_} += ':')
-                += lexical_cast<string>(textmidi_features->line_ctr_))
+            const string errstr{((string{TextMidiFeatures::me()->text_filename()} += ':')
+                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Channel was zero (0) and left as zero; channels must be in [1..16]\n"};
             cerr << errstr;
         }
@@ -518,8 +520,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-        string errstr{((((string{textmidi_features->text_filename_} += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_))
+        string errstr{((((string{TextMidiFeatures::me()->text_filename()} += ':')
+            += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
             += "File format was: ") += format_str) += " but must be in {"};
         for (const auto& fmp : midi::format_map.string_num_map())
         {
@@ -531,15 +533,15 @@ DEVICE_ID (ALL_CALL|{BYTE})
     if ((MIDI_Format::MonoTrack == midi_header.format_)
         && (midi_header.ntrks_ > 1))
     {
-        const string errstr{((((string{textmidi_features->text_filename_} += ':')
-            += lexical_cast<string>(textmidi_features->line_ctr_))
+        const string errstr{((((string{TextMidiFeatures::me()->text_filename()} += ':')
+            += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
             +=  " File format was MONOTRACK which allows only one track but there are ")
             += lexical_cast<string>(midi_header.ntrks_)) += '\n'};
         cerr << errstr;
     }
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swapbytes();
-    textmidi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
+    TextMidiFeatures::me()->midi_filestr().write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
 
@@ -550,7 +552,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> midi_header.ntrks_ >> midi_header.division_;
     global_ticks_per_quarter = midi_header.division_;
     midi_header.swapbytes();
-    textmidi_features->midi_filestr_.write(io_bytes(midi_header), sizeof(MidiHeader));
+    TextMidiFeatures::me()->midi_filestr().write(io_bytes(midi_header), sizeof(MidiHeader));
     BEGIN(DETAIL_STATE);
   }
 
@@ -565,7 +567,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <DETAIL_STATE>{STARTTRACKTOKEN} {
     ++track_counter;
-    if (textmidi_features->verbose_)
+    if (TextMidiFeatures::me()->verbose())
     {
         clog << "Found " << yytext << '\n';
     }
@@ -682,8 +684,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
         else
         {
-            const string errstr{((((string{textmidi_features->text_filename_} += ':')
-                += lexical_cast<string>(textmidi_features->line_ctr_))
+            const string errstr{((((string{TextMidiFeatures::me()->text_filename()} += ':')
+                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Invalid meta event name ") += meta_name) += '\n'};
             cerr << errstr;
         }
@@ -696,7 +698,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     MidiStreamVector len_vec = int_to_vec(yystring.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
     ranges::copy(yystring, back_inserter(trackchunk));
-    ++textmidi_features->line_ctr_;
+    TextMidiFeatures::me()->inc_line_ctr();
 
     BEGIN(DETAIL_STATE);
   }
@@ -707,14 +709,14 @@ DEVICE_ID (ALL_CALL|{BYTE})
     (((ticks_str += "Ticks: ")
         += lexical_cast<string>(global_total_track_ticks)) += ' ') += yytext;
     make_raw_string(ticks_str);
-    if (textmidi_features->verbose_)
+    if (TextMidiFeatures::me()->verbose())
     {
         cout << ticks_str << '\n';
     }
     MidiStreamVector len_vec = int_to_vec(ticks_str.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
     ranges::copy(ticks_str, back_inserter(trackchunk));
-    ++textmidi_features->line_ctr_;
+    TextMidiFeatures::me()->inc_line_ctr();
 
     BEGIN(DETAIL_STATE);
   }
@@ -729,7 +731,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk[5] = (sizetemp >> 16) & 0xFF;
     trackchunk[6] = (sizetemp >>  8) & 0xFF;
     trackchunk[7] = (sizetemp >>  0) & 0xFF;
-    ranges::copy(trackchunk, ostream_iterator<MidiStreamAtom>(textmidi_features->midi_filestr_));
+    ranges::copy(trackchunk, ostream_iterator<MidiStreamAtom>(TextMidiFeatures::me()->midi_filestr()));
     accum_delay = 0;
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
@@ -1506,8 +1508,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
-    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
-        += lexical_cast<string>(textmidi_features->line_ctr_))
+    const string errstr{((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Non Key Letter before Key Name: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
@@ -1518,8 +1520,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <DETAIL_STATE>(-{PITCH_NAME})|({PITCH_NAME}-) {
-    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
-        += lexical_cast<string>(textmidi_features->line_ctr_))
+    const string errstr{((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Ties are not allowed in DETAIL mode: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
@@ -1530,8 +1532,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <DETAIL_STATE>{NON_NOTE_LETTER}{PITCH_NAME} {
-    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
-        += lexical_cast<string>(textmidi_features->line_ctr_))
+    const string errstr{((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Non-Note Letter before Note Name: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
@@ -1542,8 +1544,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{LAZY_PITCH_NAME} {
-    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
-        += lexical_cast<string>(textmidi_features->line_ctr_))
+    const string errstr{((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Key Name without octave: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
@@ -1553,8 +1555,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{RHYTHM} {
-    const string errstr{((((((((((string{textmidi_features->text_filename_} += ':')
-        += lexical_cast<string>(textmidi_features->line_ctr_))
+    const string errstr{((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Key Name without octave: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
@@ -1591,8 +1593,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
         thedivisor = num1;
         if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
         {
-            const string errstr{((((((string{textmidi_features->text_filename_}
-                += ':') += lexical_cast<string>(textmidi_features->line_ctr_))
+            const string errstr{((((((string{TextMidiFeatures::me()->text_filename()}
+                += ':') += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " A duration denominator that is > ticks per whole! ")
                 += lexical_cast<string>(thedivisor)) += '>')
                 += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole))
@@ -1606,7 +1608,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     //
     // Subtract detache, to be added back in as a "rest".
     note_duration
-        = total_duration - ((static_cast<double>(textmidi_features->detache_) < total_duration) ? textmidi_features->detache_ : 0);
+        = total_duration - ((static_cast<double>(TextMidiFeatures::me()->detache()) < total_duration) ? TextMidiFeatures::me()->detache() : 0);
     // write note offs for each note in the chord with 0 delays
     accum_delay += note_duration;
 
@@ -1617,22 +1619,22 @@ DEVICE_ID (ALL_CALL|{BYTE})
             write_delay(); // wait the duration of the note
 
             uint32_t channel{global_channel & channel_mask};
-            const MidiStreamAtom note_cmd{textmidi_features->note_off_select_ ? note_off[0] : note_on[0]};
+            const MidiStreamAtom note_cmd{TextMidiFeatures::me()->note_off_select() ? note_off[0] : note_on[0]};
             const auto status_byte{channel | note_cmd};
             (*running_status)(status_byte, trackchunk);
 
             trackchunk.push_back(keytie.key_ & byte7_mask);
 
             // If we are using a note_off, then use the prevailing dynamic; else 0.
-            const MidiStreamAtom velocity{textmidi_features->note_off_select_
+            const MidiStreamAtom velocity{TextMidiFeatures::me()->note_off_select()
                 ? static_cast<MidiStreamAtom>(lazy::dynamic) : note_off_velocity};
             trackchunk.push_back(velocity);
         }
     }
     lazy::chord.clear();
-    if (static_cast<double>(textmidi_features->detache_) < total_duration)
+    if (static_cast<double>(TextMidiFeatures::me()->detache()) < total_duration)
     {
-        accum_delay += textmidi_features->detache_;
+        accum_delay += TextMidiFeatures::me()->detache();
     }
     BEGIN(LAZY_STATE);
   }
@@ -1664,8 +1666,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
         thedivisor = num1;
         if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
         {
-            const string errstr{((((((string{textmidi_features->text_filename_} += ':')
-                += lexical_cast<string>(textmidi_features->line_ctr_))
+            const string errstr{((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " A duration denominator that is > ticks per whole! ")
                 += lexical_cast<string>(thedivisor)) += '>')
                 += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole)) += '\n' };
@@ -1679,23 +1681,23 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <DETAIL_STATE,LAZY_STATE>{COMMENT} {
-    ++textmidi_features->line_ctr_;
+    TextMidiFeatures::me()->inc_line_ctr();
   }
 ^{SOMESPACE}
 {skip}* {
         }
 (\n) {
-    ++textmidi_features->line_ctr_;
+    TextMidiFeatures::me()->inc_line_ctr();
   }
 <<EOF>> {
-    if (textmidi_features->verbose_)
+    if (TextMidiFeatures::me()->verbose())
     {
         clog << "Found " << track_counter
              << " tracks and will set MIDI header accordingly.\n";
     }
-    textmidi_features->midi_filestr_.seekp(10);
+    TextMidiFeatures::me()->midi_filestr().seekp(10);
     track_counter = htobe16(track_counter);
-    textmidi_features->midi_filestr_.write(io_bytes(track_counter), sizeof(track_counter));
+    TextMidiFeatures::me()->midi_filestr().write(io_bytes(track_counter), sizeof(track_counter));
     yyterminate();
   }
 .

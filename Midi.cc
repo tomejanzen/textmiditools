@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -82,7 +82,9 @@ void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVec
     {
         this->clear();
     }
-    if (!is_same && !is_sysex || is_meta)
+    // SYSEX messages are built whole in a separate function,
+    // but META messages are appended to the 0xFF.
+    if ((!is_same && !is_sysex) || is_meta)
     {
         track.push_back(status_byte);
     }
@@ -116,7 +118,9 @@ void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, M
     {
         this->clear();
     }
-    if (!is_same && !is_sysex || is_meta)
+    // SYSEX messages are built whole in a separate function,
+    // but META messages are appended to the 0xFF.
+    if ((!is_same && !is_sysex) || is_meta)
     {
         track.push_back(status_byte);
     }
@@ -139,7 +143,7 @@ void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, Mi
     {
         this->clear();
     }
-    if (!is_same && !is_sysex || is_meta)
+    if ((!is_same && !is_sysex) || is_meta)
     {
         track.push_back(status_byte);
     }
@@ -162,7 +166,7 @@ void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_b
     {
         this->clear();
     }
-    if (!is_same && !is_sysex || is_meta)
+    if ((!is_same && !is_sysex) || is_meta)
     {
         track.push_back(status_byte);
     }
@@ -173,27 +177,27 @@ void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_b
     }
 }
 
-std::shared_ptr<RunningStatusBase> RunningStatusFactory::operator()(RunningStatusPolicy policy)
+RunningStatusBase* RunningStatusFactory::operator()(RunningStatusPolicy policy)
 {
     switch (policy)
     {
       case RunningStatusPolicy::Standard:
-        return std::make_shared<RunningStatusStandard>();
+        return new RunningStatusStandard();
         break;
       case RunningStatusPolicy::Never:
-        return std::make_shared<RunningStatusNever>();
+        return new RunningStatusNever();
         break;
       case RunningStatusPolicy::PersistentAfterMeta:
-        return std::make_shared<RunningStatusPersistentAfterMeta>();
+        return new RunningStatusPersistentAfterMeta();
         break;
       case RunningStatusPolicy::PersistentAfterSysex:
-        return std::make_shared<RunningStatusPersistentAfterSysex>();
+        return new RunningStatusPersistentAfterSysex();
         break;
       case RunningStatusPolicy::PersistentAfterSysexOrMeta:
-        return std::make_shared<RunningStatusPersistentAfterSysexOrMeta>();
+        return new RunningStatusPersistentAfterSysexOrMeta();
         break;
       default:
-        return std::make_shared<RunningStatusStandard>();
+        return new RunningStatusStandard();
         break;
     }
 }

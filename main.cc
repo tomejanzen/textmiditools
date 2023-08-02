@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.63
+// TextMIDITools Version 1.0.64
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -40,11 +40,6 @@ namespace
     constexpr char RunningStatusTxt[]{"with {standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta }; default is standard"};
 }
 
-namespace textmidi
-{
-    std::shared_ptr<textmidi::TextMidiFeatures> textmidi_features{};
-}
-
 extern FILE* yyin;
 extern int yylex(void);
 
@@ -66,9 +61,6 @@ int main(int argc, char *argv[])
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
-
-    ofstream midi_filestr{}; // set in main.cc
-    bool verbose{};          // set in main.cc as option
 
     try
     {
@@ -96,7 +88,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.63\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.64\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -105,7 +97,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VerboseOpt)) [[unlikely]]
     {
-       verbose = true;
+        textmidi::TextMidiFeatures::me()->verbose(true);
     }
 
     bool answer{};
@@ -160,16 +152,14 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    uint32_t detache{};   // set from cmd line; separation between notes
     if (var_map.count(DetacheOpt)) [[unlikely]]
     {
-        detache = var_map[DetacheOpt].as<uint32_t>();
+        textmidi::TextMidiFeatures::me()->detache(var_map[DetacheOpt].as<uint32_t>());
     }
 
-    bool note_off_select{};
     if (var_map.count(LazyNoteOffOpt)) [[unlikely]]
     {
-        note_off_select = true;
+        textmidi::TextMidiFeatures::me()->note_off_select(true);
     }
 
     if (var_map.count(RunningStatusOpt)) [[unlikely]]
@@ -178,7 +168,7 @@ int main(int argc, char *argv[])
         to_upper(running_status_str);
         if (midi::running_status_policy_map.contains(running_status_str))
         {
-            running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[running_status_str]);
+            running_status.reset(midi::RunningStatusFactory()(midi::running_status_policy_map[running_status_str]));
         }
         else
         {
@@ -188,7 +178,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[string{"STANDARD"}]);
+        running_status.reset(midi::RunningStatusFactory()(midi::running_status_policy_map[string{"STANDARD"}]));
     }
 
     if (midi_filename.empty()) [[unlikely]]
@@ -202,20 +192,18 @@ int main(int argc, char *argv[])
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-    midi_filestr.open(midi_filename.c_str(), ios_base::binary);
-    if (!midi_filestr)
+    textmidi::TextMidiFeatures::me()->midi_filestr().open(midi_filename.c_str(), ios_base::binary);
+    if (!textmidi::TextMidiFeatures::me()->midi_filestr())
     {
         const string errstr{(string("Can't open ") += midi_filename) += '\n'};
         cerr << errstr;
     }
-    textmidi::textmidi_features = make_shared<textmidi::TextMidiFeatures>(text_filename, midi_filestr,
-        detache, note_off_select, verbose);
     while (yylex());
     fclose (yyin);
-    if (verbose)
+    if (textmidi::TextMidiFeatures::me()->verbose())
     {
         const string verbose_str{(string{"Lines processed: "} +=
-           lexical_cast<string>(textmidi::textmidi_features->line_ctr_ - 1)) += '\n'};
+           lexical_cast<string>(textmidi::TextMidiFeatures::me()->line_ctr() - 1)) += '\n'};
         cout << verbose_str;
     }
 

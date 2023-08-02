@@ -10,7 +10,7 @@ info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi t
 
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
 CXX = /usr/bin/env g++
-AM_CXXFLAGS  = -std=c++20 -Wall -Wpedantic -Wextra -Weffc++ -g
+AM_CXXFLAGS  = -std=c++20 -Wall -Wpedantic -Wextra -Weffc++
 AM_CXXFLAGS += -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i
@@ -29,11 +29,11 @@ textmidi.cc : textmidi.l
 miditext$(EXEEXT) : miditext.o Midi.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiMaps.o MidiString.o
 	$(CXX) $(AM_CXXFLAGS) -o $@ $< Midi.o RhythmRational.o MidiEvents.o MIDIKeyString.o rational_support.o MidiMaps.o MidiString.o $(AM_LDFLAGS)
 rational_support.o: rational_support.cc rational_support.h RhythmRational.h
-	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
+	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MidiString.o: MidiString.cc MidiString.h
-	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
+	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 miditext.o: miditext.cc rational_support.h RhythmRational.h TextmidiUtils.h MidiEvents.h Midi.h MidiMaps.h Options.h
-	$(CXX) $(AM_CXXFLAGS) -c -g -o $@ $<
+	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Midi.o : Midi.cc Midi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 MidiMaps.o: MidiMaps.cc MidiMaps.h Midi.h
@@ -41,7 +41,7 @@ MidiMaps.o: MidiMaps.cc MidiMaps.h Midi.h
 Arrangements.o: Arrangements.cc Arrangements.h HeapsAlgorithmTemplate.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 MidiEvents.o: MidiEvents.cc MidiEvents.h RhythmRational.h Midi.h MidiMaps.h rational_support.h MIDIKeyString.h MidiString.h
-	$(CXX) $(AM_CXXFLAGS) -c -g -o MidiEvents.o MidiEvents.cc
+	$(CXX) $(AM_CXXFLAGS) -c -o MidiEvents.o MidiEvents.cc
 smustextmidi$(EXEEXT) : smustextmidi.o SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o $(AM_LDFLAGS)
 smustextmidi.o: smustextmidi.cc Midi.h TextmidiUtils.h rational_support.h RhythmRational.h SmusTrackEvent.h MidiMaps.h Options.h

@@ -1,5 +1,24 @@
+2023-08-01     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, MIDIKeyString.h, Makefile, Makefile.am, Makefile.in, 
+        Midi.cc, Midi.h, NoteEvent.h, Options.h, SmusTrackEvent.h, Track.h, 
+        cgmlegacy.h, config.h, config.h.in, config.status, configure:
+        make constexpr that are inside namespaces as inline.
+
+2023-07-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h: delete obsolete unused externs.
+        * Midi.h, main.cc, textmidi.{l,h}:
+        use a Singleton Pattern for the global values.  eww.
+
+2023-07-30     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, main.cc, textmidi.{l,h}:
+        make running_status a unique_ptr.
+
 2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
-        * main.cc : fix mishandling of default runningstatus="STANDARD,
+        * MidiEvents.cc: ensure dec IO manipulator is used
+        after any use of hex, probably unnecessarily.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc: fix mishandling of default runningstatus="STANDARD,
         not "standard".
 
 2023-07-18     Thomas E. Janzen <janzentome@gmail.com>

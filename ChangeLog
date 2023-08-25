@@ -1,3 +1,18 @@
+2023-08-24     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: note events were being pushed onto the wrong track's container.
+        They should be pushed on the "tr", the track index, not "i" which was incremented.
+        The index "i" has been deleted.
+        The symptom was that following higher priority voices seemed to work but following
+        lower priority tracks (e.g., track 0 followed track 1), failed to write any tracks.
+
+2023-08-20     Thomas E. Janzen <janzentome@gmail.com>
+	* GeneralMIDI.cc, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        guitar range was an octave high.  textmidiformedit: transpose spinbox
+        didn't set when files were loaded.
+
+2023-08-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am Makefile.in:  Compile with std=c++23.  
+
 2023-08-01     Thomas E. Janzen <janzentome@gmail.com>
         * GeneralMIDI.h, MIDIKeyString.h, Makefile, Makefile.am, Makefile.in, 
         Midi.cc, Midi.h, NoteEvent.h, Options.h, SmusTrackEvent.h, Track.h, 

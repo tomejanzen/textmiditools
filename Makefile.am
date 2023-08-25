@@ -10,7 +10,7 @@ info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi t
 
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
 CXX = /usr/bin/env g++
-AM_CXXFLAGS  = -std=c++20 -Wall -Wpedantic -Wextra -Weffc++
+AM_CXXFLAGS  = -std=c++23 -Wall -Wpedantic -Wextra -Weffc++
 AM_CXXFLAGS += -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i
@@ -76,7 +76,7 @@ GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT)
+	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o textmidi.cc Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT)
 install:
 	$(INSTALL_PROGRAM) textmidi$(EXEEXT) $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) miditext$(EXEEXT) $(DESTDIR)$(bindir)/miditext$(EXEEXT)

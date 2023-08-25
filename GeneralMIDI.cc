@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.64
+// TextMIDITools Version 1.0.65
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -78,14 +78,14 @@ const MIDI_Program cgm::midi_programs[] =
     {23, "Harmonica",                       {"C3",  "G5"}},
     {24, "Tango Accordion",                 {"E1",  "D6"}},
     // Guitar
-    {25, "Acoustic Guitar (nylon)",         {"E3",  "D6"}},
-    {26, "Acoustic Guitar (steel)",         {"E3",  "D6"}},
-    {27, "Electric Guitar (jazz)",          {"E3",  "D6"}},
-    {28, "Electric Guitar (clean)",         {"E3",  "D6"}},
-    {29, "Electric Guitar (muted)",         {"E3",  "D6"}},
-    {30, "Overdriven Guitar",               {"E3",  "D6"}},
-    {31, "Distortion Guitar",               {"E3",  "D6"}},
-    {32, "Guitar Harmonics",                {"E4",  "D7"}},
+    {25, "Acoustic Guitar (nylon)",         {"E2",  "D5"}},
+    {26, "Acoustic Guitar (steel)",         {"E2",  "D5"}},
+    {27, "Electric Guitar (jazz)",          {"E2",  "D5"}},
+    {28, "Electric Guitar (clean)",         {"E2",  "D5"}},
+    {29, "Electric Guitar (muted)",         {"E2",  "D5"}},
+    {30, "Overdriven Guitar",               {"E2",  "D5"}},
+    {31, "Distortion Guitar",               {"E2",  "D5"}},
+    {32, "Guitar Harmonics",                {"E3",  "D6"}},
     // Bass
     {33, "Acoustic Bass",                   {"E1",  "E4"}},
     {34, "Electric Bass (finger)",          {"E1",  "E4"}},

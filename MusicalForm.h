@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.64
+// TextMIDITools Version 1.0.65
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -19,6 +19,7 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/version.hpp>
 
 #include "cgmlegacy.h"
 #include "Voice.h"

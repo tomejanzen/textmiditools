@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.64
+# TextMIDITools Version 1.0.65
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -61,6 +61,8 @@ class XmlForm(tkinter.Tk):
         # get the xml.dom.minidom.Document
         self.dom = parse(self.the_filename)
         self.traverse_xml_form()
+        self.transpose = IntVar();
+        self.all_forms_window.scale_frame.transpose_spinbox.set(0)
         self.draw_form()
 
     def configure_callback(self, event=None):

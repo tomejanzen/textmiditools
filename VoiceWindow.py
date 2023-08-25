@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.64
+# TextMIDITools Version 1.0.65
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -266,10 +266,14 @@ class VoiceWindow(tkinter.Toplevel):
         vox = int(self.voice_number.get())
         delay_quotient = self.follow_delay.get()
         slash_index = delay_quotient.find("/")
-        num_list = delay_quotient.split("/")
-        if (len(num_list) == 2):
-            self.xml_form['voices'][vox]['follower']['delay']['numerator'] = num_list[0]
-            self.xml_form['voices'][vox]['follower']['delay']['denominator'] = num_list[1]
+        if (slash_index > 0):
+            num_list = delay_quotient.split("/")
+            if (len(num_list) == 2):
+                self.xml_form['voices'][vox]['follower']['delay']['numerator'] = num_list[0]
+                self.xml_form['voices'][vox]['follower']['delay']['denominator'] = num_list[1]
+        else:
+            self.xml_form['voices'][vox]['follower']['delay']['numerator'] = delay_quotient
+            self.xml_form['voices'][vox]['follower']['delay']['denominator'] = 1
 
     def inversion_callback(self, *args):
         vox = int(self.voice_number.get())

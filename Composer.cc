@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.64
+// TextMIDITools Version 1.0.65
 //
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -320,10 +320,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     for (auto& lts : leaders_topo_sort)
     {
         // loop over the list of voice indices
-        for (int i{}; auto tr : lts)
+        for (auto tr : lts)
         {
 #if defined(TEXTMIDICGM_PRINT)
-            cout << "tr: " << tr << " i: " << i << '\n';
+            cout << "tr: " << tr << '\n';
 #endif
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow_) [[likely]]
@@ -390,7 +390,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     if (xml_form.voices()[tr].walking())
                     {
                         // first walking note should be in mid-scale
-                        if (track_note_events[i].empty()) [[unlikely]] 
+                        if (track_note_events[tr].empty()) [[unlikely]]
                         {
                             pitch_index = xml_form.scale().size() / 2;
                         }
@@ -483,10 +483,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         }
                         NoteEvent temp_note_event{key_number,
                             dynamic, rhythm};
-                        track_note_events[i].push_back(temp_note_event);
+                        track_note_events[tr].push_back(temp_note_event);
                     } else {
                         NoteEvent temp_note_event{RestPitch, 0, rhythm};
-                        track_note_events[i].push_back(temp_note_event);
+                        track_note_events[tr].push_back(temp_note_event);
                     }
                 }
             }
@@ -613,7 +613,6 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                 const auto start_delay = cgm::NoteEvent{RestPitch, 0, xml_form.voices()[tr].follower().delay_};
                 track_note_events[tr].insert(track_note_events[tr].cbegin(), start_delay);
             }
-            ++i;
         }
     }
 

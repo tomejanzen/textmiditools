@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.64
+# TextMIDITools Version 1.0.65
 # textmidiform.py 1.0
 # Copyright © 2023 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -38,14 +38,14 @@ GeneralMIDIInstrumentDict = {
     'Harmonica'                        : ( 23, 'C3',  'G5'),
     'Tango Accordion'                  : ( 24, 'E1',  'D6'),
     # Guitar
-    'Acoustic_Guitar_(nylon)'          : ( 25, 'E3',  'D6'),
-    'Acoustic_Guitar_(steel)'          : ( 26, 'E3',  'D6'),
-    'Electric_Guitar_(jazz)'           : ( 27, 'E3',  'D6'),
-    'Electric_Guitar_(clean)'          : ( 28, 'E3',  'D6'),
-    'Electric_Guitar_(muted)'          : ( 29, 'E3',  'D6'),
-    'Overdriven_Guitar'                : ( 30, 'E3',  'D6'),
-    'Distortion_Guitar'                : ( 31, 'E3',  'D6'),
-    'Guitar_Harmonics'                 : ( 32, 'E4',  'D7'),
+    'Acoustic_Guitar_(nylon)'          : ( 25, 'E2',  'D5'),
+    'Acoustic_Guitar_(steel)'          : ( 26, 'E2',  'D5'),
+    'Electric_Guitar_(jazz)'           : ( 27, 'E2',  'D5'),
+    'Electric_Guitar_(clean)'          : ( 28, 'E2',  'D5'),
+    'Electric_Guitar_(muted)'          : ( 29, 'E2',  'D5'),
+    'Overdriven_Guitar'                : ( 30, 'E2',  'D5'),
+    'Distortion_Guitar'                : ( 31, 'E2',  'D5'),
+    'Guitar_Harmonics'                 : ( 32, 'E3',  'D6'),
     # Bass
     'Acoustic_Bass'                    : ( 33, 'E1',  'E4'),
     'Electric_Bass_(finger)'           : ( 34, 'E1',  'E4'),

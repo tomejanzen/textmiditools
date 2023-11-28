@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.65
+// TextMIDITools Version 1.0.66
 //
 // smustextmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -411,11 +411,11 @@ string SmusTrackEventVolume::textmidi()
     str += pre_rest();
     if (current_dynamic() != data())
     {
-        const auto dynamic = midi::dynamics_map(data());
-        if (dynamic)
+        if (midi::dynamics_map->contains(data()))
         {
-            (str += *dynamic) += '\n';
-        }
+            const auto dynamic{midi::dynamics_map->at(data())};
+            (str += dynamic) += '\n';
+        } 
         else
         {
             ((str += "vel ") += lexical_cast<string>(data())) += ' ';

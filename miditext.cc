@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.65
+// TextMIDITools Version 1.0.66
 //
-// miditext Version 1.0.65
+// miditext Version 1.0.66
 // Copyright © 2023 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -46,6 +46,7 @@
 #include "MidiEvents.h"
 #include "MidiMaps.h"
 #include "Options.h"
+#include "DynamicsOptions.h"
 
 using namespace std;
 using namespace boost;
@@ -155,6 +156,7 @@ int main(int argc, char *argv[])
         ((TextmidiOpt + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
         ((QuantizeOpt + ",q").c_str(), program_options::value<string>(), QuantizeTxt)
         ((LazyOpt     + ",l").c_str(),                                       LazyTxt)
+        ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -176,7 +178,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.65\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.66\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
         cout << logstr;
@@ -185,7 +187,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.65\nCopyright © 2023 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.66\nCopyright © 2023 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -247,6 +249,16 @@ int main(int argc, char *argv[])
             cout << logstr;
         }
     }
+
+    {
+        string dynamics_configuration_file{};
+        if (var_map.count(DynamicsConfigurationOpt)) [[unlikely]]
+        {
+            dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
+        } 
+        midi::dynamics_map.reset(new midi::NumStringMap<int>{textmidi::read_dynamics_configuration(dynamics_configuration_file)});
+    }
+
     if (answer && filesystem::exists(midi_filename))
     {
         const string answer_string{(string{"Overwrite "} += midi_filename) += "?\n"};

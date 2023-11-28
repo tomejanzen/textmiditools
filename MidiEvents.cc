@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.65
+// TextMIDITools Version 1.0.66
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -2449,10 +2449,10 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
             if (dynamic_ != note_on->velocity())
             {
                 os << lazy_string(true);
-                const auto dynamic = dynamics_map(note_on->velocity());
-                if (dynamic)
+                if (dynamics_map->contains(note_on->velocity()))
                 {
-                    os << *dynamic << '\n';
+                    const auto dynamic{dynamics_map->at(note_on->velocity())};
+                    os << dynamic << '\n';
                 }
                 else
                 {

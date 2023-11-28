@@ -154,6 +154,7 @@ textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} 
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}d}|@b{@minus{}@minus{}detache} @var{numticks}]
 [@b{@minus{}l}|@b{@minus{}@minus{}lazynoteoff}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
 [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}runningstatus} 
+[@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 @var{standard|never|persistentaftermeta|persistentaftersysex|persistentaftersysexormeta)}]
 @end smallexample
 
@@ -191,7 +192,7 @@ with the global velocity rather than a note-on with a velocity of zero.
 @item -a, --answer
 @cindex @minus{}a, @minus{}@minus{}answer
 If the output textmidi file already exists, ask before overwriting it.
-@item -n, --runningstauts @lbracechar{}standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
+@item -n, --runningstatus @lbracechar{}standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
 @cindex  @minus{}n, @minus{}@minus{}runningstatus @lbracechar{} standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
 For the purpose of testing with old MIDI files,
 specify the policy for running status.  By default, the MIDI SMF standard is followed:
@@ -208,6 +209,29 @@ From the spec:
 @quotedblleft{}Meta events and sysex events cancel any running status that was in effect.@quotedblright{}
 RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
 @b{sysex}, @b{meta} events, and @b{end-of-track}.
+@item -y, --dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+@cindex @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+To set the MIDI velocity values for lazy dynamics expressed with @quotedblleft{}forte@quotedblright{}, @quotedblleft{}mf@quotedblright{}, etc.,
+edit a dynamics configuration file.
+It is in the same format as boost::program_options requires.
+You can see various settings for MIDI dynamics on wikipedia at the @b{Dynamics_(music)#Interpretation_by_notation_programs} page.
+It is not necessary to specify values for all of the dynamic symbols.
+An example file:
+@example
+ppppp=5
+pppp=10
+ppp=25
+pp=40
+p=50
+mp=62
+mf=75
+forte=90
+ff=110
+fff=120
+ffff=127
+fffff=127
+@end example
+
 @end table
 
 @node Invocation Examples

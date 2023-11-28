@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.65
+** TextMIDITools Version 1.0.66
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -1451,7 +1451,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // This use of the map must work because we can only
     // be in here if the dynamic marking is one of the ones
     // in the map; we will not call contains().
-    const auto dynamic{dynamics_map.at(dynamic_str)};
+    const auto dynamic{(*dynamics_map)[dynamic_str]};
     lazy::dynamic = dynamic % 128;
   }
 

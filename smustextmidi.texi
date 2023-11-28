@@ -134,6 +134,7 @@ he had in SMUS format.
 @smallexample
 smustextmidi [@b{@minus{}i}|@b{@minus{}@minus{}smus}] @var{smus_input_file} @b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{textmidi_output_file}
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}v}|@b{@minus{}@minus{}version}] [@b{@minus{}V}|@b{@minus{}@minus{}verbose}]
+[@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 @end smallexample
 
 @table @option
@@ -162,6 +163,31 @@ If the output textmidi file already exists, ask before overwriting it.
 @cindex @minus{}o
 @cindex @minus{}@minus{}textmidi
 The output file, in textmidi text language, using LAZY dialect.
+@item -y, --dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+@cindex @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+To set the MIDI velocity values for lazy dynamics expressed with @quotedblleft{}forte@quotedblright{}, @quotedblleft{}mf@quotedblright{}, etc.,
+edit a dynamics configuration file.
+It is in the same format as boost::program_options requires.
+You can see various settings for MIDI dynamics on wikipedia at the @b{Dynamics_(music)#Interpretation_by_notation_programs} page.
+It is not necessary to specify values for all of the dynamic symbols.
+An example file:
+@example
+ppppp=5
+pppp=10
+ppp=25
+pp=40
+p=50
+mp=62
+mf=75
+forte=90
+ff=110
+fff=120
+ffff=127
+fffff=127
+@end example
+
+
+
 @end table
 
 @node Invocation Examples

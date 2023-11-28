@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.65
+// TextMIDITools Version 1.0.66
 //
 // textmidicgm 1.0
 // Copyright © 2023 Thomas E. Janzen
@@ -43,6 +43,8 @@ namespace midi
                 string_num_map_.emplace(*mi);
             }
         }
+
+        NumStringMap(const NumStringMap& ) = default;
 
         std::string_view at(NumType num) const
         {
@@ -115,13 +117,20 @@ namespace midi
         {
             return string_num_map_;
         }
+
+        void insert(std::map<std::string_view, NumType>::value_type insert_value)
+        {
+            string_num_map_[insert_value.first]  = insert_value.second;
+            num_string_map_[insert_value.second] = insert_value.first;
+        }
+
       private:
         std::map<NumType, std::string_view> num_string_map_;
         std::map<std::string_view, NumType> string_num_map_;
     };
 
     extern const NumStringMap<int> smpte_fps_map;
-    extern const NumStringMap<int> dynamics_map;
+    extern std::unique_ptr<const NumStringMap<int>> dynamics_map;
     extern const NumStringMap<int> pan_map;
     extern const NumStringMap<midi::MIDI_Format> format_map;
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;

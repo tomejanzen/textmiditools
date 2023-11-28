@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.65
+// TextMIDITools Version 1.0.66
 //
 // textmidi 1.0.6
 // Copyright © 2023 Thomas E. Janzen
@@ -24,5 +24,7 @@ const std::string AnswerOpt{"answer"};
 inline constexpr char AnswerTxt[]{"Ask before overwriting a file"};
 const std::string TextmidiOpt{"textmidi"};
 inline constexpr char TextmidiTxt[]{"textmidi file"};
+const std::string DynamicsConfigurationOpt{"dynamics_configuration"};
+inline constexpr char DynamicsConfigurationTxt[]{"dynamics_configuration file"};
 
 #endif

@@ -106,6 +106,7 @@ and 2021 in order to add support for more of the MIDI specification.
 @smallexample
 miditext [@b{@minus{}i}|@b{@minus{}@minus{}midi}] @var{midi_input_file} @b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{textmidi_output_file}
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}q}|@b{@minus{}@minus{}quantize} @var{musical_ratio in quotes}] [@b{@minus{}l}|@b{@minus{}@minus{}lazy}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
+[@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 @end smallexample
 
@@ -165,6 +166,30 @@ divisible by a sixteenth-note.
 @cindex @minus{}@minus{}lazy
 Will attempt to output track data in textmidi's LAZY mode, an abbreviated
 text representation.
+@item -y, --dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+@cindex @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+To set the MIDI velocity values for lazy dynamics expressed with @quotedblleft{}forte@quotedblright{}, @quotedblleft{}mf@quotedblright{}, etc.,
+edit a dynamics configuration file.
+It is in the same format as boost::program_options requires.
+You can see various settings for MIDI dynamics on wikipedia at the @b{Dynamics_(music)#Interpretation_by_notation_programs} page.
+It is not necessary to specify values for all of the dynamic symbols.
+An example file:
+@example
+ppppp=5
+pppp=10
+ppp=25
+pp=40
+p=50
+mp=62
+mf=75
+forte=90
+ff=110
+fff=120
+ffff=127
+fffff=127
+@end example
+
+
 @item -a, --answer
 @cindex @minus{}a
 @cindex @minus{}@minus{}answer

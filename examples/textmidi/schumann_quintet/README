@@ -1,0 +1,30 @@
+These files are the textmidi-language files for the Piano Quintet Op. 44 by
+Robert Schumann, written in 1842.  These files were written by Thomas E. Janzen
+in about 2003 and following using the first version of the textmidi program.
+This quintet rendering was coached by Massachusetts violist and string
+instructor Jenny Stirling.
+
+The base source files were written using the m4 macro preprocessor, hence
+filenames that end in ".m4".  Using m4 made it possible to write such
+verbosities as trills and swells/fades on a note in a simpler way in the track
+files.
+
+Each instrument (violin 1, violin 2, viola, cello, and piano) has its own m4
+track file.  In addition, there are 2 to 4 files for the piano, for left-hand,
+right-hand, pedal, and sometimes and additional track.  The additional
+track was needed because 20 years ago the textmidi program did not
+support asynchronous (overlapping notes) chords.
+
+The makefile turns these m4 track files into *.txt track files and concatenates
+the text files so that each of the four movements of the quintet becomes its
+own single ".txt" file.  The textmidi program can convert each movement's
+single text file to a standard 1.1 MIDI file.
+
+Note that some MIDI players do not support either polyphonic or channel
+pressure, or support only one of these.  This version of the Quintet uses
+Channel Pressure.  The original used Polyphonic Pressure, but correspondents on
+the Classical [MIDI] Archive discouraged the use of pressure since their
+favorite player did not support it; therefore the version of this Quintet on
+classicalarchives.com does not include pressure at all in the second movement
+(although Schumann indicated swells and fades).  The version here uses Channel
+Pressure.

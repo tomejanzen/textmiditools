@@ -1,0 +1,294 @@
+; $Author: janzent $
+; $Log: schuqnt2click.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.2  2003/03/23 02:58:14  root
+; final for submission prior to coaching
+;
+; Revision 1.1  2003/03/08 03:04:43  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt2click.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt2click.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt2click.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt2click.txt,v $
+; $State: Exp $
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK rhythm track
+INSTRUMENT WOODBLOCK
+PROGRAM midi_channel_click Woodblock
+pan(midi_channel_click,0)
+
+LAZY
+chan midi_channel_click
+fff
+C5 4 C4 4 C3 4 C4 4 ; measure 0 pickup
+C5 4 C4 4 C3 4 C4 4  ; m1
+C5 4 C4 4 C3 4 C4 4  ; m2
+; double bar
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m3-10
+; repeat forward
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m11 m23
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ; first ending m24 25
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m11 m23
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ; second ending m26 27
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m28-30
+C5 4 C4 4 C3 4 C4 4  ;m31 double bar in mid-bar
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m32-46
+C5 4 C4 4 ;m47a
+;repeat forward
+C3 4 C4 4 ;m47b
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m48-62
+C5 4 C4 4 ;m63 first ending
+; repeat sign
+C3 4 C4 4 ;m47b
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m48-62
+C5 4 C4 4 C3 4 C4 4  ; m64
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m65-m74
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m75-m84
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m85-m94
+;agitato
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4   ;m95 -103
+;repeat forward
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4   ;m104-111
+
+C5 4 C4 4 C3 4 C4 4  ;first ending ;m112
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4   ;m104-111
+
+C5 4 C4 4 C3 4 C4 4  ;second ending ;m113
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m114-121
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m122-129
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4        ;m130-135
+R 2 ;m136a
+R 2 ;m136b
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m137-144
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m145-152
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m153-160
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m161-168
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m169-176
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m177-184
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  ;m185-192
+
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4  
+C5 4 C4 4 C3 4 C4 4        ;m193-197
+
+END_LAZY
+DELAY 10 END_OF_TRACK

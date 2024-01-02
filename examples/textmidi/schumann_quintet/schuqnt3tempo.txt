@@ -1,0 +1,121 @@
+; $Author: janzent $
+; $Log: schuqnt3tempo.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.11  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.10  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.9  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.8  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.7  2003/05/02 01:40:15  root
+; adjustments, elsticity
+;
+; Revision 1.6  2003/04/22 00:16:11  root
+; keys
+;
+; Revision 1.5  2003/03/23 01:24:58  root
+; fix channel to 8
+;
+; Revision 1.4  2003/03/09 21:49:02  root
+; done
+;
+; Revision 1.3  2003/02/27 23:50:37  root
+; put END_LAZY around tempo and signatures
+;
+; Revision 1.2  2003/02/27 02:36:28  root
+; some cleaning
+;
+; Revision 1.1  2003/02/24 01:53:28  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3tempo.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3tempo.txt,v $
+; $State: Exp $
+; Schumann Quintet 3rd movement tempo track
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Tempo Track
+TEMPO tempo68 ; 138 for dotted quarter but MIDI wants a quarter note tempo
+TIME_SIGNATURE 6 8 240
+KEY_SIGNATURE Eb
+TEXT Robert Schuman: Quintet for piano, 2 violins, viola, and cello Op. 44
+TEXT III: Molto vivace.
+TEXT This rendering was sequenced by Thomas Janzen and coached by New England violist and teacher Jennifer Stirling.
+TEXT Output of textmidi lexical analyzer by Thomas Janzen.
+TEXT "Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+LAZY 
+chan midi_channel_tempo
+vel 5
+acousticsnare 8
+R 5/8 ;pickup measure 0
+END_LAZY TEMPO tempo68 LAZY R 8 ;measure 0 part of repeat
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 ;repeat sign m16
+R 8 ; start of repeat
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 ;end of second repeat
+R 1/8 R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8
+R 1/8 R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 4/8 end second repeat of second repeated second
+END_LAZY TEMPO eval(tempo68/4) LAZY
+R 8
+END_LAZY TEMPO tempo68 LAZY
+R 1/8 
+END_LAZY TEMPO tempotrioa LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+;begin repeat at m61
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2.  ;first ending
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. ;second ending second repeat of m61-76/77
+END_LAZY TEMPO tempo68 LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ; first bar 123
+END_LAZY TEMPO realtempo3 
+TIME_SIGNATURE 2 4 240 LAZY
+END_LAZY KEY_SIGNATURE Ab LAZY END_LAZY TEMPO eval(realtempo3/2) LAZY R 4 END_LAZY TEMPO realtempo3 LAZY R 4 ; second bar 123
+R 14/4
+R 1/4 ; m131a
+END_LAZY KEY_SIGNATURE E LAZY
+R 1/4 ;m131b
+R 14/4 ;m132-138
+R 1/4 ;m139a
+END_LAZY KEY_SIGNATURE Ab LAZY
+R 1/4 ;m139b
+
+R 102/4 ;m140-190
+R 4 ;m191a
+END_LAZY TEMPO eval(realtempo3-8) LAZY
+R 4 ;m191b
+
+R 12/4 ;m192-m197
+
+END_LAZY TIME_SIGNATURE 6 8 240 LAZY
+END_LAZY KEY_SIGNATURE Eb LAZY
+END_LAZY TEMPO tempo68 LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2.  ;m231
+END_LAZY TEMPO eval(tempo68-8) LAZY
+R 2.  ;m232
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m233-240
+R 2. R 2. 
+END_LAZY TEMPO eval(tempo68) LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m243-250
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m251-260
+R 2. ;m261
+R 2. R 2. R 2. R 2. R 2.  ;m266
+END_LAZY
+DELAY 10 END_OF_TRACK

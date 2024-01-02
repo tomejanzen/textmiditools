@@ -1,0 +1,5750 @@
+; $Author: janzent $
+; $Log: schuqnt4.m4,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.14  2003/11/09 18:23:20  root
+; add ppp macro
+;
+; Revision 1.13  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.12  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.11  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.10  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.9  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.8  2003/05/26 20:46:19  root
+; added staccato octaves
+;
+; Revision 1.7  2003/04/24 00:39:11  root
+; added pan and program macros, internal macro
+;
+; Revision 1.6  2003/04/19 01:39:27  root
+; half done with dynamics
+;
+; Revision 1.5  2003/04/18 10:55:54  root
+; fixes
+;
+; Revision 1.4  2003/04/14 01:52:07  root
+; finished 4th mmt drft
+;
+; Revision 1.3  2003/04/13 00:56:18  root
+; fixed for piano
+;
+; Revision 1.2  2003/04/07 00:34:15  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4.m4,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4.m4,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4.m4,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4.m4,v $
+; $State: Exp $
+; Schumann Quintet Fourth movement top level.
+;
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; pan is -64 to 63; 0 is center; LEFT CENTER RIGHT should work too.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; pass in channel, bend amount 0 to 8k-1
+;
+
+; mordent(note1, note2, rhythm1, rhythm2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; pass in channel, pitchname, velocity
+
+
+ ; pass in channel, pitchname, velocity
+
+
+
+
+;decresctone(channel,pitch,len_in_whole_notes,startvel,endvel)
+
+
+;decresctonestop(channel,pitch,len_in_whole_notes,startvel,endvel,pitch2)
+
+
+;longtone(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+;longtonestop(channel,pitch,len_in_whole_notes,startvel,midvel,pitch2)
+
+
+;longtonefront(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+;longtone23 lopsided 2/3 cresc 1/3 decresc
+;longtone23(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+;sound card ppp is almost too quiet to hear so promote it to pp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;cresctone(3,D4,1,1,127)
+;cresctone(channel,pitch,len_in_whole_notes,startvel,endvel)
+
+
+ 
+
+;longtone27 lopsided 2/3 cresc 1/3 decresc
+;longtone27(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+
+
+
+
+
+
+FILEHEADER 8 240
+
+; $Author: janzent $
+; $Log: schuqnt4tempo.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.22  2003/11/05 00:23:23  root
+; back off on the accel at the dn
+;
+; Revision 1.21  2003/11/02 23:03:43  root
+; done
+;
+; Revision 1.20  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.19  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.18  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.17  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.16  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.15  2003/09/04 23:54:50  root
+; legatissimo m100,104,108, change tempo rush there
+;
+; Revision 1.14  2003/08/15 01:38:15  root
+; rit at end
+;
+; Revision 1.13  2003/08/14 01:15:40  root
+; remove applause
+;
+; Revision 1.12  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.11  2003/07/12 01:01:36  root
+; adj tempos, pause 224
+;
+; Revision 1.10  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.9  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.8  2003/06/01 18:08:46  root
+; fix
+;
+; Revision 1.7  2003/05/26 20:53:35  root
+; fermata at end
+;
+; Revision 1.6  2003/05/26 20:45:57  root
+; fixed measure 43, also added fermatas near end
+;
+; Revision 1.5  2003/05/05 00:36:38  root
+; pedals dynaics
+;
+; Revision 1.4  2003/04/22 00:16:11  root
+; keys
+;
+; Revision 1.3  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4tempo.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4tempo.txt,v $
+; $State: Exp $
+; Schumann Quintet Fourth movement tempo track
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Tempo Track
+TEMPO 252
+TIME_SIGNATURE 2 2 240 
+KEY_SIGNATURE Eb
+TEXT Robert Schuman: Quintet for piano, 2 violins, viola, and cello Op. 44
+TEXT IV: Allegro ma non troppo.
+TEXT This rendering was sequenced by Thomas Janzen and coached by New England violist and teacher Jennifer Stirling.
+TEXT Output of textmidi lexical analyzer by Thomas Janzen.
+TEXT "Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+LAZY
+chan 10
+vel 5 D2 8
+R 8 R 4 R 2 ; m000
+R 1 ; m001
+LAZY
+R 1 ; m002
+R 1 ; m003
+R 1 ; m004
+R 1 ; m005
+R 1 ; m006
+R 1 ; m007
+R 1 ; m008
+R 1 ; m009
+R 1 ; m010
+R 1 ; m011
+R 1 ; m012
+R 1 ; m013
+R 1 ; m014
+R 1 ; m015
+R 1 ; m016
+R 1 ; m017
+R 1 ; m018
+R 1 ; m019
+R 1 ; m020
+R 1 ; m021
+R 1 ; m022
+R 1 ; m023
+R 1 ; m024
+R 1 ; m025
+R 1 ; m026
+R 1 ; m027
+R 1 ; m028
+R 1 ; m029
+R 1 ; m030
+R 1 ; m031
+R 1 ; m032
+R 1 ; m033
+R 1 ; m034
+R 1 ; m035
+R 1 ; m036
+R 4 END_LAZY TEMPO 100 LAZY R 8 END_LAZY TEMPO 252 LAZY R 8 R 2  ;m037
+R 1 ; m038
+R 1 ; m039
+R 1 ; m040
+END_LAZY DELAY 480 
+TEMPO 247 DELAY 240 
+TEMPO 244 DELAY 240  ;m041
+TEMPO 239 DELAY 240 
+TEMPO 231 DELAY 240 
+TEMPO 218 DELAY 240 
+TEMPO 197 DELAY 240 
+LAZY R 2 END_LAZY TEMPO 252 LAZY R 2  ; m043
+END_LAZY KEY_SIGNATURE G LAZY R 1 ; m044
+R 1 ; m045
+R 1 ; m046
+END_LAZY TIME_SIGNATURE 9 8 240 LAZY R 1 r 8 ; m047
+END_LAZY TIME_SIGNATURE 2 2 240 LAZY R 1 ; m048
+R 1 ; m049
+R 1 ; m050
+R 1 ; m051
+R 1 ; m052
+R 1 ; m053
+R 1 ; m054
+R 1 ; m055
+R 1 ; m056
+R 1 ; m057
+R 1 ; m058
+R 1 ; m059
+R 1 ; m060
+R 1 ; m061
+R 1 ; m062
+R 1 ; m063
+R 1 ; m064
+R 1 ; m065
+R 1 ; m066
+R 1 ; m067
+R 1 ; m068
+R 1 ; m069
+R 1 ; m070
+R 1 ; m071
+R 1 ; m072
+R 1 ; m073
+R 1 ; m074
+R 1 ; m075
+R 1 ; m076
+R 4 END_LAZY TEMPO 151 LAZY R 4 END_LAZY TEMPO 252 LAZY R 2 ; m077
+R 1 ; m078
+R 1 ; m079
+R 1 ; m080
+R 1 ; m081
+R 1 ; m082
+R 1 ; m083
+R 1 ; m084
+R 4 END_LAZY TEMPO 168 LAZY R 4 END_LAZY TEMPO 252 LAZY R 2 ; m085
+R 1 ; m086
+;R 2 END_LAZY TEMPO tempo2 LAZY R 2  ; m087 Jen says a tempo
+R 1 ;m087
+R 1 ; m088
+R 1 ; m089
+R 1 ; m090
+END_LAZY TEMPO 226 LAZY R 1 ; m091
+END_LAZY TEMPO 201 LAZY R 1 ; m092
+R 1 ; m093
+R 1 ; m094
+END_LAZY KEY_SIGNATURE E TEMPO 252 LAZY R 1 ; m095
+R 1 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+END_LAZY TEMPO 280 LAZY R 1 END_LAZY TEMPO 252 LAZY ; m100
+R 1 ; m101
+R 1 ; m102
+R 1 ; m103
+END_LAZY TEMPO 280 LAZY R 1 END_LAZY TEMPO 252 LAZY  ; m104
+R 1 ; m105
+R 1 ; m106
+R 1 ; m107
+END_LAZY TEMPO 280 LAZY R 1 END_LAZY TEMPO 252 LAZY  ; m108
+R 1 ; m109
+END_LAZY TEMPO 280 LAZY R 1 END_LAZY TEMPO 252 LAZY  ; m110
+R 1 ; m111
+R 1 ; m112
+R 1 ; m113
+R 1 ; m114
+R 1 ; m115
+R 1 ; m116
+R 1 ; m117
+R 1 ; m118
+R 1 ; m119
+R 1 ; m120
+R 1 ; m121
+R 1 ; m122
+R 1 ; m123
+R 1 ; m124
+R 1 ; m125
+R 1 ; m126
+R 1 ; m127
+R 1 ; m128
+R 1 ; m129
+R 1 ; m130
+R 1 ; m131
+R 1 ; m132
+R 1 ; m133
+R 1 ; m134
+R 1 ; m135
+R 1 ; m136
+R 1 ; m137
+R 1 ; m138
+R 1 ; m139
+R 1 ; m140
+R 1 ; m141
+R 1 ; m142
+R 1 ; m143
+R 1 ; m144
+R 1 ; m145
+R 1 ; m146
+R 1 ; m147
+R 1 ; m148
+R 1 ; m149
+R 1 ; m150
+R 1 ; m151
+R 1 ; m152
+R 1 ; m153
+R 1 ; m154
+R 1 ; m155
+R 1 ; m156
+R 1 ; m157
+R 1 ; m158
+R 1 ; m159
+R 1 ; m160
+R 1 ; m161
+R 1 ; m162
+R 1 ; m163
+R 2 
+END_LAZY KEY_SIGNATURE Eb LAZY
+R 2 ; m164
+R 1 ; m165
+R 1 ; m166
+R 1 ; m167
+R 1 ; m168
+R 1 ; m169
+R 1 ; m170
+R 1 ; m171
+R 1 ; m172
+R 1 ; m173
+R 1 ; m174
+R 1 ; m175
+R 1 ; m176
+R 1 ; m177
+R 4. END_LAZY TEMPO 126 DELAY 120 TEMPO 252 LAZY R 2 ; m178
+R 1 ; m179
+R 1 ; m180
+R 1 ; m181
+R 1 ; m182
+R 1 ; m183
+R 1 ; m184
+R 1 ; m185
+R 1 ; m186
+R 1 ; m187
+R 1 ; m188
+R 1 ; m189
+R 1 ; m190
+R 1 ; m191
+R 1 ; m192
+R 1 ; m193
+R 1 ; m194
+R 1 ; m195
+R 1 ; m196
+R 1 ; m197
+R 1 ; m198
+R 1 ; m199
+R 1 ; m200
+R 1 ; m201
+R 1 ; m202
+R 1 ; m203
+R 1 ; m204
+R 1 ; m205
+R 1 ; m206
+R 1 ; m207
+R 1 ; m208
+R 1 ; m209
+R 1 ; m210
+R 1 ; m211
+R 4 END_LAZY TEMPO 168 LAZY R 4 END_LAZY TEMPO 252 LAZY R 2 ; m212
+R 1 ; m213
+R 1 ; m214
+R 1 ; m215
+R 1 ; m216
+R 1 ; m217
+R 1 ; m218
+R 1 ; m219
+R 1 ; m220
+R 1 ; m221
+R 1 ; m222
+R 1 ; m223
+END_LAZY TEMPO 189 DELAY 480  
+TEMPO 252 DELAY 480 LAZY ; m224
+R 1 ; m225
+R 1 ; m226
+R 1 ; m227
+R 1 ; m228
+R 1 ; m229
+R 1 ; m230
+R 1 ; m231
+R 1 ; m232
+R 1 ; m233
+R 1 ; m234
+R 1 ; m235
+R 1 ; m236
+R 1 ; m237
+R 1 ; m238
+R 1 ; m239
+R 1 ; m240
+R 1 ; m241
+R 1 ; m242
+R 1 ; m243
+R 1 ; m244
+R 1 ; m245
+R 1 ; m246
+R 1 ; m247
+END_LAZY TEMPO 189 LAZY R 2 END_LAZY TEMPO 252 LAZY R 2 ; m248
+R 1 ; m249
+R 1 ; m250
+R 1 ; m251
+R 1 ; m252
+R 1 ; m253
+R 1 ; m254
+R 1 ; m255
+R 1 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 1 ; m262
+R 1 ; m263
+R 1 ; m264
+R 1 ; m265
+R 1 ; m266
+R 1 ; m267
+R 1 ; m268
+R 1 ; m269
+R 1 ; m270
+R 1 ; m271
+R 1 ; m272
+R 1 ; m273
+END_LAZY TIME_SIGNATURE 9 8 240 LAZY R 1 r 8 ; m274
+END_LAZY TIME_SIGNATURE 2 2 240 LAZY R 1 ; m275
+R 1 ; m276
+R 1 ; m277
+R 1 ; m278
+R 1 ; m279
+R 1 ; m280
+R 1 ; m281
+R 1 ; m282
+R 1 ; m283
+R 1 ; m284
+R 1 ; m285
+R 1 ; m286
+R 1 ; m287
+R 1 ; m288
+R 1 ; m289
+R 1 ; m290
+R 1 ; m291
+R 1 ; m292
+R 1 ; m293
+R 1 ; m294
+R 1 ; m295
+R 1 ; m296
+R 1 ; m297
+R 1 ; m298
+R 1 ; m299
+R 1 ; m300
+R 1 ; m301
+R 1 ; m302
+R 1 ; m303
+R 1 ; m304
+R 1 ; m305
+R 1 ; m306
+R 1 ; m307
+R 1 ; m308
+R 1 ; m309
+R 1 ; m310
+R 1 ; m311
+R 1 ; m312
+R 1 ; m313
+R 2 END_LAZY TEMPO 126 LAZY R 2 END_LAZY TEMPO 252 LAZY ; m314
+R 2 END_LAZY TEMPO 126 LAZY R 2 ; m315
+END_LAZY TEMPO 226 LAZY R 2  END_LAZY TEMPO 201 LAZY R 2  ; m316
+END_LAZY TEMPO 176 LAZY R 2  END_LAZY TEMPO 151 LAZY R 2  ; m317
+END_LAZY TEMPO 75 LAZY R 1 ; m318
+END_LAZY TEMPO 252 LAZY R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+R 1 ; m325
+R 1 ; m326
+R 1 ; m327
+R 1 ; m328
+R 1 ; m329
+R 1 ; m330
+R 1 ; m331
+R 1 ; m332
+R 1 ; m333
+R 1 ; m334
+R 1 ; m335
+R 1 ; m336
+R 1 ; m337
+R 1 ; m338
+R 1 ; m339
+R 1 ; m340
+R 1 ; m341
+R 1 ; m342
+R 1 ; m343
+R 1 ; m344
+R 1 ; m345
+R 1 ; m346
+R 1 ; m347
+R 1 ; m348
+R 1 ; m349
+R 1 ; m350
+R 1 ; m351
+R 1 ; m352
+R 1 ; m353
+R 1 ; m354
+R 1 ; m355
+R 1 ; m356
+R 1 ; m357
+R 1 ; m358
+R 1 ; m359
+R 1 ; m360
+R 1 ; m361
+R 1 ; m362
+R 1 ; m363
+R 1 ; m364
+R 1 ; m365
+R 1 ; m366
+R 1 ; m367
+R 1 ; m368
+R 1 ; m369
+R 1 ; m370
+R 1 ; m371
+R 1 ; m372
+R 1 ; m373
+R 1 ; m374
+R 1 ; m375
+R 1 ; m376
+R 1 ; m377
+R 1 ; m378
+R 1 ; m379
+R 1 ; m380
+R 1 ; m381
+R 1 ; m382
+R 1 ; m383
+R 1 ; m384
+R 1 ; m385
+R 1 ; m386
+R 1 ; m387
+R 1 ; m388
+R 1 ; m389
+R 1 ; m390
+R 1 ; m391
+R 1 ; m392
+R 1 ; m393
+R 1 ; m394
+R 1 ; m395
+R 1 ; m396
+R 1 ; m397
+R 1 ; m398
+R 1 ; m399
+R 1 ; m400
+R 1 ; m401
+R 1 ; m402
+R 1 ; m403
+R 1 ; m404
+R 1 ; m405
+R 1 ; m406
+R 1 ; m407
+R 1 ; m408
+R 1 ; m409
+R 1 ; m410
+END_LAZY TEMPO 257 LAZY R 1 ; m411
+END_LAZY TEMPO 262 LAZY R 1 ; m412
+END_LAZY TEMPO 267 LAZY R 1 ; m413
+END_LAZY TEMPO 272 LAZY R 1 ; m414
+END_LAZY TEMPO 277 LAZY R 1 ; m415
+END_LAZY TEMPO 279 LAZY R 1 ; m416
+END_LAZY TEMPO 282 LAZY R 1 ; m417
+END_LAZY TEMPO 284 LAZY R 1 ; m418
+END_LAZY TEMPO 287 LAZY R 1 ; m419
+END_LAZY TEMPO 289 LAZY R 1 ; m420
+R 4 END_LAZY TEMPO 168 LAZY R 4 END_LAZY 
+TEMPO 302 LAZY R 2 ; m421
+R 1 ; m422
+R 1 ; m423
+R 1 ; m424
+R 1 ; m425
+END_LAZY TEMPO 239 LAZY R 1 ; m426
+END_LAZY TEMPO 84 LAZY R 1 ; m427
+
+END_LAZY
+END_OF_TRACK
+
+; $Author: janzent $
+; $Log: schuqnt4v1.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.23  2003/11/02 23:04:42  root
+; done
+;
+; Revision 1.22  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.21  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.20  2003/10/24 01:23:14  root
+; last notes to m137
+;
+; Revision 1.19  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.18  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.17  2003/08/27 01:56:49  root
+; m. 218 impossible C4/G3 in beat 3, removed G3 left C4
+;
+; Revision 1.16  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.15  2003/07/19 21:47:53  root
+; fix dyanamiscs add applause
+;
+; Revision 1.14  2003/07/12 01:01:08  root
+; pauess m224, adj dyns
+;
+; Revision 1.13  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/06/03 23:49:04  root
+; narrow stereo field
+;
+; Revision 1.10  2003/05/26 20:46:04  root
+; staccato
+;
+; Revision 1.9  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.8  2003/04/20 16:11:34  root
+; done before coach
+;
+; Revision 1.7  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.6  2003/04/15 00:51:34  root
+; some dynamics roughed in
+;
+; Revision 1.5  2003/04/11 01:56:13  root
+; fix
+;
+; Revision 1.4  2003/04/10 11:11:05  root
+; fixes
+;
+; Revision 1.3  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.2  2003/04/06 16:14:17  root
+; finished notes
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4v1.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4v1.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4v1.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4v1.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Violin 1
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK FIRST VIOLIN
+INSTRUMENT VIOLIN
+PROGRAM 1 41
+PAN 1 -20
+LAZY
+chan 1
+ff
+chan 1
+R 1 ;m000
+ff G4 Eb4 C5 4 R 4 vel mp Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 ; m001
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 ; m002
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 ; m003
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8 ; m004
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 forte Eb4 G4 8 Eb4 G4 8 mp Eb4 G4 8 Eb4 G4 8 ; m005
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 ; m006
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 ; m007
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8 ; m008
+D4 G4 4 R 4 Eb5 4 G5 4 ; m009
+forte  Bb5 2 mf Bb4 F5 4  Bb4 F5 4  ; m010
+forte  Bb4 G5 2 mp C5 4 Eb5 4  ; m011
+forte  G5 2 mp G4 D5 4 G4 D5 4  ; m012
+forte  G4 Eb5 2 mp Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8  ; m013
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8  ; m014
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8  ; m015
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8  ; m016
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8  ; m017
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8  ; m018
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8  ; m019
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8 D4 F#4 8  ; m020
+D4 G4 2 R 2 ; m021
+forte  ff G3 Eb4 8 mf G3 Eb4 8 mp G3 Eb4 8 p G3 Eb4 8 R 2 ; m022
+forte  ff Ab3 Eb4 8 mf Ab3 Eb4 8 mp Ab3 Eb4 8 p Ab3 Eb4 8 R 2 ; m023
+forte  ff Ab3 Eb4 8 mf Ab3 Eb4 8 mp Ab3 Eb4 8 p Ab3 Eb4 8 R 2  ; m024
+G3 Eb4 4 G3 Eb4 4 ff ff G3 Eb4 8 mf G3 Eb4 8 mp G3 Eb4 8 p G3 Eb4 8 ; m025
+mp R 2  forte ff Ab3 Eb4 8 mf Ab3 Eb4 8 mp Ab3 Eb4 8 p Ab3 Eb4 8 ; m026
+R 2 forte  ff Ab3 Eb4 8 mf Ab3 Eb4 8 mp Ab3 Eb4 8 p Ab3 Eb4 8 ; m027
+R 2 Ab3 Eb4 4 Ab3 Eb4 4   ; m028
+R 2 G5 8 R 8 Bb5 8 R 8  ; m029
+D6 2 G5 8 R 8 Bb5 8 R 8 ; m030
+A5 8 R 8 D5 8 R 8 E5 8 R 8 G5 8 R 8  ; m031
+F5 8 R 8 D5 8 R 8 A4 8 R 8 C#5 8 R 8  ; m032
+D4 D5 2 G4 8 R 8 Bb4 8 R 8 ; m033
+ff D4 D5 2 forte G4 8 R 8 Bb4 8 R 8  ; m034
+A4 8 R 8 D4 8 R 8 E4 8 R 8 G4 8 R 8  ; m035
+F4 8 R 8 D4 8 R 8 A3 8 R 8 C#4 8 R 8 ; m036
+vel 25 D4 8 R 8 r 8 G3 16 A3 16  Bb3 2 ; m037
+mp R 4 r 8 G3 16 A3 16  Bb3 2  ; m038
+forte R 4 r 8 G3 16 A3 16  Bb3 2  ; m039
+R 2 Bb3 4 Bb3 4  ; m040
+Bb3 4. Bb4 16 C5 16 ff D5 4 forte C5 4 ; m041
+Bb4 4 G4 4 C4 4 C#4 4 ; m042
+D4 7/16 R 16 pppp G4 2 ; m043
+;double bar
+A4 2 B4 2 ; m044
+G4 2 END_LAZY PROGRAM 1 46 LAZY B3 G4 4 B3 G4 4  ; m045
+B3 G4 4 R 4 B3 F#4 4 R 4  ; m046
+B3 G4 4 R 4 END_LAZY PROGRAM 1 41 LAZY r 8 G4 4 C5 4 ; m047
+A4 4 D5 4 B4 4 E5 4 ; m048
+C5 4 G4 4 END_LAZY PROGRAM 1 46 LAZY E4 C5 4 E4 C5 4  ; m049
+E4 C5 4 R 4 E4 B4 4 R 4  ; m050
+E4 A4 4 END_LAZY PROGRAM 1 41 LAZY R 4 R 2 ; m051
+pp D4 D5 14/4 ; m052
+ ; m053
+ ; m054
+E5 8 R 8 F5 8 R 8 ; m055
+E5 4 p D5 4 mp C5 4  B4 4 ; m056
+mf D5 4 C5 4 forte G5 8 R 8 A5 8 R 8 ; m057
+G5 4 F5 4 E5 4 D#5 4  ; m058
+F5 4 E5 4 D5 8 R 8 C5 8 R 8 ; m059
+B4 2 C5 8 R 8 D5 8 R 8  ; m060
+C5 2 E5 8 R 8 F5 8 R 8  ; m061
+E5 4 D5 4 C5 4 B4 4  ; m062
+D5 4 C5 4 B4 8 R 8 A4 8 R 8  ; m063
+G#4 2 A4 8 R 8 B4 8 R 8  ; m064
+A4 4 R 4 R 2 ; m065
+R 1  ; m066
+R 1  ; m067
+p Bb3 1 ; m068
+mp Eb4 2 G4 4 A4 4 ; m069
+Bb4 4 B4 4 C5 4 C#5 4 ; m070
+D5 4 E5 4 F#5 4 G5 4 ; m071
+mf A5 4 B5 4 C6 4 D6 4 ; m072
+C6 4 B5 4 mf G4 8 G4 8 A4 8 A4 8; m073
+Bb4 8 Bb4 8 B4 8 B4 8 C5 8 C5 8 C#5 8 C#5 8; m074
+D5 8 D5 8 E5 8 E5 8 F#5 8 F#5 8 G5 8 G5 8 ; m075
+forte A5 8 A5 8 B5 8 B5 8 C6 8 C6 8 D6 8 D6 8 ; m076
+G5 4 R 4; m077
+;double bar
+p G4 E5 B5 4 R 4 ;m077b
+F#4 D5 B5 4 R 4 E4 B4 G5 4 R 4 ; m078
+D4 B4 F#5 4 R 4 G4 E5 4 R 4 ; m079
+F#4 D5 4 R 4 E4 C#5 4 R 4 ; m080
+mf D4 B4 4 R 4 p E4 B4 4 R 4 ; m081
+D4 B4 4 R 4 pp B3 G4 4 R 4 ; m082
+B3 F#4 4 R 4 B3 E4 4 R 4 ; m083
+D4 4 R 4 C#4 4 R 4 ; m084
+B3 4 R 4 
+END_LAZY
+NOTE_ON 1 B3 50
+DELAY 42 CHANNEL_PRESSURE 1 50
+DELAY 42 CHANNEL_PRESSURE 1 52
+DELAY 42 CHANNEL_PRESSURE 1 55
+DELAY 42 CHANNEL_PRESSURE 1 57
+DELAY 42 CHANNEL_PRESSURE 1 60
+DELAY 42 CHANNEL_PRESSURE 1 62
+DELAY 42 CHANNEL_PRESSURE 1 65
+DELAY 42 CHANNEL_PRESSURE 1 67
+DELAY 42 CHANNEL_PRESSURE 1 70
+DELAY 42 CHANNEL_PRESSURE 1 73
+DELAY 42 CHANNEL_PRESSURE 1 75
+DELAY 42 CHANNEL_PRESSURE 1 74
+DELAY 42 CHANNEL_PRESSURE 1 73
+DELAY 42 CHANNEL_PRESSURE 1 73
+DELAY 42 CHANNEL_PRESSURE 1 72
+DELAY 42 CHANNEL_PRESSURE 1 71
+DELAY 42 CHANNEL_PRESSURE 1 70
+DELAY 42 CHANNEL_PRESSURE 1 69
+DELAY 42 CHANNEL_PRESSURE 1 68
+DELAY 42 CHANNEL_PRESSURE 1 67
+DELAY 42 CHANNEL_PRESSURE 1 66
+DELAY 42 CHANNEL_PRESSURE 1 66
+DELAY 42 CHANNEL_PRESSURE 1 65
+DELAY 42 CHANNEL_PRESSURE 1 64
+DELAY 42 CHANNEL_PRESSURE 1 62
+DELAY 42 CHANNEL_PRESSURE 1 61
+DELAY 42 CHANNEL_PRESSURE 1 60
+DELAY 42 CHANNEL_PRESSURE 1 58
+DELAY 42 CHANNEL_PRESSURE 1 58
+DELAY 42 CHANNEL_PRESSURE 1 57
+DELAY 42 CHANNEL_PRESSURE 1 56
+DELAY 42 CHANNEL_PRESSURE 1  55
+DELAY 42 CHANNEL_PRESSURE 1  55
+DELAY 42 CHANNEL_PRESSURE 1  54
+DELAY 42 CHANNEL_PRESSURE 1  53
+DELAY 42 CHANNEL_PRESSURE 1  53
+DELAY 42 CHANNEL_PRESSURE 1  52
+DELAY 42 CHANNEL_PRESSURE 1  51
+DELAY 42 CHANNEL_PRESSURE 1  51
+DELAY 42 CHANNEL_PRESSURE 1  50
+NOTE_OFF 1 B3 0
+LAZY ; m085
+ ; m086
+R 4 R 2 ; m087
+p F#4 4 R 4 F#4 4 R 4 ; m088
+F#4 4 R 4  
+END_LAZY
+NOTE_ON 1 B3 40
+DELAY 42 CHANNEL_PRESSURE 1 40
+DELAY 42 CHANNEL_PRESSURE 1 41
+DELAY 42 CHANNEL_PRESSURE 1 43
+DELAY 42 CHANNEL_PRESSURE 1 44
+DELAY 42 CHANNEL_PRESSURE 1 46
+DELAY 42 CHANNEL_PRESSURE 1 47
+DELAY 42 CHANNEL_PRESSURE 1 49
+DELAY 42 CHANNEL_PRESSURE 1 50
+DELAY 42 CHANNEL_PRESSURE 1 52
+DELAY 42 CHANNEL_PRESSURE 1 53
+DELAY 42 CHANNEL_PRESSURE 1 55
+DELAY 42 CHANNEL_PRESSURE 1 56
+DELAY 42 CHANNEL_PRESSURE 1 58
+DELAY 42 CHANNEL_PRESSURE 1 60
+DELAY 42 CHANNEL_PRESSURE 1 61
+DELAY 42 CHANNEL_PRESSURE 1 63
+DELAY 42 CHANNEL_PRESSURE 1 64
+DELAY 42 CHANNEL_PRESSURE 1 66
+DELAY 42 CHANNEL_PRESSURE 1 67
+DELAY 42 CHANNEL_PRESSURE 1 69
+DELAY 42 CHANNEL_PRESSURE 1 70
+DELAY 42 CHANNEL_PRESSURE 1 68
+DELAY 42 CHANNEL_PRESSURE 1 66
+DELAY 42 CHANNEL_PRESSURE 1 65
+DELAY 42 CHANNEL_PRESSURE 1 63
+DELAY 42 CHANNEL_PRESSURE 1 62
+DELAY 42 CHANNEL_PRESSURE 1 60
+DELAY 42 CHANNEL_PRESSURE 1 59
+DELAY 42 CHANNEL_PRESSURE 1 57
+DELAY 42 CHANNEL_PRESSURE 1 56
+DELAY 42 CHANNEL_PRESSURE 1 54
+DELAY 42 CHANNEL_PRESSURE 1 53
+DELAY 42 CHANNEL_PRESSURE 1 51
+DELAY 42 CHANNEL_PRESSURE 1 50
+DELAY 42 CHANNEL_PRESSURE 1 48
+DELAY 42 CHANNEL_PRESSURE 1 46
+DELAY 42 CHANNEL_PRESSURE 1 45
+DELAY 42 CHANNEL_PRESSURE 1 43
+DELAY 42 CHANNEL_PRESSURE 1 42
+DELAY 42 CHANNEL_PRESSURE 1 40
+NOTE_OFF 1 B3 0
+LAZY ; m089
+ ; m090
+R 4 R 2 ; m091
+pp F#4 4 R 4 F#4 4 R 4  ; m092
+F#4 4 R 4 p E5 1 ; m093
+G#4 2 ; m094
+C#5 6/4  ; m095
+R 2  ; m096
+R 4/1 ; m097
+ ; m098
+ ; m099
+ ; m100
+R 2 
+END_LAZY
+NOTE_ON 1 F#5 25
+DELAY 24 CHANNEL_PRESSURE 1 25
+DELAY 24 CHANNEL_PRESSURE 1 25
+DELAY 24 CHANNEL_PRESSURE 1 26
+DELAY 24 CHANNEL_PRESSURE 1 26
+DELAY 24 CHANNEL_PRESSURE 1 27
+DELAY 24 CHANNEL_PRESSURE 1 28
+DELAY 24 CHANNEL_PRESSURE 1 28
+DELAY 24 CHANNEL_PRESSURE 1 29
+DELAY 24 CHANNEL_PRESSURE 1 30
+DELAY 24 CHANNEL_PRESSURE 1 30
+DELAY 24 CHANNEL_PRESSURE 1 31
+DELAY 24 CHANNEL_PRESSURE 1 32
+DELAY 24 CHANNEL_PRESSURE 1 32
+DELAY 24 CHANNEL_PRESSURE 1 33
+DELAY 24 CHANNEL_PRESSURE 1 33
+DELAY 24 CHANNEL_PRESSURE 1 34
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 38
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 45
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 47
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 49
+DELAY 24 CHANNEL_PRESSURE 1 50
+NOTE_OFF 1 F#5 0
+LAZY ; m101
+A4 2 ; m102
+
+END_LAZY
+NOTE_ON 1 G#4 50
+DELAY 24 CHANNEL_PRESSURE 1 50
+DELAY 24 CHANNEL_PRESSURE 1 49
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 47
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 45
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 38
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 34
+DELAY 24 CHANNEL_PRESSURE 1 33
+DELAY 24 CHANNEL_PRESSURE 1 33
+DELAY 24 CHANNEL_PRESSURE 1 32
+DELAY 24 CHANNEL_PRESSURE 1 31
+DELAY 24 CHANNEL_PRESSURE 1 30
+DELAY 24 CHANNEL_PRESSURE 1 30
+DELAY 24 CHANNEL_PRESSURE 1 29
+DELAY 24 CHANNEL_PRESSURE 1 28
+DELAY 24 CHANNEL_PRESSURE 1 27
+DELAY 24 CHANNEL_PRESSURE 1 26
+DELAY 24 CHANNEL_PRESSURE 1 26
+DELAY 24 CHANNEL_PRESSURE 1 25
+DELAY 24 CHANNEL_PRESSURE 1 24
+DELAY 24 CHANNEL_PRESSURE 1 23
+DELAY 24 CHANNEL_PRESSURE 1 23
+DELAY 24 CHANNEL_PRESSURE 1 22
+DELAY 24 CHANNEL_PRESSURE 1 21
+DELAY 24 CHANNEL_PRESSURE 1 20
+DELAY 24 CHANNEL_PRESSURE 1 20
+NOTE_OFF 1 G#4 0
+LAZY ; m103
+R 1 ; m104
+R 2 
+END_LAZY
+NOTE_ON 1 G#5 25
+DELAY 24 CHANNEL_PRESSURE 1 25
+DELAY 24 CHANNEL_PRESSURE 1 25
+DELAY 24 CHANNEL_PRESSURE 1 26
+DELAY 24 CHANNEL_PRESSURE 1 26
+DELAY 24 CHANNEL_PRESSURE 1 27
+DELAY 24 CHANNEL_PRESSURE 1 28
+DELAY 24 CHANNEL_PRESSURE 1 28
+DELAY 24 CHANNEL_PRESSURE 1 29
+DELAY 24 CHANNEL_PRESSURE 1 30
+DELAY 24 CHANNEL_PRESSURE 1 30
+DELAY 24 CHANNEL_PRESSURE 1 31
+DELAY 24 CHANNEL_PRESSURE 1 32
+DELAY 24 CHANNEL_PRESSURE 1 32
+DELAY 24 CHANNEL_PRESSURE 1 33
+DELAY 24 CHANNEL_PRESSURE 1 33
+DELAY 24 CHANNEL_PRESSURE 1 34
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 38
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 45
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 47
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 49
+DELAY 24 CHANNEL_PRESSURE 1 50
+NOTE_OFF 1 G#5 0
+LAZY ; m105
+
+END_LAZY
+NOTE_ON 1 B4 50
+DELAY 36 CHANNEL_PRESSURE 1 50
+DELAY 36 CHANNEL_PRESSURE 1 49
+DELAY 36 CHANNEL_PRESSURE 1 48
+DELAY 36 CHANNEL_PRESSURE 1 47
+DELAY 36 CHANNEL_PRESSURE 1 46
+DELAY 36 CHANNEL_PRESSURE 1 46
+DELAY 36 CHANNEL_PRESSURE 1 45
+DELAY 36 CHANNEL_PRESSURE 1 44
+DELAY 36 CHANNEL_PRESSURE 1 43
+DELAY 36 CHANNEL_PRESSURE 1 43
+DELAY 36 CHANNEL_PRESSURE 1 42
+DELAY 36 CHANNEL_PRESSURE 1 41
+DELAY 36 CHANNEL_PRESSURE 1 40
+DELAY 36 CHANNEL_PRESSURE 1 40
+DELAY 36 CHANNEL_PRESSURE 1 39
+DELAY 36 CHANNEL_PRESSURE 1 38
+DELAY 36 CHANNEL_PRESSURE 1 37
+DELAY 36 CHANNEL_PRESSURE 1 36
+DELAY 36 CHANNEL_PRESSURE 1 36
+DELAY 36 CHANNEL_PRESSURE 1 35
+DELAY 36 CHANNEL_PRESSURE 1 34
+DELAY 36 CHANNEL_PRESSURE 1 33
+DELAY 36 CHANNEL_PRESSURE 1 33
+DELAY 36 CHANNEL_PRESSURE 1 32
+DELAY 36 CHANNEL_PRESSURE 1 31
+DELAY 36 CHANNEL_PRESSURE 1 30
+DELAY 36 CHANNEL_PRESSURE 1 30
+DELAY 36 CHANNEL_PRESSURE 1 29
+DELAY 36 CHANNEL_PRESSURE 1 28
+DELAY 36 CHANNEL_PRESSURE 1 27
+DELAY 36 CHANNEL_PRESSURE 1 26
+DELAY 36 CHANNEL_PRESSURE 1 26
+DELAY 36 CHANNEL_PRESSURE 1 25
+DELAY 36 CHANNEL_PRESSURE 1 24
+DELAY 36 CHANNEL_PRESSURE 1 23
+DELAY 36 CHANNEL_PRESSURE 1 23
+DELAY 36 CHANNEL_PRESSURE 1 22
+DELAY 36 CHANNEL_PRESSURE 1 21
+DELAY 36 CHANNEL_PRESSURE 1 20
+DELAY 36 CHANNEL_PRESSURE 1 20
+NOTE_OFF 1 B4 0
+LAZY ; m106
+ ; m107
+R 1  ; m108
+
+END_LAZY
+NOTE_ON 1 A#4 35
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 35
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 38
+DELAY 24 CHANNEL_PRESSURE 1 38
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 45
+DELAY 24 CHANNEL_PRESSURE 1 45
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 47
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 49
+DELAY 24 CHANNEL_PRESSURE 1 50
+DELAY 24 CHANNEL_PRESSURE 1 49
+DELAY 24 CHANNEL_PRESSURE 1 48
+DELAY 24 CHANNEL_PRESSURE 1 47
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 46
+DELAY 24 CHANNEL_PRESSURE 1 45
+DELAY 24 CHANNEL_PRESSURE 1 44
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 43
+DELAY 24 CHANNEL_PRESSURE 1 42
+DELAY 24 CHANNEL_PRESSURE 1 41
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 40
+DELAY 24 CHANNEL_PRESSURE 1 39
+DELAY 24 CHANNEL_PRESSURE 1 38
+DELAY 24 CHANNEL_PRESSURE 1 37
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 36
+DELAY 24 CHANNEL_PRESSURE 1 35
+NOTE_OFF 1 A#4 0
+LAZY ; m109
+R 1 ; m110
+pp A4 15/4 ; m111
+ ; m112
+ ; m113
+R 4 ; m114
+p A4 2 F#5 7/6 ; m115
+E5 6 D#5 6 ; m116
+E5 2 G#5 2 ; m117
+E5 2 B4 2 ; m118
+A4 2 F#5 7/6 ; m119
+E5 6 D#5 6 ; m120
+E5 2 G#5 2 ; m121
+E5 2 B4 2 ; m122
+R 1  ; m123
+D#4 2 R 2 ; m124
+R 1  ; m125
+D#4 2 vel 40 D#4 16 R 16 R 8 vel 42 E4 16 R 16 R 8  ; m126
+vel 44 D#4 16 R 16 R 8 vel 46 C#4 16 R 16 R 8 vel 48 B3 16 R 16 R 8 vel 50 A#3 16 R 16 R 8  ; m127
+vel 52 C#4 16 R 16 R 8 vel 54 B3 16 R 16 R 8 vel 56 A3 16 R 16 R 8 vel 58 A#3 16 R 16 R 8  ; m128
+vel 60 B3 16 R 16 R 8 vel 62 C#4 16 R 16 R 8  vel 64 B3 16 R 16 R 8 vel 66 C#4 16 R 16 R 8  ; m129
+vel 68 D4 16 R 16 R 8 vel 70 D#4 16 R 16 R 8 vel 72 D#4 16 R 16 R 8 vel 74 E4 16 R 16 R 8  ; m130
+vel 76 D#4 16 R 16 R 8 vel 78 C#4 16 R 16 R 8 vel 80 B3 16 R 16 R 8 vel 82 A#3 16 R 16 R 8  ; m131
+vel 84 C#4 16 R 16 R 8 vel 86 B3 16 R 16 R 8 vel 88 D#4 8 R 8 vel 90 E4 8 R 8 ; m132
+vel 92 D#4 8 R 8 vel 94 C#4 8 R 8 vel 96 B3 8 R 8 vel 98 A#3 8 R 8  ; m133
+vel 100 B3 8 R 8 vel 102 A#3 8 R 8 vel 104 D#4 8 R 8 vel 106 E4 8 R 8  ; m134
+vel 108 D#4 8 R 8 vel 110 C#4 8 R 8 vel 112 B3 8 R 8 vel 114 A#3 8 R 8  ; m135
+vel 116 B3 8 R 8 vel 118 A#3 8 R 8 p E4 C#5 8 E4 C#5 8 E4 C#5 8 E4 C#5 8  ; m136
+D#4 B4 8 D#4 B4 8 D#4 B4 8 D#4 B4 8 E4 C#5 8 E4 C#5 8 E4 C#5 8 E4 C#5 8  ; m137
+D#4 B4 8 D#4 B4 8 D#4 B4 8 D#4 B4 8 C#4 A#4 8 C#4 A#4 8 C#4 A#4 8 C#4 A#4 8  ; m138
+B3 G#4 8 B3 G#4 8 B3 G#4 8 B3 G#4 8 A#3 G4 8 A#3 G4 8 A#3 G4 8 A#3 G4 8  ; m139
+B3 G#4 8 B3 G#4 8 B3 G#4 8 B3 G#4 8 E4 C#5 8 E4 C#5 8 E4 C#5 8 E4 C#5 8  ; m140
+D#4 B4 8 D#4 B4 8 D#4 B4 8 D#4 B4 8 E4 C#5 8 E4 C#5 8 E4 C#5 8 E4 C#5 8  ; m141
+D#4 B4 8 D#4 B4 8 D#4 B4 8 D#4 B4 8 A#4 C#4 8 A#4 C#4 8 A#4 C#4 8 A#4 C#4 8  ; m142
+B3 G#4 8 B3 G#4 8 B3 G#4 8 B3 G#4 8 A#3 G4 8 A#3 G4 8 A#3 G4 8 A#3 G4 8   ; m143
+B3 G#4 2 E5 4 G#5 4 ; m144
+mp B5 2 p B3 4 B3 4 ; m145
+E4 2 C#5 4 E5 4 ; m146
+mp G#5 2 p G#3 4 G#3 4 ; m147
+C#4 2 B4 D#5 8 B4 D#5 8 B4 D#5 8 B4 D#5 8 ; m148
+A#4 D#5 8 A#4 D#5 8 A#4 D#5 8 A#4 D#5 8 B4 D#5 8 B4 D#5 8 B4 D#5 8 B4 D#5 8  ; m149
+A#4 D#5 8 A#4 D#5 8 A#4 D#5 8 A#4 D#5 8 G#4 B4 8 G#4 B4 8 G#4 B4 8 G#4 B4 8  ; m150
+F#4 A#4 8 F#4 A#4 8 F#4 A#4 8 F#4 A#4 8 F4 A#4 8 F4 A#4 8 F4 A#4 8 F4 A#4 8  ; m151
+F#4 A#4 8 F#4 A#4 8 F#4 A#4 8 F#4 A#4 8 G#4 8 G#4 8 G#4 8 G#4 8  ; m152
+F#4 8 F#4 8 F#4 8 F#4 8 G#4 8 G#4 8 G#4 8 G#4 8  ; m153
+F#4 8 F#4 8 F#4 8 F#4 8 F4 8 F4 8 F4 8 F4 8  ; m154
+D#4 8 D#4 8 D#4 8 D#4 8 D4 8 D4 8 D4 8 D4 8  ; m155
+D#4 2 pp B3 2  ; m156
+R 2  B3 2 ; m157
+ R 2 B3 2  ; m158
+R 2  B3 8. R 16 B3 8. R 16  ; m159
+B3 2 F#4 8. R 16 F#4 8. R 16  ; m160
+R 2 G#4 8. R 16 G#4 8. R 16 ; m161
+R 2 A#4 8. R 16 A#4 8. R 16 ; m162
+R 2 B4 8. R 16 B4 8. R 16 ; m163
+R 2  ; m164a
+;double bar
+p Eb5 8 R 8 Gb5 8 R 8 ;m 164b
+mf Bb5 2 p Eb5 8 R 8 Gb5 8 R 8  ; m165
+F5 8 R 8 Bb4 8 R 8 C5 8 R 8 Eb5 8 R 8 ; m166
+Db5 8 R 8 Bb4 8 R 8 F4 8 R 8 A4 8 R 8  ; m167
+Bb4 2 Eb4 8 R 8 Gb4 8 R 8 ; m168
+mp Bb4 2 p Eb4 8 R 8 Gb4 8 R 8  ; m169
+F4 8 R 8 Bb3 8 R 8 C4 8 R 8 Eb4 8 R 8 ; m170
+Db4 8 R 8 Bb3 8 R 8 F4 8 R 8 A3 8 R 8 ; m171
+vel 25 Bb3 2 pp Gb4 2 ; m172
+pp R 2  Gb4 2  ; m173
+p R 2  Gb4 2  ; m174
+mp R 2 p Gb4 4 Gb4 4  ; m175
+mf Gb4 4. Gb5 16 Ab5 16 ff Bb5 4 forte Ab5 4  ; m176
+Gb5 4 Eb5 4 Ab4 4 A4 4 ; m177
+Bb4 4. R 8 pppp Bb4 4 Eb5 4 ; m178
+C5 4 F5 4 D5 4 G5 4 ; m179
+Eb5 4 Bb4 4 p END_LAZY PROGRAM 1 46 LAZY G4 Eb5 4 G4 Eb5 4  ; m180
+G4 Eb5 4 R 4 G4 D5 4 R 4 ; m181
+G4 C5 4 R 4 END_LAZY PROGRAM 1 41 LAZY Eb5 4 Ab5 4 ; m182
+F5 4 Bb5 4 G5 4 C6 4 ; m183
+Ab5 4 Eb5 4 END_LAZY PROGRAM 1 46 LAZY C5 Ab5 4 C5 Ab5 4  ; m184
+C5 Ab5 4 R 4 C5 G5 4 R 4 ; m185
+C5 F5 4 END_LAZY PROGRAM 1 41 LAZY R 4 R 2 ; m186
+vel 25 Bb3 Bb4 7/2 ; m187
+ ; m188
+ ; m189
+C5 8 R 8 Db5 8 R 8  ; m190
+C5 4 Bb4 4 Ab4 4 G4 4 ; m191
+Bb4 4 Ab4 4 Eb5 8 R 8 F5 8 R 8 ; m192
+Eb5 4 Db5 4 C5 4 B4 4 ; m193
+Db5 4 C5 4 Bb4 8 R 8 Ab4 8 R 8 ; m194
+forte G4 2 Ab4 8 R 8 Bb4 8 R 8 ; m195
+Ab4 2 C6 8 R 8 Db6 8 R 8  ; m196
+C6 4 Bb5 4 Ab5 4 G5 4 ; m197
+Bb5 4 Ab5 4 G5 8 R 8 F5 8 R 8  ; m198
+E5 2 F5 8 R 8 G5 8 R 8  ; m199
+F5 2 R 2 ; m200
+R 1 ; m201
+R 1 ; m202
+R 1 ; m203
+R 2 Eb4 4 F4 4 ; m204
+F#4 4 G4 4 Ab4 4 A4 4 ; m205
+Bb4 4 C5 4 D5 4 Eb5 4 ; m206
+F5 4 G5 4 Ab5 4 Bb5 4 ; m207
+Ab5 4 G5 4 forte Eb4 8 Eb4 8 F4 8 F4 8 ; m208
+F#4 8 F#4 8 G4 8 G4 8 Ab4 8 Ab4 8 A4 8 A4 8  ; m209
+Bb4 8 Bb4 8 C5 8 C5 8 D5 8 D5 8 Eb5 8 Eb5 8  ; m210
+F5 8 F5 8 G5 8 G5 8 Ab5 8 Ab5 8 Bb5 8 Bb5 8  ; m211
+Eb5 4 R 4 forte END_LAZY PROGRAM 1 46 LAZY G5 4 R 4 ; m212
+D5 4 R 4 G5 4 R 4 ; m213
+D5 4 R 4 C5 4 R 4 ; m214
+Bb4 4 R 4 A4 4 R 4  ; m215
+G4 4 R 4 G3 G4 4 R 4 ; m216
+G3 D4 4 R 4 G3 G4 4 R 4 ; m217
+G3 D4 4 R 4  C4 4 R 4  ; m218 score shows impossible G3 with the C4
+Bb3 4 R 4 A3 4 R 4 ; m219
+G3 4 R 4 ff END_LAZY PROGRAM 1 41 LAZY Bb3 4 D4 4 ; m220
+fff Eb4 2 ff Bb3 4 D4 4 ; m221
+Eb4 8 Eb4 8 G4 8 G4 8 Bb4 8 Bb4 8 D5 8 D5 8  ; m222
+Eb5 8 Eb5 8 G5 8 G5 8 Bb5 8 Bb5 8 D6 8 D6 8  ; m223
+Eb6 3/8 R 8 vel 25 Eb5 2  ; m224
+D5 2 Eb5 1 ; m225
+Eb5 2 ; m226
+pp D5 2 Eb5 1 ; m227
+Eb5 2  ; m228
+mp D5 2 F5 2 ; m229
+Eb5 2 Eb5 1 ; m230
+pp D5 2  ; m231
+Eb5 2 pp Eb5 C6 2 ; m232
+D5 Bb5 2 Eb5 4 G5 4 ; m233
+F5 4 C5 4 Eb5 C6 2 ; m234
+D5 Bb5 2 Eb5 4 G5 4  ; m235
+F5 4 C5 4 Eb5 C6 2  ; m236
+D5 Bb5 2 
+END_LAZY ;mid m237
+NOTE_ON 1  D5 10 NOTE_ON 1 Bb5 10 DELAY 470 
+NOTE_OFF 1 D5 10 DELAY  10 
+;m238
+NOTE_ON 1 Eb5  10 DELAY 470 
+NOTE_OFF 1 Eb5 10 NOTE_OFF 1 Bb5 10 DELAY  10 
+NOTE_ON  1 Eb5 10 NOTE_ON 1 C6 10 DELAY 470 
+NOTE_OFF 1 C6  10 DELAY 10 
+;m239:
+NOTE_ON  1 Bb5 10 DELAY 470 
+NOTE_OFF 1 Eb5 10 DELAY  10 
+NOTE_ON  1 D5  10 DELAY 470
+NOTE_OFF 1 D5  10 DELAY  10
+;m240
+NOTE_ON  1 Db5 10 DELAY 470
+NOTE_OFF 1 Db5 10 NOTE_OFF 1 Bb5 10 DELAY 10
+NOTE_ON  1 Db5 10 NOTE_ON  1 Bb5 10 DELAY 470
+NOTE_OFF 1 Db5 10 DELAY 10
+;m241
+NOTE_ON  1 C5  10 DELAY 470
+NOTE_OFF 1 C5  10 NOTE_OFF 1 Bb5 10 DELAY 10
+NOTE_ON  1 B4  10 NOTE_ON  1 Ab5 10 DELAY 470
+NOTE_OFF 1 B4  10 DELAY 10
+;m242
+NOTE_ON  1 Bb4 10 DELAY 470
+NOTE_OFF 1 Bb4 10 NOTE_OFF 1 Ab5 10 DELAY 10
+NOTE_ON  1 Bb4 10 NOTE_ON  1 G5  10 DELAY 470
+NOTE_OFF 1 Bb4 10 DELAY 10
+;m243
+NOTE_ON  1 Ab4 10 DELAY 470
+NOTE_OFF 1 G5  10 NOTE_OFF 1 Ab4  10 DELAY 10
+NOTE_ON  1 F5  10 NOTE_ON  1 Ab4  10 DELAY 470
+NOTE_OFF 1 Ab4 10 DELAY 10
+;m244
+NOTE_ON  1 G4 10 DELAY 470
+NOTE_OFF 1 G4 10 NOTE_OFF 1 F5 10 DELAY 10
+LAZY
+forte G4 Eb5 2 ;m244
+Ab4 Eb5 2 Bb4 Eb5 2  ; m245
+Bb4 Eb5 2 Ab4 Eb5 2  ; m246
+G4 Bb4 2 F4 Bb4 2  ; m247
+G4 Bb4 4. R 8 R 2  ; m248
+R 1  ; m249
+R 1  ; m250
+R 1  ; m251
+R 2 p G5 4 Bb5 4 ; m252
+mp D6 2 p G5 4 Bb5 4 ; m253
+A5 4 D5 4 E5 4 G5 4 ; m254
+F5 4 D5 4 A4 4 C#5 4  ; m255
+D5 2 G5 8 Ab5 8 G5 8 F5 8  ; m256
+F5 8 Eb5 8 D5 8 C5 8 Eb5 8 D5 8 C5 8 B4 8  ; m257
+C5 8 C5 8 D5 8 Eb5 8 C5 8 B4 8 A4 8 B4 8  ; m258
+C5 8 G4 8 Ab4 8 G4 8 G4 8 F4 8 Eb4 8 D4 8  ; m259
+F4 8 Eb4 8 D4 8 C4 8 R 2  ; m260
+R 1   ; m261
+R 2 forte G5 4 B5 4 ; m262
+ff C6 2 forte F5 4 Ab5 4  ; m263
+G5 4 C5 4 D5 4 F5 4 ; m264
+Eb5 4 C5 4 G4 4 B4 4 ; m265
+C5 4 Eb5 4 D5 4 F5 4  ; m266
+G5 2 Eb4 C5 Ab5 2 ; m267
+Eb4 Bb4 G5 2 C4 Ab4 F5 2 ; m268
+C4 G4 Eb5 2 C4 Ab4 F5 2 ; m269
+C4 G4 Eb5 2 Ab3 F4 Db5 2 ; m270
+Ab3 Eb4 C5 2 Ab3 F4 Db5 2 ; m271
+Ab3 Eb4 C5 2 A3 Eb4 C5 2 ; m272
+G3 D4 B4 2 A3 Eb4 C5 2 ; m273
+G3 D4 B4 2 r 8 p Bb4 8 R 8 C5 8 R 8  ; m274
+Bb4 8 R 8 Ab4 8 R 8 G4 8 R 8 F#4 8 R 8  ; m275
+Ab4 8 R 8 G4 8 R 8 F4 8 R 8 F#4 8 R 8  ; m276
+G4 8 R 8 Ab4 8 R 8 G4 8 R 8 Ab4 8 R 8  ; m277
+A4 8 R 8 Bb4 8 R 8 B4 8 R 8 C5 8 R 8  ; m278
+Bb4 8 R 8 Ab4 8 R 8 G4 8 R 8 F#4 8 R 8  ; m279
+Ab4 8 R 8 G4 8 R 8 F4 8 R 8 F#4 8 R 8  ; m280
+G4 8 R 8 Ab4 8 R 8 G4 8 R 8 Ab4 8 R 8  ; m281
+A4 8 R 8 Bb4 8 R 8 R 2 ; m282
+Db5 2 Bb5 2 ; m283
+Bb5 6 R 6 Ab5 6 R 6 G5 6 R 6 ; m284
+Ab5 2 C6 2 ; m285
+Ab5 2 forte Ab4 Eb5 C6 2 ; m286
+G4 Eb5 Bb5 2 F4 C5 Ab5 2 ; m287
+Eb4 C5 G5 2 Eb4 8 R 8 Eb4 8 R 8  ; m288
+Eb4 8 R 8 Eb4 8 R 8 Eb4 8 R 8 D4 8 R 8  ; m289
+Eb4 2 C5 C6 G5 2 ; m290
+Bb4 G5 D6 2 Ab4 Eb5 C6 2 ; m291
+G4 Eb5 Bb5 2 p Eb4 1 ; m292
+Eb4 1 ; m293
+Eb4 1 ; m294
+Eb4 1 ; m295
+Eb4 4 Eb4 4  ; m296
+Eb4 4 Eb4 4 Eb4 4 Eb4 4  ; m297
+Eb4 4 Eb4 4 Eb4 4 Eb4 4  ; m298
+Eb4 4 Eb4 4 Eb4 4 Eb4 4  ; m299
+ff Eb4 1 ; m300
+fff Eb5 1 ; m301
+ff D4 Bb4 1 ; m302
+Bb5 1 ; m303
+Eb5 1 ; m304
+Eb6 13/4 ; m305
+ ; m306
+ ; m307
+R 4 R 4 fff B3 4 ; m308
+ff Bb3 2. fff B3 4 ; m309
+ff Bb3 2. Bb3 8 Bb3 8  ; m310
+G3 8 G3 8 Bb3 8 Bb3 8 Eb4 8 Eb4 8 G4 8 G4 8  ; m311
+G5 1 ; m312
+Bb5 1 ; m313
+fff Eb6 1 ; m314
+fff E6 1 ; m315
+ff F6 2 Ab6 2 ; m316
+F6 2 Eb6 2 ; m317
+fff Bb4 F5 8 D6 4. R 2 ; m318
+R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+ff Bb4 1 ; m325
+Ab5 1 ; m326
+G5 1 ; m327
+Eb6 1 ; m328
+forte D6 2 A5 2 ; m329
+Bb5 2 Ab5 2 ; m330
+G5 2 D5 2 ; m331
+Eb5 2 G4 4 Bb4 4 ; m332
+C5 2 G4 8 R 8 Bb4 8 R 8 ; m333
+Ab4 8 R 8 D4 8 R 8 Eb4 8 R 8 F4 8 R 8 ; m334
+G4 2 G4 8 R 8 F4 8 R 8 ; m335
+Eb4 8 R 8 D4 8 R 8 C4 8 R 8 F4 2 ; m336
+F4 8 R 8 F4 8 R 8 C4 8 R 8 ;m337
+Bb3 2 R 2  ; m338
+R 1 ; m339
+R 1 ; m340
+R 1 ; m341
+R 1 ; m342
+ff Eb5 1 ; m343
+Db6 1 ; m344
+C6 2 Bb5 2 ; m345
+Ab5 2 G5 2 ; m346
+F#5 2 F#4 8 R 8 G4 8 R 8 ; m347
+A4 8 R 8 F#4 8 R 8 G4 8 R 8 A4 8 R 8 ; m348
+G4 8 R 8 D4 8 R 8 E4 8 R 8 F#4 8 R 8 ; m349
+G4 8 R 8 Bb3 8 R 8 C4 8 R 8 D4 8 R 8 ; m350
+fff C4 1 ; m351
+Bb4 1 ; m352
+ff Ab4 2 G4 2  ; m353
+F4 2 Eb4 2 ; m354
+D4 4 R 4 R 2 ; m355
+R 1 ; m356
+R 1  ; m357
+R 1  ; m358
+R 1  ; m359
+R 1  ; m360
+R 1  ; m361
+R 1  ; m362
+R 1  ; m363
+R 1  ; m364
+ff C5 1 ; m365
+ff Bb5 1  ; m366
+forte Ab5 2 G5 2 ; m367
+F5 8 R 8 Ab5 8 R 8 Bb5 8 R 8 C6 8 R 8 ; m368
+Bb5 8 R 8 D5 8 R 8 Eb5 8 R 8 F5 8 R 8 ; m369
+G5 2 Bb4 F5 2 ; m370
+Bb4 G5 2 Bb3 8 R 8 D4 8 R 8 ; m371
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 D5 8 R 8 ; m372
+Eb5 8 R 8 G5 8 R 8 Bb5 8 R 8 D6 8 R 8 ; m373
+Eb6 2 A3 8 R 8 C4 8 R 8 ; m374
+fff Eb4 2 ff A3 8 A3 8 C4 8 C4 8   ; m375
+Eb4 8 Eb4 8 Gb4 8 Gb4 8 A4 8 A4 8 C5 8 C5 8  ; m376
+Eb5 8 Eb5 8 Gb5 8 Gb5 8 A5 8 A5 8 C6 8 C6 8  ; m377
+Eb6 2 p Eb5 2 ; m378
+D5 2 Eb5 1 ; m379
+Eb5 2 ; m380
+D5 2 Eb5 1 ; m381
+Eb5 2 ; m382
+D5 2 F5 2 ; m383
+Eb5 2 Eb5 1 ; m384
+D5 2 ; m385
+Eb5 2 p Eb5 C6 2 ; m386
+D5 Bb5 2 Eb5 4 G5 4 ; m387
+F5 4 C5 4 Eb5 C6 2 ; m388
+D5 Bb5 2 Eb5 4 G5 4 ; m389
+F5 4 C5 4 Eb5 C6 2 ; m390
+D5 Bb5 2  ; m391
+END_LAZY ;mid m391
+NOTE_ON 1  D5 10 NOTE_ON 1 Bb5 10 DELAY 470 
+NOTE_OFF 1 D5 10 DELAY  10 
+;m392
+NOTE_ON 1 Eb5  10 DELAY 470 
+NOTE_OFF 1 Eb5 10 NOTE_OFF 1 Bb5 10 DELAY  10 
+NOTE_ON  1 Eb5 10 NOTE_ON 1 C6 10 DELAY 470 
+NOTE_OFF 1 C6  10 DELAY 10 
+;m393
+NOTE_ON  1 Bb5 10 DELAY 470 
+NOTE_OFF 1 Eb5 10 DELAY  10 
+NOTE_ON  1 D5  10 DELAY 470
+NOTE_OFF 1 D5  10 DELAY  10
+;m394
+NOTE_ON  1 Db5 10 DELAY 470
+NOTE_OFF 1 Db5 10 NOTE_OFF 1 Bb5 10 DELAY 10
+NOTE_ON  1 Db5 10 NOTE_ON  1 Bb5 10 DELAY 470
+NOTE_OFF 1 Db5 10 DELAY 10
+;m395
+NOTE_ON  1 C5  10 DELAY 470
+NOTE_OFF 1 C5  10 NOTE_OFF 1 Bb5 10 DELAY 10
+NOTE_ON  1 B4  10 NOTE_ON  1 Ab5 10 DELAY 470
+NOTE_OFF 1 B4  10 DELAY 10
+;m396
+NOTE_ON  1 Bb4 10 DELAY 470
+NOTE_OFF 1 Bb4 10 NOTE_OFF 1 Ab5 10 DELAY 10
+NOTE_ON  1 Bb4 10 NOTE_ON  1 G5  10 DELAY 470
+NOTE_OFF 1 Bb4 10 DELAY 10
+;m397
+NOTE_ON  1 Ab4 10 DELAY 470
+NOTE_OFF 1 G5  10 NOTE_OFF 1 Ab4  10 DELAY 10
+NOTE_ON  1 F5  10 NOTE_ON  1 Ab4  10 DELAY 470
+NOTE_OFF 1 Ab4 10 DELAY 10
+;m398
+NOTE_ON  1 G4 10 DELAY 470
+NOTE_OFF 1 G4 10 NOTE_OFF 1 F5 10 DELAY 10
+LAZY
+forte G4 Eb5 2 ;m398
+Ab4 Eb5 2 Bb4 Eb5 2  ; m399
+Bb4 Eb5 2 Ab4 Eb5 2  ; m400
+G4 Bb4 2 F4 Bb4 2  ; m401
+Eb4 Bb4 2 Eb4 8 R 8 G4 8 R 8 ; m402
+Bb4 2 D5 8 R 8 F5 8 R 8 ; m403
+G5 2 Bb4 8 R 8 Eb5 8 R 8 ; m404
+C5 8 R 8 Ab4 8 R 8 F4 8 R 8 Bb4 8 R 8 ; m405
+G4 8 R 8 Eb4 8 R 8 Eb4 8 R 8 G4 8 R 8 ; m406
+Bb4 2 D5 8 R 8 F5 8 R 8 ; m407
+G5 2 Bb4 8 R 8 Eb5 8 R 8 ; m408
+C5 8 R 8 Ab4 8 R 8 F4 8 R 8 Bb4 8 R 8 ; m409
+G4 8 R 8 Eb4 8 R 8 Bb5 8 R 8 Eb6 8 R 8 ; m410
+C6 8 R 8 Ab5 8 R 8 F5 8 R 8 Bb5 8 R 8 ; m411
+G5 8 R 8 Eb5 8 R 8 Bb5 8 R 8 Eb6 8 R 8 ; m412
+C6 8 R 8 Ab5 8 R 8 F5 8 R 8 Bb5 8 R 8 ; m413
+G5 8 R 8 Eb5 8 R 8 Bb5 8 Bb5 8 Eb6 8 Eb6 8  ; m414
+C6 8 C6 8 Ab5 8 Ab5 8 F5 8 F5 8 Bb5 8 Bb5 8  ; m415
+G5 8 G5 8 Eb5 8 Eb5 8 C5 8 C5 8 F5 8 F5 8  ; m416
+D5 8 D5 8 Bb4 8 Bb4 8 G4 8 G4 8 C5 8 C5 8  ; m417
+Ab4 8 Ab4 8 F4 8 F4 8 D4 8 D4 8 G4 8 G4 8  ; m418
+Eb4 8 Eb4 8 C4 8 C4 8 Ab3 8 Ab3 8 C4 8 C4 8  ; m419
+Bb3 4 R 4 Bb3 F4 D5 4 R 4  ; m420
+Bb3 G4 Eb5 4 R 4 R 2 ; m421
+R 1 ; m422
+Bb3 G4 Eb5 2 R 2 ; m423
+Bb3 G4 Eb5 2 R 2 ; m424
+Bb3 G4 Eb5 2 R 2  ; m425
+Eb4 2 R 2  ; m426
+Eb4 2 R 2 ; m427
+
+END_LAZY
+END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt4v2.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.21  2003/11/02 23:04:42  root
+; done
+;
+; Revision 1.20  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.19  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.18  2003/10/24 01:23:14  root
+; last notes to m137
+;
+; Revision 1.17  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.16  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.15  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.14  2003/07/19 21:47:53  root
+; fix dyanamiscs add applause
+;
+; Revision 1.13  2003/07/12 01:01:08  root
+; pauess m224, adj dyns
+;
+; Revision 1.12  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.11  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.10  2003/06/03 23:49:04  root
+; narrow stereo field
+;
+; Revision 1.9  2003/05/26 20:46:48  root
+; staccto articulation
+;
+; Revision 1.8  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.7  2003/04/20 16:11:34  root
+; done before coach
+;
+; Revision 1.6  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.5  2003/04/15 00:51:34  root
+; some dynamics roughed in
+;
+; Revision 1.4  2003/04/10 11:11:10  root
+; minor fixes
+;
+; Revision 1.3  2003/04/08 00:35:01  root
+; finished draft
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4v2.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4v2.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4v2.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4v2.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Violin 2
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK SECOND VIOLIN
+INSTRUMENT VIOLIN
+PROGRAM 2 41
+PAN 2 -10
+LAZY
+chan 2 
+mp
+R 1 ;m000
+C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 ; m001
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m002
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m003
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8  ; m004
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 forte  C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m005
+mp Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m006
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m007
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8  ; m008
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8  ; m009
+forte  Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 mp Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8  ; m010
+forte  Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 mp G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 ; m011
+forte  G3 D4 8 G3 D4 8 G3 D4 8 G3 D4 8 mp G3 D4 8 G3 D4 8 G3 D4 8 G3 D4 8  ; m012
+forte  G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 mp C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8   ; m013
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m014
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8   ; m015
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8   ; m016
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8   ; m017
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8   ; m018
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8   ; m019
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 D4 A3 8 D4 A3 8 D4 A3 8 D4 A3 8  ; m020
+Bb3 D4 2 R 2 ; m021
+forte  ff Bb3 8 mf Bb3 8 mp Bb3 8 p Bb3 8 R 2 ; m022
+forte  ff C4 8 mf C4 8 mp C4 8 p C4 8 R 2 ; m023
+forte  ff Bb3 8 mf Bb3 8 mp Bb3 8 p Bb3 8 R 2  ; m024
+mp  Bb3 4 Bb3 4 forte  ff Bb3 8 mf Bb3 8 mp Bb3 8 p Bb3 8  ; m025
+forte  R 2 ff C4 8 mf C4 8 mp C4 8 p C4 8  ; m026
+forte  R 2 ff Bb3 8 mf Bb3 8 mp Bb3 8 p Bb3 8  ; m027
+mp R 2 Bb3 4 Bb3 4  ; m028
+mp R 2 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 ; m029
+A4 D5 8 A4 D5 8 A4 D5 8 A4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 ; m030
+A4 D5 8 A4 D5 8 A4 D5 8 A4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8  ; m031
+A4 D5 8 A4 D5 8 A4 D5 8 A4 D5 8 A4 G4 8 A4 G4 8 A4 G4 8 A4 G4 8  ; m032
+A4 F4 8 A4 F4 8 A4 F4 8 A4 F4 8 G4 Bb4 8 G4 Bb4 8 G4 Bb4 8 G4 Bb4 8  ; m033
+F4 A4 8 F4 A4 8 F4 A4 8 F4 A4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8  ; m034
+F4 A4 8 F4 A4 8 F4 A4 8 F4 A4 8 E4 G4 8 E4 G4 8 E4 G4 8 E4 G4 8  ; m035
+D4 F4 8 D4 F4 8 D4 F4 8 D4 F4 8 C#4 E4 8 C#4 E4 8 C#4 E4 8 C#4 E4 8  ; m036
+vel 25 D4 4 R 8 G3 16 A3 16  Bb3 2 ; m037
+mp R 4 R 8 G3 16 A3 16  Bb3 2  ; m038
+forte R 4 R 8 G3 16 A3 16  Bb3 2  ; m039
+R 2 Bb3 4 Bb3 4  ; m040
+Bb3 4. Bb4 16 C5 16 ff D5 4 forte C5 4 ; m041
+Bb4 4 G4 4 C4 4 C#4 4 ; m042
+D4 7/16 R 16 pppp D4 2 ; m043
+E4 2 F#4 2 ; m044
+D4 2 END_LAZY PROGRAM 2 46 LAZY D4 4 E4 4  ; m045
+E4 4 R 4 D#4 4 R 4 ; m046
+E4 4 END_LAZY PROGRAM 2 41 LAZY R 4 r 8 G4 2 ; m047
+A4 2 B4 2 ; m048
+G4 2 END_LAZY PROGRAM 2 46 LAZY A4 4 A4 4  ; m049
+A4 4 R 4 G#4 4 R 4 ; m050
+A4 4 END_LAZY PROGRAM 2 41 LAZY R 4 R 2 ; m051
+R 1 ; m052
+R 2 mf D5 8 R 8 E5 8 R 8 ; m053
+D5 4 C5 4 B4 4 A#4 4 ; m054
+C5 4 B4 4 E5 8 R 8 F5 8 R 8 ; m055
+E5 4 D5 4 C5 4 B4 4 ; m056
+D5 4 C5 4 forte G4 8 R 8 A4 8 R 8 ; m057
+G4 4 F4 4 E4 4 D#4 4 ; m058
+F4 4 E4 4 D4 8 R 8 C4 8 R 8 ; m059
+B3 2 C4 8 R 8 D4 8 R 8  ; m060
+C4 2 E4 8 R 8 F4 8 R 8  ; m061
+E4 4 D4 4 C4 4 B3 4 ; m062
+D4 4 C4 4 B3 8 R 8 A3 8 R 8  ; m063
+G#3 2 A3 8 R 8 B3 8 R 8  ; m064
+A3 4 R 4 R 2 ; m065
+p D4 2/1 ; m066
+ ; m067
+D4 1 ; m068
+mp Eb4 2 G3 G4 1 ; m069
+G3 G4 2 ; m070
+mf G3 G4 4 R 4 R 2 ; m071
+D4 F#4 4 R 4 R 2 ; m072
+B3 G4 4 R 4 END_LAZY DELAY 1 LAZY mf G3 8 G3 8 A3 8 A3 8  ; m073
+Bb3 8 Bb3 8 B3 8 B3 8 C4 8 C4 8 C#4 8 C#4 8  ; m074
+D4 8 D4 8 E4 8 E4 8 F#4 8 F#4 8 G4 8 G4 8  ; m075
+forte D4 A4 8 D4 A4 8 D4 B4 8 D4 B4 8 D4 C5 8 D4 C5 8 D4 D5 8 D4 D5 8 ; m076
+G4 4 END_LAZY DELAY 239 LAZY ; m077
+;double bar
+p E4 B4 4 R 4 ;m 077b
+D4 B4 4 R 4 B3 G4 4 R 4  ; m078
+B3 F#4 4 R 4 B3 E4 4 R 4 ; m079
+B3 D4 4 R 4 A#3 F#4 4 R 4 ; m080
+mf B3 F#4 4 R 4 p B3 G4 4 R 4 ; m081
+B3 F#4 4 R 4 B3 E4 4 R 4  ; m082
+B3 D4 4 R 4  pp B3 4 R 4  ; m083
+B3 4 R 4  A#3 4 R 4   ; m084
+B3 4 R 4 
+END_LAZY
+NOTE_ON 2 B3 50
+DELAY 42 CHANNEL_PRESSURE 2 50
+DELAY 42 CHANNEL_PRESSURE 2 52
+DELAY 42 CHANNEL_PRESSURE 2 55
+DELAY 42 CHANNEL_PRESSURE 2 57
+DELAY 42 CHANNEL_PRESSURE 2 60
+DELAY 42 CHANNEL_PRESSURE 2 62
+DELAY 42 CHANNEL_PRESSURE 2 65
+DELAY 42 CHANNEL_PRESSURE 2 67
+DELAY 42 CHANNEL_PRESSURE 2 70
+DELAY 42 CHANNEL_PRESSURE 2 73
+DELAY 42 CHANNEL_PRESSURE 2 75
+DELAY 42 CHANNEL_PRESSURE 2 74
+DELAY 42 CHANNEL_PRESSURE 2 73
+DELAY 42 CHANNEL_PRESSURE 2 73
+DELAY 42 CHANNEL_PRESSURE 2 72
+DELAY 42 CHANNEL_PRESSURE 2 71
+DELAY 42 CHANNEL_PRESSURE 2 70
+DELAY 42 CHANNEL_PRESSURE 2 69
+DELAY 42 CHANNEL_PRESSURE 2 68
+DELAY 42 CHANNEL_PRESSURE 2 67
+DELAY 42 CHANNEL_PRESSURE 2 66
+DELAY 42 CHANNEL_PRESSURE 2 66
+DELAY 42 CHANNEL_PRESSURE 2 65
+DELAY 42 CHANNEL_PRESSURE 2 64
+DELAY 42 CHANNEL_PRESSURE 2 62
+DELAY 42 CHANNEL_PRESSURE 2 61
+DELAY 42 CHANNEL_PRESSURE 2 60
+DELAY 42 CHANNEL_PRESSURE 2 58
+DELAY 42 CHANNEL_PRESSURE 2 58
+DELAY 42 CHANNEL_PRESSURE 2 57
+DELAY 42 CHANNEL_PRESSURE 2 56
+DELAY 42 CHANNEL_PRESSURE 2  55
+DELAY 42 CHANNEL_PRESSURE 2  55
+DELAY 42 CHANNEL_PRESSURE 2  54
+DELAY 42 CHANNEL_PRESSURE 2  53
+DELAY 42 CHANNEL_PRESSURE 2  53
+DELAY 42 CHANNEL_PRESSURE 2  52
+DELAY 42 CHANNEL_PRESSURE 2  51
+DELAY 42 CHANNEL_PRESSURE 2  51
+DELAY 42 CHANNEL_PRESSURE 2  50
+NOTE_OFF 2 B3 0
+LAZY ; m085
+ ; m086
+R 4 R 2 ; m087
+R 1  ; m088
+R 2 
+END_LAZY
+NOTE_ON 2 B3 40
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 41
+DELAY 24 CHANNEL_PRESSURE 2 41
+DELAY 24 CHANNEL_PRESSURE 2 42
+DELAY 24 CHANNEL_PRESSURE 2 42
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 44
+DELAY 24 CHANNEL_PRESSURE 2 45
+DELAY 24 CHANNEL_PRESSURE 2 45
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 47
+DELAY 24 CHANNEL_PRESSURE 2 47
+DELAY 24 CHANNEL_PRESSURE 2 48
+DELAY 24 CHANNEL_PRESSURE 2 49
+DELAY 24 CHANNEL_PRESSURE 2 49
+DELAY 24 CHANNEL_PRESSURE 2 50
+DELAY 24 CHANNEL_PRESSURE 2 50
+DELAY 24 CHANNEL_PRESSURE 2 51
+DELAY 24 CHANNEL_PRESSURE 2 51
+DELAY 24 CHANNEL_PRESSURE 2 52
+DELAY 24 CHANNEL_PRESSURE 2 52
+DELAY 24 CHANNEL_PRESSURE 2 53
+DELAY 24 CHANNEL_PRESSURE 2 54
+DELAY 24 CHANNEL_PRESSURE 2 54
+DELAY 24 CHANNEL_PRESSURE 2 55
+DELAY 24 CHANNEL_PRESSURE 2 55
+DELAY 24 CHANNEL_PRESSURE 2 56
+DELAY 24 CHANNEL_PRESSURE 2 56
+DELAY 24 CHANNEL_PRESSURE 2 57
+DELAY 24 CHANNEL_PRESSURE 2 58
+DELAY 24 CHANNEL_PRESSURE 2 58
+DELAY 24 CHANNEL_PRESSURE 2 59
+DELAY 24 CHANNEL_PRESSURE 2 59
+DELAY 24 CHANNEL_PRESSURE 2 60
+DELAY 24 CHANNEL_PRESSURE 2 60
+DELAY 24 CHANNEL_PRESSURE 2 61
+DELAY 24 CHANNEL_PRESSURE 2 62
+NOTE_OFF 2 B3 0
+LAZY ; m089
+E4 2 ; m090
+
+END_LAZY
+NOTE_ON 2 D#4 62
+DELAY 12 CHANNEL_PRESSURE 2 62
+DELAY 12 CHANNEL_PRESSURE 2 61
+DELAY 12 CHANNEL_PRESSURE 2 60
+DELAY 12 CHANNEL_PRESSURE 2 60
+DELAY 12 CHANNEL_PRESSURE 2 59
+DELAY 12 CHANNEL_PRESSURE 2 59
+DELAY 12 CHANNEL_PRESSURE 2 58
+DELAY 12 CHANNEL_PRESSURE 2 58
+DELAY 12 CHANNEL_PRESSURE 2 57
+DELAY 12 CHANNEL_PRESSURE 2 56
+DELAY 12 CHANNEL_PRESSURE 2 56
+DELAY 12 CHANNEL_PRESSURE 2 55
+DELAY 12 CHANNEL_PRESSURE 2 55
+DELAY 12 CHANNEL_PRESSURE 2 54
+DELAY 12 CHANNEL_PRESSURE 2 54
+DELAY 12 CHANNEL_PRESSURE 2 53
+DELAY 12 CHANNEL_PRESSURE 2 52
+DELAY 12 CHANNEL_PRESSURE 2 52
+DELAY 12 CHANNEL_PRESSURE 2 51
+DELAY 12 CHANNEL_PRESSURE 2 51
+DELAY 12 CHANNEL_PRESSURE 2 50
+DELAY 12 CHANNEL_PRESSURE 2 50
+DELAY 12 CHANNEL_PRESSURE 2 49
+DELAY 12 CHANNEL_PRESSURE 2 49
+DELAY 12 CHANNEL_PRESSURE 2 48
+DELAY 12 CHANNEL_PRESSURE 2 47
+DELAY 12 CHANNEL_PRESSURE 2 47
+DELAY 12 CHANNEL_PRESSURE 2 46
+DELAY 12 CHANNEL_PRESSURE 2 46
+DELAY 12 CHANNEL_PRESSURE 2 45
+DELAY 12 CHANNEL_PRESSURE 2 45
+DELAY 12 CHANNEL_PRESSURE 2 44
+DELAY 12 CHANNEL_PRESSURE 2 43
+DELAY 12 CHANNEL_PRESSURE 2 43
+DELAY 12 CHANNEL_PRESSURE 2 42
+DELAY 12 CHANNEL_PRESSURE 2 42
+DELAY 12 CHANNEL_PRESSURE 2 41
+DELAY 12 CHANNEL_PRESSURE 2 41
+DELAY 12 CHANNEL_PRESSURE 2 40
+DELAY 12 CHANNEL_PRESSURE 2 40
+NOTE_OFF 2 D#4 0
+LAZY R 2 ; m091
+R 1 ; m092
+R 2 p E4 G#4 6/4 ; m093
+ ; m094
+E4 G4 6/4 ; m095 four sharps
+R 2 ; m096
+R 1  ; m097
+R 1  ; m098
+R 1  ; m099
+R 1 ; m100
+R 2 p 
+END_LAZY
+NOTE_ON 2 D4 50
+DELAY 60 CHANNEL_PRESSURE 2 50
+DELAY 60 CHANNEL_PRESSURE 2 49
+DELAY 60 CHANNEL_PRESSURE 2 48
+DELAY 60 CHANNEL_PRESSURE 2 47
+DELAY 60 CHANNEL_PRESSURE 2 46
+DELAY 60 CHANNEL_PRESSURE 2 46
+DELAY 60 CHANNEL_PRESSURE 2 45
+DELAY 60 CHANNEL_PRESSURE 2 44
+DELAY 60 CHANNEL_PRESSURE 2 43
+DELAY 60 CHANNEL_PRESSURE 2 43
+DELAY 60 CHANNEL_PRESSURE 2 42
+DELAY 60 CHANNEL_PRESSURE 2 41
+DELAY 60 CHANNEL_PRESSURE 2 40
+DELAY 60 CHANNEL_PRESSURE 2 40
+DELAY 60 CHANNEL_PRESSURE 2 39
+DELAY 60 CHANNEL_PRESSURE 2 38
+DELAY 60 CHANNEL_PRESSURE 2 37
+DELAY 60 CHANNEL_PRESSURE 2 36
+DELAY 60 CHANNEL_PRESSURE 2 36
+DELAY 60 CHANNEL_PRESSURE 2 35
+DELAY 60 CHANNEL_PRESSURE 2 34
+DELAY 60 CHANNEL_PRESSURE 2 33
+DELAY 60 CHANNEL_PRESSURE 2 33
+DELAY 60 CHANNEL_PRESSURE 2 32
+DELAY 60 CHANNEL_PRESSURE 2 31
+DELAY 60 CHANNEL_PRESSURE 2 30
+DELAY 60 CHANNEL_PRESSURE 2 30
+DELAY 60 CHANNEL_PRESSURE 2 29
+DELAY 60 CHANNEL_PRESSURE 2 28
+DELAY 60 CHANNEL_PRESSURE 2 27
+DELAY 60 CHANNEL_PRESSURE 2 26
+DELAY 60 CHANNEL_PRESSURE 2 26
+DELAY 60 CHANNEL_PRESSURE 2 25
+DELAY 60 CHANNEL_PRESSURE 2 24
+DELAY 60 CHANNEL_PRESSURE 2 23
+DELAY 60 CHANNEL_PRESSURE 2 23
+DELAY 60 CHANNEL_PRESSURE 2 22
+DELAY 60 CHANNEL_PRESSURE 2 21
+DELAY 60 CHANNEL_PRESSURE 2 20
+DELAY 60 CHANNEL_PRESSURE 2 20
+NOTE_OFF 2 D4 0
+LAZY ; m101
+ ; m102
+ ; m103
+R 1  ; m104
+R 2 F4 6/4 ; m105
+ ; m106
+
+END_LAZY
+NOTE_ON 2 F#4 50
+DELAY 24 CHANNEL_PRESSURE 2 50
+DELAY 24 CHANNEL_PRESSURE 2 49
+DELAY 24 CHANNEL_PRESSURE 2 48
+DELAY 24 CHANNEL_PRESSURE 2 47
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 45
+DELAY 24 CHANNEL_PRESSURE 2 44
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 42
+DELAY 24 CHANNEL_PRESSURE 2 41
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 39
+DELAY 24 CHANNEL_PRESSURE 2 38
+DELAY 24 CHANNEL_PRESSURE 2 37
+DELAY 24 CHANNEL_PRESSURE 2 36
+DELAY 24 CHANNEL_PRESSURE 2 36
+DELAY 24 CHANNEL_PRESSURE 2 35
+DELAY 24 CHANNEL_PRESSURE 2 34
+DELAY 24 CHANNEL_PRESSURE 2 33
+DELAY 24 CHANNEL_PRESSURE 2 33
+DELAY 24 CHANNEL_PRESSURE 2 32
+DELAY 24 CHANNEL_PRESSURE 2 31
+DELAY 24 CHANNEL_PRESSURE 2 30
+DELAY 24 CHANNEL_PRESSURE 2 30
+DELAY 24 CHANNEL_PRESSURE 2 29
+DELAY 24 CHANNEL_PRESSURE 2 28
+DELAY 24 CHANNEL_PRESSURE 2 27
+DELAY 24 CHANNEL_PRESSURE 2 26
+DELAY 24 CHANNEL_PRESSURE 2 26
+DELAY 24 CHANNEL_PRESSURE 2 25
+DELAY 24 CHANNEL_PRESSURE 2 24
+DELAY 24 CHANNEL_PRESSURE 2 23
+DELAY 24 CHANNEL_PRESSURE 2 23
+DELAY 24 CHANNEL_PRESSURE 2 22
+DELAY 24 CHANNEL_PRESSURE 2 21
+DELAY 24 CHANNEL_PRESSURE 2 20
+DELAY 24 CHANNEL_PRESSURE 2 20
+NOTE_OFF 2 F#4 0
+LAZY ; m107
+R 1  ; m108
+
+END_LAZY
+NOTE_ON 2 F#4 35
+DELAY 24 CHANNEL_PRESSURE 2 35
+DELAY 24 CHANNEL_PRESSURE 2 35
+DELAY 24 CHANNEL_PRESSURE 2 36
+DELAY 24 CHANNEL_PRESSURE 2 37
+DELAY 24 CHANNEL_PRESSURE 2 38
+DELAY 24 CHANNEL_PRESSURE 2 38
+DELAY 24 CHANNEL_PRESSURE 2 39
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 41
+DELAY 24 CHANNEL_PRESSURE 2 41
+DELAY 24 CHANNEL_PRESSURE 2 42
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 44
+DELAY 24 CHANNEL_PRESSURE 2 45
+DELAY 24 CHANNEL_PRESSURE 2 45
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 47
+DELAY 24 CHANNEL_PRESSURE 2 48
+DELAY 24 CHANNEL_PRESSURE 2 48
+DELAY 24 CHANNEL_PRESSURE 2 49
+DELAY 24 CHANNEL_PRESSURE 2 50
+DELAY 24 CHANNEL_PRESSURE 2 49
+DELAY 24 CHANNEL_PRESSURE 2 48
+DELAY 24 CHANNEL_PRESSURE 2 47
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 46
+DELAY 24 CHANNEL_PRESSURE 2 45
+DELAY 24 CHANNEL_PRESSURE 2 44
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 43
+DELAY 24 CHANNEL_PRESSURE 2 42
+DELAY 24 CHANNEL_PRESSURE 2 41
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 40
+DELAY 24 CHANNEL_PRESSURE 2 39
+DELAY 24 CHANNEL_PRESSURE 2 38
+DELAY 24 CHANNEL_PRESSURE 2 37
+DELAY 24 CHANNEL_PRESSURE 2 36
+DELAY 24 CHANNEL_PRESSURE 2 36
+DELAY 24 CHANNEL_PRESSURE 2 35
+NOTE_OFF 2 F#4 0
+LAZY ; m109
+R 1 ; m110
+pp D4 F#4 15/4 ; m111
+ ; m112
+ ; m113
+R 4 ; m114
+R 1 ; m115
+p B3 B4 1 ; m116
+R 1 ; m117
+B3 B4 1 ; m118
+A3 2 F#4 7/6 ; m119
+E4 6 D#4 6 ; m120
+E4 2 G#4 2 ; m121
+E4 2 B3 2 ; m122
+C#4 2 A#4 7/6 ; m123
+G#4 6 G4 6 ; m124
+G#4 2 B4 2 ; m125
+G#4 2 D#4 2 ; m126
+C#4 2 A#4 2 ; m127
+A#4 6 R 6 G#4 6 R 6 G4 6 R 6 ; m128
+G#4 2 B4 2  ; m129
+G#4 2 vel 72 D#4 16. R 32 r 8 vel 74 E4 16. R 32 r 8  ; m130
+vel 76 D#4 16. R 32 r 8 vel 78 C#4 16. R 32 r 8 vel 80 B3 16. R 32 r 8 vel 82 A#3 16. R 32 r 8  ; m131
+vel 84 C#4 16. R 32 r 8 vel 86 B3 16. R 32 r 8 vel 88 D#4 8 r 8 vel 90 E4 8 r 8  ; m132
+vel 92 D#4 8 r 8 vel 94 C#4 8 r 8 vel 96 B3 8 r 8 vel 98 A#3 8 r 8  ; m133
+vel 100 B3 8 r 8 vel 102 A#3 8 r 8 vel 104 D#4 8 r 8 vel 106 E4 8 r 8  ; m134
+vel 108 D#4 8 r 8 vel 110 C#4 8 r 8 vel 112 B3 8 r 8 vel 114 A#3 8 r 8  ; m135
+vel 116 B3 8 r 8 vel 118 A#3 8 r 8 p G#4 8 G#4 8 G#4 8 G#4 8 ; m136
+G#4 8 G#4 8 G#4 8 G#4 8 G#4 8 G#4 8 G#4 8 G#4 8 ; m137
+G#4 8 G#4 8 G#4 8 G#4 8 E4 8 E4 8 E4 8 E4 8  ; m138
+D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8  ; m139
+D#4 8 D#4 8 D#4 8 D#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8  ; m140
+G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8  ; m141
+G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 G#3 G#4 8 E4 8 E4 8 E4 8 E4 8  ; m142
+D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8  ; m143
+G#4 8 G#4 8 G#4 8 G#4 8 G#5 8 G#5 8 G#5 8 G#5 8  ; m144
+F#5 8 F#5 8 F#5 8 F#5 8 F#5 8 F#5 8 F#5 8 F#5 8  ; m145
+G#5 8 G#5 8 G#5 8 G#5 8 E5 8 E5 8 E5 8 E5 8  ; m146
+D#5 8 D#5 8 D#5 8 D#5 8 D#5 8 D#5 8 D#5 8 D#5 8  ; m147
+E5 8 E5 8 E5 8 E5 8 G#4 8 G#4 8 G#4 8 G#4 8  ; m148
+F#4 8 F#4 8 F#4 8 F#4 8 G#4 8 G#4 8 G#4 8 G#4 8  ; m149
+F#4 8 F#4 8 F#4 8 F#4 8 D#4 8 D#4 8 D#4 8 D#4 8  ; m150
+D#4 8 D#4 8 D#4 8 D#4 8 D4 8 D4 8 D4 8 D4 8  ; m151
+D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8  ; m152
+D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8  ; m153
+D#4 8 D#4 8 D#4 8 D#4 8 B3 8 B3 8 B3 8 B3 8  ; m154
+A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 A#3 8  ; m155
+A#3 2 pp B3 2  ; m156
+R 2  B3 2 ; m157
+R 2  B3 2 ; m158
+R 2 B3 8. R 16 B3 8. R 16 ; m159
+B3 2 D#4 8. R 16 D#4 8. R 16 ; m160
+R 2 E4 8. R 16 E4 8. R 16 ; m161
+R 2 F#4 8. R 16 F#4 8. R 16 ; m162
+R 2 F#4 8. R 16 F#4 8. R 16 ; m163
+R 2  ; m164a
+ ;double bar; 3 flats
+p Gb4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8  ;m164b
+mp F4 Bb4 8 F4 Bb4 8 F4 Bb4 8 F4 Bb4 8 mp Gb4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8  ; m165
+F4 Bb4 8 F4 Bb4 8 F4 Bb4 8 F4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8 Gb4 Bb4 8  ; m166
+F4 8 F4 8 F4 8 F4 8 F4 8 F4 8 F4 8 F4 8  ; m167
+F4 Db4 8 F4 Db4 8 F4 Db4 8 F4 Db4 8 Bb3 Gb4 8 Bb3 Gb4 8 Bb3 Gb4 8 Bb3 Gb4 8  ; m168
+Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 Gb4 8 Bb3 Gb4 8 Bb3 Gb4 8 Bb3 Gb4 8  ; m169
+Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 Gb4 8 Bb3 Gb4 8 Bb3 Gb4 8 Bb3 Gb4 8  ; m170
+Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 A3 F4 8 A3 F4 8 A3 F4 8 A3 F4 8  ; m171
+vel 25 Bb3 2 pp Gb4 2 ; m172
+pp R 2  Gb4 2  ; m173
+p R 2  Gb4 2  ; m174
+mp R 2 p Gb4 4 Gb4 4  ; m175
+mf Gb4 4. Gb4 16 Ab4 16 ff Gb4 4 forte Ab4 4 ; m176
+Gb4 4 Eb4 4 Ab3 4 A3 4 ; m177
+Bb3 4. R 8 pppp Bb4 2/1 ; m178
+ ; m179
+p END_LAZY PROGRAM 2 46 LAZY C5 4 C5 4 ; m180
+C5 4 R 4 B4 4 R 4 ; m181
+C5 4 R 4 END_LAZY PROGRAM 2 41 LAZY C5 2 ; m182
+Db5 2 Eb5 2 ; m183
+C5 2 END_LAZY PROGRAM 2 46 LAZY F5 4 F5 4 ; m184
+F5 4 R 4 E5 4 R 4 ; m185
+F5 4 END_LAZY PROGRAM 2 41 LAZY R 4 R 2 ; m186
+R 1  ; m187
+R 2 mp Bb4 8 R 8 C5 8 R 8 ; m188
+Bb4 4 Ab4 4 G4 4 F#4 4 ; m189
+Ab4 4 G4 4 C5 8 R 8 Db5 8 R 8 ; m190
+C5 4 Bb4 4 Ab4 4 G4 4 ; m191
+Bb4 4 Ab4 4 Eb4 8 R 8 F4 8 R 8 ; m192
+Eb4 4 Db4 4 C4 4 B3 4 ; m193
+Db4 4 C4 4 Bb3 8 R 8 Ab3 8 R 8  ; m194
+forte G3 2 Ab3 8 R 8 Bb3 8 R 8  ; m195
+Ab3 2 C5 8 R 8 Db5 8 R 8  ; m196
+C5 4 Bb4 4 Ab4 4 G4 4 ; m197
+Bb4 4 Ab4 4 G4 8 R 8 F4 8 R 8  ; m198
+E4 2 F4 8 R 8 G4 8 R 8  ; m199
+F4 2 R 2 ; m200
+R 1 ; m201
+R 2 p Gb4 8 R 8 Ab4 8 R 8  ; m202
+Gb4 4 E4 4 Eb4 4 D4 4  ; m203
+E4 4 Eb4 4 Eb4 1 ; m204
+Eb4 2 ; m205
+Eb4 G4 2 R 2 ; m206
+D4 F4 2 R 2 ; m207
+Eb4 2 forte Eb4 8 Eb4 8 Eb4 8 Eb4 8 ; m208
+Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8  ; m209
+Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8 Eb4 G4 8   ; m210
+D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8  ; m211
+Eb4 4 R 4 forte C5 Eb5 8 C5 Eb5 8 C5 Eb5 8 C5 Eb5 8  ; m212
+Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 C5 Eb5 8 C5 Eb5 8 C5 Eb5 8 C5 Eb5 8  ; m213
+Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 Bb4 D5 8 A4 C5 8 A4 C5 8 A4 C5 8 A4 C5 8  ; m214
+G4 Bb4 8 G4 Bb4 8 G4 Bb4 8 G4 Bb4 8 F#4 A4 8 F#4 A4 8 F#4 A4 8 F#4 A4 8  ; m215
+G4 8 G4 8 G4 8 G4 8 G4 Eb4 8 G4 Eb4 8 G4 Eb4 8 G4 Eb4 8  ; m216
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 G4 Eb4 8 G4 Eb4 8 G4 Eb4 8 G4 Eb4 8  ; m217
+D4 G4 8 D4 G4 8 D4 G4 8 D4 G4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8 C4 Eb4 8  ; m218
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8 A3 D4 8  ; m219
+G3 4 R 4 ff Bb3 4 D4 4 ; m220
+Eb4 2 Bb3 4 D4 4 ; m221
+Eb4 8 Eb4 8 G4 8 G4 8 Bb4 8 Bb4 8 D5 8 D5 8   ; m222
+Eb5 8 Eb5 8 G5 8 G5 8 Bb5 8 Bb5 8 D6 8 D6 8  ; m223
+Eb6 3/8 R 8 vel 25 C5 2 ; m224
+Bb4 2 Bb4 2 ; m225
+C5 2 C5 2 ; m226
+pp Bb4 2 Bb4 2  ; m227
+C5 2 C5 2  ; m228
+mp Bb4 2 Bb4 1  ; m229
+F4 2 ; m230
+pp Ab4 2 F4 2  ; m231
+G4 2 pp C5 2 ; m232
+Bb4 2 Bb4 2 ; m233
+C5 2 C5 2 ; m234
+Bb4 2 Bb4 2 ; m235
+C5 2 C5 2 ; m236
+Bb4 2 Bb4 1 ; m237
+F4 2 ; m238
+Bb4 2 Bb4 1  ; m239
+END_LAZY NOTE_ON 2 Eb4 64 LAZY
+Bb4 1 ;m240
+Ab4 1 ;m241
+G4  1 ;m242
+F4  1 ;m243
+END_LAZY NOTE_OFF 2 Eb4 64 LAZY
+forte Eb4 2 ; m244
+D4 2 Db4 Eb4 2 ; m245
+Db4 Eb4 2 C4 Eb4 2 ; m246
+Bb3 Eb4 2 Bb3 D4 2 ; m247
+Bb3 Eb4 4. R 8 p C5 16 R 16 mf Eb5 16 R 16 p D5 16 R 16 C5 16 R 16  ; m248
+C5 16 R 16 mf Bb4 16 R 16 p A4 16 R 16 G4 16 R 16 Bb4 16 R 16 mf A4 16 R 16 p G4 16 R 16 F#4 16 R 16  ; m249
+G4 16 R 16 mf G4 16 R 16 p A4 16 R 16 Bb4 16 R 16 G4 16 R 16 mf F#4 16 R 16 p E4 16 R 16 F#4 16 R 16  ; m250
+G4 16 R 16 mf D4 16 R 16 p Eb4 16 R 16 D4 16 R 16 D4 16 R 16 mf C4 16 R 16 p Bb3 16 R 16 A3 16 R 16  ; m251
+C4 8 Bb3 8 A3 8 G3 8 G4 2 ; m252
+D4 4 F4 4 mp G4 3/4 ; m253
+p F4 2 E4 2 ; m254
+F4 4 G4 4 A4 4 ; m255
+D4 4 F4 4 G4 2 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 2 forte G5 8 Ab5 8 G5 8 F5 8  ; m262
+F5 8 Eb5 8 D5 8 C5 8 Eb5 8 D5 8 C5 8 B4 8 ; m263
+C5 8 C5 8 D5 8 Eb5 8 C5 8 B4 8 A4 8 B4 8  ; m264
+C5 8 G4 8 Ab4 8 G4 8 G4 8 F4 8 Eb4 8 D4 8  ; m265
+C4 8 G4 8 F4 8 C5 8 Bb4 8 C5 8 Bb4 8 Ab4 8  ; m266
+ff G4 4/26 forte Bb4 3/26 Eb5 3/26 G5 3/26 ff Ab5 4/26 forte Eb5 3/26 C5 3/26 Ab4 3/26  ; m267
+ff G4 4/26 forte Bb4 3/26 Eb5 3/26 G5 3/26 ff F5 4/26 forte C5 3/26 Ab4 3/26 F4 3/26  ; m268
+ff Eb4 4/26 forte G4 3/26 C5 3/26 Eb5 3/26 ff F5 4/26 forte C5 3/26 Ab4 3/26 F4 3/26  ; m269
+ff Eb4 4/26 forte G4 3/26 C5 3/26 Eb5 3/26 ff Db5 4/26 forte Ab4 3/26 F4 3/26 Db4 3/26  ; m270
+ff C4 4/26 forte Eb4 3/26 Ab4 3/26 C5 3/26 ff Db5 4/26 forte Ab4 3/26 F4 3/26 Db4 3/26  ; m271
+ff C4 4/26 forte Eb4 3/26 Ab4 3/26 C5 3/26 ff C4 8 C4 8 forte Eb4 8 Eb4 8  ; m272
+G4 8 G4 8 G4 8 G4 8 C4 8 C4 8 Eb4 8 Eb4 8 ; m273
+G4 2 r 8 R 2 ; m274
+p END_LAZY NOTE_ON 2 Bb3 25 NOTE_ON 2 Bb4 25 LAZY R 1 ; m275 
+R 1 ; m276
+R 1 ; m277
+R 1 ; m278
+R 1 ; m279
+R 1 ; m280
+R 1 ; m281
+END_LAZY NOTE_OFF 2 Bb3 64 LAZY R 2 END_LAZY NOTE_OFF 2 Bb4 64 LAZY 
+Eb4 8 R 8 F4 8 R 8  ; m282
+Eb4 8 R 8 Db4 8 R 8 C4 8 R 8 B3 8 R 8  ; m283
+Db4 8 R 8 C4 8 R 8 Bb3 8 R 8 B3 8 R 8  ; m284
+C4 8 R 8 Db4 8 R 8 C4 8 R 8 Db4 8 R 8   ; m285
+D4 8 R 8 Eb4 8 R 8 forte C4 Ab4 2 ; m286
+Bb3 G4 2 Ab3 F4 2 ; m287
+G3 Eb4 2 R 2 ; m288
+R 1 ; m289
+R 2 C4 G4 Eb5 2 ; m290
+Bb3 G4 D5 2 Ab3 Eb4 C5 2 ; m291
+G3 Eb4 Bb4 2 R 2 ; m292
+R 2 p Db4 4 Eb4 4  ; m293
+Eb4 4 Eb4 4 Eb4 4 Eb4 4  ; m294
+Eb4 4 Eb4 4 D4 4 Eb4 4 ;m295
+E4 4  F4  4 F4  4 G4 4 ; m296
+G4 4 Ab4 4 Bb4 4 Bb4 4 ; m297
+Bb4 4 Bb4 4 Bb4 4 Bb4 4  ; m298
+Bb4 4 Bb4 4 Bb4 4 Bb4 4  ; m299
+ff G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 ; m300
+G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8  ; m301
+Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8  ; m302
+Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8 Ab3 F4 8  ; m303
+G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8  ; m304
+G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8  ; m305
+Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8  ; m306
+Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8 Ab3 Eb4 8  ; m307
+G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 fff Ab3 Eb4 8 Ab3 Eb4 8  ; m308
+ff G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 fff Ab3 Eb4 8 Ab3 Eb4 8  ; m309
+ff G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 Bb3 8 Bb3 8  ; m310
+G3 8 G3 8 Bb3 8 Bb3 8 Eb4 8 Eb4 8 G4 8 G4 8  ; m311
+Bb4 1 ; m312
+Bb4 F5 1 ; m313
+fff Bb4 Eb5 1 ; m314
+fff Bb4 E5 1  ; m315
+ff Bb4 F5 2 Ab4 F5 2 ; m316
+Ab4 F5 2 Ab4 Eb5 2  ; m317
+fff Ab4 D5 2 R 2 ; m318
+R 1 ; m319
+R 2 forte Eb4 8 R 8 G4 8 R 8 ; m320
+Ab4 2 Eb4 8 R 8 G4 8 R 8 ; m321
+F4 8 R 8 Bb3 8 R 8 C4 8 R 8 D4 8 R 8 ; m322
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 Bb3 8 R 8 ; m323
+C4 8 R 8 Bb3 8 R 8 A3 8 R 8 C4 8 R 8 ; m324
+Bb3 8 R 8 D4 8 R 8 C4 8 R 8 Eb4 8 R 8 ; m325
+D4 2 R 2 ; m326
+ff Bb4 1 ; m327
+forte A4 8 R 8 A4 8 R 8 Bb4 8 R 8 C5 8 R 8 ; m328
+D5 2 D5 8 R 8 C5 8 R 8 ; m329
+Bb4 2 Bb4 1 ; m330
+Bb4 4 Ab4 4 ; m331
+G4 2 R 2 ; m332
+R 1  ; m333
+R 1 ; m334
+R 1 ; m335
+R 1 ; m336
+R 1 ; m337
+ff Bb3 9/4 ; m338
+ ; m339
+A3 4 Bb3 4 C4 4 ; m340
+D4 2 D4 4 C4 4 ; m341
+Bb3 2 R 2 ; m342
+R 1  ; m343
+R 1 ; m344
+R 1 ; m345
+R 1 ; m346
+ff D4 1 ; m347
+ff C5 1 ; m348
+forte Bb4 2 A4 2 ; m349
+G4 2 F4 2 ; m350
+E4 2 E4 8 R 8 F4 8 R 8 ; m351
+G4 8 R 8 E4 8 R 8 F4 8 R 8 G4 8 R 8 ; m352
+Ab4 8 R 8 C4 8 R 8 D4 8 R 8 E4 8 R 8 ; m353
+F4 8 R 8 Ab3 8 R 8 Bb3 8 R 8 C4 8 R 8 ; m354
+Bb3 4 R 4 R 2 ; m355
+R 1 ; m356
+ff Eb4 1 ; m357
+ff Db5 1 ; m358
+forte C5 2 Bb4 2 ; m359
+Ab4 8 R 8 F4 8 R 8 G4 8 R 8 Ab4 8 R 8  ; m360
+D4 8 R 8 F4 8 R 8 Ab4 8 R 8 G4 8 R 8  ; m361
+F4 8 R 8 D4 8 R 8 Eb4 8 R 8 F4 8 R 8  ; m362
+G4 2 G4 8 R 8 Ab4 8 R 8 ; m363
+Bb4 8 R 8 G4 8 R 8 Ab4 8 R 8 Bb4 8 R 8 ; m364
+C5 8 R 8 E5 8 R 8 G5 8 R 8 F5 8 R 8 ; m365
+E5 8 R 8 C5 8 R 8 D5 8 R 8 E5 8 R 8 ; m366
+ff F5 1 ; m367
+ff Eb6 1 ; m368
+forte D6 2 C6 2 ; m369
+Bb5 2 Bb4 Ab5 2 ; m370
+Bb4 G5 2 Bb3 8 R 8 D4 8 R 8 ; m371
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 D5 8 R 8 ; m372
+Eb5 8 R 8 G5 8 R 8 Bb5 8 R 8 D6 8 R 8 ; m373
+Eb6 2 A3 8 R 8 C4 8 R 8 ; m374
+fff Eb4 2 ff A3 8 A3 8 C4 8 C4 8   ; m375
+Eb4 8 Eb4 8 Gb4 8 Gb4 8 A4 8 A4 8 C5 8 C5 8  ; m376
+Eb5 8 Eb5 8 Gb5 8 Gb5 8 A5 8 A5 8 C6 8 C6 8  ; m377
+Eb6 2 p C5 2 ; m378
+Bb4 2 Bb4 2 ; m379
+C5 2 C5 2 ; m380
+Bb4 2 Bb4 2 ; m381
+C5 2 C5 2 ; m382
+Bb4 2 Bb4 1  ; m383
+F4 2 ; m384
+Ab4 2 F4 2  ; m385
+G4 2 p C5 2 ; m386
+Bb4 2 Bb4 2 ; m387
+C5 2 C5 2 ; m388
+Bb4 2 Bb4 2 ; m389
+C5 2 C5 2  ; m390
+Bb4 2 Bb4 1  ; m391
+F4 2 ; m392
+Bb4 2 Bb4 1 ; m393
+END_LAZY NOTE_ON 2 Eb4 64 LAZY
+Bb4 1 ;m394
+Ab4 1 ;m395
+G4  1 ;m396
+F4  1 ;m397
+END_LAZY NOTE_OFF 2 Eb4 64 LAZY
+forte Eb4 2 ; m398
+D4 2 Db4 Eb4 2 ; m399
+Db4 Eb4 2 C4 Eb4 2 ; m400
+Bb3 Eb4 2 Bb3 D4 2 ; m401
+Bb3 Eb4 8 Bb3 Eb4 8 Bb3 Eb4 8 Bb3 Eb4 8 Bb3 Eb4 8 Bb3 Eb4 8 Bb3 Eb4 8 Bb3 Eb4 8 ; m402
+Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8 Bb3 F4 8  ; m403
+Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8 Bb3 G4 8  ; m404
+C4 Ab4 8 C4 Ab4 8 C4 Ab4 8 C4 Ab4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8  ; m405
+Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8  ; m406
+D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8  ; m407
+Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8  ; m408
+C4 Ab4 8 C4 Ab4 8 C4 Ab4 8 C4 Ab4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8  ; m409
+Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8  ; m410
+C4 Ab4 8 C4 Ab4 8 C4 Ab4 8 C4 Ab4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8 D4 Bb4 8  ; m411
+Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Eb4 Bb4 8 Bb4 8 Bb4 8 Eb5 8 Eb5 8  ; m412
+C5 8 C5 8 Ab4 8 Ab4 8 F4 8 F4 8 Bb4 8 Bb4 8  ; m413
+G4 8 G4 8 Eb4 8 Eb4 8 Bb4 8 Bb4 8 Eb5 8 Eb5 8  ; m414
+C5 8 C5 8 Ab4 8 Ab4 8 F4 8 F4 8 Bb4 8 Bb4 8  ; m415
+G4 8 G4 8 Eb4 8 Eb4 8 C4 8 C4 8 F4 8 F4 8  ; m416
+D4 8 D4 8 Bb3 8 Bb3 8 G3 8 G3 8 C5 8 C5 8  ; m417
+Ab4 8 Ab4 8 F4 8 F4 8 D4 8 D4 8 G4 8 G4 8  ; m418
+Eb4 8 Eb4 8 C4 8 C4 8 Ab3 8 Ab3 8 C4 8 C4 8  ; m419
+Bb3 4 R 4 Bb3 F4 D5 4 R 4 ; m420
+Bb3 G4 Eb5 4 R 4 R 2 ; m421
+R 1 ; m422
+Bb3 G4 Eb5 2 R 2 ; m423
+Bb3 G4 Eb5 2 R 2  ; m424
+Bb3 G4 Eb5 2 R 2  ; m425
+G3 Eb4 2 R 2 ; m426
+G3 Eb4 2 R 2  ; m427
+END_LAZY
+END_OF_TRACK
+
+; $Author: janzent $
+; $Log: schuqnt4va.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.21  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.20  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.19  2003/10/24 01:23:14  root
+; last notes to m137
+;
+; Revision 1.18  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.17  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.16  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.15  2003/07/19 21:47:53  root
+; fix dyanamiscs add applause
+;
+; Revision 1.14  2003/07/12 01:01:08  root
+; pauess m224, adj dyns
+;
+; Revision 1.13  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/06/03 23:49:04  root
+; narrow stereo field
+;
+; Revision 1.10  2003/05/26 20:46:38  root
+; staccato articulation
+;
+; Revision 1.9  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.8  2003/04/20 16:11:34  root
+; done before coach
+;
+; Revision 1.7  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.6  2003/04/15 00:51:34  root
+; some dynamics roughed in
+;
+; Revision 1.5  2003/04/11 01:56:25  root
+; fixes
+;
+; Revision 1.4  2003/04/09 00:54:47  root
+; drafted in
+;
+; Revision 1.3  2003/04/08 10:51:29  root
+; to around m 82
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4va.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4va.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Viola
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK VIOLA
+INSTRUMENT 42
+PROGRAM 3 42
+PAN 3 20
+LAZY
+chan 3
+mp
+R 1 ;m000
+G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 ; m001
+G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 ; m002
+G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 ; m003
+G3 8 G3 8 G3 8 G3 8 D4 8 D4 8 D4 8 D4 8 ; m004
+G3 8 G3 8 G3 8 G3 8 C4 8 C4 8 Eb4 8 Eb4 8 ; m005
+G4 8 G4 8 G4 8 G4 8 C4 8 C4 8 Eb4 8 Eb4 8 ; m006
+D4 8 D4 8 G3 8 G3 8 A3 8 A3 8 C4 8 C4 8 ; m007
+Bb3 8 Bb3 8 G3 8 G3 8 D3 8 D3 8 F#3 8 F#3 8 ; m008
+G3 8 G3 8 G3 8 G3 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 ; m009
+forte Eb4 4 mp D4 4 Bb4 8 Bb4 8 Bb4 8 Bb4 8 ; m010
+forte  F4 4 mp Eb4 4 C4 2; m011
+forte  C4 4 mp B3 4 G4 8 G4 8 G4 8 G4 8 ; m012
+forte  D4 4 mp C4 4 G3 8 G3 8 G3 8 G3 8 ; m013
+G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 ; m014
+G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 ; m015
+G3 8 G3 8 G3 8 G3 8 D4 8 D4 8 D4 8 D4 8 ; m016
+G3 8 G3 8 G3 8 G3 8 C4 8 C4 8 Eb4 8 Eb4 8 ; m017
+G4 8 G4 8 G4 8 G4 8 C4 8 C4 8 Eb4 8 Eb4 8 ; m018
+D4 8 D4 8 G3 8 G3 8 A3 8 A3 8 C4 8 C4 8 ; m019
+Bb3 8 Bb3 8 G3 8 G3 8 D3 8 D3 8 F#3 8 F#3 8 ; m020
+G3 2 R 2 ; m021
+forte  ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 R 2 ; m022
+ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 R 2 ; m023
+ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 R 2 ; m024
+mp Eb3 4 Eb3 4 R 2 ; m025
+forte  ff G3 Eb4 8 mf G3 Eb4 8 mp G3 Eb4 8 p G3 Eb4 8 R 2 ; m026
+ff Ab3 Eb4 8 mf Ab3 Eb4 8 mp Ab3 Eb4 8 p Ab3 Eb4 8 R 2 ; m027
+ff Ab3 Eb4 8 mf Ab3 Eb4 8 mp Ab3 Eb4 8 p Ab3 Eb4 8 R 2 ; m028
+ff G3 Eb4 8 mf G3 Eb4 8 mp G3 Eb4 8 p G3 Eb4 8 R 2 ; m029
+forte D4 4 F4 4 ff G4 2 ; m030
+forte D4 4 F4 4 E4 4 Bb3 4 ; m031
+A3 4 D4 4 F4 4 E4 4 ; m032
+D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 ; m033
+D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 ; m034
+D4 8 D4 8 D4 8 D4 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 ; m035
+A3 8 A3 8 A3 8 A3 8 A3 8 A3 8 A3 8 A3 8 ; m036
+D4 4 R 4 R 2 ; m037
+mp Bb3 2 R 2 ; m038
+ Bb3 2 R 2 ; m039
+ Bb3 2 Eb4 4 Eb4 4  ; m040
+Eb4 4 D4 4 ff D4 4 forte C4 4 ; m041
+Bb3 4 G3 4 C3 4 C#3 4 ; m042
+D3 7/16 R 16 pppp B3 2 ; m043
+C4 2 D4 2 ; m044
+B3 2 END_LAZY PROGRAM 3 46 LAZY E3 B3 4 E3 B3 4 ; m045
+E3 B3 4 R 4 A3 4 R 4 ; m046
+G3 4 R 4 END_LAZY PROGRAM 3 42 LAZY r 8 E4 2 ; m047
+F4 2 G4 2 ; m048
+E4 2 END_LAZY PROGRAM 3 46 LAZY A3 E4 4 A3 E4 4 ; m049
+A3 E4 4 R 4 D4 4 R 4 ; m050
+C4 4 R 4 END_LAZY PROGRAM 3 42 LAZY mf D4 8 R 8 E4 8 R 8 ; m051
+D4 4 C4 4 B3 4 A#3 4 ; m052
+C4 4 B3 4 A3 4 G3 4 ; m053
+F#3 4 E3 4 D3 4 C#3 4 ; m054
+E3 4 D3 4 E4 8 R 8 F4 8 R 8 ; m055
+E4 4 D4 4 C4 4 B3 4 ; m056
+D4 4 C4 4 forte ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ; m057
+ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ; m058
+ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ; m059
+ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ; m060
+ff G3 G4 8 mf G3 G4 8 mp G3 G4 8 p G3 G4 8 ff E4 8 mf E4 8 mp E4 8 p E4 8 ; m061
+ff E4 8 mf E4 8 mp E4 8 p E4 8 ff E4 8 mf E4 8 mp E4 8 p E4 8 ; m062
+ff E4 8 mf E4 8 mp E4 8 p E4 8 ff E4 8 mf E4 8 mp E4 8 p E4 8 ; m063
+ff E4 8 mf E4 8 mp E4 8 p E4 8 ff E4 8 mf E4 8 mp E4 8 p E4 8 ; m064
+E4 4 R 4 p D4 8 R 8 E4 8 R 8 ; m065
+D4 4 C4 4 B3 4 A#3 4 ; m066
+C4 4 B3 4 Bb3 8 R 8 C4 8 R 8 ; m067
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m068
+Ab3 4 G3 4 G3 4 A3 4 ; m069
+Bb3 4 B3 4 C4 4 C#4 4 ; m070
+D4 4 E4 4 F#4 4 G4 4 ; m071
+A4 4 B4 4 C5 4 D5 4 ; m072
+C5 4 B4 4 forte G3 G4 1 ; m073
+G3 G4 2 ; m074
+ff D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 ; m075
+D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 D4 8 ; m076
+G3 4 R 4 p B3 4 R 4 ; m077
+B3 4 R 4 B3 4 R 4 ; m078
+B3 4 R 4 B3 4 R 4 ; m079
+B3 4 R 4 F#4 4 R 4 ; m080
+mf B3 4 R 4 p B3 4 R 4 ; m081
+B3 4 R 4 B3 4 R 4 ; m082
+B3 4 R 4 pp G3 4 R 4 ; m083
+F#3 4 R 4 F#3 4 R 4 ; m084
+F#3 4 R 4 
+END_LAZY NOTE_ON 3 E3 64 LAZY
+G#3 1 ; m085
+G3 2 ; m086
+END_LAZY NOTE_OFF 3 E3 64 LAZY
+F#3 2 F#3 8 R 1/24 B3 8 R 1/24 D#4 8 R 1/24  ; m087
+F#4 4 R 4 A#3 4 R 4 ; m088
+B3 4 R 4 ; m089
+END_LAZY NOTE_ON 3 E3 64 LAZY ;m89
+G#3 1 
+G3 2 ; m090
+END_LAZY NOTE_OFF 3 E3 64 LAZY 
+F#3 2 p F#3 6 B3 6 D#4 6 ; m091
+F#4 4 R 4 A#3 4 R 4 ; m092
+B3 4 R 4 C#4 6/4 ; m093
+; m094
+C#4 6/4 ; m095
+R 2 ; m096
+R 1 ; m097
+R 2 forte F#3 8 R 8 G#3 8 R 8 ; m098
+ff F#3 4 forte E3 4 D#3 8 R 8 C#3 8 R 8 ; m099
+R 1 ; m100
+R 2 p A3 6/4 ; m101
+; m102
+
+END_LAZY
+NOTE_ON 3 G#3 50
+DELAY 24 CHANNEL_PRESSURE 3 50
+DELAY 24 CHANNEL_PRESSURE 3 49
+DELAY 24 CHANNEL_PRESSURE 3 48
+DELAY 24 CHANNEL_PRESSURE 3 47
+DELAY 24 CHANNEL_PRESSURE 3 46
+DELAY 24 CHANNEL_PRESSURE 3 46
+DELAY 24 CHANNEL_PRESSURE 3 45
+DELAY 24 CHANNEL_PRESSURE 3 44
+DELAY 24 CHANNEL_PRESSURE 3 43
+DELAY 24 CHANNEL_PRESSURE 3 43
+DELAY 24 CHANNEL_PRESSURE 3 42
+DELAY 24 CHANNEL_PRESSURE 3 41
+DELAY 24 CHANNEL_PRESSURE 3 40
+DELAY 24 CHANNEL_PRESSURE 3 40
+DELAY 24 CHANNEL_PRESSURE 3 39
+DELAY 24 CHANNEL_PRESSURE 3 38
+DELAY 24 CHANNEL_PRESSURE 3 37
+DELAY 24 CHANNEL_PRESSURE 3 36
+DELAY 24 CHANNEL_PRESSURE 3 36
+DELAY 24 CHANNEL_PRESSURE 3 35
+DELAY 24 CHANNEL_PRESSURE 3 34
+DELAY 24 CHANNEL_PRESSURE 3 33
+DELAY 24 CHANNEL_PRESSURE 3 33
+DELAY 24 CHANNEL_PRESSURE 3 32
+DELAY 24 CHANNEL_PRESSURE 3 31
+DELAY 24 CHANNEL_PRESSURE 3 30
+DELAY 24 CHANNEL_PRESSURE 3 30
+DELAY 24 CHANNEL_PRESSURE 3 29
+DELAY 24 CHANNEL_PRESSURE 3 28
+DELAY 24 CHANNEL_PRESSURE 3 27
+DELAY 24 CHANNEL_PRESSURE 3 26
+DELAY 24 CHANNEL_PRESSURE 3 26
+DELAY 24 CHANNEL_PRESSURE 3 25
+DELAY 24 CHANNEL_PRESSURE 3 24
+DELAY 24 CHANNEL_PRESSURE 3 23
+DELAY 24 CHANNEL_PRESSURE 3 23
+DELAY 24 CHANNEL_PRESSURE 3 22
+DELAY 24 CHANNEL_PRESSURE 3 21
+DELAY 24 CHANNEL_PRESSURE 3 20
+DELAY 24 CHANNEL_PRESSURE 3 20
+NOTE_OFF 3 G#3 0
+LAZY ; m103
+R 1 ; m104
+R 2 B3 1 ; m105
+
+END_LAZY
+NOTE_ON 3 D#4 50
+DELAY 36 CHANNEL_PRESSURE 3 50
+DELAY 36 CHANNEL_PRESSURE 3 49
+DELAY 36 CHANNEL_PRESSURE 3 48
+DELAY 36 CHANNEL_PRESSURE 3 47
+DELAY 36 CHANNEL_PRESSURE 3 46
+DELAY 36 CHANNEL_PRESSURE 3 46
+DELAY 36 CHANNEL_PRESSURE 3 45
+DELAY 36 CHANNEL_PRESSURE 3 44
+DELAY 36 CHANNEL_PRESSURE 3 43
+DELAY 36 CHANNEL_PRESSURE 3 43
+DELAY 36 CHANNEL_PRESSURE 3 42
+DELAY 36 CHANNEL_PRESSURE 3 41
+DELAY 36 CHANNEL_PRESSURE 3 40
+DELAY 36 CHANNEL_PRESSURE 3 40
+DELAY 36 CHANNEL_PRESSURE 3 39
+DELAY 36 CHANNEL_PRESSURE 3 38
+DELAY 36 CHANNEL_PRESSURE 3 37
+DELAY 36 CHANNEL_PRESSURE 3 36
+DELAY 36 CHANNEL_PRESSURE 3 36
+DELAY 36 CHANNEL_PRESSURE 3 35
+DELAY 36 CHANNEL_PRESSURE 3 34
+DELAY 36 CHANNEL_PRESSURE 3 33
+DELAY 36 CHANNEL_PRESSURE 3 33
+DELAY 36 CHANNEL_PRESSURE 3 32
+DELAY 36 CHANNEL_PRESSURE 3 31
+DELAY 36 CHANNEL_PRESSURE 3 30
+DELAY 36 CHANNEL_PRESSURE 3 30
+DELAY 36 CHANNEL_PRESSURE 3 29
+DELAY 36 CHANNEL_PRESSURE 3 28
+DELAY 36 CHANNEL_PRESSURE 3 27
+DELAY 36 CHANNEL_PRESSURE 3 26
+DELAY 36 CHANNEL_PRESSURE 3 26
+DELAY 36 CHANNEL_PRESSURE 3 25
+DELAY 36 CHANNEL_PRESSURE 3 24
+DELAY 36 CHANNEL_PRESSURE 3 23
+DELAY 36 CHANNEL_PRESSURE 3 23
+DELAY 36 CHANNEL_PRESSURE 3 22
+DELAY 36 CHANNEL_PRESSURE 3 21
+DELAY 36 CHANNEL_PRESSURE 3 20
+DELAY 36 CHANNEL_PRESSURE 3 20
+NOTE_OFF 3 D#4 0
+LAZY ; m106
+; m107
+R 1 ; m108
+
+END_LAZY
+NOTE_ON 3 C#4 35
+NOTE_ON 3 E4 35
+DELAY 24 CHANNEL_PRESSURE 3 35
+POLY_KEY_PRESSURE 3 E4 35
+DELAY 24 CHANNEL_PRESSURE 3 35
+POLY_KEY_PRESSURE 3 E4 35
+DELAY 24 CHANNEL_PRESSURE 3 36
+POLY_KEY_PRESSURE 3 E4 36
+DELAY 24 CHANNEL_PRESSURE 3 37
+POLY_KEY_PRESSURE 3 E4 37
+DELAY 24 CHANNEL_PRESSURE 3 38
+POLY_KEY_PRESSURE 3 E4 38
+DELAY 24 CHANNEL_PRESSURE 3 38
+POLY_KEY_PRESSURE 3 E4 38
+DELAY 24 CHANNEL_PRESSURE 3 39
+POLY_KEY_PRESSURE 3 E4 39
+DELAY 24 CHANNEL_PRESSURE 3 40
+POLY_KEY_PRESSURE 3 E4 40
+DELAY 24 CHANNEL_PRESSURE 3 41
+POLY_KEY_PRESSURE 3 E4 41
+DELAY 24 CHANNEL_PRESSURE 3 41
+POLY_KEY_PRESSURE 3 E4 41
+DELAY 24 CHANNEL_PRESSURE 3 42
+POLY_KEY_PRESSURE 3 E4 42
+DELAY 24 CHANNEL_PRESSURE 3 43
+POLY_KEY_PRESSURE 3 E4 43
+DELAY 24 CHANNEL_PRESSURE 3 44
+POLY_KEY_PRESSURE 3 E4 44
+DELAY 24 CHANNEL_PRESSURE 3 45
+POLY_KEY_PRESSURE 3 E4 45
+DELAY 24 CHANNEL_PRESSURE 3 45
+POLY_KEY_PRESSURE 3 E4 45
+DELAY 24 CHANNEL_PRESSURE 3 46
+POLY_KEY_PRESSURE 3 E4 46
+DELAY 24 CHANNEL_PRESSURE 3 47
+POLY_KEY_PRESSURE 3 E4 47
+DELAY 24 CHANNEL_PRESSURE 3 48
+POLY_KEY_PRESSURE 3 E4 48
+DELAY 24 CHANNEL_PRESSURE 3 48
+POLY_KEY_PRESSURE 3 E4 48
+DELAY 24 CHANNEL_PRESSURE 3 49
+POLY_KEY_PRESSURE 3 E4 49
+DELAY 24 CHANNEL_PRESSURE 3 50
+POLY_KEY_PRESSURE 3 E4 50
+DELAY 24 CHANNEL_PRESSURE 3 49
+POLY_KEY_PRESSURE 3 E4 49
+DELAY 24 CHANNEL_PRESSURE 3 48
+POLY_KEY_PRESSURE 3 E4 48
+DELAY 24 CHANNEL_PRESSURE 3 47
+POLY_KEY_PRESSURE 3 E4 47
+DELAY 24 CHANNEL_PRESSURE 3 46
+POLY_KEY_PRESSURE 3 E4 46
+DELAY 24 CHANNEL_PRESSURE 3 46
+POLY_KEY_PRESSURE 3 E4 46
+DELAY 24 CHANNEL_PRESSURE 3 45
+POLY_KEY_PRESSURE 3 E4 45
+DELAY 24 CHANNEL_PRESSURE 3 44
+POLY_KEY_PRESSURE 3 E4 44
+DELAY 24 CHANNEL_PRESSURE 3 43
+POLY_KEY_PRESSURE 3 E4 43
+DELAY 24 CHANNEL_PRESSURE 3 43
+POLY_KEY_PRESSURE 3 E4 43
+DELAY 24 CHANNEL_PRESSURE 3 42
+POLY_KEY_PRESSURE 3 E4 42
+DELAY 24 CHANNEL_PRESSURE 3 41
+POLY_KEY_PRESSURE 3 E4 41
+DELAY 24 CHANNEL_PRESSURE 3 40
+POLY_KEY_PRESSURE 3 E4 40
+DELAY 24 CHANNEL_PRESSURE 3 40
+POLY_KEY_PRESSURE 3 E4 40
+DELAY 24 CHANNEL_PRESSURE 3 39
+POLY_KEY_PRESSURE 3 E4 39
+DELAY 24 CHANNEL_PRESSURE 3 38
+POLY_KEY_PRESSURE 3 E4 38
+DELAY 24 CHANNEL_PRESSURE 3 37
+POLY_KEY_PRESSURE 3 E4 37
+DELAY 24 CHANNEL_PRESSURE 3 36
+POLY_KEY_PRESSURE 3 E4 36
+DELAY 24 CHANNEL_PRESSURE 3 36
+POLY_KEY_PRESSURE 3 E4 36
+DELAY 24 CHANNEL_PRESSURE 3 35
+POLY_KEY_PRESSURE 3 E4 35
+NOTE_OFF 3 C#4 0
+NOTE_OFF 3 E4 0
+LAZY ; m109
+R 1 ; m110
+pp C4 14/4 ; m111
+; m112
+; m113
+mf B3 16. R 32 r 8 C#4 16. R 32 r 8 ; m114
+B3 16. R 32 r 8 A3 16. R 32 r 8 G#3 16. R 32 r 8 G3 16. R 32 r 8 ; m115
+A3 16. R 32 r 8 G#3 16. R 32 r 8 F#3 16. R 32 r 8 G3 16. R 32 r 8 ; m116
+G#3 16. R 32 r 8 A3 16. R 32 r 8 G#3 16. R 32 r 8 A3 16. R 32 r 8 ; m117
+A#3 16. R 32 r 8 B3 16. R 32 r 8 B3 16. R 32 r 8 C#4 16. R 32 r 8 ; m118
+B3 16. R 32 r 8 A3 16. R 32 r 8 G#3 16. R 32 r 8 G3 16. R 32 r 8 ; m119
+A3 16. R 32 r 8 G#3 16. R 32 r 8 F#3 16. R 32 r 8 G3 16. R 32 r 8 ; m120
+G#3 16. R 32 r 8 A3 16. R 32 r 8 G#3 16. R 32 r 8 A3 16. R 32 r 8 ; m121
+A#3 16. R 32 r 8 B3 16. R 32 r 8 R 2 ; m122
+C#3 2 A#3 7/6 ; m123
+G#3 6 G3 6 ; m124
+G#3 2 B3 2 ; m125
+G#3 2 D#3 2 ; m126
+C#3 2 A#3 2 ; m127
+A3 6 R 6 G#3 6 R 6 G3 6 R 6 ; m128
+G#3 2 B3 2 ; m129
+G#3 2 vel 72 D#4 16. R 32 r 8 vel 74 E4 16. R 32 r 8 ; m130
+vel 76 D#4 16. R 32 r 8 vel 78 C#4 16. R 32 r 8 vel 80 B3 16. R 32 r 8 vel 82 A#3 16. R 32 r 8 ; m131
+vel 84 C#4 16. R 32 r 8 vel 86 B3 16. R 32 r 8 vel 88 D#4 16. R 32 r 8 vel 90 E4 16. R 32 r 8 ; m132
+D#4 8 R 8 C#4 8 R 8 B3 8 R 8 A#3 8 R 8 ; m133
+B3 8 R 8 A#3 8 R 8 D#4 8 R 8 E4 8 R 8 ; m134
+D#4 8 R 8 C#4 8 R 8 B3 8 R 8 A#3 8 R 8 ; m135
+B3 8 R 8 A#3 8 R 8 p G#3 8 G#3 8 G#3 8 G#3 8 ; m136
+G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 ; m137
+G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 G#3 8 ; m138
+D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 D#4 8 ; m139
+G#3 4 R 4 C#4 8 C#4 8 E4 8 E4 8 ; m140
+mp G#4 8 G#4 8 G#4 8 G#4 8 p C#4 8 C#4 8 E4 8 E4 8 ; m141
+D#4 8 D#4 8 G#3 8 G#3 8 A#3 8 A#3 8 C#4 8 C#4 8 ; m142
+B3 8 B3 8 G#3 8 G#3 8 D#3 8 D#3 8 G3 8 G3 8 ; m143
+G#3 2 E4 4 E5 4 ; m144
+mp E5 4 p D#5 4 D#5 4 D#5 4 ; m145
+mp F#5 4 p E5 4 C#4 4 C#5 4 ; m146
+mp C#5 4 p C5 4 C5 4 C5 4 ; m147a
+mp D#5 4 p C#5 4 G#4 8 G#4 8 G#4 8 G#4 8 ; m148
+D#4 8 D#4 8 D#4 8 D#4 8 G#4 8 G#4 8 G#4 8 G#4 8 ; m149
+D#4 8 D#4 8 D#4 8 D#4 8 G#3 8 G#3 8 G#3 8 G#3 8 ; m150
+A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 A#3 8 ; m151
+D#4 8 D#4 8 D#4 8 D#4 8 B3 8 B3 8 B3 8 B3 8 ; m152
+A#3 8 A#3 8 A#3 8 A#3 8 B3 8 B3 8 B3 8 B3 8 ; m153
+A#3 8 A#3 8 A#3 8 A#3 8 G#3 8 G#3 8 G#3 8 G#3 8 ; m154
+F#3 8 F#3 8 F#3 8 F#3 8 F3 8 F3 8 F3 8 F3 8 ; m155
+F#3 2 pp B3 2 ; m156
+R 2 B3 2 ; m157
+R 2 B3 2 ; m158
+R 2 B3 8. R 16 B3 8. R 16 ; m159
+B3 2 R 2 ; m160
+F#3 8. R 16 F#3 8. R 16 R 2 ; m161
+G#3 8. R 16 G#3 8. R 16 R 2 ; m162
+F#3 8. R 16 F#3 8. R 16 R 2 ; m163
+F#3 8. R 16 F#3 8. R 16 ; m164
+;double bar 3 flats
+R 2  ;164b
+p Bb3 4 Db4 4 mp Eb4 2 ; m165
+p Bb3 4 Db4 4 C4 4 Eb3 4 ; m166
+F3 4 Bb3 4 F4 4 F3 4 ; m167
+Bb3 2 R 2 ; m168
+Bb3 4 Db4 4 mf Eb4 2 ; m169
+p Bb3 4 Db4 4 C4 4 Eb3 4 ; m170
+F3 4 Bb3 4 F4 4 F3 4 ; m171
+vel 25 Bb3 2 R 2 ; m172
+pp Gb3 2 R 2 ; m173
+p  Gb3 2 R 2 ; m174
+mp Gb3 2 R 2 ; m175
+mf Gb3 4 Gb3 8 Gb4 16 Ab4 16 ff Bb4 4 forte Ab4 4  ; m176
+Gb4 4 Eb4 4 Ab3 4 A3 4 ; m177
+Bb3 4. R 8 pppp G4 2 ; m178
+Ab4 2 Bb4 2 ; m179
+p G4 2 END_LAZY PROGRAM 3 46 LAZY G4 4 G4 4 ; m180
+G4 4 R 4 F4 4 R 4 ; m181
+Eb4 4 R 4 END_LAZY PROGRAM 3 42 LAZY Eb4 4 Ab4 4 ; m182
+F4 4 Bb4 4 G4 4 C5 4 ; m183
+Ab4 4 Eb4 4 END_LAZY PROGRAM 3 46 LAZY C5 4 C5 4 ; m184
+C5 4 R 4 Bb4 4 R 4 ; m185
+Ab4 4 END_LAZY PROGRAM 3 42 LAZY R 4 R 2 ; m186
+R 1 ; m187
+R 1 ; m188
+R 1 ; m189
+R 2 C4 8 R 8 Db4 8 R 8 ; m190
+C4 4 Bb3 4 Ab3 4 G3 4 ; m191
+Bb3 4 Ab3 4 Eb4 8 Eb4 8 Eb4 8 Eb4 8 ; m192
+Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 ; m193
+Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 ; m194
+forte Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8 ; m195
+Eb4 8 Eb4 8 Eb4 8 Eb4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 ; m196
+C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 ; m197
+C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 ; m198
+C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 C3 C4 8 ; m199
+C3 C4 4 R 4 R 2 ; m200
+R 1 ; m201
+R 1 ; m202
+R 1 ; m203
+R 2 Eb3 4 F3 4 ; m204
+F#3 4 G3 4 Ab3 4 A3 4 ; m205
+Bb3 4 C4 4 D4 4 Eb4 4 ; m206
+F4 4 G4 4 Ab4 4 Bb4 4 ; m207
+Ab4 4 G4 4 forte Eb3 8 Eb3 8 F3 8 F3 8 ; m208
+F#3 8 F#3 8 G3 8 G3 8 Ab3 8 Ab3 8 A3 8 A3 8 ; m209
+Bb3 8 Bb3 8 C4 8 C4 8 D4 8 D4 8 Eb4 8 Eb4 8 ; m210
+F4 8 F4 8 G4 8 G4 8 Ab4 8 Ab4 8 Bb4 8 Bb4 8 ; m211
+Eb4 4 R 4 mf G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 ; m212
+G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 ; m213
+G3 G4 8 G3 G4 8 G3 G4 8 G3 G4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 G3 Eb4 8 ; m214
+G3 D4 8 G3 D4 8 G3 D4 8 G3 D4 8 C4 D4 8 C4 D4 8 C4 D4 8 C4 D4 8 ; m215
+Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 Bb3 D4 8 C4 8 C4 8 C4 8 C4 8 ; m216
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 C4 8 C4 8 C4 8 C4 8 ; m217
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 G3 8 G3 8 G3 8 G3 8 ; m218
+G3 8 G3 8 G3 8 G3 8 F#3 8 F#3 8 F#3 8 F#3 8 ; m219
+G3 4 R 4 ff Bb3 4 D4 4 ; m220
+fff Eb4 2 ff Bb3 4 D4 4 ; m221
+Eb4 8 Eb4 8 G4 8 G4 8 Bb4 8 Bb4 8 D5 8 D5 8 ; m222
+Eb4 8 Eb4 8 G4 8 G4 8 Bb4 8 Bb4 8 D5 8 D5 8 ; m223
+Eb5 3/8 R 8 vel 25 F4 1 ; m224
+G4 2 ; m225
+F4 2 F4 1 ; m226
+pp G4 2 ; m227
+F4 2 F4 1 ; m228
+mp D4 2 ; m229
+Eb4 2 C4 2 ; m230
+pp F4 2 Ab4 2 ; m231
+G4 2 pp  F4 1 ; m232
+Eb4 4 G4 4 ; m233
+F4 4 C4 4 F4 1 ; m234
+Eb4 4 G4 4 ; m235
+F4 4 C4 4 F4 1 ; m236
+F4 2 ; m237
+Eb4 2 Eb4 1 ; m238
+Ab4 2 ; m239
+mf G4 2 Eb3 8 R 8 G3 8 R 8 ; m240
+forte Ab3 2 mf Ab3 8 R 8 B3 8 R 8 ; m241
+forte Eb4 2 mf Eb3 8 R 8 G3 8 R 8 ; m242
+forte Ab3 2 mf Ab3 8 R 8 B3 8 R 8 ; m243
+forte Eb4 2 mf Eb3 4 G3 4 ; m244
+F3 4 Ab3 4 G3 4 Bb3 4 ; m245
+Ab3 2 Ab3 4 C4 4 ; m246
+Eb4 4 G3 4 Bb3 4 Bb3 4 ; m247
+Eb3 Bb3 4. R 8 R 2 ; m248
+R 1 ; m249
+R 1 ; m250
+R 1 ; m251
+R 1 ; m252
+R 1 ; m253
+R 1 ; m254
+R 1 ; m255
+R 2 p G4 8 Ab4 8 G4 8 F4 8  ; m256
+F4 8 Eb4 8 D4 8 C4 8 Eb4 8 D4 8 C4 8 B3 8 ; m257
+C4 8 C4 8 D4 8 Eb4 8 C4 8 B3 8 A3 8 B3 8 ; m258
+C4 8 G3 8 Ab3 8 G3 8 G3 8 F3 8 Eb3 8 D3 8 ; m259
+F3 8 Eb3 8 D3 8 C3 8 D3 8 G3 8 Bb3 8 D4 8 ; m260
+Eb4 8 G4 8 F#4 8 A4 8 G4 8 D4 8 Eb4 8 D4 8 ; m261
+D4 8 C4 8 Bb3 8 A3 8 forte G3 8 ;****  copy v2
+Ab4 8 G4 8 F4 8 ; m262
+F4 8 Eb4 8 D4 8 C4 8 Eb4 8 D4 8 C4 8 B3 8 ; m263 done
+C4 8 C4 8 D4 8 Eb4 8 C4 8 B3 8 A3 8 B3 8 ; m264
+C4 8 G3 8 Ab3 8 G3 8 G3 8 F3 8 Eb3 8 D3 8 ; m265
+C3 8 G3 8 F3 8 C4 8 Bb3 8 C4 8 Bb3 8 Ab3 8 ; m266
+ff G3 4/26 forte Bb3 3/26 Eb4 3/26 G4 3/26 ff Ab4 4/26 forte Eb4 3/26 C4 3/26 Ab3 3/26 ; m267
+ff G3 4/26 forte Bb3 3/26 Eb4 3/26 G4 3/26 ff F4 4/26 forte C4 3/26 Ab3 3/26 F3 3/26 ; m268
+ff Eb3 4/26 forte G3 3/26 C4 3/26 Eb4 3/26 ff F4 4/26 forte C4 3/26 Ab3 3/26 F3 3/26 ; m269
+ff Eb3 4/26 forte G3 3/26 C4 3/26 Eb4 3/26 ff Db4 4/26 forte Ab3 3/26 F3 3/26 Db3 3/26 ; m270
+ff C3 4/26 forte Eb3 3/26 Ab3 3/26 C4 3/26 ff Db4 4/26 forte Ab3 3/26 F3 3/26 Db3 3/26 ; m271
+ff C3 4/26 forte Eb3 3/26 Ab3 3/26 C4 3/26 C3 8 C3 8 Eb3 8 Eb3 8 ; m272
+G3 8 G3 8 G3 8 G3 8 C3 8 C3 8 Eb3 8 Eb3 8 ; m273
+G3 2 r 8 p Bb3 8 R 8 C4 8 R 8 ; m274
+Bb3 8 R 8 Ab3 8 R 8 G3 8 R 8 F#3 8 R 8 ; m275
+Ab3 8 R 8 G3 8 R 8 F3 8 R 8 F#3 8 R 8 ; m276
+G3 8 R 8 Ab3 8 R 8 G3 8 R 8 Ab3 8 R 8 ; m277
+A3 8 R 8 Bb3 8 R 8 Bb3 8 R 8 C4 8 R 8 ; m278
+Bb3 8 R 8 Ab3 8 R 8 G3 8 R 8 F#3 8 R 8 ; m279
+Ab3 8 R 8 G3 8 R 8 F3 8 R 8 F#3 8 R 8 ; m280
+G3 8 R 8 Ab3 8 R 8 G3 8 R 8 Ab3 8 R 8 ; m281
+A3 8 R 8 Bb3 8 R 8 Eb4 8 R 8 F4 8 R 8 ; m282
+Eb4 8 R 8 Db4 8 R 8 C4 8 R 8 B3 8 R 8 ; m283
+Db4 8 R 8 C4 8 R 8 Bb3 8 R 8 B3 8 R 8 ; m284
+C4 8 R 8 Db4 8 R 8 C4 8 R 8 Db4 8 R 8 ; m285
+D4 8 R 8 Eb4 8 R 8 forte Ab3 4 C4 4 ; m286
+ff Eb4 2 forte F3 4 Ab3 4 ; m287
+ff C4 2 forte C4 8 R 8 C4 8 R 8 ; m288
+Bb3 8 R 8 Ab3 8 R 8 C4 8 R 8 Bb3 8 R 8 ; m289
+Bb3 2 C4 4 Eb4 4 ; m290
+ff G4 2 forte Ab3 4 C4 4 ; m291
+ff Eb4 2 p Eb3 4 Eb3 4 ; m292
+Eb3 4 Eb3 4 Eb3 4 Eb3 4 ; m293
+Eb3 4 Eb3 4 Eb3 4 Eb3 4 ; m294
+Eb3 4 Eb3 4 Bb3 8 Bb3 8 Bb3 8 Bb3 8 ; m295
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 ; m296
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 ; m297
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 ; m298
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 ; m299
+ff Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 ; m300
+Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 ; m301
+Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 ; m302
+Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 ; m303
+Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 ; m304
+Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 Eb3 Db4 8 ; m305
+Eb3 C4 8 Eb3 C4 8 Eb3 C4 8 Eb3 C4 8  Eb3 C4 8 Eb3 C4 8 Eb3 C4 8 Eb3 C4 8 ; m306
+Eb3 B3 8 Eb3 B3 8 Eb3 B3 8 Eb3 B3 8  Eb3 B3 8 Eb3 B3 8 Eb3 B3 8 Eb3 B3 8 ; m307
+Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 ff Eb3 B3 8 Eb3 B3 8 ; m308
+forte Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 ff Eb3 B3 8 Eb3 B3 8 ; m309
+forte Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Eb3 Bb3 8 Bb3 8 Bb3 8 ; m310
+G3 8 G3 8 Bb3 8 Bb3 8 Eb4 8 Eb4 8 G4 8 G4 8 ; m311
+Eb4 1 ; m312
+D4 1 ; m313
+ff Eb4 1 ; m314
+ff Db4 1 ; m315
+forte D4 2 B3 2 ; m316
+Bb3 2 Ab3 Eb4 2 ; m317
+fff Ab3 F4 2 R 2 ; m318
+R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+R 1 ; m325
+R 1 ; m326
+R 1 ; m327
+R 1 ; m328
+R 1 ; m329
+R 1 ; m330
+ff Eb3 1 ; m331
+ff Db4 1 ; m332
+ff C4 1 ; m333
+ff Ab4 1 ; m334
+forte G4 2 D4 2 ; m335
+Eb4 2 F4 2 ; m336
+D4 2 A3 2 ; m337
+Bb3 2 Bb3 8 R 8 D4 8 R 8 ; m338
+Eb4 2 Bb3 8 R 8 D4 8 R 8 ; m339
+forte C4 8 R 8 F3 8 R 8 G3 8 R 8 A3 8 R 8 ; m340
+Bb3 8 R 8 D4 8 R 8 F4 8 R 8 Eb4 8 R 8 ; m341
+D4 8 R 8 Bb3 8 R 8 C4 8 R 8 D4 8 R 8 ; m342
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 Ab4 8 R 8 ; m343
+G4 8 R 8 G4 8 R 8 Ab4 8 R 8 Bb4 8 R 8 ; m344
+C5 8 R 8 C5 8 R 8 D5 8 R 8 E5 8 R 8 ; m345
+F5 8 R 8 Ab4 8 R 8 Bb4 8 R 8 C5 8 R 8 ; m346
+D5 2 R 2 ; m347
+R 1 ; m348
+R 1 ; m349
+R 1 ; m350
+C3 2 C3 8 R 8 D3 8 R 8 ; m351
+E3 8 R 8 C3 8 R 8 D3 8 R 8 E3 8 R 8 ; m352
+F3 8 R 8 Ab3 8 R 8 C4 8 R 8 Bb3 8 R 8 ; m353
+Ab3 8 R 8 F3 8 R 8 G3 8 R 8 A3 8 R 8 ; m354
+Bb3 4 R 4 R 2 ; m355
+R 1 ; m356
+R 1 ; m357
+R 1 ; m358
+R 1 ; m359
+R 1 ; m360
+ff D4 1 ; m361
+ff C5 1 ; m362
+forte Bb4 2 Ab4 2 ; m363
+G4 8 R 8 E4 8 R 8 F4 8 R 8 G4 8 R 8 ; m364
+C4 8 R 8 E4 8 R 8 G4 8 R 8 F4 8 R 8 ; m365
+E4 8 R 8 C4 8 R 8 D4 8 R 8 E4 8 R 8 ; m366
+F4 8 R 8 Ab4 8 R 8 C5 8 R 8 Bb4 8 R 8 ; m367
+Ab4 8 R 8 F4 8 R 8 G4 8 R 8 Ab4 8 R 8 ; m368
+Bb4 2 Ab4 2 ; m369
+G4 2 Bb3 8 R 8 D4 8 R 8 ; m370
+ff Eb4 2 forte Bb3 8 R 8 D4 8 R 8 ; m371
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 D4 8 R 8 ; m372
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 D5 8 R 8 ; m373
+Eb5 2 A3 8 R 8 C4 8 R 8 ; m374
+ff Eb4 2 forte A3 8 A3 8 C4 8 C4 8 ; m375
+Eb4 8 Eb4 8 Gb4 8 Gb4 8 A4 8 A4 8 C4 8 C4 8 ; m376
+Eb4 8 Eb4 8 Gb4 8 Gb4 8 A4 8 A4 8 C5 8 C5 8 ; m377
+Eb5 2 p F4 1 ; m378
+G4 2 ; m379
+F4 2 F4 1 ; m380
+G4 2 ; m381
+F4 2 F4 1 ; m382
+D4 2 ; m383
+Eb4 2 C4 2 ; m384
+F4 2 Ab4 2 ; m385
+G4 2 p F4 1; m386
+Eb4 4 G4 4 ; m387
+F4 4 C4 4 F4 1 ; m388
+Eb4 4 G4 4 ; m389
+F4 4 C4 4 F4 1 ; m390
+F4 2 ; m391
+Eb4 2 Eb4 1 ; m392
+Ab4 2 ; m393
+G4 2 Eb3 8 R 8 G3 8 R 8 ; m394
+Ab3 2 Ab3 8 R 8 B3 8 R 8  ; m395
+Eb4 2 Eb3 4 G3 4 ; m396
+Ab3 2 Ab3 4 B3 4 ; m397
+Eb4 2 forte Eb3 4 G3 4 ; m398
+F3 4 Ab3 4 G3 4 Bb3 4 ; m399
+Ab3 2 Ab3 4 C4 4 ; m400
+Eb4 4 G3 4 Bb3 4 Bb3 4 ; m401
+Eb3 2 Eb3 8 R 8 G3 8 R 8 ; m402
+Bb3 2 D4 8 R 8 F4 8 R 8 ; m403
+G4 2 Bb3 8 R 8 Eb4 8 R 8 ; m404
+C4 8 R 8 Ab3 8 R 8 F3 8 R 8 Bb3 8 R 8 ; m405
+G3 8 R 8 Eb3 8 R 8 Eb3 8 R 8 G3 8 R 8 ; m406
+Bb3 2 D4 8 R 8 F4 8 R 8 ;407
+G4 2 Bb3 8 R 8 Eb4 8 R 8 ; m408
+C4 8 R 8 Ab3 8 R 8 F3 8 R 8 Bb3 8 R 8 ; m409
+G3 8 R 8 Eb3 8 R 8 Bb4 8 R 8 Eb5 8 R 8 ; m410
+C5 8 R 8 Ab4 8 R 8 F4 8 R 8 Bb4 8 R 8 ; m411
+G4 8 R 8 Eb4 8 R 8 Bb4 8 Bb4 8 Eb5 8 Eb5 8 ; m412
+C5 8 C5 8 Ab4 8 Ab4 8 F4 8 F4 8 Bb4 8 Bb4 8 ; m413
+G4 8 G4 8 Eb4 8 Eb4 8 Bb4 8 Bb4 8 Eb5 8 Eb5 8 ; m414
+C5 8 C5 8 Ab4 8 Ab4 8 F4 8 F4 8 Bb4 8 Bb4 8 ; m415
+G4 8 G4 8 Eb4 8 Eb4 8 C4 8 C4 8 F4 8 F4 8 ; m416
+D4 8 D4 8 Bb3 8 Bb3 8 G3 8 G3 8 C4 8 C4 8 ; m417
+Ab3 8 Ab3 8 F3 8 F3 8 D3 8 D3 8 G3 8 G3 8 ; m418
+Eb3 8 Eb3 8 C3 8 C3 8 Ab3 8 Ab3 8 C4 8 C4 8 ; m419
+Bb3 4 R 4 Bb3 F4 4 R 4 ; m420
+Eb4 4 R 4 R 2 ; m421
+R 1 ; m422
+Eb4 2 R 2 ; m423
+Eb4 2 R 2 ; m424
+Eb4 2 R 2 ; m425
+Eb3 2 R 2 ; m426
+Eb3 2 R 2 ; m427
+
+END_LAZY
+END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt4vc.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.22  2003/11/02 23:04:42  root
+; done
+;
+; Revision 1.21  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.20  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.19  2003/10/24 01:23:14  root
+; last notes to m137
+;
+; Revision 1.18  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.17  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.16  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.15  2003/07/19 21:47:53  root
+; fix dyanamiscs add applause
+;
+; Revision 1.14  2003/07/12 01:01:08  root
+; pauess m224, adj dyns
+;
+; Revision 1.13  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/06/03 23:49:04  root
+; narrow stereo field
+;
+; Revision 1.10  2003/05/26 20:46:27  root
+; staccators
+;
+; Revision 1.9  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.8  2003/04/20 16:11:34  root
+; done before coach
+;
+; Revision 1.7  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.6  2003/04/18 10:56:13  root
+; dynamics
+;
+; Revision 1.5  2003/04/12 00:35:10  root
+; drafted pitches rhythms
+;
+; Revision 1.4  2003/04/11 01:56:30  root
+; in progress
+;
+; Revision 1.3  2003/04/10 23:50:03  root
+; fixes
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4vc.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4vc.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4vc.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4vc.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Cello
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK 43
+INSTRUMENT 43
+PROGRAM 4 43
+PAN 4 10
+LAZY
+chan 4
+R 1 ;m000
+ff C2 C3 4 R 4 mp C3 2 ; m001
+G2 2 C3 2 ; m002
+G2 2 C3 2 ; m003
+D3 2 D3 2 ; m004
+G2 2 C3 2 ; m005
+G2 2 C3 2 ; m006
+G3 2 C3 2 ; m007
+D3 2 D3 2 ; m008
+G2 2 R 2 ; m009
+forte  Bb2 4 mp Bb3 4 R 2 ; m010
+forte  Eb3 4 mp Eb4 4 R 2 ; m011
+forte  G2 4 mp G3 4 R 2 ; m012
+forte  C3 4 mp C4 4 C3 2 ; m013
+G2 2 C3 2 ; m014
+G2 2 C3 4 A2 4  ; m015
+D3 2 D3 2 ; m016
+G2 2 C3 2 ; m017
+G2 2 C3 2 ; m018
+G3 2 C3 4 C3 4 ; m019
+D3 2 C2 2 ; m020
+Bb2 2 R 2 ; m021
+forte  Eb3 2 R 2 ; m022
+ Eb3 2 R 2 ; m023
+ Eb3 2 R 2 ; m024
+mp Eb3 4 Eb3 4 R 2 ; m025
+forte ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 R 2 ; m026
+forte ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 R 2 ; m027
+forte ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 R 2 ; m028
+forte ff Eb3 8 mf Eb3 8 mp Eb3 8 p Eb3 8 forte G2 4 G3 4  ; m029
+D4 2 D4 2 ; m030
+D3 2 G2 4 G3 4 ; m031
+A2 2 A3 2 ; m032
+D3 2 R 2 ; m033
+D3 4 F3 4 ff G3 2 ; m034
+ffff D3 4 F3 4 G2 4 G3 4 ; m035
+A2 4 A3 4 A2 4 A3 4 ; m036
+D3 4 R 4 R 2 ; m037
+ff Bb2 2 R 2 ; m038
+ff Bb2 2 R 2 ; m039
+ff Bb2 2 R 2 ; m040
+R 4 r 8 Bb3 16 C4 16 ff D4 4 forte C4 4 ; m041
+Bb3 4 G3 4 C3 4 C#3 4 ; m042
+D3 7/16 R 16 pppp G2 1 ; m043
+G2 2 ; m044 one sharp
+G2 2 END_LAZY PROGRAM 4 46 LAZY E3 4 E3 4 ; m045
+E3 4 R 4 B2 4 R 4 ; m046
+E3 4 R 4 END_LAZY PROGRAM 4 43 LAZY r 8 C3 1 ; m047
+C3 2 ; m048
+C3 2 END_LAZY PROGRAM 4 46 LAZY A3 4 A3 4 ; m049
+A3 4 R 4 E3 4 R 4 ; m050
+A3 4 R 4 R 2  ; m051
+END_LAZY PROGRAM 4 43 LAZY
+R 1 ; m052
+R 1 ; m053
+R 1 ; m054
+R 2 p C3 8 R 8 D3 8 R 8 ; m055
+D3 4 B2 4 A2 4 G#2 4 ; m056
+B2 4 A2 4 R 2 ; m057
+R 1 ; m058
+R 2 forte G3 8 R 8 A3 8 R 8 ; m059
+G3 4 F3 4 E3 4 D#3 4  ; m060
+F3 4 E3 4 D3 8 R 8 C3 8 R 8  ; m061
+B2 2 C3 8 R 8 D3 8 R 8 ; m062
+C3 2 E3 8 R 8 F3 8 R 8 ; m063
+E3 4 D3 4 C3 4 B2 4 ; m064
+D3 4 C3 4 R 2 ; m065
+R 1 ; m066
+mf R 2 Bb3 8 R 8 C4 8 R 8 ; m067
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m068
+Ab3 4 G3 4 Eb3 1 ; m069
+Eb3 2 ; m070
+D3 4 R 4 R 2 ; m071
+D3 4 R 4 D3 4 R 4 ; m072
+E3 2 forte E3 1 ; m073
+E3 2 ; m074
+D3 2 D3 4 D3 4 ; m075
+ff D3 4 D3 4 D3 4 D3 4 ; m076
+G3 4 R 4 ; m077
+;double bar one sharp
+p E3 4 R 4 
+B2 4 R 4  E3 4 R 4 ; m078
+B2 4 R 4 E3 4 R 4 ; m079
+F#3 4 R 4 F#2 4 R 4 ; m080
+mf B2 4 R 4 p E3 4 R 4 ; m081
+B2 4 R 4 E3 4 R 4 ; m082
+B2 4 R 4 pp E3 4 R 4 ; m083
+F#3 4 R 4 F#3 4 R 4 ; m084
+B2 4 R 4 B2 1 ; m085
+E3 2 ; m086
+D#3 2 D#3 8 R 1/24  F#3 8 R 1/24  B3 8 R 1/24  ; m087
+D#4 4 R 4 C#4 4 R 4 ; m088
+B3 4 R 4 
+END_LAZY
+NOTE_ON 4 B2 40
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 42
+DELAY 24 CHANNEL_PRESSURE 4 42
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 44
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 47
+DELAY 24 CHANNEL_PRESSURE 4 47
+DELAY 24 CHANNEL_PRESSURE 4 48
+DELAY 24 CHANNEL_PRESSURE 4 49
+DELAY 24 CHANNEL_PRESSURE 4 49
+DELAY 24 CHANNEL_PRESSURE 4 50
+DELAY 24 CHANNEL_PRESSURE 4 50
+DELAY 24 CHANNEL_PRESSURE 4 51
+DELAY 24 CHANNEL_PRESSURE 4 51
+DELAY 24 CHANNEL_PRESSURE 4 52
+DELAY 24 CHANNEL_PRESSURE 4 52
+DELAY 24 CHANNEL_PRESSURE 4 53
+DELAY 24 CHANNEL_PRESSURE 4 54
+DELAY 24 CHANNEL_PRESSURE 4 54
+DELAY 24 CHANNEL_PRESSURE 4 55
+DELAY 24 CHANNEL_PRESSURE 4 55
+DELAY 24 CHANNEL_PRESSURE 4 56
+DELAY 24 CHANNEL_PRESSURE 4 56
+DELAY 24 CHANNEL_PRESSURE 4 57
+DELAY 24 CHANNEL_PRESSURE 4 58
+DELAY 24 CHANNEL_PRESSURE 4 58
+DELAY 24 CHANNEL_PRESSURE 4 59
+DELAY 24 CHANNEL_PRESSURE 4 59
+DELAY 24 CHANNEL_PRESSURE 4 60
+DELAY 24 CHANNEL_PRESSURE 4 60
+DELAY 24 CHANNEL_PRESSURE 4 61
+DELAY 24 CHANNEL_PRESSURE 4 62
+NOTE_OFF 4 B2 0
+LAZY ; m089
+
+END_LAZY
+NOTE_ON 4 E3 62
+DELAY 12 CHANNEL_PRESSURE 4 62
+DELAY 12 CHANNEL_PRESSURE 4 61
+DELAY 12 CHANNEL_PRESSURE 4 60
+DELAY 12 CHANNEL_PRESSURE 4 60
+DELAY 12 CHANNEL_PRESSURE 4 59
+DELAY 12 CHANNEL_PRESSURE 4 59
+DELAY 12 CHANNEL_PRESSURE 4 58
+DELAY 12 CHANNEL_PRESSURE 4 58
+DELAY 12 CHANNEL_PRESSURE 4 57
+DELAY 12 CHANNEL_PRESSURE 4 56
+DELAY 12 CHANNEL_PRESSURE 4 56
+DELAY 12 CHANNEL_PRESSURE 4 55
+DELAY 12 CHANNEL_PRESSURE 4 55
+DELAY 12 CHANNEL_PRESSURE 4 54
+DELAY 12 CHANNEL_PRESSURE 4 54
+DELAY 12 CHANNEL_PRESSURE 4 53
+DELAY 12 CHANNEL_PRESSURE 4 52
+DELAY 12 CHANNEL_PRESSURE 4 52
+DELAY 12 CHANNEL_PRESSURE 4 51
+DELAY 12 CHANNEL_PRESSURE 4 51
+DELAY 12 CHANNEL_PRESSURE 4 50
+DELAY 12 CHANNEL_PRESSURE 4 50
+DELAY 12 CHANNEL_PRESSURE 4 49
+DELAY 12 CHANNEL_PRESSURE 4 49
+DELAY 12 CHANNEL_PRESSURE 4 48
+DELAY 12 CHANNEL_PRESSURE 4 47
+DELAY 12 CHANNEL_PRESSURE 4 47
+DELAY 12 CHANNEL_PRESSURE 4 46
+DELAY 12 CHANNEL_PRESSURE 4 46
+DELAY 12 CHANNEL_PRESSURE 4 45
+DELAY 12 CHANNEL_PRESSURE 4 45
+DELAY 12 CHANNEL_PRESSURE 4 44
+DELAY 12 CHANNEL_PRESSURE 4 43
+DELAY 12 CHANNEL_PRESSURE 4 43
+DELAY 12 CHANNEL_PRESSURE 4 42
+DELAY 12 CHANNEL_PRESSURE 4 42
+DELAY 12 CHANNEL_PRESSURE 4 41
+DELAY 12 CHANNEL_PRESSURE 4 41
+DELAY 12 CHANNEL_PRESSURE 4 40
+DELAY 12 CHANNEL_PRESSURE 4 40
+NOTE_OFF 4 E3 0
+LAZY ; m090
+D#3 2 pp D#3 6 F#3 6 B3 6 ; m091
+D#4 4 R 4 C#4 4 R 4 ; m092
+B3 4 R 4 p C#3 3/2 ; m093
+; m094
+;double bar 4 sharps
+A#2 3/2 ; m095
+R 2 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+R 1 ; m100
+R 2 p B2 3/2 ; m101
+; m102
+
+END_LAZY
+NOTE_ON 4 C3 50
+DELAY 24 CHANNEL_PRESSURE 4 50
+DELAY 24 CHANNEL_PRESSURE 4 49
+DELAY 24 CHANNEL_PRESSURE 4 48
+DELAY 24 CHANNEL_PRESSURE 4 47
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 44
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 42
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 39
+DELAY 24 CHANNEL_PRESSURE 4 38
+DELAY 24 CHANNEL_PRESSURE 4 37
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 35
+DELAY 24 CHANNEL_PRESSURE 4 34
+DELAY 24 CHANNEL_PRESSURE 4 33
+DELAY 24 CHANNEL_PRESSURE 4 33
+DELAY 24 CHANNEL_PRESSURE 4 32
+DELAY 24 CHANNEL_PRESSURE 4 31
+DELAY 24 CHANNEL_PRESSURE 4 30
+DELAY 24 CHANNEL_PRESSURE 4 30
+DELAY 24 CHANNEL_PRESSURE 4 29
+DELAY 24 CHANNEL_PRESSURE 4 28
+DELAY 24 CHANNEL_PRESSURE 4 27
+DELAY 24 CHANNEL_PRESSURE 4 26
+DELAY 24 CHANNEL_PRESSURE 4 26
+DELAY 24 CHANNEL_PRESSURE 4 25
+DELAY 24 CHANNEL_PRESSURE 4 24
+DELAY 24 CHANNEL_PRESSURE 4 23
+DELAY 24 CHANNEL_PRESSURE 4 23
+DELAY 24 CHANNEL_PRESSURE 4 22
+DELAY 24 CHANNEL_PRESSURE 4 21
+DELAY 24 CHANNEL_PRESSURE 4 20
+DELAY 24 CHANNEL_PRESSURE 4 20
+NOTE_OFF 4 C3 0
+LAZY ; m103
+R 1 ; m104
+p R 2 C#3 3/2 ; m105
+; m106
+
+END_LAZY
+NOTE_ON 4 F#3 50
+DELAY 24 CHANNEL_PRESSURE 4 50
+DELAY 24 CHANNEL_PRESSURE 4 49
+DELAY 24 CHANNEL_PRESSURE 4 48
+DELAY 24 CHANNEL_PRESSURE 4 47
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 44
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 42
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 39
+DELAY 24 CHANNEL_PRESSURE 4 38
+DELAY 24 CHANNEL_PRESSURE 4 37
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 35
+DELAY 24 CHANNEL_PRESSURE 4 34
+DELAY 24 CHANNEL_PRESSURE 4 33
+DELAY 24 CHANNEL_PRESSURE 4 33
+DELAY 24 CHANNEL_PRESSURE 4 32
+DELAY 24 CHANNEL_PRESSURE 4 31
+DELAY 24 CHANNEL_PRESSURE 4 30
+DELAY 24 CHANNEL_PRESSURE 4 30
+DELAY 24 CHANNEL_PRESSURE 4 29
+DELAY 24 CHANNEL_PRESSURE 4 28
+DELAY 24 CHANNEL_PRESSURE 4 27
+DELAY 24 CHANNEL_PRESSURE 4 26
+DELAY 24 CHANNEL_PRESSURE 4 26
+DELAY 24 CHANNEL_PRESSURE 4 25
+DELAY 24 CHANNEL_PRESSURE 4 24
+DELAY 24 CHANNEL_PRESSURE 4 23
+DELAY 24 CHANNEL_PRESSURE 4 23
+DELAY 24 CHANNEL_PRESSURE 4 22
+DELAY 24 CHANNEL_PRESSURE 4 21
+DELAY 24 CHANNEL_PRESSURE 4 20
+DELAY 24 CHANNEL_PRESSURE 4 20
+NOTE_OFF 4 F#3 0
+LAZY ; m107
+R 1 ; m108
+
+END_LAZY
+NOTE_ON 4 F#3 35
+DELAY 24 CHANNEL_PRESSURE 4 35
+DELAY 24 CHANNEL_PRESSURE 4 35
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 37
+DELAY 24 CHANNEL_PRESSURE 4 38
+DELAY 24 CHANNEL_PRESSURE 4 38
+DELAY 24 CHANNEL_PRESSURE 4 39
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 42
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 44
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 47
+DELAY 24 CHANNEL_PRESSURE 4 48
+DELAY 24 CHANNEL_PRESSURE 4 48
+DELAY 24 CHANNEL_PRESSURE 4 49
+DELAY 24 CHANNEL_PRESSURE 4 50
+DELAY 24 CHANNEL_PRESSURE 4 49
+DELAY 24 CHANNEL_PRESSURE 4 48
+DELAY 24 CHANNEL_PRESSURE 4 47
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 46
+DELAY 24 CHANNEL_PRESSURE 4 45
+DELAY 24 CHANNEL_PRESSURE 4 44
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 43
+DELAY 24 CHANNEL_PRESSURE 4 42
+DELAY 24 CHANNEL_PRESSURE 4 41
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 40
+DELAY 24 CHANNEL_PRESSURE 4 39
+DELAY 24 CHANNEL_PRESSURE 4 38
+DELAY 24 CHANNEL_PRESSURE 4 37
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 36
+DELAY 24 CHANNEL_PRESSURE 4 35
+NOTE_OFF 4 F#3 0
+LAZY ; m109
+R 1 ; m110
+R 1 ; m111
+END_LAZY PROGRAM 4 46 LAZY B2 4 END_LAZY PROGRAM 4 43 LAZY R 4 R 2 ; m112
+R 1 ; m113
+R 1 ; m114
+B2 2 R 2 ; m115
+R 1 ; m116
+B2 2 R 2 ; m117
+R 1 ; m118
+B2 2 R 2 ; m119
+R 1 ; m120
+B2 2 R 2 ; m121
+R 2 vel 40 D#3 16. R 32 r 8 vel 42 E3 16. R 32 r 8   ; m122
+vel 44 D#3 16. R 32 r 8 vel 46 C#3 16. R 32 r 8 vel 48 B2 16. R 32 r 8 vel 50 A#2 16. R 32 r 8  ; m123
+vel 52 C#3 16. R 32 r 8 vel 54 B2 16. R 32 r 8 vel 56 A2 16. R 32 r 8 vel 58 A#2 16. R 32 r 8 ; m124
+vel 60 B2 16. R 32 r 8 vel 62 C#3 16. R 32 r 8 vel 64 B2 16. R 32 r 8 vel 66 C#3 16. R 32 r 8 ; m125
+vel 68 D3 16. R 32 r 8 vel 70 D#3 16. R 32 r 8 vel 72 D#3 16. R 32 r 8 vel 74 E3 16. R 32 r 8 ; m126
+vel 76 D#3 16. R 32 r 8 vel 78 C#3 16. R 32 r 8 vel 80 B2 16. R 32 r 8 vel 82 A#2 16. R 32 r 8 ; m127
+vel 84 C#3 16. R 32 r 8 vel 86 B2 16. R 32 r 8 vel 88 A2 16. R 32 r 8 vel 90 A#2 16. R 32 r 8 ; m128
+vel 92 B2 16. R 32 r 8 vel 94 C#3 16. R 32 r 8 vel 96 B2 16. R 32 r 8 vel 98 C#3 16. R 32 r 8 ; m129
+vel 100 D3 16. R 32 r 8 vel 102 D#3 16. R 32 r 8 vel 104 D#3 16. R 32 r 8 vel 106 E3 16. R 32 r 8 ; m130
+vel 108 D#3 16. R 32 r 8 vel 110 C#3 16. R 32 r 8 vel 112 B2 16. R 32 r 8 vel 114 A#2 16. R 32 r 8 ; m131
+vel 116 C#3 16. R 32 r 8 vel 118 B2 16. R 32 r 8 D#3 8 R 8  E3 8 R 8 ; m132
+D#3 8 R 8 C#3 8 R 8 B2 8 R 8 A#2 8 R 8 ; m133
+B2 8 R 8 A#2 8 R 8 D#3 8 R 8 E3 8 R 8 ; m134
+D#3 8 R 8 C#3 8 R 8 B2 8 R 8 A#2 8 R 8 ; m135
+B2 8 R 8 A#2 8 R 8 G#2 8 p R 8 G#3 8 R 8 ; m136
+mp G#4 2 p G#2 8 R 8 G#3 8 R 8 ; m137
+mp G#4 2 p C#3 4 p C#4 4 ; m138
+D#3 4 D#4 4 D#3 4 D#4 4 ; m139
+G#2 4 G#3 4 C#3 2 ; m140
+G#2 2 C#3 2 ; m141
+G#2 2 C#3 2 ; m142
+D#3 2 D#2 2 ; m143
+G#2 2 R 2 ; m144
+mf B3 4 mp B3 4 R 2 ; m145
+mf E3 4 mp E3 4 R 2 ; m146
+mf G#3 4 mp G#3 4 R 2 ; m147
+mf C#3 4 mp C#3 4 G#3 8 G#3 8 G#3 8 G#3 8 ; m148
+D#3 8 D#3 8 D#3 8 D#3 8 G#3 8 G#3 8 G#3 8 G#3 8 ; m149
+D#3 8 D#3 8 D#3 8 D#3 8 G#3 8 G#3 8 G#3 8 G#3 8 ; m150
+A#3 8 A#3 8 A#3 8 A#3 8 A#2 8 A#2 8 A#2 8 A#2 8 ; m151
+D#3 8 D#3 8 D#3 8 D#3 8 G#2 8 G#2 8 G#2 8 G#2 8 ; m152
+D#2 8 D#2 8 D#2 8 D#2 8 G#2 8 G#2 8 G#2 8 G#2 8 ; m153
+D#2 8 D#2 8 D#2 8 D#2 8 G#2 8 G#2 8 G#2 8 G#2 8 ; m154
+A#2 8 A#2 8 A#2 8 A#2 8 A#2 8 A#2 8 A#2 8 A#2 8 ; m155
+p D#3 2 pp B2 2 ; m156
+R 2 B2 2 ; m157
+R 2 B2 2 ; m158
+R 2 B2 8. R 16 B2 8. R 16 ; m159
+B2 2 R 2 ; m160
+B2 8. R 16 B2 8. R 16 R 2 ; m161
+B2 8. R 16 B2 8. R 16 R 2 ; m162
+B2 8. R 16 B2 8. R 16 R 2 ; m163
+B2 8. R 16 B2 8. R 16  ;m164a
+;double bar three flats
+R 2 ; m164b
+p Bb3 4 Db4 4 mp Eb4 2 ; m165
+p Bb3 4 Db4 4 C4 4 Eb3 4 ; m166
+F3 4 Bb3 4 F4 4 F3 4 ; m167
+Bb3 2 R 2 ; m168
+Bb2 4 Db3 4 mf Eb3 2 ; m169
+mp Bb2 4 Db3 4 C3 4 Eb2 4 ; m170
+F2 4 Bb2 4 F3 4 F2 4 ; m171
+vel 25 Bb2 2 R 2 ; m172
+pp Gb2 2 R 2 ; m173
+p Gb2 2 R 2 ; m174
+mp Gb2 2 R 2 ; m175
+mf Gb2 4 Gb2 8 Gb3 16 Ab3 16 ff Bb3 4 forte Ab3 4 ; m176
+Gb3 4 Eb3 4 Ab2 4 A2 4 ; m177
+Bb2 4. R 8 pppp Eb3 Bb3 1 ; m178
+Eb3 Bb3 1 ; m179
+p END_LAZY PROGRAM 4 46 LAZY C3 4 C3 4 ; m180
+C3 4 R 4 G2 4 R 4 ; m181
+C3 4 R 4 END_LAZY PROGRAM 4 43 LAZY Ab3 1 ; m182
+Ab3 1 ; m183
+END_LAZY PROGRAM 4 46 LAZY F3 4 F3 4 ; m184
+F3 4 R 4 C3 4 R 4 ; m185
+F3 4 R 4 END_LAZY PROGRAM 4 43 LAZY Bb3 8 R 8 C4 8 R 8 ; m186
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m187
+Ab3 4 G3 4 F3 4 Eb3 4 ; m188
+D3 4 C3 4 Bb2 4 A2 4 ; m189
+C3 4 Bb2 4 Ab2 8 R 8 Bb2 8 R 8 ; m190
+Ab2 4 G2 4 F2 4 E2 4 ; m191
+G2 4 F2 4 R 2 ; m192
+R 1 ; m193
+R 2 forte Eb3 8 R 8 F3 8 R 8 ; m194
+Eb3 4 Db3 4 C3 4 B2 4 ; m195
+Db3 4 C3 4 Bb2 8 R 8 Ab2 8 R 8 ; m196
+G2 2 Ab2 8 R 8 Bb2 8 R 8 ; m197
+Ab2 2 C3 8 R 8 Db3 8 R 8 ; m198
+C3 4 Bb2 4 Ab2 4 G2 4 ; m199
+Bb2 4 Ab2 4 p Bb3 8 R 8 C4 8 R 8 ; m200
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m201
+Ab3 4 G3 4 Gb3 2/1 ; m202
+; m203
+B2 1 ; m204
+B2 2 ; m205
+Bb2 2 R 4 Bb3 4 ; m206
+Bb2 2 R 4 Bb3 4 ; m207
+C3 2 forte C3 1 ; m208
+C3 2 ; m209
+Bb2 2 R 4 Bb3 4 ; m210
+Bb2 2 Bb2 2 ; m211
+Eb2 4 R 4 END_LAZY PROGRAM 4 46 LAZY forte C3 4 R 4 ; m212
+G2 G3 4 R 4 C3 4 R 4 ; m213
+G2 G3 4 R 4 C3 4 R 4 ; m214
+D3 4 R 4 D3 A3 4 R 4 ; m215
+G2 G3 4 R 4 G2 4 R 4 ; m216
+G2 D3 4 R 4 G2 4 R 4 ; m217
+G2 D3 4 R 4 C3 4 R 4 ; m218
+D3 4 R 4 D3 4 R 4 ; m219
+G2 4 R 4 END_LAZY PROGRAM 4 43 LAZY ff Bb2 4 D3 4 ; m220
+fff Eb3 2 ff Bb2 4 D3 4 ; m221
+Eb3 8 Eb3 8 G3 8 G3 8 Bb3 8 Bb3 8 D4 8 D4 8 ; m222
+Eb4 8 Eb4 8 G4 8 G4 8 Bb4 8 Bb4 8 D4 8 D4 8 ; m223
+Eb4 3/8 R 8 vel 25 A3 2 ; m224
+Ab3 2 G3 2 ; m225
+A3 2 A3 2 ; m226
+pp Ab3 2 G3 2 ; m227
+A3 2 A3 2 ; m228
+mp Ab3 2 Ab3 2 ; m229
+G3 2 A3 2 ; m230
+pp Bb3 2 Bb3 2 ; m231
+Eb3 2 pp A3 2 ; m232
+Ab3 2 G3 2 ; m233
+A3 2 A3 2 ; m234
+Ab3 2 G3 2 ; m235
+A3 2 A3 2 ; m236
+Ab3 2 Ab3 2 ; m237
+G3 2 A3 2 ; m238
+Bb3 2 Bb2 2 ; m239
+Eb3 2 Eb3 8 R 8 G3 8 R 8 ; m240
+forte  Ab3 2 mf Ab3 8 R 8 B3 8 R 8 ; m241
+forte Eb4 2 mf Eb3 8 R 8 G3 8 R 8 ; m242
+forte Ab3 2 mf Ab3 8 R 8 B3 8 R 8 ; m243
+forte Eb4 2 mf Eb3 4 G3 4 ; m244
+F3 4 Ab3 4 G3 4 Bb3 4 ; m245
+Ab3 2 Ab3 4 C4 4 ; m246
+Eb4 4 G3 4 Bb3 4 Bb2 4 ; m247
+Eb3 4. R 8 R 2 ; m248
+R 1 ; m249
+R 1 ; m250
+R 1 ; m251
+R 1 ; m252
+R 1 ; m253
+R 1 ; ma254
+R 1 ; m255
+R 2 mf G3 4 B3 4 ; m256
+C4 2 p F3 4 Ab3 4 ; m257
+G3 4 C3 4 D3 4 F3 4 ; m258
+Eb3 4 C3 4 G2 4 B2 4 ; m259
+C3 2 Bb2 2 ; m260
+C3 4 A2 4 Bb2 4 C3 4 ; m261
+D3 4 D2 4 G2 4 G3 4 ; m262
+forte C3 4 mf Eb3 4 ff F3 3/4 ; m263
+Eb3 2 D3 2 ; m264
+Eb3 4 F3 4 G3 4 ; m265
+Ab2 4 A2 4 Bb2 4 D3 4 ; m266
+ff Eb3 2 forte Ab2 4 C3 4 ; m267
+Eb3 4 Eb2 4 F2 4 Ab2 4 ; m268
+ff C3 2 forte F2 4 Ab2 4 ; m269
+C3 4 C2 4 Db2 4 F2 4 ; m270
+Ab2 2 Db2 4 F2 4 ; m271
+Ab2 2 F#2 2 ; m272
+G2 2 F#2 2 ; m273
+G2 2 r 8 R 2 ; m274
+p Bb2 8/1 ; m275
+; m276
+; m277
+; m278
+; m279
+; m280
+; m281
+; m282
+Eb2 14/4 ; m283
+; m284
+; m285
+forte Ab2 4 C3 4 ; m286
+ff Eb3 2 forte F2 4 Ab2 4 ; m287
+ff C3 2 forte Ab2 8 R 8 A2 8 R 8 ; m288
+Bb2 8 R 8 C3 8 R 8 Ab2 8 R 8 Bb2 8 R 8 ; m289
+Eb3 2 C3 4 Eb3 4 ; m290
+ff G3 2 forte Ab2 4 C3 4 ; m291
+ff Eb3 2 p Ab2 4 A2 4 ; m292
+Bb2 4 C3 4 Bb2 4 B2 4 ; m293
+C3 4 Db3 4 C3 4 Db3 4 ; m294
+D3 4 Eb3 4 Eb2 Bb2 1 ; m295
+Eb2 Bb2 1 ; m296
+Eb2 Bb2 1 ; m297
+Eb2 Bb2 4 Eb2 Bb2 4 ; m298
+Eb2 Bb2 4 Eb2 Bb2 4 Eb2 Bb2 4 Eb2 Bb2 4 ; m299
+ff Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 ; m300
+Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 ; m301
+Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 Eb2 8 ; m302
+Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 Eb3 8 ; m303
+fff Eb3 8 Eb3 8 ff Eb3 8 Eb3 8 ff Eb3 8 Eb3 8 Eb3 8 Eb3 8 ; m304
+fff Db4 8 Db4 8 ff Db4 8 Db4 8 Db4 8 Db4 8 Db4 8 Db4 8 ; m305
+fff C4 8 C4 8 ff C4 8 C4 8 C4 8 C4 8 C4 8 C4 8 ; m306
+fff Ab4 8 Ab4 8 ff Ab4 8 Ab4 8 Ab4 8 Ab4 8 Ab4 8 Ab4 8 ; m307
+G4 4 R 4 R 4 
+END_LAZY NOTE_ON 4 Eb2 100 LAZY
+fff B2 4 ;m308
+ff Bb2 3/4
+END_LAZY NOTE_OFF 4 Eb2 64 LAZY
+END_LAZY NOTE_ON  4 Eb2 100 LAZY
+fff B2 4 ;m309
+ff Bb2 3/4
+END_LAZY NOTE_OFF 4 Eb2 64 LAZY
+Bb2 8 Bb2 8 ;m310
+G2 8 G2 8 Bb2 8 Bb2 8 Eb3 8 Eb3 8 G3 8 G3 8 ; m311
+Bb3 1 ; m312
+Ab3 1 ; m313
+fff G3 1 ; m314
+fff Gb3 1 ; m315
+ff F3 2 Eb3 2 ; m316
+D3 2 B2 2 ; m317
+fff Bb2 2 R 2 ; m318
+R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+R 1 ; m325
+forte R 2 Bb3 8 R 8 D4 8 R 8 ; m326
+ff Eb4 2 forte Bb3 8 R 8 D4 8 R 8 ; m327
+C4 8 R 8 F3 8 R 8 G3 8 R 8 A3 8 R 8 ; m328
+Bb3 8 R 8 D4 8 R 8 F4 8 R 8 F3 8 R 8 ; m329
+Bb3 8 R 8 C4 8 R 8 C#4 8 R 8 D4 8 R 8 ; m330
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 Bb3 8 R 8 ; m331
+Eb4 4 R 4 R 2 ; m332
+R 1 ; m333
+R 1 ; m334
+R 1 ; A335
+R 1 ; m336
+ff Bb2 1 ; m337
+ff Ab3 1 ; m338
+ff G3 1 ; m339
+fff Eb4 1 ; m340
+forte D4 2 A3 2 ; m341
+Bb3 2 Ab3 2 ; m342
+G3 2 D3 2 ; m343
+Eb3 8 R 8 Eb3 8 R 8 F3 8 R 8 G3 8 R 8 ; m344
+Ab3 2 C4 2 ; m345
+F4 2 Eb4 2 ; m346
+D4 2 D3 8 R 8 E3 8 R 8 ; m347
+F#3 8 R 8 D3 8 R 8 E3 8 R 8 F#3 8 R 8 ; m348
+G3 8 R 8 Bb3 8 R 8 D4 8 R 8 C4 8 R 8 ; m349
+Bb3 8 R 8 G3 8 R 8 A3 8 R 8 B3 8 R 8 ; m350
+C4 2 R 2 ; m351
+R 1 ; m352
+R 1 ; m353
+R 1 ; m354
+fff Bb2 1 ; m355
+fff Ab3 1 ; m356
+ff G3 2 F3 2 ; m357
+Eb3 8 R 8 G3 8 R 8 Ab3 8 R 8 Bb3 8 R 8 ; m358
+fff Ab3 1 ; m359
+G4 1 ; m360
+ff F4 2 Eb4 2 ; m361
+D4 8 R 8 F4 8 R 8 G4 8 R 8 Ab4 8 R 8 ; m362
+fff G3 1 ; m363
+fff F4 1 ; m364
+ff E4 2 D4 2 ; m365
+C4 8 R 8 E4 8 R 8 F4 8 R 8 G4 8 R 8 ; m366
+F4 8 R 8 Ab4 8 R 8 C5 8 R 8 Bb4 8 R 8 ; m367
+Ab4 8 R 8 F4 8 R 8 G4 8 R 8 Ab4 8 R 8 ; m368
+Bb4 1 ; m369
+ff Bb3 2 Bb2 8 R 8 D3 8 R 8 ; m370
+fff Eb3 2 ff Bb2 8 R 8 D3 8 R 8 ; m371
+Eb3 8 R 8 G3 8 R 8 Bb3 8 R 8 D4 8 R 8 ; m372
+Eb4 8 R 8 G4 8 R 8 Bb4 8 R 8 D4 8 R 8 ; m373
+Eb4 2 A2 8 R 8 C3 8 R 8 ; m374
+fff Eb3 2 ff A2 8 A2 8 C3 8 C3 8 ; m375
+Eb3 8 Eb3 8 Gb3 8 Gb3 8 A3 8 A3 8 C4 8 C4 8 ; m376
+Eb4 8 Eb4 8 Gb4 8 Gb4 8 A4 8 A4 8 C4 8 C4 8 ; m377
+Eb4 2 p A3 2 ; m378
+Ab3 2 G3 2 ; m379
+A3 2 A3 2 ; m380
+Ab3 2 G3 2 ; m381
+A3 2 A3 2 ; m382
+Ab3 2 Ab3 2 ; m383
+G3 2 A3 2 ; m384
+Bb3 2 Bb3 2 ; m385
+Eb3 2 p A3 2 ; m386
+Ab3 2 G3 2 ; m387
+A3 2 A3 2 ; m388
+Ab3 2 G3 2 ; m389
+A3 2 A3 2 ; m390
+Ab3 2 Ab3 2 ; m391
+G3 2 A3 2 ; m392
+Bb3 2 Bb2 2 ; m393
+Eb3 2 Eb3 8 R 8 G3 8 R 8 ; m394
+forte Ab3 2 mf Ab3 8 R 8 B3 8 R 8 ; m395
+ff Eb4 2 forte Eb3 4 G3 4 ; m396
+ff Ab3 2 forte Ab3 4 B3 4 ; m397
+ff Eb4 2 forte Eb3 4 G3 4 ; m398
+forte F3 4 Ab3 4 G3 4 Bb3 4 ; m399
+Ab3 2 Ab3 4 C4 4 ; m400
+Eb4 4 G3 4 Bb3 4 Bb2 4 ; m401
+Eb3 2 R 2 ; m402
+Eb2 Bb2 2 R 2 ; m403
+Eb3 Bb3 2 R 2 ; m404
+Eb2 8 R 8 Eb2 8 R 8 Eb3 8 R 8 Eb3 8 R 8 ; m405
+Eb2 2 R 2 ; m406
+Eb2 Bb2 1 ; m407
+Eb2 Bb2 1 ; m408
+Eb2 8 R 8 Eb2 8 R 8 Eb3 8 R 8 Eb3 8 R 8  ; m409
+Eb2 8 R 8 Eb2 8 R 8 Eb3 8 R 8 Eb3 8 R 8 ; m410
+Eb2 8 R 8 Eb2 8 R 8 Eb3 8 R 8 Eb3 8 R 8 ; m411
+Eb2 8 R 8 Eb2 8 R 8 Bb3 8 Bb3 8 Eb4 8 Eb4 8  ; m412
+C4 8 C4 8 Ab3 8 Ab3 8 F3 8 F3 8 Bb3 8 Bb3 8 ; m413
+G3 8 G3 8 Eb3 8 Eb3 8 Bb3 8 Bb3 8 Eb4 8 Eb4 8 ; m414
+C4 8 C4 8 Ab3 8 Ab3 8 F3 8 F3 8 Bb3 8 Bb3 8 ; m415
+G3 8 G3 8 Eb3 8 Eb3 8 C3 8 C3 8 F3 8 F3 8 ; m416
+D3 8 D3 8 Bb2 8 Bb2 8 G2 8 G2 8 C3 8 C3 8 ; m417
+Ab2 8 Ab2 8 F2 8 F2 8 D2 8 D2 8 G2 8 G2 8 ; m418
+Eb2 8 Eb2 8 C2 8 C2 8 Ab2 8 Ab2 8 C3 8 C3 8 ; m419
+Bb2 8 R 8 R 4 Bb2 8 R 8 R 4 ; m420
+Eb2 4 R 4 R 2 ; m421
+R 1 ; m422
+Eb2 2 R 2 ; m423
+Eb2 2 R 2 ; m424
+Eb2 2 R 2 ; m425
+Eb2 Bb2 2 R 2 ; m426
+Eb2 2 R 2 ; m427
+
+
+END_LAZY
+END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt4pr.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.19  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.18  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.17  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.16  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.15  2003/09/04 23:54:50  root
+; legatissimo m100,104,108, change tempo rush there
+;
+; Revision 1.14  2003/07/12 01:01:36  root
+; adj tempos, pause 224
+;
+; Revision 1.13  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/05/26 20:47:00  root
+; staccato articulation
+;
+; Revision 1.10  2003/05/05 00:36:38  root
+; pedals dynaics
+;
+; Revision 1.9  2003/04/20 16:11:51  root
+; done before coach
+;
+; Revision 1.8  2003/04/18 11:10:02  root
+; fix B2 in 310 caused rhythm to be off
+;
+; Revision 1.7  2003/04/18 10:55:37  root
+; damper and fixes
+;
+; Revision 1.6  2003/04/18 10:44:53  root
+; fixed mistakes
+;
+; Revision 1.5  2003/04/15 00:51:52  root
+; some dynamics roughed in
+; d
+;
+; Revision 1.4  2003/04/13 22:04:19  root
+; draft done, rhythm ok
+;
+; Revision 1.3  2003/04/13 00:56:07  root
+; started
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4pr.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pr.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Piano Right Hand
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Right Hand
+INSTRUMENT Piano Right
+PROGRAM 5 1
+PAN 5 0
+LAZY
+chan 5
+ff
+R 1 ;m000
+R 2 c4 c5 6 r 12   eb4 eb5 6 r 12   ; m001
+fff g4 g5 2 ff c4 c5 6 r 12   eb4 eb5 6 r 12   ; m002
+ff d4 d5 6 r 12   g3 g4 6 r 12   a3 a4 6 r 12   c4 c5 6 r 12   ; m003
+bb3 bb4 6 r 12   g3 g4 6 r 12   d3 d4 6 r 12   f#3 f#4 6 r 12   ; m004
+ff g3 g4 2 ff c4 c5 6 r 12   eb4 eb5 6 r 12   ; m005
+fff g4 g5 2 ff c4 c5 6 r 12   eb4 eb5 6 r 12   ; m006
+d4 d5 6 r 12   g3 g4 6 r 12   a3 a4 6 r 12   c4 c5 6 r 12   ; m007
+Bb3 Bb4 6 r 12   g3 g4 6 r 12   d3 d4 6 r 12   F#3 F#4 6 r 12   ; m008
+g3 g4 2 eb4 eb5 6 r 12   g4 g5 6 r 12   ; m009
+fff eb4 eb5 4 ff d4 d5 6 r 12   d4 d5 6 r 12   f4 f5 6 r 12   ; m010
+fff f4 f5 4 ff eb4 eb5 6 r 12   c4 c5 6 r 12   eb4 eb5 6 r 12   ; m011
+fff c4 c5 4 ff b3 b4 6 r 12   b3 b4 6 r 12   d4 d5 6 r 12   ; m012
+fff d4 d5 4 ff c4 c5 6 r 12   c4 c5 6 r 12   eb4 eb5 6 r 12   ; m013
+G3 D4 G4 Bb4 D5 G5 2 c4 c5 6 r 12   eb4 eb5 6 r 12   ; m014
+d4 d5 6 r 12   g3 g4 6 r 12   a3 a4 6 r 12   c4 c5 6 r 12   ; m015
+bb3 bb4 6 r 12   g3 g4 6 r 12   d3 d4 6 r 12   f#3 f#4 6 r 12   ; m016
+fff G2 D3 G3 Bb3 D4 G4 2 ff c3 c4 6 r 12   eb3 eb4 6 r 12   ; m017
+fff G2    G3 Bb3 D4 G4 2 ff c3 c4 6 r 12   eb3 eb4 6 r 12   ; m018
+d3 d4 6 r 12   g2 g3 6 r 12   a2 a3 6 r 12   c3 c4 6 r 12   ; m019
+bb2 bb3 6 r 12   g2 g3 6 r 12   d2 d3 6 r 12   f#2 f#3 6 r 12   ; m020
+forte g2 g3 2 Bb2 Bb3 4 c3 c4 4 ; m021
+d3 d4 4 eb3 eb4 4 c3 c4 4 d3 d4 4 ; m022
+eb3 eb4 4 f3 f4 4 END_LAZY DAMPER 5 127 LAZY d3 d4 4 eb3 eb4 4 ; m023
+f3 f4 4 g3 g4 4 ab3 ab4 4 bb3 bb4 4 END_LAZY DAMPER 5   0 LAZY ; m024
+ff ab3 ab4 4  g3 g4 4 ff bb3 bb4 4 forte c4 c5 4 ; m025
+d4 d5 4 eb4 eb5 4 ff c4 c5 4 forte d4 d5 4 ; m026
+Eb4 Eb5 4 f4 f5 4 ff END_LAZY DAMPER 5 127 LAZY d4 d5 4 forte eb4 eb5 4 ; m027
+f4 f5 4 g4 g5 4 ab4 ab5 4 bb4 bb5 4 END_LAZY DAMPER 5   0 LAZY ; m028
+ff ab4 ab5 4 g4 g5 4 G4 Bb4 D5 G5 Bb5 D6 4 R 4 ; m029
+D4 A4 F5 A5 D6 4 R 4 G4 Bb4 D5 G5 Bb5 4 R 4 ; m030
+D4 A4 D5 F5 A5 4 R 4 G3 G4 G5 Bb4 E5 4 R 4 ; m031
+A3 D4 F4 A4 D5 D6 4 R 4 A3 C#4 E4 G4 A4 C#5 E5 4 R 4 ; m032
+D3 D4 D5 A3 A4 F4 4 R 4 G3 G4 Bb3 Bb4 D4 D5 4 R 4 ; m033
+D3 D4 D5 A3 A4 F4 4 R 4 G3 G4 Bb3 Bb4 D4 4 R 4 ; m034
+D3 D4 A3 A4 F4 4 R 4 G2 G3 G4 Bb3 E4 4 R 4 ; m035
+A2 A3 F3 F4 D4 4 R 4 A2 A3 E3 E4 G3 C#4 4 R 4 ; m036
+D2 D3 D4 A2 A3 F3 4 R 4 ff f3 f4 4 forte g3 g4 4 ; m037
+a3 a4 4 Bb3 Bb4 4 ff g3 g4 4 forte a3 a4 4 ; m038
+Bb3 Bb4 4 c4 c5 4 ff a3 a4 4 forte Bb3 Bb4 4 ; m039
+c4 c5 4 d4 d5 4 Eb4 Eb5 4 f4 f5 4 ; m040
+Eb4 Eb5 4 D4 D5 8 Bb3 Bb4 16 c4 c5 16 ff d4 d5 4 c4 c5 4 ; m041
+Bb3 Bb4 4 g3 g4 4 c3 c4 4 c#3 c#4 4 ; m042
+D3 7/16 R 16 p D4 16 R 16 E4 16 R 16 F#4 16 R 16 G4 16 R 16 ; m043
+; double bar one sharp
+E4 16 R 16 F#4 16 R 16 G4 16 R 16 A4 16 R 16 F#4 16 R 16 G4 16 R 16 A4 16 R 16 B4 16 R 16 ; m044
+G4 16 R 16 A4 16 R 16 B4 16 R 16 C5 16 R 16 B4 8 C5 8 B4 8 C5 8 ; m045
+mf B4 8 p C5 8 B4 8 G5 8 mf A4 8 p B4 8 A4 8 F#5 8 ; m046
+mf G4 8 A4 8 G4 8 E5 8 r 8 p G4 16 R 16 A4 16 R 16 B4 16 R 16 C5 16 R 16 ;m047
+A4 16 R 16 B4 16 R 16 C5 16 R 16 D5 16 R 16 B4 16 R 16 C5 16 R 16 D5 16 R 16 E5 16 R 16 ; m048
+C5 16 R 16 D5 16 R 16 E5 16 R 16 F5 16 R 16 E5 8 F5 8 E5 8 F5 8 ; m049
+mf E5 8 p F5 8 E5 8 C6 8 mf D5 8 p E5 8 D5 8 B5 8 ; m050
+C5 8 D5 8 C5 8 A5 8 END_LAZY DAMPER 5 127 LAZY D5 8 E5 8 D5 8 E5 8 ; m051
+D5 8 E5 8 D5 8 D6 8 END_LAZY DAMPER 5   0 LAZY D5 8 E5 8 D5 8 D6 8  ; m052
+D5 8 E5 8 D5 8 D6 8 D5 8 E5 8 D5 8 E5 8 ; m053
+D5 8 E5 8 D5 8 D6 8 D5 8 E5 8 D5 8 D6 8 ; m054
+D5 8 E5 8 D5 8 D6 8 E5 8 F5 8 E5 8 F5 8 ; m055
+E5 8 F5 8 E5 8 E6 8 E5 8 F5 8 E5 8 E6 8  ; m056
+E5 8 F5 8 E5 8 E6 8 G4 8 G5 8 A4 8 A5 8 ; m057
+G4 8 G5 8 F4 8 F5 8 E4 8 E5 8 D#4 8 D#5 8 ; m058
+f4 8 f5 8 e4 8 e5 8 d4 8 d5 8 c4 8 c5 8 ; m059
+b3 8 b4 8 b3 8 b4 8 c4 8 c5 8 d4 8 d5 8 ; m060
+pp c4 8 c5 8 c4 8 c5 8 e4 8 e5 8 f4 8 f5 8  ; m061
+e4 8 e5 8 d4 8 d5 8 c4 8 c5 8 b3 8 b4 8 ; m062
+d4 8 d5 8 c4 8 c5 8 b3 8 b4 8 a3 8 a4 8 ; m063
+G#3 8 G#4 8 G#3 8 G#4 8 a3 8 a4 8 b3 8 b4 8 ; m064
+a3 8 a4 8 a3 8 a4 8 END_LAZY DAMPER 5 127 LAZY D5 8 E5 8 D5 8 D6 8 ; m065
+D5 8 E5 8 D5 8 D6 8 END_LAZY DAMPER 5   0 LAZY D5 8 E5 8 D5 8 D6 8 ; m066
+D5 8 E5 8 D5 8 D6 8 Bb4 8 C5 8 Bb4 8 Bb5 8  ; m067
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m068
+Bb4 8 C5 8 Bb4 8 Bb5 8 g4 8 g5 8 a4 8 a5 8 ; m069
+Bb4 8 Bb5 8 b4 8 b5 8 p c5 8 c6 8 c#5 8 c#6 8 ; m070
+vel 58 d5 8 d6 8 e5 8 e6 8 vel 66 f#5 8 f#6 8 g5 8 g6 8 ; m071
+vel 74 a5 8 a6 8 b5 8 b6 8 vel 82 c6 8 c7 8 d6 8 d7 8 ; m072
+c6 8 c7 8 b5 8 b6 8 forte g4 8 g5 8 a4 8 a5 8 ; m073
+Bb4 8 Bb5 8 b4 8 b5 8 c5 8 c6 8 c#5 8 c#6 8 ; m074
+d5 8 d6 8 e5 8 e6 8 f#5 8 f#6 8 g5 8 g6 8 ; m075
+a5 8 a6 8 b5 8 b6 8 c6 8 c7 8 d6 8 d7 8 ; m076
+ff G5 G6 4 R 4 forte e4 e5 6 r 12   g4 g5 6 r 12     ; m077
+B3 F#4 B4 D5 F#5 B5 2 e4 e5 6 r 12   g4 g5 6 r 12   ; m078
+f#4 f#5 6 r 12   b3 b4 6 r 12   c#4 c#5 6 r 12   e4 e5 6 r 12   ; m079
+d4 d5 6 r 12   b3 b4 6 r 12   f#3 f#4 6 r 12   a#3 a#4 6 r 12   ; m080
+mf B2 B3 B4 D4 2 p e3 e4 6 r 12   g3 g4 6 r 12   ; m081
+B2 B3 B4 D4 F#4 2 vel 83 e3 e4 6 r 12   g3 g4 6 r 12   ; m082
+f#3 f#4 6 r 12   b2 b3 6 r 12   c#3 c#4 6 r 12   e3 e4 6 r 12   ; m083
+d3 d4 6 r 12   b2 b3 6 r 12   f#2 f#3 6 r 12   a#2 a#3 6 r 12   ; m084
+b2 b3 6 r 12   R 4 E2 E3 B2 B3 3/2 ; m085 add the g# later
+; m086
+B1 B2 B3 D#3 F#3 2 B2 D#3 F#3 6 B3 D#3 F#3 6 B3 D#4 F#3 6 ; m087
+F#2 F#3 F#4 B3 D#4 2 F#2 F#3 F#4 A#3 C#4 2 ; m088
+B2 B3 F#3 F#4 D#4 2 pp E2 E3 B2 3/2 ; m089
+; m090
+B1 B2 D#3 F#3 2 B2 D#3 F#3 6 D#3 F#3 B3 6 F#3 B3 D#4 6 ; m091
+F#2 F#3 F#4 B3 D#4 2 F#2 F#3 F#4 A#3 C#4 2 ; m092
+B2 B3 F#3 F#4 D#4 2 R 2 ; m093
+R 1 ; m094
+R 1 ; m095 four sharps
+R 2 f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 ; m096
+f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 ; m097
+f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 ; m098
+f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 f#1 f#2 8 g#1 g#2 8 f#1 f#2 8 c#2 c#3 8 ; m099
+F#1 F#2 8. R 16 A#1 A#2 8. R 16 C#2 C#3 8. R 16 E2 E3 8. R 16 ; m100
+B1 B2 4 R 4 R 2 ; m101
+R 1 ; m102
+R 2 pp G#1 G#2 8 A#1 A#2 8 G#1 G#2 8 D#2 D#3 8 ; m103
+G#1 G#2 8. R 16 C2 C3 8. R 16 D#2 D#3 8. R 16 F#2 F#3 8. R 16 ; m104
+C#2 C#3 4 R 4 R 2 ; m105
+R 1 ; m106
+R 1 ; m107
+p F#2 8. R 16 A#2 8. R 16 C#3 8. R 16 E3 8. R 16 ;  m108
+R 1 ; m109
+pp F#1 8. R 16 A#1 8. R 16 C#2 8. R 16 E2 8. R 16 ; m110
+END_LAZY DAMPER 5 127 LAZY p C4 D#4 F#4 A4 14/4 ; m111
+; m112
+; m113
+END_LAZY DAMPER 5   0 LAZY R 2 ; m114
+END_LAZY DAMPER 5 127 LAZY p B2 B3 D#4 F#4 A4 2 R 2 ; m115
+B3 F#4 A4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m116
+damperb2 B3 E4 G#4 2 R 2 ; m117
+B3 E4 G#4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m118
+END_LAZY DAMPER 5 127 LAZY B2 B3 D#4 F#4 A4 2 R 2 ; m119
+B3 F#4 A4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m120
+END_LAZY DAMPER 5 127 LAZY B2 B3 E4 G#4 2 R 2 ; m121
+B3 E4 G#4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m122
+END_LAZY DAMPER 5 127 LAZY D#2 D#3 G3 C#4 D#4 2 R 2 ; m123
+D#3 G3 C#4 D#4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m124
+END_LAZY DAMPER 5 127 LAZY D#2 D#3 D#4 G#3 B3 2 R 2 ; m125
+D#3 G#3 B3 D#4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m126
+END_LAZY DAMPER 5 127 LAZY D#2 D#3 D#4 G3 C#4 2 R 2 ; m127
+D#3 D#4 G3 C#4 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m128
+END_LAZY DAMPER 5 127 LAZY D#2 D#3 D#4 G#3 B3 2 R 2 ; m129
+D#3 D#4 G#3 B3 2 END_LAZY DAMPER 5   0 LAZY D#3 D#4 8 R 8 E3 E4 8 R 8 ; m130
+D#3 D#4 8 R 8 C#3 C#4 8 R 8 B2 B3 8 R 8 A#2 A#3 8 R 8 ; m131
+C#3 C#4 8 R 8 B2 B3 8 R 8 D#3 D#4 8 R 8 E3 E4 8 R 8 ; m132
+p D#3 D#4 8 R 8 C#3 C#4 8 R 8 vel 60 B2 B3 8 R 8 A#2 A#3 8 R 8 ; m133
+vel 70 B2 B3 8 R 8 A#2 A#3 8 R 8 vel 80 D#3 D#4 8 R 8 E3 E4 8 R 8 ; m134
+vel 90 D#3 D#4 8 R 8 C#3 C#4 8 R 8 vel 100 B2 B3 8 R 8 A#2 A#3 8 R 8 ; m135
+B2 B3 8 R 8 A#2 A#3 8 R 8 ff G#3 G#4 C#4 C#5 4 G#3 G#4 E4 E5 G#4 4 ; m136
+fff G#3 G#4 G#5 D#4 D#5 B4 2 ff C#4 C#5 6 r 12   e4 e5 6 r 12   ; m137
+D#5 D#4 4 g#3 g#4 6 r 12   a#3 a#4 6 r 12   c#4 c#5 6 r 12   ; m138
+B3 B4 4 g#3 g#4 6 r 12   d#3 d#4 6 r 12   g3 g4 6 r 12   ; m139
+g#3 g#4 2 G#3 G#4 C#4 C#5 4 G#3 G#4 E4 E5 G#4 4 ; m140
+fff G#3 G#4 G#5 D#4 D#5 B4 2 ff C#4 C#5 6 r 12   e4 e5 6 r 12   ; m141
+D#4 D#5 4 g#3 g#4 6 r 12   a#3 a#4 6 r 12   c#4 c#5 6 r 12   ; m142
+B3 B4 4 g#3 g#4 6 r 12   d#3 d#4 6 r 12   g3 g4 6 r 12   ; m143
+G#3 G#4 2 e4 e5 6 r 12   g#4 g#5 6 r 12   ; m144
+fff e4 e5 4 ff d#4 d#5 6 r 12   b3 b4 6 r 12   f#4 f#5 6 r 12   ; m145
+fff F#4 F#5 4 ff e4 e5 6 r 12   c#4 c#5 6 r 12   e4 e5 6 r 12   ; m146
+fff c#4 c#5 4 ff c4 c5 6 r 12   g#3 g#4 6 r 12   d#4 d#5 6 r 12   ; m147
+fff d#4 d#5 4 ff c#4 c#5 6 r 12   G#3 G#4 G#5 6 r 12 b3 b4 b5 6 r 12 ; m148
+fff d#4 d#5 d#6 2 ff g#3 g#4 g#5 6 r 12 b3 b4 b5 6 r 12 ;m149
+a#3 a#4 a#5 6 r 12 d#3 d#4 d#5 6 r 12 f3 f4 f5 6 r 12 g#3 g#4 g#5 6 r 12 ; m150
+f#3 f#4 f#5 6 r 12 d#3 d#4 d#5 6 r 12 a#2 a#3 a#4 6 r 12 d3 d4 d5 6 r 12 ; m151
+d#3 d#4 d#5 2 g#2 g#3 g#4 6 r 12 b2 b3 b4 6 r 12 ; m152
+fff d#3 d#4 d#5 2 ff g#2 g#3 g#4 6 r 12 b2 b3 b4 6 r 12 ; m153
+a#2 a#3 a#4 6 r 12 d#2 d#3 d#4 6 r 12 f2 f3 f4 6 r 12 g#2 g#3 g#4 6 r 12 ; m154
+f#2 f#3 f#4 6 r 12 D#2 D#3 D#4 6 r 12 a#1 a#2 a#3 6 r 12 d2 d3 d4 6 r 12 ; m155
+forte d#2 d#3 d#4 2 f#2 f#3 4 g#2 g#3 4 ; m156
+a#2 a#3 4 b2 b3 4 g#2 g#3 4 a#2 a#3 4 ; m157
+b2 b3 4 c#3 c#4 4 a#2 a#3 4 b2 b3 4 ; m158
+c#3 c#4 4 d#3 d#4 4 e3 e4 4 f#3 f#4 4 ; m159
+ff e3 e4 4 forte D#3 D#4 4 f#3 f#4 4 g#3 g#4 4 ; m160
+a#3 a#4 4 b3 b4 4 g#3 g#4 4 a#3 a#4 4 ; m161
+b3 b4 4 c#4 c#5 4 a#3 a#4 4 b3 b4 4 ; m162
+c#4 c#5 4 d#4 d#5 4 e4 e5 4 f#4 f#5 4 ; m163
+e4 e5 4 d#4 d#5 4 mp Eb4 Eb5 Gb4 Gb5 Bb4 Bb5 4 R 4 ; m164 3 flats
+Bb3 F4 Bb4 Db5 F5 Bb5 4 R 4 Bb3 Eb4 Gb4 Bb4 Eb5 Gb5 4 R 4 ; m165
+Bb3 Bb4 Db4 Db5 F4 F5 4 R 4 Eb3 Eb4 Eb5 Bb3 Bb4 Gb4 4 R 4 ; m166
+F3 Bb3 Db4 F4 Bb4 Db5 4 R 4 F3 F4 Eb4 A4 4 R 4 ; m167
+Bb3 F4 Db4 Bb4 4 R 4 Eb3 Bb3 Eb4 Gb4 Gb4 4 R 4 ; m168
+Bb2 Bb3 Bb4 Db4 F4 4 R 4 Eb3 Bb3 Eb4 Gb4 Bb4 4 R 4 ; m169
+Bb2 Bb3 Bb4 Db4 F4 4 R 4 Eb2 Eb3 Eb4 Eb3 Gb4 4 R 4 ; m170
+F2 F3 F4 Bb3 Db4 4 R 4 F2 F3 F4 A3 C4 4 R 4 ; m171
+Bb2 Bb3 2 ff db3 db4 4 forte eb3 eb4 4 ; m172
+f3 f4 4 gb3 gb4 4 ff eb3 eb4 4 forte f3 f4 4 ; m173
+gb3 gb4 4 ab3 ab4 4 ff f3 f4 4 forte gb3 gb4 4 ; m174
+ab3 ab4 4 bb3 bb4 4 b3 b4 4 db4 db5 4 ; m175
+b3 b4 4 bb3 bb4 8 Gb5 16 Ab5 16 ff bb3 bb4 bb5 4 forte  ab3 ab4 ab5 4 ; m176
+gb3 gb4 gb5 4 eb3 eb4 eb5 4 ab2 ab3 ab4 4 a2 a3 a4 4 ; m177
+bb2 bb3 bb4 2 p Bb4 16 R 16 C5 16 R 16 D5 16 R 16 Eb5 16 R 16 ; m178
+C5 16 R 16 D5 16 R 16 Eb5 16 R 16 F5 16 R 16 D5 16 R 16 Eb5 16 R 16 F5 16 R 16 G5 16 R 16 ; m179
+Eb5 16 R 16 F5 16 R 16 G5 16 R 16 Ab5 16 R 16 G5 8 Ab5 8 G5 8 Ab5 8 ; m180
+mf G5 8 p Ab5 8 G5 8 Eb6 8 mf F5 8 p G5 8 F5 8 D6 8 ; m181
+mf Eb5 8 p F5 8 Eb5 8 C6 8 Eb5 16 R 16 F5 16 R 16 G5 16 R 16 Ab5 16 R 16 ; m182
+F5 16 R 16 G5 16 R 16 Ab5 16 R 16 Bb5 16 R 16 G5 16 R 16 Ab5 16 R 16 Bb5 16 R 16 C6 16 R 16 ; m183
+Ab5 16 R 16 Bb5 16 R 16 C6 16 R 16 Db6 16 R 16 C5 8 Db5 8 C5 8 Db5 8 ; m184
+mf C5 8 p Db5 8 C5 8 Ab5 8 mf Bb4 8 p C5 8 Bb4 8 G5 8 ; m185
+mf Ab4 8 p Bb4 8 Ab4 8 F5 8 Bb4 8 C5 8 Bb4 8 C5 8 ; m186
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m187
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 C5 8  ; m188
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m189
+Bb4 8 C5 8 Bb4 8 Bb5 8 C5 8 Db5 8 C5 8 Db5 8 ; m190
+C5 8 Db5 8 C5 8 C6 8 C5 8 Db5 8 C5 8 C6 8 ; m191
+C5 8 Db5 8 C5 8 C6 8 Eb5 8 Eb6 8 f5 8 f6 8; m192
+Eb5 8 Eb6 8 Db5 8 Db6 8 C5 8 C6 8 B4 8 B5 8 ; m193
+Db5 8 Db6 8 C5 8 C6 8 forte Bb4 8 Bb5 8 Ab4 8 Ab5 8 ; m194
+G4 8 G5 8 G4 8 G5 8 Ab4 8 Ab5 8 Bb4 8 Bb5 8 ; m195
+Ab4 8 Ab5 8 Ab4 8 Ab5 8 C5 8 C6 8 Db5 8 Db6 8 ; m196
+c5 8 c6 8 Bb4 8 Bb5 8 Ab4 8 Ab5 8 g4 8 g5 8 ; m197
+Bb4 8 Bb5 8 Ab4 8 Ab5 8 G4 8 G5 8 F4 8 F5 8 ; m198
+E4 8 E5 8 E4 8 E5 8 F4 8 F5 8 G4 8 G5 8 ; m199
+F4 8 F5 8 F4 8 F5 8 p Bb4 8 C5 8 Bb4 8 Bb5 8 ; m200
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m201
+Bb4 8 C5 8 Bb4 8 Bb5 8 Gb4 8 Ab4 8 Gb4 8 Gb5 8 ; m202
+Gb4 8 Ab4 8 Gb4 8 Gb5 8 Gb4 8 Ab4 8 Gb4 8 Gb5 8 ; m203
+Gb4 8 Ab4 8 Gb4 8 Gb5 8 ff Eb4 8 Eb5 8 F4 8 F5 8 ; m204
+F#4 8 F#5 8 G4 8 G5 8 Ab4 8 Ab5 8 a4 8 a5 8 ; m205
+Bb4 8 Bb5 8 c5 8 c6 8 d5 8 d6 8 Eb5 8 Eb6 8 ; m206
+f5 8 f6 8 g5 8 g6 8 Ab5 8 Ab6 8 Bb5 8 Bb6 8 ; m207
+Ab5 8 Ab6 8 g5 8 g6 8 forte Eb4 8 Eb5 8 F4 8 F5 8 ; m208
+F#4 8 F#5 8 G4 8 G5 8 Ab4 8 Ab5 8 a4 8 a5 8 ; m209
+Bb4 8 Bb5 8 c5 8 c6 8 d5 8 d6 8 Eb5 8 Eb6 8 ; m210
+f5 8 f6 8 g5 8 g6 8 Ab5 8 Ab6 8 Bb5 8 Bb6 8 ; m211
+Eb5 Eb6 4 R 4 forte c4 c5 6 r 12   eb4 eb5 6 r 12   ; m212
+ff g4 g5 2 forte c4 c5 6 r 12   eb4 eb5 6 r 12   ; m213
+d4 d5 6 r 12   g3 g4 6 r 12   a3 a4 6 r 12   c4 c5 6 r 12   ; m214
+Bb3 Bb4 6 r 12   g3 g4 6 r 12   d3 d4 6 r 12   F#3 F#4 6 r 12   ; m215
+g3 g4 2 c4 c5 6 r 12   Eb4 Eb5 6 r 12   ; m216
+ff g3 g4 2 forte c3 c4 6 r 12   eb3 eb4 6 r 12   ; m217
+d3 d4 6 r 12   g2 g3 6 r 12   a2 a3 6 r 12   c3 c4 6 r 12   ; m218
+bb2 bb3 6 r 12   g2 g3 6 r 12   d2 d3 6 r 12   f#2 f#3 6 r 12   ; m219
+g2 g3 2 ff Bb1 Bb2 Bb3 4 d2 d3 d4 4 ; m220
+fff Eb2 Eb3 Eb4 2 ff Bb1 Bb2 Bb3 4 d2 d3 d4 4 ; m221
+Eb2 Eb3 Eb4 4 g2 g3 g4 4 Bb2 Bb3 Bb4 4 d3 d4 d5 4 ; m222
+Eb3 Eb4 Eb5 4 g3 g4 g5 4 Bb3 Bb4 Bb5 4 d4 d5 d6 4 ; m223
+Eb4 Eb5 Eb6 3/8 R 8 mp R 8 Eb5 4 C6 4 ; m224
+Bb5 4 D5 4 Eb5 4 G5 4 ; m225
+F5 4 C5 4 Eb5 4 C6 4 ; m226
+Bb5 4 D5 4 Eb5 4 G5 4 ; m227
+F5 4 C5 4 Eb5 4 C6 4 ; m228
+Bb5 4 D5 4 F5 4 D6 4 ; m229
+Eb6 4 Eb5 4 C6 4 Eb5 4 ; m230
+Bb5 4 Eb5 4 Bb5 4 D5 4 ; m231
+Bb5 4 Eb5 4 Eb5 4 C6 4 ; m232
+Bb5 4 D5 4 Eb5 4 G5 4 ; m233
+F5 4 C5 4 Eb5 4 C6 4 ; m234
+p Bb5 4 D5 4 Eb5 4 G5 4 ; m235
+vel 58 F5 4 C5 4 Eb5 4 C6 4 ; m236
+vel 66 Bb5 4 D5 4 F5 4 D6 4 ; m237
+vel 74 Eb6 4 Eb5 4 C6 4 Eb5 4 ; m238
+vel 82 Bb5 4 Eb5 4 Bb5 4 D5 4 ; m239
+forte Bb5 4 Db5 4 Bb5 4 Db5 4 ; m240
+Bb5 4 C5 4 Ab5 4 B4 4 ; m241
+Ab5 4 Bb4 4 G5 4 Bb4 4 ; m242
+G5 4 Ab4 4 F5 4 Ab4 4 ; m243
+F5 4 G4 4 Eb5 4 G4 4 ; m244
+Eb5 4 Ab4 4 Eb5 4 Bb4 4 ; m245
+Eb5 4 Bb4 4 Eb5 4 Ab4 4 ; m246
+Bb4 4 Eb4 4 Bb4 4 D4 8 ; m247
+Eb3 Eb4 6 r 12   R 4 p C4 C5 8 R 8 Eb4 Eb5 8 R 8 ; m248
+mf G4 G5 2 C5 4 Eb5 4 ; m249
+D5 4 G4 4 A4 4 C5 4 ; m250
+Bb4 4 G4 4 D4 4 F#4 4 ; m251
+G4 2 mp G5 16 R 16 mf Bb5 16 R 16 mp A5 16 R 16 G5 16 R 16 ; m252
+G5 16 R 16 mf F5 16 R 16 mp E5 16 R 16 D5 16 R 16 F5 16 R 16 mf E5 16 R 16 mp D5 16 R 16 C#5 16 R 16 ; m253
+D5 16 R 16 mf D5 16 R 16 mp E5 16 R 16 F5 16 R 16 D5 16 R 16 mf C#5 16 R 16 mp B4 16 R 16 C#5 16 R 16 ; m254
+D5 16 R 16 mf A4 16 R 16 mp Bb4 16 R 16 A4 16 R 16 A4 16 R 16 mf G4 16 R 16 mp F4 16 R 16 E4 16 R 16 ; m255
+G4 16 R 16 mf F4 16 R 16 mp E4 16 R 16 D4 16 R 16 R 2 ; m256
+forte C5 8 R 8 Eb5 8 R 8 F5 3/4 ; m257
+Eb5 2 D5 4 ; m258
+forte C4 C5 6 r 12   Eb4 Eb5 6 r 12   ff G4 G5 2 ; m259
+forte c4 c5 6 r 12   Eb4 Eb5 6 r 12   d4 d5 6 r 12   g3 g4 6 r 12   ; m260
+a3 a4 6 r 12   c4 c5 6 r 12   Bb3 Bb4 6 r 12   G3 G4 6 r 12   ; m261
+D3 D4 6 r 12   F#3 F#4 6 r 12   G4 4 B4 4  ; m262
+forte C5 2 F4 4 Ab4 4 ; m263
+G4 4 C4 4 D4 4 F4 4 ; m264
+Eb4 4 C4 Eb2 Eb3 4 G3 F2 F3 4 B3 G2 G3 4 ; m265
+Ab2 Ab3 C4 4 A1 A2 Eb4 4 Bb1 Bb2 D4 4 D2 D3 Bb3 F4 4 ; m266
+ff Eb2 Eb3 Bb3 G4 2 forte C4 Eb4 Ab4 2 ; m267
+Bb3 Eb4 G4 2 Ab3 C4 F4 2 ; m268
+ff G3 C4 Eb4 2 forte Ab3 C4 F4 2 ; m269
+G3 C4 Eb4 2 Db4 Db5 F4 Ab4 2 ; m270
+C4 C5 Eb4 Ab4 2 Db4 Db5 F4 Ab4 2 ; m271
+C4 C5 Eb4 Ab4 2 F#2 E4 A4 C5 2 ; m272
+ff G2 G3 G4 D4 B4 2 forte F#2 E4 A4 C5 2 ; m273
+ff G2 G3 G4 D4 B4 2 r 8 p Bb3 Bb4 8 R 8 C4 C5 8 R 8 ; m274
+END_LAZY DAMPER 5 127 LAZY Bb2 Bb3 Bb4 D4 Ab4 2 Ab3 Bb3 F4 Ab4 Bb4 F5 2 ; m275
+Ab3 Bb3 F4 Ab4 Bb4 F5 8 R 8 G3 Bb3 Eb4 G4 Bb4 Eb5 8 R 8 END_LAZY DAMPER 5   0 LAZY Bb3 D4 Bb4 D5 2 ; m276
+G3 G4 Bb3 Bb4 Eb4 Eb5 2 Bb3 Bb4 Eb4 Eb5 G4 G5 2 ; m277
+G3 G4 Bb3 Bb4 Eb4 Eb5 2 Eb3 Eb4 G3 G4 Bb3 Bb4 2 ; m278
+END_LAZY DAMPER 5 127 LAZY Bb2 Bb3 D3 D4 Ab4 2 Ab3 Bb3 F4 Ab4 Bb4 F5 2 ; m279
+Ab3 Bb3 F4 Ab4 Bb4 F5 8 R 8 G3 Bb3 Eb4 G4 Bb4 Eb5 8 R 8 END_LAZY DAMPER 5   0 LAZY Bb3 D4 Bb4 D5 2 ; m280
+G3 Bb3 Eb4 G4 Bb4 Eb5 2 G5 Bb3 Eb4 G4 Bb4 Eb5 2 ; m281
+G3 Bb3 Eb4 G4 Bb4 Eb5 2 G3 Bb3 Eb4 G4 Bb4 Eb3 2 ; m282
+END_LAZY DAMPER 5 127 LAZY Eb2 Eb3 Eb4 G3 Db4 2 Db3 Eb3 Bb3 Db4 Eb4 Bb4 2 ; m283
+Db3 Eb3 Bb3 Db4 Eb4 Bb4 8 R 8 C3 Eb3 Ab3 C4 Eb4 Ab4 8 R 8 END_LAZY DAMPER 5   0 LAZY Eb3 G3 Eb4 G4 2  ; m284
+C3 Eb3 Ab3 C4 Eb4 Ab4 2 C5 Eb3 Ab3 C4 Eb4 Ab4 2 ; m285
+C3 Eb3 Ab3 C4 Eb4 Ab4 2 forte C4 C5 Eb4 Ab4 2 ; m286
+Bb3 Bb4 Eb4 G4 2 Ab3 C4 F4 Ab4 2 ; m287
+C3 C4 G3 G4 Eb4 2 Ab2 Eb3 F3 C4 Eb4 F4 4 A2 Eb3 F#3 C4 Eb4 F#4 4 ; m288
+Bb2 Eb3 G3 Bb3 Eb4 G4 4 C3 Eb3 Ab3 C4 Eb4 Ab4 4 Ab2 Eb3 F3 C3 Eb4 F4 4 Bb2 F3 Ab3 D4 F4 Bb4 4 ; m289
+Eb3 G3 Bb3 Eb4 G4 2 Eb4 G4 C5 Eb5 2 ; m290
+D4 G4 Bb4 D5 2 C4 C5 Eb4 Ab4 2 ; m291
+Eb2 Eb3 Eb4 Bb3 G4 Bb4 2 p Ab2 Eb3 F3 C4 Eb4 F4 4 A2 Eb3 F#3 C4 Eb4 F#4 4 ; m292
+vel 58 Bb2 Eb3 G3 Bb3 Eb4 G4 4 C3 Eb3 Ab3 C4 Eb4 Ab4 4 Bb2 Eb3 G3 Db4 Eb4 G4 4 B2 Eb3 Ab3 Eb4 Ab4 4 ; m293
+vel 66 C3 Eb3 F#3 A3 Eb4 F#4 A4 4 Db3 Eb3 G3 Bb3 Eb4 G4 Bb4 4 C3 Eb3 Ab3 Eb4 Ab4 4 Db3 Ab3 Bb3 Db4 Ab4 Bb4 4 ; m294
+vel 74 D3 Ab3 B3 D4 Ab4 B4 4 Eb3 Ab3 C4 Eb4 Ab4 C5 4 D3 Ab3 Bb3 D4 Ab4 Bb4 4 Eb3 Ab3 C4 Eb4 Ab4 C5 4 ; m295
+vel 82 E3 Ab3 Bb3 C#4 E4 Ab4 Bb4 C#5 4 F3 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 4 F3 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 4 G3 Bb3 Eb4 G4 Bb4 Eb5 4   ; m296
+vel 90 G3 Bb3 C#4 E4 G4 Bb4 C#5 E5 4 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 F5 4 Bb3 D4 F4 Bb4 D5 F5 4 Bb3 Eb4 F#4 Bb4 Eb5 F#5 4 ; m297
+vel 95Bb3 E4 G4 Bb4 E5 G5 4 Bb3 F4 Ab4 Bb4 F5 Ab5 4 Bb3 F4 Ab4 Bb4 F5 Ab5 4 Bb3 F#4 A4 Bb4 F#5 A5 4 ; m298
+vel 100 Bb3 G4 Bb4 G5 Bb5 4 F4 Ab4 B4 F5 Ab5 B5 4 Eb4 Gb4 A4 C5 Eb5 Gb5 A5 C6 4 F4 Ab4 Bb4 D5 F5 Ab5 Bb5 D6 4   ; m299
+ff Eb4 G4 Bb4 Eb5 G5 Bb5 Eb6 2 g5 g6 4 Bb4 Bb5 4 ; m300
+Eb5 Eb6 4 G4 G5 4 Bb4 Bb5 4 Eb4 Eb5 8 Ab4 Ab5 16 Bb4 Bb5 16; m301
+fff c5 c6 4 ff f4 f5 4 Ab4 Ab5 4 D4 D5 4 ; m302
+F4 F5 4 Ab3 Ab4 4 C4 C5 4 F3 F4 8 Bb3 Bb4 16 C4 C5 16 ; m303
+fff Db4 Db5 4 ff G3 G4 4 Bb3 Bb4 4 Db3 Db4 4 ; m304
+F3 F4 4 Bb2 Bb3 4 Eb3 Eb4 4 G2 G3 4 ; m305
+fff Eb3 Eb4 4 ff Bb2 Bb3 4 fff C3 C4 4 ff Eb2 Eb3 4 ; m306
+fff Eb3 Eb4 4 ff Ab2 Ab3 4 fff b2 b3 4 ff Eb2 Eb3 4  ;m307
+Bb2 Bb3 3/4 fff B2 B3 4 ; m308
+ff Bb2 Bb3 3/4 fff B2 B3 4 ; m309
+ff Bb2 Bb3 3/4 END_LAZY DAMPER 5 127 LAZY R 4  ; m310
+R 8 G3 16 R 16 R 8 Bb3 16 R 16 R 8 Eb4 16 R 16 R 8 G4 16 R 16 ; m311
+END_LAZY DAMPER 5   0 LAZY END_LAZY DAMPER 5 127 LAZY fff Bb1 Bb2 G4 G5 Eb5 2 ff G3 Bb3 Eb4 G4 Bb4 2  ; m312
+END_LAZY DAMPER 5   0 LAZY END_LAZY DAMPER 5 127 LAZY fff Ab1 Ab2 Bb4 F5 Bb5 2 ff F3 Bb3 D4 F4 Bb4 D5 2 ; m313
+END_LAZY DAMPER 5   0 LAZY END_LAZY DAMPER 5 127 LAZY fff G1 G2 Eb5 Bb5 Eb6 2 ff G3 Bb3 Eb4 Bb4 Eb5 2 ; m314
+END_LAZY DAMPER 5   0 LAZY  END_LAZY DAMPER 5 127 LAZY fff Gb1 Gb2 E5 E6 Bb5 E5 2 ff Gb3 Bb3 Db4 E4 E5 Bb4 Db5 2  ; m315
+END_LAZY DAMPER 5   0 LAZY F3 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 D6 2 Eb3 F3 Ab3 B3 Ab4 B4 Ab5 2 ; m316
+D3 F3 Ab3 Bb3 F4 Ab4 Bb4 F5 2 B2 Eb3 Ab3 Eb4 Eb5 Ab5 Eb6 2 ; m317
+fff END_LAZY DAMPER 5 127 LAZY Bb2 F3 Ab3 D4 D5 Ab5 Bb5 D6 2 END_LAZY DAMPER 5   0 LAZY R 2 ; m318
+fff Eb4 1 ; m319
+fff Db5 1 ; m320
+fff C5 1 ; m321
+Ab5 1 ; m322
+G5 2 D5 2 ; m323
+Eb5 2 F5 2 ; m324
+D5 2 A4 2 ; m325
+Bb4 2/1 ; m326
+; m327
+A4 4 A4 4 Bb4 4 C5 4 ; m328
+D5 3/4 C5 4 ; m329
+Bb4 2 Bb4 1 ; m330
+Bb4 4 Ab4 4 ; m331
+G4 2 G4 4 Bb4 4 ; m332
+C5 2 G4 4 Bb4 4 ; m333
+Ab4 4 D4 4 Eb4 4 F4 4 ; m334
+G4 2 G4 4 F4 4 ; m335
+Eb4 4 D4 4 C4 4 F4 2 ; m336
+F4 4 F4 4 C4 4 ; m337
+Bb3 4 R 4 Bb3 4 D4 4 ; m338
+Eb4 2 Bb3 4 D4 4 ; m339
+C4 4 F3 4 G3 4 A3 4 ; m340
+Bb3 4 D4 4 F4 4 Eb4 4 ; m341
+D4 4 Bb3 4 C4 4 D4 4 ; m342
+Eb4 4 G4 4 Bb4 4 Ab4 4 ; m343
+G4 4 G4 4 Ab4 4 Bb4 4 ; m344
+C5 4 C5 4 D5 4 E5 4 ; m345
+F5 4 Ab4 4 Bb4 4 C5 4 ; m346
+D5 F#5 2 F#4 4 G4 4 ; m347
+A4 4 F#4 4 G4 4 A4 4 ; m348
+Bb4 2 A4 2 ; m349
+G4 2 F4 2 ; m350
+E4 2 E4 4 F4 4 ; m351
+G4 4 E4 4 F4 4 G4 4 ; m352
+Ab4 2 G4 2 ; m353
+F4 2 Eb4 2 ; m354
+D4 4 R 4 Bb2 4 C3 4  ; m355
+D3 4 Bb2 4 C3 4 D3 4 ; m356
+Eb3 4 G3 4 Bb3 4 Ab3 4 ; m357
+G3 4 Eb3 4 F3 4 G3 4 ; m358
+Ab3 2 Ab3 4 Bb3 4 ; m359
+C4 4 Ab3 4 Bb3 4 C4 4 ; m360
+D4 4 F4 4 Ab4 4 G4 4 ; m361
+F4 4 D4 4 Eb4 4 F4 4 ; m362
+D4 F4 2 G4 4 Ab4 4 ; m363
+Bb4 4 G4 4 Ab4 4 Bb4 4 ; m364
+C5 4 E5 4 G4 G5 4 F4 F5 4 ; m365
+E4 E5 C5 4 C4 C5 4 F4 C5 D5 4 G4 C5 E5 4 ; m366
+F4 F5 Ab4 C5 1 ; m367
+Eb5 F5 Ab5 Eb6 1 ; m368
+F5 Ab5 1 ; m369
+Bb2 Bb4 Bb5 G5 2 Ab4 Bb4 F5 Ab5 2 ; m370
+fff G4 Bb4 Eb5 G5 4 R 4 ff Bb1 Bb2 Bb3 4 D2 D3 D4 4 ; m371
+Eb2 Eb3 Eb4 4 G2 G3 G4 4 Bb2 Bb3 Bb4 4 d3 d4 d5 4 ; m372
+Eb3 Eb4 Eb5 4 G3 G4 G5 4 Bb3 Bb4 Bb5 4 D4 D5 D6 4 ; m373
+Eb4 Eb5 Eb6 2 a1 a2 a3 4 c2 c3 c4 4 ; m374
+fff Eb2 Eb3 Eb4 Gb4 2 ff A1 A2 A3 4 C2 C3 C4 4  ; m375
+Eb2 Eb3 Eb4 4 Gb2 Gb3 Gb4 4 A2 A3 A4 4 C3 C4 C5 4 ; m376
+Eb2 Eb3 Eb4 4 Gb3 Gb4 Gb5 4 A3 A4 A5 4 C4 C5 C6 4 ; m377
+Eb4 Eb5 Eb6 2 R 8 p Eb5 4 C6 4  ; m378
+Bb5 4 D5 4 Eb5 4 G5 4  ; m379
+F5 4 C5 4 Eb5 4 C6 4  ; m380
+Bb5 4 D5 4 Eb5 4 G5 4  ; m381
+F5 4 C5 4 Eb5 4 C6 4  ; m382
+Bb5 4 D5 4 F5 4 D6 4  ; m383
+Eb6 4 Eb5 4 C6 4 Eb5 4  ; m384
+Bb5 4 Eb5 4 Bb5 4 D5 4  ; m385
+Bb5 4 Eb5 4 Eb5 4 C6 4  ; m386
+Bb5 4 D5 4 Eb5 4 G5 4  ; m387
+F5 4 C5 4 Eb5 4 C6 4  ; m388
+Bb5 4 D5 4 Eb5 4 G5 4  ; m389
+vel 55 F5 4 C5 4 Eb5 4 C6 4  ; m390
+vel 60 Bb5 4 D5 4 F5 4 D6 4  ; m391
+vel 65 Eb6 4 Eb5 4 C6 4 Eb5 4  ; m392
+vel 70 Bb5 4 Eb5 4 Bb5 4 D5 4  ; m393
+vel 75 Bb5 4 Db5 4 Bb5 4 Db5 4  ; m394
+vel 80 Bb5 4 C5 4 Ab5 4 B4 4  ; m395
+vel 85 Ab5 4 Bb4 4 G5 4 Bb4 4  ; m396
+vel 90 G5 4 Ab4 4 F5 4 Ab4 4  ; m397
+vel 95 F5 4 G4 4 Eb5 4 G4 4  ; m398
+vel 100 Eb5 4 Ab4 4 Eb5 4 Bb4 4  ; m399
+vel 105 Eb5 4 Bb4 4 Eb5 4 Ab4 4  ; m400
+vel 110 Bb4 4 Eb4 4 Bb4 4 D4 8  ; m401
+ff Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m402
+Bb4 4 Ab4 D4 Bb3 4 Bb4 4 Ab4 D4 Bb3 4 ; m403
+Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m404
+Bb4 4 C4 Eb4 Ab4 4 Bb4 4 D4 F4 Ab4 4 ; m405
+Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m406
+Bb4 4 Ab4 D4 Bb3 4 Bb4 4 Ab4 D4 Bb3 4 ; m407
+Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m408
+Bb4 4 C4 Eb4 Ab4 4 Bb4 4 D4 F4 Ab4 4 ; m409
+Bb4 4 G4 Eb4 Bb3 4 fff Bb3 Bb4 4 ff Eb4 Eb5 4 ; m410
+c4 c5 4 ab3 ab4 4 f3 f4 4 bb3 bb4 4 ; m411
+g3 g4 4 Eb3 Eb4 4 fff Bb3 Bb4 4 ff Eb4 Eb5 4 ; m412
+c4 c5 4 ab3 ab4 4 f3 f4 4 Bb3 Bb4 4 ; m413
+g3 g4 4 eb3 eb4 4 fff Bb3 Bb4 4 ff eb4 eb5 4 ; m414
+c4 c5 4 ab3 ab4 4 f3 f4 4 bb3 bb4 4 ; m415
+g3 g4 4 eb3 eb4 4 c3 c4 4 f3 f4 4 ; m416
+d3 d4 4 bb2 bb3 4 g2 g3 4 c3 c4 4 ; m417
+ab2 ab3 4 f2 f3 4 d2 d3 4 g2 g3 4 ; m418
+Eb2 Eb3 4 C2 C3 4 Ab1 Ab2 4 c2 c3 8 R 8 ; m419
+Bb1 Bb2 4 R 4 Bb1 Bb2 F3 Ab3 Bb3 D5 4 R 4 ; m420
+Eb2 Eb3 Eb4 G3 Bb3 4 R 4 END_LAZY DAMPER 5 127 LAZY Bb2 Eb3 G3 4 Eb3 G3 Bb3 4 ; m421
+G3 Bb3 Eb4 4 Bb3 Eb4 G4 4 Eb4 G4 Bb4 4 G4 Bb4 Eb5 4 ; m422
+fff Bb4 Eb5 G5 4 ff G4 Bb4 Eb5 4 Eb4 G4 Bb4 4 Bb3 Eb4 G4 4 ; m423
+Eb4 G4 Bb4 4 Bb3 Eb4 G4 4 G3 Bb3 Eb4 4 Eb3 G3 Bb3 4 ; m424
+G3 Bb3 Eb4 4 END_LAZY DAMPER 5   0 LAZY R 4 R 2 ; m425
+Eb2 Bb2 Eb3 G3 Bb3 Eb4 2 R 2 ; m426
+Eb2 Bb2 Eb3 G3 Bb3 Eb4 2 R 2 ; m427
+
+END_LAZY
+END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt4pl.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.14  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.13  2003/10/24 01:23:14  root
+; last notes to m137
+;
+; Revision 1.12  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.11  2003/09/04 23:54:50  root
+; legatissimo m100,104,108, change tempo rush there
+;
+; Revision 1.10  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.9  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.8  2003/04/20 16:11:51  root
+; done before coach
+;
+; Revision 1.7  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.6  2003/04/18 10:44:45  root
+; fixed mistakes
+;
+; Revision 1.5  2003/04/14 00:38:00  root
+; fix
+;
+; Revision 1.4  2003/04/14 00:07:07  root
+; drafted
+;
+; Revision 1.3  2003/04/13 00:56:13  root
+; started
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pl.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4pl.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4pl.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pl.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Piano Right Hand
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Right Hand
+INSTRUMENT Piano Right
+PROGRAM 5 1
+PAN 5 0
+
+LAZY
+chan 5
+forte 
+R 1 ;m000
+R 1 ; m001
+R 1 ; m002
+R 1 ; m003
+R 1 ; m004
+R 1 ; m005
+R 1 ; m006
+R 1 ; m007
+R 1 ; m008
+R 1 ; m009
+ff Bb3 F4 Bb4 F5 Bb5 2 R 2 ; m010
+G4 Bb4 G5 2 R 2 ; m011
+G3 D4 D5 G5 2 R 2 ; m012
+Eb4 G4 Eb5 2 R 2 ; m013
+R 1 ; m014
+R 1 ; m015
+R 1 ; m016
+R 1 ; m017
+R 1 ; m018
+R 1 ; m019
+R 1 ; m020
+forte R 2 Eb2 G3 1 ; m021
+Eb2 Ab3 1 ; m022
+Eb2 Ab3 Bb3 2 ; m023
+R 1 ; m024
+Eb3 Eb4 2 Eb3 G4 1 ; m025
+Eb3 Ab4 1 ; m026
+Eb3 Bb3 Ab4 Bb4 2 ; m027
+R 1 ; m028
+eb4 eb5 2 R 2 ; m029
+R 1 ; m030
+R 1 ; m031
+R 1 ; m032
+R 1 ; m033
+R 1 ; m034
+R 1 ; m035
+R 1 ; m036
+R 2 Bb2 D4 1  ; m037
+Bb2 Eb4 1 ; m038
+Bb2 F3 Eb4 F4 2 ; m039
+R 1 ; m040
+Bb3 Bb4 2 R 2 ; m041
+R 1 ; m042
+p R 2 R 4 B2 G3 2 ; m043 
+C3 A3 2 D3 B3 2 ; m044 ONE SHARP
+vel 25 B2 G3 4 E3 8 R 8 B3 E4 G4 8 R 8 ; m045
+B3 E4 G4 4 R 4 B3 D#4 F#4 4 R 4 ; m046
+E3 B3 E4 2 r 8 C3 4 E3 C4 2 ; m047
+F3 D4 2 G3 E4 2 ; m048
+E3 C4 4 A3 8 R 8 E4 A4 C5 8 R 8 ; m049
+E4 A4 C5 2 E4 G#4 B4 2 ; m050
+A3 E4 A4 2 F#4 A4 8 C5 8 F#4 A4 8 C5 8 ; m051
+F#4 8 A4 8 F#4 8 A4 8 D4 8 F#4 8 D4 8 F#4 8 ; m052
+R 8 G4 8 R 8 G4 8 R 8 D4 8 R 8 D4 8 ; m053
+R 8 D4 8 R 8 D4 8 R 8 D4 8 R 8 D4 8 ; m054
+R 8 G3 8 R 8 G3 8 R 8 E3 8 R 8 E3 8 ; m055
+R 8 E3 8 R 8 E3 8 R 8 E3 8 R 8 E3 8 ; m056
+R 8 E3 8 R 8 E3 8 G2 G3 4 G2 G3 4 ; m057
+mf G2 G3 2 G2 G3 4 G2 G3 4  ; m058
+G2 G3 2 G2 G3 4 A2 A3 4 ; m059
+g2 g3 4 f2 f3 4 e2 e3 4 d#2 d#3 4 ; m060
+f2 f3 4 e2 e3 4 d2 d3 4 c2 c3 4 ; m061
+b1 b2 2 c2 c3 4 d2 d3 4 ; m062
+c2 c3 2 e2 e3 4 f2 f3 4 ; m063
+e2 e3 4 d2 d3 4 c2 c3 4 b1 b2 4 ; m064
+d2 d3 4 c2 c3 4 F#4 8 A4 8 F#4 8 A4 8 ; m065
+F#4 8 A4 8 F#4 8 A4 8 D4 8 F#4 8 D4 8 F#4 8 ; m066
+D4 8 G4 8 R 8 G4 8 D4 F4 8 Ab4 8 D4 F4 8 Ab4 8 ; m067
+D4 F4 8 Ab4 8 D4 8 F4 8 Bb3 8 D4 8 Bb3 8 D4 8 ; m068
+Bb3 8 Eb4 8 R 8 Eb4 8 G3 4 A3 4 ; m069
+Bb3 4 B3 4 C4 4 C#4 4 ; m070
+D4 4 E4 4 F#4 4 G4 4 ; m071
+D4 F#4 A4 4 B4 4 C5 4 D5 4 ; m072
+forte E4 G4 C5 4 B4 4 G3 4 A3 4 ; m073
+Bb3 4 B3 4 C4 4 C#4 4 ; m074
+D3 D4 G3 B3 4 E4 4 F#4 4 G4 4 ; m075
+D4 F#4 A4 4 B4 4 C5 4 D5 4 ; m076
+forte G3 D4 B4 4 R 4 R 2 ; m077
+R 1 ; m078
+R 1 ; m079
+R 1 ; m080
+R 1 ; m081
+R 1 ; m082
+R 1 ; m083
+R 1 ; m084
+R 2 G#3 1 ; m085
+G3 2 ; m086
+R 1 ; m087
+R 1 ; m088
+pp R 2 G#3 1 ; m089
+G3 2 ; m090
+R 1 ; m091
+R 1 ; m092
+R 1 ; m093
+R 1 ; m094
+R 1 ; m095
+R 1 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+; every other note for legatissimo with other track
+R 8 G#1 G#2 8. R 16 B1 B2 8. R 16 D#2 D#3 8. R 16 F#2 F#3 8 ; m100
+R 1 ; m101
+R 1 ; m102
+R 1 ; m103
+R 8 A#1 A#2 8. R 16 C#2 C#3 8. R 16 E2 E3 8. R 16 G#2 G#3 8 ; m104b
+R 1 ; m105
+R 1 ; m106
+R 1 ; m107
+pp R 8 G#2 8. R 16 B2 8. R 16 D#3 8. R 16 F#3 8 ; m108
+R 1 ; m109
+pp R 8 G#1 8. R 16 B1 8. R 16 D#2 8. R 16 F#2 8 ;  m110
+R 1 ; m111
+R 1 ; m112
+R 1 ; m113
+R 1 ; m114
+R 1 ; m115
+R 1 ; m116
+R 1 ; m117
+R 1 ; m118
+R 1 ; m119
+R 1 ; m120
+R 1 ; m121
+R 1 ; m122
+R 1 ; m123
+R 1 ; m124
+R 1 ; m125
+R 1 ; m126
+R 1 ; m127
+R 1 ; m128
+R 1 ; m129
+R 1 ; m130
+R 1 ; m131
+R 1 ; m132
+R 1 ; m133
+R 1 ; m134
+R 1 ; m135
+R 1 ; m136
+R 1 ; m137
+R 1 ; m138
+R 1 ; m139
+R 1 ; m140
+R 1 ; m141
+R 1 ; m142
+R 1 ; m143
+R 1 ; m144
+ff B3 F#4 B4 F#5 B5 2 R 2 ; m145
+G#4 B4 G#5 2 R 2 ; m146
+G#3 D#4 G#4 D#5 G#5 2 R 2 ; m147
+E4 E5 G#4 2 R 2 ; m148
+R 1 ; m149
+R 1 ; m150
+R 1 ; m151
+R 1 ; m152
+R 1 ; m153
+R 1 ; m154
+R 1 ; m155
+forte R 2 B1 D#3 2 ; m156
+R 2 B1 E3 2 ; m157
+R 2 B1 E3 F#3 2 ; m158
+R 1 ; m159
+R 2 B2 D#4 2 ; m160
+R 2 B2 E4 2 ; m161
+R 2 B2 E4 F#4 2 ; m162
+R 1 ; m163
+R 1 ; m164
+R 1 ; m165
+R 1 ; m166
+R 1 ; m167
+R 1 ; m168
+R 1 ; m169
+R 1 ; m170
+R 1 ; m171
+forte R 2 Gb2 Bb3 2 ; m172
+R 2 Gb2 B3 2 ; m173
+R 2 Gb2 B3 Db4 2 ; m174
+R 1 ; m175
+Gb3 Gb4 2 R 2 ; m176
+R 1 ; m177
+p R 2 Eb3 4 Bb3 G4 2 ; m178
+p C4 Ab4 4 Eb3 4 D4 Bb4 4 ; m179
+Eb3 4 Bb3 G4 4 C4 4 G4 Eb5 4 ; m180
+G4 Eb5 2 G4 B4 D5 2  ; m181
+C4 C5 G4 2 Ab3 4 Eb4 C5 4 ; m182
+Ab3 4 F4 Db5 4 Ab3 4 G4 Eb5 4 ; m183
+Ab3 4 Ab4 C5 4 F3 4 C4 Ab4 4 ; m184
+C4 Ab4 2 C4 E4 G4 2 ; m185
+F3 F4 C4 2 D4 F4 8 Ab4 8 D4 F4 8 Ab4 8 ; m186
+D4 8 F4 8 D4 8 F4 8 Bb3 8 D4 8 Bb3 8 D4 8 ; m187
+Bb3 8 Eb4 8 Bb3 8 Eb4 8 R 8 Bb3 8 R 8 Bb3 8 ; m188
+R 8 Bb3 8 R 8 Bb3 8 R 8 Bb3 8 R 8 Bb3 8 ; m189
+R 8 Eb3 8 R 8 Eb3 8 R 8 C3 8 R 8 C3 8 ; m190
+R 8 C3 8 R 8 C3 8 R 8 C3 8 R 8 C3 8 ; m191
+R 8 C3 8 R 8 C3 8 Eb2 Eb3 4 Eb2 Eb3 4 ; m192
+Eb2 Eb3 2 Eb2 Eb3 4 Eb2 Eb3 4 ; m193
+Eb2 Eb3 2 forte Eb4 Eb3 4 F3 F4 4 ; m194
+Eb4 Eb3 4 Db3 Db4 4 C3 C4 4 B2 B3 4 ; m195
+Db3 Db4 4 C3 C4 4 Bb2 Bb3 4 Ab2 Ab3 4 ; m196
+g2 g3 2 Ab2 Ab3 4 Bb2 Bb3 4 ; m197
+Ab2 Ab3 2 c3 c4 4 Db3 Db4 4 ; m198
+c3 c4 4 Bb2 Bb3 4 Ab2 Ab3 4 g2 g3 4 ; m199
+Bb2 Bb3 4 Ab2 Ab3 4 p D4 F4 8 Ab4 8 D4 F4 8 Ab4 8 ; m200
+D4 8 F4 8 D4 8 F4 8 Bb3 8 D4 8 Bb3 8 D4 8 ; m201
+Bb3 8 Eb4 8 R 8 Eb4 8 Bb3 Db4 8 E4 8 Bb3 Db4 8 E4 8  ; m202
+Bb3 Db4 8 E4 8 Bb3 8 Db4 8 Gb3 8 Bb3 8 Gb3 8 Bb3 8 ; m203
+Gb3 8 B3 8 R 8 B3 8 forte Eb3 4 F3 4 ; m204
+F#3 4 G3 4 Ab3 4 A3 4 ; m205
+Bb3 4 C4 4 D4 4 Eb4 4 ; m206
+Bb3 D4 F4 4 G4 4 Ab4 4 Bb4 4 ; m207
+C4 Eb4 Ab4 4 G4 4 Eb3 4 F3 4 ; m208
+F#3 4 G3 4 Ab3 4 A3 4 ; m209
+Bb3 4 C4 4 D4 4 Eb4 4 ; m210
+Bb3 D4 F4 4 G4 4 Ab4 4 Bb4 4 ; m211
+Eb3 4 R 4 R 2 ; m212
+R 1 ; m213
+R 1 ; m214
+R 1 ; m215
+R 1 ; m216
+R 1 ; m217
+R 1 ; m218
+R 1 ; m219
+R 1 ; m220
+R 1 ; m221
+R 1 ; m222
+R 1 ; m223
+vel 25 R 2 Eb4 4 F4 4 ; m224
+D4 4 F4 4 Eb4 4 G4 4 ; m225
+Eb4 4 F4 4 Eb4 4 F4 4 ; m226
+D4 4 F4 4 Eb4 4 G4 4 ; m227
+Eb4 4 F4 4 Eb4 4 F4 4 ; m228
+D4 4 F4 4 D4 4 F4 4 ; m229
+Eb4 4 G4 4 Eb4 4 F4 4 ; m230
+Eb4 F4 4 Ab4 4 D4 F4 4 Ab4 4 ; m231
+Eb4 4 G4 4 Eb4 4 F4 4 ; m232
+D4 4 F4 4 Eb4 4 G4 4 ; m233
+Eb4 4 F4 4 Eb4 4 F4 4 ; m234
+D4 4 F4 4 Eb4 4 G4 4 ; m235
+Eb4 4 F4 4 Eb4 4 F4 4 ; m236
+D4 4 F4 4 D4 4 F4 4 ; m237
+Eb4 4 G4 4 Eb4 4 F4 4 ; m238
+Eb4 F4 4 Ab4 4 D4 F4 4 Ab4 4 ; m239
+mp Eb3 4 Db4 Eb4 Bb4 4 Eb3 4 Db4 Eb4 Bb4 2 ; m240
+C4 Eb4 Bb4 4 Eb3 4 B3 Eb4 Ab4 4 ; m241
+Eb3 4 Bb3 Eb4 Ab4 4 Eb3 4 Bb3 Eb4 G4 2 ; m242
+Ab3 C4 G4 4 Eb3 4 Ab3 B3 F4 4 ; m243
+Eb3 4 G3 Bb3 F4 4 R 4 G3 Eb4 4 ; m244
+R 4 Ab3 Bb3 D4 4 R 4 Bb3 Db4 4 ; m245
+R 4 Bb3 Db4 4 R 4 C4 4 ; m246
+R 4 G3 Bb3 4 R 4 F3 Bb3 4 ; m247
+R 1 ; m248
+R 1 ; m249
+R 1 ; m250
+R 1 ; m251
+R 1 ; m252
+R 1 ; m253
+R 1 ; m254
+R 1 ; m255
+R 1 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 2 forte G3 2 ; m262
+c2 c3 4 eb2 eb3 4 F2 F3 3/4 ; m263
+Eb2 Eb3 2 D2 D3 2 ; m264
+Eb2 Eb3 4 F2 F3 4 g2 g3 4 ; m265
+Ab2 Ab3 4 a1 a2 4 Bb1 Bb2 4 D2 D3 4 ; m266
+R 2 Ab2 4 C3 4 ; m267
+Eb3 4 Eb2 4 F2 4 Ab2 4 ; m268
+C3 2 F2 4 Ab2 4 ; m269
+C3 4 C2 4 Db2 Db3 4 f2 f3 4 ; m270
+Ab2 Ab3 2 Db2 Db3 4 f2 f3 4 ; m271
+Ab2 Ab3 2 C3 C4 4 Eb3 Eb4 4 ; m272
+R 2 c3 c4 4 eb3 eb4 4 ; m273
+R 1 r 8 ; m274
+R 1 ; m275
+R 1 ; m276
+R 1 ; m277
+R 1 ; m278
+R 1 ; m279
+p R 2 F3 F4 4 F#3 F#4 4 ; m280
+R 1 ; m281
+R 1 ; m282
+R 1 ; m283
+R 2 Bb2 Bb3 4 b2 b3 4 ; m284
+R 1 ; m285
+R 2 Ab2 4 C3 4  ; m286
+Eb3 2 forte F2 4 Ab2 4 ; m287
+R 1 ; m288
+R 1 ; m289
+R 2 c2 c3 4 Eb2 Eb3 4 ; m290
+G2 G3 2 Ab1 Ab2 4 c2 c3 4 ; m291
+R 1 ; m292
+R 1 ; m293
+R 1 ; m294
+R 1 ; m295
+R 1 ; m296
+R 1 ; m297
+R 1 ; m298
+R 1 ; m299
+R 1 ; m300
+R 1 ; m301
+R 1 ; m302
+R 1 ; m303
+R 1 ; m304
+R 1 ; m305
+R 1 ; m306
+R 1 ; m307
+forte G3 8 Eb3 8 G3 8 Eb3 8 G3 8 Eb3 8 Ab3 8 Eb3 8 ; m308
+G3 8 Eb3 8 G3 8 Eb3 8 G3 8 Eb3 8 Ab3 8 Eb3 8 ; m309
+G3 8 Eb3 8 G3 8 Eb3 8 G3 8 Eb3 8 R 4  ; m310
+G2 4 Bb2 4 Eb3 4 G3 4 ; m311
+R 1 ; m312
+R 1 ; m313
+R 1 ; m314
+R 1 ; m315
+R 1 ; m316
+R 1 ; m317
+R 1 ; m318
+R 1 ; m319
+forte R 2 Eb4 4 G4 4 ; m320
+Ab4 2 Eb4 4 G4 4 ; m321
+F4 4 Bb3 4 C4 4 D4 4 ; m322
+Eb4 4 G4 4 Bb4 4 Bb3 4 ; m323
+C4 4 Bb3 4 A3 4 C4 4 ; m324
+Bb3 4 D4 4 C4 4 Eb4 4 ; m325
+D4 4 R 4 Bb3 4 D4 4 ; m326
+Eb4 2 Bb3 4 D4 4 ; m327
+C4 4 F3 4 G3 4 A3 4 ; m328
+Bb3 4 D4 4 F4 4 F3 4 ; m329
+Bb3 4 C4 4 C#4 4 D4 4 ; m330
+Eb4 4 G4 4 Bb4 4 Bb3 4 ; m331
+Eb4 2 Eb3 4 G3 4 ; m332
+Ab3 2 Eb3 4 G3 4 ; m333
+F3 4 Bb2 4 C3 4 D3 4 ; m334
+Eb3 4 G3 4 Bb3 4 Bb2 4 ; m335
+C3 4 Bb2 4 A2 4 C3 4 ; m336
+R 4 D3 4 C3 4 Eb3 4 ; m337
+fff Ab3 1  ; m338
+G3 1 ; m339
+Eb4 1 ; m340
+D4 2 A3 2 ; m341
+Bb3 2 Ab3 2 ; m342
+G3 2 D3 2 ; m343
+ff Eb3 2 F3 4 G3 4 ; m344
+Ab3 2 C4 Bb5 2 ; m345
+F4 Ab5 2 Eb4 G5 2 ; m346
+D4 2 D3 4 E3 4 ; m347
+F#3 4 D3 4 E3 4 F#3 4 ; m348
+G3 G4 4 Bb3 D4 4 D4 E4 4 C4 F#4 4 ; m349
+Bb3 D4 4 G3 Bb3 4 A3 C4 4 B3 D4 4 ; m350
+C4 2 C3 4 D3 4 ; m351
+E3 4 C3 4 D3 4 E3 4 ; m352
+F3 4 Ab3 4 C4 4 Bb3 4 ; m353
+Ab3 F4 4 F3 Ab3 4 G3 Bb3 4 A3 C4 4 ; m354
+fff Bb2 2 R 2 ; m355
+R 1 ; m356
+ff Bb1 Bb2 1 ; m357
+fff Bb2 1 ; m358
+ff Bb1 Bb2 2/1 ; m359
+; m360
+ff Bb1 Bb2 1 ; m361
+ff Bb2 1 ; m362
+G3 G4 1 ; m363
+F4 F5 1 ; m364
+E4 E5 2 D5 2 ; m365
+Bb2 1 ; m366
+fff Bb1 Bb2 1 ; m367
+fff Bb1 Bb2 1 ; m368
+Bb1 Bb2 1 ; m369
+R 2 Bb1 Bb2 4 d2 d3 4 ; m370
+Eb2 Eb3 2 R 2 ; m371
+R 1 ; m372
+R 1 ; m373
+R 1 ; m374
+R 1 ; m375
+R 1 ; m376
+R 1 ; m377
+p R 2 Eb4 4 F4 4 ; m378
+D4 4 F4 4 Eb4 4 G4 4 ; m379
+Eb4 4 F4 4 Eb4 4 F4 4 ; m380
+D4 4 F4 4 Eb4 4 G4 4 ; m381
+Eb4 4 F4 4 Eb4 4 F4 4 ; m382
+D4 4 F4 4 D4 4 F4 4 ; m383
+Eb4 4 G4 4 Eb4 4 F4 4 ; m384
+Eb4 F4 4 Ab4 4 D4 4 Ab4 4 ; m385
+Eb4 4 G4 4 Eb4 4 F4 4 ; m386
+D4 4 F4 4 Eb4 4 G4 4 ; m387
+Eb4 4 F4 4 Eb4 4 F4 4 ; m388
+D4 4 F4 4 Eb4 4 G4 4 ; m389
+Eb4 4 F4 4 Eb4 4 F4 4 ; m390
+vel 55 D4 4 F4 4 D4 4 F4 4 ; m391
+vel 60 Eb4 4 G4 4 Eb4 4 F4 4 ; m392
+vel 65 Eb4 F4 4 Ab4 4 D4 F4 4 Ab4 4 ; m393
+vel 70 Eb3 4 Db4 Eb4 Bb4 4 Eb3 4 Db4 Eb4 Bb4 2 ; m394
+vel 75 C4 Eb4 Bb4 4 Eb3 4 B3 Eb4 Ab4 4 ; m395
+vel 80 Eb3 4 Bb3 Eb4 Ab4 4 Eb3 4 Bb3 Eb4 G4 2 ; m396
+vel 85 Ab3 C4 G4 4 Eb3 4 Ab3 B3 F4 4 ; m397
+vel 90 Eb3 4 G3 Bb3 F4 R 4 G3 Eb4 4 ; m398
+vel 95 R 4 Ab3 Bb3 D4 4 R 4 Bb3 Db4 4 ; m399
+vel 100 R 4 Bb3 Db4 4 R 4 C4 4 ; m400
+vel 105 R 4 G3 Bb3 4 R 4 F3 Bb3 4 ; m401
+ff Eb2 Bb2 1 ; m402
+Eb2 Bb2 1 ; m403
+Eb2 Bb2 1 ; m404
+Eb2 Bb2 1 ; m405
+Eb2 Bb2 1 ; m406
+Eb2 Bb2 1 ; m407
+Eb2 Bb2 1 ; m408
+Eb2 Bb2 2 Eb2 Bb2 2 ; m409
+Eb2 Bb2 2 R 2 ; m410
+R 1 ; m411
+R 1 ; m412
+R 1 ; m413
+R 1 ; m414
+R 1 ; m415
+R 1 ; m416
+R 1 ; m417
+R 1 ; m418
+R 1 ; m419
+R 1 ; m420
+R 1 ; m421
+R 1 ; m422
+R 1 ; m423
+R 1 ; m424
+R 1 ; m425
+R 1 ; m426
+R 1 ; m427
+
+END_LAZY
+END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt4pt.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.11  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.10  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.9  2003/08/14 01:29:14  root
+; extend quiet note to prevent reverb cutoff
+;
+; Revision 1.8  2003/08/14 01:15:54  root
+; remove appluase
+;
+; Revision 1.7  2003/07/19 21:47:53  root
+; fix dyanamiscs add applause
+;
+; Revision 1.6  2003/07/13 23:14:00  root
+; applause, commented out
+;
+; Revision 1.5  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.4  2003/04/20 16:11:51  root
+; done before coach
+;
+; Revision 1.3  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.2  2003/04/18 10:45:05  root
+; fixed mistakes
+;
+; Revision 1.1  2003/04/14 01:51:35  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pt.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4pt.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4pt.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pt.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Piano Third Hand
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Third Hand
+INSTRUMENT Piano 
+PROGRAM 5 1
+PAN 5 0
+LAZY
+chan 5
+forte 
+R 1 ;m000
+R 1 ; m001
+R 1 ; m002
+R 1 ; m003
+R 1 ; m004
+R 1 ; m005
+R 1 ; m006
+R 1 ; m007
+R 1 ; m008
+R 1 ; m009
+R 1 ; m010
+R 1 ; m011
+R 1 ; m012
+R 1 ; m013
+R 1 ; m014
+R 1 ; m015
+R 1 ; m016
+R 1 ; m017
+R 1 ; m018
+R 1 ; m019
+R 1 ; m020
+R 1 ; m021
+R 1 ; m022
+R 1 ; m023
+R 1 ; m024
+R 1 ; m025
+R 1 ; m026
+R 1 ; m027
+R 1 ; m028
+R 1 ; m029
+R 1 ; m030
+R 1 ; m031
+R 1 ; m032
+R 1 ; m033
+R 1 ; m034
+R 1 ; m035
+R 1 ; m036
+R 1 ; m037
+R 1 ; m038
+R 1 ; m039
+R 1 ; m040
+R 1 ; m041
+R 1 ; m042
+p R 2 G2 1 ; m043
+G2 2 ; m044
+G2 2 R 2 ; m045
+R 1 ; m046
+R 2 r 8 C3 1 ; m047
+C3 2 ; m048
+C3 2 R 2 ; m049
+R 1 ; m050
+R 2 mf D4 4 E4 4 ; m051
+D4 4 C4 4 B3 4 A#3 4 ; m052
+C4 4 B3 4 A3 4 G3 4 ; m053
+F#3 4 E3 4 D3 4 C#3 4 ; m054
+E3 4 D3 4 C3 4 D3 4 ; m055
+C3 4 B2 4 A2 4 G#2 4 ; m056
+B2 4 A2 4 R 2 ; m057
+R 1 ; m058
+R 1 ; m059
+R 1 ; m060
+R 1 ; m061
+R 1 ; m062
+R 1 ; m063
+R 1 ; m064
+mf R 2 D4 4 E4 4 ; m065
+D4 4 C4 4 B3 4 A#3 4 ; m066
+C4 4 B3 4 Bb3 4 C4 4 ; m067
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m068
+Ab3 4 G3 4 Eb3 G3 1 ; m069
+Eb3 G3 2 ; m070
+R 1 ; m071
+R 1 ; m072
+forte R 2 E3 G3 1 ; m073
+E3 G3 A3 2 ; m074
+R 1 ; m075
+R 1 ; m076
+R 1 ; m077
+R 1 ; m078
+R 1 ; m079
+R 1 ; m080
+R 1 ; m081
+R 1 ; m082
+R 1 ; m083
+R 1 ; m084
+R 1 ; m085
+R 1 ; m086
+R 1 ; m087
+R 1 ; m088
+R 1 ; m089
+R 1 ; m090
+R 1 ; m091
+R 1 ; m092
+R 1 ; m093
+R 1 ; m094
+R 1 ; m095
+R 1 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+R 1 ; m100
+R 1 ; m101
+R 1 ; m102
+R 1 ; m103
+R 1 ; m104
+R 1 ; m105
+R 1 ; m106
+R 1 ; m107
+R 1 ; m108
+R 1 ; m109
+R 1 ; m110
+R 1 ; m111
+R 1 ; m112
+R 1 ; m113
+R 1 ; m114
+R 1 ; m115
+R 1 ; m116
+R 1 ; m117
+R 1 ; m118
+R 1 ; m119
+R 1 ; m120
+R 1 ; m121
+R 1 ; m122
+R 1 ; m123
+R 1 ; m124
+R 1 ; m125
+R 1 ; m126
+R 1 ; m127
+R 1 ; m128
+R 1 ; m129
+R 1 ; m130
+R 1 ; m131
+R 1 ; m132
+R 1 ; m133
+R 1 ; m134
+R 1 ; m135
+R 1 ; m136
+R 1 ; m137
+R 1 ; m138
+R 1 ; m139
+R 1 ; m140
+R 1 ; m141
+R 1 ; m142
+R 1 ; m143
+R 1 ; m144
+R 1 ; m145
+R 1 ; m146
+R 1 ; m147
+R 1 ; m148
+R 1 ; m149
+R 1 ; m150
+R 1 ; m151
+R 1 ; m152
+R 1 ; m153
+R 1 ; m154
+R 1 ; m155
+R 1 ; m156
+R 1 ; m157
+R 1 ; m158
+R 1 ; m159
+R 1 ; m160
+R 1 ; m161
+R 1 ; m162
+R 1 ; m163
+R 1 ; m164
+R 1 ; m165
+R 1 ; m166
+R 1 ; m167
+R 1 ; m168
+R 1 ; m169
+R 1 ; m170
+R 1 ; m171
+R 1 ; m172
+R 1 ; m173
+R 1 ; m174
+R 1 ; m175
+R 1 ; m176
+R 1 ; m177
+R 1 ; m178
+R 1 ; m179
+R 1 ; m180
+R 1 ; m181
+R 1 ; m182
+R 1 ; m183
+R 1 ; m184
+R 1 ; m185
+p R 2 Bb3 4 C4 4 ; m186
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m187
+Ab3 4 G3 4 F3 4 Eb3 4 ; m188
+D3 4 C3 4 Bb2 4 A2 4 ; m189
+C3 4 Bb2 4 Ab2 4 Bb2 4 ; m190
+Ab2 4 G2 4 F2 4 E2 4 ; m191
+G2 4 F2 4 R 2 ; m192
+R 1 ; m193
+R 1 ; m194
+R 1 ; m195
+R 1 ; m196
+R 1 ; m197
+R 1 ; m198
+R 1 ; m199
+p R 2 Bb3 4 C4 4 ; m200
+Bb3 4 Ab3 4 G3 4 F#3 4 ; m201
+Ab3 4 G3 4 Gb3 4 Ab3 4 ; m202
+Gb3 4 E3 4 Eb3 4 D3 4 ; m203
+E3 4 Eb3 4 B2 Eb3 1 ; m204
+mp B2 Eb3 2 ; m205
+mf Bb2 Eb3 G3 2 R 2 ; m206
+R 1 ; m207
+forte R 2 C3 Eb3 1 ; m208
+C3 Eb3 F3 2 ; m209
+Bb2 Eb3 G3 2 R 2 ; m210
+R 1 ; m211
+R 1 ; m212
+R 1 ; m213
+R 1 ; m214
+R 1 ; m215
+R 1 ; m216
+R 1 ; m217
+R 1 ; m218
+R 1 ; m219
+R 1 ; m220
+R 1 ; m221
+R 1 ; m222
+R 1 ; m223
+vel 25 R 2 A3 C4 2 ; m224
+Ab3 Bb3 2 G3 Bb3 2 ; m225
+A3 C4 2 A3 C4 2 ; m226
+Ab3 Bb3 2 G3 Bb3 2 ; m227
+A3 C4 2 A3 C4 2 ; m228
+Ab3 Bb3 2 Ab3 Bb3 2 ; m229
+G3 Bb3 2 A3 C4 2 ; m230
+Bb3 2 Bb3 2 ; m231
+Bb3 2 A3 C4 2 ; m232
+Ab3 Bb3 2 G3 Bb3 2 ; m233
+A3 C4 2 A3 C4 2 ; m234
+Ab3 Bb3 2 G3 Bb3 2 ; m235
+A3 C4 2 A3 C4 2 ; m236
+mf Ab3 Bb3 2 Ab3 Bb3 2 ; m237
+G3 Bb3 2 A3 C4 2 ; m238
+forte Bb3 2 Bb3 2 ; m239
+R 1 ; m240
+R 1 ; m241
+R 1 ; m242
+R 1 ; m243
+p R 2 Eb3 2 ; m244
+F3 2 G3 2 ; m245
+Ab3 2 Ab3 2 ; m246
+Bb2 2 Bb2 2 ; m247
+R 1 ; m248
+R 1 ; m249
+R 1 ; m250
+R 1 ; m251
+R 1 ; m252
+R 1 ; m253
+R 1 ; m254
+R 1 ; m255
+R 1 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 1 ; m262
+R 1 ; m263
+R 1 ; m264
+R 1 ; m265
+R 1 ; m266
+R 1 ; m267
+R 1 ; m268
+R 1 ; m269
+R 1 ; m270
+R 1 ; m271
+R 1 ; m272
+R 1 ; m273
+R 1 r 8 ; m274
+R 1 ; m275
+R 1 ; m276
+R 1 ; m277
+R 1 ; m278
+R 1 ; m279
+R 1 ; m280
+R 1 ; m281
+R 1 ; m282
+R 1 ; m283
+R 1 ; m284
+R 1 ; m285
+R 1 ; m286
+R 1 ; m287
+R 1 ; m288
+R 1 ; m289
+R 1 ; m290
+R 1 ; m291
+R 1 ; m292
+R 1 ; m293
+R 1 ; m294
+R 1 ; m295
+R 1 ; m296
+R 1 ; m297
+R 1 ; m298
+R 1 ; m299
+R 1 ; m300
+R 1 ; m301
+R 1 ; m302
+R 1 ; m303
+R 1 ; m304
+R 1 ; m305
+R 1 ; m306
+R 1 ; m307
+ff Eb2 1 ; m308
+Eb2 1 ; m309
+Eb2 3/4 Bb2 4  ; m310
+R 1 ; m311
+R 1 ; m312
+R 1 ; m313
+R 1 ; m314
+R 1 ; m315
+R 1 ; m316
+R 1 ; m317
+R 1 ; m318
+R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+R 1 ; m325
+R 1 ; m326
+R 1 ; m327
+R 1 ; m328
+R 1 ; m329
+R 1 ; m330
+R 1 ; m331
+R 1 ; m332
+R 1 ; m333
+R 1 ; m334
+R 1 ; m335
+R 1 ; m336
+fff Bb2 1 ; m337
+D3 4 R 3/4 ; m338
+R 1 ; m339
+R 1 ; m340
+R 1 ; m341
+R 1 ; m342
+R 1 ; m343
+R 1 ; m344
+R 1 ; m345
+R 1 ; m346
+R 1 ; m347
+R 1 ; m348
+R 1 ; m349
+R 1 ; m350
+R 1 ; m351
+R 1 ; m352
+R 1 ; m353
+R 1 ; m354
+ffff Bb1 2/1 ; m355
+; m356
+R 1 ; m357
+R 1 ; m358
+R 1 ; m359
+R 1 ; m360
+R 1 ; m361
+R 1 ; m362
+ff Bb1 Bb2 2/1 ; m363
+; m364
+ff Bb1 Bb2 1 ; m365
+R 1 ; m366
+R 1 ; m367
+R 1 ; m368
+R 1 ; m369
+R 1 ; m370
+R 1 ; m371
+R 1 ; m372
+R 1 ; m373
+R 1 ; m374
+R 1 ; m375
+R 1 ; m376
+R 1 ; m377
+vel 25 R 2 A3 C4 2 ; m378
+Ab3 Bb3 2 G3 Bb3 2 ; m379
+A3 C4 2 A3 C4 2 ; m380
+Ab3 Bb3 2 G3 Bb3 2 ; m381
+A3 C4 2 A3 C4 2 ; m382
+Ab3 Bb3 2 Ab3 Bb3 2 ; m383
+G3 Bb3 2 A3 C4 2 ; m384
+Bb3 2 Bb3 2 ; m385
+Bb3 2 A3 C4 2 ; m386
+Ab3 Bb3 2 G3 Bb3 2 ; m387
+A3 C4 2 A3 C4 2 ; m388
+Ab3 Bb3 2 G3 Bb3 2 ; m389
+A3 C4 2 A3 C4 2 ; m390
+Ab3 Bb3 2 Ab3 Bb3 2 ; m391
+G3 Bb3 2 A3 C4 2 ; m392
+Bb3 2 Bb3 2 ; m393
+R 1 ; m394
+R 1 ; m395
+R 1 ; m396
+R 1 ; m397
+forte R 2 Eb3 2 ; m398
+F3 2 G3 2 ; m399
+Ab3 2 Ab3 2 ; m400
+Bb2 2 Bb2 2 ; m401
+R 1 ; m402
+R 1 ; m403
+R 1 ; m404
+R 1 ; m405
+R 1 ; m406
+R 1 ; m407
+R 1 ; m408
+R 1 ; m409
+R 1 ; m410
+R 1 ; m411
+R 1 ; m412
+R 1 ; m413
+R 1 ; m414
+R 1 ; m415
+R 1 ; m416
+R 1 ; m417
+R 1 ; m418
+R 1 ; m419
+R 1 ; m420
+R 1 ; m421
+R 1 ; m422
+R 1 ; m423
+R 1 ; m424
+R 1 ; m425
+R 1 ; m426
+vel 1 Eb2 2/1  ; m427
+END_LAZY
+
+END_OF_TRACK
+
+
+
+

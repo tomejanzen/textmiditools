@@ -1,0 +1,359 @@
+; $Author: janzent $
+; $Log: schuqnt2vc.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.14  2003/11/08 23:31:15  root
+; tone macros must always take value i n whole notes such as 2/1 never just 2
+;
+; Revision 1.13  2003/10/17 01:24:17  root
+; last set of notes from Jenny
+;
+; Revision 1.12  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.11  2003/08/02 00:10:30  root
+; long tones done
+;
+; Revision 1.10  2003/06/03 23:48:43  root
+; narrow stereo field
+;
+; Revision 1.9  2003/05/01 11:32:58  root
+; last chord dyn
+;
+; Revision 1.8  2003/04/30 00:38:51  root
+; nuanced (finessed) tempo and fixed blanace in last 6 bars
+;
+; Revision 1.7  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.6  2003/03/23 02:58:14  root
+; final for submission prior to coaching
+;
+; Revision 1.5  2003/03/20 11:36:31  root
+; rough dynamics
+;
+; Revision 1.4  2003/03/20 01:26:43  root
+; rough dynamics
+;
+; Revision 1.3  2003/03/17 02:58:35  root
+; goodnight
+;
+; Revision 1.2  2003/03/14 02:42:33  root
+; fake dynamic
+;
+; Revision 1.1  2003/03/10 01:19:00  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt2vc.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt2vc.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt2vc.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt2vc.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Second Movement ; Cello
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Cello
+INSTRUMENT Cello
+program(midi_channel_cello,Cello)
+pan(midi_channel_cello,10)
+LAZY
+chan midi_channel_cello
+p
+R 1 ;m0
+R 1 ;m1
+C3 2 vel 60 Bb2 2 ;m2
+vel 70 ;double bar
+p Ab2 4 R 4 F2 4 R 4 ;m3
+Eb2 4 R 4 R 4. F2 8 ;m4
+G2 4 R 4 G2 4 R 4 ;m5
+Ab2 4 R 4 G2 4 R 4 ;m6
+F2 4 R 4 D2 4 R 4 ;m7
+Eb2 4 R 4 R 4. Ab2 8 ;m8
+G2 4 R 4 G2 4 R 4 ;m9
+C2 4 R 4 R 2 ;m10
+;repeat forward
+C3 4 R 4 mp Bb2 4 R 4 ;m11
+p A2 4 R 4 R 2 ;m12
+R 4. Eb3 8 F3 4 R 8 F2 8 ;m13
+Bb2 4 R 4 Ab3 4 R 4 ;m14
+G3 4 R 4 mp F3 4 R 4 ;m15
+p E3 4 R 4 R 4. E3 8 ;m16
+F3 4 R 8 vel 48 Bb2 8 vel 46 C3 4 R 8 vel 44 C3 8 ;m17
+vel 42 F2 4 R 4 vel 40 D2 4 R 4 ;m18
+Eb2 4 R 4 R 4. F2 8 ;m19
+G2 4. vel 42 G2 8 vel 44 G2 4. vel 46 G2 8 ;m20
+48 Ab2 2 vel 45 G2 2 ;m21
+pp  F2 4 R 4 D2 4 R 4 ;m22
+Eb2 4 R 4 R 4. F2 8 ;m23
+G2 4. vel 38 G2 8 vel 36 G2 4. vel 34 G2 8 ;m24 first ending
+vel 32 C2 2 R 2 ;m25 first ending
+;repeat back
+C3 4 R 4 mp Bb2 4 R 4 ;m11
+p A2 4 R 4 R 2 ;m12
+R 4. Eb3 8 F3 4 R 8 F2 8 ;m13
+Bb2 4 R 4 Ab3 4 R 4 ;m14
+G3 4 R 4 mp F3 4 R 4 ;m15
+p E3 4 R 4 R 4. E3 8 ;m16
+F3 4 R 8 vel 48 Bb2 8 vel 46 C3 4 R 8 vel 44 C3 8 ;m17
+vel 42 F2 4 R 4 vel 40 D2 4 R 4 ;m18
+Eb2 4 R 4 R 4. F2 8 ;m19
+G2 4. vel 42 G2 8 vel 44 G2 4. vel 46 G2 8 ;m20
+48 Ab2 2 vel 45 G2 2 ;m21
+pp  F2 4 R 4 D2 4 R 4 ;m22
+Eb2 4 R 4 R 4. F2 8 ;m23
+vel 38 G2 4. vel 36 G2 8 vel 34 G2 4. vel 32 G2 8 ;m26 second ending
+C2 2 R 2 ;m27 second ending
+R 1 ;m28
+pp R 4. G2 8 Eb2 4 R 8 F2 8 ;m29
+G2 4 R 4 ppp pizz(4) G2 4 R 4  ;m30
+C2 G2 4 R 4 endpizz(4,43) ;m31a
+;double bar C major
+p longtone23(4,C3,2/1,30,75) ;m31b
+; m32
+C3 2 ;m33
+F3 2 E3 2 ;m34
+D3 2 F3 2 ;m35
+A3 2 F#3 2 ;m36
+longtone23(4,G3,3/2,30,75) ;m37
+F#3 2 ;m38
+G3 2 C3 2 ;m39
+longtone23(4,F3,6/4,30,75) ;m40
+C3 2 ;m41
+F3 2 E3 2 ;m42
+D3 2 F3 2 ;m43
+A3 2 G#3 2 ;m44
+longtone23(4,A3,6/4,30,75) ;m45
+pp G3 2 ;m46
+C3 2 ;47a
+;repeat forward
+mf A2 2 ;m47b
+longtone23(4,B2,6/4,35,85) ;m48
+A2 2 ;m49
+B2 2 A2 2 ;m50
+G2 2 A2 2 ;m51
+B2 2 B2 2 ;m52
+E2 6/4 ;m53
+B2 2 ;m54
+E2 2 longtone(4,E4,1/2,40,65) ;m55
+longtone23(4,D4,6/4,35,85) ;m56
+E4 2 ;m57
+D4 2 E4 2 ;m58
+F4 2 D4 2 ;m59
+A3 2 D4 2 ;m60
+longtone23(4,C4,6/4,35,85) ;m61
+pp D4 2 ;m62
+C4 2 ;m63a first ending
+;repeat back
+mf A2 2 ;m47b
+longtone23(4,B2,6/4,35,85) ;m48 rep
+A2 2 ;m49
+B2 2 A2 2 ;m50
+G2 2 A2 2 ;m51
+B2 2 B2 2 ;m52
+E2 6/4 ;m53
+B2 2 ;m54
+E2 2 longtone(4,E4,1/2,40,65) ;m55
+longtone23(4,D4,6/4,35,85) ;m56
+E4 2 ;m57
+D4 2 E4 2 ;m58
+F4 2 D4 2 ;m59
+A3 2 D4 2 ;m60
+longtone23(4,C4,6/4,35,85) ;m61
+pp D4 2 ;m62
+C4 2 R 2 ;m64 second ending ; key three flats
+Ab2 4 R 4 F2 4 R 4 ;m65
+Eb2 4 R 4 R 4. F2 8 ;m66
+G2 4 R 4 G2 4 R 4 ;m67
+Ab2 4 R 4 G2 4 R 4 ;m68
+F2 4 R 4 D2 4 R 4 ;m69
+Eb2 4 R 4 R 4. Ab2 8 ;m70
+G2 4 R 4 G2 4 R 4 ;m71
+C2 4 R 4 R 2 ;m72
+C3 4 R 4 Bb2 4 R 4 ;m73
+A2 4 R 4  R 2 ;m74
+R 4. Eb3 8 F3 4 R 8 F2 8 ;m75
+Bb2 4 R 4 Ab3 4 R 4 ;m76
+mf G3 4 R 4 vel 82 F3 4 R 4 ;m77
+forte E3 4 R 4 R 4. vel 82 E3 8 ;m78
+mf F3 4 R 8 Bb2 8 C3 4 R 8 C3 8 ;m79
+F2 4 R 4 D2 4 R 4 ;m80
+Eb2 4 R 4 R 4. F2 8 ;m81
+G2 4. G2 8 G2 4. G2 8 ;m82
+Ab2 2 p G2 2 ;m83
+pp F2 4 R 4 D2 4 R 4 ;m84
+Eb2 4 R 4 R 4. F2 8 ;m85
+G2 4 R 4 vel 38 pizz(4) vel 36 G2 4 R 4 ;m86
+vel 34 C2 4 endpizz(4,43) R 4 R 2 ;m87
+R 1 ;m88
+R 1 ;m89
+R 1 ;m90
+R 2 mp E2 6/4 ;m91
+;m92
+R 1 ;m93
+R 1 ;m94
+;double bar four flats
+R 4 ff F2 2 R 8 
+forte 
+F2 8 ;m95
+E2 8 R 8 ff E2 2 R 8 
+forte 
+E2 8 ;m96
+F2 8 R 8 ff Ab2 2 R 8 
+forte 
+Ab2 8 ;m97
+Bb2 4 R 8 D3 8 C3 4 R 8 E3 8 ;m98
+F3 8 R 8 R 4 ff F3 4. F3 8 ;m99
+E3 4 R 4 ff E3 4. 
+forte 
+E3 8 ;m100
+F3 4 R 4 ff Ab3 4. 
+forte 
+Ab3 8 ;m101
+Bb3 4 R 8 Db4 8 C4 4 R 8 C4 8 ;m102
+F3 8 R 8 R 8 
+forte 
+stac8(F4) ff Ab4 3 
+forte 
+F4 12 D4 12 ;m103
+;repeat forward
+C4 12 G3 12 Eb3 12 C3 8 stac8(Eb4) ff Gb4 3 
+forte 
+Eb4 12 C4 12 ;m104
+Bb3 12 F3 12 Db3 12 Bb2 8 R 8 ff Bb2 3/8 
+forte 
+Bb2 16 Bb2 16 ;m105
+A2 4 R 4 ff A2 3/8 
+forte 
+A2 16 A2 16 ;m106
+Bb2 4 R 8 Db3 16 Db3 16 C3 4 R 8 E3 16 E3 16 ;m107
+F3 4 R 8 ff B2 8 
+forte 
+C3 2 ;m108
+E2 4 R 8 ff B2 8 
+forte 
+C3 2 ;m109
+F2 4 R 8 Ab3 16 Ab3 16 Bb3 4 R 8 E3 16 E3 16 ;m110
+F3 4 R 8 Ab2 16 Ab2 16 Bb2 4 R 8 C3 16 C3 16 ;m111
+F2 8 R 8 R 8 stac8(F4) ff Ab4 3 
+forte 
+F4 12 D4 12 ;m112 first ending
+;repeat back
+C4 12 G3 12 Eb3 12 C3 8 stac8(Eb4) ff Gb4 3 
+forte 
+Eb4 12 C4 12 ;m104
+Bb3 12 F3 12 Db3 12 Bb2 8 R 8 ff Bb2 3/8 
+forte 
+Bb2 16 Bb2 16 ;m105
+A2 4 R 4 ff A2 3/8 
+forte 
+A2 16 A2 16 ;m106
+Bb2 4 R 8 Db3 16 Db3 16 C3 4 R 8 E3 16 E3 16 ;m107
+F3 4 R 8 ff B2 8 
+forte 
+C3 2 ;m108
+E2 4 R 8 ff B2 8 
+forte 
+C3 2 ;m109
+F2 4 R 8 Ab3 16 Ab3 16 Bb3 4 R 8 E3 16 E3 16 ;m110
+F3 4 R 8 Ab2 16 Ab2 16 Bb2 4 R 8 C3 16 C3 16 ;m111
+F2 8 R 8 R 4 R 2 ;m113 second ending
+R 1 ;m114
+p R 8 stac8(G3) Ab3 3 stac12(G3) stac12(F#3) stac12(G3) stac12(Eb3) stac12(C3) ;m115
+G2 8 R 8 R 4 R 2 ;m116
+R 1 ;m117
+R 1 ;m118
+p R 8 stac8(G3) Ab3 3 stac12(G3) stac12(F#3) stac12(G3) stac12(Eb3) stac12(C3) ;m119
+G2 8 R 8 R 4 G2 8 R 8 R 4 ;m120
+C3 8 R 8 R 4 R 2 ;m121
+R 1 ;m122
+R 8 stac8(E3) F3 3 stac12(F3) stac12(E3) stac12(F3) stac12(A3) stac12(C4) ;m123
+stac8(Db4) stac8(Db3) stac8(C3) R 8 R 8 stac8(Bb2) stac8(F2) R 8 ;m124
+R 8 stac8(F2) stac8(Bb2) R 8 R 2 ;m125
+R 1 ;m126
+R 8 stac8(B2) C3 3 stac12(C3) stac12(B2) stac12(C3) stac12(E3) stac12(G3) ;m127
+Ab3 8 stac8(Ab3) stac8(G3) R 8 R 8 stac8(F3) stac8(C3) R 8 ;m128
+R 8 stac8(C3) stac8(F2) R 8 R 2 ;m129
+R 8 stac8(G3) Ab3 3 stac12(G3) stac12(F#3) stac12(G3) stac12(Eb3) stac12(C3) ;m130
+G2 8 R 8 R 4 R 2 ;m131
+p Ab2 2 mp G2 2 ;m132
+F2 8 R 8 R 4 R 2 ;m133
+vel 75 R 8 stac8(G3) vel 70 Ab3 3 vel 70 stac12(G3) vel 65 stac12(F#3) vel 62 stac12(G3) vel 60 stac12(Eb3) vel 58 stac12(C3) ;m134
+vel 55 G2 8 R 8 R 4 vel 48 G2 8 R 8 R 4 ;m135
+vel 40 C2 8 R 8 R 4 ;m136a
+; one flat double bar
+p F2 2 ;m136b
+longtone23(4,Bb2,6/4,30,75) ;m137
+F2 2 ;m138
+Bb2 2 A2 2 ;m139
+G2 2 Bb2 2 ;m140
+D3 2 B2 2 ;m141
+longtone23(4,C3,6/4,30,75) ;m142
+B2 2 ;m143
+C3 2 F2 2 ;m144
+longtone23(4,Bb2,6/4,30,75) ;m145
+F2 2 ;m146
+Bb2 2 A2 2 ;m147
+G2 2 Bb2 2 ;m148
+D3 2 C#3 2 ;m149
+longtone23(4,D3,6/4,30,75) ;m150
+pp C3 2 ;m151
+F2 2 ;m152a double bar
+mf D3 2 ;m152b 
+longtone23(4,E3,6/4,30,75) ;m153
+D3 2 ;m154
+vel 77 E3 2 vel 78 D3 2 ;m155
+vel 80 C3 2 vel 82 D3 2 ;m156
+vel 84 E3 2 vel 80 E2 2 ;m157
+longtone23(4,A2,6/4,30,75) ;m158
+E2 2 ;m159
+A2 2 A4 2 ;m160
+G4 6/4 
+A4 2 ;m162
+G4 2 A4 2 ;m163
+Bb4 2 G4 2 ;m164
+D4 2 longtone(4,G4,1/2,40,65) ;m165
+longtone23(4,F4,6/4,30,75) ;m166
+pp G4 2 ;m167
+F4 2 R 2 ;m168
+; double bar 3 flats
+p pizz(4) Db3 4 R 4 Bb2 4 R 4 ;m169
+Ab2 4 R 4 R 4. Bb2 8 ;m170
+C3 4 R 4 C3 4 R 4 ;m171
+Db3 4 R 4 C3 4 R 4 ;m172
+Bb2 4 R 4 G2 4 R 4 ;m173
+Ab2 4 R 4 R 4. Ab2 16 G2 16 ;m174
+F2 4 R 4 G2 4 R 4 ;m175
+C2 4 R 4 R 2 ;m176
+C3 4 R 4 Bb2 4 R 4 ;m177
+A2 4 R 4 R 2 ;m178
+R 4. Eb3 8 F3 4 R 8 F2 8 ;m179
+Bb2 4 R 4 Ab3 4 R 4 ;m180
+G3 4 R 4 F3 4 R 4 ;m181
+E3 4 R 4 R 4. E3 8 ;m182
+vel 48 F3 4 R 8 Bb2 8 C3 4 R 8 C3 8 ;m183
+vel 46 F2 4 R 4 D2 4 R 4 ;m184
+vel 44 Eb2 4 R 4 R 4. F2 8 ;m185
+vel 42 G2 4 R 8 G2 8 G2 4 R 8 G2 8  ;m186
+Ab2 4 R 4 G2 4 R 4 ;m187
+pp F2 4 R 4 D2 4 R 4 ;m188
+Eb2 4 R 4 R 4. D2 8 ;m189
+Eb2 4 R 4 R 2 ;m190
+R 1 endpizz(4,43) ;m191
+pppp C2 4/1 ;m192
+;193
+;194
+;195
+R 1 ;m196
+
+pp Eb4 1 ;m197
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+

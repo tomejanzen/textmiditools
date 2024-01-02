@@ -1,0 +1,401 @@
+; $Author: janzent $
+; $Log: schuqnt3va.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.12  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.11  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.10  2003/06/03 23:48:55  root
+; narrow stereo field
+;
+; Revision 1.9  2003/06/03 23:11:23  root
+; fix 223 booboo
+;
+; Revision 1.8  2003/05/30 00:26:45  root
+; add portamento to first trio in scherzo
+;
+; Revision 1.7  2003/05/26 18:49:50  root
+; staccatos
+;
+; Revision 1.6  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.5  2003/03/09 21:49:13  root
+; done
+;
+; Revision 1.4  2003/03/05 02:51:30  root
+; fixed accturnto turn acc
+;
+; Revision 1.3  2003/03/05 02:05:48  root
+; dynamics ok
+;
+; Revision 1.2  2003/03/04 03:16:16  root
+; notes and rhythms ok
+;
+; Revision 1.1  2003/03/02 18:42:34  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3va.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3va.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement Scherzo: molto vivace ; Viola
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK VIOLA
+INSTRUMENT Viola
+program(midi_channel_viola,Viola)
+pan(midi_channel_viola,20)
+LAZY
+chan midi_channel_viola
+forte
+R 5/8 ;measure 0
+R 8
+R 2. ;m1
+R 3/8 Eb3 4 stac8b(Eb3) ;m2
+vela stac8b(F3) veld stac8b(G3) velg stac8b(Ab3) velj  stac8b(Bb3) velm stac8b(C4) velp stac8b(D4)  ;m3
+vels stac8b(Eb4) velv stac8b(F4) vely stac8b(G4) velab Ab4 3/8 ;m4
+R 2. ;m5
+forte R 3/8 Bb3 3/8 ;m6
+R 2. ;m7
+R 3/8 Bb3 G4 3/8  ;m8
+R 2. ;m9
+R 5/8 vela stac8b(D3)  ;m10
+veld stac8b(E3) velg stac8b(F#3) velj stac8b(G3) velm  stac8b(A3) velp  stac8b(Bb3) vels stac8b(C4) ;m11
+velv stac8b(D4) vely stac8b(E4) velab stac8b(F#4) velae G4 3/8 ;m12
+R 2. ;m13
+R 5/8 vela stac8b(F3) ;m14
+veld stac8b(G3) velg stac8b(A3) velj stac8b(Bb3) velm stac8b(C4) velp stac8b(D4) vels stac8b(Eb4)  ;m15
+velv stac8b(F4) vely stac8b(G4) velab stac8b(A4) velae Bb4 4 ;m16
+R 8
+R 2. ;m1
+R 3/8 Eb3 4 stac8b(Eb3) ;m2
+vela stac8b(F3) veld stac8b(G3) velg stac8b(Ab3) velj  stac8b(Bb3) velm stac8b(C4) velp stac8b(D4)  ;m3
+vels stac8b(Eb4) velv stac8b(F4) vely stac8b(G4) velab Ab4 3/8 ;m4
+R 2. ;m5
+forte R 3/8 Bb3 3/8 ;m6
+R 2. ;m7
+R 3/8 Bb3 G4 3/8  ;m8
+R 2. ;m9
+R 5/8 vela stac8b(D3)  ;m10
+veld stac8b(E3) velg stac8b(F#3) velj stac8b(G3) velm  stac8b(A3) velp  stac8b(Bb3) vels stac8b(C4) ;m11
+velv stac8b(D4) vely stac8b(E4) velab stac8b(F#4) velae G4 3/8 ;m12
+R 2. ;m13
+R 5/8 vela stac8b(F3) ;m14
+veld stac8b(G3) velg stac8b(A3) velj stac8b(Bb3) velm stac8b(C4) velp stac8b(D4) vels stac8b(Eb4) ;m15
+velv stac8b(F4) vely stac8b(G4) velab stac8b(A4) velae Bb4 4 ;m16
+ ;repeat sign
+vela stac8b(Bb3) 
+veld stac8b(C3) velg stac8b(Db3) velj  stac8b(Eb3) velm   stac8b(F3) velp  stac8b(G3) vels  stac8b(Ab3)  ;m17
+velv stac8b(Bb3) vely  stac8b(C4) velab  stac8b(Db4) velae  Eb4 4 forte stac8b(Eb3)  ; m18
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4)  ;m19
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 vela stac8b(C3) ;m20
+veld stac8b(D3) velg  stac8b(E3) velj  stac8b(F3) velm  stac8b(G3) velp  stac8b(A3) vels  stac8b(Bb3)  ;m21
+velv stac8b(C4) velab  stac8b(D4) velae  stac8b(E4)  F4 4 forte stac8b(F3)  ;m22
+stac8b(G3) stac8b(A3) stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) ;m23
+stac8b(F4) stac8b(G4) stac8b(A4) Bb4 4 pp stac8b(Bb3) ;m24
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m25
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) mf stac8b(Ab3) ;m26
+pp stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) ;m27
+stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) mf stac8b(G3) ;m28
+vel 50 stac8b(A3) stac8b(B3) stac8b(C4) vel 54 stac8b(D4) stac8b(E4) stac8b(F4) ;m29
+vel 58 stac8b(G4) stac8b(A4) stac8b(B4) vel 62 C5 4 stac8b(Bb4) ;m30
+vel 66  mordent4(A4,Bb4) stac8b(G4) vel 70 mordent4(F4,G4) stac8b(Eb4)  ;m31
+vel 74 mordent4(D4,Eb4) stac8b(C4) vel 78 Bb3 4 stac8b(Bb3)  ;m32
+vel 82 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) vel 86 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m33
+vel 90 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) vel 94 Eb4 4 forte stac8b(Eb3) ;m34
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4)  ;m35
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Ab3) ;m36
+stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) F4 8 stac8b(G4) ;m37
+stac8b(Ab4) stac8b(Bb4) stac8b(C5) D5 4 stac8b(`Bb3 Bb4')  ;m38
+stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4')   ;m39
+stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') Bb3 Bb4 4 stac8b(Eb3) ;m40
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(Db4) ;m41
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Bb3) ;m42
+stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4) stac8b(Ab4) ;m43
+stac8b(Bb4) stac8b(C5) stac8b(D5) stac8b(Eb5) R 8 ;m44a
+vela stac8b(Bb3) 
+veld stac8b(C3) velg stac8b(Db3) velj  stac8b(Eb3) velm   stac8b(F3) velp  stac8b(G3) vels  stac8b(Ab3)  ;m17
+velv stac8b(Bb3) vely  stac8b(C4) velab  stac8b(Db4) velae  Eb4 4 forte stac8b(Eb3)  ; m18
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4)  ;m19
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 vela stac8b(C3) ;m20
+veld stac8b(D3) velg  stac8b(E3) velj  stac8b(F3) velm  stac8b(G3) velp  stac8b(A3) vels  stac8b(Bb3)  ;m21
+velv stac8b(C4) velab  stac8b(D4) velae  stac8b(E4)  F4 4 forte stac8b(F3)  ;m22
+stac8b(G3) stac8b(A3) stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) ;m23
+stac8b(F4) stac8b(G4) stac8b(A4) Bb4 4 p stac8b(Bb3) ;m24
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m25
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) mf stac8b(Ab3) ;m26
+p stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) ;m27
+stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) mf stac8b(G3) ;m28
+vel 50 stac8b(A3) stac8b(B3) stac8b(C4) vel 54 stac8b(D4) stac8b(E4) stac8b(F4) ;m29
+vel 58 stac8b(G4) stac8b(A4) stac8b(B4) vel 62 C5 4 stac8b(Bb4) ;m30
+vel 66  mordent4(A4,Bb4) stac8b(G4) vel 70 mordent4(F4,G4) stac8b(Eb4)  ;m31
+vel 74 mordent4(D4,Eb4) stac8b(C4) vel 78 Bb3 4 stac8b(Bb3)  ;m32
+vel 82 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) vel 86 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m33
+vel 90 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) vel 94 Eb4 4 forte stac8b(Eb3) ;m34
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4)  ;m35
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Ab3) ;m36
+stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4) ;m37
+stac8b(Ab4) stac8b(Bb4) stac8b(C5) D5 4 stac8b(`Bb3 Bb4')  ;m38
+stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4')   ;m39
+stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') Bb3 Bb4 4 stac8b(Eb3) ;m40
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(Db4) ;m41
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Bb3) ;m42
+stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4) stac8b(Ab4) ;m43
+stac8b(Bb4) stac8b(C5) stac8b(D5) stac8b(Eb5) R 8 ;m44a
+;repeat sign 
+;Trio I
+R 8 ;44b
+R 2. ;m45
+R 2. ;m46
+p porttrailingdown38(3,Gb4,50) B3 3/8  ;m47
+Db4 3/8 Gb3 3/8 ;m48
+B3 5/8 Db4 8 ;m49
+Bb3 3/8 Gb3 3/8 ;m50
+mp porttrailingdown38(3,Gb4,62) p B3 3/8  ;m51
+Db4 3/8 Gb3 3/8 ;m52
+B3 5/8 Db4 8 ;m53
+Bb3 3/8 R 3/8 ;m54
+mp porttrailingdown38(3,Gb4,50) p B3 3/8  ;m55
+Db4 3/8 Gb3 3/8 ;m56
+B3 5/8 Db4 8 ;m57
+Bb3 3/8 Gb3 3/8 ;m58
+mp porttrailingdown38(3,Gb4,50) p  B3 3/8  ;m59
+Db4 3/8 Gb3 3/8 ;m60
+R 2. ;m61 begin repeat
+R 2. ;m62
+mp porttrailingdown38(3,F4,50) p Bb3 3/8 ;m63
+C4 3/8 F3 3/8 ;m64
+Bb3 5/8 Db4 8  ;m65
+decresctone(3,F4,9/4,50,25) ;m66
+;m67
+;m68
+R 2. ;m69
+R 2. ;m70
+pp porttrailingdown38(3,Gb4,40) B3 3/8 ;m71
+Db4 3/8 Gb3 3/8 ;m72
+B3 5/8 Db4 8 ;m73
+Bb3 3/8 Gb3 3/8 ;m74
+porttrailingdown38(3,Gb4,40) B3 3/8 ;m75
+Db4 3/8 Gb3 3/8 ;m76 first ending
+R 2. ;m61 begin repeat
+R 2. ;m62
+mp porttrailingdown38(3,F4,50) p Bb3 3/8 ;m63
+C4 3/8 F3 3/8 ;m64
+Bb3 5/8 Db4 8  ;m65
+decresctone(3,F4,9/4,50,25) ;m66 rep
+;m67
+;m68
+R 2. ;m69
+R 2. ;m70
+pp porttrailingdown38(3,Gb4,40) B3 3/8 ;m71
+Db4 3/8 Gb3 3/8 ;m72
+B3 5/8 Db4 8 ;m73
+Bb3 3/8 Gb3 3/8 ;m74
+porttrailingdown38(3,Gb4,40) B3 3/8 ;m75
+Db4 3/8 Gb3 8 R 4 ;m77 second ending
+R 5/8 stac8b(Bb3)  ;m78
+vel 40 stac8b(Bb3) vel 49 stac8b(Bb3) vel 58 stac8b(Bb3) vel 67 stac8b(Bb3) vel 76 stac8b(Bb3) vel 85 stac8b(Bb3) ;m79
+forte stac8b(C3) stac8b(D3) stac8b(Eb3) vel 93 stac8b(F3) vel 96  stac8b(G3) vel 100 stac8b(Ab3) ;m80
+vel 103  stac8b(G3) vel 106 stac8b(Ab3) vel 109 stac8b(Bb3) vel 112 Eb4 4 forte stac8b(Eb3) ;m81
+vel 60 stac8b(F3) vel 63 stac8b(G3) vel 66 stac8b(Ab3) vel 69 stac8b(Bb3) vel 72 stac8b(C4) vel 75 stac8b(D4)  ;m82
+vel 78 stac8b(Eb4) vel 81 stac8b(F4) vel 84 stac8b(G4) vel 87 Ab4 3/8 ;m83
+R 2. ;m84
+forte R 3/8 Bb3 3/8 ;m85
+R 2. ;m86
+R 3/8 Bb3 G4 3/8 ;m87
+R 2. ;m88
+R 5/8 forte stac8b(D3) ;m89
+vela stac8b(E3) veld stac8b(F#3) velg stac8b(G3) velj stac8b(A3) velm  stac8b(Bb3) velp stac8b(C4) ;m90
+vels  stac8b(D4) velv  stac8b(E4) vely stac8b(F#4) velab G4 3/8 ;m91
+R 2. ;m92
+R 5/8 ff stac8b(F3) ;m93
+vela stac8b(G3) veld stac8b(A3) velg stac8b(Bb3) velj stac8b(C4) velm stac8b(D4) velp stac8b(Eb4) ;m94
+vels stac8b(F4) velv stac8b(G4) vely stac8b(A4) velab Bb4 4 forte stac8b(Bb3) ;m95
+vela stac8b(C3) veld stac8b(Db3) velg stac8b(Eb3) velj stac8b(F3) velm stac8b(G3) velp stac8b(Ab3) ;m96
+vels stac8b(Bb3) velv stac8b(C4) vely stac8b(Db4) velab Eb4 4 vela stac8b(Eb3) ;m 97
+forte stac8b(F3)  stac8b(G3)  stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(Db4) ;m98
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(C3) ;m99
+vela stac8b(D3) veld stac8b(E3) velg stac8b(F3) velj stac8b(G3) velm stac8b(A3) velp stac8b(Bb3) ;m100
+vels stac8b(C4) velv  stac8b(D4) vely  stac8b(E4) velab F4 4 forte stac8b(F3)  ;m101
+stac8b(G3) stac8b(A3) stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4)  ;m102
+stac8b(F4) stac8b(G4) stac8b(A4) Bb4 4 p stac8b(Bb3) ;m103
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3)  ;m104
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) mf stac8b(Ab3)  ;m105
+p stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3)  ;m106
+stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) mf stac8b(G3)  ;m107
+p stac8b(A3) vel 53 stac8b(B3) vel 56 stac8b(C4) vel 59 stac8b(D4) vel 62 stac8b(E4) vel 65 stac8b(F4)  ;m108
+vel 68 stac8b(G4) velf 71 stac8b(A4) vel 74 stac8b(B4) vel 75 C5 4 stac8b(Bb4)  ;m109
+vel 80 mordent4(A4,Bb4) stac8b(G4) vel 85 mordent4(F4,G4) stac8b(Eb4) ;m110
+forte mordent4(D4,Eb4) stac8b(C4) Bb3 4 stac8b(Bb3) ;m111
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m112
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) Eb4 4 stac8b(Eb3) ;113
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4)  ;m114
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Ab3) ;m115
+stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4)  ;m116
+stac8b(Ab4) stac8b(Bb4) stac8b(C5) D5 4 stac8b(`Bb3 Bb4') ;m117
+stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') ;m118
+stac8b(`Bb3 Bb4')  stac8b(`Bb3 Bb4') stac8b(`Bb3 Bb4') Bb3 Bb4 4 stac8b(Eb3) ;m119
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(Db4) ;m120
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Bb3)  ;m121
+stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4) stac8b(Ab4) ;m122
+stac8b(Bb4) stac8b(C5) stac8b(D5) ff stac8b(Eb5) R 8 R 8 ;m123A
+; 2/4 Trio II
+R 2 ;m123B
+R 2 ;m124
+R 2 ;m125
+R 2 ;m126
+R 2 ;m127
+R 2 ;m128
+R 2 ;m129
+R 2 ;m130
+R 4 mf turn(B3,C#4,A3) ;m131
+turn(G#3,A3,E3) turn(E4,F#4,D#4)  ;m132
+turn(C#4,D#4,A3) turn(F#3,G#3,E3) ;m133
+turn(D#3,E3,B3) turn(B3,C#4,A3) ;m134
+turn(G#3,A3,E3) vel 85 bowtrem4_68(E4) ;m135
+bowtrem4_68(E4) bowtrem4_68(`F#4 A4') ;m136
+bowtrem4_68(`F#4 A4') bowtrem4_68(F#4) ;m137
+bowtrem4_68(F#4) bowtrem4_68(E4) ;m138
+bowtrem4_68(E4) ff turn(Eb4,F4,Db4) ;m139
+turn(B3,Db4,Ab3) turn(Ab4,A4,Gb4) ;m140
+turn(Fb5,Gb5,Db5) turn(Bb4,B4,Ab4) ;m141
+turn(G4,Ab4,Eb4) turn(Eb5,E5,Db5) ;m142
+turn(B3,Db4,Ab3) turn(Eb4,E4,Db4) ;m143
+turn(B3,Db4,Ab3) turn(Ab4,A4,Gb4)  ;m144
+turn(Gb4,Ab4,Db4) turn(Bb3,B3,Ab3) ;m145
+turn(G3,Ab3,Eb3) turn(Eb4,E4,Db4) ;m146
+turn(B3,Db4,Ab3) R 4 ;m147
+p pizz(3) R 8 vel 60 Ab4 8 vel 68 Gb4 8 vel 76 F4 8 ;m148
+vel 84 Eb4 8 R 3/8 ;m149
+R 2 ;m150
+R 2 ;m151
+R 8 vel 70 B3 8 vel 78 Bb3 8 vel 86 Ab3 8 ;m152
+vel 94 Gb3 8 endpizz(3,42) R 3/8 ;m153
+R 2 ;m154
+R 2 ;m155
+R 2 ;m156
+R 2 ;m157
+R 2 ;m158
+R 4 B3 8 B3 8 ;m159
+R 4 vel 60 E3 8 E3 8 ;m160
+vel 70 R 4 F#3 8 F#3 8 ;m161
+vel 80 R 4 B3 8 B3 8 ;m162
+forte R 4 turn(C#4,D4,B3) ;m163
+turn(A3,B3,F#3) turn(F#4,G4,E4)  ;m164
+turn(D4,E4,B3) turn(G#3,A3,F#3)  ;m165
+turn(F3,F#3,C#3) turn(C#4,D4,B3) ;m166
+turn(A3,B3,F#3) turn(C#4,D4,B3)  ;m167
+turn(A3,B3,F#3) turn(F#4,G4,E4) ;m168
+turn(D4,E4,B3) turn(G#3,A3,F#3) ;m169
+turn(F3,F#3,C#3) turn(C#4,D4,B3) ;m170
+turn(A3,B3,F#3) R 4 ;m171
+p pizz(3) R 8 vel 60 F#4 8 vel 68 E4 8 vel 76 D#4 8 ;m172
+vel 84 C#4 8 R 8 R 4 ;m173
+R 2 ;m174
+R 2 ;m175
+R 8 vel 70 Ab4 8 vel 78 Gb4 8 vel 86 F4 8 ;m176
+vel 94 Eb4 8 endpizz(3,42) R 3/8 ;m177
+R 2 ;m178
+R 2 ;m179
+ff Db4 8 forte Db4 8 R 4 ;m180
+ff Db4 8 forte Db4 8 R 4 ;m181
+ff C4 8 forte C4 8 R 4 ;m182
+ff Db4 8 forte Db4 8 ff turn(Eb4,E4,Db4)  ;m183
+turn(B3,Db4,Ab3) turn(Ab4,A4,Gb4) ;m184
+turn(E4,Gb4,Db4) turn(Bb3,B3,Ab3) ;m185
+turn(G3,Ab3,Eb3) turn(Eb4,E4,Db4) ;m186
+turn(B3,Db4,Ab3) turn(Eb4,Fb4,Db4) ;m187
+turn(B3,Db4,Ab3) turn(Ab4,A4,Gb4) ;m188
+turn(E4,Gb4,Db4) turn(Bb3,B3,Ab3) ;m189
+turn(G3,Ab3,Eb4) turn(Eb4,E4,Db4) ;m190
+turn(B3,Db4,Ab3) turnacc(Eb3,E3,Db3) ;m191
+ff turn(B3,Db4,Bb3) turn(Ab3,Bb3,Gb3) ;m192
+turn(Fb3,Gb3,Eb3) turn(Db3,Eb3,B3)  ;m193
+turn(Bb3,B3,A3) turn(Bb3,B3,A3) ;m194
+turn(Bb3,B3,A3) turn(Bb3,B3,A3) ;m195
+ff Bb3 12 ff Bb3 12 Bb3 12 Bb3 12 Bb3 12 Bb3 12 ;m196
+ff Bb3 12 ff Bb3 12 Bb3 12 fff Bb3 12 ff Bb3 12 Bb3 12 ;m197
+vela stac8b(C3) veld stac8b(D3) velg stac8b(Eb3) velj stac8b(F3) velm  stac8b(G3) velp  stac8b(Ab3)  ;m198
+vels stac8b(Bb3) velv stac8b(C4) vely  stac8b(D4) velab  Eb4 4 forte stac8b(Eb3) ;m199
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4)  ;m200
+stac8b(Eb4) stac8b(F4) stac8b(G4) ff Ab4 3/8 ;m201
+R 2. ;m202
+R 3/8 forte Bb3 3/8 ;m203 
+R 2. ;m204
+R 3/8 Bb3 G4 3/8 ;m205
+R 2.   ;m206
+R 5/8 ff stac8b(D3) ;m207
+forte stac8b(E3) vel 63 stac8b(F#3) vel 66 stac8b(G3) vel 69 stac8b(A3) vel 69 stac8b(Bb3) vel 72 stac8b(C4) ;m208
+vel 75 stac8b(D4) vel 78 stac8b(E4) vel 81 stac8b(F#4) vel 84 G4 3/8  ;m209
+R 2. ;m210
+R 5/8 F3 8 ;m211
+vela stac8b(G3) veld stac8b(A3) velg  stac8b(Bb3) velj stac8b(C4) velm stac8b(D4) velp stac8b(Eb4) ;m212
+vels stac8b(F4) velv stac8b(G4) vely stac8b(A4) velab Bb4 4 forte stac8b(Bb3) ;m213
+stac8b(C3) stac8b(Db3) stac8b(Eb3) stac8b(F3) stac8b(G3) stac8b(Ab3) ;m214
+stac8b(Bb3)  stac8b(C4)  stac8b(Db4)  ff Eb4 4 forte stac8b(Eb3)  ;m215
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(Db4) ;m216
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(C3) ;m217
+vela stac8b(D3) veld stac8b(E3) velg stac8b(F3) velj stac8b(G3) velm stac8b(A3) velp stac8b(Bb3) ;m218
+vels stac8b(C4) velv stac8b(D4) vely stac8b(E4) velab F4 4 forte stac8b(F3) ;m219
+stac8b(G3) stac8b(A3) stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) ;m220
+stac8b(F4) stac8b(G4) stac8b(A4) Bb4 4 p stac8b(Bb3) ;m221
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3)  ;m222
+stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) mp stac8b(Ab3) ;m223
+p stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) ;m224
+stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) mp stac8b(G3) ;m225
+p stac8b(A3) stac8b(B3) stac8b(C4) stac8b(D4) stac8b(E4) stac8b(F4) ;m226
+stac8b(G4) stac8b(A4) stac8b(B4) C5 4 mf stac8b(Bb4) ;m227
+p mordent4(A4,Bb4) stac8b(G4) vel 50 mordent4(F4,G4) stac8b(Eb4)  ;m228
+vel 55 mordent4(D4,Eb4) stac8b(C4) vel 65 Bb3 4 stac8b(Bb3) ;m229
+vel 70 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) vel 75 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m230
+vel 80 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) vel 90 Eb4 4 forte stac8b(Eb3) ;m231
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(D4) ;m232
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Ab3) ;m233
+stac8b(Bb3) stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4) ;m234 *
+stac8b(Ab4) stac8b(Bb4) stac8b(C5) D5 4 stac8b(`Bb2 Bb3') ;m235
+stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3')  ;m236
+stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3') stac8b(`Bb2 Bb3') Bb2 Bb3 4 stac8b(Eb3) ;m237
+stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(Bb3) stac8b(C4) stac8b(Db4) ;m238
+stac8b(Eb4) stac8b(F4) stac8b(G4) Ab4 4 stac8b(Bb3) ;m239
+stac8b(C4) stac8b(D4) stac8b(Eb4) stac8b(F4) stac8b(G4) stac8b(Ab4) ;m240
+stac8b(Bb4) stac8b(C5) stac8b(D5) ff Eb5 8. R 8. ;m241
+R 2. ;m242
+R 2. ;m243
+R 2. ;m244
+R 5/8 ff F#4 10/8 ;m245
+;m246
+stac8b(G4) R 4 ;m247
+R 2. ;m248
+R 5/8 F#4 10/8 ;m249
+;m250
+stac8b(G4) R 8 Ab4 10/8 ;m251
+;m252
+p Ab3 3/4 ;m253
+fff stac8b(Ab3) stac8b(G3) stac8b(F3) ;m254
+forte stac8b(E3) stac8b(F3) stac8b(G3) stac8b(Ab3) stac8b(G3) stac8b(F3) ;m255
+fff stac8b(E3) stac8b(F3) stac8b(G3) vel 75 stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) ;m256 75 to 110
+vel 80 stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) ;m257
+vel 85 stac8b(Ab3) stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) ;m258
+vel 90 stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) stac8b(Ab4) ;m259
+vel 95 G4 4 R 8 R 3/8 ;m260
+vel 100 G4 3/8 Bb3 3/8 ;m261
+vel 105 Eb4 3/8 G3 3/8 ;m262
+vel 110 Bb3 3/8 Bb3 3/8 
+Eb4 4 R 2
+Eb3 Bb3 G4 4 R 2
+Eb3 2.
+END_LAZY
+DELAY 10 END_OF_TRACK
+

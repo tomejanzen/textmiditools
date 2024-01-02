@@ -1,0 +1,173 @@
+; $Author: janzent $
+; $Log: schuqnt3pt.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.6  2003/05/05 00:36:12  root
+; pedals dynamics
+;
+; Revision 1.5  2003/03/09 21:48:48  root
+; done
+;
+; Revision 1.4  2003/03/05 02:53:18  root
+; dynamics
+;
+; Revision 1.3  2003/03/01 02:39:31  root
+; probably done
+;
+; Revision 1.2  2003/02/28 01:21:17  root
+; DELAY not a lazy statement
+;
+; Revision 1.1  2003/02/28 00:37:54  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pt.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3pt.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3pt.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pt.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement ; Piano Third hand or more
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Third Hand
+INSTRUMENT Piano
+PROGRAM midi_channel_piano AcousticGrandPiano
+pan(midi_channel_piano,0)
+LAZY
+chan midi_channel_piano
+ff
+R 5/8 ;pickup
+R 8
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 
+R 8
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 
+;to first repeat sign ;m16
+R 1/8 ; after first repeat sign
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m28
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2.  ;m39
+ff R 5/8 Db4 8 ;m40
+C4 8 R 5/8 ;m41
+R 5/8 Bb2 4 ;m42
+R 5/8 ;m43
+R 5/8 ;m44 repeat sign backwards
+R 1/8 ; after first repeat sign
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m28
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2.  ;m39
+ff R 5/8 Db4 8 ;m40
+C4 8 R 5/8 ;m41
+R 5/8 Bb2 4 ;m42
+R 5/8 ;m43
+R 5/8 ;m44 repeat sign backwards
+R 1/8 ;m44 past repeat sign
+R 16 damperdown R 9/16 damperup R 8 ;m45
+R 16 damperdown R 9/16 damperup R 8 ;m46
+R 16 damperdown R 9/16 damperup R 8 ;m47
+R 16 damperdown R 9/16 damperup R 8 ;m48
+R 16 damperdown R 9/16 damperup R 8 ;m49
+R 16 damperdown R 9/16 damperup R 8 ;m50
+R 16 damperdown R 9/16 damperup R 8 ;m51
+R 16 damperdown R 9/16 damperup R 8 ;m52
+R 16 damperdown R 9/16 damperup R 8 ;m53
+R 16 damperdown R 9/16 damperup R 8 ;m54
+R 16 damperdown R 9/16 damperup R 8 ;m55
+R 16 damperdown R 9/16 damperup R 8 ;m56
+R 16 damperdown R 9/16 damperup R 8 ;m57
+R 16 damperdown R 9/16 damperup R 8 ;m58
+R 16 damperdown R 9/16 damperup R 8 ;m59
+R 16 damperdown R 9/16 damperup R 8 ;m60
+R 16 damperdown R 9/16 damperup R 8 ;m61
+R 16 damperdown R 9/16 damperup R 8 ;m62
+R 16 damperdown R 9/16 damperup R 8 ;m63
+R 16 damperdown R 9/16 damperup R 8 ;m64
+R 16 damperdown R 9/16 damperup R 8 ;m65
+R 16 damperdown R 9/16 damperup R 8 ;m66
+R 16 damperdown R 9/16 damperup R 8 ;m67
+R 16 damperdown R 9/16 damperup R 8 ;m68
+R 16 damperdown R 9/16 damperup R 8 ;m69
+R 16 damperdown R 9/16 damperup R 8 ;m70
+R 16 damperdown R 9/16 damperup R 8 ;m71
+R 16 damperdown R 9/16 damperup R 8 ;m72
+R 16 damperdown R 9/16 damperup R 8 ;m73
+R 16 damperdown R 9/16 damperup R 8 ;m74
+R 16 damperdown R 9/16 damperup R 8 ;m75
+
+R 16 damperdown R 9/16 damperup R 8  ;m76 first ending
+R 16 damperdown R 9/16 damperup R 8 ;m61
+R 16 damperdown R 9/16 damperup R 8 ;m62
+R 16 damperdown R 9/16 damperup R 8 ;m63
+R 16 damperdown R 9/16 damperup R 8 ;m64
+R 16 damperdown R 9/16 damperup R 8 ;m65
+R 16 damperdown R 9/16 damperup R 8 ;m66
+R 16 damperdown R 9/16 damperup R 8 ;m67
+R 16 damperdown R 9/16 damperup R 8 ;m68
+R 16 damperdown R 9/16 damperup R 8 ;m69
+R 16 damperdown R 9/16 damperup R 8 ;m70
+R 16 damperdown R 9/16 damperup R 8 ;m71
+R 16 damperdown R 9/16 damperup R 8 ;m72
+R 16 damperdown R 9/16 damperup R 8 ;m73
+R 16 damperdown R 9/16 damperup R 8 ;m74
+R 16 damperdown R 9/16 damperup R 8 ;m75
+
+R 16 damperdown R 9/16 damperup R 8 ;m77 second ending
+END_LAZY barsrest68(41) ;41 measures rest
+LAZY
+R 5/8 Db4 8  ;m121
+C4 8 R 5/8 ;m120
+R 5/8 Ab3 8 ;m121
+G3 8 R 5/8 ;m122
+R 2. ;m123
+R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2
+fff R 4 B4 4 ;m143
+Ab4 4 E5 4 ;m144
+Db5 4 G4 4
+Eb4 4 B4 4
+Ab4 4 R 4
+R 2
+R 2
+E5 4 R 4
+R 2
+R 2
+R 2
+G5 4 R 4
+R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 ;19 bars
+mf D5 4 R 4 ;m174
+R 2 R 2 R 2 ;m175,176,177
+E5 4 R 4 ;m178
+R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 ;m179-186
+fff R 4 B4 4
+Ab4 4 E5 4
+Db5 4 G4 4
+Eb4 4 B4 4
+Ab4 4 R 4
+R 2 R 2 R 2 R 2 R 2 R 2 
+;m198
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. rm68
+R 5/8 forte Db4 8
+C4 8 R 5/8
+R 5/8 Bb2 4
+R 5/8
+R 2. ;m241
+R 2. R 2. R 2. 
+R 5/8 Eb2 3/8
+R 2
+rm68
+rm68
+R 5/8 Eb2 3/8
+R 2
+R 5/8 Eb2 3/8
+R 2
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. rm68
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+

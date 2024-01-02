@@ -1,0 +1,3708 @@
+; $Author: janzent $
+; $Log: schuqnt3.m4,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.17  2003/11/09 18:23:20  root
+; add ppp macro
+;
+; Revision 1.16  2003/08/07 01:04:11  root
+; long tones, decresc, cresc, etc.
+;
+; Revision 1.15  2003/05/30 09:33:41  root
+; added portamento to second trio
+;
+; Revision 1.14  2003/05/30 00:27:10  root
+; add portamento macro
+;
+; Revision 1.13  2003/05/25 16:42:51  root
+; hi
+;
+; Revision 1.12  2003/05/25 16:41:39  root
+; worked on chaeating the quavers to be staccato
+;
+; Revision 1.11  2003/05/05 00:36:12  root
+; pedals dynamics
+;
+; Revision 1.10  2003/04/24 00:39:11  root
+; added pan and program macros, internal macro
+;
+; Revision 1.9  2003/03/15 05:16:08  root
+; don't includ click track; it creates a dead track in the midi file
+;
+; Revision 1.8  2003/03/11 23:36:14  root
+; duplicate oct4
+;
+; Revision 1.7  2003/03/09 21:40:44  root
+; done
+;
+; Revision 1.6  2003/03/04 03:16:40  root
+; done
+;
+; Revision 1.5  2003/03/02 22:19:50  root
+; rhythms ok excep t maybe last change to 6/8
+;
+; Revision 1.4  2003/03/01 02:39:21  root
+; added v1
+;
+; Revision 1.3  2003/02/28 01:21:42  root
+; done drafting all piano
+;
+; Revision 1.2  2003/02/27 02:35:27  root
+; some cleaning
+;
+; Revision 1.1  2003/02/24 01:53:56  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3.m4,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3.m4,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3.m4,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3.m4,v $
+; $State: Exp $
+; Schumann Quintet third movement top level.
+;
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; pan is -64 to 63; 0 is center; LEFT CENTER RIGHT should work too.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; pass in channel, bend amount 0 to 8k-1
+;
+
+; mordent(note1, note2, rhythm1, rhythm2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; pass in channel, pitchname, velocity
+
+
+ ; pass in channel, pitchname, velocity
+
+
+
+
+;decresctone(channel,pitch,len_in_whole_notes,startvel,endvel)
+
+
+;decresctonestop(channel,pitch,len_in_whole_notes,startvel,endvel,pitch2)
+
+
+;longtone(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+;longtonestop(channel,pitch,len_in_whole_notes,startvel,midvel,pitch2)
+
+
+;longtonefront(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+;longtone23 lopsided 2/3 cresc 1/3 decresc
+;longtone23(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+;sound card ppp is almost too quiet to hear so promote it to pp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;cresctone(3,D4,1,1,127)
+;cresctone(channel,pitch,len_in_whole_notes,startvel,endvel)
+
+
+ 
+
+;longtone27 lopsided 2/3 cresc 1/3 decresc
+;longtone27(channel,pitch,len_in_whole_notes,startvel,midvel)
+
+
+
+
+
+
+
+
+FILEHEADER 8 240
+
+; $Author: janzent $
+; $Log: schuqnt3tempo.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.11  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.10  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.9  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.8  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.7  2003/05/02 01:40:15  root
+; adjustments, elsticity
+;
+; Revision 1.6  2003/04/22 00:16:11  root
+; keys
+;
+; Revision 1.5  2003/03/23 01:24:58  root
+; fix channel to 8
+;
+; Revision 1.4  2003/03/09 21:49:02  root
+; done
+;
+; Revision 1.3  2003/02/27 23:50:37  root
+; put END_LAZY around tempo and signatures
+;
+; Revision 1.2  2003/02/27 02:36:28  root
+; some cleaning
+;
+; Revision 1.1  2003/02/24 01:53:28  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3tempo.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3tempo.txt,v $
+; $State: Exp $
+; Schumann Quintet 3rd movement tempo track
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Tempo Track
+TEMPO 207 ; 138 for dotted quarter but MIDI wants a quarter note tempo
+TIME_SIGNATURE 6 8 240
+KEY_SIGNATURE Eb
+TEXT Robert Schuman: Quintet for piano, 2 violins, viola, and cello Op. 44
+TEXT III: Molto vivace.
+TEXT This rendering was sequenced by Thomas Janzen and coached by New England violist and teacher Jennifer Stirling.
+TEXT Output of textmidi lexical analyzer by Thomas Janzen.
+TEXT "Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+LAZY 
+chan 10
+vel 5
+D2 8
+R 5/8 ;pickup measure 0
+END_LAZY TEMPO 207 LAZY R 8 ;measure 0 part of repeat
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 ;repeat sign m16
+R 8 ; start of repeat
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 ;end of second repeat
+R 1/8 R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8
+R 1/8 R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 4/8 end second repeat of second repeated second
+END_LAZY TEMPO 51 LAZY
+R 8
+END_LAZY TEMPO 207 LAZY
+R 1/8 
+END_LAZY TEMPO 196 LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+;begin repeat at m61
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2.  ;first ending
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. ;second ending second repeat of m61-76/77
+END_LAZY TEMPO 207 LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ; first bar 123
+END_LAZY TEMPO 138 
+TIME_SIGNATURE 2 4 240 LAZY
+END_LAZY KEY_SIGNATURE Ab LAZY END_LAZY TEMPO 69 LAZY R 4 END_LAZY TEMPO 138 LAZY R 4 ; second bar 123
+R 14/4
+R 1/4 ; m131a
+END_LAZY KEY_SIGNATURE E LAZY
+R 1/4 ;m131b
+R 14/4 ;m132-138
+R 1/4 ;m139a
+END_LAZY KEY_SIGNATURE Ab LAZY
+R 1/4 ;m139b
+
+R 102/4 ;m140-190
+R 4 ;m191a
+END_LAZY TEMPO 130 LAZY
+R 4 ;m191b
+
+R 12/4 ;m192-m197
+
+END_LAZY TIME_SIGNATURE 6 8 240 LAZY
+END_LAZY KEY_SIGNATURE Eb LAZY
+END_LAZY TEMPO 207 LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2.  ;m231
+END_LAZY TEMPO 199 LAZY
+R 2.  ;m232
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m233-240
+R 2. R 2. 
+END_LAZY TEMPO 207 LAZY
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m243-250
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m251-260
+R 2. ;m261
+R 2. R 2. R 2. R 2. R 2.  ;m266
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+; $Author: janzent $
+; $Log: schuqnt3v1.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.19  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.18  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.17  2003/06/03 23:48:55  root
+; narrow stereo field
+;
+; Revision 1.16  2003/05/30 09:33:41  root
+; added portamento to second trio
+;
+; Revision 1.15  2003/05/30 00:26:45  root
+; add portamento to first trio in scherzo
+;
+; Revision 1.14  2003/05/26 21:43:31  root
+; balace balance
+;
+; Revision 1.13  2003/05/26 18:49:50  root
+; staccatos
+;
+; Revision 1.12  2003/05/25 16:41:13  root
+; staccato implied
+;
+; Revision 1.11  2003/05/06 00:50:17  root
+; bring 124 down to mp
+;
+; Revision 1.10  2003/05/02 01:40:04  root
+; adjust
+;
+; Revision 1.9  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.8  2003/03/09 21:49:11  root
+; done
+;
+; Revision 1.7  2003/03/05 02:05:59  root
+; dynamics ok
+;
+; Revision 1.6  2003/03/04 03:16:03  root
+; dynamics
+;
+; Revision 1.5  2003/03/02 22:14:23  root
+; rhythm ok
+;
+; Revision 1.4  2003/03/02 20:50:29  root
+; minor fixes
+;
+; Revision 1.3  2003/03/02 19:25:12  root
+; random checkin
+;
+; Revision 1.2  2003/03/01 16:53:23  root
+; added measure numbers
+;
+; Revision 1.1  2003/03/01 02:23:56  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3v1.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3v1.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3v1.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3v1.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement ; Violin 1
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK FIRST VIOLIN
+INSTRUMENT VIOLIN
+PROGRAM 1 41
+PAN 1 -20
+LAZY
+chan 1
+forte
+R 5/8 ;m1
+R 1/8 ; start of repeat
+R 2. ;measure 1
+R 3/8 G3 Eb4 3/8 ;m2
+R 2. ;m3
+R 3/8 C4 Ab4 3/8 ;m4
+R 2. ;m5
+R 3/8 F4 D5 4 Bb4 12 R 24 ;m6
+C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 ;m7
+Bb5 12 R 24 C6 12 R 24 D6 12 R 24 Eb6 3/8 ;m8
+R 2. ;m9
+R 5/8 ff D4 4 ;m10
+vel 45 D4 12 R 24 vel 50 D4 12 R 24 vel 55  D4 12 R 24 vel 60 D4 12 R 24 vel 65 D4 12 R 24 ;m11
+vel 70 D4 12 R 24 vel 75 D4 12 R 24 vel 80 D4 12 R 24 G4 4 R 8 ;m12
+R 2. ;13 
+R 5/8 F4 4 ;14
+vel 45 F4 12 R 24 vel 50 F4 12 R 24 vel 55 F4 12 R 24 vel 60 F4 12 R 24 vel 65 F4 12 R 24 ;15
+vel 70 F4 12 R 24 vel 75 F4 12 R 24 vel 80 F4 12 R 24 D4 Bb4 4 ;m16
+R 1/8 ; start of repeat
+R 2. ;measure 1
+R 3/8 G3 Eb4 3/8 ;m2
+R 2. ;m3
+R 3/8 C4 Ab4 3/8 ;m4
+R 2. ;m5
+R 3/8 F4 D5 4 Bb4 8 ;m6
+C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 ;m7
+Bb5 12 R 24 C6 12 R 24 D6 12 R 24 Eb6 3/8 ;m8
+R 2. ;m9
+R 5/8 ff D4 4 ;m10
+vel 45 D4 12 R 24 vel 50 D4 12 R 24 vel 55  D4 12 R 24 vel 60 D4 12 R 24 vel 65 D4 12 R 24 ;m11
+vel 70 D4 12 R 24 vel 75 D4 12 R 24 vel 80 D4 12 R 24 G4 4 R 8 ;m12
+R 2. ;13 
+R 5/8 F4 4 ;14
+vel 45 F4 12 R 24 vel 50 F4 12 R 24 vel 55 F4 12 R 24 vel 60 F4 12 R 24 vel 65 F4 12 R 24 ;15
+vel 70 F4 12 R 24 vel 75 F4 12 R 24 vel 80 F4 12 R 24 D4 Bb4 4 ;m16
+;repeat sign
+Bb3 8 ;m16 b
+vel 64 C4 12 R 24 vel 70 Db4 12 R 24 vel 76 Eb4 12 R 24 vel 82 F4 12 R 24 vel 88 G4 12 R 24 vel 94 Ab4 12 R 24 ;m17
+vel 100 Bb4 12 R 24 vel 106 C5 12 R 24 Db5 12 R 24 vel 120 Eb5 4 forte Db5 8 ;m18
+ff C5 16 Db5 16 C5 8  forte Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24 ;m19
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 Eb4 C5 4 C4 12 R 24  ;m20
+vel 60 D4 12 R 24 vel 66 E4 12 R 24 vel 72 F4 12 R 24 vel 78 G4 12 R 24 vel 84 A4 12 R 24 vel 90 Bb4 12 R 24 ;m21
+vel 96 C5 12 R 24 vel 102 D5 12 R 24 vel 108 E5 12 R 24 vel 120 F5 4 forte Eb5 8 ;m22
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24 ;m23
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 p F4 12 R 24 ;m24
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;25
+F4 12 R 24 F4 12 R 24 F4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Ab4 12 R 24 ;26
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 ;27
+Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24 D6 4 C6 8 ;28
+B5 16 C6 16 B5 8 A5 12 R 24 G5 16 A5 16 G5 8 F5 12 R 24 ;m29
+Eb5 16 F5 16 Eb5 8 D5 12 R 24 C5 4 F4 12 R 24 ;m30
+G4 12 R 24 A4 12 R 24 Bb4 12 R 24 C5 12 R 24 vel 56 D5 12 R 24 Eb5 12 R 24  ;m31
+vel 62 F5 12 R 24 G5 12 R 24 A5 12 R 24 vel 68 Bb5 4 Ab5 8 ;m32
+vel 74 G5 16 Ab5 16 G5 8 F5 12 R 24 vel 80 Eb5 16 F5 16 Eb5 8 D5 12 R 24 ;m33
+vel 86 C5 16 D5 16 C5 8 Bb4 12 R 24 forte Eb4 Eb4 G5 4. ;m34
+R 2.  ;m35
+R 3/8 Eb4 C5 Ab5 4. ;m36
+R 2. ;m37
+R 3/8 Bb3 F4 D5 4 D5 12 R 24 ;m38
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24  ;m39
+D6 12 R 24 Eb6 12 R 24 F6 12 R 24 G6 4 Eb4 12 R 24 ;m40
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ;m41
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 ff F4 D5 9/8 ;m42
+;m43
+forte Bb3 F4 D5 8 Bb3 G4 Eb5 8 R 8 ;m44
+Bb3 12 R 24 ;m16 b
+vel 64 C4 12 R 24 vel 70 Db4 12 R 24 vel 76 Eb4 12 R 24 vel 82 F4 12 R 24 vel 88 G4 12 R 24 vel 94 Ab4 12 R 24 ;m17
+vel 100 Bb4 12 R 24 vel 106 C5 12 R 24 Db5 12 R 24 vel 120 Eb5 4 forte Db5 12 R 24 ;m18
+ff C5 16 Db5 16 C5 8  forte Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24 ;m19
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 Eb4 C5 4 C4 12 R 24  ;m20
+vel 60 D4 12 R 24 vel 66 E4 12 R 24 vel 72 F4 12 R 24 vel 78 G4 12 R 24 vel 84 A4 12 R 24 vel 90 Bb4 12 R 24 ;m21
+vel 96 C5 12 R 24 vel 102 D5 12 R 24 vel 108 E5 12 R 24 vel 120 F5 4 forte Eb5 12 R 24 ;m22
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24 ;m23
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 p F4 12 R 24 ;m24
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;25
+F4 12 R 24 F4 12 R 24 F4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Ab4 12 R 24 ;26
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 ;27
+Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24 D6 4 C6 12 R 24 ;28
+B5 16 C6 16 B5 8 A5 12 R 24 G5 16 A5 16 G5 8 F5 12 R 24 ;m29
+Eb5 16 F5 16 Eb5 8 D5 8 C5 4 F4 12 R 24 ;m30
+G4 12 R 24 A4 12 R 24 Bb4 12 R 24 C5 12 R 24 vel 56 D5 12 R 24 Eb5 12 R 24  ;m31
+vel 62 F5 12 R 24 G5 12 R 24 A5 12 R 24 vel 68 Bb5 4 Ab5 12 R 24 ;m32
+vel 74 G5 16 Ab5 16 G5 8 F5 12 R 24 vel 80 Eb5 16 F5 16 Eb5 8 D5 12 R 24 ;m33
+vel 86 C5 16 D5 16 C5 8 Bb4 12 R 24 forte Eb4 Eb4 G5 4. ;m34
+R 2.  ;m35
+R 3/8 Eb4 C5 Ab5 4. ;m36
+R 2. ;m37
+R 3/8 Bb3 F4 D5 4 D5 12 R 24 ;m38
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24  ;m39
+D6 12 R 24 Eb6 12 R 24 F6 12 R 24 G6 4 Eb4 12 R 24 ;m40
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ;m41
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 ff F4 D5 9/8 ;m42
+;m43
+forte Bb3 F4 D5 8 Bb3 G4 Eb5 8 R 8 ;m44
+;repeat sign
+R 8  ;m44b
+p END_LAZY NOTE_ON 1 Gb5 50 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;m45
+Db5 3/8 Gb4 3/8 ;m46
+B4 5/8 Db5 8 ;m47
+Bb4 3/8 Gb4 3/8 ;m48
+END_LAZY NOTE_ON 1 Gb5 50 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;49
+Db5 3/8 Gb4 3/8 ;m50
+B4 5/8 Db5 8 ;51
+Bb4 3/8 R 3/8 ;52
+END_LAZY NOTE_ON 1 Gb5 50 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;53
+Db5 3/8 Gb4 3/8 ;m54
+B4 5/8 Db5 8 ;m55
+Bb4 3/8 Gb4 3/8 ;56
+END_LAZY NOTE_ON 1 Gb5 50 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;57
+Db5 3/8 Gb4 3/8 ;m58
+B4 5/8 Db5 8 ;m59
+Bb4 3/8 R 3/8 ;60
+END_LAZY NOTE_ON 1 F5 50 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 F5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY Bb4 3/8 ;61 begin repeat
+C5 3/8 F4 3/8 ;m62
+Bb4 5/8 Db5 8 ;m63
+
+END_LAZY
+NOTE_ON 1 F5 50
+DELAY 90 CHANNEL_PRESSURE 1 50
+DELAY 90 CHANNEL_PRESSURE 1 49
+DELAY 90 CHANNEL_PRESSURE 1 48
+DELAY 90 CHANNEL_PRESSURE 1 48
+DELAY 90 CHANNEL_PRESSURE 1 47
+DELAY 90 CHANNEL_PRESSURE 1 46
+DELAY 90 CHANNEL_PRESSURE 1 46
+DELAY 90 CHANNEL_PRESSURE 1 45
+DELAY 90 CHANNEL_PRESSURE 1 44
+DELAY 90 CHANNEL_PRESSURE 1 44
+DELAY 90 CHANNEL_PRESSURE 1 43
+DELAY 90 CHANNEL_PRESSURE 1 42
+DELAY 90 CHANNEL_PRESSURE 1 42
+DELAY 90 CHANNEL_PRESSURE 1 41
+DELAY 90 CHANNEL_PRESSURE 1 41
+DELAY 90 CHANNEL_PRESSURE 1 40
+DELAY 90 CHANNEL_PRESSURE 1 39
+DELAY 90 CHANNEL_PRESSURE 1 39
+DELAY 90 CHANNEL_PRESSURE 1 38
+DELAY 90 CHANNEL_PRESSURE 1 37
+DELAY 90 CHANNEL_PRESSURE 1 37
+DELAY 90 CHANNEL_PRESSURE 1 36
+DELAY 90 CHANNEL_PRESSURE 1 35
+DELAY 90 CHANNEL_PRESSURE 1 35
+DELAY 90 CHANNEL_PRESSURE 1 34
+DELAY 90 CHANNEL_PRESSURE 1 33
+DELAY 90 CHANNEL_PRESSURE 1 33
+DELAY 90 CHANNEL_PRESSURE 1 32
+DELAY 90 CHANNEL_PRESSURE 1 32
+DELAY 90 CHANNEL_PRESSURE 1 31
+DELAY 90 CHANNEL_PRESSURE 1 30
+DELAY 90 CHANNEL_PRESSURE 1 30
+DELAY 90 CHANNEL_PRESSURE 1 29
+DELAY 90 CHANNEL_PRESSURE 1 28
+DELAY 90 CHANNEL_PRESSURE 1 28
+DELAY 90 CHANNEL_PRESSURE 1 27
+DELAY 90 CHANNEL_PRESSURE 1 26
+DELAY 90 CHANNEL_PRESSURE 1 26
+DELAY 90 CHANNEL_PRESSURE 1 25
+DELAY 90 CHANNEL_PRESSURE 1 25
+NOTE_OFF 1 F5 0
+LAZY ;m64
+;m65
+;m66
+;m67
+;m68
+pp END_LAZY NOTE_ON 1 Gb5 40 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;m69
+Db5 3/8 Gb4 3/8 ;m70
+B4 5/8 Db5 8 ;m71
+Bb4 3/8 Gb4 3/8 ;m72
+END_LAZY NOTE_ON 1 Gb5 40 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;m73
+Db5 3/8 Gb4 3/8 ;m74
+B4 5/8 Db5 8 ;m75
+Bb4 3/8 R 3/8 ;first ending m76
+END_LAZY NOTE_ON 1 F5 50 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 F5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY Bb4 3/8 ;61 begin repeat
+C5 3/8 F4 3/8 ;m62
+Bb4 5/8 Db5 8 ;m63
+
+END_LAZY
+NOTE_ON 1 F5 50
+DELAY 90 CHANNEL_PRESSURE 1 50
+DELAY 90 CHANNEL_PRESSURE 1 49
+DELAY 90 CHANNEL_PRESSURE 1 48
+DELAY 90 CHANNEL_PRESSURE 1 48
+DELAY 90 CHANNEL_PRESSURE 1 47
+DELAY 90 CHANNEL_PRESSURE 1 46
+DELAY 90 CHANNEL_PRESSURE 1 46
+DELAY 90 CHANNEL_PRESSURE 1 45
+DELAY 90 CHANNEL_PRESSURE 1 44
+DELAY 90 CHANNEL_PRESSURE 1 44
+DELAY 90 CHANNEL_PRESSURE 1 43
+DELAY 90 CHANNEL_PRESSURE 1 42
+DELAY 90 CHANNEL_PRESSURE 1 42
+DELAY 90 CHANNEL_PRESSURE 1 41
+DELAY 90 CHANNEL_PRESSURE 1 41
+DELAY 90 CHANNEL_PRESSURE 1 40
+DELAY 90 CHANNEL_PRESSURE 1 39
+DELAY 90 CHANNEL_PRESSURE 1 39
+DELAY 90 CHANNEL_PRESSURE 1 38
+DELAY 90 CHANNEL_PRESSURE 1 37
+DELAY 90 CHANNEL_PRESSURE 1 37
+DELAY 90 CHANNEL_PRESSURE 1 36
+DELAY 90 CHANNEL_PRESSURE 1 35
+DELAY 90 CHANNEL_PRESSURE 1 35
+DELAY 90 CHANNEL_PRESSURE 1 34
+DELAY 90 CHANNEL_PRESSURE 1 33
+DELAY 90 CHANNEL_PRESSURE 1 33
+DELAY 90 CHANNEL_PRESSURE 1 32
+DELAY 90 CHANNEL_PRESSURE 1 32
+DELAY 90 CHANNEL_PRESSURE 1 31
+DELAY 90 CHANNEL_PRESSURE 1 30
+DELAY 90 CHANNEL_PRESSURE 1 30
+DELAY 90 CHANNEL_PRESSURE 1 29
+DELAY 90 CHANNEL_PRESSURE 1 28
+DELAY 90 CHANNEL_PRESSURE 1 28
+DELAY 90 CHANNEL_PRESSURE 1 27
+DELAY 90 CHANNEL_PRESSURE 1 26
+DELAY 90 CHANNEL_PRESSURE 1 26
+DELAY 90 CHANNEL_PRESSURE 1 25
+DELAY 90 CHANNEL_PRESSURE 1 25
+NOTE_OFF 1 F5 0
+LAZY ;m64 rep
+;m65
+;m66
+;m67
+;m68
+pp END_LAZY NOTE_ON 1 Gb5 40 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;m69
+Db5 3/8 Gb4 3/8 ;m70
+B4 5/8 Db5 8 ;m71
+Bb4 3/8 Gb4 3/8 ;m72
+END_LAZY NOTE_ON 1 Gb5 40 DELAY 270 
+PITCH_WHEEL 1 8021 DELAY 10
+PITCH_WHEEL 1 7850 DELAY 10
+PITCH_WHEEL 1 7680 DELAY 10 
+PITCH_WHEEL 1 7509 DELAY 10 
+PITCH_WHEEL 1 7338 DELAY 10 
+PITCH_WHEEL 1 7168 DELAY 10 
+PITCH_WHEEL 1 6997 DELAY 10 
+PITCH_WHEEL 1 6826 DELAY 10 
+NOTE_ON 1 Gb5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY B4 3/8 ;m73
+Db5 3/8 Gb4 3/8 ;m74
+B4 5/8 Db5 8 ;m75
+Bb4 4 R 8 R 3/8 ;second ending ;m77
+R 5/8 Ab3 D4 8 ;m78
+Ab3 D4 12 R 24 p Ab3 D4 12 R 24 mp Ab3 D4 12 R 24 mf Ab3 D4 12 R 24 forte Ab3 D4 12 R 24 R 8 ;m79
+R 2. ;m80
+R 3/8 G3 Eb4 3/8 ;m81
+R 2. ;m82
+R 3/8 C4 Ab4 3/8 ;m83
+R 2. ;m84
+R 3/8 F4 D5 4 Bb4 12 R 24 ;m85
+C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 ;m86
+Bb5 12 R 24 C6 12 R 24 D6 12 R 24 Eb6 3/8 ;m87
+R 2. ;m88
+R 5/8 mf D4 4 ;m89
+vel 30 D4 12 R 24 vel 35 D4 12 R 24 vel 40 D4 12 R 24 vel 45 D4 12 R 24 vel 50 D4 12 R 24  ;m90
+vel 55 D4 12 R 24 vel 60 D4 12 R 24 vel 65 D4 12 R 24 G4 4 R 8 ;m91
+R 2. ;m92
+R 5/8 mf F4 4 ;m93
+vel 30 F4 12 R 24 vel 35 F4 12 R 24 vel 40 F4 12 R 24 vel 45 F4 12 R 24 vel 50 F4 12 R 24  ;m94
+vel 55 F4 12 R 24 vel 60 F4 12 R 24 vel 65 F4 12 R 24 vel 70 D4 Bb4 4 Bb3 8 ;m95
+vel 60 C4 12 R 24 vel 66 Db4 12 R 24 vel 72 Eb4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 Ab4 12 R 24  ;96
+vel 96 Bb4 12 R 24 vel 102 C5 12 R 24 vel 108 Db5 12 R 24 120 Eb5 4 forte D5 12 R 24 ;97
+ff C5 16 Db5 16 C5 8 forte Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24 ;m98
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 Eb4 C5 4 vel 60 C4 12 R 24  ;m99
+vel 66 D4 12 R 24 vel 72 E4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 A4 12 R 24 vel 96 Bb4 12 R 24 ;m100
+vel 102 C5 12 R 24 vel 108 D5 12 R 24 vel 114 E5 12 R 24 vel 120 F5 4 forte Eb5 12 R 24 ;m101
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24 ;m102
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 p F4 12 R 24  ;m103
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;104
+F4 12 R 24 F4 12 R 24 F4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Ab4 12 R 24 ;105
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 ;106
+Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24 D6 4 C6 8 ;28 ;107
+B5 16 C6 16 B5 8 A5 12 R 24 G5 16 A5 16 G5 8 F5 12 R 24 ;m108
+Eb5 16 F5 16 Eb5 8 D5 12 R 24 C5 4 F4 12 R 24 ;m109
+vel 50 G4 12 R 24 A4 12 R 24 Bb4 12 R 24 vel 56 C5 12 R 24 D5 12 R 24 Eb5 12 R 24  ;m110
+vel 62 F5 12 R 24 G5 12 R 24 A5 12 R 24 vel 68 Bb5 4 Ab5 12 R 24  ;m111
+vel 74 G5 16 Ab5 16 G5 8 F5 12 R 24 vel 80 Eb5 16 F5 16 Eb5 8 D5 12 R 24 ;m112
+vel 86 C5 16 D5 16 C5 8 Bb4 12 R 24 vel 92 Eb4 Eb4 G5 4. ;m113
+R 2.  ;m114
+R 3/8 forte Eb4 C5 Ab5 4. ;m115
+R 2. ;m116
+R 3/8 Bb3 F4 D5 4 D5 12 R 24 ;m117
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24  ;m118
+D6 12 R 24 Eb6 12 R 24 F6 12 R 24 G6 4 Eb4 12 R 24 ;m119
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ;m120
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 ff F4 D5 9/8 ;m121
+;m122
+forte Bb3 F4 D5 8 ff Bb3 G4 Eb5 8 R 8 R 8 ;m123
+;2/4
+R 4 forte  Eb4 16 E4 16 Eb4 16 Db4 16  ;m123b
+ forte B3 16 mf Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m124
+ forte E4 16 mf Gb4 16 E4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m125
+ forte G3 16 mf Ab3 16 G3 16 Eb4 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m126
+ forte B3 16 mf Db4 16 B3 16 Ab3 16   Eb4 16 Eb4 16 Eb4 16 Db4 16  ;m127
+ forte B3 16 mf Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m128
+ forte E4 16 mf Gb4 16 E4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m129
+ forte G3 16 mf Ab3 16 G3 16 Eb4 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m130
+ forte B3 16 mf Db4 16 B3 16 Ab3 16  R 8 mp B3 G#4 8  ;m131
+B3 G#4 8 B3 G#4 8 R 8 C#4 A4 8  ;m132
+C#4 A4 8 C#4 A4 8  R 8 D#4 F#4 8  ;m133
+D#4 F#4 8 D#4 F#4 8  R 8 E4 G#4 8 ;m134
+E4 G#4 8 E4 G#4 8 forte  G#5 16 A5 16 G#5 16 F#5 16  ;m135
+ E5 16 F#5 16 E5 16 C#5 16   C#6 16 D6 16 C#6 16 B5 16  ;m136
+ A5 16 B5 16 A5 16 F#5 16   D#5 16 E5 16 D#5 16 C#5 16  ;m137
+ C5 16 C#5 16 C5 16 G#4 16   G#5 16 A5 16 G#5 16 F#5 16  ;m138
+ E5 16 F#5 16 E5 16 C#5 16  ff  Eb5 16 E5 16 Eb5 16 Db5 16  ;m139
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;m140
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m141
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m142
+ B4 16 Db5 16 B4 16 Ab4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m143
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;m144
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m145
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m146
+ B4 16 Db5 16 B4 16 Ab4 16  R 4 ;m147
+R 2 ;m148
+R 4 p END_LAZY NOTE_ON 1 A4 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 A4 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m149
+mp E5 4 p D#5 4 ;m150
+G#4 4 R 4 ;m151
+R 2 ;m152
+R 4 p END_LAZY NOTE_ON 1 C5 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 C5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m153
+mp G5 4 p F#5 4 ;m154
+pp B4 4 R 4 ;m155
+R 2 ;m156
+R 4 p END_LAZY NOTE_ON 1 B4 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 B4 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m157
+mp C6 4 p B5 4 ;m158
+pp E5 4 R 4 ;m159
+R 2 ;m160
+R 4 p END_LAZY NOTE_ON 1 F#4 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 F#4 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m161
+mp G5 4 F#5 4 ;m162
+p B4 4 forte  C#5 16 D5 16 C#5 16 B4 16  ;m163
+ A4 16 B4 16 A4 16 F#4 16   F#5 16 G5 16 F#5 16 E5 16  ;m164
+ D5 16 E5 16 D5 16 B4 16   G#4 16 A4 16 G#4 16 F#4 16  ;m165
+ F4 16 F#4 16 F4 16 C#4 16   C#5 16 D5 16 C#5 16 B4 16  ;m166
+ A4 16 B4 16 A4 16 F#4 16   C#5 16 D5 16 C#5 16 B5 16  ;m167
+ A4 16 B4 16 A4 16 F#4 16   F#5 16 G5 16 F#5 16 E5 16  ;m168
+ D5 16 E5 16 D5 16 B4 16   G#4 16 A4 16 G#4 16 F#4 16  ;m169
+ F4 16 F#4 16 F4 16 C#4 16   C#5 16 D5 16 C#5 16 B4 16  ;m170
+ A4 16 B4 16 A4 16 F#4 16  R 4 ;m171
+R 2 ;m172
+R 4 p END_LAZY NOTE_ON 1 G5 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 G5 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m173
+mp D6 4 p C#6 4 ;m174
+pp F#5 4 R 4 ;m175
+R 2 ;m176
+R 4 p END_LAZY NOTE_ON 1 A4 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 A4 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m177
+mp E6 4 p D#6 4 ;m178
+pp G#5 4 forte C#4 8 C#4 8  ;m179
+R 4 C#4 8 C#4 8  ;m180
+R 4 mf END_LAZY NOTE_ON 1 G#4 50 DELAY 120
+PITCH_WHEEL 1 8362 DELAY 10
+PITCH_WHEEL 1 8532 DELAY 10
+PITCH_WHEEL 1 8702 DELAY 10
+PITCH_WHEEL 1 8872 DELAY 10 
+PITCH_WHEEL 1 9042 DELAY 10 
+PITCH_WHEEL 1 9212 DELAY 10 
+PITCH_WHEEL 1 9382 DELAY 10 
+PITCH_WHEEL 1 9552 DELAY 10 
+PITCH_WHEEL 1 9722 DELAY 10 
+PITCH_WHEEL 1 9892 DELAY 10 
+PITCH_WHEEL 1 10962 DELAY 10 
+NOTE_ON 1 G#4 0 PITCH_WHEEL 1 8192 DELAY 10 LAZY ;m181
+forte A5 4 mf G#5 4 ;m182
+C#5 4 ff  Eb5 16 E5 16 Eb5 16 Db5 16  ;m183
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;m184
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m185
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m186
+ B4 16 Db5 16 B4 16 Ab4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m187
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;m188
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m189
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m190
+ B4 16 Db5 16 B4 16 Ab4 16   forte Eb5 16 mf E5 16 Eb5 16 Db5 16  ;m191
+ff  B4 16 Db5 16 B4 16 Bb4 16   Ab4 16 Bb4 16 Ab4 16 Gb4 16  ;m192
+ E4 16 Gb4 16 E4 16 Eb4 16   Db4 16 Eb4 16 Db4 16 B3 16  ;m193
+ Bb3 16 B3 16 Bb3 16 A3 16    Bb3 16 B3 16 Bb3 16 A3 16  ;m194
+ Bb3 16 B3 16 Bb3 16 A3 16    Bb3 16 B3 16 Bb3 16 A3 16  ;m195
+Bb3 5/8 R 3/8 ;m196 
+;m197
+;6/8 time
+R 2.  ;m198
+R 3/8 ff G4 Eb5 3/8 ;m199
+R 2. ;m200
+R 3/8 Eb4 C5 Ab5 3/8 ;m201
+R 2. ;m202
+R 3/8 forte F4 D5 4 Bb4 12 R 24 ;m203
+C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24  ;m204
+Bb5 12 R 24 C6 12 R 24 D6 12 R 24 Eb6 3/8 ;m205
+R 2. ;m206
+R 5/8 ff D4 4  ;m207
+vel 50  D4 12 R 24 vel 54 D4 12 R 24 vel 58 D4 12 R 24 vel 62 D4 12 R 24 vel 66 D4 12 R 24  ;m208
+vel 66 D4 12 R 24 vel 70 D4 12 R 24 vel 74 D4 12 R 24 G4 4 R 8 ;m209
+R 2.  ;m210
+R 5/8 ff F4 4 ;m211
+vel 40  F4 12 R 24 vel 45 F4 12 R 24 vel 50 F4 12 R 24 vel 55 F4 12 R 24 vel 60 F4 12 R 24  ;m212
+vel 65 F4 12 R 24 vel 70 F4 12 R 24 vel 75 F4 12 R 24 vel 80 D4 Bb4 4 Bb3 12 R 24  ;m213
+C4 12 R 24 Db4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24  ;m214
+Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ff Eb5 4 forte Db5 12 R 24 ;m215
+C5 16 Db5 16 C5 8 Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24 ;m216
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 ff Eb4 C5 4 forte C4 12 R 24  ;m217
+vel 60 D4 12 R 24 vel 66 E4 12 R 24 vel 72 F4 12 R 24 vel 76 G4 12 R 24 vel 82 A4 12 R 24 vel 88 Bb4 12 R 24 ;m218
+vel 94 C5 12 R 24 vel 100 D5 12 R 24 vel 106 E5 12 R 24 vel 112 F5 4 forte Eb5 12 R 24 ;m219
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24 ;m220
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 p F4 12 R 24  ;m221
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24   ;m222
+F4 12 R 24 F4 12 R 24 F4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 mf Ab4 12 R 24  ;m223
+p Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 12 R 24  ;m224
+Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24 D6 4 C6 12 R 24  ;m225
+B5 16 C6 16 B5 8 A5 12 R 24 G5 16 A5 16 G5 8 F5 12 R 24  ;m226
+Eb5 16 F5 16 Eb5 8 D5 12 R 24 C5 4 F4 12 R 24 ;m227
+G4 12 R 24 A4 12 R 24 Bb4 12 R 24 vel 60 C5 12 R 24 D5 12 R 24 Eb5 12 R 24  ;m228
+vel 66 F5 8 G5 8 A5 8 vel 72 Bb5 4 Ab5 8  ;m229
+vel 78 G5 16 Ab5 16 G5 8 F5 12 R 24 vel 84 Eb5 16 F5 16 Eb5 8 D5 12 R 24 ;m230
+vel 90 C5 16 D5 16 C5 8 Bb4 12 R 24 vel 96 Eb4 Eb4 G5 4. ;m231
+R 2.   ;m232
+R 3/8 forte Eb4 C5 Ab5 4. ;m233
+R 2. ;m234
+R 3/8 forte Bb3 F4 D5 4 D5 12 R 24 ;m235
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 Bb5 12 R 24 C6 12 R 24   ;m236
+D6 12 R 24 Eb6 12 R 24 F6 12 R 24 G6 4 Eb4 12 R 24 ;m237
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24  ;m238
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 ff F4 D5 9/8  ;m239
+;m240
+forte Bb3 F4 D5 8 ff Bb3 G4 Eb5 8. R 8. ;m241
+R 2. ;m242
+R 5/8 forte Eb4 12 R 24  ;m243
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 B4 12 R 24 Db5 12 R 24 ;m244
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 12 R 24 R 8 ff A5 10/8 ;m245
+;m246
+Bb5 8 R 8 vel 60 Eb4 12 R 24 ;m247
+vel 66 F4 12 R 24 vel 72 G4 12 R 24 vel 76 Ab4 12 R 24 vel 84 Bb4 12 R 24 vel 90 B4 12 R 24 vel 96 Db5 12 R 24 ;m248
+vel 102 Eb5 12 R 24 vel 108 F5 12 R 24 vel 114 G5 12 R 24 vel 120 Ab5 12 R 24 R 8 A5 10/8 ;m249
+;250
+Bb5 8 R 8 B5 10/8 ;m251
+;252
+p F4 Ab4 6/8 ;m253
+mp F4 Ab4 6/8 ;m254
+mp F4 Ab4 2 ;m255
+vel 60 F4 Ab4 12 R 24 vel 62 F4 Ab4 12 R 24 vel 64 F4 Ab4 12 R 24 vel 66 F4 Ab4 12 R 24 vel 68 F4 Ab4 12 R 24  ;m256
+vel 70 F4 Ab4 12 R 24 vel 72 F4 Ab4 12 R 24 vel 74 F4 Ab4 12 R 24 vel 76 F4 Ab4 12 R 24 vel 78 F4 Ab4 12 R 24 vel 80 F4 Ab4 12 R 24 ;m257
+vel 82 F4 Ab4 12 R 24 vel 84 F4 D5 12 R 24 vel 86 F4 D5 12 R 24 vel 88 F4 D5 12 R 24 vel 90 F4 D5 12 R 24 vel 92 F4 D5 12 R 24  ;m258
+vel 94 F4 D5 12 R 24 vel 96 F4 D5 12 R 24 vel 98 F4 D5 12 R 24 vel 100 F4 D5 12 R 24 vel 102 F4 D5 12 R 24 vel 104 F4 D5 12 R 24  ;m259
+vel 106 G4 Eb5 4 R 2 ;m260
+G5 3/8 Bb4 3/8 ;m261
+Eb5 3/8 G4 3/8 ;m262
+Bb4 3/8 Bb3 3/8 ;m263
+Eb4 4 R 2 ;m264
+Bb3 G4 Eb5 4 R 2 ;m265
+G3 Eb4 6/8 ;m266
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt3v2.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.15  2003/11/09 18:24:15  root
+; use ppp macro, use ppp not vel 25
+;
+; Revision 1.14  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.13  2003/06/03 23:48:55  root
+; narrow stereo field
+;
+; Revision 1.12  2003/06/03 23:18:04  root
+; fiddle
+;
+; Revision 1.11  2003/05/30 09:33:41  root
+; added portamento to second trio
+;
+; Revision 1.10  2003/05/30 00:26:45  root
+; add portamento to first trio in scherzo
+;
+; Revision 1.9  2003/05/26 21:43:31  root
+; balace balance
+;
+; Revision 1.8  2003/05/26 18:49:50  root
+; staccatos
+;
+; Revision 1.7  2003/05/25 16:41:25  root
+; staccato implied articulation, cheating the quavers
+;
+; Revision 1.6  2003/05/02 01:40:00  root
+; adjust
+;
+; Revision 1.5  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.4  2003/03/09 21:49:39  root
+; done
+;
+; Revision 1.3  2003/03/04 03:16:12  root
+; dynamics
+;
+; Revision 1.2  2003/03/02 21:02:36  root
+; minor fixes
+;
+; Revision 1.1  2003/03/01 18:36:00  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3v2.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3v2.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3v2.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3v2.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement ; Violin II
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK SECOND VIOLIN
+INSTRUMENT VIOLIN
+PROGRAM 2 41
+PAN 2 -10
+LAZY
+chan 2
+forte
+R 5/8 ;measure 0
+R 8
+R 2. ;m1
+R 3/8 Bb3 3/8 ;m2
+R 2. ;m3
+R 3/8 Ab3 4 Ab3 12 R 24 ;m4
+vel 60 Bb3 12 R 24 vel 66 C4 12 R 24 vel 72 D4 12 R 24 vel 84 Eb4 12 R 24 vel 90 F4 12 R 24 vel 96 G4 12 R 24 ;m5
+vel 102 Ab4 12 R 24 vel 108 Bb4 12 R 24 vel 114 C5 12 R 24 forte D5 4 Bb3 12 R 24 ;m6
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m7
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 3/8 ;m8
+R 2. ;m9
+R 5/8 ff D4 4 ;m10
+vel 45 D4 12 R 24 vel 50 D4 12 R 24 vel 55 D4 12 R 24 vel 60 D4 12 R 24 vel 65 D4 12 R 24 ;m11
+vel 70 D4 12 R 24 vel 75 D4 12 R 24 vel 80 D4 12 R 24 G4 4 R 8 ;m12
+R 2. ;13 
+R 5/8 ff F4 4 ;14
+vel 45 F4 12 R 24 vel 50 F4 12 R 24 vel 55 F4 12 R 24 vel 60 F4 12 R 24 vel 65 F4 12 R 24 ;15
+vel 70 F4 12 R 24 vel 75 F4 12 R 24 vel 80 F4 12 R 24 D4 Bb4 4 ;m16
+R 8
+R 2. ;m1
+R 3/8 Bb3 3/8 ;m2
+R 2. ;m3
+R 3/8 Ab3 4 Ab3 12 R 24 ;m4
+vel 60 Bb3 12 R 24 vel 66 C4 12 R 24 vel 72 D4 12 R 24 vel 84 Eb4 12 R 24 vel 90 F4 12 R 24 vel 96 G4 12 R 24 ;m5
+vel 102 Ab4 12 R 24 vel 108 Bb4 12 R 24 vel 114 C5 12 R 24 forte D5 4 Bb3 12 R 24 ;m6
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m7
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 3/8 ;m8
+R 2. ;m9
+R 5/8 ff D4 4 ;m10
+vel 60 D4 12 R 24 vel 64 D4 12 R 24 vel 68 D4 12 R 24 vel 72 D4 12 R 24 vel 76 D4 12 R 24 ;m11
+vel 80 D4 12 R 24 vel 84 D4 12 R 24 vel 86 D4 12 R 24 G4 4 R 8 ;m12
+R 2. ;13 
+R 5/8 ff F4 4 ;14
+vel 60 F4 12 R 24 vel 64 F4 12 R 24 vel 68 F4 12 R 24 vel 72 F4 12 R 24 vel 76 F4 12 R 24 ;15
+vel 80 F4 12 R 24 vel 84 F4 12 R 24 vel 88 F4 12 R 24 D4 Bb4 4 ;m16
+;repeat sign
+Bb3 12 R 24 ;m16 b
+vel 60 C4 12 R 24 vel 66 Db4 12 R 24 vel 72 Eb4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 Ab4 12 R 24 ;m17
+vel 96 Bb4 12 R 24 vel 104 C5 12 R 24 vel 110 Db5 12 R 24 vel 120 Eb5 4 forte Eb4 4 forte
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 ;m19
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 4 C4 12 R 24  ;m20
+vel 60 D4 12 R 24 vel 66 E4 12 R 24 vel 72 F4 12 R 24 vel 78 G4 12 R 24 vel 84 A4 12 R 24 vel 90 Bb4 12 R 24 ;m21
+vel 96 C5 12 R 24 vel 102 D5 12 R 24 vel 108 E5 12 R 24 vel 114 F5 4 mp F4 4 ;m22
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;m23
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 4 pp D4 12 R 24 ;m24
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 pp D4 12 R 24  ;m25
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 mf C4 Eb4 12 R 24 ;26
+pp C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24  ;27
+C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 D4 12 R 24 C4 D4 12 R 24 mf B3 D4 12 R 24 ;28
+p B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24  ;m29
+B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 C4 12 R 24 C4 12 R 24 mf C4 12 R 24  ;m30
+p C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 50  C4 12 R 24 C4 12 R 24 C4 12 R 24   ;m31
+vel 56 C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 62 Bb3 4 Ab4 12 R 24 ;m32
+vel 68 G4 16 Ab4 16 G4 8 F4 12 R 24 vel 74 Eb4 16 F4 16 Eb4 8 D4 12 R 24 ;m33
+vel 80 C4 16 D4 16 C4 8 Bb3 12 R 24 vel 86 G3 Eb4 3/8 ;m34
+R 2.  ;m35
+R 3/8 forte Ab3 Eb4 4 Ab3 12 R 24 ;m36
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m37
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 D4 12 R 24 ;m38
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24  ;m39
+D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 4 Eb5 12 R 24 ;m40
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ;m41
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 Bb3 12 R 24 ;m42
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m43
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 R 8 ;m44 ;repeat sign
+Bb3 12 R 24 ;m16 b
+vel 60 C4 12 R 24 vel 66 Db4 12 R 24 vel 72 Eb4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 Ab4 12 R 24 ;m17
+vel 96 Bb4 12 R 24 vel 104 C5 12 R 24 vel 110 Db5 12 R 24 vel 120 Eb5 4 forte Eb4 4 forte
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 ;m19
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 4 C4 12 R 24  ;m20
+vel 60 D4 12 R 24 vel 66 E4 12 R 24 vel 72 F4 12 R 24 vel 78 G4 12 R 24 vel 84 A4 12 R 24 vel 90 Bb4 12 R 24 ;m21
+vel 96 C5 12 R 24 vel 102 D5 12 R 24 vel 108 E5 12 R 24 vel 114 F5 4 forte F4 4 ;m22
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;m23
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 4 pp D4 12 R 24 ;m24
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24  ;25
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 mf C4 Eb4 12 R 24 ;26
+pp C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24  ;27
+C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 D4 12 R 24 C4 D4 12 R 24 mf B3 D4 12 R 24 ;28
+pp B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24  ;m29
+B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 C4 12 R 24 C4 12 R 24 mf C4 12 R 24  ;m30
+p C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 50  C4 12 R 24 C4 12 R 24 C4 12 R 24   ;m31
+vel 56 C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 62 Bb3 4 Ab4 12 R 24 ;m32
+vel 68 G4 16 Ab4 16 G4 8 F4 12 R 24 vel 74 Eb4 16 F4 16 Eb4 8 D4 12 R 24 ;m33
+vel 80 C4 16 D4 16 C4 8 Bb3 12 R 24 vel 86 G3 Eb4 3/8 ;m34
+R 2.  ;m35
+R 3/8 forte Ab3 Eb4 4 Ab3 12 R 24 ;m36
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m37
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 D4 12 R 24 ;m38
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24  ;m39
+D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 4 Eb5 12 R 24 ;m40
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ;m41
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 Bb3 12 R 24 ;m42
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m43
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 R 8 ;m44 ;repeat sign
+R 8  ;m44b
+R 2. ;m45
+R 2. ;m46
+vel 35 Ab4 6/8 ;m47
+Gb4 4 R 2 ;m48
+R 2. ;49
+R 2. ;m50
+Ab4 6/8 ;51
+Gb4 4 R 2 ;52
+R 2. ;53
+R 2. ;m54
+Ab4 6/8 ;m55
+Gb4 4 R 2 ;56
+R 2. ;57
+R 2. ;m58
+Ab4 6/8 ;m59
+Gb4 4 R 2 ;60
+R 2. ;61 begin repeat
+R 2. ;m62
+R 2. ;m63
+R 2. ;m64
+vel 25 END_LAZY NOTE_ON 2 F5 25 DELAY 270 
+PITCH_WHEEL 2 8021 DELAY 10
+PITCH_WHEEL 2 7850 DELAY 10
+PITCH_WHEEL 2 7680 DELAY 10 
+PITCH_WHEEL 2 7509 DELAY 10 
+PITCH_WHEEL 2 7338 DELAY 10 
+PITCH_WHEEL 2 7168 DELAY 10 
+PITCH_WHEEL 2 6997 DELAY 10 
+PITCH_WHEEL 2 6826 DELAY 10 
+NOTE_ON 2 F5 0 PITCH_WHEEL 2 8192 DELAY 10 LAZY Bb4 3/8 ;m65
+C5 3/8 F4 3/8 ;m66
+Bb4 5/8 Db5 8 ;m67
+F5 6/8 ;m68
+R 2. ;m69
+R 2. ;m70
+Ab4 6/8 ;m71
+Gb4 4 R 2 ;m72
+R 2. ;m73
+R 2. ;m74
+Ab4 6/8 ;m75
+Gb4 4 R 2 ;first ending m76
+R 2. ;61 begin repeat
+R 2. ;m62
+R 2. ;m63
+R 2. ;m64
+vel 30 END_LAZY NOTE_ON 2 F5 30 DELAY 270 
+PITCH_WHEEL 2 8021 DELAY 10
+PITCH_WHEEL 2 7850 DELAY 10
+PITCH_WHEEL 2 7680 DELAY 10 
+PITCH_WHEEL 2 7509 DELAY 10 
+PITCH_WHEEL 2 7338 DELAY 10 
+PITCH_WHEEL 2 7168 DELAY 10 
+PITCH_WHEEL 2 6997 DELAY 10 
+PITCH_WHEEL 2 6826 DELAY 10 
+NOTE_ON 2 F5 0 PITCH_WHEEL 2 8192 DELAY 10 LAZY Bb4 3/8 ;m65
+C5 3/8 F4 3/8 ;m66
+Bb4 5/8 Db5 8 ;m67
+F5 6/8 ;m68
+R 2. ;m69
+R 2. ;m70
+Ab4 6/8 ;m71
+Gb4 4 R 2 ;m72
+R 2. ;m73
+R 2. ;m74
+Ab4 6/8 ;m75
+Gb4 4 R 3/8 p Bb3 12 R 24  ;second ending ;m77
+vel 50  Bb3 12 R 24 vel 53 Bb3 12 R 24 vel 56 Bb3 12 R 24 vel 59  Bb3 12 R 24 vel 62 Bb3 12 R 24 vel 65 Bb3 12 R 24 ;m78
+vel 68 Bb3 12 R 24 vel 71 Bb3 12 R 24 vel 74 Bb3 12 R 24 vel 75 Bb3 12 R 24 vel 78 Bb3 12 R 24 R 8 ;m79
+R 2. ;m80
+R 3/8 forte Bb3 3/8 ;m81
+R 2. ;m82
+R 3/8 Ab3 4 Ab3 12 R 24 ;m83
+vel 60 Bb3 12 R 24 vel 66 C4 12 R 24 vel 72 D4 12 R 24 vel 78 Eb4 12 R 24 vel 84 F4 12 R 24 vel 90 G4 12 R 24 ;m84
+vel 96 Ab4 12 R 24 vel 102 Bb4 12 R 24 vel 108 C5 12 R 24 vel 114 D5 4 forte Bb3 12 R 24 ;m85
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m86
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 3/8 ;m87
+R 2. ;m88
+R 5/8 mf D4 4 ;m89
+vel 30  D4 12 R 24 vel 35 D4 12 R 24 vel 40 D4 12 R 24 vel 45 D4 12 R 24 vel 50 D4 12 R 24  ;m90
+vel 55 D4 12 R 24 vel 60 D4 12 R 24 vel 65 D4 12 R 24 G4 4 R 8 ;m91
+R 2. ;m92
+R 5/8 mf F4 4 ;m93
+p F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;m94
+F4 12 R 24 F4 12 R 24 F4 12 R 24 D5 Bb4 4 Bb3 12 R 24 ;m95
+vel 60 C4 12 R 24 vel 66 Db4 12 R 24 vel 72 Eb4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 Ab4 12 R 24  ;96
+vel 96 Bb4 12 R 24 vel 102 C5 12 R 24 vel 108 Db5 12 R 24 vel 114 Eb5 4 forte Eb4 4 ;97
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24  ;m98
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 4 C4 12 R 24 ;m99
+vel 60 D4 12 R 24 vel 66 E4 12 R 24 vel 72 F4 12 R 24 vel 78 G4 12 R 24 vel 84 A4 12 R 24 vel 90 Bb4 12 R 24 ;m100
+vel 96 C5 12 R 24 vel 102 D5 12 R 24 vel 108 E5 12 R 24 vel 114 F5 4 forte F4 4 ;m101
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;m102
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 4 p D4 12 R 24 ;m103
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24   ;104
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 mf C4 Eb4 12 R 24 ;105
+p C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 ;106
+C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 D4 12 R 24 C4 D4 12 R 24 B3 D4 12 R 24 ;107
+B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 mf B3 D4 12 R 24  ;m108
+p B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 C4 12 R 24 C4 12 R 24 mf C4 12 R 24  ;m109
+vel 60  C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 66 C4 12 R 24 C4 12 R 24 C4 12 R 24   ;m110
+vel 72 C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 78 Bb3 4 Ab4 12 R 24 ;m111
+vel 84 G4 16 Ab4 16 G4 8 F4 12 R 24 vel 90 Eb4 16 F4 16 Eb4 8 D4 12 R 24 ;m112
+vel 96 C4 16 D4 16 C4 8 Bb3 12 R 24 vel 102 G3 Eb4 3/8 ;m113
+R 2.  ;m114
+R 3/8 forte Ab3 Eb4 4 Ab3 12 R 24 ;m115
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m116
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 D4 12 R 24 ;m117
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24  ;m118
+D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 4 Eb4 12 R 24 ;m119
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ;m120
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 Bb3 12 R 24 ;m121
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m122
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 ff Eb5 8 R 4  ;m123
+;2/4
+R 2 ;m123b
+R 2  ;m124
+R 2 ;m125
+R 2 ;m126
+R 2 ;m127
+R 2 ;m128
+R 2 ;m129
+R 2 ;m130
+R 4 mf  B4 16 C#5 16 B4 16 A4 16  ;m131
+ G#4 16 A4 16 G#4 16 E4 16   E5 16 F#5 16 E5 16 D#5 16    ;m132
+ C#5 16 D#5 16 C#5 16 A4 16   F#4 16 G#4 16 F#4 16 E4 16    ;m133
+ D#4 16 E4 16 D#4 16 B3 16   B4 16 C#5 16 B4 16 A4 16   ;m134
+ G#4 16 A4 16 G#4 16 E4 16  forte G#4 16 G#4 16 G#4 16 G#4 16  ;m135
+G#5 16 G#5 16 G#5 16 G#5 16 C#5 16 C#5 16 C#5 16 C#5 16  ;m136
+C#6 16 C#6 16 C#6 16 C#6 16 G#4 16 G#4 16 G#4 16 G#4 16  ;m137 next
+G#5 16 G#5 16 G#5 16 G#5 16 G#4 16 G#4 16 G#4 16 G#4 16  ;m138
+G#5 16 G#5 16 G#5 16 G#5 16 ff Ab4 8 Ab4 8 ;m139
+R 8 Ab4 8 E4 Db5 8 E4 Db5 8  ;m140
+R 8 Ab4 8 G3 Eb4 8 G3 Eb4 8  ;m141
+R 8 Eb4 8 B3 Ab4 8 B3 Ab4 8  ;m142
+R 8 B3 Ab4 8 B3 Ab4 8 B3 Ab4 8  ;m143
+R 8 Ab4 8 E4 Db5 8 E4 Db5 8  ;m144
+R 8 Ab4 8 G3 Eb4 8 G3 Eb4 8  ;m145
+R 8 Eb4 8 B3 Ab4 8 B3 Ab4 8  ;m146
+R 4 END_LAZY PROGRAM 2 46 LAZY vel 50 A4 8 vel 58 Bb4 8 ;m147 46 is pizzicato
+vel 66 B4 8 vel 74 C5 8 vel 82 Db5 8 vel 100  D5 8 ;m148
+vel 108 Eb5 8 R 3/8 ;m149
+R 2 ;m150
+R 4 vel 50 C5 8 vel 58 Db5 8 ;m151
+vel 66 D5 8 vel 74 Eb5 8 vel 82 E5 8 vel 100 F5 8  ;m152
+F#5 8 END_LAZY PROGRAM 2 41 LAZY R 3/8 ;m153
+R 2  ;m154
+R 2 ;m155
+R 2 ;m156
+R 4 p END_LAZY NOTE_ON 2 B3 50 DELAY 120
+PITCH_WHEEL 2 8362 DELAY 10
+PITCH_WHEEL 2 8532 DELAY 10
+PITCH_WHEEL 2 8702 DELAY 10
+PITCH_WHEEL 2 8872 DELAY 10 
+PITCH_WHEEL 2 9042 DELAY 10 
+PITCH_WHEEL 2 9212 DELAY 10 
+PITCH_WHEEL 2 9382 DELAY 10 
+PITCH_WHEEL 2 9552 DELAY 10 
+PITCH_WHEEL 2 9722 DELAY 10 
+PITCH_WHEEL 2 9892 DELAY 10 
+PITCH_WHEEL 2 10962 DELAY 10 
+NOTE_ON 2 B3 0 PITCH_WHEEL 2 8192 DELAY 10 LAZY ;m157
+mp C5 4 p B4 4 ;m158
+pp E4 4 R 4 ;m159
+R 2 ;m160
+R 4 p F#4 4 ;m161
+mp G4 4 p F#4 4 ;m162
+pp B3 4 forte F#4 A4 8 F#4 A4 8  ;m163
+R 4 F#4 B4 8 F#4 B4 8  ;m164
+R 4 mf END_LAZY NOTE_ON 2 C#4 75 DELAY 120
+PITCH_WHEEL 2 8362 DELAY 10
+PITCH_WHEEL 2 8532 DELAY 10
+PITCH_WHEEL 2 8702 DELAY 10
+PITCH_WHEEL 2 8872 DELAY 10 
+PITCH_WHEEL 2 9042 DELAY 10 
+PITCH_WHEEL 2 9212 DELAY 10 
+PITCH_WHEEL 2 9382 DELAY 10 
+PITCH_WHEEL 2 9552 DELAY 10 
+PITCH_WHEEL 2 9722 DELAY 10 
+PITCH_WHEEL 2 9892 DELAY 10 
+PITCH_WHEEL 2 10962 DELAY 10 
+NOTE_ON 2 C#4 0 PITCH_WHEEL 2 8192 DELAY 10 LAZY ;m165
+forte D5 4 mf C#5 4 ;m166
+F#4 4 F#4 A4 8 F#4 A4 8  ;m167
+R 4 F#4 B4 8 F#4 B4 8  ;m168
+R 4 END_LAZY NOTE_ON 2 C#4 75 DELAY 120
+PITCH_WHEEL 2 8362 DELAY 10
+PITCH_WHEEL 2 8532 DELAY 10
+PITCH_WHEEL 2 8702 DELAY 10
+PITCH_WHEEL 2 8872 DELAY 10 
+PITCH_WHEEL 2 9042 DELAY 10 
+PITCH_WHEEL 2 9212 DELAY 10 
+PITCH_WHEEL 2 9382 DELAY 10 
+PITCH_WHEEL 2 9552 DELAY 10 
+PITCH_WHEEL 2 9722 DELAY 10 
+PITCH_WHEEL 2 9892 DELAY 10 
+PITCH_WHEEL 2 10962 DELAY 10 
+NOTE_ON 2 C#4 0 PITCH_WHEEL 2 8192 DELAY 10 LAZY ;m169
+forte D5 4 mf C#5 4 ;m170
+F#4 4 END_LAZY PROGRAM 2 46 LAZY vel 50 G4 8 vel 58 G#4 8  ;m171
+vel 66 A4 8 vel 74 A#4 8 vel 84 B4 8 vel 92 C5 8 ;m172
+vel 100 C#5 8 R 3/8 ;m173
+R 2 ;m174
+R 4 vel 50 A4 8 vel 58 Bb4 8 ;m175
+vel 66 B4 8 vel 74 C5 8 vel 82 Db5 8 vel 100 D5 8 ;m176
+vel 108 Eb5 8 END_LAZY PROGRAM 2 41 LAZY R 3/8 ;m177
+R 2  ;m178
+R 2  ;m179
+R 2  ;m180
+R 4 forte END_LAZY NOTE_ON 2 G#3 90 DELAY 120
+PITCH_WHEEL 2 8362 DELAY 10
+PITCH_WHEEL 2 8532 DELAY 10
+PITCH_WHEEL 2 8702 DELAY 10
+PITCH_WHEEL 2 8872 DELAY 10 
+PITCH_WHEEL 2 9042 DELAY 10 
+PITCH_WHEEL 2 9212 DELAY 10 
+PITCH_WHEEL 2 9382 DELAY 10 
+PITCH_WHEEL 2 9552 DELAY 10 
+PITCH_WHEEL 2 9722 DELAY 10 
+PITCH_WHEEL 2 9892 DELAY 10 
+PITCH_WHEEL 2 10962 DELAY 10 
+NOTE_ON 2 G#3 0 PITCH_WHEEL 2 8192 DELAY 10 LAZY ;m181
+ff A4 4 forte G#4 4 ;m182
+C#4 4 ff  Eb4 16 E4 16 Eb4 16 Db4 16  ;m183
+ B3 16 Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m184
+ E4 16 Gb4 16 E4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m185
+ G3 16 Ab3 16 G3 16 Eb4 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m186
+ B3 16 Db4 16 B3 16 Ab3 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m187
+ B3 16 Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m188
+ E4 16 Gb4 16 E4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m189
+ G3 16 Ab3 16 G3 16 Eb4 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m190
+B3 8 R 8  forte Eb5 16 mf E5 16 Eb5 16 Db5 16  ;m191
+ff  B4 16 Db5 16 B4 16 Bb4 16   Ab4 16 Bb4 16 Ab4 16 Gb4 16  ;m192
+ E4 16 Gb4 16 E4 16 Eb4 16   Db4 16 Eb4 16 Db4 16 B3 16  ;m193
+ Bb3 16 B3 16 Bb3 16 A3 16    Bb3 16 B3 16 Bb3 16 A3 16  ;m194
+ Bb3 16 B3 16 Bb3 16 A3 16    Bb3 16 B3 16 Bb3 16 A3 16  ;m195
+ff Bb3 12 ff Bb3 12 Bb3 12 Bb3 12 Bb3 12 Bb3 12 ;m196 
+ff Bb3 12 ff Bb3 12 Bb3 12 fff Bb3 12 ff Bb3 12 Bb3 12 ;m197
+;6/8 time
+vel 60 C4 12 R 24 vel 66 D4 12 R 24 vel 72 Eb4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 Ab4 12 R 24   ;m198
+vel 96 Bb4 12 R 24 vel 102 C5 12 R 24 vel 108 D5 12 R 24 vel 114 G4 Eb5 3/8 ;m199
+R 2. ;m200
+R 3/8 ff Ab3 4 forte Ab3 12 R 24 ;m201
+vel 60 Bb3 12 R 24 vel 66 C4 12 R 24 vel 72 D4 12 R 24 vel 78 Eb4 12 R 24 vel 84 F4 12 R 24 vel 90 G4 12 R 24  ;m202
+vel 96 Ab4 12 R 24 vel 102 Bb4 12 R 24 vel 108 C5 12 R 24 vel 114 D5 4 Bb3 12 R 24 ;m203
+forte C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24  ;m204
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 3/8 ;m205
+R 2. ;m206
+R 5/8 ff D4 4  ;m207
+vel 50  D4 12 R 24 vel 54 D4 12 R 24 vel 58 D4 12 R 24 vel 62 D4 12 R 24 vel 66 D4 12 R 24  ;m208
+vel 70 D4 12 R 24 vel 74 D4 12 R 24 vel 78 D4 12 R 24 G4 4 R 8 ;m209
+R 2.  ;m210
+R 5/8 ff F4 4 ;m211
+vel 45  F4 12 R 24 vel 50 F4 12 R 24 vel 55 F4 12 R 24 vel 60 F4 12 R 24 vel 65 F4 12 R 24  ;m212
+vel 70 F4 12 R 24 vel 75 F4 12 R 24 vel 80 F4 12 R 24 vel 85 D4 Bb4 4 Bb3 12 R 24  ;m213
+C4 12 R 24 Db4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24  ;m214
+Bb4 12 R 24 C5 12 R 24 Db5 12 R 24 ff Eb5 4 forte Eb4 4 ;m215
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24  ;m216
+Eb4 12 R 24 Eb4 12 R 24 Eb4 12 R 24 Eb4 4 vel 60 C4 12 R 24 ;m217
+vel 66 D4 12 R 24 vel 72 E4 12 R 24 vel 78 F4 12 R 24 vel 84 G4 12 R 24 vel 90 A4 12 R 24 vel 96 Bb4 12 R 24 ;m218
+vel 102 C5 12 R 24 vel 108 D5 12 R 24 vel 114 E5 12 R 24 vel 120 F5 4 forte F4 4 ;m219
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 12 R 24  ;m220
+F4 12 R 24 F4 12 R 24 F4 12 R 24 F4 4 p D4 12 R 24 ;m221
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24   ;m222
+D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 D4 12 R 24 mf C4 Eb4 12 R 24 ;m223
+p C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24   ;m224
+C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 Eb4 12 R 24 C4 D4 12 R 24 C4 D4 12 R 24 mf B3 D4 12 R 24 ;m225
+p B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24   ;m226
+B3 D4 12 R 24 B3 D4 12 R 24 B3 D4 12 R 24 C4 12 R 24 C4 12 R 24 mf C4 12 R 24  ;m227
+p C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 60 C4 12 R 24 C4 12 R 24 C4 12 R 24 ;m228
+vel 66 C4 12 R 24 C4 12 R 24 C4 12 R 24 vel 72 Bb3 4 Ab4 12 R 24  ;m229
+vel 78 G4 16 Ab4 16 G4 8 F4 12 R 24 vel 84 Eb4 16 F4 16 Eb4 8 D4 12 R 24 ;m230
+vel 90 C4 16 D4 16 C4 8 Bb3 12 R 24 vel 96 Eb4 G3 3/8 ;m231
+R 2.   ;m232
+R 3/8 forte Ab3 Eb4 4 Ab3 12 R 24 ;m233
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m234
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 D4 12 R 24 ;m235
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24   ;m236
+D5 12 R 24 Eb5 12 R 24 F5 12 R 24 G5 4 Eb4 12 R 24 ;m237
+F4 12 R 24 G4 12 R 24 Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Db5 12 R 24  ;m238
+Eb5 12 R 24 F5 12 R 24 G5 12 R 24 Ab5 4 Bb3 12 R 24  ;m239
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m240
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 ff Eb5 8. R 8. ;m241
+R 2. ;m242 ;CODA
+R 2.  ;m243
+R 2. ;m244
+R 5/8 ff Eb5 10/8 ;m245
+;m246
+Eb5 8 R 4 ;m247
+R 2. ;m248
+R 5/8 Eb5 10/8 ;m249
+;250
+Eb5 8 R 8 F5 10/8 ;m251
+;252
+p D4 6/8 ;m253
+mp D4 6/8 ;m254
+D4 2 ;m255
+vel 60 D4 12 R 24 vel 62 D4 12 R 24 vel 64 D4 12 R 24 vel 66 D4 12 R 24 vel 68 D4 12 R 24  ;m256
+vel 70 D4 12 R 24 vel 72 D4 12 R 24 vel 74 D4 12 R 24 vel 76 D4 12 R 24 vel 78 D4 12 R 24 vel 80 D4 12 R 24  ;m257
+vel 82 D4 12 R 24 vel 84 D4 Bb3 12 R 24 vel 86 D4 Bb3 12 R 24 vel 88 D4 Bb3 12 R 24 vel 90 D4 Bb3 12 R 24 vel 92 D4 Bb3 12 R 24  ;m258
+vel 94 D4 Bb3 12 R 24 vel 96 D4 Bb3 12 R 24 vel 98 D4 Bb3 12 R 24 vel 100 D4 Bb3 12 R 24 vel 102 D4 Bb3 12 R 24 vel 104 D4 Bb3 12 R 24 ;m259
+vel 106 Bb3 Eb4 4 R 2 ;m260
+R 2. ;m261
+Bb3 16 G4 Eb5 3/16 R 2 ;m262
+Bb3 16 G4 Eb5 3/16 R 2 ;m263
+Eb4 4 R 2 ;m264
+G3 Eb4 Bb4 4 R 2 ;m265
+G3 Eb4 6/8 ;m266
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt3va.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.12  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.11  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.10  2003/06/03 23:48:55  root
+; narrow stereo field
+;
+; Revision 1.9  2003/06/03 23:11:23  root
+; fix 223 booboo
+;
+; Revision 1.8  2003/05/30 00:26:45  root
+; add portamento to first trio in scherzo
+;
+; Revision 1.7  2003/05/26 18:49:50  root
+; staccatos
+;
+; Revision 1.6  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.5  2003/03/09 21:49:13  root
+; done
+;
+; Revision 1.4  2003/03/05 02:51:30  root
+; fixed accturnto turn acc
+;
+; Revision 1.3  2003/03/05 02:05:48  root
+; dynamics ok
+;
+; Revision 1.2  2003/03/04 03:16:16  root
+; notes and rhythms ok
+;
+; Revision 1.1  2003/03/02 18:42:34  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3va.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3va.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement Scherzo: molto vivace ; Viola
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK VIOLA
+INSTRUMENT 42
+PROGRAM 3 42
+PAN 3 20
+LAZY
+chan 3
+forte
+R 5/8 ;measure 0
+R 8
+R 2. ;m1
+R 3/8 Eb3 4 Eb3 12 R 24 ;m2
+vel 60 F3 12 R 24 vel 66 G3 12 R 24 vel 72 Ab3 12 R 24 vel 78  Bb3 12 R 24 vel 84 C4 12 R 24 vel 90 D4 12 R 24  ;m3
+vel 96 Eb4 12 R 24 vel 102 F4 12 R 24 vel 108 G4 12 R 24 vel 114 Ab4 3/8 ;m4
+R 2. ;m5
+forte R 3/8 Bb3 3/8 ;m6
+R 2. ;m7
+R 3/8 Bb3 G4 3/8  ;m8
+R 2. ;m9
+R 5/8 vel 60 D3 12 R 24  ;m10
+vel 66 E3 12 R 24 vel 72 F#3 12 R 24 vel 78 G3 12 R 24 vel 84  A3 12 R 24 vel 90  Bb3 12 R 24 vel 96 C4 12 R 24 ;m11
+vel 102 D4 12 R 24 vel 108 E4 12 R 24 vel 114 F#4 12 R 24 vel 120 G4 3/8 ;m12
+R 2. ;m13
+R 5/8 vel 60 F3 12 R 24 ;m14
+vel 66 G3 12 R 24 vel 72 A3 12 R 24 vel 78 Bb3 12 R 24 vel 84 C4 12 R 24 vel 90 D4 12 R 24 vel 96 Eb4 12 R 24  ;m15
+vel 102 F4 12 R 24 vel 108 G4 12 R 24 vel 114 A4 12 R 24 vel 120 Bb4 4 ;m16
+R 8
+R 2. ;m1
+R 3/8 Eb3 4 Eb3 12 R 24 ;m2
+vel 60 F3 12 R 24 vel 66 G3 12 R 24 vel 72 Ab3 12 R 24 vel 78  Bb3 12 R 24 vel 84 C4 12 R 24 vel 90 D4 12 R 24  ;m3
+vel 96 Eb4 12 R 24 vel 102 F4 12 R 24 vel 108 G4 12 R 24 vel 114 Ab4 3/8 ;m4
+R 2. ;m5
+forte R 3/8 Bb3 3/8 ;m6
+R 2. ;m7
+R 3/8 Bb3 G4 3/8  ;m8
+R 2. ;m9
+R 5/8 vel 60 D3 12 R 24  ;m10
+vel 66 E3 12 R 24 vel 72 F#3 12 R 24 vel 78 G3 12 R 24 vel 84  A3 12 R 24 vel 90  Bb3 12 R 24 vel 96 C4 12 R 24 ;m11
+vel 102 D4 12 R 24 vel 108 E4 12 R 24 vel 114 F#4 12 R 24 vel 120 G4 3/8 ;m12
+R 2. ;m13
+R 5/8 vel 60 F3 12 R 24 ;m14
+vel 66 G3 12 R 24 vel 72 A3 12 R 24 vel 78 Bb3 12 R 24 vel 84 C4 12 R 24 vel 90 D4 12 R 24 vel 96 Eb4 12 R 24 ;m15
+vel 102 F4 12 R 24 vel 108 G4 12 R 24 vel 114 A4 12 R 24 vel 120 Bb4 4 ;m16
+ ;repeat sign
+vel 60 Bb3 12 R 24 
+vel 66 C3 12 R 24 vel 72 Db3 12 R 24 vel 78  Eb3 12 R 24 vel 84   F3 12 R 24 vel 90  G3 12 R 24 vel 96  Ab3 12 R 24  ;m17
+vel 102 Bb3 12 R 24 vel 108  C4 12 R 24 vel 114  Db4 12 R 24 vel 120  Eb4 4 forte Eb3 12 R 24  ; m18
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m19
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 vel 60 C3 12 R 24 ;m20
+vel 66 D3 12 R 24 vel 72  E3 12 R 24 vel 78  F3 12 R 24 vel 84  G3 12 R 24 vel 90  A3 12 R 24 vel 96  Bb3 12 R 24  ;m21
+vel 102 C4 12 R 24 vel 114  D4 12 R 24 vel 120  E4 12 R 24  F4 4 forte F3 12 R 24  ;m22
+G3 12 R 24 A3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 ;m23
+F4 12 R 24 G4 12 R 24 A4 12 R 24 Bb4 4 pp Bb3 12 R 24 ;m24
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 ;m25
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 mf Ab3 12 R 24 ;m26
+pp Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m27
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 mf G3 12 R 24 ;m28
+vel 50 A3 12 R 24 B3 12 R 24 C4 12 R 24 vel 54 D4 12 R 24 E4 12 R 24 F4 12 R 24 ;m29
+vel 58 G4 12 R 24 A4 12 R 24 B4 12 R 24 vel 62 C5 4 Bb4 12 R 24 ;m30
+vel 66  A4 16 Bb4 16 A4 8 G4 12 R 24 vel 70 F4 16 G4 16 F4 8 Eb4 12 R 24  ;m31
+vel 74 D4 16 Eb4 16 D4 8 C4 12 R 24 vel 78 Bb3 4 Bb3 12 R 24  ;m32
+vel 82 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 vel 86 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 ;m33
+vel 90 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 vel 94 Eb4 4 forte Eb3 12 R 24 ;m34
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m35
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Ab3 12 R 24 ;m36
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 8 G4 12 R 24 ;m37
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 Bb3 Bb4 12 R 24  ;m38
+Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24   ;m39
+Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 4 Eb3 12 R 24 ;m40
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 Db4 12 R 24 ;m41
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Bb3 12 R 24 ;m42
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m43
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 R 8 ;m44a
+vel 60 Bb3 12 R 24 
+vel 66 C3 12 R 24 vel 72 Db3 12 R 24 vel 78  Eb3 12 R 24 vel 84   F3 12 R 24 vel 90  G3 12 R 24 vel 96  Ab3 12 R 24  ;m17
+vel 102 Bb3 12 R 24 vel 108  C4 12 R 24 vel 114  Db4 12 R 24 vel 120  Eb4 4 forte Eb3 12 R 24  ; m18
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m19
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 vel 60 C3 12 R 24 ;m20
+vel 66 D3 12 R 24 vel 72  E3 12 R 24 vel 78  F3 12 R 24 vel 84  G3 12 R 24 vel 90  A3 12 R 24 vel 96  Bb3 12 R 24  ;m21
+vel 102 C4 12 R 24 vel 114  D4 12 R 24 vel 120  E4 12 R 24  F4 4 forte F3 12 R 24  ;m22
+G3 12 R 24 A3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 ;m23
+F4 12 R 24 G4 12 R 24 A4 12 R 24 Bb4 4 p Bb3 12 R 24 ;m24
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 ;m25
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 mf Ab3 12 R 24 ;m26
+p Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m27
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 mf G3 12 R 24 ;m28
+vel 50 A3 12 R 24 B3 12 R 24 C4 12 R 24 vel 54 D4 12 R 24 E4 12 R 24 F4 12 R 24 ;m29
+vel 58 G4 12 R 24 A4 12 R 24 B4 12 R 24 vel 62 C5 4 Bb4 12 R 24 ;m30
+vel 66  A4 16 Bb4 16 A4 8 G4 12 R 24 vel 70 F4 16 G4 16 F4 8 Eb4 12 R 24  ;m31
+vel 74 D4 16 Eb4 16 D4 8 C4 12 R 24 vel 78 Bb3 4 Bb3 12 R 24  ;m32
+vel 82 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 vel 86 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 ;m33
+vel 90 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 vel 94 Eb4 4 forte Eb3 12 R 24 ;m34
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m35
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Ab3 12 R 24 ;m36
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m37
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 Bb3 Bb4 12 R 24  ;m38
+Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24   ;m39
+Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 4 Eb3 12 R 24 ;m40
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 Db4 12 R 24 ;m41
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Bb3 12 R 24 ;m42
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m43
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 Eb5 12 R 24 R 8 ;m44a
+;repeat sign 
+;Trio I
+R 8 ;44b
+R 2. ;m45
+R 2. ;m46
+p END_LAZY NOTE_ON 3 Gb4 50 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY B3 3/8  ;m47
+Db4 3/8 Gb3 3/8 ;m48
+B3 5/8 Db4 8 ;m49
+Bb3 3/8 Gb3 3/8 ;m50
+mp END_LAZY NOTE_ON 3 Gb4 62 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY p B3 3/8  ;m51
+Db4 3/8 Gb3 3/8 ;m52
+B3 5/8 Db4 8 ;m53
+Bb3 3/8 R 3/8 ;m54
+mp END_LAZY NOTE_ON 3 Gb4 50 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY p B3 3/8  ;m55
+Db4 3/8 Gb3 3/8 ;m56
+B3 5/8 Db4 8 ;m57
+Bb3 3/8 Gb3 3/8 ;m58
+mp END_LAZY NOTE_ON 3 Gb4 50 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY p  B3 3/8  ;m59
+Db4 3/8 Gb3 3/8 ;m60
+R 2. ;m61 begin repeat
+R 2. ;m62
+mp END_LAZY NOTE_ON 3 F4 50 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 F4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY p Bb3 3/8 ;m63
+C4 3/8 F3 3/8 ;m64
+Bb3 5/8 Db4 8  ;m65
+
+END_LAZY
+NOTE_ON 3 F4 50
+DELAY 54 CHANNEL_PRESSURE 3 50
+DELAY 54 CHANNEL_PRESSURE 3 49
+DELAY 54 CHANNEL_PRESSURE 3 48
+DELAY 54 CHANNEL_PRESSURE 3 48
+DELAY 54 CHANNEL_PRESSURE 3 47
+DELAY 54 CHANNEL_PRESSURE 3 46
+DELAY 54 CHANNEL_PRESSURE 3 46
+DELAY 54 CHANNEL_PRESSURE 3 45
+DELAY 54 CHANNEL_PRESSURE 3 44
+DELAY 54 CHANNEL_PRESSURE 3 44
+DELAY 54 CHANNEL_PRESSURE 3 43
+DELAY 54 CHANNEL_PRESSURE 3 42
+DELAY 54 CHANNEL_PRESSURE 3 42
+DELAY 54 CHANNEL_PRESSURE 3 41
+DELAY 54 CHANNEL_PRESSURE 3 41
+DELAY 54 CHANNEL_PRESSURE 3 40
+DELAY 54 CHANNEL_PRESSURE 3 39
+DELAY 54 CHANNEL_PRESSURE 3 39
+DELAY 54 CHANNEL_PRESSURE 3 38
+DELAY 54 CHANNEL_PRESSURE 3 37
+DELAY 54 CHANNEL_PRESSURE 3 37
+DELAY 54 CHANNEL_PRESSURE 3 36
+DELAY 54 CHANNEL_PRESSURE 3 35
+DELAY 54 CHANNEL_PRESSURE 3 35
+DELAY 54 CHANNEL_PRESSURE 3 34
+DELAY 54 CHANNEL_PRESSURE 3 33
+DELAY 54 CHANNEL_PRESSURE 3 33
+DELAY 54 CHANNEL_PRESSURE 3 32
+DELAY 54 CHANNEL_PRESSURE 3 32
+DELAY 54 CHANNEL_PRESSURE 3 31
+DELAY 54 CHANNEL_PRESSURE 3 30
+DELAY 54 CHANNEL_PRESSURE 3 30
+DELAY 54 CHANNEL_PRESSURE 3 29
+DELAY 54 CHANNEL_PRESSURE 3 28
+DELAY 54 CHANNEL_PRESSURE 3 28
+DELAY 54 CHANNEL_PRESSURE 3 27
+DELAY 54 CHANNEL_PRESSURE 3 26
+DELAY 54 CHANNEL_PRESSURE 3 26
+DELAY 54 CHANNEL_PRESSURE 3 25
+DELAY 54 CHANNEL_PRESSURE 3 25
+NOTE_OFF 3 F4 0
+LAZY ;m66
+;m67
+;m68
+R 2. ;m69
+R 2. ;m70
+pp END_LAZY NOTE_ON 3 Gb4 40 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY B3 3/8 ;m71
+Db4 3/8 Gb3 3/8 ;m72
+B3 5/8 Db4 8 ;m73
+Bb3 3/8 Gb3 3/8 ;m74
+END_LAZY NOTE_ON 3 Gb4 40 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY B3 3/8 ;m75
+Db4 3/8 Gb3 3/8 ;m76 first ending
+R 2. ;m61 begin repeat
+R 2. ;m62
+mp END_LAZY NOTE_ON 3 F4 50 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 F4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY p Bb3 3/8 ;m63
+C4 3/8 F3 3/8 ;m64
+Bb3 5/8 Db4 8  ;m65
+
+END_LAZY
+NOTE_ON 3 F4 50
+DELAY 54 CHANNEL_PRESSURE 3 50
+DELAY 54 CHANNEL_PRESSURE 3 49
+DELAY 54 CHANNEL_PRESSURE 3 48
+DELAY 54 CHANNEL_PRESSURE 3 48
+DELAY 54 CHANNEL_PRESSURE 3 47
+DELAY 54 CHANNEL_PRESSURE 3 46
+DELAY 54 CHANNEL_PRESSURE 3 46
+DELAY 54 CHANNEL_PRESSURE 3 45
+DELAY 54 CHANNEL_PRESSURE 3 44
+DELAY 54 CHANNEL_PRESSURE 3 44
+DELAY 54 CHANNEL_PRESSURE 3 43
+DELAY 54 CHANNEL_PRESSURE 3 42
+DELAY 54 CHANNEL_PRESSURE 3 42
+DELAY 54 CHANNEL_PRESSURE 3 41
+DELAY 54 CHANNEL_PRESSURE 3 41
+DELAY 54 CHANNEL_PRESSURE 3 40
+DELAY 54 CHANNEL_PRESSURE 3 39
+DELAY 54 CHANNEL_PRESSURE 3 39
+DELAY 54 CHANNEL_PRESSURE 3 38
+DELAY 54 CHANNEL_PRESSURE 3 37
+DELAY 54 CHANNEL_PRESSURE 3 37
+DELAY 54 CHANNEL_PRESSURE 3 36
+DELAY 54 CHANNEL_PRESSURE 3 35
+DELAY 54 CHANNEL_PRESSURE 3 35
+DELAY 54 CHANNEL_PRESSURE 3 34
+DELAY 54 CHANNEL_PRESSURE 3 33
+DELAY 54 CHANNEL_PRESSURE 3 33
+DELAY 54 CHANNEL_PRESSURE 3 32
+DELAY 54 CHANNEL_PRESSURE 3 32
+DELAY 54 CHANNEL_PRESSURE 3 31
+DELAY 54 CHANNEL_PRESSURE 3 30
+DELAY 54 CHANNEL_PRESSURE 3 30
+DELAY 54 CHANNEL_PRESSURE 3 29
+DELAY 54 CHANNEL_PRESSURE 3 28
+DELAY 54 CHANNEL_PRESSURE 3 28
+DELAY 54 CHANNEL_PRESSURE 3 27
+DELAY 54 CHANNEL_PRESSURE 3 26
+DELAY 54 CHANNEL_PRESSURE 3 26
+DELAY 54 CHANNEL_PRESSURE 3 25
+DELAY 54 CHANNEL_PRESSURE 3 25
+NOTE_OFF 3 F4 0
+LAZY ;m66 rep
+;m67
+;m68
+R 2. ;m69
+R 2. ;m70
+pp END_LAZY NOTE_ON 3 Gb4 40 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY B3 3/8 ;m71
+Db4 3/8 Gb3 3/8 ;m72
+B3 5/8 Db4 8 ;m73
+Bb3 3/8 Gb3 3/8 ;m74
+END_LAZY NOTE_ON 3 Gb4 40 DELAY 270 
+PITCH_WHEEL 3 8021 DELAY 10
+PITCH_WHEEL 3 7850 DELAY 10
+PITCH_WHEEL 3 7680 DELAY 10 
+PITCH_WHEEL 3 7509 DELAY 10 
+PITCH_WHEEL 3 7338 DELAY 10 
+PITCH_WHEEL 3 7168 DELAY 10 
+PITCH_WHEEL 3 6997 DELAY 10 
+PITCH_WHEEL 3 6826 DELAY 10 
+NOTE_ON 3 Gb4 0 PITCH_WHEEL 3 8192 DELAY 10 LAZY B3 3/8 ;m75
+Db4 3/8 Gb3 8 R 4 ;m77 second ending
+R 5/8 Bb3 12 R 24  ;m78
+vel 40 Bb3 12 R 24 vel 49 Bb3 12 R 24 vel 58 Bb3 12 R 24 vel 67 Bb3 12 R 24 vel 76 Bb3 12 R 24 vel 85 Bb3 12 R 24 ;m79
+forte C3 12 R 24 D3 12 R 24 Eb3 12 R 24 vel 93 F3 12 R 24 vel 96  G3 12 R 24 vel 100 Ab3 12 R 24 ;m80
+vel 103  G3 12 R 24 vel 106 Ab3 12 R 24 vel 109 Bb3 12 R 24 vel 112 Eb4 4 forte Eb3 12 R 24 ;m81
+vel 60 F3 12 R 24 vel 63 G3 12 R 24 vel 66 Ab3 12 R 24 vel 69 Bb3 12 R 24 vel 72 C4 12 R 24 vel 75 D4 12 R 24  ;m82
+vel 78 Eb4 12 R 24 vel 81 F4 12 R 24 vel 84 G4 12 R 24 vel 87 Ab4 3/8 ;m83
+R 2. ;m84
+forte R 3/8 Bb3 3/8 ;m85
+R 2. ;m86
+R 3/8 Bb3 G4 3/8 ;m87
+R 2. ;m88
+R 5/8 forte D3 12 R 24 ;m89
+vel 60 E3 12 R 24 vel 66 F#3 12 R 24 vel 72 G3 12 R 24 vel 78 A3 12 R 24 vel 84  Bb3 12 R 24 vel 90 C4 12 R 24 ;m90
+vel 96  D4 12 R 24 vel 102  E4 12 R 24 vel 108 F#4 12 R 24 vel 114 G4 3/8 ;m91
+R 2. ;m92
+R 5/8 ff F3 12 R 24 ;m93
+vel 60 G3 12 R 24 vel 66 A3 12 R 24 vel 72 Bb3 12 R 24 vel 78 C4 12 R 24 vel 84 D4 12 R 24 vel 90 Eb4 12 R 24 ;m94
+vel 96 F4 12 R 24 vel 102 G4 12 R 24 vel 108 A4 12 R 24 vel 114 Bb4 4 forte Bb3 12 R 24 ;m95
+vel 60 C3 12 R 24 vel 66 Db3 12 R 24 vel 72 Eb3 12 R 24 vel 78 F3 12 R 24 vel 84 G3 12 R 24 vel 90 Ab3 12 R 24 ;m96
+vel 96 Bb3 12 R 24 vel 102 C4 12 R 24 vel 108 Db4 12 R 24 vel 114 Eb4 4 vel 60 Eb3 12 R 24 ;m 97
+forte F3 12 R 24  G3 12 R 24  Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 Db4 12 R 24 ;m98
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 C3 12 R 24 ;m99
+vel 60 D3 12 R 24 vel 66 E3 12 R 24 vel 72 F3 12 R 24 vel 78 G3 12 R 24 vel 84 A3 12 R 24 vel 90 Bb3 12 R 24 ;m100
+vel 96 C4 12 R 24 vel 102  D4 12 R 24 vel 108  E4 12 R 24 vel 114 F4 4 forte F3 12 R 24  ;m101
+G3 12 R 24 A3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24  ;m102
+F4 12 R 24 G4 12 R 24 A4 12 R 24 Bb4 4 p Bb3 12 R 24 ;m103
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24  ;m104
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 mf Ab3 12 R 24  ;m105
+p Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24  ;m106
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 mf G3 12 R 24  ;m107
+p A3 12 R 24 vel 53 B3 12 R 24 vel 56 C4 12 R 24 vel 59 D4 12 R 24 vel 62 E4 12 R 24 vel 65 F4 12 R 24  ;m108
+vel 68 G4 12 R 24 vel 70 71 A4 12 R 24 vel 74 B4 12 R 24 vel 75 C5 4 Bb4 12 R 24  ;m109
+vel 80 A4 16 Bb4 16 A4 8 G4 12 R 24 vel 85 F4 16 G4 16 F4 8 Eb4 12 R 24 ;m110
+forte D4 16 Eb4 16 D4 8 C4 12 R 24 Bb3 4 Bb3 12 R 24 ;m111
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 ;m112
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Eb4 4 Eb3 12 R 24 ;113
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m114
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Ab3 12 R 24 ;m115
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24  ;m116
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 Bb3 Bb4 12 R 24 ;m117
+Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 ;m118
+Bb3 Bb4 12 R 24  Bb3 Bb4 12 R 24 Bb3 Bb4 12 R 24 Bb3 Bb4 4 Eb3 12 R 24 ;m119
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 Db4 12 R 24 ;m120
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Bb3 12 R 24  ;m121
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m122
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 ff Eb5 12 R 24 R 8 R 8 ;m123A
+; 2/4 Trio II
+R 2 ;m123B
+R 2 ;m124
+R 2 ;m125
+R 2 ;m126
+R 2 ;m127
+R 2 ;m128
+R 2 ;m129
+R 2 ;m130
+R 4 mf  B3 16 C#4 16 B3 16 A3 16  ;m131
+ G#3 16 A3 16 G#3 16 E3 16   E4 16 F#4 16 E4 16 D#4 16   ;m132
+ C#4 16 D#4 16 C#4 16 A3 16   F#3 16 G#3 16 F#3 16 E3 16  ;m133
+ D#3 16 E3 16 D#3 16 B3 16   B3 16 C#4 16 B3 16 A3 16  ;m134
+ G#3 16 A3 16 G#3 16 E3 16  vel 85 E4 16 E4 16 E4 16 E4 16 ;m135
+E4 16 E4 16 E4 16 E4 16 F#4 A4 16 F#4 A4 16 F#4 A4 16 F#4 A4 16 ;m136
+F#4 A4 16 F#4 A4 16 F#4 A4 16 F#4 A4 16 F#4 16 F#4 16 F#4 16 F#4 16 ;m137
+F#4 16 F#4 16 F#4 16 F#4 16 E4 16 E4 16 E4 16 E4 16 ;m138
+E4 16 E4 16 E4 16 E4 16 ff  Eb4 16 F4 16 Eb4 16 Db4 16  ;m139
+ B3 16 Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m140
+ Fb5 16 Gb5 16 Fb5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m141
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m142
+ B3 16 Db4 16 B3 16 Ab3 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m143
+ B3 16 Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16   ;m144
+ Gb4 16 Ab4 16 Gb4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m145
+ G3 16 Ab3 16 G3 16 Eb3 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m146
+ B3 16 Db4 16 B3 16 Ab3 16  R 4 ;m147
+p END_LAZY PROGRAM 3 46 LAZY R 8 vel 60 Ab4 8 vel 68 Gb4 8 vel 76 F4 8 ;m148
+vel 84 Eb4 8 R 3/8 ;m149
+R 2 ;m150
+R 2 ;m151
+R 8 vel 70 B3 8 vel 78 Bb3 8 vel 86 Ab3 8 ;m152
+vel 94 Gb3 8 END_LAZY PROGRAM 3 42 LAZY R 3/8 ;m153
+R 2 ;m154
+R 2 ;m155
+R 2 ;m156
+R 2 ;m157
+R 2 ;m158
+R 4 B3 8 B3 8 ;m159
+R 4 vel 60 E3 8 E3 8 ;m160
+vel 70 R 4 F#3 8 F#3 8 ;m161
+vel 80 R 4 B3 8 B3 8 ;m162
+forte R 4  C#4 16 D4 16 C#4 16 B3 16  ;m163
+ A3 16 B3 16 A3 16 F#3 16   F#4 16 G4 16 F#4 16 E4 16   ;m164
+ D4 16 E4 16 D4 16 B3 16   G#3 16 A3 16 G#3 16 F#3 16   ;m165
+ F3 16 F#3 16 F3 16 C#3 16   C#4 16 D4 16 C#4 16 B3 16  ;m166
+ A3 16 B3 16 A3 16 F#3 16   C#4 16 D4 16 C#4 16 B3 16   ;m167
+ A3 16 B3 16 A3 16 F#3 16   F#4 16 G4 16 F#4 16 E4 16  ;m168
+ D4 16 E4 16 D4 16 B3 16   G#3 16 A3 16 G#3 16 F#3 16  ;m169
+ F3 16 F#3 16 F3 16 C#3 16   C#4 16 D4 16 C#4 16 B3 16  ;m170
+ A3 16 B3 16 A3 16 F#3 16  R 4 ;m171
+p END_LAZY PROGRAM 3 46 LAZY R 8 vel 60 F#4 8 vel 68 E4 8 vel 76 D#4 8 ;m172
+vel 84 C#4 8 R 8 R 4 ;m173
+R 2 ;m174
+R 2 ;m175
+R 8 vel 70 Ab4 8 vel 78 Gb4 8 vel 86 F4 8 ;m176
+vel 94 Eb4 8 END_LAZY PROGRAM 3 42 LAZY R 3/8 ;m177
+R 2 ;m178
+R 2 ;m179
+ff Db4 8 forte Db4 8 R 4 ;m180
+ff Db4 8 forte Db4 8 R 4 ;m181
+ff C4 8 forte C4 8 R 4 ;m182
+ff Db4 8 forte Db4 8 ff  Eb4 16 E4 16 Eb4 16 Db4 16   ;m183
+ B3 16 Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m184
+ E4 16 Gb4 16 E4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m185
+ G3 16 Ab3 16 G3 16 Eb3 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m186
+ B3 16 Db4 16 B3 16 Ab3 16   Eb4 16 Fb4 16 Eb4 16 Db4 16  ;m187
+ B3 16 Db4 16 B3 16 Ab3 16   Ab4 16 A4 16 Ab4 16 Gb4 16  ;m188
+ E4 16 Gb4 16 E4 16 Db4 16   Bb3 16 B3 16 Bb3 16 Ab3 16  ;m189
+ G3 16 Ab3 16 G3 16 Eb4 16   Eb4 16 E4 16 Eb4 16 Db4 16  ;m190
+ B3 16 Db4 16 B3 16 Ab3 16   forte Eb3 16 mf E3 16 Eb3 16 Db3 16  ;m191
+ff  B3 16 Db4 16 B3 16 Bb3 16   Ab3 16 Bb3 16 Ab3 16 Gb3 16  ;m192
+ Fb3 16 Gb3 16 Fb3 16 Eb3 16   Db3 16 Eb3 16 Db3 16 B3 16   ;m193
+ Bb3 16 B3 16 Bb3 16 A3 16   Bb3 16 B3 16 Bb3 16 A3 16  ;m194
+ Bb3 16 B3 16 Bb3 16 A3 16   Bb3 16 B3 16 Bb3 16 A3 16  ;m195
+ff Bb3 12 ff Bb3 12 Bb3 12 Bb3 12 Bb3 12 Bb3 12 ;m196
+ff Bb3 12 ff Bb3 12 Bb3 12 fff Bb3 12 ff Bb3 12 Bb3 12 ;m197
+vel 60 C3 12 R 24 vel 66 D3 12 R 24 vel 72 Eb3 12 R 24 vel 78 F3 12 R 24 vel 84  G3 12 R 24 vel 90  Ab3 12 R 24  ;m198
+vel 96 Bb3 12 R 24 vel 102 C4 12 R 24 vel 108  D4 12 R 24 vel 114  Eb4 4 forte Eb3 12 R 24 ;m199
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m200
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ff Ab4 3/8 ;m201
+R 2. ;m202
+R 3/8 forte Bb3 3/8 ;m203 
+R 2. ;m204
+R 3/8 Bb3 G4 3/8 ;m205
+R 2.   ;m206
+R 5/8 ff D3 12 R 24 ;m207
+forte E3 12 R 24 vel 63 F#3 12 R 24 vel 66 G3 12 R 24 vel 69 A3 12 R 24 vel 69 Bb3 12 R 24 vel 72 C4 12 R 24 ;m208
+vel 75 D4 12 R 24 vel 78 E4 12 R 24 vel 81 F#4 12 R 24 vel 84 G4 3/8  ;m209
+R 2. ;m210
+R 5/8 F3 8 ;m211
+vel 60 G3 12 R 24 vel 66 A3 12 R 24 vel 72  Bb3 12 R 24 vel 78 C4 12 R 24 vel 84 D4 12 R 24 vel 90 Eb4 12 R 24 ;m212
+vel 96 F4 12 R 24 vel 102 G4 12 R 24 vel 108 A4 12 R 24 vel 114 Bb4 4 forte Bb3 12 R 24 ;m213
+C3 12 R 24 Db3 12 R 24 Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 12 R 24 ;m214
+Bb3 12 R 24  C4 12 R 24  Db4 12 R 24  ff Eb4 4 forte Eb3 12 R 24  ;m215
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 Db4 12 R 24 ;m216
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 C3 12 R 24 ;m217
+vel 60 D3 12 R 24 vel 66 E3 12 R 24 vel 72 F3 12 R 24 vel 78 G3 12 R 24 vel 84 A3 12 R 24 vel 90 Bb3 12 R 24 ;m218
+vel 96 C4 12 R 24 vel 102 D4 12 R 24 vel 108 E4 12 R 24 vel 114 F4 4 forte F3 12 R 24 ;m219
+G3 12 R 24 A3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 ;m220
+F4 12 R 24 G4 12 R 24 A4 12 R 24 Bb4 4 p Bb3 12 R 24 ;m221
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24  ;m222
+Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 mp Ab3 12 R 24 ;m223
+p Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m224
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 mp G3 12 R 24 ;m225
+p A3 12 R 24 B3 12 R 24 C4 12 R 24 D4 12 R 24 E4 12 R 24 F4 12 R 24 ;m226
+G4 12 R 24 A4 12 R 24 B4 12 R 24 C5 4 mf Bb4 12 R 24 ;m227
+p A4 16 Bb4 16 A4 8 G4 12 R 24 vel 50 F4 16 G4 16 F4 8 Eb4 12 R 24  ;m228
+vel 55 D4 16 Eb4 16 D4 8 C4 12 R 24 vel 65 Bb3 4 Bb3 12 R 24 ;m229
+vel 70 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 vel 75 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 ;m230
+vel 80 Bb3 12 R 24 Bb3 12 R 24 Bb3 12 R 24 vel 90 Eb4 4 forte Eb3 12 R 24 ;m231
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 ;m232
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Ab3 12 R 24 ;m233
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m234 *
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 D5 4 Bb2 Bb3 12 R 24 ;m235
+Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24  ;m236
+Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24 Bb2 Bb3 12 R 24 Bb2 Bb3 4 Eb3 12 R 24 ;m237
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 Db4 12 R 24 ;m238
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 4 Bb3 12 R 24 ;m239
+C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Ab4 12 R 24 ;m240
+Bb4 12 R 24 C5 12 R 24 D5 12 R 24 ff Eb5 8. R 8. ;m241
+R 2. ;m242
+R 2. ;m243
+R 2. ;m244
+R 5/8 ff F#4 10/8 ;m245
+;m246
+G4 12 R 24 R 4 ;m247
+R 2. ;m248
+R 5/8 F#4 10/8 ;m249
+;m250
+G4 12 R 24 R 8 Ab4 10/8 ;m251
+;m252
+p Ab3 3/4 ;m253
+fff Ab3 12 R 24 G3 12 R 24 F3 12 R 24 ;m254
+forte E3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 12 R 24 G3 12 R 24 F3 12 R 24 ;m255
+fff E3 12 R 24 F3 12 R 24 G3 12 R 24 vel 75 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m256 75 to 110
+vel 80 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m257
+vel 85 Ab3 12 R 24 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 ;m258
+vel 90 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 Ab4 12 R 24 ;m259
+vel 95 G4 4 R 8 R 3/8 ;m260
+vel 100 G4 3/8 Bb3 3/8 ;m261
+vel 105 Eb4 3/8 G3 3/8 ;m262
+vel 110 Bb3 3/8 Bb3 3/8 
+Eb4 4 R 2
+Eb3 Bb3 G4 4 R 2
+Eb3 2.
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt3vc.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.11  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.10  2003/06/03 23:48:55  root
+; narrow stereo field
+;
+; Revision 1.9  2003/06/03 23:18:04  root
+; fiddle
+;
+; Revision 1.8  2003/05/30 00:26:45  root
+; add portamento to first trio in scherzo
+;
+; Revision 1.7  2003/05/26 21:43:31  root
+; balace balance
+;
+; Revision 1.6  2003/05/26 18:49:50  root
+; staccatos
+;
+; Revision 1.5  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.4  2003/03/09 21:49:18  root
+; done
+;
+; Revision 1.3  2003/03/05 02:05:36  root
+; dynamics ok
+;
+; Revision 1.2  2003/03/02 21:25:06  root
+; minotor errors R 1 in 2/4 is wrong
+;
+; Revision 1.1  2003/03/02 21:12:45  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3vc.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3vc.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3vc.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3vc.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement Scherzo: molto vivace ; Cello
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK 43
+INSTRUMENT 43
+PROGRAM 4 43
+PAN 4 10
+LAZY
+chan 4
+forte
+R 5/8 ;measure 0
+R 8
+R 2. ;m1
+R 3/8 Eb3 3/8 ;m2
+R 2. ;m3
+R 3/8 Eb3 3/8 ;m4
+R 2. ;m5
+R 3/8 Eb3 3/8 ;m6
+R 2. ;m7
+R 3/8 Eb3 3/8 ;m8
+R 2. ;m9
+R 5/8 vel 60 D2 12 R 24  ;m10
+vel 66 E2 12 R 24 vel 72 F#2 12 R 24 vel 78 G2 12 R 24 vel 84 A2 12 R 24 vel 90 Bb2 12 R 24 vel 96 C3 12 R 24 ;m11
+vel 102 D3 12 R 24 vel 108 E3 12 R 24 vel 114 F#3 12 R 24 vel 120 G3 3/8 ;m12
+R 2. ;m13
+R 5/8 ff F2 12 R 24 ;m14
+vel 60 G2 12 R 24 vel 66 A2 12 R 24 vel 72 Bb2 12 R 24 vel 78 C3 12 R 24 vel 84 D3 12 R 24 vel 90 Eb3 12 R 24 ;m15
+vel 96 F3 12 R 24 vel 102 G3 12 R 24 vel 108 A3 12 R 24 vel 114 Bb3 4 ;m16
+R 8
+R 2. ;m1
+R 3/8 Eb3 3/8 ;m2
+R 2. ;m3
+R 3/8 Eb3 3/8 ;m4
+R 2. ;m5
+R 3/8 Eb3 3/8 ;m6
+R 2. ;m7
+R 3/8 Eb3 3/8 ;m8
+R 2. ;m9
+R 5/8 vel 60 D2 12 R 24  ;m10
+vel 66 E2 12 R 24 vel 72 F#2 12 R 24 vel 78 G2 12 R 24 vel 84 A2 12 R 24 vel 90 Bb2 12 R 24 vel 96 C3 12 R 24 ;m11
+vel 102 D3 12 R 24 vel 108 E3 12 R 24 vel 114 F#3 12 R 24 vel 120 G3 3/8 ;m12
+R 2. ;m13
+R 5/8 ff F2 12 R 24 ;m14
+vel 60 G2 12 R 24 vel 66 A2 12 R 24 vel 72 Bb2 12 R 24 vel 78 C3 12 R 24 vel 84 D3 12 R 24 vel 90 Eb3 12 R 24 ;m15
+vel 96 F3 12 R 24 vel 102 G3 12 R 24 vel 108 A3 12 R 24 vel 114 Bb3 4 ;m16
+ ;repeat sign
+R 8
+R 2. ;m17
+R 5/8 forte Eb2 12 R 24  ; m18
+vel 60 F2 12 R 24 vel 66 G2 12 R 24 vel 72  Ab2 12 R 24 vel 78 Bb2 12 R 24 vel 84 C3 12 R 24 vel 90 D3 12 R 24  ;m19
+vel 96 Eb3 12 R 24 vel 102 F3 12 R 24 vel 108 G3 12 R 24 vel 114 Ab3 4 R 8 ;m20
+R 2. ;m21
+R 5/8 F2 12 R 24  ;m22
+G2 12 R 24 A2 12 R 24 Bb2 12 R 24 C3 12 R 24 D3 12 R 24 Eb3 12 R 24 ;m23
+F3 12 R 24 G3 12 R 24 A3 12 R 24 Bb3 4 pp Ab3 12 R 24 ;m24
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m25
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 G3 12 R 24 G3 12 R 24 mf G3 12 R 24 ;m26
+pp G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 ;m27
+G3 12 R 24 G3 12 R 24 G3 12 R 24 F3 12 R 24 F3 12 R 24 mf F3 12 R 24 ;m28
+pp F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 ;m29
+F3 12 R 24 F3 12 R 24 F3 12 R 24 E3 12 R 24 E3 12 R 24 mf Eb3 12 R 24 ;m30
+p Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24 vel 42 Eb3 12 R 24 vel 44 Eb3 12 R 24 vel 46 Eb3 12 R 24  ;m31
+Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24  D3 4 forte Bb2 12 R 24  ;m32
+vel 60 C2 12 R 24 vel 66 D2 12 R 24 vel 72 Eb2 12 R 24 vel 78 F2 12 R 24 vel 84 G2 12 R 24 vel 90 Ab2 12 R 24 ;m33
+vel 96 Bb2 12 R 24 vel 102 C3 12 R 24 vel 108 D3 12 R 24 vel 114 Eb3 3/8 ;m34
+R 2. ;m35
+R 3/8 forte Eb3 3/8 ;m36
+R 2. ;m37
+R 3/8 Eb3 3/8 ;m38
+R 2. ;m39
+R 3/8 Eb3 4 Eb2 12 R 24 ;m40
+F2 12 R 24 G2 12 R 24 Ab2 12 R 24 Bb2 12 R 24 C3 12 R 24 Db3 12 R 24 ;m41
+Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 4 Ab3 12 R 24 ;m42
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m43
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 Eb2 12 R 24 R 8 ;m44a
+R 8
+R 2. ;m17
+R 5/8 forte Eb2 12 R 24  ; m18
+vel 60 F2 12 R 24 vel 66 G2 12 R 24 vel 72  Ab2 12 R 24 vel 78 Bb2 12 R 24 vel 84 C3 12 R 24 vel 90 D3 12 R 24  ;m19
+vel 96 Eb3 12 R 24 vel 102 F3 12 R 24 vel 108 G3 12 R 24 vel 114 Ab3 4 R 8 ;m20
+R 2. ;m21
+R 5/8 F2 12 R 24  ;m22
+G2 12 R 24 A2 12 R 24 Bb2 12 R 24 C3 12 R 24 D3 12 R 24 Eb3 12 R 24 ;m23
+F3 12 R 24 G3 12 R 24 A3 12 R 24 Bb3 4 p Ab3 12 R 24 ;m24
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m25
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 G3 12 R 24 G3 12 R 24 mf G3 12 R 24 ;m26
+p G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 ;m27
+G3 12 R 24 G3 12 R 24 G3 12 R 24 F3 12 R 24 F3 12 R 24 mf F3 12 R 24 ;m28
+p F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 ;m29
+F3 12 R 24 F3 12 R 24 F3 12 R 24 E3 12 R 24 E3 12 R 24 mf Eb3 12 R 24 ;m30
+p Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24 vel 42 Eb3 12 R 24 vel 44 Eb3 12 R 24 vel 46 Eb3 12 R 24  ;m31
+Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24  D3 4 forte Bb2 12 R 24  ;m32
+vel 60 C2 12 R 24 vel 66 D2 12 R 24 vel 72 Eb2 12 R 24 vel 78 F2 12 R 24 vel 84 G2 12 R 24 vel 90 Ab2 12 R 24 ;m33
+vel 96 Bb2 12 R 24 vel 102 C3 12 R 24 vel 108 D3 12 R 24 vel 114 Eb3 3/8 ;m34
+R 2. ;m35
+R 3/8 forte Eb3 3/8 ;m36
+R 2. ;m37
+R 3/8 Eb3 3/8 ;m38
+R 2. ;m39
+R 3/8 Eb3 4 Eb2 12 R 24 ;m40
+F2 12 R 24 G2 12 R 24 Ab2 12 R 24 Bb2 12 R 24 C3 12 R 24 Db3 12 R 24 ;m41
+Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 4 Ab3 12 R 24 ;m42
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m43
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 Eb2 12 R 24 R 8 ;m44a
+;repeat sign 
+;Trio I
+R 8 ;44b
+R 2. ;m45
+R 2. ;m46
+vel 30 Db3 6/8 ;m47
+Gb2 4 R 2 ;m48
+R 2. ;m49
+R 2. ;m50
+Db3 6/8 ;m51
+Gb2 4 R 2 ;m52
+R 2. ;m53
+R 2. ;m54
+Db3 6/8 ;m55
+Gb2 4 R 2 ;m56
+R 2. ;m57
+R 2. ;m58
+Db3 6/8 ;m59
+Gb2 4 R 2 ;m60
+R 2. ;m61 begin repeat
+R 2. ;m62
+Bb2 6/8 ;m63
+F2 4 R 2 ;m64
+R 2.  ;m65
+R 2. ;m66
+vel 25 END_LAZY NOTE_ON 4 F4 25 DELAY 270 
+PITCH_WHEEL 4 8021 DELAY 10
+PITCH_WHEEL 4 7850 DELAY 10
+PITCH_WHEEL 4 7680 DELAY 10 
+PITCH_WHEEL 4 7509 DELAY 10 
+PITCH_WHEEL 4 7338 DELAY 10 
+PITCH_WHEEL 4 7168 DELAY 10 
+PITCH_WHEEL 4 6997 DELAY 10 
+PITCH_WHEEL 4 6826 DELAY 10 
+NOTE_ON 4 F4 0 PITCH_WHEEL 4 8192 DELAY 10 LAZY Bb3 3/8 ;m67
+C4 3/8 F3 3/8 ;m68
+R 2. ;m69
+R 2. ;m70
+Db3 6/8 ;m71
+Gb2 3/8 R 3/8 ;m72
+R 2. ;m73
+R 2. ;m74
+Db3 6/8 ;m75
+Gb2 3/8 R 3/8 ;m76 first ending
+R 2. ;m61 begin repeat
+R 2. ;m62
+vel 30 Bb2 6/8 ;m63
+F2 4 R 2 ;m64
+R 2.  ;m65
+R 2. ;m66
+vel 25 F4 3/8 Bb3 3/8 ;m67
+C4 3/8 F3 3/8 ;m68
+R 2. ;m69
+R 2. ;m70
+Db3 6/8 ;m71
+Gb2 3/8 R 3/8 ;m72
+R 2. ;m73
+R 2. ;m74
+Db3 6/8 ;m75
+Gb2 3/8 R 3/8 ;m77 second ending
+R 5/8 vel 50 Bb2 12 R 24  ;m78
+vel 57 Bb2 12 R 24 vel 62 Bb2 12 R 24 vel 68 Bb2 12 R 24 vel 75 Bb2 12 R 24 vel 81 Bb2 12 R 24 vel 88 Bb2 12 R 24 ;m79
+vel 90 C2 12 R 24 D2 12 R 24 Eb2 12 R 24 vel 60 F2 12 R 24 vel 67 G2 12 R 24 vel 74 Ab2 12 R 24 ;m80
+vel 80 Bb2 12 R 24 vel 85 C3 12 R 24 D3 12 R 24 vel 90 Eb3 4. ;m81
+R 2. ;m82
+R 3/8 forte Eb3 3/8 ;m83
+R 2. ;m84
+R 3/8 Eb3 3/8 ;m85
+R 2. ;m86
+R 3/8 Eb3 3/8 ;m87
+R 2. ;m88
+R 5/8 forte D2 12 R 24 ;m89
+vel 60 E2 12 R 24 vel 66 F#2 12 R 24 vel 72 G2 12 R 24 vel 78 A2 12 R 24 vel 84 Bb2 12 R 24 vel 90 C3 12 R 24 ;m90
+vel 96 D3 12 R 24 vel 102 E3 12 R 24 vel 108 F#3 12 R 24 vel 114 G3 3/8 ;m91
+R 2. ;m92
+R 5/8 forte F2 12 R 24 ;m93
+vel 60 G2 12 R 24 vel 66 A2 12 R 24 vel 72 Bb2 12 R 24 vel 78 C3 12 R 24 vel 84 D3 12 R 24 vel 90 Eb3 12 R 24 ;m94
+vel 96 F3 12 R 24 vel 102 G3 12 R 24 vel 108 A3 12 R 24 vel 114 Bb3 4 R 8 ;m95
+R 2. ;m96
+R 5/8 forte Eb2 12 R 24 ;m 97
+F2 12 R 24 G2 12 R 24 Ab2 12 R 24 Bb2 12 R 24 C3 12 R 24 Db3 12 R 24 ;m98
+Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 4 R 8 ;m99
+R 2. ;m100
+R 5/8 F2 8  ;m101
+G2 12 R 24 A2 12 R 24 Bb2 12 R 24 C3 12 R 24 D3 12 R 24 Eb3 12 R 24  ;m102
+F3 12 R 24 G3 12 R 24 A3 12 R 24 Bb3 4 Ab3 12 R 24 ;m103
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24  ;m104
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 G3 12 R 24 G3 12 R 24 ff G3 12 R 24  ;m105
+forte G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24  ;m106
+G3 12 R 24 G3 12 R 24 G3 12 R 24 F3 12 R 24 F3 12 R 24 ff F3 12 R 24  ;m107
+forte F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 ;m108
+F3 12 R 24 F3 12 R 24 F3 12 R 24 E3 12 R 24 E3 12 R 24 ff Eb3 12 R 24 ;m109
+forte Eb3 12 R 24 vel 94 Eb3 12 R 24 vel 98 Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24 ;m110
+Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24 D3 4 forte Bb2 12 R 24 ;m111
+vel 60 C2 12 R 24 vel 66 D2 12 R 24 vel 72 Eb2 12 R 24 vel 78 F2 12 R 24 vel 84 G2 12 R 24 vel 90 Ab2 12 R 24 ;m112
+vel 96 Bb2 12 R 24 vel 102 C3 12 R 24 vel 108 D3 12 R 24 vel 114 Eb3 3/8 ;113
+R 2. ;m114
+forte R 3/8 Eb3 3/8 ;m115
+R 2.  ;m116
+R 3/8 Eb3 3/8 ;m117
+R 2. ;m118
+R 3/8 ff Eb3 4 forte Eb2 12 R 24 ;m119
+F2 12 R 24 G2 12 R 24 Ab2 12 R 24 Bb2 12 R 24 C3 12 R 24 Db3 12 R 24 ;m120
+Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 4 Ab3 12 R 24  ;m121
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m122
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 ff Eb2 12 R 24 R 4 ;m123A
+; 2/4 Trio II
+R 4 forte  Eb3 16 E3 16 Eb3 16 Db3 16  ;m123b
+ forte B2 16 mf Db3 16 B2 16 Ab2 16   Ab3 16 A3 16 Ab3 16 Gb3 16  ;m124
+ forte E3 16 mf Gb3 16 E3 16 Db3 16   Bb2 16 B2 16 Bb2 16 Ab2 16  ;m125
+ forte G2 16 mf Ab2 16 G2 16 Eb2 16   Eb3 16 E3 16 Eb3 16 Db3 16  ;m126
+ forte B2 16 mf Db3 16 B2 16 Ab2 16   Eb3 16 E3 16 Eb3 16 Db3 16  ;m127
+ forte B2 16 mf Db3 16 B2 16 Ab2 16   Ab3 16 A3 16 Ab3 16 Gb3 16  ;m128
+ forte E3 16 mf Gb3 16 E3 16 Db3 16   Bb2 16 B2 16 Bb2 16 Ab2 16  ;m129
+ forte G2 16 mf Ab2 16 G2 16 Eb2 16   Eb3 16 E3 16 Eb3 16 Db3 16  ;m130
+ forte B2 16 mf Db3 16 B2 16 Ab2 16  mf R 8 E3 8  ;m131
+E3 8 E3 8 R 8 A2 8 ;m132
+A2 8 A2 8 R 8 B2 8 ;m133
+B2 8 B2 8 R 8 E3 8 ;m134
+E3 8 E3 8 vel 85 C#3 8 C#3 8 ;m135
+C#4 8 C#4 8 F#2 8 F#2 8  ;m136
+F#3 8 F#3 8 G#2 8 G#2 8  ;m137
+G#3 8 G#3 8 C#3 8 C#3 8  ;m138
+C#4 8 C#4 8 ff Ab2 Eb3 8 Ab2 Eb3 8 ;m139
+R 8 Ab2 8 Db2 Ab2 8 Db2 Ab2 8  ;m140
+R 8 Db3 8 Eb3 8 Eb3 8  ;m141
+R 8 Eb3 8 Ab2 Eb3 8 Ab2 Eb3 8 ;m142
+R 8 Ab2 Eb3 8 Ab2 Eb3 8 Ab2 Eb3 8  ;m143
+R 8 Ab2 8 Db2 Ab2 8 Db2 Ab2 8  ;m144
+R 8 Db3 8 Eb3 8 Eb3 8  ;m145
+R 8 Eb3 8 Ab2 Eb3 8 Ab2 Eb3 8 ;m146
+R 8 Ab2 8 R 4 ;m147
+R 2 ;m148
+R 4 p Db4 2 ;m149
+mp Eb4 4 ;m150
+p Ab3 4 R 4 ;m151
+R 2 ;m152
+R 4 p E4 2 ;m153
+mp F#4 4 ;m154
+p B3 4 R 4 ;m155
+p E3 8 E3 8 R 4 ;m156
+A2 8 A2 8 R 4 ;m157
+B2 8 B2 8 R 4 ;m158
+E2 8 E2 8 R 4 ;m159
+B2 8 B2 8 R 4 ;m160
+vel 62 E2 8 E2 8 R 4 ;m161
+vel 74 F#2 8 F#2 8 R 4 ;m162
+vel 86 B2 8 B2 8 R 4 ;m163
+F#3 4 R 4 ;m164
+B2 8 R 8 mf C#3 4  ;m165
+ff D4 4 forte C#4 4 ;m166
+mf F#3 4 R 4 ;m167
+F#2 8 R 3/8 ;m168
+B2 8 R 8 C#3 4  ;m169
+forte D4 4 mf C#4 4 ;m170
+F#3 4 R 4 ;m171
+R 2 ;m172
+R 4 p B3 2 ;m173
+mp C#4 4 ;m174
+p F#4 4 R 4 ;m175
+R 2 ;m176
+R 4 p Db4 2 ;m177
+mp Eb4 4 ;m178
+p Ab4 4 R 4 ;m179
+ff Db3 8 forte Db3 8 R 4 ;m180
+ff Gb2 8 forte Gb2 8 R 4 ;m181
+ff Ab2 8 forte Ab2 8 R 4 ;m182
+Db3 8 Db3 8 ff Ab2 Eb3 8 Ab2 Eb3 8 ;m183
+R 4 Db3 8 Db3 8  ;m184
+R 4 Eb3 8 Eb3 8  ;m185
+R 4 Ab2 8 Ab2 8  ;m186
+R 4 Ab2 Eb3 8 Ab2 Eb3 8  ;m187
+R 4 Db3 8 Db3 8 ;m188
+R 4 Eb3 8 Eb3 8 ;m189
+R 4 Ab2 8 Ab2 8  ;m190
+R 4  forte Eb4 16 mf E4 16 Eb4 16 Db4 16  ;m191
+ff  B3 16 Db4 16 B3 16 Bb3 16   Ab3 16 Bb3 16 Ab3 16 Gb3 16  ;m192
+ Fb3 16 Gb3 16 Fb3 16 Eb3 16   Db3 16 Eb3 16 Db3 16 B2 16   ;m193
+ Bb2 16 B2 16 Bb2 16 A2 16   Bb2 16 B2 16 Bb2 16 A2 16  ;m194
+ Bb2 16 B2 16 Bb2 16 A2 16   Bb2 16 B2 16 Bb2 16 A2 16  ;m195
+Bb2 5/8 ;m196
+R 8 R 6 Bb2 12 ;m197
+vel 60 C2 12 R 24 vel 66  D2 12 R 24 vel 72  Eb2 12 R 24 vel 78  F2 12 R 24 vel 84  G2 12 R 24 vel 90  Ab2 12 R 24  ;m198
+vel 96 Bb2 12 R 24 vel 102 C3 12 R 24 vel 108  D3 12 R 24 vel 114  Eb3 4. ;m199
+R 2. ;m200
+R 3/8 ff Eb3 3/8 ;m201
+R 2. ;m202
+R 3/8 forte Eb3 3/8 ;m203 
+R 2. ;m204
+R 3/8 Eb3 3/8 ;m205
+R 2.   ;m206
+R 5/8 forte D2 12 R 24 ;m207
+vel 60  E2 12 R 24 vel 66 F#2 12 R 24 vel 72 G2 12 R 24 vel 78 A2 12 R 24 vel 84 Bb2 12 R 24 vel 90 C3 12 R 24 ;m208
+vel 96 D3 12 R 24 vel 102 E3 12 R 24 vel 108 F#3 12 R 24 vel 114 G3 3/8  ;m209
+R 2. ;m210
+R 5/8 forte F2 12 R 24 ;m211
+vel 60 G2 12 R 24 vel 66 A2 12 R 24 vel 72 Bb2 12 R 24 vel 78 C3 12 R 24 vel 84 D3 12 R 24 vel 90 Eb3 12 R 24 ;m212
+vel 96 F3 12 R 24 vel 102 G3 12 R 24 vel 108 A3 12 R 24 vel 114 Bb3 4 R 8 ;m213
+R 2. ;m214
+R 5/8 forte Eb2 12 R 24  ;m215
+F2 12 R 24 G2 12 R 24 Ab2 12 R 24 Bb2 12 R 24 C3 12 R 24 Db3 12 R 24 ;m216
+Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 4 R 8 ;m217
+R 2. ;m218
+R 5/8  F2 12 R 24 ;m219
+G2 12 R 24 A2 12 R 24 Bb2 12 R 24 C3 12 R 24 D3 12 R 24 Eb3 12 R 24 ;m220
+F3 12 R 24 G3 12 R 24 A3 12 R 24 Bb3 4 p Ab3 12 R 24 ;m221
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 ;m222
+Ab3 12 R 24 Ab3 12 R 24 Ab3 12 R 24 G3 12 R 24 G3 12 R 24 mp G3 12 R 24 ;m223
+p G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 G3 12 R 24 ;m224
+G3 12 R 24 G3 12 R 24 G3 12 R 24 F3 12 R 24 F3 12 R 24 mp F3 12 R 24  ;m225
+p F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 F3 12 R 24 ;m226
+F3 12 R 24 F3 12 R 24 F3 12 R 24 E3 12 R 24 E3 12 R 24 mp Eb3 12 R 24 ;m227
+p Eb3 12 R 24 Eb3 12 R 24 Eb3 12 R 24 vel 53 Eb3 12 R 24 vel 56 Eb3 12 R 24 vel 59 Eb3 12 R 24 ;m228
+vel 62 Eb3 12 R 24 vel 65 Eb3 12 R 24 vel 68 Eb3 12 R 24 vel 71 D3 4 Bb2 12 R 24 ;m229
+vel 74 C2 12 R 24 vel 77 D2 12 R 24 vel 81  Eb2 12 R 24 vel 84 F2 12 R 24 vel 87 G2 12 R 24 Ab2 12 R 24 ;m230
+vel 90 Bb2 12 R 24 vel 93 C3 12 R 24 vel 96 D3 12 R 24 vel 99 Eb3 4 R 8 ;m231
+R 2. ;m232
+R 3/8  forte Eb3 3/8  ;m233
+R 2. ;m234
+R 3/8  Eb3 3/8  ;m235
+R 2. ;m236
+R 5/8 Eb2 8 ;m237
+F2 12 R 24 G2 12 R 24 Ab2 12 R 24 Bb2 12 R 24 C3 12 R 24 Db3 12 R 24 ;m238
+Eb3 12 R 24 F3 12 R 24 G3 12 R 24 Ab3 4 Ab3 12 R 24 ;m239
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m240
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 ff Eb2 8. R 8. ;m241
+R 2. ;m242
+R 2. ;m243
+Eb2 10/8 ;m244
+R 8 A2 8 ;m245
+vel 80 Bb2 12 R 24 vel 82 C3 12 R 24 vel 84 Db3 12 R 24 vel 86 Eb3 12 R 24 vel 88 F3 12 R 24 vel 90 G3 12 R 24 ;m246
+vel 92 A3 12 R 24 vel 94 Bb3 12 R 24 vel 97 C4 12 R 24 vel 98 Db4 4 R 8 ;m247
+Eb2 10/8 ;m248
+R 8 forte A2 12 R 24 ;m249
+vel 60 Bb2 12 R 24 vel 66 C3 12 R 24 vel 72 Db3 12 R 24 vel 78 Eb3 12 R 24 vel 84 F3 12 R 24 vel 90 G3 12 R 24 ;m250
+vel 96 A3 12 R 24 vel 102 Bb3 12 R 24 vel 108 C4 12 R 24 vel 114 Db4 4 D4 10/8 ;m251
+;m252
+p Bb2 Eb2 6/8 ;m253
+mp Bb2 Eb2 6/8 ;m254
+mf Bb2 Eb2 3/8 ;m255
+forte Eb2 12 R 24 vel 91 Bb2 12 R 24 vel 92 Eb2 12 R 24 vel 93 Bb2 12 R 24 vel 94 Eb2 12 R 24 vel 95 Bb2 12 R 24 
+vel 96 Eb2 12 R 24 vel 97 Bb2 12 R 24 vel 98 Eb2 12 R 24 vel 99 Bb2 12 R 24 vel 100 Eb2 12 R 24 vel 101 Bb2 12 R 24 
+vel 102 Eb2 12 R 24 vel 103 Bb2 12 R 24 vel 104 Eb2 12 R 24 vel 105 Bb2 12 R 24 vel 106 Eb2 12 R 24 vel 107 Bb2 12 R 24 
+vel 108 Eb2 12 R 24 vel 109 Bb2 12 R 24 vel 110 Eb2 12 R 24 vel 111 Bb2 12 R 24 vel 112 Eb2 12 R 24 vel 113 Bb2 12 R 24 
+ff Eb2 4 R 2 
+rm68
+Eb2 4 R 2 
+Eb2 4 R 2 
+Eb2 4 R 2 
+Eb2 Bb2 G3 Eb4 4 R 2
+Eb2 6/8
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt3pr.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.16  2003/11/09 18:23:20  root
+; add ppp macro
+;
+; Revision 1.15  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.14  2003/05/26 21:43:31  root
+; balace balance
+;
+; Revision 1.13  2003/05/26 19:37:34  root
+; staccaoto articulation
+;
+; Revision 1.12  2003/05/05 00:36:12  root
+; pedals dynamics
+;
+; Revision 1.11  2003/03/09 21:48:56  root
+; done
+;
+; Revision 1.10  2003/03/05 02:05:21  root
+; dynamics ok
+;
+; Revision 1.9  2003/03/02 22:14:38  root
+; rhythm ok
+;
+; Revision 1.8  2003/03/02 21:05:58  root
+; minor fix gb in triplets
+;
+; Revision 1.7  2003/03/01 00:13:18  root
+; clean up
+;
+; Revision 1.6  2003/02/27 23:51:01  root
+; fix a couple things
+;
+; Revision 1.5  2003/02/27 02:36:43  root
+; some cleaning
+;
+; Revision 1.4  2003/02/26 02:24:43  root
+; did more
+;
+; Revision 1.3  2003/02/24 01:52:29  root
+; done for sunday
+;
+; Revision 1.2  2003/02/24 00:46:01  root
+; up to m135, one error unfixed
+;
+; Revision 1.1  2003/02/22 03:43:35  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3pr.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pr.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement ; Piano Right hand or more
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Right Hand
+INSTRUMENT Piano
+PROGRAM 5 1
+PAN 5 0
+LAZY
+chan 5
+forte
+R 5/8 
+vel 60 Bb1 Bb2 16 r 16 ;measure 0
+vel 66 c2 c3 16 r 16 vel 72 d2 d3 16 r 16 vel 78 Eb2 Eb3 16 r 16 vel 84 F2 F3 16 r 16 vel 90 G2 G3 16 r 16 vel 96 Ab2 Ab3 16 r 16 ;m1
+vel 102 Bb2 Bb3 16 r 16 vel 108 C3 C4 16 r 16 vel 114 D3 D4 16 r 16 vel 120 Eb4 Bb3 G3 3/8 ;m2
+R 2. ;m3
+forte R 3/8 C4 Eb4 Ab4 3/8 ;m4
+R 2. ;m5
+R 8 Bb4 12 R 24 C5 12 R 24 F4 Ab4 Bb4 D5 4 bb3 bb4 16 r 16 ;m6
+C4 C5 16 r 16 D4 D5 16 r 16 Eb4 Eb5 16 r 16 F4 F5 16 r 16 G4 G5 16 r 16 Ab4 Ab5 16 r 16  ;m7
+Bb4 Bb5 16 r 16 C5 C6 16 r 16 D5 D6 16 r 16 G5 Bb5 Eb6 G6 4 Eb5 G5 G6 16 r 16 ;m8
+D5 F5 F6 16 r 16 C5 Eb5 Eb6 16 r 16 Bb4 D5 D6 16 r 16  ;m9
+      Ab4 C5 C6 16 r 16 G4 Bb4 Bb5 16 r 16 F4 Ab4 Ab5 16 r 16
+Eb4 G4 G5 16 r 16 D4 F4 F5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 4 ff D3 D4 D5 Bb4 3/8 ;m10
+D3 D4 A4 C5 3/8 D3 D4 G4 Bb4 3/8
+forte D3 C4 D4 F#4 A4 12 R 24 G2 D3 Bb3 G4 4 G4 Bb4 Bb5 16 r 16
+F4 A4 A5 16 r 16 Eb4 G4 G5 16 r 16 D4 f4 f5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 16 r 16 A3 C4 C5 16 r 16
+G3 Bb3 Bb4 16 r 16 F3 A3 A4 16 r 16 Eb3 G3 G4 16 r 16 D3 F3 F4 4 F2 F3 F4 D4 3/8
+F2 F3 C4 Eb4 3/8 F3 Bb3 D4 3/8 
+Eb3 F3 A3 C4 F2 12 R 24  Bb1 F2 D3 Bb3 4
+vel 60 Bb1 Bb2 16 r 16 ;measure 0
+vel 66 c2 c3 16 r 16 vel 72 d2 d3 16 r 16 vel 78 Eb2 Eb3 16 r 16 vel 84 F2 F3 16 r 16 vel 90 G2 G3 16 r 16 vel 96 Ab2 Ab3 16 r 16 ;m1
+vel 102 Bb2 Bb3 16 r 16 vel 108 C3 C4 16 r 16 vel 114 D3 D4 16 r 16 vel 120 Eb4 Bb3 G3 3/8 ;m2
+R 2. ;m3
+forte R 3/8 C4 Eb4 Ab4 3/8 ;m4
+R 2. ;m5
+R 8 Bb4 12 R 24 C5 12 R 24 F4 Ab4 Bb4 D5 4 bb3 bb4 16 r 16 ;m6
+C4 C5 16 r 16 D4 D5 16 r 16 Eb4 Eb5 16 r 16 F4 F5 16 r 16 G4 G5 16 r 16 Ab4 Ab5 16 r 16  ;m7
+Bb4 Bb5 16 r 16 C5 C6 16 r 16 D5 D6 16 r 16 G5 Bb5 Eb6 G6 4 Eb5 G5 G6 16 r 16 ;m8
+D5 F5 F6 16 r 16 C5 Eb5 Eb6 16 r 16 Bb4 D5 D6 16 r 16  ;m9
+      Ab4 C5 C6 16 r 16 G4 Bb4 Bb5 16 r 16 F4 Ab4 Ab5 16 r 16
+Eb4 G4 G5 16 r 16 D4 F4 F5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 4 ff D3 D4 D5 Bb4 3/8 ;m10
+D3 D4 A4 C5 3/8 D3 D4 G4 Bb4 3/8
+forte D3 C4 D4 F#4 A4 12 R 24 G2 D3 Bb3 G4 4 G4 Bb4 Bb5 16 r 16
+F4 A4 A5 16 r 16 Eb4 G4 G5 16 r 16 D4 f4 f5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 16 r 16 A3 C4 C5 16 r 16
+G3 Bb3 Bb4 16 r 16 F3 A3 A4 16 r 16 Eb3 G3 G4 16 r 16 D3 F3 F4 4 F2 F3 F4 D4 3/8
+F2 F3 C4 Eb4 3/8 F3 Bb3 D4 3/8 
+Eb3 F3 A3 C4 F2 12 R 24  Bb1 F2 D3 Bb3 4
+ ;repeat sign
+Bb2 Bb3 16 r 16
+C3 C4 16 r 16 Db3 Db4 16 r 16 Eb3 Eb4 16 r 16 F3 F4 16 r 16 G3 G4 16 r 16 Ab3 Ab4 16 r 16
+Bb3 Bb4 16 r 16 C4 C5 16 r 16 Db4 Db5 16 r 16 Eb4 Eb5 4 Db4 Db5 16 r 16 ; ok to here
+ff C5 16 Db5 16 C5 8 forte Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 C4 C5 4 C4 12 R 24 
+vel 60 D3 D4 16 r 16 vel 66 e3 e4 16 r 16 vel 72 f3 f4 16 r 16 vel 78 g3 g4 16 r 16 vel 84 a3 a4 16 r 16 vel 90 Bb3 Bb4 16 r 16 ;page 72 m21
+vel 90 c4 c5 16 r 16 vel 96 D4 D5 16 r 16 vel 102 e4 e5 16 r 16 vel 108 f4 f5 4 Eb4 Eb5 16 r 16 ;m22
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24 ;m23
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 mf Bb4 16 R 16 ;m24
+C5 16 R 16 D5 16 R 16 Eb5 16 R 16 F5 16 R 16 G5 16 R 16 Ab5 16 R 16 ;m25
+Bb5 16 R 16 C6 16 R 16 D6 16 R 16 Eb6 4 D6 12 R 24 ;m26
+C6 16 D6 16 C6 8 Bb5 12 R 24 Ab5 16 Bb5 16 Ab5 8 G5 12 R 24 ;m27
+F5 16 G5 16 F5 8 Eb5 12 R 24 D5 12 R 24 R 8 G4 16 R 16 ;m28
+A4 16 R 16 B4 16 R 16 C5 16 R 16 D5 16 R 16 E5 16 R 16 F5 16 R 16 ;m29
+G5 16 R 16 A5 16 R 16 B5 16 R 16 C6 4 Bb5 12 R 24 ;m30
+A5 16 Bb5 16 A5 8 G5 12 R 24  vel 62 F5 16 G5 16 F5 8 Eb5 12 R 24  ;m31
+vel 74 D5 16 Eb5 16 D5 8 C5 12 R 24 vel 86 Bb4 4 forte bb1 bb2 16 r 16 ;m32
+c2 c3 16 r 16 d2 d3 16 r 16 eb2 eb3 16 r 16 f2 f3 16 r 16 g2 g3 16 r 16 ab2 ab3 16 r 16 ;m33
+Bb2 Bb3 16 r 16 c3 c4 16 r 16 d3 d4 16 r 16 ff G3 Bb3 Eb4 3/8 ;m34
+forte F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m35
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ff C4 Eb4 Ab4 3/8 ;m36
+forte Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m37
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Eb3 Bb3 F4 Ab4 Bb4 D5 4 ff d4 d5 16 r 16 ;m38
+forte eb4 eb5 16 r 16 f4 f5 16 r 16 g4 g5 16 r 16 ab4 ab5 16 r 16 bb4 bb5 16 r 16 c5 c6 16 r 16 ;m39
+d5 d6 16 r 16 eb5 eb6 16 r 16 f5 f6 16 r 16 Eb4 Bb4 Eb5 G5 Eb6 G6 8 R 8 ff G4 Bb4 Db5 Eb5 G5 10/8 ;m40
+C5 Eb5 Ab5 C6 8 R 8 D4 F4 Bb4 D5 10/8 Eb4 Eb5 G4 Bb4 8 R 8
+Bb2 Bb3 16 r 16
+C3 C4 16 r 16 Db3 Db4 16 r 16 Eb3 Eb4 16 r 16 F3 F4 16 r 16 G3 G4 16 r 16 Ab3 Ab4 16 r 16
+Bb3 Bb4 16 r 16 C4 C5 16 r 16 Db4 Db5 16 r 16 Eb4 Eb5 4 Db4 Db5 16 r 16 ; ok to here
+ff C5 16 Db5 16 C5 8 forte Bb4 8 ff Ab4 16 Bb4 16 Ab4 8 forte G4 8
+ff F4 16 G4 16 F4 8 forte Eb4 8 C4 C5 4 C4 8 
+vel 60 D3 D4 16 r 16 vel 66 e3 e4 16 r 16 vel 72 f3 f4 16 r 16 vel 78 g3 g4 16 r 16 vel 84 a3 a4 16 r 16 vel 90 Bb3 Bb4 16 r 16 ;page 72 m21
+vel 90 c4 c5 16 r 16 vel 96 D4 D5 16 r 16 vel 102 e4 e5 16 r 16 vel 108 f4 f5 4 Eb4 Eb5 16 r 16 ;m22
+ff D5 16 Eb5 16 D5 8 forte C5 8 ff Bb4 16 C5 16 Bb4 8 forte A4 8 ;m23
+ff G4 16 A4 16 G4 8 forte F4 8 F4 D5 4 mf Bb4 16 R 16 ;m24
+C5 16 R 16 D5 16 R 16 Eb5 16 R 16 F5 16 R 16 G5 16 R 16 Ab5 16 R 16 ;m25
+Bb5 16 R 16 C6 16 R 16 D6 16 R 16 Eb6 4 D6 8 ;m26
+C6 16 D6 16 C6 8 Bb5 8 Ab5 16 Bb5 16 Ab5 8 G5 8 ;m27
+F5 16 G5 16 F5 8 Eb5 8 D5 8 R 8 G4 16 R 16 ;m28
+A4 16 R 16 B4 16 R 16 C5 16 R 16 D5 16 R 16 E5 16 R 16 F5 16 R 16 ;m29
+G5 16 R 16 A5 16 R 16 B5 16 R 16 C6 4 Bb5 8 ;m30
+A5 16 Bb5 16 A5 8 G5 8  vel 62 F5 16 G5 16 F5 8 Eb5 8  ;m31
+vel 74 D5 16 Eb5 16 D5 8 C5 8 vel 86 Bb4 4 forte bb1 bb2 16 r 16 ;m32
+c2 c3 16 r 16 d2 d3 16 r 16 eb2 eb3 16 r 16 f2 f3 16 r 16 g2 g3 16 r 16 ab2 ab3 16 r 16 ;m33
+Bb2 Bb3 16 r 16 c3 c4 16 r 16 d3 d4 16 r 16 ff G3 Bb3 Eb4 3/8 ;m34
+forte F3 8 G3 8 Ab3 8 Bb3 8 C4 8 D4 8  ;m35
+Eb4 8 F4 8 G4 8 ff C4 Eb4 Ab4 3/8 ;m36
+forte Bb3 8 C4 8 D4 8 Eb4 8 F4 8 G4 8 ;m37
+Ab4 8 Bb4 8 C5 8 Eb3 Bb3 F4 Ab4 Bb4 D5 4 ff d4 d5 16 r 16 ;m38
+forte eb4 eb5 16 r 16 f4 f5 16 r 16 g4 g5 16 r 16 ab4 ab5 16 r 16 bb4 bb5 16 r 16 c5 c6 16 r 16 ;m39
+d5 d6 16 r 16 eb5 eb6 16 r 16 f5 f6 16 r 16 Eb4 Bb4 Eb5 G5 Eb6 G6 8 R 8 ff G4 Bb4 Db5 Eb5 G5 10/8 ;m40
+C5 Eb5 Ab5 C6 8 R 8 D4 F4 Bb4 D5 10/8 Eb4 Eb5 G4 Bb4 8 R 8
+;repeat sign 
+vel 30 eb4 eb5 8 ;Trio I
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;m45
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m46
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8  ;m47
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 eb4 eb5 8  ;m48
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;49
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8  ;m50
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8  ;51
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 eb4 eb5 8 ;52
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;m53
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m54
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8 ;m55
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 eb4 eb5 8  ;m56
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;m57
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m58
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8 ;m59
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 db4 db5 8 ;m60
+;page 74
+f4 f5 8 bb3 bb4 8 db4 db5 8 f4 f5 8 bb3 bb4 8 bb3 bb4 8 ;m61 begin rep
+c4 c5 8 f3 f4 8 a3 a4 8 c4 c5 8 f3 f4 8 c4 c5 8 ;m62
+db4 db5 8 f3 f4 8 bb3 bb4 8 db4 db5 8 f3 f4 8 bb3 bb4 8 ;m63
+c4 c5 8 f3 f4 8 a3 a4 8 c4 c5 8 f3 f4 8 db4 db5 8 ;m64
+f4 f5 8 bb3 bb4 8 db4 db5 8 f4 f5 8 bb3 bb4 8 bb3 bb4 8 ;m65
+c4 c5 8 f3 f4 8 a3 a4 8 c4 c5 8 f3 f4 8 c4 c5 8 ;m66
+db4 db5 8 vel 29 f3 f4 8 vel 28 bb3 bb4 8 vel 27 db4 db5 8 vel 26 f3 f4 8 vel 25 bb3 bb4 8 ;m67
+vel 24  c4 c5 8 vel 23 f3 f4 8 vel 22 a3 a4 8 vel 21 c4 c5 8 vel 20 f3 f4 8 eb4 eb5 8 ;m68
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;m69
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m70
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8 ;m71
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 eb4 eb5 8 ;m72
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;73
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m74
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8 ;m75
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 db4 db5 8 ;first ending 76
+;repeat sign
+vel 30 f4 f5 8 bb3 bb4 8 db4 db5 8 f4 f5 8 bb3 bb4 8 bb3 bb4 8 ;m61 begin rep
+c4 c5 8 f3 f4 8 a3 a4 8 c4 c5 8 f3 f4 8 c4 c5 8 ;m62
+db4 db5 8 f3 f4 8 bb3 bb4 8 db4 db5 8 f3 f4 8 bb3 bb4 8 ;m63
+c4 c5 8 f3 f4 8 a3 a4 8 c4 c5 8 f3 f4 8 db4 db5 8 ;m64
+f4 f5 8 bb3 bb4 8 db4 db5 8 f4 f5 8 bb3 bb4 8 bb3 bb4 8 ;m65
+c4 c5 8 f3 f4 8 a3 a4 8 c4 c5 8 f3 f4 8 c4 c5 8 ;m66
+db4 db5 8 vel 29 f3 f4 8 vel 28 bb3 bb4 8 vel 27 db4 db5 8 vel 26 f3 f4 8 vel 25 bb3 bb4 8 ;m67
+vel 24  c4 c5 8 vel 23 f3 f4 8 vel 22 a3 a4 8 vel 21 c4 c5 8 vel 20 f3 f4 8 eb4 eb5 8 ;m68
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;m69
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m70
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8 ;m71
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 eb4 eb5 8 ;m72
+gb4 gb5 8 b3 b4 8 Eb4 Eb5 8 gb4 gb5 8 b3 b4 8 bb3 bb4 8 ;73
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 gb3 gb4 8 b3 b4 8 ;m74
+db4 db5 8 gb3 gb4 8 b3 b4 8 db4 db5 8 f3 f4 8 b3 b4 8 ;m75
+db4 db5 8 gb3 gb4 8 bb3 bb4 8 db4 db5 8 R 4 ;second ending 77
+R 3/8 R 4 bb1 bb2 16 r 16 ;78
+vel 56 bb1 bb2 16 r 16 vel 62 bb1 bb2 16 r 16 vel 68 bb1 bb2 16 r 16 vel 74 bb1 bb2 16 r 16 vel 80 bb1 bb2 16 r 16 vel 86 bb1 bb2 16 r 16 ;m79
+forte c2 c3 16 r 16 d2 d3 16 r 16 eb2 eb3 16 r 16 f2 f3 16 r 16 g2 g3 16 r 16 ab2 ab3 16 r 16  ;m80
+bb2 bb3 16 r 16 c3 c4 16 r 16 d3 d4 16 r 16 G3 Bb3 Eb4 3/8
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 C4 Eb4 Ab4 3/8 ;m83
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ;m84
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 Eb3 Bb3 F4 Ab4 Bb4 D5 4 bb3 bb4 16 r 16 ;m85
+c4 c5 16 r 16 d4 d5 16 r 16 eb4 eb5 16 r 16 f4 f5 16 r 16 g4 g5 16 r 16 ab4 ab5 16 r 16 ;m86
+bb4 bb5 16 r 16 c5 c6 16 r 16 d5 d6 16 r 16 Eb4 Bb4 Eb5 G5 Bb5 Eb6 G6 4 Eb5 g5 g6 16 r 16 ;m87
+D5 f5 f6 16 r 16 C5 eb5 eb6 16 r 16 Bb4 d5 d6 16 r 16 Ab4 c5 c6 16 r 16 G4 bb4 bb5 16 r 16 F4 ab4 ab5 16 r 16 ;m88
+Eb4 g4 g5 16 r 16 D4 f4 f5 16 r 16 C4 eb4 eb5 16 r 16 ff Bb3 d4 d5 4 ;m89
+D3 D4 D5 Bb4 3/8 ;m90
+D3 D4 A4 C5 3/8 forte D3 D4 G4 Bb4 3/8
+D3 C4 D4 F#4 A4 12 R 24 G2 D3 Bb3 G4 4 G4 Bb4 Bb5 16 r 16 ;m91
+F4 A4 A5 16 r 16 Eb4 G4 G5 16 r 16 D4 f4 f5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 16 r 16 A3 C4 C5 16 r 16 ;92
+G3 Bb3 Bb4 16 r 16 F3 A3 A4 16 r 16 Eb3 G3 G4 16 r 16 D3 F3 F4 4 F2 F3 F4 D4 3/8 ;m93
+F2 F3 C4 Eb4 3/8 F3 Bb3 D4 3/8 ;m94
+Eb3 F3 A3 C4 F2 12 R 24  Bb1 F2 D3 Bb3 4 Bb2 Bb3 16 r 16 ;m95
+vel 60 C3 C4 16 r 16 vel 66 Db3 Db4 16 r 16 vel 72 Eb3 Eb4 16 r 16 vel 78 F3 F4 16 r 16 vel 84 G3 G4 16 r 16 vel 90 Ab3 Ab4 16 r 16 ;m96
+vel 96 Bb3 Bb4 16 r 16 vel 102 C4 C5 16 r 16 vel 108 Db4 Db5 16 r 16 vel 114 Eb4 Eb5 4 vel 120 D4 D5 16 r 16 ; 97
+ff C5 16 Db5 16 C5 8 forte Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24 ;m98
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 C4 C5 4 C4 12 R 24  ;m99
+vel 60 D3 D4 16 r 16 vel 66 e3 e4 16 r 16 vel 72 f3 f4 16 r 16 vel 78 g3 g4 16 r 16 vel 84 a3 a4 16 r 16 vel 90 Bb3 Bb4 16 r 16 ; m100
+vel 96 c4 c5 16 r 16 vel 102 D4 D5 16 r 16 vel 108 e4 e5 16 r 16 vel 114 f4 f5 4 Eb4 Eb5 16 r 16 ;m101
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24 ;m102
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 mf Bb4 16 R 16 ;m103
+C5 16 R 16 D5 16 R 16 Eb5 16 R 16 F5 16 R 16 G5 16 R 16 Ab5 16 R 16 ;m104
+Bb5 16 R 16 C6 16 R 16 D6 16 R 16 Eb6 4 D6 12 R 24 ;m105
+C6 16 D6 16 C6 8 Bb5 12 R 24 Ab5 16 Bb5 16 Ab5 8 G5 12 R 24 ;m106
+F5 16 G5 16 F5 8 Eb5 12 R 24 D5 12 R 24 R 8 G4 16 R 16 ;m107
+A4 16 R 16 B4 16 R 16 C5 16 R 16 D5 16 R 16 E5 16 R 16 F5 16 R 16 ;m108
+G5 16 R 16 A5 16 R 16 B5 16 R 16 C6 4 Bb5 12 R 24 ;m109
+mp A5 16 Bb5 16 A5 8 G5 12 R 24 vel 78 F5 16 G5 16 F5 8 Eb5 12 R 24 ;m110
+mf D5 16 Eb5 16 D5 8 C5 12 R 24 Bb4 4 bb1 bb2 16 r 16 ;m111
+forte c2 c3 16 r 16 d2 d3 16 r 16 eb2 eb3 16 r 16 f2 f3 16 r 16 g2 g3 16 r 16 ab2 ab3 16 r 16 ;112
+Bb2 Bb3 16 r 16 c3 c4 16 r 16 d3 d4 16 r 16 ff G3 Bb3 Eb4 3/8 ;113
+forte F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24  ;m114
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ff C4 Eb4 Ab4 3/8 ;m115
+forte Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24  ;m116
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 ff F4 Ab4 Bb4 D5 4 forte d4 d5 16 r 16 ;m117
+eb4 eb5 16 r 16 f4 f5 16 r 16 g4 g5 16 r 16 ab4 ab5 16 r 16 bb4 bb5 16 r 16 c5 c6 16 r 16 ;m118
+d5 d6 16 r 16 eb5 eb6 16 r 16 f5 f6 16 r 16 Eb4 Bb4 Eb5 G5 Eb6 G6 8 R 8 ff G4 Bb4 Db5 Eb5 G5 10/8 ;m119
+C5 Eb5 Ab5 C6 8 R 8 D4 F4 Bb4 D5 10/8 ;m121,122
+ff Eb4 Eb5 G4 Bb4 8 R 8 R 8 ;m123a
+mp R 4 Ab2 Eb3 Ab3 B3 Eb4 8 Ab2 Eb3 Ab3 B3 Eb4 8 ;m123b
+mp R 8 Ab2 Eb3 Ab3 B3 Eb4 8 mf Db2 Db3 Db4 Fb4 Ab4 8 mp Db2 Db3 Db4 Fb4 Ab4 8 ;m124
+mp R 8 Db2 Db3 Db4 Fb4 Ab4 8 mf Eb2 Eb3 Eb4 G3 Bb3 8 mp Eb2 Eb3 Eb4 G3 Bb3 8 ;m125
+mp R 8 Eb2 Eb3 Eb4 G3 Bb3 8 mf Ab2 Eb3 Ab3 B3 Eb4 8 mp Ab2 Eb3 Ab3 B3 Eb4 8 ;m126
+mp R 8 Ab2 Eb3 Ab3 B3 Eb4 8 mf Ab2 Eb3 Ab3 B3 Eb4 8 mp Ab2 Eb3 Ab3 B3 Eb4 8 ;m127
+mp R 8 Ab2 Eb3 Ab3 B3 Eb4 8 mf Db2 Db3 Db4 Fb4 Ab4 8 mp Db2 Db3 Db4 Fb4 Ab4 8;m128
+mp R 8 Db2 Db3 Db4 Fb4 Ab4 8 mf Eb2 Eb3 Eb4 G3 Bb3 8 mp Eb2 Eb3 Eb4 G3 Bb3 8 ;m129
+mp R 8 Eb2 Eb3 Eb4 G3 Bb3 8 mf Ab2 Eb3 Ab3 B3 Eb4 8 mp Ab2 Eb3 Ab3 B3 Eb4 8 ;m130
+mp R 8 Ab2 Eb3 Ab3 B3 Eb4 8 forte  E2 E3 E4 G#3 B3 8 mp E2 E3 E4 G#3 B3 8 ;m131
+mf R 8 E2 E3 E4 G#3 B3 8 forte A2 E3 A3 E4 C#4 8 mp A2 E3 A3 E4 C#4 8 ;m132
+mf R 8 A2 E3 A3 E4 C#4 8 forte B1 B2 B3 F#3 D#4 8 mp B1 B2 B3 F#3 D#4 8 ;m133
+mf R 8 B1 B2 B3 F#3 D#4 8 forte E2 B2 G#3 B3 E4 8 mp E2 B2 G#3 B3 E4 8 ;m134
+R 8 E2 B2 G#3 B3 E4 8 forte  G#5 16 A4 16 G#5 16 G#4 16  ;m135
+ G#5 16 A4 16 G#5 16 G#4 16   C#6 16 D6 16 C#6 16 C#5 16  ;136
+ C#6 16 D6 16 C#6 16 C#5 16   G#5 16 A4 16 G#5 16 G#4 16  ;137
+ G#5 16 A4 16 G#5 16 G#4 16   G#5 16 A4 16 G#5 16 G#4 16  ;138
+ G#5 16 A4 16 G#5 16 G#4 16  ff  Eb5 16 Fb5 16 Eb5 16 Db5 16  ;139
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;140
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;141
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 Fb5 16 Eb5 16 Db5 16  ;142
+ B4 16 Db5 16 B4 16 Ab4 16   Eb5 16 Fb5 16 Eb5 16 Db5 16  ;p78 143
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;144
+ Fb5 16 Gb5 16 Fb5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;145
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;146
+ B4 16 Db5 16 B4 16 Ab4 16   forte Bb5 16 mf B5 16 Bb5 16 Bb4 16  ;147
+p  Bb5 16 B5 16 Bb5 16 Bb4 16   Bb5 16 B5 16 Bb5 16 Bb4 16  ;148
+ Bb5 16 B5 16 Bb5 16 Bb4 16   A5 16 B5 16 A5 16 E5 16  ;149
+ A5 16 E6 16 A5 16 E5 16   G5 16 Eb6 16 G5 16 Eb5 16  ;150
+ Ab5 16 Eb6 16 Ab5 16 Eb5 16   forte Db6 16 mf D6 16 Db6 16 Db5 16  ;151
+p  Db6 16 D6 16 Db6 16 Db5 16   Db6 16 D6 16 Db6 16 Db5 16  ;152
+ Db6 16 D6 16 Db6 16 Db5 16   C6 16 D6 16 C6 16 G5 16  ;153
+ C6 16 G6 16 C6 16 G5 16   A#5 16 F#6 16 A#5 16 F#5 16  ;154
+ B5 16 F#6 16 B5 16 F#5 16   B5 16 C6 16 B5 16 A5 16  ;155
+ G5 16 A5 16 G5 16 E5 16   E6 16 F6 16 E6 16 D6 16  ;156
+ C6 16 D6 16 C6 16 A5 16   F#5 16 G5 16 F#5 16 E5 16  ;157
+ D#5 16 E5 16 D#5 16 B4 16   B5 16 C6 16 B5 16 A5 16  ;158
+ G5 16 A5 16 G5 16 E5 16   F#5 16 G5 16 F#5 16 E5 16  ;159
+ D5 16 E5 16 D5 16 B4 16  vel 40  B5 16 C6 16 B5 16 A5 16  ;160 cresc to forte in 163
+vel 48  G5 16 A6 16 G5 16 E5 16  vel 56  C#5 16 D5 16 C#5 16 B4 16  ;161
+vel 64  A#4 16 B4 16 A#4 16 F#4 16  vel 72  F#5 16 G5 16 F#5 16 E5 16  ;162
+vel 80  D5 16 E5 16 D5 16 B4 16  vel 88 F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 R 16 R 8  ;m163
+forte B4 D5 F#5 16 F#4 16 B4 D5 F#5 16 F#4 16 B4 D5 F#5 16 R 16 R 8  
+C#5 E#4 G#4 16 C#4 16 C#5 E#4 G#4 16 C#4 16 C#5 E#4 G#4 16 R 16 R 8  
+F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 R 16 R 8  
+F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 R 16 R 8  
+B4 D5 F#5 16 F#4 16 B4 D5 F#5 16 F#4 16 B4 D5 F#5 16 R 16 R 8  
+E#4 G#4 C#5 16 C#4 16 E#4 G#4 C#5 16 C#4 16 E#4 G#4 C#5 16 R 16 R 8  
+F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 C#4 16 F#4 A4 C#5 16 R 16 R 8  
+ forte G#5 16 mf A5 16 G#5 16 G#4 16  ;m171
+p  G#5 16 A5 16 G#5 16 G#4 16   G#5 16 A5 16 G#5 16 G#4 16  
+ G#5 16 A5 16 G#5 16 G#4 16   G5 16 A5 16 G5 16 D5 16 
+ G5 16 D6 16 G5 16 D5 16   E#5 16 C#6 16 E#5 16 C#5 16  
+ F#5 16 C#6 16 F#5 16 C#5 16   forte Bb5 16 mf B5 16 Bb5 16 Bb4 16 
+p  Bb5 16 B5 16 Bb5 16 Bb4 16   Bb5 16 B5 16 Bb5 16 Bb4 16 
+ Bb5 16 B5 16 Bb5 16 Bb4 16   A5 16 B5 16 A5 16 E5 16  
+mp  A5 16 E6 16 A5 16 E5 16  p  G5 16 Eb6 16 G5 16 Eb5 16   ;178
+ Ab5 16 Eb6 16 Ab5 16 Eb5 16  forte  Ab5 16 A5 16 Ab5 16 Gb5 16  
+ E5 16 Gb5 16 E5 16 Db5 16   Db6 16 D6 16 Db6 16 B5 16  ;180
+ A5 16 B5 16 A5 16 Gb5 16   Eb5 16 E5 16 Eb5 16 Db5 16  
+ C5 16 Db5 16 C5 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  
+ E5 16 Gb5 16 E5 16 Db5 16  ff  Eb5 16 E5 16 Eb5 16 Db5 16  ;m183
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;m184forte forte 
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m185mp mp 
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  ;m186
+ B4 16 Db5 16 B4 16 Ab4 16   Eb5 16 F5 16 Eb5 16 Db5 16  ;m187
+ B4 16 Db5 16 B4 16 Ab4 16   Ab5 16 A5 16 Ab5 16 Gb5 16  ;m188
+ E5 16 Gb5 16 E5 16 Db5 16   Bb4 16 B4 16 Bb4 16 Ab4 16  ;m189
+ G4 16 Ab4 16 G4 16 Eb4 16   Eb5 16 E5 16 Eb5 16 Db5 16  
+ B4 16 Db5 16 B4 16 Ab4 16  eb4 eb5 16 e4 e5 16 eb4 eb5 16 db4 db5 16 ;m191
+b3 b4 16 db4 db5 16 b3 b4 16 bb3 bb4 16 ab3 ab4 16 bb3 bb4 16 ab3 ab4 16 gb3 gb4 16 ;m192
+fb3 fb4 16 gb3 gb4 16 fb3 fb4 16 eb3 eb4 16 db3 db4 16 eb3 eb4 16 db3 db4 16 b2 b3 16  ;m193
+bb2 bb3 16 b2 b3 16 bb2 bb3 16 a2 a3 16 bb2 bb3 16 b2 b3 16 bb2 bb3 16 a2 a3 16 ;m194
+bb2 bb3 16 b2 b3 16 bb2 bb3 16 a2 a3 16 bb2 bb3 16 b2 b3 16 bb2 bb3 16 a2 a3 16 ;m195
+Bb2 8 R 3/8 ;m196
+R 4 R 2/12 Bb1 Bb2 1/12 ;m197
+vel 60 c2 c3 16 r 16 vel 66 d2 d3 16 r 16 vel 72 Eb2 Eb3 16 r 16 vel 78 F2 F3 16 r 16 vel 84 G2 G3 16 r 16 vel 90 Ab2 Ab3 16 r 16 ;m198
+vel 96 Bb2 Bb3 16 r 16 vel 102 C3 C4 16 r 16 vel 108 D3 D4 16 r 16 vel 114 Eb4 Bb3 G3 3/8 ;m199
+R 2. ;m200
+forte R 3/8 C4 Eb4 Ab4 3/8 ;m201
+R 2. ;m202
+R 8 Bb4 12 R 24 C5 12 R 24 F4 Ab4 Bb4 D5 4 bb3 bb4 16 r 16 ;m203
+C4 C5 16 r 16 D4 D5 16 r 16 Eb4 Eb5 16 r 16 F4 F5 16 r 16 G4 G5 16 r 16 Ab4 Ab5 16 r 16  ;m204
+Bb4 Bb5 16 r 16 C5 C6 16 r 16 D5 D6 16 r 16 G5 Bb5 Eb6 G6 4 Eb5 G5 G6 16 r 16 ;m205
+D5 F5 F6 16 r 16 C5 Eb5 Eb6 16 r 16 Bb4 D5 D6 16 r 16  ;m206
+      Ab4 C5 C6 16 r 16 G4 Bb4 Bb5 16 r 16 ff F4 Ab4 Ab5 16 r 16
+Eb4 G4 G5 16 r 16 D4 F4 F5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 4 D3 D4 D5 Bb4 3/8 ;m207
+D3 D4 A4 C5 3/8 D3 D4 G4 Bb4 3/8 ;m208
+forte D3 C4 D4 F#4 A4 12 R 24 G2 D3 Bb3 G4 4 G4 Bb4 Bb5 16 r 16 ;m209
+F4 A4 A5 16 r 16 Eb4 G4 G5 16 r 16 D4 f4 f5 16 r 16 C4 Eb4 Eb5 16 r 16 Bb3 D4 D5 16 r 16 A3 C4 C5 16 r 16 ;m210
+G3 Bb3 Bb4 16 r 16 F3 A3 A4 16 r 16 Eb3 G3 G4 16 r 16 D3 F3 F4 4 ff F2 F3 F4 D4 3/8 ;m211
+F2 F3 C4 Eb4 3/8 F3 Bb3 D4 3/8 ;m212
+forte Eb3 F3 A3 C4 F2 12 R 24  Bb1 F2 D3 Bb3 4 Bb2 Bb3 16 r 16
+vel 60 C3 C4 16 r 16 vel 66 Db3 Db4 16 r 16 vel 72 Eb3 Eb4 16 r 16 vel 78 F3 F4 16 r 16 vel 84 G3 G4 16 r 16 vel 90 Ab3 Ab4 16 r 16
+vel 90 Bb3 Bb4 16 r 16 vel 96 C4 C5 16 r 16 vel 102 Db4 Db5 16 r 16 vel 108 Eb4 Eb5 4 Db4 Db5 16 r 16
+ff C5 16 Db5 16 C5 8 forte Bb4 12 R 24 ff Ab4 16 Bb4 16 Ab4 8 forte G4 12 R 24
+ff F4 16 G4 16 F4 8 forte Eb4 12 R 24 C4 C5 4 C4 12 R 24 ;207
+vel 60 D3 D4 16 r 16 vel 66 e3 e4 16 r 16 vel 72 f3 f4 16 r 16 vel 78 g3 g4 16 r 16 vel 84 a3 a4 16 r 16 vel 90 Bb3 Bb4 16 r 16
+vel 96 c4 c5 16 r 16 vel 102 D4 D5 16 r 16 vel 108 e4 e5 16 r 16 vel 114 f4 f5 4 Eb4 Eb5 16 r 16
+ff D5 16 Eb5 16 D5 8 forte C5 12 R 24 ff Bb4 16 C5 16 Bb4 8 forte A4 12 R 24
+ff G4 16 A4 16 G4 8 forte F4 12 R 24 F4 D5 4 mf Bb4 16 R 16 ;221
+C5 16 R 16 D5 16 R 16 Eb5 16 R 16 F5 16 R 16 G5 16 R 16 Ab5 16 R 16 ;222
+Bb5 16 R 16 C6 16 R 16 D6 16 R 16 Eb6 4 D6 12 R 24 ;223
+C6 16 D6 16 C6 8 Bb5 12 R 24 Ab5 16 Bb5 16 Ab5 8 G5 12 R 24 ;224
+F5 16 G5 16 F5 8 Eb5 12 R 24 D5 12 R 24 R 8 G4 16 R 16 ;225
+A4 16 R 16 B4 16 R 16 C5 16 R 16 D5 16 R 16 E5 16 R 16 F5 16 R 16 ;226
+G5 16 R 16 A5 16 R 16 B5 16 R 16 C6 4 Bb5 12 R 24 ;227
+A5 16 Bb5 16 A5 8 G5 12 R 24 mp F5 16 G5 16 F5 8 p Eb5 12 R 24  ;228
+mf D5 16 Eb5 16 D5 8 mp C5 12 R 24 mf Bb4 4 forte bb1 bb2 16 r 16
+c2 c3 16 r 16 d2 d3 16 r 16 eb2 eb3 16 r 16 f2 f3 16 r 16 g2 g3 16 r 16 ab2 ab3 16 r 16 ;230
+Bb2 Bb3 16 r 16 c3 c4 16 r 16 d3 d4 16 r 16 ff G3 Bb3 Eb4 3/8
+forte F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ff C4 Eb4 Ab4 3/8
+forte Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24 
+Ab4 12 R 24 Bb4 12 R 24 C5 12 R 24 ff Eb3 Bb3 F4 Ab4 Bb4 D5 4 forte d4 d5 16 r 16 ;m235
+eb4 eb5 16 r 16 f4 f5 16 r 16 g4 g5 16 r 16 ab4 ab5 16 r 16 bb4 bb5 16 r 16 c5 c6 16 r 16 ;m236
+d5 d6 16 r 16 eb5 eb6 16 r 16 f5 f6 16 r 16 Eb4 Bb4 Eb5 G5 Eb6 G6 8 R 8 ff G4 Bb4 Db5 Eb5 G5 10/8 ;m237
+;m238
+C5 Eb5 Ab5 C6 8 R 8 D4 F4 Bb4 D5 10/8 ;m239
+;m240
+Eb4 Eb5 G4 Bb4 8 R 8 Eb2 Eb4 8  ;m241
+END_LAZY DAMPER 5 127 LAZY Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 ;m242
+Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 ;m243
+Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 ;m244
+Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 Ab4 B4 Eb5 8 END_LAZY DAMPER 5   0 LAZY Eb4 8 ;m245
+F#4 C5 Eb5 8 Eb4 8 F#4 C5 Eb5 8 Eb4 8 F#4 C5 Eb5 8 Eb4 8 ;m246
+F#4 C5 Eb5 8 Eb4 8 F#4 C5 Eb5 8 Eb4 8 G4 Db5 Eb5 8 Eb4 8 ;m247
+END_LAZY DAMPER 5 127 LAZY Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 ;m248
+Eb3 Eb5 8 Eb2 Eb4 8 Eb3 Eb5 8 Eb2 Eb4 8 Ab4 B4 Eb5 8 END_LAZY DAMPER 5   0 LAZY Eb4 8 ;m249
+F#4 C5 Eb5 8 Eb4 8 F#4 C5 Eb5 8 Eb4 8 F#4 C5 Eb5 8 Eb4 8 ;m250
+F#4 C5 Eb5 8 Eb4 8 F#4 C5 Eb5 8 Eb4 8 G4 Bb4 Eb5 8 D4 8 ;m251
+F4 Ab4 B4 D5 8 D4 8 F4 Ab4 B4 D5 8 D4 8 F4 Ab4 B4 D5 8 D4 8 ;m252
+forte F4 Ab4 B4 D5 8 D4 8 F4 Ab4 B4 D5 8 ff D4 8 forte Ab4 Bb4 D5 8 D4 8 ;m253
+Ab4 Bb4 D5 8 D4 8 Ab4 Bb4 D5 8 ff D4 8 forte Ab4 Bb4 D5 8 D4 8 ;m254
+Ab4 Bb4 D5 8 D4 8 Ab4 Bb4 D5 8 ff Ab4 12 R 24 forte G4 12 R 24 F4 12 R 24 ;m255
+vel 40 e3 e4 16 r 16 f3 f4 16 r 16 g3 g4 16 r 16 vel 48 ab3 ab4 16 r 16 a3 a4 16 r 16 bb3 bb4 16 r 16 ;m256
+vel 57 c4 c5 16 r 16 d4 d5 16 r 16 eb4 eb5 16 r 16 vel 65 f4 f5 16 r 16 g4 g5 16 r 16 ab4 ab5 16 r 16 ;m257
+vel 74 a4 a5 16 r 16 bb4 bb5 16 r 16 c5 c6 16 r 16 vel 82 d5 d6 16 r 16 eb5 eb6 16 r 16 f5 f6 16 r 16 ;m258
+vel 91 g5 g6 16 r 16 ab5 ab6 16 r 16 a5 a6 16 r 16 vel 99 bb5 bb6 16 r 16 c6 c7 16 r 16 d6 d7 16 r 16 ;m259
+END_LAZY DAMPER 5 127 LAZY ff Eb5 Bb5 Eb6 G6 Eb7 4 eb5 eb6 16 r 16 g5 g6 16 r 16 bb4 bb5 16 r 16 bb4 bb5 16 r 16  ;m260
+eb5 eb6 16 r 16 eb4 eb5 16 r 16 eb4 eb5 16 r 16 g4 g5 16 r 16 bb3 bb4 16 r 16 bb3 bb4 16 r 16 ;m261
+eb4 eb5 16 r 16 eb3 eb4 16 r 16 eb3 eb4 16 r 16 g3 g4 16 r 16 bb2 bb3 16 r 16 bb2 bb3 16 r 16 ;m262
+eb3 eb4 16 r 16 eb2 eb3 16 r 16 eb2 eb3 16 r 16 g2 g3 16 r 16 bb1 bb2 16 r 16 bb1 bb2 16 r 16 ;m263
+Eb1 Bb2 Eb2 G2 Bb2 Eb3 4 R 8 Eb2 Bb2 Eb3 G3 Bb3 Eb4 4 R 8 ;m264 
+R 3/8 Eb3 Bb3 Eb4 G4 Bb4 Eb5 4 R 8 ;m265
+Eb4 Bb4 Eb5 G5 Bb5 Eb6 4 R 8 R 3/8 END_LAZY DAMPER 5   0 LAZY ;m266
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt3pl.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.14  2003/10/19 23:48:44  root
+; Jennifer's last notes
+;
+; Revision 1.13  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/05/26 21:43:31  root
+; balace balance
+;
+; Revision 1.10  2003/05/26 19:37:34  root
+; staccaoto articulation
+;
+; Revision 1.9  2003/05/02 01:40:57  root
+; adjust
+;
+; Revision 1.8  2003/03/09 21:48:43  root
+; done
+;
+; Revision 1.7  2003/03/05 02:53:27  root
+; fixed piano near end
+;
+; Revision 1.6  2003/03/05 02:17:01  root
+; dynamics
+;
+; Revision 1.5  2003/02/28 00:45:31  root
+; fix an ocatave
+;
+; Revision 1.4  2003/02/28 00:38:05  root
+; some fixes
+;
+; Revision 1.3  2003/02/28 00:05:15  root
+; first draft done
+;
+; Revision 1.2  2003/02/27 02:36:49  root
+; some cleaning
+;
+; Revision 1.1  2003/02/26 02:25:02  root
+; Initial revision
+;
+; Revision 1.3  2003/02/24 01:52:29  root
+; done for sunday
+;
+; Revision 1.2  2003/02/24 00:46:01  root
+; up to m135, one error unfixed
+;
+; Revision 1.1  2003/02/22 03:43:35  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pl.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3pl.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3pl.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pl.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement ; Piano Right hand or more
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Right Hand
+INSTRUMENT Piano
+PROGRAM 5 1
+PAN 5 0
+LAZY
+chan 5
+ff
+R 5/8 ;pick-up
+ff R 8
+R 2. ;1
+R 3/8 forte Eb2 Eb3 4 Eb3 12 R 24 ;2
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 ;3
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Eb3 Ab3 4 Ab3 12 R 24 ;4
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24  ;5
+Ab4 12 R 24 R 4 Eb3 Bb3 4 Bb3 12 R 24 ;6
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 ;repeat sign 7-16
+R 8
+R 2. ;1
+R 3/8 forte Eb2 Eb3 4 Eb3 12 R 24 ;2
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 ;3
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 Eb3 Ab3 4 Ab3 12 R 24 ;4
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24  ;5
+Ab4 12 R 24 R 4 Eb3 Bb3 4 Bb3 12 R 24 ;6
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 ;repeat sign 7-16
+R 1/8 ;16
+R 2. R 2. ;17 18
+ff C4 4 forte Bb3 12 R 24 ff Ab3 4 forte G3 12 R 24 
+ff F3 4 forte Eb3 12 R 24 Ab2 Ab3 4 C3 12 R 24
+R 2. R 2. ;21 22
+ff D4 4 forte C4 12 R 24 ff Bb3 4 forte A3 12 R 24 ;m23
+ff G3 4 forte F3 12 R 24 Bb2 Bb3 4 pp Ab3 Bb3 D4 F4 12 R 24  ;m24
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 ;m25
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 G3 Bb3 Eb4 4 G3 Ab3 C4 Eb4 3/8 ;m26
+G3 Ab3 C4 Eb4 3/8 G3 Ab3 C4 Eb4 3/8 ;27
+G3 Ab3 C4 Eb4 12 R 24 F3 Ab3 C4 D4 4 F3 G3 B3 D4 12 R 24 ;m28
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 ;m29
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 E3 G3 C4 4 Eb3 F3 A3 C4 3/8 ;m30
+Eb3 F3 A3 C4 3/8 vel 50 Eb3 F3 A3 C4 3/8 ;m31
+vel 60  Eb3 F3 A3 C4 12 R 24 vel 70 D3 F3 Bb3 4 R 8 ;m32
+R 2.  ;m33
+forte R 3/8 Eb2 Eb3 4 Eb3 12 R 24 ;m34
+R 2. ;m35
+R 3/8 ff Eb3 Ab3 4 Ab3 12 R 24 ;m36
+R 2. ;m37
+R 2. ;m38
+R 2. ;m39
+ff R 5/8 Eb3 4 ;m40
+Bb3 12 R 24 Ab3 12 R 24 G3 12 R 24 F3 12 R 24 Eb3 12 R 24 ;m41
+Db3 12 R 24 C3 12 R 24 Bb2 12 R 24 Ab2 12 R 24 R 8 Ab3 12 R 24 ;m42
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m43
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 Eb2 12 R 24 R 8 ;m44 repeat sign
+R 1/8 ;16
+R 2. R 2. ;17 18
+ff C4 4 forte Bb3 12 R 24 ff Ab3 4 forte G3 12 R 24 
+ff F3 4 forte Eb3 12 R 24 Ab2 Ab3 4 C3 12 R 24
+R 2. R 2. ;21 22
+ff D4 4 forte C4 12 R 24 ff Bb3 4 forte A3 12 R 24 ;m23
+ff G3 4 forte F3 12 R 24 Bb2 Bb3 4 pp Ab3 Bb3 D4 F4 12 R 24  ;m24
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 ;m25
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 G3 Bb3 Eb4 4 G3 Ab3 C4 Eb4 3/8 ;m26
+G3 Ab3 C4 Eb4 3/8 G3 Ab3 C4 Eb4 3/8 ;27
+G3 Ab3 C4 Eb4 12 R 24 F3 Ab3 C4 D4 4 F3 G3 B3 D4 12 R 24 ;m28
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 ;m29
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 E3 G3 C4 4 Eb3 F3 A3 C4 3/8 ;m30
+Eb3 F3 A3 C4 3/8 vel 50 Eb3 F3 A3 C4 3/8 ;m31
+vel 60  Eb3 F3 A3 C4 12 R 24 vel 70 D3 F3 Bb3 4 R 8 ;m32
+R 2.  ;m33
+forte R 3/8 Eb2 Eb3 4 Eb3 12 R 24 ;m34
+R 2. ;m35
+R 3/8 ff Eb3 Ab3 4 Ab3 12 R 24 ;m36
+R 2. ;m37
+R 2. ;m38
+R 2. ;m39
+ff R 5/8 Eb3 4 ;m40
+Bb3 12 R 24 Ab3 12 R 24 G3 12 R 24 F3 12 R 24 Eb3 12 R 24 ;m41
+Db3 12 R 24 C3 12 R 24 Bb2 12 R 24 Ab2 12 R 24 R 8 Ab3 12 R 24 ;m42
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m43
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 Eb2 12 R 24 R 8 ;m44 repeat sign
+R 8 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2.  ;16 rests
+;repeat sign m61
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;61 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;61 
+R 2. ;first ending
+R 2. ;second ending
+R 2. R 2. R 2. ;78 79 80
+forte R 3/8 Eb2 Eb3 4 Eb3 12 R 24 ;81
+R 2. ;top of page 75
+R 3/8 Eb3 Ab3 4 Ab3 12 R 24 ;m83
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m84 to m97
+ff C4 4 forte Bb3 12 R 24 ff Ab3 4 forte G3 12 R 24 ;m98
+ff F3 4 forte Eb3 12 R 24 Ab2 Ab3 4 C3 12 R 24 ;m99
+R 2. ;m100
+R 2. ;m101
+ff D4 4 forte C4 12 R 24 ff Bb3 4 forte A3 12 R 24 ;m102
+ff G3 4 forte F3 12 R 24 Bb2 Bb3 4 p Ab3 Bb3 D4 F4 12 R 24 ;m103
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 ;m104
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 G3 Bb3 Eb4 4 G3 Ab3 C4 Eb4 3/8 ;m105
+G3 Ab3 C4 Eb4 3/8 G3 Ab3 C4 Eb4 3/8 ;m106
+G3 Ab3 C4 Eb4 12 R 24 F3 Ab3 C4 D4 4 F3 G3 B3 D4 12 R 24 ;m107
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24  ;m108
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 E3 G3 C4 4 Eb3 F3 A3 C4 3/8 ;m109
+p Eb3 F3 A3 C4 3/8 mp Eb3 F3 A3 C4 3/8  ;m110
+mf Eb3 F3 A3 C4 12 R 24 D3 F3 Bb3 4 R 8 ;m111
+R 2. ;m112
+forte R 3/8 eb2 eb3 4 Eb3 12 R 24 ;m113
+R 2. ;m114
+R 3/8 Eb3 Ab3 4 Ab3 12 R 24 ;m115
+R 2. ;m116
+R 3/8 Eb3 Bb3 4 R 8 ;m117
+R 2. ;m118
+ff R 5/8 Eb3 4 ;m119
+Bb3 12 R 24 Ab3 12 R 24 G3 12 R 24 F3 12 R 24 Eb3 12 R 24 ;m120
+Db3 12 R 24 C3 12 R 24 Bb2 12 R 24 Ab2 12 R 24 R 8 Bb2 4 ;m121
+F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m122
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 Eb2 12 R 24 R 8 R 8 
+R 4 R 4 ;m123
+R 2 ;m124
+R 2 ;m125
+R 2 ;m126
+R 2 ;m127
+R 2 ;m128
+R 2 ;m129
+R 2 ;m130
+R 2 ;m131
+R 2 ;m132
+R 2 ;m133
+R 2 ;m134
+R 4 ff C#3 E3 G#3 16 A3 16 C#3 E3 G#3 16 A3 16 C#3 E3 G#3 16 R 16 R 8  ;m135
+F#3 A3 C#4 16 D4 16 F#3 A3 C#4 16 D4 16 F#3 A3 C#4 16 R 16 R 8  ;m136
+ G#2 16 G#3 16 G#2 16 G#3 16  ;m137
+G#2 16 R 16 R 8 ;m138
+C#3 E3 G#3 16 A3 16 C#3 E3 G#3 16 A3 16 C#3 E3 G#3 16 R 16 R 8 
+forte Ab2 8 Eb3 Ab3 B3 8 ff Eb3 Ab3 B3 4
+forte Db2 8 Ab3 Db4 E4 8 ff Ab3 Db4 E4 4
+forte Eb2 8 Eb3 G3 Bb3 8 ff Eb3 G3 Bb3 4
+forte Ab2 8 Eb3 Ab3 B3 8 ff Eb3 Ab3 B3 4
+forte Ab2 8 Eb3 Ab3 B3 8 ff Eb3 Ab3 B3 4
+forte Db2 8 Ab3 Db4 E4 8 ff Ab3 Db4 E4 4
+forte Eb2 8 Eb3 G3 Bb3 8 ff Eb3 G3 Bb3 4
+forte Ab2 8 Eb3 Ab3 B3 8 ff Eb3 Ab3 B3 4 p A4 16 R 16 Bb4 16 R 16 ;lands in m147 
+B4 16 R 16 C5 16 R 16 Db5 16 R 16 D5 16 R 16 
+Eb5 16 R 16 R 8 C#4 E4 A4 2
+Eb4 Bb4 Db5 4 ;m150
+Ab4 B4 4 C4 16 R 16 Db4 16 R 16 
+D4 16 R 16 Eb4 16 R 16 E4 16 R 16 F4 16 R 16 
+Gb4 16 R 16 R 8 E4 G4 C5 2
+F#4 C#5 E5 4
+B4 D5 4 p E3 8 B3 G4  8 mp B3 G4  4
+p A3 8 E4 A5 C5 8 mp E4 A5 C5 4
+p B2 8 B3 D#4 A4 8 mp B3 D#4 A4 4
+p E3 8 B3 E4 G4 8 mp B3 E4 G4 4
+B2 16 D4 16 F#3 B3 16 D4 16 F#3 B3 16 r 16 r 8
+vel 50  E2 16 E4 16 G3 B3 16 E4 16 G3 B3 16 r 16 r 8  ;m160
+vel 58 F#2 16 E4 16 F#3 A#3 16 E4 16 F#3 A#3 16 r 16 r 8 
+vel 66 B2 16 D4 16 F#3 B3 16 D4 16 F#3 B3 16 r 16 r 8 
+vel 74 F#2 16 A3 16 C#3 F#3 16 A3 16 C#3 F#3 16 r 16 r 8 
+vel 82 B1 16 D4 16 F#3 B3 16 D4 16 F#3 B3 16 r 16 r 8 
+vel 90 C#2 16 B3 16 C#3 F3 16 B3 16 C#3 F3 16 r 16 r 8 
+F#2 16 A3 16 C#3 F#3 16 A3 16 C#3 F#3 16 r 16 r 8 
+F#2 16 A3 16 C#3 F#3 16 A3 16 C#3 F#3 16 r 16 r 8 
+B1 16 D4 16 F#3 B3 16 D4 16 F#3 B3 16 r 16 r 8 
+C#2 16 B3 16 C#3 F3 16 B3 16 C#3 F3 16 r 16 r 8 
+F#2 16 A3 16 C#3 F#3 16 A3 16 C#3 F#3 16 r 16 r 8 ;m170
+G4 16 R 16 p G#4 16 R 16 ;m171
+A4 16 R 16 A#4 16 R 16 B4 16 R 16 C5 16 R 16 ;m172
+C#5 16 R 16 R 8 B3 D4 G4 2
+C#4 G#4 B4 4 ;m174
+F#4 A4 4 mf A3 16 R 16 p Bb3 16 R 16 ;m175
+B3 16 R 16 C4 16 R 16 Db4 16 R 16 D4 16 R 16 ;m176
+Eb4 16 R 16 R 8 C#4 E4 A4 2
+Eb4 Bb4 Db5 4 ;m178
+Ab4 B4 8 R 8 forte forte Db3 8 Ab3 Db4 E4 8 ff Ab3 Db4 E4 4 ;m179
+forte Gb2 8 A3 Db4 Gb4 8 ff A3 Db4 Gb4 4 ;m180
+forte Ab2 8 Ab3 C4 Eb4 8 ff Ab3 C4 Eb4 4
+forte Db3 8 Ab3 Db4 E4 8 ff Ab3 Db4 E4 4
+forte Ab2 8. Ab3 B3 Eb4 16 ff Ab3 B3 Eb4 4 
+forte Db3 8. Ab3 Db4 E4 16 ff Ab3 Db4 E4 4 
+forte Eb2 8. Eb3 G3 Bb3 16 ff Eb3 G3 Bb3 4
+forte Ab2 8. Eb3 Ab3 B3 16 ff Eb3 Ab3 B3 4
+forte Ab2 8. Ab3 B3 Eb4 16 ff Ab3 B3 Eb4 4
+forte Db3 8. Ab3 Db4 E4 16 ff Ab3 Db4 E4 4
+forte Eb2 8. Eb3 G3 Bb3 16 ff Eb3 G3 Bb3 4 ;190
+forte Ab2 8. Eb3 Ab3 B3 16 ff Eb3 Ab3 B3 4 
+R 4 ;m191
+R 2 R 2 R 2 R 2 R 2 R 2 ;m192-m197
+R 6/8 ;m198
+R 3/8 Eb2 Eb3 4 Eb3 12 R 24 ;199
+F3 12 R 24 G3 12 R 24 Ab3 12 R 24 Bb3 12 R 24 C4 12 R 24 D4 12 R 24 ;200
+Eb4 12 R 24 F4 12 R 24 G4 12 R 24 ff Eb3 Ab3 4 forte Ab3 12 R 24 ;201
+Bb3 12 R 24 C4 12 R 24 D4 12 R 24 Eb4 12 R 24 F4 12 R 24 G4 12 R 24  ;202
+Ab4 12 R 24 R 4 Eb3 Bb3 4 Bb3 12 R 24 ;203
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 R 1/8 ;204-213
+R 2. R 2. ;214-215
+ff C4 4 Bb3 12 R 24 Ab3 4 G3 12 R 24 ;m216
+F3 4 Eb3 12 R 24 Ab2 Ab3 4 C3 12 R 24 ;m217
+R 2. R 2. ;m218 m219
+D4 4 C4 12 R 24 Bb3 4 A3 12 R 24 ;m220
+G3 4 F3 12 R 24 Bb2 Bb3 4 p Ab3 Bb3 D4 F4 12 R 24  ;m221
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 ;m222
+Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 Ab3 Bb3 D4 F4 12 R 24 G3 Bb3 Eb4 4 G3 Ab3 C4 Eb4 3/8 ;m223
+G3 Ab3 C4 Eb4 3/8 G3 Ab3 C4 Eb4 3/8 ;224
+G3 Ab3 C4 Eb4 12 R 24 F3 Ab3 C4 D4 4 F3 G3 B3 D4 12 R 24 ;m225
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 ;m226
+F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 F3 G3 B3 D4 12 R 24 E3 G3 C4 4 Eb3 F3 A3 C4 3/8 ;m227
+Eb3 F3 A3 C4 3/8 Eb3 F3 A3 C4 3/8 ;m228
+Eb3 F3 A3 C4 12 R 24 D3 F3 Bb3 4 R 8 ;m229
+R 2.  ;m230
+R 3/8 Eb2 Eb3 4 Eb3 12 R 24 ;m231
+R 2. ;m232
+R 3/8 Eb3 Ab3 4 Ab3 12 R 24 ;m233
+R 2. R 2. R 2. ;m234,235,236
+R 5/8 Eb3 4 ;m237
+Bb3 12 R 24 Ab3 12 R 24 G3 12 R 24 F3 12 R 24 Eb3 12 R 24 ;m238
+Db3 12 R 24 C3 12 R 24 Bb2 12 R 24 Ab2 12 R 24 R 8 Ab3 12 R 24 ;m239
+G3 12 R 24 F3 12 R 24 Eb3 12 R 24 D3 12 R 24 C3 12 R 24 Bb2 12 R 24 ;m240
+Ab2 12 R 24 G2 12 R 24 F2 12 R 24 Eb2 12 R 24 R 4 ;m241 repeat sign
+R 2. R 2. R 2. ; coda
+R 5/8 A3 8
+Bb2 16 R 16 C3 16 R 16 Db3 16 R 16 Eb3 16 R 16 F3 16 R 16 G3 16 R 16 
+A3 16 R 16 Bb3 16 R 16 C4 16 R 16 Db4 4 R 8 
+R 2. ;m248
+R 5/8 A3 8
+Bb2 16 R 16 C3 16 R 16 Db3 16 R 16 Eb3 16 R 16 F3 16 R 16 G3 16 R 16 
+A3 16 R 16 Bb3 16 R 16 C4 16 R 16 Db4 4 F2 8
+G2 8 Ab2 8 Bb2 8 B2 8 C3 8 D3 8 
+Eb3 8 F3 8 G3 8 Ab3 8 G3 8 F3 8
+E3 8 F3 8 G3 8 Ab3 8 G3 8 F3 8
+E3 8 F3 8 G3 8 Ab3 8 G3 8 F3 8
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+vel 1 Eb2 12/8 ;fin
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+; $Author: janzent $
+; $Log: schuqnt3pt.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.6  2003/05/05 00:36:12  root
+; pedals dynamics
+;
+; Revision 1.5  2003/03/09 21:48:48  root
+; done
+;
+; Revision 1.4  2003/03/05 02:53:18  root
+; dynamics
+;
+; Revision 1.3  2003/03/01 02:39:31  root
+; probably done
+;
+; Revision 1.2  2003/02/28 01:21:17  root
+; DELAY not a lazy statement
+;
+; Revision 1.1  2003/02/28 00:37:54  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pt.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt3pt.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt3pt.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt3pt.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Third Movement ; Piano Third hand or more
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Third Hand
+INSTRUMENT Piano
+PROGRAM 5 1
+PAN 5 0
+LAZY
+chan 5
+ff
+R 5/8 ;pickup
+R 8
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 
+R 8
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 5/8 
+;to first repeat sign ;m16
+R 1/8 ; after first repeat sign
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m28
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2.  ;m39
+ff R 5/8 Db4 8 ;m40
+C4 8 R 5/8 ;m41
+R 5/8 Bb2 4 ;m42
+R 5/8 ;m43
+R 5/8 ;m44 repeat sign backwards
+R 1/8 ; after first repeat sign
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. ;m28
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2.  ;m39
+ff R 5/8 Db4 8 ;m40
+C4 8 R 5/8 ;m41
+R 5/8 Bb2 4 ;m42
+R 5/8 ;m43
+R 5/8 ;m44 repeat sign backwards
+R 1/8 ;m44 past repeat sign
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m45
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m46
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m47
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m48
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m49
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m50
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m51
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m52
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m53
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m54
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m55
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m56
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m57
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m58
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m59
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m60
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m61
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m62
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m63
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m64
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m65
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m66
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m67
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m68
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m69
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m70
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m71
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m72
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m73
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m74
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m75
+
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8  ;m76 first ending
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m61
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m62
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m63
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m64
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m65
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m66
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m67
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m68
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m69
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m70
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m71
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m72
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m73
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m74
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m75
+
+R 16 END_LAZY DAMPER 5 127 LAZY R 9/16 END_LAZY DAMPER 5   0 LAZY R 8 ;m77 second ending
+END_LAZY DELAY 29520 ;41 measures rest
+LAZY
+R 5/8 Db4 8  ;m121
+C4 8 R 5/8 ;m120
+R 5/8 Ab3 8 ;m121
+G3 8 R 5/8 ;m122
+R 2. ;m123
+R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2
+fff R 4 B4 4 ;m143
+Ab4 4 E5 4 ;m144
+Db5 4 G4 4
+Eb4 4 B4 4
+Ab4 4 R 4
+R 2
+R 2
+E5 4 R 4
+R 2
+R 2
+R 2
+G5 4 R 4
+R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 ;19 bars
+mf D5 4 R 4 ;m174
+R 2 R 2 R 2 ;m175,176,177
+E5 4 R 4 ;m178
+R 2 R 2 R 2 R 2 R 2 R 2 R 2 R 2 ;m179-186
+fff R 4 B4 4
+Ab4 4 E5 4
+Db5 4 G4 4
+Eb4 4 B4 4
+Ab4 4 R 4
+R 2 R 2 R 2 R 2 R 2 R 2 
+;m198
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. 
+R 2. R 2. R 2. R 2. R 2. R 2. rm68
+R 5/8 forte Db4 8
+C4 8 R 5/8
+R 5/8 Bb2 4
+R 5/8
+R 2. ;m241
+R 2. R 2. R 2. 
+R 5/8 Eb2 3/8
+R 2
+rm68
+rm68
+R 5/8 Eb2 3/8
+R 2
+R 5/8 Eb2 3/8
+R 2
+R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. R 2. rm68
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+
+
+
+

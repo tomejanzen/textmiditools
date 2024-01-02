@@ -1,0 +1,538 @@
+; $Author: janzent $
+; $Log: schuqnt4tempo.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.22  2003/11/05 00:23:23  root
+; back off on the accel at the dn
+;
+; Revision 1.21  2003/11/02 23:03:43  root
+; done
+;
+; Revision 1.20  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.19  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.18  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.17  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.16  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.15  2003/09/04 23:54:50  root
+; legatissimo m100,104,108, change tempo rush there
+;
+; Revision 1.14  2003/08/15 01:38:15  root
+; rit at end
+;
+; Revision 1.13  2003/08/14 01:15:40  root
+; remove applause
+;
+; Revision 1.12  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.11  2003/07/12 01:01:36  root
+; adj tempos, pause 224
+;
+; Revision 1.10  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.9  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.8  2003/06/01 18:08:46  root
+; fix
+;
+; Revision 1.7  2003/05/26 20:53:35  root
+; fermata at end
+;
+; Revision 1.6  2003/05/26 20:45:57  root
+; fixed measure 43, also added fermatas near end
+;
+; Revision 1.5  2003/05/05 00:36:38  root
+; pedals dynaics
+;
+; Revision 1.4  2003/04/22 00:16:11  root
+; keys
+;
+; Revision 1.3  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4tempo.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4tempo.txt,v $
+; $State: Exp $
+; Schumann Quintet Fourth movement tempo track
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Tempo Track
+TEMPO realtempo4
+TIME_SIGNATURE 2 2 ticks 
+KEY_SIGNATURE Eb
+TEXT Robert Schuman: Quintet for piano, 2 violins, viola, and cello Op. 44
+TEXT IV: Allegro ma non troppo.
+TEXT This rendering was sequenced by Thomas Janzen and coached by New England violist and teacher Jennifer Stirling.
+TEXT Output of textmidi lexical analyzer by Thomas Janzen.
+TEXT "Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+LAZY
+chan midi_channel_tempo
+vel 5 acousticsnare 8
+R 8 R 4 R 2 ; m000
+R 1 ; m001
+LAZY
+R 1 ; m002
+R 1 ; m003
+R 1 ; m004
+R 1 ; m005
+R 1 ; m006
+R 1 ; m007
+R 1 ; m008
+R 1 ; m009
+R 1 ; m010
+R 1 ; m011
+R 1 ; m012
+R 1 ; m013
+R 1 ; m014
+R 1 ; m015
+R 1 ; m016
+R 1 ; m017
+R 1 ; m018
+R 1 ; m019
+R 1 ; m020
+R 1 ; m021
+R 1 ; m022
+R 1 ; m023
+R 1 ; m024
+R 1 ; m025
+R 1 ; m026
+R 1 ; m027
+R 1 ; m028
+R 1 ; m029
+R 1 ; m030
+R 1 ; m031
+R 1 ; m032
+R 1 ; m033
+R 1 ; m034
+R 1 ; m035
+R 1 ; m036
+R 4 END_LAZY TEMPO eval((realtempo4*2)/5) LAZY R 8 END_LAZY TEMPO realtempo4 LAZY R 8 R 2  ;m037
+R 1 ; m038
+R 1 ; m039
+R 1 ; m040
+END_LAZY DELAY 480 
+TEMPO eval(realtempo4-5) DELAY ticks 
+TEMPO eval(realtempo4-8) DELAY ticks  ;m041
+TEMPO eval(realtempo4-13) DELAY ticks 
+TEMPO eval(realtempo4-21) DELAY ticks 
+TEMPO eval(realtempo4-34) DELAY ticks 
+TEMPO eval(realtempo4-55) DELAY ticks 
+LAZY R 2 END_LAZY TEMPO realtempo4 LAZY R 2  ; m043
+END_LAZY KEY_SIGNATURE G LAZY R 1 ; m044
+R 1 ; m045
+R 1 ; m046
+END_LAZY TIME_SIGNATURE 9 8 ticks LAZY R 1 caesura8 ; m047
+END_LAZY TIME_SIGNATURE 2 2 ticks LAZY R 1 ; m048
+R 1 ; m049
+R 1 ; m050
+R 1 ; m051
+R 1 ; m052
+R 1 ; m053
+R 1 ; m054
+R 1 ; m055
+R 1 ; m056
+R 1 ; m057
+R 1 ; m058
+R 1 ; m059
+R 1 ; m060
+R 1 ; m061
+R 1 ; m062
+R 1 ; m063
+R 1 ; m064
+R 1 ; m065
+R 1 ; m066
+R 1 ; m067
+R 1 ; m068
+R 1 ; m069
+R 1 ; m070
+R 1 ; m071
+R 1 ; m072
+R 1 ; m073
+R 1 ; m074
+R 1 ; m075
+R 1 ; m076
+R 4 END_LAZY TEMPO eval((3*realtempo4)/5) LAZY R 4 END_LAZY TEMPO realtempo4 LAZY R 2 ; m077
+R 1 ; m078
+R 1 ; m079
+R 1 ; m080
+R 1 ; m081
+R 1 ; m082
+R 1 ; m083
+R 1 ; m084
+R 4 END_LAZY TEMPO eval((2*realtempo4)/3) LAZY R 4 END_LAZY TEMPO realtempo4 LAZY R 2 ; m085
+R 1 ; m086
+;R 2 END_LAZY TEMPO tempo2 LAZY R 2  ; m087 Jen says a tempo
+R 1 ;m087
+R 1 ; m088
+R 1 ; m089
+R 1 ; m090
+END_LAZY TEMPO eval((9*realtempo4)/10) LAZY R 1 ; m091
+END_LAZY TEMPO eval((4*realtempo4)/5) LAZY R 1 ; m092
+R 1 ; m093
+R 1 ; m094
+END_LAZY KEY_SIGNATURE E TEMPO realtempo4 LAZY R 1 ; m095
+R 1 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+END_LAZY TEMPO eval((10*realtempo4)/9) LAZY R 1 END_LAZY TEMPO realtempo4 LAZY ; m100
+R 1 ; m101
+R 1 ; m102
+R 1 ; m103
+END_LAZY TEMPO eval((10*realtempo4)/9) LAZY R 1 END_LAZY TEMPO realtempo4 LAZY  ; m104
+R 1 ; m105
+R 1 ; m106
+R 1 ; m107
+END_LAZY TEMPO eval((10*realtempo4)/9) LAZY R 1 END_LAZY TEMPO realtempo4 LAZY  ; m108
+R 1 ; m109
+END_LAZY TEMPO eval((10*realtempo4)/9) LAZY R 1 END_LAZY TEMPO realtempo4 LAZY  ; m110
+R 1 ; m111
+R 1 ; m112
+R 1 ; m113
+R 1 ; m114
+R 1 ; m115
+R 1 ; m116
+R 1 ; m117
+R 1 ; m118
+R 1 ; m119
+R 1 ; m120
+R 1 ; m121
+R 1 ; m122
+R 1 ; m123
+R 1 ; m124
+R 1 ; m125
+R 1 ; m126
+R 1 ; m127
+R 1 ; m128
+R 1 ; m129
+R 1 ; m130
+R 1 ; m131
+R 1 ; m132
+R 1 ; m133
+R 1 ; m134
+R 1 ; m135
+R 1 ; m136
+R 1 ; m137
+R 1 ; m138
+R 1 ; m139
+R 1 ; m140
+R 1 ; m141
+R 1 ; m142
+R 1 ; m143
+R 1 ; m144
+R 1 ; m145
+R 1 ; m146
+R 1 ; m147
+R 1 ; m148
+R 1 ; m149
+R 1 ; m150
+R 1 ; m151
+R 1 ; m152
+R 1 ; m153
+R 1 ; m154
+R 1 ; m155
+R 1 ; m156
+R 1 ; m157
+R 1 ; m158
+R 1 ; m159
+R 1 ; m160
+R 1 ; m161
+R 1 ; m162
+R 1 ; m163
+R 2 
+END_LAZY KEY_SIGNATURE Eb LAZY
+R 2 ; m164
+R 1 ; m165
+R 1 ; m166
+R 1 ; m167
+R 1 ; m168
+R 1 ; m169
+R 1 ; m170
+R 1 ; m171
+R 1 ; m172
+R 1 ; m173
+R 1 ; m174
+R 1 ; m175
+R 1 ; m176
+R 1 ; m177
+R 4. END_LAZY TEMPO eval((realtempo4)/2) DELAY 120 TEMPO realtempo4 LAZY R 2 ; m178
+R 1 ; m179
+R 1 ; m180
+R 1 ; m181
+R 1 ; m182
+R 1 ; m183
+R 1 ; m184
+R 1 ; m185
+R 1 ; m186
+R 1 ; m187
+R 1 ; m188
+R 1 ; m189
+R 1 ; m190
+R 1 ; m191
+R 1 ; m192
+R 1 ; m193
+R 1 ; m194
+R 1 ; m195
+R 1 ; m196
+R 1 ; m197
+R 1 ; m198
+R 1 ; m199
+R 1 ; m200
+R 1 ; m201
+R 1 ; m202
+R 1 ; m203
+R 1 ; m204
+R 1 ; m205
+R 1 ; m206
+R 1 ; m207
+R 1 ; m208
+R 1 ; m209
+R 1 ; m210
+R 1 ; m211
+R 4 END_LAZY TEMPO eval((2*realtempo4)/3) LAZY R 4 END_LAZY TEMPO realtempo4 LAZY R 2 ; m212
+R 1 ; m213
+R 1 ; m214
+R 1 ; m215
+R 1 ; m216
+R 1 ; m217
+R 1 ; m218
+R 1 ; m219
+R 1 ; m220
+R 1 ; m221
+R 1 ; m222
+R 1 ; m223
+END_LAZY TEMPO eval((realtempo4*3)/4) DELAY 480  
+TEMPO realtempo4 DELAY 480 LAZY ; m224
+R 1 ; m225
+R 1 ; m226
+R 1 ; m227
+R 1 ; m228
+R 1 ; m229
+R 1 ; m230
+R 1 ; m231
+R 1 ; m232
+R 1 ; m233
+R 1 ; m234
+R 1 ; m235
+R 1 ; m236
+R 1 ; m237
+R 1 ; m238
+R 1 ; m239
+R 1 ; m240
+R 1 ; m241
+R 1 ; m242
+R 1 ; m243
+R 1 ; m244
+R 1 ; m245
+R 1 ; m246
+R 1 ; m247
+END_LAZY TEMPO eval((3*realtempo4)/4) LAZY R 2 END_LAZY TEMPO realtempo4 LAZY R 2 ; m248
+R 1 ; m249
+R 1 ; m250
+R 1 ; m251
+R 1 ; m252
+R 1 ; m253
+R 1 ; m254
+R 1 ; m255
+R 1 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 1 ; m262
+R 1 ; m263
+R 1 ; m264
+R 1 ; m265
+R 1 ; m266
+R 1 ; m267
+R 1 ; m268
+R 1 ; m269
+R 1 ; m270
+R 1 ; m271
+R 1 ; m272
+R 1 ; m273
+END_LAZY TIME_SIGNATURE 9 8 ticks LAZY R 1 caesura8 ; m274
+END_LAZY TIME_SIGNATURE 2 2 ticks LAZY R 1 ; m275
+R 1 ; m276
+R 1 ; m277
+R 1 ; m278
+R 1 ; m279
+R 1 ; m280
+R 1 ; m281
+R 1 ; m282
+R 1 ; m283
+R 1 ; m284
+R 1 ; m285
+R 1 ; m286
+R 1 ; m287
+R 1 ; m288
+R 1 ; m289
+R 1 ; m290
+R 1 ; m291
+R 1 ; m292
+R 1 ; m293
+R 1 ; m294
+R 1 ; m295
+R 1 ; m296
+R 1 ; m297
+R 1 ; m298
+R 1 ; m299
+R 1 ; m300
+R 1 ; m301
+R 1 ; m302
+R 1 ; m303
+R 1 ; m304
+R 1 ; m305
+R 1 ; m306
+R 1 ; m307
+R 1 ; m308
+R 1 ; m309
+R 1 ; m310
+R 1 ; m311
+R 1 ; m312
+R 1 ; m313
+R 2 END_LAZY TEMPO eval(realtempo4/2) LAZY R 2 END_LAZY TEMPO realtempo4 LAZY ; m314
+R 2 END_LAZY TEMPO eval(realtempo4/2) LAZY R 2 ; m315
+END_LAZY TEMPO eval((realtempo4*9)/10) LAZY R 2  END_LAZY TEMPO eval((realtempo4*8)/10) LAZY R 2  ; m316
+END_LAZY TEMPO eval((realtempo4*7)/10) LAZY R 2  END_LAZY TEMPO eval((realtempo4*6)/10) LAZY R 2  ; m317
+END_LAZY TEMPO eval((realtempo4*3)/10) LAZY R 1 ; m318
+END_LAZY TEMPO realtempo4 LAZY R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+R 1 ; m325
+R 1 ; m326
+R 1 ; m327
+R 1 ; m328
+R 1 ; m329
+R 1 ; m330
+R 1 ; m331
+R 1 ; m332
+R 1 ; m333
+R 1 ; m334
+R 1 ; m335
+R 1 ; m336
+R 1 ; m337
+R 1 ; m338
+R 1 ; m339
+R 1 ; m340
+R 1 ; m341
+R 1 ; m342
+R 1 ; m343
+R 1 ; m344
+R 1 ; m345
+R 1 ; m346
+R 1 ; m347
+R 1 ; m348
+R 1 ; m349
+R 1 ; m350
+R 1 ; m351
+R 1 ; m352
+R 1 ; m353
+R 1 ; m354
+R 1 ; m355
+R 1 ; m356
+R 1 ; m357
+R 1 ; m358
+R 1 ; m359
+R 1 ; m360
+R 1 ; m361
+R 1 ; m362
+R 1 ; m363
+R 1 ; m364
+R 1 ; m365
+R 1 ; m366
+R 1 ; m367
+R 1 ; m368
+R 1 ; m369
+R 1 ; m370
+R 1 ; m371
+R 1 ; m372
+R 1 ; m373
+R 1 ; m374
+R 1 ; m375
+R 1 ; m376
+R 1 ; m377
+R 1 ; m378
+R 1 ; m379
+R 1 ; m380
+R 1 ; m381
+R 1 ; m382
+R 1 ; m383
+R 1 ; m384
+R 1 ; m385
+R 1 ; m386
+R 1 ; m387
+R 1 ; m388
+R 1 ; m389
+R 1 ; m390
+R 1 ; m391
+R 1 ; m392
+R 1 ; m393
+R 1 ; m394
+R 1 ; m395
+R 1 ; m396
+R 1 ; m397
+R 1 ; m398
+R 1 ; m399
+R 1 ; m400
+R 1 ; m401
+R 1 ; m402
+R 1 ; m403
+R 1 ; m404
+R 1 ; m405
+R 1 ; m406
+R 1 ; m407
+R 1 ; m408
+R 1 ; m409
+R 1 ; m410
+END_LAZY TEMPO eval((realtempo4*102)/100) LAZY R 1 ; m411
+END_LAZY TEMPO eval((realtempo4*104)/100) LAZY R 1 ; m412
+END_LAZY TEMPO eval((realtempo4*106)/100) LAZY R 1 ; m413
+END_LAZY TEMPO eval((realtempo4*108)/100) LAZY R 1 ; m414
+END_LAZY TEMPO eval((realtempo4*110)/100) LAZY R 1 ; m415
+END_LAZY TEMPO eval((realtempo4*111)/100) LAZY R 1 ; m416
+END_LAZY TEMPO eval((realtempo4*112)/100) LAZY R 1 ; m417
+END_LAZY TEMPO eval((realtempo4*113)/100) LAZY R 1 ; m418
+END_LAZY TEMPO eval((realtempo4*114)/100) LAZY R 1 ; m419
+END_LAZY TEMPO eval((realtempo4*115)/100) LAZY R 1 ; m420
+R 4 END_LAZY TEMPO eval((realtempo4*2)/3) LAZY R 4 END_LAZY 
+TEMPO eval((120*realtempo4)/100) LAZY R 2 ; m421
+R 1 ; m422
+R 1 ; m423
+R 1 ; m424
+R 1 ; m425
+END_LAZY TEMPO eval((realtempo4*19)/20) LAZY R 1 ; m426
+END_LAZY TEMPO eval(realtempo4/3) LAZY R 1 ; m427
+
+END_LAZY
+END_OF_TRACK

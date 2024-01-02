@@ -1,0 +1,546 @@
+; $Author: janzent $
+; $Log: schuqnt1va.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.19  2003/11/08 23:31:15  root
+; tone macros must always take value i n whole notes such as 2/1 never just 2
+;
+; Revision 1.18  2003/10/30 02:00:44  root
+; try to fix constructive interference of unisos octaves
+;
+; Revision 1.17  2003/08/26 01:26:58  root
+; wrong channel on longtone
+;
+; Revision 1.16  2003/08/10 16:22:31  root
+; fix rit into m9
+;
+; Revision 1.15  2003/08/01 23:30:18  root
+; completed acceneted piano figure, pause before last chord,
+;
+; Revision 1.14  2003/08/01 01:42:55  root
+; using long tones, decresc, cresc pretty much done. fixed first big cadence
+;
+; Revision 1.13  2003/07/13 21:28:57  root
+; 318 wrong ab should be a, final touches
+; before last lesson
+;
+; Revision 1.12  2003/07/06 22:04:34  root
+; lesson notes
+;
+; Revision 1.11  2003/07/03 01:15:07  root
+; jenny suggestsions to repeat
+;
+; Revision 1.10  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.9  2003/06/03 23:48:32  root
+; narrow stereo field
+;
+; Revision 1.8  2003/05/23 01:55:52  root
+; fix staccato implied in first theme at all appearances
+;
+; Revision 1.7  2003/05/05 00:15:38  root
+; pedals and dynamics
+;
+; Revision 1.6  2003/05/03 00:50:01  root
+; fix opening crescendo
+;
+; Revision 1.5  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.4  2003/04/21 23:38:54  root
+; balance
+;
+; Revision 1.3  2003/02/17 01:22:40  root
+; dynamics roughed in to, uh, end
+;
+; Revision 1.2  2003/02/16 21:58:15  root
+; copied dyna fro repeat
+;
+; Revision 1.1  2003/02/16 20:24:31  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt1va.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt1va.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1va.txt,v $
+; $State: Exp $
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK VIOLA
+INSTRUMENT VIOLA
+program(midi_channel_viola,Viola)
+
+pan(midi_channel_viola,20)
+LAZY
+chan midi_channel_viola
+ff
+END_LAZY DELAY 960 LAZY ;m0
+Eb3 2 Bb3 2 ;m001
+Ab3 2 B3 2 ;m002
+forte Bb3 4 Bb3 8 Bb3 8 Bb3 8 Bb3 8 F4 8 F4 8 ;m003
+F4 8 F4 8 F3 8 F3 8 F3 8 F3 8 C4 8 C4 8 ;m004
+ff C4 2 B3 2
+ff Bb3 2 Eb4 2
+forte F4 4 F4 8 F4 8 G4 8 G4 8 Eb4 8 Eb4 8
+ff Eb4 2 Ab4 7/16 R 16  ;m008
+longtone(3,Eb3,1/2,40,75) forte R 2 ;m009
+R 1 ;m010
+vel 58 F3 2 vel 62 Eb4 2  ;m011
+vel 66  D4 4 vel 68 Eb4 4 vel 70 F4 4 vel 72 F#4 4 ;m012
+vel 74 G4 2 vel 78 R 2 ;m013
+vel 82  Eb3 2 vel 86 D4 2 ;m014
+vel 90 C#4 4 vel 92 D4 4 vel 94 D#4 4 vel 96 E4 4
+vel 100  F4 3/4 vel 108 F4 4 ;m016
+vel 110  F4 2 F4 2
+Eb4 2 C4 2
+forte Bb3 4 C4 8 C4 8 D4 8 D4 8 E4 8 E4 8
+F4 8 F4 8 G4 8 G4 8 A4 8 A4 8 F4 8 F4 8
+Bb4 2 R 2 ;m21
+ff G3 2 Gb3 2
+forte F4 4 Eb4 8 Eb4 8 D4 8 D4 8 E3 8 E3 8
+F3 8 F3 8 G3 8 G3 8 A3 8 A3 8 F3 8 F3 8
+Bb3 2 R 2
+ff Bb3 2 Bb4 4. R 8 ;m26
+R 4/1
+
+
+
+R 8/1
+
+
+
+
+
+
+
+p Db4 2 D4 2
+Eb4 2 B3 1 mp 
+Ab4 2
+mf Db4 2 Gb4 2
+forte R 2 Bb3 2
+C4 2. C4 8 C4 8
+mp Bb3 8 Bb3 8 mf C4 8 C4 8 forte Db4 8 Db4 8 ff E4 8 E4 8
+mf C4 8 C4 8 C4 8 C4 8 C4 8 C4 8 C4 8 C4 8
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8
+mp C4 8 C4 8 mf C4 8 C4 8 forte C4 8 C4 8 ff C4 8 C4 8
+Bb3 8 Bb3 8 C4 8 C4 8 Db4 8 Db4 8 E4 8 E4 8
+C4 2 R 2
+R 1
+p R 2 C4 1 
+R 2
+R 2 C4 1 
+R 2
+R 3/1
+
+
+mf G3 2 D4 4. C4 8
+Bb3 4 mp A3 4 p G3 4 pp F3 4
+Eb3 2 R 2
+R 1
+forte A3 2 mf Eb4 4. D4 8
+mp C4 4 p Bb3 4 A3 pp 4 G3 4
+F3 2 R 2
+R 2/1
+
+p B3 1
+C4 2/1
+
+R 1
+E3 1
+pp F3 4 R 2.
+p R 2 C4 1 
+R 2
+R 2 C4 1 
+R 2
+R 3/1
+
+
+mf G3 2 forte D4 4. C4 8
+mf Bb3 4 A3 4 mp G3 4 p F3 4
+pp Eb3 2 R 2
+R 1
+mf A3 2 forte Eb4 4. D4 8
+mf C4 4 Bb3 4 mp A3 4 p G3 4
+pp F3 2 F4 1 
+Bb4 2
+A4 1
+p G4 1
+mp C4 3/2 mf E4 4. G4 8
+forte A4 2 mf F4 4 mp D4 4
+p C4 2 pp Bb3 2
+A3 2 R 2
+p R 2 Bb3 2
+A3 2
+R 2
+R 2 A3 7/16 R 16 ;m98
+R 3/1
+
+
+ff R 2 Bb3 2
+fff C4 F3 1
+R 1
+D3 2. R 4
+forte D4 4 D4 8 D4 8 C4 8 C4 8 B3 8 B3 8
+C4 8 C4 8 C4 8 C4 8 D4 4 C4 4
+Bb3 4 Bb3 8 C4 8 D4 8 Bb3 8 C4 8 D4 8
+Eb4 8 D4 8 Eb4 8 F4 8 Gb4 8 A4 8 C5 8 Eb5 8
+D5 4 A4 8 A4 8 Bb4 8 Bb4 8 C5 8 C5 8
+A4 8 A4 8 Bb4 8 Bb4 8 C5 8 C5 8 F4 8 F4 8
+Bb4 2 Bb4 D4 2
+Bb4 Eb4 2
+Gb4 2
+F4 8 F4 8 A4 8 A4 8 Bb4 8 Bb4 8 C5 8 C5 8
+A4 8 A4 8 Bb4 8 Bb4 8 B4 8 B4 8 C5 8 C5 8
+Bb4 4 Ab4 8 Ab4 8 F4 8 F4 8 D4 8 D4 8
+Bb3 8 Bb3 8 Ab3 8 Ab3 8 F3 8 F3 8 D3 8 D3 8
+Eb3 2 Bb3 2
+Ab3 2 B3 2
+forte Bb3 4 Bb3 8 Bb3 8 Bb3 8 Bb3 8 F4 8 F4 8
+F4 8 F4 8 F3 8 F3 8 F3 8 F3 8 C4 8 C4 8
+ff C4 2 B3 2
+ff Bb3 2 Eb4 2
+forte F4 4 F4 8 F4 8 G4 8 G4 8 Eb4 8 Eb4 8
+ff Eb4 2 Ab4 7/16 R 16  ;m008 rep
+longtone(3,Eb3,1/2,40,75) forte R 2 ;m009 rep
+R 1 ;m010 repeat
+vel 58  F3 2 vel 62 Eb4 2
+vel 66 D4 4 vel 68 Eb4 4 vel 70 F4 4 vel 72 F#4 4
+vel 74 G4 2 vel 78 R 2 ;m013 repeat
+vel 82 Eb3 2 vel 86 D4 2 ;m014
+vel 90  C#4 4 vel 92 D4 4 vel 94 D#4 4 vel 96 E4 4 ;m015
+vel 100 F4 3/4 F4 4 ;m016
+ff F4 2 F4 2
+Eb4 2 C4 2
+forte Bb3 4 C4 8 C4 8 D4 8 D4 8 E4 8 E4 8
+F4 8 F4 8 G4 8 G4 8 A4 8 A4 8 F4 8 F4 8
+Bb4 2 R 2
+ff G3 2 Gb3 2
+forte F4 4 Eb4 8 Eb4 8 D4 8 D4 8 E3 8 E3 8
+F3 8 F3 8 G3 8 G3 8 A3 8 A3 8 F3 8 F3 8
+Bb3 2 R 2
+ff Bb3 2 Bb4 4. R 8 ;m26 
+R 4/1
+
+
+
+R 8/1
+
+
+
+
+
+
+
+p Db4 2 D4 2
+Eb4 2 B3 1 mp 
+Ab4 2
+mf Db4 2 Gb4 2
+forte R 2 Bb3 2
+C4 2. C4 8 C4 8
+mp Bb3 8 Bb3 8 mf C4 8 C4 8 forte Db4 8 Db4 8 ff E4 8 E4 8
+mf C4 8 C4 8 C4 8 C4 8 C4 8 C4 8 C4 8 C4 8
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8
+mp C4 8 C4 8 mf C4 8 C4 8 forte C4 8 C4 8 ff C4 8 C4 8
+Bb3 8 Bb3 8 C4 8 C4 8 Db4 8 Db4 8 E4 8 E4 8
+C4 2 R 2
+R 1
+p R 2 C4 1 
+R 2
+R 2 C4 1 
+R 2
+R 3/1
+
+
+mf G3 2 D4 4. C4 8
+Bb3 4 mp A3 4 p G3 4 pp F3 4
+Eb3 2 R 2
+R 1
+forte A3 2 mf Eb4 4. D4 8
+mp C4 4 p Bb3 4 A3 pp 4 G3 4
+F3 2 R 2
+R 2/1
+
+p B3 1
+C4 2/1
+
+R 1
+E3 1
+pp F3 4 R 2.
+p R 2 C4 1 
+R 2
+R 2 C4 1 
+R 2
+R 3/1
+
+
+mf G3 2 forte D4 4. C4 8
+mf Bb3 4 A3 4 mp G3 4 p F3 4
+pp Eb3 2 R 2
+R 1
+mf A3 2 forte Eb4 4. D4 8
+mf C4 4 Bb3 4 mp A3 4 p G3 4
+pp F3 2 F4 1 
+Bb4 2
+A4 1
+p G4 1
+mp C4 3/2 mf E4 4. G4 8
+forte A4 2 mf F4 4 mp D4 4
+p C4 2 pp Bb3 2
+A3 2 R 2
+p R 2 Bb3 2
+A3 2
+R 2
+R 2 A3 7/16 R 16 ;m98 rep
+R 3/1
+
+
+ff R 2 Bb3 2
+fff C4 F3 1
+R 1
+D3 2. R 4
+forte D4 4 D4 8 D4 8 C4 8 C4 8 B3 8 B3 8
+C4 8 C4 8 C4 8 C4 8 D4 4 C4 4
+Bb3 4 Bb3 8 C4 8 D4 8 Bb3 8 C4 8 D4 8
+Eb4 8 D4 8 Eb4 8 F4 8 Gb4 8 A4 8 C5 8 Eb5 8
+D5 4 A4 8 A4 8 Bb4 8 Bb4 8 C5 8 C5 8
+A4 8 A4 8 Bb4 8 Bb4 8 C5 8 C5 8 F4 8 F4 8
+Bb4 2 Bb4 D4 2
+Bb4 Eb4 2
+Gb4 2
+F4 8 F4 8 A4 8 A4 8 Bb4 8 Bb4 8 C5 8 C5 8
+A4 8 A4 8 Bb4 8 Bb4 8 B4 8 B4 8 C5 8 C5 8
+Bb4 3/8 R 8 ff F4 2 ; 118
+R 3/1
+;m120
+
+forte R 2 decresctone(3,B3,1,90,50)  ;m122
+p Bb3 1 
+Ab3 1 
+Gb3 4. F3 8
+Ab3 2 mf G3 1 
+R 2
+R 2/1
+
+forte Ab3 2. R 4 ;m130
+ff Ab4 2 Fb5 2
+forte pocostac4(Eb5) Fb5 8 Fb5 8 Eb5 8 Eb5 8 Fb5 8 Fb5 8
+mf Bb4 8 Bb4 8 Ab4 8 Ab4 8 G4 4 R 4
+R 3/1
+
+
+p Ab3 2 Eb4 1
+Eb4 1
+Eb4 2
+R 1  ;m140
+p Eb3 2 Bb3 1
+Bb3 1
+Bb3 2
+Bb3 2 A3 2
+Bb3 2 A3 2 mp
+R 2 Bb3 1
+Bb3 2
+R 4. C3 8 C3 4 R 4 mf
+R 4. C3 8 C3 4 R 4
+R 2 C3 1 ;m150
+C3 2
+F4 2 E4 2
+F3 2 E3 2
+R 2 F3 C4 1 forte
+F3 C4 2
+END_LAZY bend(3,8250) LAZY R 2 R 4. G3 8
+G3 2 R 2
+R 2 R 4 R 8 G3 8
+G3 2 R 2
+R 2 R 4 R 8 C3 8 ; m160
+C3 2 R 2
+R 2 R 4 R 8 C3 8
+C3 2 R 4 R 8. Db3 48 Eb3 48 F3 48
+ff Gb3 2 R 2
+R 2 F4 4. forte Eb4 8
+D4 16 Eb4 16 D4 16 Eb4 16 D4 16 Eb4 16 C#4 16 D4 16 Eb4 4 R 4
+R 2 Db4 4. C4 8
+B3 16 C4 16 B3 16 C4 16 B3 16 C4 16 A#3 16 B3 16 ff C4 7/16 forte Bb3 48 Ab3 48 G3 48
+END_LAZY bend(3,8192) LAZY fff F3 2. R 4
+E4 2 Db5 2 ;m170
+forte C5 4 Bb4 8 Bb4 8 C5 8 C5 8 G4 8 G4 8
+mf G4 8 G4 8 F4 8 F4 8 E4 4 R 4
+R 4/1
+
+
+
+ppp longtonefront(3,Eb4,4/1,40,70) ;m177
+
+
+;m180
+R 2/1
+
+longtone(3,Fb5,2/1,35,70) ;m183
+
+longtonefront(3,Eb4,4/1,30,70);m185
+
+
+
+mp R 4. Ab3 8 Ab3 4 R 4
+mf R 4. Ab3 8 Ab3 4 R 4 ;m190
+forte F4 Ab4 2/1
+
+Eb4 2 D4 2
+Eb4 2 D4 2
+ff Eb5 2/1
+
+forte F3 2 F4 2
+R 2 R 4 R 8 F3 8
+F3 2 F4 2
+R 2 R 4 R 8 Bb3 8 ;m200
+Bb3 2 Bb4 2
+R 2 R 4 R 8 Bb3 8
+Bb3 2 Bb4 2
+R 2 Eb4 2
+D4 2 C4 2
+B3 2 A3 2 ;m205
+ff Ab3 2 Ab3 1
+F3 Bb3 2
+Eb3 Bb3 2 Bb3 8 Bb3 8 Bb3 8 Bb3 8
+Ab3 8 Ab3 8 Ab3 8 Ab3 8 B3 8 B3 8 B3 8 B3 8
+forte Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 Bb3 8 F4 8 F4 8
+F4 8 F4 8 F4 8 F4 8 F4 8 F4 8 C4 8 C4 8
+ff F3 C4 2 B3 8 B3 8 B3 8 B3 8
+Bb3 8 Bb3 8 Bb3 8 Bb3 8 Eb4 8 Eb4 8 Eb4 8 Eb4 8
+forte F4 8 F4 8 F4 8 F4 8 G4 8 G4 8 Eb4 8 Eb4 8
+Eb4 8 Eb4 8 Eb4 8 Eb4 8 Ab4 8 Ab4 8 Ab4 8 Ab4 8
+mf Eb3 2 R 2
+R 1
+R 2/1
+;m220
+p G3 2 F4 2
+Eb4 2. D4 4
+C#4 4 D4 4 D#4 4 E4 4
+mf F4 2. forte F4 4
+ff F4 2 F4 2
+Eb4 2 C4 2
+forte Bb3 4 C4 8 C4 8 D4 8 D4 8 E4 8 E4 8
+F4 8 F4 8 G4 8 G4 8 A4 8 A4 8 F4 8 F4 8
+ff Bb4 2 R 2
+forte G3 2 Gb3 2 ;m230
+F4 4 Eb4 8 Eb4 8 D4 8 D4 8 E3 8 E3 8
+F3 8 F3 8 G3 8 G3 8 A3 8 A3 8 F3 8 F3 8
+Bb3 2 R 2
+ff Bb3 2 Bb4 4. R 8 ;m234
+R 12/1
+
+
+
+
+;m240
+
+
+
+
+
+
+p Gb4 2 G4 2
+mp Ab4 2 Fb4 1
+mf Db5 2
+forte Gb4 2 B4 2 ;m250
+R 2 Eb4 2
+F4 2. F4 8 F4 8
+Eb4 8 Eb4 8 F4 8 F4 8 Gb4 8 Gb4 8 A4 8 A4 8
+F4 8 F4 8 F4 8 F4 8 F4 8 F4 8 F4 8 F4 8
+R 2 Eb4 2
+F4 2. F4 8 F4 8
+Eb4 8 Eb4 8 F4 8 F4 8 Gb4 8 Gb4 8 A4 8 A4 8
+F4 2 R 2
+R 1
+ppp R 2 decresctone(3,F4,1,50,15) ;m 260
+R 2
+R 2 decresctone(3,F4,1,50,15) ;m262
+R 2
+R 3/1
+
+
+mf C4 2 forte G4 4. F4 8
+ff Eb4 8 R 8 mf D4 8 R 8 C4 4 Bb3 4
+Ab3 2 R 2
+R 1 ;m270
+D4 2 Ab4 4. G4 8 ; m271
+F4 8 R 8 Eb4 8 R 8 D4 4 C4 4
+Bb3 2 R 2
+R 2/1
+
+p E4 1
+F4 2/1
+
+R 1
+p A3 1 ;m280
+p Bb3 4 R 2.
+p R 2 F4 1
+R 2
+R 2 F4 1
+R 2
+R 3/1
+
+
+p C4 2 mf G4 4. F4 8
+mp Eb4 8 R 8 D4 8 R 8 p C4 4 Bb3 4 ;290
+Ab3 2 R 2
+R 1
+D4 2 Ab4 3/8 G4 8
+p F4 8 R 8 mf Eb4 8 R 8 mp D4 4 C4 4
+Bb3 2 ppp Bb4 1
+p Eb5 2
+mp D5 1
+mf C5 1
+F4 6/4
+mf A4 4. C5 8 ;m300
+mp D5 2 p Bb4 4. G4 8
+F4 2 Eb4 2
+D4 2 R 2
+p R 2 Eb4 2
+p D4 2 R 2
+R 2 D4 2
+R 2/1
+
+R 1
+ff Eb3 2 Eb4 2 ;m310
+Bb3 F4 1
+R 1
+G3 2. R 4
+forte G4 4 G4 8 G4 8 F4 8 F4 8 E4 8 E4 8
+F4 8 F4 8 F4 8 F4 8 G4 4 F4 4
+Eb4 4 Eb3 8 F3 8 G3 8 Eb3 8 F3 8 G3 8
+ff Ab3 8 G3 8 Ab3 8 Bb3 8 B3 8 D4 8 F4 8 Ab4 8
+forte G4 4 Ab4 8 Ab4 8 Bb4 8 Bb4 8 C5 8 C5 8
+Bb4 8 Bb4 8 Bb4 8 Bb4 8 Bb4 8 Bb4 8 Bb4 8 Bb4 8
+Eb4 2 ff G4 2 ;m320
+ff Ab4 2 B3 2
+forte Bb4 4 Bb4 8 Bb4 8 Bb4 8 Bb4 8 ff F4 8 F4 8
+forte F4 8 F4 8 F4 8 F4 8 F4 8 F4 8 ff C4 8 C4 8
+forte C4 8 C4 8C4 8 C4 8C4 8 C4 8 ff G3 8 G3 8
+forte G3 8 G3 8 G3 8 G3 8 G3 8 G3 8 ff F#3 8 F#3 8
+forte F#3 8 F#3 8 F#3 8 F#3 8 F#3 8 F#3 8 ff F#4 8 F#4 8
+forte F#4 8 F#4 8 F#4 8 F#4 8 F#4 8 F#4 8 ff G4 8 G4 8
+forte G4 8 G4 8 G4 8 G4 8 G4 8 G4 8 ff A4 8 A4 8
+forte A4 8 A4 8 A4 8 A4 8 A4 8 A4 8 ff F4 Ab4 8 F4 Ab4 8
+forte F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 ff F4 Ab4 8 F4 Ab4 8
+forte F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 ff F4 Ab4 8 F4 Ab4 8
+forte F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 ff F4 Ab4 8 F4 Ab4 8
+F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8 F4 Ab4 8
+G4 4 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8
+Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8
+Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8
+Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8 Eb3 Eb4 8
+Eb3 Eb4 2 R 2
+Eb3 Bb3 2 Eb3 Bb3 4. R 8
+Eb3 Bb3 2/1 ;m340
+
+END_LAZY
+
+DELAY 10 END_OF_TRACK
+

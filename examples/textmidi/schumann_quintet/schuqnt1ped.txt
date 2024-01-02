@@ -1,0 +1,487 @@
+; $Author: janzent $
+; $Log: schuqnt1ped.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.1  2003/05/05 00:15:38  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1ped.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt1ped.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt1ped.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1ped.txt,v $
+; $State: Exp $
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Pedal
+INSTRUMENT Piano
+PROGRAM midi_channel_piano AcousticGrandPiano
+pan(midi_channel_piano,0)
+LAZY
+chan midi_channel_piano
+R 1 ; m000
+
+R 1 ; m001 ;start first repeat
+R 1 ; m002
+R 1 ; m003
+R 1 ; m004
+R 1 ; m005
+R 1 ; m006
+R 1 ; m007
+R 1 ; m008
+R 1 ; m009
+R 1 ; m010
+R 1 ; m011
+R 1 ; m012
+R 1 ; m013
+R 1 ; m014
+R 1 ; m015
+R 1 ; m016
+R 1 ; m017
+R 1 ; m018
+R 1 ; m019
+R 1 ; m020
+R 1 ; m021
+R 1 ; m022
+R 1 ; m023
+R 1 ; m024
+R 1 ; m025
+R 1 ; m026
+R 1 ; m027
+R 1 ; m028
+R 1 ; m029
+R 1 ; m030
+R 1 ; m031
+R 1 ; m032
+R 1 ; m033
+R 1 ; m034
+R 1 ; m035
+R 1 ; m036
+R 1 ; m037
+R 1 ; m038
+R 1 ; m039
+R 1 ; m040
+R 1 ; m041
+R 1 ; m042
+R 1 ; m043
+R 1 ; m044
+R 1 ; m045
+R 1 ; m046
+R 1 ; m047
+R 1 ; m048
+R 1 ; m049
+R 1 ; m050
+R 1 ; m051
+R 1 ; m052
+R 1 ; m053
+R 1 ; m054
+R 1 ; m055
+R 1 ; m056
+R 1 ; m057
+R 1 ; m058
+R 1 ; m059
+R 1 ; m060
+R 1 ; m061
+R 1 ; m062
+R 1 ; m063
+R 1 ; m064
+R 1 ; m065
+R 1 ; m066
+R 1 ; m067
+R 1 ; m068
+R 1 ; m069
+R 1 ; m070
+R 1 ; m071
+R 1 ; m072
+R 1 ; m073
+R 1 ; m074
+R 1 ; m075
+R 1 ; m076
+R 1 ; m077
+R 1 ; m078
+R 1 ; m079
+R 1 ; m080
+R 1 ; m081
+R 1 ; m082
+R 1 ; m083
+R 1 ; m084
+R 1 ; m085
+R 1 ; m086
+R 1 ; m087
+R 1 ; m088
+R 1 ; m089
+R 1 ; m090
+R 1 ; m091
+R 1 ; m092
+R 1 ; m093
+R 1 ; m094
+R 1 ; m095
+R 1 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+R 1 ; m100
+R 1 ; m101
+R 1 ; m102
+R 1 ; m103
+R 1 ; m104
+R 1 ; m105
+R 1 ; m106
+R 1 ; m107
+R 1 ; m108
+R 1 ; m109
+R 1 ; m110
+R 1 ; m111
+R 1 ; m112
+R 1 ; m113
+R 1 ; m114
+R 1 ; m115
+R 1 ; m116 ; first ending
+R 1 ; m117
+
+R 1 ; m001 ;start second repeat
+R 1 ; m002
+R 1 ; m003
+R 1 ; m004
+R 1 ; m005
+R 1 ; m006
+R 1 ; m007
+R 1 ; m008
+R 1 ; m009
+R 1 ; m010
+R 1 ; m011
+R 1 ; m012
+R 1 ; m013
+R 1 ; m014
+R 1 ; m015
+R 1 ; m016
+R 1 ; m017
+R 1 ; m018
+R 1 ; m019
+R 1 ; m020
+R 1 ; m021
+R 1 ; m022
+R 1 ; m023
+R 1 ; m024
+R 1 ; m025
+R 1 ; m026
+R 1 ; m027
+R 1 ; m028
+R 1 ; m029
+R 1 ; m030
+R 1 ; m031
+R 1 ; m032
+R 1 ; m033
+R 1 ; m034
+R 1 ; m035
+R 1 ; m036
+R 1 ; m037
+R 1 ; m038
+R 1 ; m039
+R 1 ; m040
+R 1 ; m041
+R 1 ; m042
+R 1 ; m043
+R 1 ; m044
+R 1 ; m045
+R 1 ; m046
+R 1 ; m047
+R 1 ; m048
+R 1 ; m049
+R 1 ; m050
+R 1 ; m051
+R 1 ; m052
+R 1 ; m053
+R 1 ; m054
+R 1 ; m055
+R 1 ; m056
+R 4 damperdown R 2. ; m057
+R 2 damperup R 2 ; m058
+damperdown R 1  ; m059
+R 7/8 damperup R 8  ; m060
+damperdown R 1 ; m061
+R 7/8 damperup R 8  ; m062
+damperdown R 1 ; m063
+R 7/8 damperup R 8 ; m064
+damperdown R 1 ; m065
+R 2 damperup R 2  ; m066
+damperdown R 7/8 damperup R 8 ; m067
+damperdown R 7/8 damperup R 8 ; m068
+damperdown R 7/8 damperup R 8  ; m069
+damperdown R 7/8 damperup R 8  ; m070
+damperdown R 7/8 damperup R 8  ; m071
+damperdown R 7/8 damperup R 8  ; m072
+R 1 ; m073
+R 1 ; m074
+R 1 ; m075
+R 1 ; m076
+R 1 ; m077
+R 1 ; m078
+damperdown R 1 ; m079
+R 2 damperup R 2  ; m080
+damperdown R 7/8 damperup R 8  ; m081
+damperdown R 7/8 damperup R 8  ; m082
+damperdown R 1  ; m083
+R 7/8 damperup R 8  ; m084
+damperdown R 1 ; m085
+R 7/8 damperup R 8  ; m086
+damperdown R 1 ; m087
+R 2 damperup R 2 ; m088
+damperdown R 7/8 damperup R 8 ; m089
+damperdown R 7/8 damperup R 8  ; m090
+damperdown R 7/8 damperup R 8  ; m091
+damperdown R 7/8 damperup R 8  ; m092
+damperdown R 7/8 damperup R 8  ; m093
+damperdown R 7/8 damperup R 8  ; m094
+R 1 ; m095
+R 1 ; m096
+R 1 ; m097
+R 1 ; m098
+R 1 ; m099
+R 1 ; m100
+R 1 ; m101
+R 1 ; m102
+R 1 ; m103
+R 1 ; m104
+R 1 ; m105
+R 1 ; m106
+R 1 ; m107
+R 1 ; m108
+R 1 ; m109
+R 1 ; m110
+R 1 ; m111
+R 1 ; m112
+R 1 ; m113
+R 1 ; m114 
+R 1 ; m115 ;end second repeat
+
+R 1 ; m118 ;second ending
+R 1 ; m119
+R 1 ; m120
+R 1 ; m121
+R 1 ; m122
+R 1 ; m123
+R 1 ; m124
+R 1 ; m125
+R 1 ; m126
+R 1 ; m127
+R 1 ; m128
+R 1 ; m129
+R 1 ; m130
+R 1 ; m131
+R 1 ; m132
+R 1 ; m133
+R 1 ; m134
+R 1 ; m135
+R 1 ; m136
+R 1 ; m137
+R 1 ; m138
+R 1 ; m139
+R 1 ; m140
+R 1 ; m141
+R 1 ; m142
+R 1 ; m143
+R 1 ; m144
+R 1 ; m145
+R 1 ; m146
+R 1 ; m147
+R 1 ; m148
+R 1 ; m149
+R 1 ; m150
+R 1 ; m151
+R 1 ; m152
+R 1 ; m153
+R 1 ; m154
+R 1 ; m155
+R 1 ; m156
+R 1 ; m157
+R 1 ; m158
+R 1 ; m159
+R 1 ; m160
+R 1 ; m161
+R 1 ; m162
+R 1 ; m163
+R 1 ; m164
+R 1 ; m165
+R 1 ; m166
+R 1 ; m167
+R 1 ; m168
+R 1 ; m169
+R 1 ; m170
+R 1 ; m171
+R 1 ; m172
+R 1 ; m173
+R 1 ; m174
+R 1 ; m175
+R 1 ; m176
+R 1 ; m177
+R 1 ; m178
+R 1 ; m179
+R 1 ; m180
+R 1 ; m181
+R 1 ; m182
+R 1 ; m183
+R 1 ; m184
+R 1 ; m185
+R 1 ; m186
+R 1 ; m187
+R 1 ; m188
+R 1 ; m189
+R 1 ; m190
+R 1 ; m191
+R 1 ; m192
+R 1 ; m193
+R 1 ; m194
+R 1 ; m195
+R 1 ; m196
+R 1 ; m197
+R 1 ; m198
+R 1 ; m199
+R 1 ; m200
+R 1 ; m201
+R 1 ; m202
+R 1 ; m203
+R 1 ; m204
+R 1 ; m205
+R 1 ; m206
+R 1 ; m207
+R 1 ; m208
+R 1 ; m209
+R 1 ; m210
+R 1 ; m211
+R 1 ; m212
+R 1 ; m213
+R 1 ; m214
+R 1 ; m215
+R 1 ; m216
+damperbar ; m217
+damperbar ; m218
+R 1 ; m219
+damperhalfbar ; m220
+damperhalfbar ; m221
+damperhalfbar ; m222
+R 1 ; m223
+damperhalfbar ; m224
+damperbar ; m225
+damperhalfbar ; m226
+R 1 ; m227
+R 1 ; m228
+damperbar ; m229
+damperhalfbar ; m230
+R 1 ; m231
+R 1 ; m232
+R 1 ; m233
+R 1 ; m234
+R 1 ; m235
+R 1 ; m236
+R 1 ; m237
+R 1 ; m238
+R 1 ; m239
+R 1 ; m240
+R 1 ; m241
+R 1 ; m242
+damperbar ; m243
+damperbar ; m244
+damperbar ; m245
+damperbar ; m246
+damperhalfbar  ; m247
+damperbar ; m248
+damperbar ; m249
+damperbar ; m250
+damperbar ; m251
+damperbar ; m252
+R 1 ; m253
+damperbar ; m254
+damperbar ; m255
+R 1 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 1 ; m262
+R 1 ; m263
+R 1 ; m264
+R 1 ; m265
+damperhalfbar  ; m266
+damperbar ; m267
+damperbar ; m268
+damperbar ; m269
+damperbar ; m270
+damperbar ; m271
+damperbar ; m272
+damperbar ; m273
+damperhalfbar  ; m274
+damperbar ; m275
+damperbar ; m276
+damperbar ; m277
+damperbar ; m278
+damperbar ; m279
+damperbar ; m280
+R 1 ; m281
+R 1 ; m282
+R 1 ; m283
+R 1 ; m284
+R 1 ; m285
+R 1 ; m286
+damperbar ; m287
+damperhalfbar  ; m288
+damperbar ; m289
+damperbar ; m290
+damperbar ; m291
+damperbar ; m292
+damperbar ; m293
+damperbar ; m294
+damperbar ; m295
+damperhalfbar  ; m296
+damperbar ; m297
+damperbar ; m298
+damperbar ; m299
+damperbar ; m300
+damperbar ; m301
+damperbar ; m302
+R 1 ; m303
+R 1 ; m304
+R 1 ; m305
+R 1 ; m306
+R 1 ; m307
+R 1 ; m308
+R 1 ; m309
+R 1 ; m310
+R 1 ; m311
+R 1 ; m312
+R 1 ; m313
+R 1 ; m314
+R 1 ; m315
+R 1 ; m316
+R 1 ; m317
+R 1 ; m318
+R 1 ; m319
+R 1 ; m320
+R 1 ; m321
+R 1 ; m322
+R 1 ; m323
+R 1 ; m324
+R 1 ; m325
+R 1 ; m326
+R 1 ; m327
+R 1 ; m328
+R 1 ; m329
+R 1 ; m330
+R 1 ; m331
+R 1 ; m332
+R 1 ; m333
+R 1 ; m334
+R 1 ; m335
+R 1 ; m336
+R 1 ; m337
+R 1 ; m338
+damperdown R 1 ; m339
+R 1 R 1 damperup ; m340 341 fermata
+END_LAZY
+DELAY 10 END_OF_TRACK

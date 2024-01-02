@@ -1,0 +1,324 @@
+; $Author: janzent $
+; $Log: schuqnt2pr.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.16  2003/11/09 18:23:20  root
+; add ppp macro
+;
+; Revision 1.15  2003/10/29 01:28:33  root
+; fix m 176 had vel before duration of eb
+;
+; Revision 1.14  2003/10/17 01:24:17  root
+; last set of notes from Jenny
+;
+; Revision 1.13  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.12  2003/08/13 00:21:00  root
+; fix pedal
+;
+; Revision 1.11  2003/05/05 00:35:43  root
+; pedals dynamics
+;
+; Revision 1.10  2003/03/23 02:58:14  root
+; final for submission prior to coaching
+;
+; Revision 1.9  2003/03/23 01:31:30  root
+; fix f in 101
+;
+; Revision 1.8  2003/03/20 11:36:07  root
+; rough dyn
+;
+; Revision 1.7  2003/03/17 02:58:09  root
+; goodnight
+;
+; Revision 1.6  2003/03/17 01:07:26  root
+; temporary
+;
+; Revision 1.5  2003/03/15 18:45:18  root
+; fixed some frhythm
+;
+; Revision 1.4  2003/03/15 06:14:18  root
+; pinao rh in more or less roughed in
+;
+; Revision 1.3  2003/03/14 02:42:21  root
+; fake dynamic
+;
+; Revision 1.2  2003/03/12 01:23:57  root
+; went further
+;
+; Revision 1.1  2003/03/11 02:03:06  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt2pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt2pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt2pr.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt2pr.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Second Movement ; Piano Right Hand
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Right Hand
+INSTRUMENT Piano Right
+PROGRAM midi_channel_piano AcousticGrandPiano
+pan(midi_channel_piano,0)
+LAZY
+chan midi_channel_piano
+p
+damperdown R 7/8 oct8(Eb,3)  ;m0
+vel 60 oct(Eb,4) 4. vel 50 oct8(C,4) vel 40 oct(G,3) 4. vel 30 oct8(Eb,3) ;m1
+vel 20 oct(c,3) 1 ;m2
+p C3 F3 C4 4 R 4 F2 C3 Ab3 C4 4 R 4 ;m3
+Eb2 C3 C4 G3 4 R 4 R 4. F2 Ab3 C4 8 ;m4
+G2 G3 C4 Eb4 4 R 4 G2 F3 B3 D4 4 R 4 ;m5
+Ab2 Eb3 C4 4 R 4 G2 C3 E3 Bb3 C4 4 R 4 ;m6
+F2 C3 F3 Ab3 C4 4 R 4 D2 C3 Ab3 Bb3 C4 4 R 4 ;m7
+Eb2 C3 G3 C4 4 R 4 R 4. Ab2 F3 C4 8 ;m8
+G2 G3 C4 Eb4 4 R 4 G2 F3 B3 D4 4 R 8 oct8(Eb,3)  ;m9
+vel 60 oct(Eb,4) 4. vel 50 oct8(C,4) vel 40 oct(G,3) 4. vel 30 oct8(Eb,3) ;m10
+;repeat forward
+vel 20 oct4(c,3) R 4 mp Bb2 Gb3 C4 Eb4 4 R 4 ;m11
+p A2 F3 C4 Eb4 4 R 4 R 4. A2 F3 C4 Eb4 8 ;m12
+Bb2 F3 Bb3 Db4 4 R 8 Eb2 Eb3 Gb3 C4 8 F2 Db3 F3 Bb3 4 R 8 F2 C3 F3 A3 8 ;m13
+Bb2 Db3 F3 Bb3 4 R 4 Ab3 Bb3 Db4 F4 Bb4 4 R 4 ;m14
+G3 Bb3 Db4 E4 Bb4 4 R 4 mp F3 Bb3 Db4 F4 Bb4 4 R 4 ;m15
+p E3 C4 G4 Bb4 4 R 4 R 4. E3 C4 G4 Bb4 8 ;m16
+F3 C4 F4 Ab4 4 R 8 vel 49 Bb2 Bb3 Db4 G4 8 C3 Ab3 C4 F4 4 R 8 C3 G3 Bb3 E4 8 ;m17
+vel 48 F2 C3 Ab3 F4 4 R 4 vel 47 D2 C3 Ab3 B3 F4 4 R 4 ;m18
+vel 46 Eb2 C3 G3 C4 Eb4 4 R 4 R 4. vel 45 F2 Ab3 C4 8 ;m19
+vel 44 G2 G3 C4 Eb4 4 R 4 vel 43 G2 F3 B3 D4 4 R 4 ;m20
+vel 42 Ab2 Eb3 Ab3 C4 4 R 4 vel 41 G2 C3 E3 Bb3 C4 4 R 4 ;m21
+pp F2 C3 C4 F3 Ab3 4 R 4 D2 C3 Ab3 B3 C4 4 R 4 ;m22
+Eb2 C3 G3 C4 4 R 4 R 4. F2 Ab3 C4 8  ;m23
+vel 38 G2 G3 C4 Eb4 4 R 4 vel 36 G2 F3 B3 D4 4 R 8 oct8(Eb,3) ;m24 first ending
+vel 55 oct(Eb,4) 4. vel 45 oct8(C,4) vel 35 oct(G,3) 4.  ppp oct8(Eb,3) ;m25 first ending
+;repeat back
+vel 20 oct4(c,3) R 4 mp Bb2 Gb3 C4 Eb4 4 R 4 ;m11
+p A2 F3 C4 Eb4 4 R 4 R 4. A2 F3 C4 Eb4 8 ;m12
+Bb2 F3 Bb3 Db4 4 R 8 Eb2 Eb3 Gb3 C4 8 F2 Db3 F3 Bb3 4 R 8 F2 C3 F3 A3 8 ;m13
+Bb2 Db3 F3 Bb3 4 R 4 Ab3 Bb3 Db4 F4 Bb4 4 R 4 ;m14
+G3 Bb3 Db4 E4 Bb4 4 R 4 mp F3 Bb3 Db4 F4 Bb4 4 R 4 ;m15
+p E3 C4 G4 Bb4 4 R 4 R 4. E3 C4 G4 Bb4 8 ;m16
+F3 C4 F4 Ab4 4 R 8 vel 49 Bb2 Bb3 Db4 G4 8 C3 Ab3 C4 F4 4 R 8 C3 G3 Bb3 E4 8 ;m17
+vel 48 F2 C3 Ab3 F4 4 R 4 vel 47 D2 C3 Ab3 B3 F4 4 R 4 ;m18
+vel 46 Eb2 C3 G3 C4 Eb4 4 R 4 R 4. vel 45 F2 Ab3 C4 8 ;m19
+vel 44 G2 G3 C4 Eb4 4 R 4 vel 43 G2 F3 B3 D4 4 R 4 ;m20
+vel 42 Ab2 Eb3 Ab3 C4 4 R 4 vel 41 G2 C3 E3 Bb3 C4 4 R 4 ;m21
+pp F2 C3 C4 F3 Ab3 4 R 4 D2 C3 Ab3 B3 C4 4 R 4 ;m22
+Eb2 C3 G3 C4 4 R 4 R 4. F2 Ab3 C4 8  ;m23
+vel 38 G2 G3 C4 Eb4 4 R 4 vel 36 G2 F3 B3 D4 4 R 4 ;m26 second ending
+vel 34 C2 G2 Eb3 C4 4 R 4 R 4. pp oct8(Eb,3)  ;m27
+oct(Eb,4) 4. oct8(C,4) oct(G,3) 4. oct8(Eb,3) ;m28
+oct(c,3) 4. oct8(g,2) oct4(Eb,2) R 8 oct8(f,2) ;m29
+oct4(g,2) R 4 ppp G1 G2 G3 8 R 8 R 4 ;m30
+C2 C3 8 R 8 R 4 ;m31a
+;double bar
+pp chordtripb(E4,G4,C5,E5) ;m31b
+damperdown chordtripa(F4,Ab4,B4,D5) damper chordtripb(F4,Ab4,B4,D5) ;m32
+damper chordtripa(F4,Ab4,B4,D5) damper chordtripb(E4,G4,C5,E5) ;m33
+damper chordtripa(F4,Ab4,B4,D5) damper chordtripb(E4,G4,C5,E5) ;m34
+damper chordtripa(F4,A4,D5,F5) chordtripb(F4,A4,D5) ;m35
+damper chordtripa(E4,A4,C5) chordtripb(E4,A4,C5,E5) ;m36
+damper chordtripa(D4,B4,D5) chordtripb(D4,B4,D5) ;m37
+damper chordtripa(D4,B4,D5) damper pp chordtripb(E4,A4,C5,E5) ;m38
+damper chordtripa(D4,B4,D5) p chordtripb(E4,G4,C5,E5) ;m39
+damper chordtripa(F4,Ab4,B4,D5) damper chordtripb(F4,Ab4,B4,D5) ;m40 
+damper chordtripa(F4,Ab4,B4,D5) damper chordtripb(E4,G4,C5,E5) ;m41
+damper chordtripa(F4,Ab4,B4,D5) damper chordtripb(E4,G4,C5,E5) ;m42
+damper chordtripa(F4,A4,D5,F5) chordtripb(F4,A4,D5) ;m43
+damper chordtripa(F4,A4) damper chordtripb(F4,B4,D5) ;m44
+damper chordtripa(E4,A4,C5) chordtripb(E4,A4,C5) ;m45
+damper chordtripa(E4,A4,C5) damper pp chordtripb(F4,B4,D5) ;m46
+damper chordtripa(E4,G4,C5)  ;m47a
+;repeat forward
+damper mf chordtripb(E4,A4,C5) ;m47b
+damper chordtripa(D#4,F#4,B4) chordtripb(D#4,F#4,B4) ;m48
+damper chordtripa(D#4,F#4,B4) damper chordtripb(E4,A4,C5) ;m49
+damper chordtripa(D#4,F#4,B4) chordtripb(D#4,F#4,B4) ;m50
+damper chordtripa(E4,G4,B4) damper chordtripb(C4,F#4,A4) ;m51
+damper chordtripa(B3,E4,G4) damper chordtripb(A3,D#4,F#4) ;m52
+damper chordtripa(G3,B3,E4) chordtripb(G3,B3,E4) ;m53
+chordtripa(G3,B3,E4) damper chordtripb(A3,D#4,F#4)  ;m54
+damper chordtripa(G3,B3,E4) damper chordtripb(G#3,C4,E4) ;m55
+damper chordtripa(A3,C4,D4) chordtripb(A3,C4,D4) ;m56
+chordtripa(A3,C4,D4) damper chordtripb(G#3,C4,E4) ;m57
+damper chordtripa(A3,C4,D4) damper chordtripb(G3,C#4,E4) ;m58
+damper chordtripa(F3,D4,F4) chordtripb(F3,A3,D4) ;m59
+damper chordtripa(F3,A3) damper chordtripb(F3,B3,D4) ;m60
+damper chordtripa(E3,A3,C4) chordtripb(E3,A3,C4) ;m61
+damper chordtripa(E3,A3,C4) damper pp chordtripb(F3,B3,D4) ;m62
+damper chordtripa(E3,G3,C4) ;m63 first ending
+;3 flats second ending
+damper mf chordtripb(E4,A4,C5) ;m47b
+damper chordtripa(D#4,F#4,B4) damper chordtripb(D#4,F#4,B4) ;m48
+damper chordtripa(D#4,F#4,B4) chordtripb(E4,A4,C5) ;m49
+damper chordtripa(D#4,F#4,B4) chordtripb(D#4,F#4,B4) ;m50
+damper chordtripa(E4,G4,B4) damper chordtripb(C4,F#4,A4) ;m51
+damper chordtripa(B3,E4,G4) damper chordtripb(A3,D#4,F#4) ;m52
+damper chordtripa(G3,B3,E4) chordtripb(G3,B3,E4) ;m53
+chordtripa(G3,B3,E4) damper chordtripb(A3,D#4,F#4)  ;m54
+damper chordtripa(G3,B3,E4) damper chordtripb(G#3,C4,E4) ;m55
+damper chordtripa(A3,C4,D4) chordtripb(A3,C4,D4) ;m56
+chordtripa(A3,C4,D4) damper chordtripb(G#3,C4,E4) ;m57
+damper chordtripa(A3,C4,D4) damper chordtripb(G3,C#4,E4) ;m58
+damper chordtripa(F3,D4,F4) chordtripb(F3,A3,D4) ;m59
+damper chordtripa(F3,A3) damper chordtripb(F3,B3,D4) ;m60
+damper chordtripa(E3,A3,C4) chordtripb(E3,A3,C4) ;m61
+chordtripa(E3,A3,C4) damper pp chordtripb(F3,B3,D4) damperup ;m62
+E3 G3 C4 1 ;m64
+Ab2 C3 F3 C4 4 R 4 F3 C3 Ab3 C4 4 R 4 ;m65
+Eb2 C3 C4 G3 4 R 4 R 4. F2 Ab3 C4 8 ;m66
+G2 G3 C4 Eb4 4 R 4 G2 F3 B3 D4 4 R 4 ;m67
+Ab2 Eb3 C4 4 R 4 G2 C3 E3 Bb3 C4 4 R 4 ;m68
+F2 C3 F3 Ab3 C4 4 R 4 D2 C3 Ab3 B3 C4 4 R 4 ;m69
+Eb2 C3 C4 G3 4 R 4 R 4. Ab2 F3 C4 8 ;m70
+G2 G3 C4 Eb4 4 R 4 G2 F3 B3 D4 4 R 8 oct8(Eb,3) ;m71
+vel 60 oct(Eb,4) 4. vel 50 oct8(C,4) vel 40 oct(G,3) 4. vel 30 oct8(Eb,3) ;m72
+vel 20 oct4(c,3) R 4 p Bb2 Gb3 C4 Eb4 4 R 4 ;m73
+A2 F3 C4 Eb4 4 R 4 R 4. A2 F3 C4 Eb4 8 ;m74
+Bb2 F3 Bb3 Db4 4 R 8 Eb2 Eb3 Gb3 C4 8 F2 Db3 F3 Bb3 4 R 8 F2 C3 F3 A3 8 ;m75
+Bb2 Bb3 Db3 F3 4 R 4 Ab3 Bb3 Db4 F4 Bb4 4 R 4 ;m76
+G3 Bb3 Db4 E4 Bb4 4 R 4 p F3 Bb3 Db4 F4 Bb4 4 R 4 ;m77
+mp E3 C4 G4 Bb4 4 R 4 R 4. p E3 C4 G4 Bb4 8 ;m78
+pp F3 C4 F4 Ab4 4 R 8 Bb2 Bb3 Db4 G4 8 C3 Ab3 C4 F4 4 R 8 C3 G3 Bb3 E4 8 ;m79
+F2 C3 Ab3 F4 4 R 4 D2 C3 Ab3 B3 F4 4 R 4 ;m80
+Eb2 C3 G3 C4 Eb4 4 R 4 R 4. F2 Ab3 C4 8 ;m81
+G2 G3 C4 Eb4 4 R 4 G2 F3 B3 D4 4 R 4 ;m82
+Ab2 Eb3 Ab3 C4 4 R 4 G2 C3 E3 Bb3 C4 4 R 4 ;m83
+pp F2 C3 C4 F3 Ab3 4 R 4 D2 C3 Ab3 B3 C4 4 R 4 ;m84
+Eb2 C3 C4 G3 4 R 4 R 4. F2 Ab3 C4 8 ;m85
+G2 G3 C4 Eb4 4 R 4 ppp G2 G3 B3 D4 4 R 4 ;m86
+oct4(c,3) R 2. ;m87
+R 1 ;m88
+R 1 ;m89
+R 1 ;m90
+R 2 Db3 Db4 G3 Bb3 1 ;m91
+C3 C4 1 ;m92
+Bb2 Bb3 1 ;m93
+Ab2 Ab3 4. oct8(g,2) ;m94
+ff oct8(Bb,2) octstac8(c,3) forte oct(Db,3) 3 octstac12(c,3) octstac12(b,2) octstac12(c,3) octstac12(f,3)  octstac12(Ab,3) ;m95
+ff octstac8(g,3) octstac8(c,3) forte oct(Db,3) 3 forte octstac12(c,3) octstac12(b,2) octstac12(c,3) octstac12(g,3)  octstac12(Bb,3) ;m96
+ff octstac8(Ab,3) octstac8(f,3) forte oct(g,3) 3 forte octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(Ab,3) octstac12(c,4) ;m97
+ff octstac12(Db,4) forte octstac12(g,3) octstac12(f#,3) octstac12(g,3) octstac12(Bb,3) octstac12(f,4) ff octstac12(e,4) forte octstac12(c,4) octstac12(b,3) octstac12(c,4) octstac12(e,4) octstac12(g,4) ;m98
+octstac8(Ab,4) octstac8(C,4) ff oct(Db,4) 3 forte octstac12(c,4) octstac12(b,3) octstac12(c,4) octstac12(f,4) octstac12(Ab,4) ;m99
+ff octstac8(g,4) octstac8(c,4) forte oct(Db,4) 3 forte octstac12(c,4) octstac12(b,3) octstac12(c,4) octstac12(g,4) octstac12(Bb,4) ;m100
+ff octstac8(Ab,4) octstac8(F,4) forte oct(G,4) 3 forte octstac12(f,4) octstac12(e,4) octstac12(f,4) octstac12(Ab,4) octstac12(c,5) ;m101
+ff octstac12(Db,5) forte octstac12(g,4) octstac12(F#,4) octstac12(G,4) octstac12(Bb,4) octstac12(F,5) ff octstac12(E,5) forte octstac12(C,5) octstac12(B,4) octstac12(C,5) octstac12(E,5) octstac12(G,5) ;m102
+octstac8(Ab,5) octstac8(F,4) ff oct(Ab,4) 3 forte octstac12(f,4) octstac12(d,4) octstac12(b,3) octstac12(Ab,3) octstac12(f,3) ;m103
+;repeat forward
+octstac8(Eb,3) octstac8(Eb,4) ff oct(Gb,4) 3 forte octstac12(Eb,4) octstac12(c,4) octstac12(A,3) octstac12(Gb,3) octstac12(Eb,3) ;m104
+octstac8(Db,3) octstac8(f,3) ff oct(Gb,3) 3 forte octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(Bb,3) octstac12(Db,4) ;m105
+octstac8(C,4) octstac8(F,3) ff oct(Gb,3) 3 forte octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(c,4) octstac12(Eb,4) ;m106
+ff octstac12(Db,4) forte octstac12(g,3) octstac12(F#,3) octstac12(G,3) octstac12(Bb,3) octstac12(F,4) ff octstac12(E,4) forte octstac12(C,4) octstac12(B,3) octstac12(C,4) octstac12(e,4) octstac12(G,4) ;m107
+ff octstac8(Ab,4) octstac8(C,4) fff oct(Db,4) 3 ff octstac12(C,4) octstac12(B,3) octstac12(C,4) octstac12(f,4) octstac12(Ab,4) ;m108
+octstac8(g,4) octstac8(c,4) fff oct(Db,4) 3 ff octstac12(C,4) octstac12(B,3) octstac12(C,4) octstac12(G,4) octstac12(Bb,4) ;m109
+fff octstac12(Ab,4) ff octstac12(F,4) octstac12(E,4) octstac12(F,4) octstac12(C,5) octstac12(F,5) fff octstac12(Db,5) ff octstac12(c,4) octstac12(b,3) octstac12(c,4) octstac12(G,4) octstac12(C,5) ;m110
+fff octstac12(Ab,4) ff octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(c,4) octstac12(f,4) fff octstac12(Db,4) ff octstac12(c,3) octstac12(b,2) octstac12(c,3) octstac12(g,3) octstac12(c,4) ;m111
+ff octstac8(f,3) octstac8(f,4) fff oct(Ab,4) 3 octstac12(f,4) octstac12(d,4) octstac12(b,3) octstac12(Ab,3) octstac12(F,3) ;112 first ending
+octstac8(Eb,3) octstac8(Eb,4) ff oct(Gb,4) 3 forte octstac12(Eb,4) octstac12(c,4) octstac12(A,3) octstac12(Gb,3) octstac12(Eb,3) ;m104
+octstac8(Db,3) octstac8(f,3) ff oct(Gb,3) 3 forte octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(Bb,3) octstac12(Db,4) ;m105
+octstac8(C,4) octstac8(F,3) ff oct(Gb,3) 3 forte octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(c,4) octstac12(Eb,4) ;m106
+ff octstac12(Db,4) forte octstac12(g,3) octstac12(F#,3) octstac12(G,3) octstac12(Bb,3) octstac12(F,4) ff octstac12(E,4) forte octstac12(C,4) octstac12(B,3) octstac12(C,4) octstac12(e,4) octstac12(G,4) ;m107
+ff octstac8(Ab,4) octstac8(C,4) fff oct(Db,4) 3 ff octstac12(C,4) octstac12(B,3) octstac12(C,4) octstac12(f,4) octstac12(Ab,4) ;m108
+octstac8(g,4) octstac8(c,4) fff oct(Db,4) 3 ff octstac12(C,4) octstac12(B,3) octstac12(C,4) octstac12(G,4) octstac12(Bb,4) ;m109
+fff octstac12(Ab,4) ff octstac12(F,4) octstac12(E,4) octstac12(F,4) octstac12(C,5) octstac12(F,5) fff octstac12(Db,5) ff octstac12(c,4) octstac12(b,3) octstac12(c,4) octstac12(G,4) octstac12(C,5) ;m110
+fff octstac12(Ab,4) ff octstac12(f,3) octstac12(e,3) octstac12(f,3) octstac12(c,4) octstac12(f,4) fff octstac12(Db,4) ff octstac12(c,3) octstac12(b,2) octstac12(c,3) octstac12(g,3) octstac12(c,4) ;m111
+p triplet(F4,Ab4,C5) pp triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) ;m113 second ending
+triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) ;m114
+triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) ;m115
+triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(D4,G4,B4) triplet(D4,G4,B4) ;m116
+triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) ;m117
+triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) triplet(F4,Ab4,C5) ;m118
+triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) ;m119
+triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(D4,G4,B4) triplet(D4,G4,B4) ;m120
+triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) triplet(Eb4,G4,C5) ;m121
+triplet(C4,Eb4,G4) triplet(C4,Eb4,G4) triplet(C4,Eb4,Gb4) triplet(C4,Eb4,Gb4)  ;m122
+triplet(C4,Eb4,Gb4) triplet(C4,Eb4,F4) triplet(C4,Eb4,F4) triplet(C4,Eb4,F4) ;m123
+triplet(Bb3,Db4,F4) triplet(Gb3,Bb3,Eb4) triplet(F3,Bb3,Db4) triplet(F3,A3,C4) ;m124
+triplet(F3,Bb3,Db4) triplet(F3,Bb3,Db4) triplet(Db4,F4,Bb4) triplet(Db4,F4,Bb4) ;m125
+triplet(Db4,E4,Bb4) triplet(Db4,E4,Bb4) triplet(Db4,F4,Bb4) triplet(Db4,F4,Bb4) ;m126
+triplet(C4,G4,Bb4) triplet(C4,G4,Bb4) triplet(C4,G4,Bb4) triplet(C4,G4,Bb4) ;m127
+triplet(C4,F4,Ab4) triplet(Bb3,Db4,G4) triplet(Ab3,C4,F4) triplet(G3,Bb3,E4) ;m128
+triplet(Ab3,C4,F4) triplet(Ab3,C4,F4) triplet(B3,D4,F4) triplet(B3,D4,F4) ;m129
+triplet(R,C4,Eb4) triplet(G3,C4,Eb4) triplet(G3,C4,Eb4) triplet(G3,C4,Eb4) ;m130
+triplet(G3,C4,Eb4) triplet(G3,C4,Eb4) triplet(F3,B3,D4) triplet(F3,B3,D4) ;m131
+triplet(Eb3,Ab3,C4) triplet(Eb3,Ab3,C4) triplet(E3,Bb3,C4) triplet(E3,Bb3,C4) ;m132
+triplet(F3,Ab3,C4) triplet(F3,Ab3,C4) triplet(B3,D4,F4) triplet(B3,D4,F4) ;m133
+vel 75 triplet(R,C4,Eb4) vel 70 triplet(G3,C4,Eb4) vel 65 triplet(G3,C4,Eb4) vel 60 triplet(G3,C4,Eb4) ;m134
+vel 55 triplet(G3,C4,Eb4) vel 50 triplet(G3,C4,Eb4) vel 45 triplet(F3,B3,D4) vel 40 triplet(F3,B3,D4) ;m135
+C4 4 R 4 R 2 ;m136
+p triplet(Bb2,F3,G3) triplet(Bb3,Db4,E4) G4 24 R 24 E4 12 Db4 12 Bb3 12 G3 12 F3 12 ;m137
+triplet(Bb2,F3,G3) Bb3 12 Db4 12 Eb4 G4 24 R 24 triplet(F2,C3,F3) A3 12 C4 12 F4 A4 24 R 24 ;m138
+triplet(Bb2,F3,G3) Bb3 12 Db4 12 Eb4 G4 24 R 24 triplet(A2,F3,A3) C4 12 F4 12 A4 24 R 24 ;m139
+triplet(G2,D3,G3) Bb3 12 D4 12 G4 Bb4 24 R 24 triplet(Bb2,D3,G3) Bb3 12 D4 12 G4 24 R 24 ;m140
+triplet(D2,A2,D3) F3 12 A3 12 D4 F4 24 R 24 triplet(B1,B2,D3) F3 12 A3 12 F4 A4 24 R 24 ;m141
+triplet(C2,G2,C3) triplet(E3,G3,C4) E4 G4 24 R 24 C4 12 G3 12 triplet(E3,C3,G2) ;m142
+triplet(C2,G2,C3) E3 12 G3 12 E4 G4 24 R 24 triplet(B1,B2,D3) F3 12 A3 12 F4 A4 24 R 24 ;m143
+triplet(C2,G2,C3) E3 12 G3 12 E4 G4 24 R 24 triplet(F2,C3,F3) A3 12 C4 12 F4 A4 24 R 24 ;m144
+triplet(Bb2,F3,G3) triplet(Bb3,Db4,Eb4) G4 24 R 24 Eb4 12 Db4 12 triplet(Bb3,G3,F3) ;m145
+triplet(Bb2,F3,G3) Bb3 12 Db4 12 Eb4 G4 24 R 24 triplet(F2,C3,F3) A3 12 C4 12 F4 A4 24 R 24 ;m146
+triplet(Bb2,F3,G3) Bb3 12 Db4 12 Eb4 G4 24 R 24 triplet(A2,F3,A3) C4 12 F4 12 A4 24 R 24 ;m147
+triplet(G2,D3,G3) Bb3 12 D4 12 G4 Bb4 24 R 24 triplet(`Bb1 Bb2',D3,G3) Bb3 12 D4 12 G4 24 R 24 ;m148
+triplet(D2,D3,G3) Bb3 12 D4 12 G4 24 R 24 triplet(C#2,C#3,E3) G3 12 Bb3 12 Eb4 G4 24 R 24 ;m149
+triplet(D2,A2,D3) triplet(F3,A3,D4) stac12(F4) D4 12 A3 12 triplet(F3,D3,A2)  ;m150
+triplet(D2,A2,D3) tripletstac(F3,A3,`D4 F4') triplet(C2,C3,E3) triplet(G3,Bb3,`E4,G4') ;m151
+triplet(F2,C3,F3) tripletstac(A3,C4,F4) ;152a
+;double bar
+mf triplet(D2,A2,D3) tripletstac(F3,A3,`D4 F4') ;152b
+triplet(E2,B2,E3) triplet(G#3,B3,D4) E4 G#4 24 R 24 D4 12 B3 12 triplet(G#3,E3,B2) ;m153
+triplet(E2,B2,E3) tripletstac(G#3,B3,`D4 E4') triplet(D2,A3,D3) tripletstac(F3,A3,`D4 F4') ;m154
+triplet(E2,B2,E3) tripletstac(G#3,B3,`D4 E4') triplet(D2,B2,E3) tripletstac(G#3,B3,`E4 G#4') ;m155
+triplet(C2,C3,E3) tripletstac(A3,C4,`E4 A4') triplet(D2,A2,D3) triplet(F3,A3,`D4 F4') ;m156
+triplet(E2,A2,C3) tripletstac(E3,A3,`C4 E4') triplet(E2,B2,E3) tripletstac(G#3,B3,`D4 E4') ;m157
+triplet(A2,E3,A3) triplet(C4,E4,A4) C5 24 R 24 A4 12 E4 12 triplet(C4,A3,E3) ;m158
+triplet(A2,E3,A3) tripletstac(C4,E4,`A4 C5') triplet(E2,E3,G#3) tripletstac(B3,D4,`G#4 B4') ;m159
+triplet(A2,E3,A3) tripletstac(C4,E4,A4) triplet(A1,A2,C#3) tripletstac(F3,A3,`C#4 F4 A4') ;m160
+triplet(Bb1,Bb2,D3) triplet(G3,Bb3,D4) stac12(G4) D4 12 Bb3 12 triplet(G3,D3,Bb2) ;m161
+triplet(Bb1,Bb2,D3) triplet(G3,Bb3,`D4 G4') triplet(A1,A2,C#3) tripletstac(F3,A3,`C#4 F4 A4') ;m162
+triplet(Bb1,Bb2,D3) triplet(G3,Bb3,`D4 G4') triplet(A1,A2,C3) tripletstac(F#3,A3,`C4 F#4 A4') ;m163
+triplet(G1,G2,Bb2) tripletstac(D3,G3,`D4 G4 Bb4') triplet(Bb1,G2,Bb2) tripletstac(D3,G3,`D4 G4') ;m164
+triplet(D2,G2,Bb2) tripletstac(D3,G3,`Bb3 D4') triplet(C#2,G2,Bb2) tripletstac(E3,G3,`Bb3 E4 G4') ;m165
+triplet(D2,A2,D3) triplet(F3,A3,D4) stac12(F4) D4 12 A3 12 triplet(F3,D3,A2) ;m166
+triplet(D2,A2,D3) triplet(F3,A3,`D4 F4') p triplet(C2,C3,E3) tripletstac(G3,Bb3,`E4 G4') ;167
+triplet(F2,C3,F3) tripletstac(A3,C4,F4) R 2 ;m168
+;double bar, three flats
+p Db3 Bb3 F4 4 R 4 Bb2 F3 Db4 F4 4 R 4 ;m169
+Ab2 F3 C4 F4 4 R 4 R 4. Bb2 F3 Db4 F4 8 ;m170
+C3 F3 C4 Ab4 4 R 4 C3 E3 Bb3 G4 4 R 4 ; m171
+Db3 F3 Ab3 F4 4 R 4 C3 F3 A3 Eb4 F4 4 R 4  ;m172
+Bb2 F3 Bb3 Db4 F4 4 R 4 G2 F3 Bb3 Db4 E4 F4 4 R 4 ;m173
+Ab2 F3 C4 F4 4 R 4 R 4. C4 F4 8 ;m174
+F2 C4 Ab4 4 R 4 G2 B3 G4 4 R 8 oct8(Eb,3) ;m175
+vel 60 oct(Eb,4) 4. vel 50 oct8(c,4) vel 40 oct(G,3) 4. vel 30 oct8(Eb,3) ;m176
+vel 20 oct4(c,3) R 4 p Bb2 Gb3 C4 Eb4 4 R 4 ;m177
+A2 F3 C4 Eb4 4 R 4 R 4. A2 F3 C4 Eb4 8 ;m178
+Bb2 F3 Bb3 Db4 4 R 8 Eb2 Eb3 Gb3 C4 8 F2 Db3 F3 Bb3 4 R 8 F2 C3 F3 A3 8 ;m179
+Bb2 Db3 F4 Bb3 4 R 4 Ab3 Bb3 Db4 F4 Bb4 4 R 4 ;m180
+G3 Bb3 Db4 E4 Bb4 4 R 4 F3 Bb3 Db4 F4 Bb4 4 R 4 ;m181
+E3 C4 G4 Bb4 4 R 4 R 4. E3 C4 G4 Bb4 8 ;m182
+F3 C4 F4 Ab4 4 R 8 Bb2 Bb3 Db4 G4 8 vel 49 C3 Ab3 C4 F4 4 R 8 C3 G3 Bb3 E4 8 ;m183
+vel 48 F2 C3 Ab3 F4 4 R 4 vel 47 D2 C3 Ab3 B3 F4 4 R 4 ;m184
+vel 46 Eb2 C3 G3 C4 Eb4 4 R 4 R 4. vel 45 F2 Ab3 C4 8 ;m185
+vel 44 G2 G3 C4 Eb4 4 R 4 vel 43 G2 F3 B3 D4 4 R 4 ;m186
+vel 42 Ab2 Eb3 Ab3 C4 4 R 4 vel 41 G2 C3 E3 Bb3 C4 4 R 4 ;m187
+pp F2 F3 C3 Ab3 C4 4 R 4 D2 C3 C4 Ab3 B3 4 R 4 ;m188
+Eb2 G3 C4 4 R 4 R 4. D2 F3 C4 8 ;m189
+Eb2 G3 C4 4 R 4 R 2 ;m190
+R 2 R 4. oct8(c,2) ;m191
+oct4(c,2) R 8 oct8(c,2) oct4(c,2) R 8 oct16(f,2) oct16(Ab,2) ;m192
+oct4(g,2) oct4(c,2) R 4. oct8(c,2) ;m193
+oct4(c,2) R 8 oct8(c,2) oct4(c,2) R 8 oct16(f,2) oct16(Ab,2) ;m194
+oct4(g,2) oct4(c,2) R 2 ;m195
+oct4(g,2) oct4(c,2) R 2 ;m196
+R 1 ;m197
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+

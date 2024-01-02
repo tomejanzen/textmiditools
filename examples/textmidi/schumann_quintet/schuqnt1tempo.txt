@@ -1,0 +1,987 @@
+; $Author: janzent $
+; $Log: schuqnt1tempo.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.20  2003/10/30 02:00:44  root
+; try to fix constructive interference of unisos octaves
+;
+; Revision 1.19  2003/09/30 01:08:24  root
+; some of jenny stirling notes from 22 sep 2003
+;
+; Revision 1.18  2003/08/15 01:38:15  root
+; rit at end
+;
+; Revision 1.17  2003/08/13 23:42:37  root
+; remove phony event at start just to get a pause
+;
+; Revision 1.16  2003/08/10 16:22:31  root
+; fix rit into m9
+;
+; Revision 1.15  2003/08/01 23:30:18  root
+; completed acceneted piano figure, pause before last chord,
+;
+; Revision 1.14  2003/08/01 01:42:55  root
+; using long tones, decresc, cresc pretty much done. fixed first big cadence
+;
+; Revision 1.13  2003/07/13 21:28:57  root
+; 318 wrong ab should be a, final touches
+; before last lesson
+;
+; Revision 1.12  2003/07/06 22:04:34  root
+; lesson notes
+;
+; Revision 1.11  2003/07/03 01:15:07  root
+; jenny suggestsions to repeat
+;
+; Revision 1.10  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.9  2003/06/02 00:50:18  root
+; no change
+;
+; Revision 1.8  2003/05/31 01:21:17  root
+; don't remember what I fixed
+;
+; Revision 1.7  2003/04/29 00:55:44  root
+; varied tempo
+;
+; Revision 1.6  2003/04/28 00:03:23  root
+; added text
+;
+; Revision 1.5  2003/04/22 00:16:11  root
+; keys
+;
+; Revision 1.4  2003/03/23 01:24:24  root
+; fix channel
+;
+; Revision 1.3  2003/02/19 01:51:00  root
+; copyright year
+;
+; Revision 1.2  2003/02/17 23:27:43  root
+; added contct info
+;
+; Revision 1.1  2003/02/16 20:25:27  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt1tempo.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt1tempo.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1tempo.txt,v $
+; $State: Exp $
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Tempo Track
+TEMPO 216
+TIME_SIGNATURE 4 4 240
+KEY_SIGNATURE Eb
+TEXT Robert Schuman: Quintet for piano, 2 violins, viola, and cello Op. 44
+TEXT I: Allegro Brillante
+TEXT "Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+TEXT Coached by New England violist and teacher Jennifer Stirling.
+TEXT Output of miditext lexical analyzer by Thomas Janzen.
+TEXT Cf. Bach Well-Tempered Clavier I Prelude 7 for opening theme.
+LAZY
+chan midi_channel_tempo
+vel 5 acousticsnare 8
+R 8 R 4 R 2  ;m 0
+R 1  ;m1
+R 1  ;m2
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m3
+R 1  ;m4
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m5
+R 1  ;m6
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m7
+END_LAZY TEMPO 216 
+LAZY
+R 2 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 203 ;m8
+LAZY
+R 4 
+END_LAZY TEMPO 216 
+LAZY
+R 2. ;m9
+R 1  ;m10
+R 1  ;m11
+R 1  ;m12
+R 1  ;m13
+R 1  ;m14
+R 1  ;m15
+R 1  ;m16
+R 1  ;m17
+R 1  ;m18
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m19
+R 1  ;m20
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m21
+R 1  ;m22
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m23
+R 1  ;m24
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m25
+R 2 
+END_LAZY TEMPO 156 
+LAZY
+R 2  ;m26
+END_LAZY TEMPO 208 
+LAZY
+R 1  ;m27
+R 1  ;m28
+R 1  ;m29
+R 1  ;m30
+R 1  ;m31
+R 1  ;m32
+R 1  ;m33
+R 1  ;m34
+R 1  ;m35
+R 1  ;m36
+R 1  ;m37
+R 1  ;m38
+R 1  ;m39
+R 1  ;m40
+R 1  ;m41
+R 1  ;m42
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m43
+R 2. 
+END_LAZY TEMPO 170 
+LAZY
+R 4 
+END_LAZY TEMPO 216 ;m44
+LAZY
+R 1  ;m45
+R 1  ;m46
+R 1  ;m47
+R 2. 
+END_LAZY TEMPO 170 
+LAZY
+R 4 
+END_LAZY TEMPO 216 ;m48
+LAZY
+R 1  ;m49
+R 1  ;m50
+END_LAZY TEMPO 200 
+LAZY
+R 1  ;m51
+R 1  ;m52
+R 1  ;m53
+R 1  ;m54
+R 2 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 200 
+LAZY
+R 4 ; m 55
+END_LAZY TEMPO 195 
+LAZY
+R 4 
+END_LAZY TEMPO 187 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+R 4 ;m56
+END_LAZY TEMPO 208
+LAZY
+R 13/1 ;m57
+END_LAZY TEMPO 208 
+LAZY
+R 4 
+END_LAZY TEMPO 208 
+LAZY
+R 4 
+END_LAZY TEMPO 207 
+LAZY
+R 4 
+END_LAZY TEMPO 206 
+LAZY
+R 4 ;m70
+END_LAZY TEMPO 205 
+LAZY
+R 4 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 200 
+LAZY
+R 4 
+END_LAZY TEMPO 195 
+LAZY
+R 4  ;m71
+END_LAZY TEMPO 187 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 ;m72
+END_LAZY TEMPO 200 
+LAZY
+R 1 ;m73
+R 1 ;m74
+R 1 ;m75
+R 1 ;m76
+END_LAZY TEMPO 192
+LAZY
+R 1 ;m77
+R 1 ;m78
+END_LAZY TEMPO 200
+LAZY
+R 1 ;m79
+R 1 ;m80
+R 1 ;m81
+R 1 ;m82
+R 1 ;m83
+R 1 ;m84
+R 1 ;m85
+R 1 ;m86
+END_LAZY TEMPO 192
+LAZY
+R 1 ;m87
+R 1 ;m88
+R 1 ;m89
+R 1 ;m90
+R 1 ;m91
+R 1 ;m92
+R 1 ;m93
+END_LAZY TEMPO 184 
+LAZY
+R 1 ;m94
+R 1 ;m95
+END_LAZY TEMPO 183 
+LAZY
+R 4 
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 181 
+LAZY
+R 4 ;m96
+END_LAZY TEMPO 181 
+LAZY
+R 4 
+END_LAZY TEMPO 180 
+LAZY
+R 4 
+END_LAZY TEMPO 179 
+LAZY
+R 4 
+END_LAZY TEMPO 177 
+LAZY
+R 4 ;m97
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+END_LAZY TEMPO 169 
+LAZY
+R 4 
+END_LAZY TEMPO 161 
+LAZY
+R 4 
+END_LAZY TEMPO  90 
+LAZY
+R 4 ;m98
+END_LAZY TEMPO 184
+LAZY
+R 1 ;m99
+END_LAZY TEMPO 196 
+LAZY
+R 1 ;m100
+END_LAZY TEMPO 208 
+LAZY
+R 1 ;m101
+R 1 ;m102
+END_LAZY TEMPO 212 
+LAZY
+R 2 
+END_LAZY TEMPO 252 
+LAZY
+R 2  ;m103
+R 1 ;m104
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m105
+R 1 ;m106
+R 1 ;m107
+R 1 ;m108
+R 1 ;m109
+R 1 ;m110
+R 1 ;m111
+R 1 ;m112
+R 1 ;m113
+R 1 ;m114
+R 1 ;m115
+R 1 ;m116
+R 1 ;m117
+
+;repeat
+R 1  ;m1
+R 1  ;m2
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m3
+R 1  ;m4
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m5
+R 1  ;m6
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m7
+END_LAZY TEMPO 216 
+LAZY
+R 2 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 203 ;m8 rep
+LAZY
+R 4 
+END_LAZY TEMPO 216 
+LAZY
+R 2.  ;m9 rep
+R 1  ;m10
+R 1  ;m11
+R 1  ;m12
+R 1  ;m13
+R 1  ;m14
+R 1  ;m15
+R 1  ;m16
+R 1  ;m17
+R 1  ;m18
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m19
+R 1  ;m20
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m21
+R 1  ;m22
+END_LAZY TEMPO 224 
+LAZY
+R 1  ;m23
+R 1  ;m24
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m25
+R 2 
+END_LAZY TEMPO 156 
+LAZY
+R 2  ;m26
+END_LAZY TEMPO 208 
+LAZY
+R 1  ;m27
+R 1  ;m28
+R 1  ;m29
+R 1  ;m30
+R 1  ;m31
+R 1  ;m32
+R 1  ;m33
+R 1  ;m34
+R 1  ;m35
+R 1  ;m36
+R 1  ;m37
+R 1  ;m38
+R 1  ;m39
+R 1  ;m40
+R 1  ;m41
+R 1  ;m42
+END_LAZY TEMPO 216 
+LAZY
+R 1  ;m43
+R 2. 
+END_LAZY TEMPO 170 
+LAZY
+R 4 
+END_LAZY TEMPO 208 ;m44
+LAZY
+R 1  ;m45
+R 1  ;m46
+R 1  ;m47
+R 2. 
+END_LAZY TEMPO 170 
+LAZY
+R 4 
+END_LAZY TEMPO 216 ;m48
+LAZY
+R 1  ;m49
+R 1  ;m50
+END_LAZY TEMPO 200 
+LAZY
+R 1  ;m51
+R 1  ;m52
+R 1  ;m53
+R 1  ;m54
+R 2 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 200 
+LAZY
+R 4 ; m 55 rep
+END_LAZY TEMPO 195 
+LAZY
+R 4 
+END_LAZY TEMPO 187 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+R 4 ;m56 rep
+END_LAZY TEMPO 208
+LAZY
+R 13/1  ;m57
+END_LAZY TEMPO 208 
+LAZY
+R 4 
+END_LAZY TEMPO 208 
+LAZY
+R 4 
+END_LAZY TEMPO 207 
+LAZY
+R 4 
+END_LAZY TEMPO 206 
+LAZY
+R 4 ;m70
+END_LAZY TEMPO 205 
+LAZY
+R 4 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 200 
+LAZY
+R 4 
+END_LAZY TEMPO 195 
+LAZY
+R 4  ;m71
+END_LAZY TEMPO 187 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+END_LAZY TEMPO 174 
+LAZY
+R 4 ;m72 rep
+END_LAZY TEMPO 200 
+LAZY
+R 1 ;m73
+R 1 ;m74
+R 1 ;m75
+R 1 ;m76
+END_LAZY TEMPO 192
+LAZY
+R 1 ;m77
+R 1 ;m78
+END_LAZY TEMPO 200
+LAZY
+R 1 ;m79
+R 1 ;m80
+R 1 ;m81
+R 1 ;m82
+R 1 ;m83
+R 1 ;m84
+R 1 ;m85
+R 1 ;m86
+END_LAZY TEMPO 192
+LAZY
+R 1 ;m87
+R 1 ;m88
+R 1 ;m89
+R 1 ;m90
+R 1 ;m91
+R 1 ;m92
+R 1 ;m93
+END_LAZY TEMPO 184 
+LAZY
+R 1 ;m94
+R 1 ;m95
+END_LAZY TEMPO 183 
+LAZY
+R 4 
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 181 
+LAZY
+R 4 ;m96
+END_LAZY TEMPO 181 
+LAZY
+R 4 
+END_LAZY TEMPO 180 
+LAZY
+R 4 
+END_LAZY TEMPO 179 
+LAZY
+R 4 
+END_LAZY TEMPO 177 
+LAZY
+R 4 ;m97
+END_LAZY TEMPO 174 
+LAZY
+R 4 
+END_LAZY TEMPO 169 
+LAZY
+R 4 
+END_LAZY TEMPO 161 
+LAZY
+R 4 
+END_LAZY TEMPO 90 
+LAZY
+R 4 ;m98
+END_LAZY TEMPO 184
+LAZY
+R 1 ;m99
+END_LAZY TEMPO 196 
+LAZY
+R 1 ;m100
+END_LAZY TEMPO 208 
+LAZY
+R 1 ;m101
+R 1 ;m102
+END_LAZY TEMPO 212 
+LAZY
+R 2 
+END_LAZY TEMPO 252 
+LAZY
+R 2  ;m103
+R 1 ;m104
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m105
+R 1 ;m106
+R 1 ;m107
+R 1 ;m108
+R 1 ;m109
+R 1 ;m110
+R 1 ;m111
+R 1 ;m112
+R 1 ;m113
+R 1 ;m114
+R 1 ;m115
+;end second repeat
+R 1 ;m118
+END_LAZY TEMPO 184
+LAZY
+R 1 ;m119
+;**********************left off
+R 1 ;m120
+R 1 ;m121
+R 1 ;m122
+R 1 ;m123
+R 1 ;m124
+R 1 ;m125
+R 1 ;m126
+R 1 ;m127
+R 1 ;m128
+R 1 ;m129
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m130
+R 1 ;m131
+R 1 ;m132
+R 1 ;m133
+R 1 ;m134
+R 1 ;m135
+END_LAZY TEMPO 232  
+LAZY
+R 1 ;m136
+R 1 ;m137
+R 1 ;m138
+R 1 ;m139
+R 1 ;m140
+R 1 ;m141
+R 1 ;m142
+R 1 ;m143
+R 1 ;m144
+R 1 ;m145
+R 1 ;m146
+R 1 ;m147
+R 1 ;m148
+R 1 ;m149
+R 1 ;m150
+R 1 ;m151
+R 1 ;m152
+R 1 ;m153
+R 1 ;m154
+R 1 ;m155
+R 1 ;m156
+R 1 ;m157
+R 1 ;m158
+R 1 ;m159
+R 1 ;m160
+R 1 ;m161
+END_LAZY TEMPO 240 
+LAZY
+R 1 ;m162
+R 1 ;m163
+R 1 ;m164
+R 1 ;m165
+R 1 ;m166
+R 1 ;m167
+R 1 ;m168
+R 1 ;m169
+R 1 ;m170
+R 1 ;m171
+R 1 ;m172
+END_LAZY TEMPO 240  
+LAZY
+R 1 ;m173
+R 1 ;m174
+R 1 ;m175
+R 1 ;m176
+END_LAZY TEMPO 240 
+LAZY
+R 1 ;m177
+R 1 ;m178
+R 1 ;m179
+R 1 ;m180
+R 1 ;m181
+R 1 ;m182
+R 1 ;m183
+R 1 ;m184
+R 1 ;m185
+R 1 ;m186
+R 1 ;m187
+R 1 ;m188
+R 1 ;m189
+R 1 ;m190
+R 1 ;m191
+R 1 ;m192
+R 1 ;m193
+R 1 ;m194
+R 1 ;m195
+R 1 ;m196
+R 1 ;m197
+R 1 ;m198
+R 1 ;m199
+R 1 ;m200
+R 1 ;m201
+R 1 ;m202
+R 1 ;m203
+R 1 ;m204
+R 1 ;m205
+R 1 ;m206
+
+END_LAZY TEMPO 240 
+LAZY
+R 4 
+END_LAZY TEMPO 239 
+LAZY
+R 4 
+END_LAZY TEMPO 237 
+LAZY
+R 4 
+END_LAZY TEMPO 235 
+LAZY
+R 4 ;m207
+END_LAZY TEMPO 232 
+LAZY
+R 4 
+END_LAZY TEMPO 227 
+LAZY
+R 4 
+END_LAZY TEMPO 219 
+LAZY
+R 4 
+END_LAZY TEMPO 206 
+LAZY
+R 4  ;m208
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m209
+R 1 ;m210
+R 1 ;m211
+R 1 ;m212
+R 1 ;m213
+R 1 ;m214
+R 1 ;m215
+R 1 ;m216
+R 1 ;m217
+R 1 ;m218
+R 1 ;m219
+R 1 ;m220
+R 1 ;m221
+R 1 ;m222
+R 1 ;m223
+R 1 ;m224
+R 1 ;m225
+R 1 ;m226
+R 1 ;m227
+R 1 ;m228
+R 1 ;m229
+R 1 ;m230
+R 1 ;m231
+R 1 ;m232
+
+R 1 ;m233
+R 2 
+END_LAZY TEMPO 156 
+LAZY
+R 2  ;m234
+END_LAZY TEMPO 208 
+LAZY
+R 1 ;m235
+R 1 ;m236
+R 1 ;m237
+R 1 ;m238
+R 1 ;m239
+R 1 ;m240
+R 1 ;m241
+R 1 ;m242
+R 1 ;m243
+R 1 ;m244
+R 1 ;m245
+R 1 ;m246
+R 1 ;m247
+R 1 ;m248
+R 1 ;m249
+R 1 ;m250
+R 1 ;m251
+R 1 ;m252
+R 1 ;m253
+R 1 ;m254
+R 1 ;m255
+R 1 ;m256
+R 1 ;m257
+R 1 ;m258
+R 1 ;m259
+R 1 ;m260
+R 1 ;m261
+R 1 ;m262
+R 2 
+END_LAZY TEMPO 184 
+LAZY
+R 2 ;m263
+END_LAZY TEMPO 182 
+LAZY
+R 4 
+END_LAZY TEMPO 179 
+LAZY
+R 4 
+END_LAZY TEMPO 175 
+LAZY
+R 4 
+END_LAZY TEMPO 170 
+LAZY
+R 4 ;m264
+END_LAZY TEMPO 200 
+LAZY
+R 1 ;m265 
+R 1 ;m266
+R 1 ;m267
+R 1 ;m268
+R 1 ;m269
+
+R 1 ;m270
+R 1 ;m271
+R 1 ;m272
+R 1 ;m273
+R 1 ;m274
+R 1 ;m275 
+R 1 ;m276
+R 1 ;m277
+R 1 ;m278
+R 1 ;m279
+
+R 1 ;m280
+END_LAZY TEMPO eval(96*2) 
+LAZY
+R 1 ;m281
+R 1 ;m282
+R 1 ;m283
+R 1 ;m284
+R 1 ;m285 
+R 1 ;m286
+END_LAZY TEMPO 200 
+LAZY
+R 1 ;m287
+R 1 ;m288
+R 1 ;m289
+
+R 1 ;m290
+R 1 ;m291
+R 1 ;m292
+R 1 ;m293
+R 1 ;m294
+R 1 ;m295 
+R 1 ;m296
+R 1 ;m297
+R 1 ;m298
+R 1 ;m299
+END_LAZY TEMPO 197 
+LAZY
+R 4 
+END_LAZY TEMPO 197 
+LAZY
+R 4 
+END_LAZY TEMPO 195 
+LAZY
+R 4 
+END_LAZY TEMPO 195 
+LAZY
+R 4 ;m300
+END_LAZY TEMPO 192 
+LAZY
+R 4 
+END_LAZY TEMPO 192 
+LAZY
+R 4 
+END_LAZY TEMPO 187 
+LAZY
+R 4 
+END_LAZY TEMPO 187 
+LAZY
+R 4 ;m301
+END_LAZY TEMPO 179 
+LAZY
+R 4 
+END_LAZY TEMPO 179 
+LAZY
+R 4 
+END_LAZY TEMPO 166 
+LAZY
+R 4 
+END_LAZY TEMPO 160 
+LAZY
+R 4 ;m302
+
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m303
+R 1 ;m304
+
+END_LAZY TEMPO 216 
+LAZY
+R 4 
+END_LAZY TEMPO 215 
+LAZY
+R 4 
+END_LAZY TEMPO 214 
+LAZY
+R 4 
+END_LAZY TEMPO 213 
+LAZY
+R 4 ;m305
+END_LAZY TEMPO 211 
+LAZY
+R 4 
+END_LAZY TEMPO 208 
+LAZY
+R 4 
+END_LAZY TEMPO 203 
+LAZY
+R 4 
+END_LAZY TEMPO 195 
+LAZY
+R 4 ;m306
+
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m307
+R 1 ;m308
+R 1 ;m309
+
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m310
+R 2 
+END_LAZY TEMPO 242 
+LAZY
+R 2 ;m311
+R 1 ;m312
+END_LAZY TEMPO 216 
+LAZY
+R 1 ;m313
+R 1 ;m314
+R 1 ;m315 
+R 1 ;m316
+R 1 ;m317
+R 1 ;m318
+R 1 ;m319
+
+R 1 ;m320
+R 1 ;m321
+R 1 ;m322
+R 1 ;m323
+R 1 ;m324
+R 1 ;m325 
+R 1 ;m326
+R 1 ;m327
+R 1 ;m328
+R 1 ;m329
+
+R 1 ;m330
+R 1 ;m331
+R 1 ;m332
+R 1 ;m333
+END_LAZY TEMPO eval(116*2) 
+LAZY
+R 1 ;m334
+R 1 ;m335 
+R 1 ;m336
+R 1 ;m337
+R 1 ;m338
+END_LAZY TEMPO eval(108*2) 
+LAZY
+R 2 
+END_LAZY TEMPO eval(80*2) 
+LAZY
+R 2 ;m339
+END_LAZY TEMPO eval(65*2) 
+LAZY
+R 2 
+R 2 ;m340 real enough for me
+END_LAZY TEMPO eval((116*2*3)/5) 
+LAZY
+R 1 ; the real m340
+R 1
+
+END_LAZY
+
+END_OF_TRACK

@@ -1,0 +1,517 @@
+; $Author: janzent $
+; $Log: schuqnt4pr.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.19  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.18  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.17  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.16  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.15  2003/09/04 23:54:50  root
+; legatissimo m100,104,108, change tempo rush there
+;
+; Revision 1.14  2003/07/12 01:01:36  root
+; adj tempos, pause 224
+;
+; Revision 1.13  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/05/26 20:47:00  root
+; staccato articulation
+;
+; Revision 1.10  2003/05/05 00:36:38  root
+; pedals dynaics
+;
+; Revision 1.9  2003/04/20 16:11:51  root
+; done before coach
+;
+; Revision 1.8  2003/04/18 11:10:02  root
+; fix B2 in 310 caused rhythm to be off
+;
+; Revision 1.7  2003/04/18 10:55:37  root
+; damper and fixes
+;
+; Revision 1.6  2003/04/18 10:44:53  root
+; fixed mistakes
+;
+; Revision 1.5  2003/04/15 00:51:52  root
+; some dynamics roughed in
+; d
+;
+; Revision 1.4  2003/04/13 22:04:19  root
+; draft done, rhythm ok
+;
+; Revision 1.3  2003/04/13 00:56:07  root
+; started
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4pr.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4pr.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Piano Right Hand
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano Right Hand
+INSTRUMENT Piano Right
+PROGRAM midi_channel_piano AcousticGrandPiano
+pan(midi_channel_piano,0)
+LAZY
+chan midi_channel_piano
+ff
+R 1 ;m000
+R 2 stacoct4(c,4) stacoct4(eb,4) ; m001
+fff oct2(g,4) ff stacoct4(c,4) stacoct4(eb,4) ; m002
+ff stacoct4(d,4) stacoct4(g,3) stacoct4(a,3) stacoct4(c,4) ; m003
+stacoct4(bb,3) stacoct4(g,3) stacoct4(d,3) stacoct4(f#,3) ; m004
+ff oct2(g,3) ff stacoct4(c,4) stacoct4(eb,4) ; m005
+fff oct2(g,4) ff stacoct4(c,4) stacoct4(eb,4) ; m006
+stacoct4(d,4) stacoct4(g,3) stacoct4(a,3) stacoct4(c,4) ; m007
+stacoct4(Bb,3) stacoct4(g,3) stacoct4(d,3) stacoct4(F#,3) ; m008
+oct2(g,3) stacoct4(eb,4) stacoct4(g,4) ; m009
+fff oct4(eb,4) ff stacoct4(d,4) stacoct4(d,4) stacoct4(f,4) ; m010
+fff oct4(f,4) ff stacoct4(eb,4) stacoct4(c,4) stacoct4(eb,4) ; m011
+fff oct4(c,4) ff stacoct4(b,3) stacoct4(b,3) stacoct4(d,4) ; m012
+fff oct4(d,4) ff stacoct4(c,4) stacoct4(c,4) stacoct4(eb,4) ; m013
+G3 D4 G4 Bb4 D5 G5 2 stacoct4(c,4) stacoct4(eb,4) ; m014
+stacoct4(d,4) stacoct4(g,3) stacoct4(a,3) stacoct4(c,4) ; m015
+stacoct4(bb,3) stacoct4(g,3) stacoct4(d,3) stacoct4(f#,3) ; m016
+fff G2 D3 G3 Bb3 D4 G4 2 ff stacoct4(c,3) stacoct4(eb,3) ; m017
+fff G2    G3 Bb3 D4 G4 2 ff stacoct4(c,3) stacoct4(eb,3) ; m018
+stacoct4(d,3) stacoct4(g,2) stacoct4(a,2) stacoct4(c,3) ; m019
+stacoct4(bb,2) stacoct4(g,2) stacoct4(d,2) stacoct4(f#,2) ; m020
+forte oct2(g,2) oct4(Bb,2) oct4(c,3) ; m021
+oct4(d,3) oct4(eb,3) oct4(c,3) oct4(d,3) ; m022
+oct4(eb,3) oct4(f,3) damperdown oct4(d,3) oct4(eb,3) ; m023
+oct4(f,3) oct4(g,3) oct4(ab,3) oct4(bb,3) damperup ; m024
+ff oct4(ab,3)  oct4(g,3) ff oct4(bb,3) forte oct4(c,4) ; m025
+oct4(d,4) oct4(eb,4) ff oct4(c,4) forte oct4(d,4) ; m026
+oct4(Eb,4) oct4(f,4) ff damperdown oct4(d,4) forte oct4(eb,4) ; m027
+oct4(f,4) oct4(g,4) oct4(ab,4) oct4(bb,4) damperup ; m028
+ff oct4(ab,4) oct4(g,4) G4 Bb4 D5 G5 Bb5 D6 4 R 4 ; m029
+D4 A4 F5 A5 D6 4 R 4 G4 Bb4 D5 G5 Bb5 4 R 4 ; m030
+D4 A4 D5 F5 A5 4 R 4 G3 G4 G5 Bb4 E5 4 R 4 ; m031
+A3 D4 F4 A4 D5 D6 4 R 4 A3 C#4 E4 G4 A4 C#5 E5 4 R 4 ; m032
+D3 D4 D5 A3 A4 F4 4 R 4 G3 G4 Bb3 Bb4 D4 D5 4 R 4 ; m033
+D3 D4 D5 A3 A4 F4 4 R 4 G3 G4 Bb3 Bb4 D4 4 R 4 ; m034
+D3 D4 A3 A4 F4 4 R 4 G2 G3 G4 Bb3 E4 4 R 4 ; m035
+A2 A3 F3 F4 D4 4 R 4 A2 A3 E3 E4 G3 C#4 4 R 4 ; m036
+D2 D3 D4 A2 A3 F3 4 R 4 ff oct4(f,3) forte oct4(g,3) ; m037
+oct4(a,3) oct4(Bb,3) ff oct4(g,3) forte oct4(a,3) ; m038
+oct4(Bb,3) oct4(c,4) ff oct4(a,3) forte oct4(Bb,3) ; m039
+oct4(c,4) oct4(d,4) oct4(Eb,4) oct4(f,4) ; m040
+oct4(Eb,4) oct8(D,4) oct16(Bb,3) oct16(c,4) ff oct4(d,4) oct4(c,4) ; m041
+oct4(Bb,3) oct4(g,3) oct4(c,3) oct4(c#,3) ; m042
+D3 7/16 R 16 p stac8(D4) stac8(E4) stac8(F#4) stac8(G4) ; m043
+; double bar one sharp
+stac8(E4) stac8(F#4) stac8(G4) stac8(A4) stac8(F#4) stac8(G4) stac8(A4) stac8(B4) ; m044
+stac8(G4) stac8(A4) stac8(B4) stac8(C5) B4 8 C5 8 B4 8 C5 8 ; m045
+mf B4 8 p C5 8 B4 8 G5 8 mf A4 8 p B4 8 A4 8 F#5 8 ; m046
+mf G4 8 A4 8 G4 8 E5 8 caesura8 p stac8(G4) stac8(A4) stac8(B4) stac8(C5) ;m047
+stac8(A4) stac8(B4) stac8(C5) stac8(D5) stac8(B4) stac8(C5) stac8(D5) stac8(E5) ; m048
+stac8(C5) stac8(D5) stac8(E5) stac8(F5) E5 8 F5 8 E5 8 F5 8 ; m049
+mf E5 8 p F5 8 E5 8 C6 8 mf D5 8 p E5 8 D5 8 B5 8 ; m050
+C5 8 D5 8 C5 8 A5 8 damperdown D5 8 E5 8 D5 8 E5 8 ; m051
+D5 8 E5 8 D5 8 D6 8 damperup D5 8 E5 8 D5 8 D6 8  ; m052
+D5 8 E5 8 D5 8 D6 8 D5 8 E5 8 D5 8 E5 8 ; m053
+D5 8 E5 8 D5 8 D6 8 D5 8 E5 8 D5 8 D6 8 ; m054
+D5 8 E5 8 D5 8 D6 8 E5 8 F5 8 E5 8 F5 8 ; m055
+E5 8 F5 8 E5 8 E6 8 E5 8 F5 8 E5 8 E6 8  ; m056
+E5 8 F5 8 E5 8 E6 8 G4 8 G5 8 A4 8 A5 8 ; m057
+G4 8 G5 8 F4 8 F5 8 E4 8 E5 8 D#4 8 D#5 8 ; m058
+brokenoct8(f,4) brokenoct8(e,4) brokenoct8(d,4) brokenoct8(c,4) ; m059
+brokenoct8(b,3) brokenoct8(b,3) brokenoct8(c,4) brokenoct8(d,4) ; m060
+pp brokenoct8(c,4) brokenoct8(c,4) brokenoct8(e,4) brokenoct8(f,4)  ; m061
+brokenoct8(e,4) brokenoct8(d,4) brokenoct8(c,4) brokenoct8(b,3) ; m062
+brokenoct8(d,4) brokenoct8(c,4) brokenoct8(b,3) brokenoct8(a,3) ; m063
+brokenoct8(G#,3) brokenoct8(G#,3) brokenoct8(a,3) brokenoct8(b,3) ; m064
+brokenoct8(a,3) brokenoct8(a,3) damperdown D5 8 E5 8 D5 8 D6 8 ; m065
+D5 8 E5 8 D5 8 D6 8 damperup D5 8 E5 8 D5 8 D6 8 ; m066
+D5 8 E5 8 D5 8 D6 8 Bb4 8 C5 8 Bb4 8 Bb5 8  ; m067
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m068
+Bb4 8 C5 8 Bb4 8 Bb5 8 brokenoct8(g,4) brokenoct8(a,4) ; m069
+brokenoct8(Bb,4) brokenoct8(b,4) p brokenoct8(c,5) brokenoct8(c#,5) ; m070
+vel 58 brokenoct8(d,5) brokenoct8(e,5) vel 66 brokenoct8(f#,5) brokenoct8(g,5) ; m071
+vel 74 brokenoct8(a,5) brokenoct8(b,5) vel 82 brokenoct8(c,6) brokenoct8(d,6) ; m072
+brokenoct8(c,6) brokenoct8(b,5) forte brokenoct8(g,4) brokenoct8(a,4) ; m073
+brokenoct8(Bb,4) brokenoct8(b,4) brokenoct8(c,5) brokenoct8(c#,5) ; m074
+brokenoct8(d,5) brokenoct8(e,5) brokenoct8(f#,5) brokenoct8(g,5) ; m075
+brokenoct8(a,5) brokenoct8(b,5) brokenoct8(c,6) brokenoct8(d,6) ; m076
+ff G5 G6 4 R 4 forte stacoct4(e,4) stacoct4(g,4)   ; m077
+B3 F#4 B4 D5 F#5 B5 2 stacoct4(e,4) stacoct4(g,4) ; m078
+stacoct4(f#,4) stacoct4(b,3) stacoct4(c#,4) stacoct4(e,4) ; m079
+stacoct4(d,4) stacoct4(b,3) stacoct4(f#,3) stacoct4(a#,3) ; m080
+mf B2 B3 B4 D4 2 p stacoct4(e,3) stacoct4(g,3) ; m081
+B2 B3 B4 D4 F#4 2 vel 83 stacoct4(e,3) stacoct4(g,3) ; m082
+stacoct4(f#,3) stacoct4(b,2) stacoct4(c#,3) stacoct4(e,3) ; m083
+stacoct4(d,3) stacoct4(b,2) stacoct4(f#,2) stacoct4(a#,2) ; m084
+stacoct4(b,2) R 4 E2 E3 B2 B3 3/2 ; m085 add the g# later
+; m086
+B1 B2 B3 D#3 F#3 2 B2 D#3 F#3 6 B3 D#3 F#3 6 B3 D#4 F#3 6 ; m087
+F#2 F#3 F#4 B3 D#4 2 F#2 F#3 F#4 A#3 C#4 2 ; m088
+B2 B3 F#3 F#4 D#4 2 pp E2 E3 B2 3/2 ; m089
+; m090
+B1 B2 D#3 F#3 2 B2 D#3 F#3 6 D#3 F#3 B3 6 F#3 B3 D#4 6 ; m091
+F#2 F#3 F#4 B3 D#4 2 F#2 F#3 F#4 A#3 C#4 2 ; m092
+B2 B3 F#3 F#4 D#4 2 R 2 ; m093
+R 1 ; m094
+R 1 ; m095 four sharps
+R 2 oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) ; m096
+oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) ; m097
+oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) ; m098
+oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) oct8(f#,1) oct8(g#,1) oct8(f#,1) oct8(c#,2) ; m099
+F#1 F#2 8. R 16 A#1 A#2 8. R 16 C#2 C#3 8. R 16 E2 E3 8. R 16 ; m100
+oct4(B,1) R 4 R 2 ; m101
+R 1 ; m102
+R 2 pp oct8(G#,1) oct8(A#,1) oct8(G#,1) oct8(D#,2) ; m103
+G#1 G#2 8. R 16 C2 C3 8. R 16 D#2 D#3 8. R 16 F#2 F#3 8. R 16 ; m104
+oct4(C#,2) R 4 R 2 ; m105
+R 1 ; m106
+R 1 ; m107
+p F#2 8. R 16 A#2 8. R 16 C#3 8. R 16 E3 8. R 16 ;  m108
+R 1 ; m109
+pp F#1 8. R 16 A#1 8. R 16 C#2 8. R 16 E2 8. R 16 ; m110
+damperdown p C4 D#4 F#4 A4 14/4 ; m111
+; m112
+; m113
+damperup R 2 ; m114
+damperdown p B2 B3 D#4 F#4 A4 2 R 2 ; m115
+B3 F#4 A4 2 damperup R 2 ; m116
+damperb2 B3 E4 G#4 2 R 2 ; m117
+B3 E4 G#4 2 damperup R 2 ; m118
+damperdown B2 B3 D#4 F#4 A4 2 R 2 ; m119
+B3 F#4 A4 2 damperup R 2 ; m120
+damperdown B2 B3 E4 G#4 2 R 2 ; m121
+B3 E4 G#4 2 damperup R 2 ; m122
+damperdown D#2 D#3 G3 C#4 D#4 2 R 2 ; m123
+D#3 G3 C#4 D#4 2 damperup R 2 ; m124
+damperdown D#2 D#3 D#4 G#3 B3 2 R 2 ; m125
+D#3 G#3 B3 D#4 2 damperup R 2 ; m126
+damperdown D#2 D#3 D#4 G3 C#4 2 R 2 ; m127
+D#3 D#4 G3 C#4 2 damperup R 2 ; m128
+damperdown D#2 D#3 D#4 G#3 B3 2 R 2 ; m129
+D#3 D#4 G#3 B3 2 damperup D#3 D#4 8 R 8 E3 E4 8 R 8 ; m130
+D#3 D#4 8 R 8 C#3 C#4 8 R 8 B2 B3 8 R 8 A#2 A#3 8 R 8 ; m131
+C#3 C#4 8 R 8 B2 B3 8 R 8 D#3 D#4 8 R 8 E3 E4 8 R 8 ; m132
+p D#3 D#4 8 R 8 C#3 C#4 8 R 8 vel 60 B2 B3 8 R 8 A#2 A#3 8 R 8 ; m133
+vel 70 B2 B3 8 R 8 A#2 A#3 8 R 8 vel 80 D#3 D#4 8 R 8 E3 E4 8 R 8 ; m134
+vel 90 D#3 D#4 8 R 8 C#3 C#4 8 R 8 vel 100 B2 B3 8 R 8 A#2 A#3 8 R 8 ; m135
+B2 B3 8 R 8 A#2 A#3 8 R 8 ff G#3 G#4 C#4 C#5 4 G#3 G#4 E4 E5 G#4 4 ; m136
+fff G#3 G#4 G#5 D#4 D#5 B4 2 ff stacoct4(C#,4) stacoct4(e,4) ; m137
+D#5 D#4 4 stacoct4(g#,3) stacoct4(a#,3) stacoct4(c#,4) ; m138
+B3 B4 4 stacoct4(g#,3) stacoct4(d#,3) stacoct4(g,3) ; m139
+oct2(g#,3) G#3 G#4 C#4 C#5 4 G#3 G#4 E4 E5 G#4 4 ; m140
+fff G#3 G#4 G#5 D#4 D#5 B4 2 ff stacoct4(C#,4) stacoct4(e,4) ; m141
+D#4 D#5 4 stacoct4(g#,3) stacoct4(a#,3) stacoct4(c#,4) ; m142
+B3 B4 4 stacoct4(g#,3) stacoct4(d#,3) stacoct4(g,3) ; m143
+oct2(G#,3) stacoct4(e,4) stacoct4(g#,4) ; m144
+fff oct4(e,4) ff stacoct4(d#,4) stacoct4(b,3) stacoct4(f#,4) ; m145
+fff oct4(F#,4) ff stacoct4(e,4) stacoct4(c#,4) stacoct4(e,4) ; m146
+fff oct4(c#,4) ff stacoct4(c,4) stacoct4(g#,3) stacoct4(d#,4) ; m147
+fff oct4(d#,4) ff stacoct4(c#,4) stacoct34(G#,3) stacoct34(b,3) ; m148
+fff oct32(d#,4) ff stacoct34(g#,3) stacoct34(b,3) ;m149
+stacoct34(a#,3) stacoct34(d#,3) stacoct34(f,3) stacoct34(g#,3) ; m150
+stacoct34(f#,3) stacoct34(d#,3) stacoct34(a#,2) stacoct34(d,3) ; m151
+oct32(d#,3) stacoct34(g#,2) stacoct34(b,2) ; m152
+fff oct32(d#,3) ff stacoct34(g#,2) stacoct34(b,2) ; m153
+stacoct34(a#,2) stacoct34(d#,2) stacoct34(f,2) stacoct34(g#,2) ; m154
+stacoct34(f#,2) stacoct34(D#,2) stacoct34(a#,1) stacoct34(d,2) ; m155
+forte oct32(d#,2) oct4(f#,2) oct4(g#,2) ; m156
+oct4(a#,2) oct4(b,2) oct4(g#,2) oct4(a#,2) ; m157
+oct4(b,2) oct4(c#,3) oct4(a#,2) oct4(b,2) ; m158
+oct4(c#,3) oct4(d#,3) oct4(e,3) oct4(f#,3) ; m159
+ff oct4(e,3) forte oct4(D#,3) oct4(f#,3) oct4(g#,3) ; m160
+oct4(a#,3) oct4(b,3) oct4(g#,3) oct4(a#,3) ; m161
+oct4(b,3) oct4(c#,4) oct4(a#,3) oct4(b,3) ; m162
+oct4(c#,4) oct4(d#,4) oct4(e,4) oct4(f#,4) ; m163
+oct4(e,4) oct4(d#,4) mp Eb4 Eb5 Gb4 Gb5 Bb4 Bb5 4 R 4 ; m164 3 flats
+Bb3 F4 Bb4 Db5 F5 Bb5 4 R 4 Bb3 Eb4 Gb4 Bb4 Eb5 Gb5 4 R 4 ; m165
+Bb3 Bb4 Db4 Db5 F4 F5 4 R 4 Eb3 Eb4 Eb5 Bb3 Bb4 Gb4 4 R 4 ; m166
+F3 Bb3 Db4 F4 Bb4 Db5 4 R 4 F3 F4 Eb4 A4 4 R 4 ; m167
+Bb3 F4 Db4 Bb4 4 R 4 Eb3 Bb3 Eb4 Gb4 Gb4 4 R 4 ; m168
+Bb2 Bb3 Bb4 Db4 F4 4 R 4 Eb3 Bb3 Eb4 Gb4 Bb4 4 R 4 ; m169
+Bb2 Bb3 Bb4 Db4 F4 4 R 4 Eb2 Eb3 Eb4 Eb3 Gb4 4 R 4 ; m170
+F2 F3 F4 Bb3 Db4 4 R 4 F2 F3 F4 A3 C4 4 R 4 ; m171
+Bb2 Bb3 2 ff oct4(db,3) forte oct4(eb,3) ; m172
+oct4(f,3) oct4(gb,3) ff oct4(eb,3) forte oct4(f,3) ; m173
+oct4(gb,3) oct4(ab,3) ff oct4(f,3) forte oct4(gb,3) ; m174
+oct4(ab,3) oct4(bb,3) oct4(b,3) oct4(db,4) ; m175
+oct4(b,3) oct8(bb,3) graces(Gb5,Ab5) ff oct34(bb,3) forte  oct34(ab,3) ; m176
+oct34(gb,3) oct34(eb,3) oct34(ab,2) oct34(a,2) ; m177
+oct32(bb,2) p stac8(Bb4) stac8(C5) stac8(D5) stac8(Eb5) ; m178
+stac8(C5) stac8(D5) stac8(Eb5) stac8(F5) stac8(D5) stac8(Eb5) stac8(F5) stac8(G5) ; m179
+stac8(Eb5) stac8(F5) stac8(G5) stac8(Ab5) G5 8 Ab5 8 G5 8 Ab5 8 ; m180
+mf G5 8 p Ab5 8 G5 8 Eb6 8 mf F5 8 p G5 8 F5 8 D6 8 ; m181
+mf Eb5 8 p F5 8 Eb5 8 C6 8 stac8(Eb5) stac8(F5) stac8(G5) stac8(Ab5) ; m182
+stac8(F5) stac8(G5) stac8(Ab5) stac8(Bb5) stac8(G5) stac8(Ab5) stac8(Bb5) stac8(C6) ; m183
+stac8(Ab5) stac8(Bb5) stac8(C6) stac8(Db6) C5 8 Db5 8 C5 8 Db5 8 ; m184
+mf C5 8 p Db5 8 C5 8 Ab5 8 mf Bb4 8 p C5 8 Bb4 8 G5 8 ; m185
+mf Ab4 8 p Bb4 8 Ab4 8 F5 8 Bb4 8 C5 8 Bb4 8 C5 8 ; m186
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m187
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 C5 8  ; m188
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m189
+Bb4 8 C5 8 Bb4 8 Bb5 8 C5 8 Db5 8 C5 8 Db5 8 ; m190
+C5 8 Db5 8 C5 8 C6 8 C5 8 Db5 8 C5 8 C6 8 ; m191
+C5 8 Db5 8 C5 8 C6 8 brokenoct8(Eb,5) brokenoct8(f,5); m192
+brokenoct8(Eb,5) brokenoct8(Db,5) brokenoct8(C,5) brokenoct8(B,4) ; m193
+brokenoct8(Db,5) brokenoct8(C,5) forte brokenoct8(Bb,4) brokenoct8(Ab,4) ; m194
+brokenoct8(G,4) brokenoct8(G,4) brokenoct8(Ab,4) brokenoct8(Bb,4) ; m195
+brokenoct8(Ab,4) brokenoct8(Ab,4) brokenoct8(C,5) brokenoct8(Db,5) ; m196
+brokenoct8(c,5) brokenoct8(Bb,4) brokenoct8(Ab,4) brokenoct8(g,4) ; m197
+brokenoct8(Bb,4) brokenoct8(Ab,4) brokenoct8(G,4) brokenoct8(F,4) ; m198
+brokenoct8(E,4) brokenoct8(E,4) brokenoct8(F,4) brokenoct8(G,4) ; m199
+brokenoct8(F,4) brokenoct8(F,4) p Bb4 8 C5 8 Bb4 8 Bb5 8 ; m200
+Bb4 8 C5 8 Bb4 8 Bb5 8 Bb4 8 C5 8 Bb4 8 Bb5 8 ; m201
+Bb4 8 C5 8 Bb4 8 Bb5 8 Gb4 8 Ab4 8 Gb4 8 Gb5 8 ; m202
+Gb4 8 Ab4 8 Gb4 8 Gb5 8 Gb4 8 Ab4 8 Gb4 8 Gb5 8 ; m203
+Gb4 8 Ab4 8 Gb4 8 Gb5 8 ff brokenoct8(Eb,4) brokenoct8(F,4) ; m204
+brokenoct8(F#,4) brokenoct8(G,4) brokenoct8(Ab,4) brokenoct8(a,4) ; m205
+brokenoct8(Bb,4) brokenoct8(c,5) brokenoct8(d,5) brokenoct8(Eb,5) ; m206
+brokenoct8(f,5) brokenoct8(g,5) brokenoct8(Ab,5) brokenoct8(Bb,5) ; m207
+brokenoct8(Ab,5) brokenoct8(g,5) forte brokenoct8(Eb,4) brokenoct8(F,4) ; m208
+brokenoct8(F#,4) brokenoct8(G,4) brokenoct8(Ab,4) brokenoct8(a,4) ; m209
+brokenoct8(Bb,4) brokenoct8(c,5) brokenoct8(d,5) brokenoct8(Eb,5) ; m210
+brokenoct8(f,5) brokenoct8(g,5) brokenoct8(Ab,5) brokenoct8(Bb,5) ; m211
+Eb5 Eb6 4 R 4 forte stacoct4(c,4) stacoct4(eb,4) ; m212
+ff oct2(g,4) forte stacoct4(c,4) stacoct4(eb,4) ; m213
+stacoct4(d,4) stacoct4(g,3) stacoct4(a,3) stacoct4(c,4) ; m214
+stacoct4(Bb,3) stacoct4(g,3) stacoct4(d,3) stacoct4(F#,3) ; m215
+oct2(g,3) stacoct4(c,4) stacoct4(Eb,4) ; m216
+ff oct2(g,3) forte stacoct4(c,3) stacoct4(eb,3) ; m217
+stacoct4(d,3) stacoct4(g,2) stacoct4(a,2) stacoct4(c,3) ; m218
+stacoct4(bb,2) stacoct4(g,2) stacoct4(d,2) stacoct4(f#,2) ; m219
+oct2(g,2) ff oct34(Bb,1) oct34(d,2) ; m220
+fff oct32(Eb,2) ff oct34(Bb,1) oct34(d,2) ; m221
+oct34(Eb,2) oct34(g,2) oct34(Bb,2) oct34(d,3) ; m222
+oct34(Eb,3) oct34(g,3) oct34(Bb,3) oct34(d,4) ; m223
+Eb4 Eb5 Eb6 3/8 R 8 mp R 8 Eb5 4 C6 4 ; m224
+Bb5 4 D5 4 Eb5 4 G5 4 ; m225
+F5 4 C5 4 Eb5 4 C6 4 ; m226
+Bb5 4 D5 4 Eb5 4 G5 4 ; m227
+F5 4 C5 4 Eb5 4 C6 4 ; m228
+Bb5 4 D5 4 F5 4 D6 4 ; m229
+Eb6 4 Eb5 4 C6 4 Eb5 4 ; m230
+Bb5 4 Eb5 4 Bb5 4 D5 4 ; m231
+Bb5 4 Eb5 4 Eb5 4 C6 4 ; m232
+Bb5 4 D5 4 Eb5 4 G5 4 ; m233
+F5 4 C5 4 Eb5 4 C6 4 ; m234
+p Bb5 4 D5 4 Eb5 4 G5 4 ; m235
+vel 58 F5 4 C5 4 Eb5 4 C6 4 ; m236
+vel 66 Bb5 4 D5 4 F5 4 D6 4 ; m237
+vel 74 Eb6 4 Eb5 4 C6 4 Eb5 4 ; m238
+vel 82 Bb5 4 Eb5 4 Bb5 4 D5 4 ; m239
+forte Bb5 4 Db5 4 Bb5 4 Db5 4 ; m240
+Bb5 4 C5 4 Ab5 4 B4 4 ; m241
+Ab5 4 Bb4 4 G5 4 Bb4 4 ; m242
+G5 4 Ab4 4 F5 4 Ab4 4 ; m243
+F5 4 G4 4 Eb5 4 G4 4 ; m244
+Eb5 4 Ab4 4 Eb5 4 Bb4 4 ; m245
+Eb5 4 Bb4 4 Eb5 4 Ab4 4 ; m246
+Bb4 4 Eb4 4 Bb4 4 D4 8 ; m247
+stacoct4(Eb,3) R 4 p oct8(C,4) R 8 oct8(Eb,4) R 8 ; m248
+mf oct2(G,4) C5 4 Eb5 4 ; m249
+D5 4 G4 4 A4 4 C5 4 ; m250
+Bb4 4 G4 4 D4 4 F#4 4 ; m251
+G4 2 mp stac8(G5) mf stac8(Bb5) mp stac8(A5) stac8(G5) ; m252
+stac8(G5) mf stac8(F5) mp stac8(E5) stac8(D5) stac8(F5) mf stac8(E5) mp stac8(D5) stac8(C#5) ; m253
+stac8(D5) mf stac8(D5) mp stac8(E5) stac8(F5) stac8(D5) mf stac8(C#5) mp stac8(B4) stac8(C#5) ; m254
+stac8(D5) mf stac8(A4) mp stac8(Bb4) stac8(A4) stac8(A4) mf stac8(G4) mp stac8(F4) stac8(E4) ; m255
+stac8(G4) mf stac8(F4) mp stac8(E4) stac8(D4) R 2 ; m256
+forte stac4(C5) stac4(Eb5) F5 3/4 ; m257
+Eb5 2 D5 4 ; m258
+forte stacoct4(C,4) stacoct4(Eb,4) ff oct2(G,4) ; m259
+forte stacoct4(c,4) stacoct4(Eb,4) stacoct4(d,4) stacoct4(g,3) ; m260
+stacoct4(a,3) stacoct4(c,4) stacoct4(Bb,3) stacoct4(G,3) ; m261
+stacoct4(D,3) stacoct4(F#,3) G4 4 B4 4  ; m262
+forte C5 2 F4 4 Ab4 4 ; m263
+G4 4 C4 4 D4 4 F4 4 ; m264
+Eb4 4 C4 Eb2 Eb3 4 G3 F2 F3 4 B3 G2 G3 4 ; m265
+Ab2 Ab3 C4 4 A1 A2 Eb4 4 Bb1 Bb2 D4 4 D2 D3 Bb3 F4 4 ; m266
+ff Eb2 Eb3 Bb3 G4 2 forte C4 Eb4 Ab4 2 ; m267
+Bb3 Eb4 G4 2 Ab3 C4 F4 2 ; m268
+ff G3 C4 Eb4 2 forte Ab3 C4 F4 2 ; m269
+G3 C4 Eb4 2 Db4 Db5 F4 Ab4 2 ; m270
+C4 C5 Eb4 Ab4 2 Db4 Db5 F4 Ab4 2 ; m271
+C4 C5 Eb4 Ab4 2 F#2 E4 A4 C5 2 ; m272
+ff G2 G3 G4 D4 B4 2 forte F#2 E4 A4 C5 2 ; m273
+ff G2 G3 G4 D4 B4 2 caesura8 p Bb3 Bb4 8 R 8 C4 C5 8 R 8 ; m274
+damperdown Bb2 Bb3 Bb4 D4 Ab4 2 Ab3 Bb3 F4 Ab4 Bb4 F5 2 ; m275
+stac4(`Ab3 Bb3 F4 Ab4 Bb4 F5') stac4(`G3 Bb3 Eb4 G4 Bb4 Eb5') damperup Bb3 D4 Bb4 D5 2 ; m276
+G3 G4 Bb3 Bb4 Eb4 Eb5 2 Bb3 Bb4 Eb4 Eb5 G4 G5 2 ; m277
+G3 G4 Bb3 Bb4 Eb4 Eb5 2 Eb3 Eb4 G3 G4 Bb3 Bb4 2 ; m278
+damperdown Bb2 Bb3 D3 D4 Ab4 2 Ab3 Bb3 F4 Ab4 Bb4 F5 2 ; m279
+stac4(`Ab3 Bb3 F4 Ab4 Bb4 F5') stac4(`G3 Bb3 Eb4 G4 Bb4 Eb5') damperup Bb3 D4 Bb4 D5 2 ; m280
+G3 Bb3 Eb4 G4 Bb4 Eb5 2 G5 Bb3 Eb4 G4 Bb4 Eb5 2 ; m281
+G3 Bb3 Eb4 G4 Bb4 Eb5 2 G3 Bb3 Eb4 G4 Bb4 Eb3 2 ; m282
+damperdown Eb2 Eb3 Eb4 G3 Db4 2 Db3 Eb3 Bb3 Db4 Eb4 Bb4 2 ; m283
+stac4(`Db3 Eb3 Bb3 Db4 Eb4 Bb4') stac4(`C3 Eb3 Ab3 C4 Eb4 Ab4') damperup Eb3 G3 Eb4 G4 2  ; m284
+C3 Eb3 Ab3 C4 Eb4 Ab4 2 C5 Eb3 Ab3 C4 Eb4 Ab4 2 ; m285
+C3 Eb3 Ab3 C4 Eb4 Ab4 2 forte C4 C5 Eb4 Ab4 2 ; m286
+Bb3 Bb4 Eb4 G4 2 Ab3 C4 F4 Ab4 2 ; m287
+C3 C4 G3 G4 Eb4 2 Ab2 Eb3 F3 C4 Eb4 F4 4 A2 Eb3 F#3 C4 Eb4 F#4 4 ; m288
+Bb2 Eb3 G3 Bb3 Eb4 G4 4 C3 Eb3 Ab3 C4 Eb4 Ab4 4 Ab2 Eb3 F3 C3 Eb4 F4 4 Bb2 F3 Ab3 D4 F4 Bb4 4 ; m289
+Eb3 G3 Bb3 Eb4 G4 2 Eb4 G4 C5 Eb5 2 ; m290
+D4 G4 Bb4 D5 2 C4 C5 Eb4 Ab4 2 ; m291
+Eb2 Eb3 Eb4 Bb3 G4 Bb4 2 p Ab2 Eb3 F3 C4 Eb4 F4 4 A2 Eb3 F#3 C4 Eb4 F#4 4 ; m292
+vel 58 Bb2 Eb3 G3 Bb3 Eb4 G4 4 C3 Eb3 Ab3 C4 Eb4 Ab4 4 Bb2 Eb3 G3 Db4 Eb4 G4 4 B2 Eb3 Ab3 Eb4 Ab4 4 ; m293
+vel 66 C3 Eb3 F#3 A3 Eb4 F#4 A4 4 Db3 Eb3 G3 Bb3 Eb4 G4 Bb4 4 C3 Eb3 Ab3 Eb4 Ab4 4 Db3 Ab3 Bb3 Db4 Ab4 Bb4 4 ; m294
+vel 74 D3 Ab3 B3 D4 Ab4 B4 4 Eb3 Ab3 C4 Eb4 Ab4 C5 4 D3 Ab3 Bb3 D4 Ab4 Bb4 4 Eb3 Ab3 C4 Eb4 Ab4 C5 4 ; m295
+vel 82 E3 Ab3 Bb3 C#4 E4 Ab4 Bb4 C#5 4 F3 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 4 F3 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 4 G3 Bb3 Eb4 G4 Bb4 Eb5 4   ; m296
+vel 90 G3 Bb3 C#4 E4 G4 Bb4 C#5 E5 4 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 F5 4 Bb3 D4 F4 Bb4 D5 F5 4 Bb3 Eb4 F#4 Bb4 Eb5 F#5 4 ; m297
+vel 95Bb3 E4 G4 Bb4 E5 G5 4 Bb3 F4 Ab4 Bb4 F5 Ab5 4 Bb3 F4 Ab4 Bb4 F5 Ab5 4 Bb3 F#4 A4 Bb4 F#5 A5 4 ; m298
+vel 100 Bb3 G4 Bb4 G5 Bb5 4 F4 Ab4 B4 F5 Ab5 B5 4 Eb4 Gb4 A4 C5 Eb5 Gb5 A5 C6 4 F4 Ab4 Bb4 D5 F5 Ab5 Bb5 D6 4   ; m299
+ff Eb4 G4 Bb4 Eb5 G5 Bb5 Eb6 2 oct4(g,5) oct4(Bb,4) ; m300
+oct4(Eb,5) oct4(G,4) oct4(Bb,4) oct8(Eb,4) graces(`Ab4 Ab5',`Bb4 Bb5'); m301
+fff oct4(c,5) ff oct4(f,4) oct4(Ab,4) oct4(D,4) ; m302
+oct4(F,4) oct4(Ab,3) oct4(C,4) oct8(F,3) graces(`Bb3 Bb4',`C4 C5') ; m303
+fff oct4(Db,4) ff oct4(G,3) oct4(Bb,3) oct4(Db,3) ; m304
+oct4(F,3) oct4(Bb,2) oct4(Eb,3) oct4(G,2) ; m305
+fff oct4(Eb,3) ff oct4(Bb,2) fff oct4(C,3) ff oct4(Eb,2) ; m306
+fff oct4(Eb,3) ff oct4(Ab,2) fff oct4(b,2) ff oct4(Eb,2)  ;m307
+Bb2 Bb3 3/4 fff B2 B3 4 ; m308
+ff Bb2 Bb3 3/4 fff B2 B3 4 ; m309
+ff Bb2 Bb3 3/4 damperdown R 4  ; m310
+R 8 stac8(G3) R 8 stac8(Bb3) R 8 stac8(Eb4) R 8 stac8(G4) ; m311
+damperup damperdown fff Bb1 Bb2 G4 G5 Eb5 2 ff G3 Bb3 Eb4 G4 Bb4 2  ; m312
+damperup damperdown fff Ab1 Ab2 Bb4 F5 Bb5 2 ff F3 Bb3 D4 F4 Bb4 D5 2 ; m313
+damperup damperdown fff G1 G2 Eb5 Bb5 Eb6 2 ff G3 Bb3 Eb4 Bb4 Eb5 2 ; m314
+damperup  damperdown fff Gb1 Gb2 E5 E6 Bb5 E5 2 ff Gb3 Bb3 Db4 E4 E5 Bb4 Db5 2  ; m315
+damperup F3 Ab3 Bb3 D4 F4 Ab4 Bb4 D5 D6 2 Eb3 F3 Ab3 B3 Ab4 B4 Ab5 2 ; m316
+D3 F3 Ab3 Bb3 F4 Ab4 Bb4 F5 2 B2 Eb3 Ab3 Eb4 Eb5 Ab5 Eb6 2 ; m317
+fff damperdown Bb2 F3 Ab3 D4 D5 Ab5 Bb5 D6 2 damperup R 2 ; m318
+fff Eb4 1 ; m319
+fff Db5 1 ; m320
+fff C5 1 ; m321
+Ab5 1 ; m322
+G5 2 D5 2 ; m323
+Eb5 2 F5 2 ; m324
+D5 2 A4 2 ; m325
+Bb4 2/1 ; m326
+; m327
+A4 4 A4 4 Bb4 4 C5 4 ; m328
+D5 3/4 C5 4 ; m329
+Bb4 2 Bb4 1 ; m330
+Bb4 4 Ab4 4 ; m331
+G4 2 G4 4 Bb4 4 ; m332
+C5 2 G4 4 Bb4 4 ; m333
+Ab4 4 D4 4 Eb4 4 F4 4 ; m334
+G4 2 G4 4 F4 4 ; m335
+Eb4 4 D4 4 C4 4 F4 2 ; m336
+F4 4 F4 4 C4 4 ; m337
+Bb3 4 R 4 Bb3 4 D4 4 ; m338
+Eb4 2 Bb3 4 D4 4 ; m339
+C4 4 F3 4 G3 4 A3 4 ; m340
+Bb3 4 D4 4 F4 4 Eb4 4 ; m341
+D4 4 Bb3 4 C4 4 D4 4 ; m342
+Eb4 4 G4 4 Bb4 4 Ab4 4 ; m343
+G4 4 G4 4 Ab4 4 Bb4 4 ; m344
+C5 4 C5 4 D5 4 E5 4 ; m345
+F5 4 Ab4 4 Bb4 4 C5 4 ; m346
+D5 F#5 2 F#4 4 G4 4 ; m347
+A4 4 F#4 4 G4 4 A4 4 ; m348
+Bb4 2 A4 2 ; m349
+G4 2 F4 2 ; m350
+E4 2 E4 4 F4 4 ; m351
+G4 4 E4 4 F4 4 G4 4 ; m352
+Ab4 2 G4 2 ; m353
+F4 2 Eb4 2 ; m354
+D4 4 R 4 Bb2 4 C3 4  ; m355
+D3 4 Bb2 4 C3 4 D3 4 ; m356
+Eb3 4 G3 4 Bb3 4 Ab3 4 ; m357
+G3 4 Eb3 4 F3 4 G3 4 ; m358
+Ab3 2 Ab3 4 Bb3 4 ; m359
+C4 4 Ab3 4 Bb3 4 C4 4 ; m360
+D4 4 F4 4 Ab4 4 G4 4 ; m361
+F4 4 D4 4 Eb4 4 F4 4 ; m362
+D4 F4 2 G4 4 Ab4 4 ; m363
+Bb4 4 G4 4 Ab4 4 Bb4 4 ; m364
+C5 4 E5 4 G4 G5 4 F4 F5 4 ; m365
+E4 E5 C5 4 C4 C5 4 F4 C5 D5 4 G4 C5 E5 4 ; m366
+F4 F5 Ab4 C5 1 ; m367
+Eb5 F5 Ab5 Eb6 1 ; m368
+F5 Ab5 1 ; m369
+Bb2 Bb4 Bb5 G5 2 Ab4 Bb4 F5 Ab5 2 ; m370
+fff G4 Bb4 Eb5 G5 4 R 4 ff oct34(Bb,1) oct34(D,2) ; m371
+oct34(Eb,2) oct34(G,2) oct34(Bb,2) oct34(d,3) ; m372
+oct34(Eb,3) oct34(G,3) oct34(Bb,3) oct34(D,4) ; m373
+oct32(Eb,4) oct34(a,1) oct34(c,2) ; m374
+fff Eb2 Eb3 Eb4 Gb4 2 ff oct34(A,1) oct34(C,2)  ; m375
+oct34(Eb,2) oct34(Gb,2) oct34(A,2) oct34(C,3) ; m376
+oct34(Eb,2) oct34(Gb,3) oct34(A,3) oct34(C,4) ; m377
+Eb4 Eb5 Eb6 2 R 8 p Eb5 4 C6 4  ; m378
+Bb5 4 D5 4 Eb5 4 G5 4  ; m379
+F5 4 C5 4 Eb5 4 C6 4  ; m380
+Bb5 4 D5 4 Eb5 4 G5 4  ; m381
+F5 4 C5 4 Eb5 4 C6 4  ; m382
+Bb5 4 D5 4 F5 4 D6 4  ; m383
+Eb6 4 Eb5 4 C6 4 Eb5 4  ; m384
+Bb5 4 Eb5 4 Bb5 4 D5 4  ; m385
+Bb5 4 Eb5 4 Eb5 4 C6 4  ; m386
+Bb5 4 D5 4 Eb5 4 G5 4  ; m387
+F5 4 C5 4 Eb5 4 C6 4  ; m388
+Bb5 4 D5 4 Eb5 4 G5 4  ; m389
+vel 55 F5 4 C5 4 Eb5 4 C6 4  ; m390
+vel 60 Bb5 4 D5 4 F5 4 D6 4  ; m391
+vel 65 Eb6 4 Eb5 4 C6 4 Eb5 4  ; m392
+vel 70 Bb5 4 Eb5 4 Bb5 4 D5 4  ; m393
+vel 75 Bb5 4 Db5 4 Bb5 4 Db5 4  ; m394
+vel 80 Bb5 4 C5 4 Ab5 4 B4 4  ; m395
+vel 85 Ab5 4 Bb4 4 G5 4 Bb4 4  ; m396
+vel 90 G5 4 Ab4 4 F5 4 Ab4 4  ; m397
+vel 95 F5 4 G4 4 Eb5 4 G4 4  ; m398
+vel 100 Eb5 4 Ab4 4 Eb5 4 Bb4 4  ; m399
+vel 105 Eb5 4 Bb4 4 Eb5 4 Ab4 4  ; m400
+vel 110 Bb4 4 Eb4 4 Bb4 4 D4 8  ; m401
+ff Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m402
+Bb4 4 Ab4 D4 Bb3 4 Bb4 4 Ab4 D4 Bb3 4 ; m403
+Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m404
+Bb4 4 C4 Eb4 Ab4 4 Bb4 4 D4 F4 Ab4 4 ; m405
+Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m406
+Bb4 4 Ab4 D4 Bb3 4 Bb4 4 Ab4 D4 Bb3 4 ; m407
+Bb4 4 G4 Eb4 Bb3 4 Bb4 4 G4 Eb4 Bb3 4 ; m408
+Bb4 4 C4 Eb4 Ab4 4 Bb4 4 D4 F4 Ab4 4 ; m409
+Bb4 4 G4 Eb4 Bb3 4 fff oct4(Bb,3) ff oct4(Eb,4) ; m410
+oct4(c,4) oct4(ab,3) oct4(f,3) oct4(bb,3) ; m411
+oct4(g,3) oct4(Eb,3) fff oct4(Bb,3) ff oct4(Eb,4) ; m412
+oct4(c,4) oct4(ab,3) oct4(f,3) oct4(Bb,3) ; m413
+oct4(g,3) oct4(eb,3) fff oct4(Bb,3) ff oct4(eb,4) ; m414
+oct4(c,4) oct4(ab,3) oct4(f,3) oct4(bb,3) ; m415
+oct4(g,3) oct4(eb,3) oct4(c,3) oct4(f,3) ; m416
+oct4(d,3) oct4(bb,2) oct4(g,2) oct4(c,3) ; m417
+oct4(ab,2) oct4(f,2) oct4(d,2) oct4(g,2) ; m418
+oct4(Eb,2) oct4(C,2) oct4(Ab,1) oct8(c,2) R 8 ; m419
+Bb1 Bb2 4 R 4 Bb1 Bb2 F3 Ab3 Bb3 D5 4 R 4 ; m420
+Eb2 Eb3 Eb4 G3 Bb3 4 R 4 damperdown Bb2 Eb3 G3 4 Eb3 G3 Bb3 4 ; m421
+G3 Bb3 Eb4 4 Bb3 Eb4 G4 4 Eb4 G4 Bb4 4 G4 Bb4 Eb5 4 ; m422
+fff Bb4 Eb5 G5 4 ff G4 Bb4 Eb5 4 Eb4 G4 Bb4 4 Bb3 Eb4 G4 4 ; m423
+Eb4 G4 Bb4 4 Bb3 Eb4 G4 4 G3 Bb3 Eb4 4 Eb3 G3 Bb3 4 ; m424
+G3 Bb3 Eb4 4 damperup R 4 R 2 ; m425
+Eb2 Bb2 Eb3 G3 Bb3 Eb4 2 R 2 ; m426
+Eb2 Bb2 Eb3 G3 Bb3 Eb4 2 R 2 ; m427
+
+END_LAZY
+END_OF_TRACK
+

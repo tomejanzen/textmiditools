@@ -1,0 +1,538 @@
+; $Author: janzent $
+; $Log: schuqnt1pr.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.19  2003/11/02 23:04:42  root
+; done
+;
+; Revision 1.18  2003/08/10 16:22:31  root
+; fix rit into m9
+;
+; Revision 1.17  2003/08/01 23:30:18  root
+; completed acceneted piano figure, pause before last chord,
+;
+; Revision 1.16  2003/08/01 01:42:55  root
+; using long tones, decresc, cresc pretty much done. fixed first big cadence
+;
+; Revision 1.15  2003/07/13 21:28:57  root
+; 318 wrong ab should be a, final touches
+; before last lesson
+;
+; Revision 1.14  2003/07/06 22:04:34  root
+; lesson notes
+;
+; Revision 1.13  2003/07/03 01:15:07  root
+; jenny suggestsions to repeat
+;
+; Revision 1.12  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.11  2003/05/05 00:15:38  root
+; pedals and dynamics
+;
+; Revision 1.10  2003/05/03 00:50:01  root
+; fix opening crescendo
+;
+; Revision 1.9  2003/04/23 23:09:48  root
+; fixed 236
+;
+; Revision 1.8  2003/04/21 22:58:47  root
+; fix wrong note
+;
+; Revision 1.7  2003/02/22 03:06:11  root
+; re-center pan
+;
+; Revision 1.6  2003/02/19 01:48:37  root
+; final cleanup fix piano solos towards ends
+;
+; Revision 1.5  2003/02/17 23:23:31  root
+; done
+;
+; Revision 1.4  2003/02/17 22:41:11  root
+; cleanup
+;
+; Revision 1.3  2003/02/17 02:13:20  root
+; dynamics for whole movement roughed in
+;
+; Revision 1.2  2003/02/16 22:20:18  root
+; dyn ok to second repeat
+;
+; Revision 1.1  2003/02/16 20:24:54  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt1pr.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt1pr.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt1pr.txt,v $
+; $State: Exp $
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK Piano RH
+INSTRUMENT Piano
+PROGRAM midi_channel_piano AcousticGrandPiano
+pan(midi_channel_piano,0)
+LAZY
+chan midi_channel_piano
+ff
+R 1
+Eb4 Bb3 G3 2 G4 Bb4 Eb5 2 ;m001
+Ab4 C5 2 Ab4 D5 Ab5 2 ;m002
+G4 Eb5 G5 4 Ab4 Bb4 D5 4 Bb4 Eb5 4 F4 F5 D5 4 ;m003
+F4 Bb4 D5 4 Eb4 A4 4 F4 Bb4 4 F4 C5 4
+F4 2 F4 B4 F5 2
+F4 Ab4 Bb4 2 Ab4 Eb5 Ab5 2
+F4 Bb4 D5 4 C5 D5 C6 4 Bb4 Eb5 Bb5 4 G4 Eb5 4
+C5 Eb5 F5 2 Bb4 D5 G5 7/16 R 16  ;m8 rep
+Eb4 2 vel 50  Db5 2 ;m009
+vel 50 C5 2. vel 56 Bb4 4 ;m010
+R 1 ;m011
+vel 66 D5 2. vel 72 C5 4 ;m012
+vel 74 B4 2 vel 78 F5 2 ;m013
+vel 82  Eb5 G3 2. vel 88 D5 G3 4 ;m014
+vel 90 A3 2 vel 94 A3 2 ;m015
+vel 100  F5 D3 2. vel 107 Eb5 C3 4 ;m016
+vel 110  D5 Bb4 D4 2 Ab5 D5 Ab4 2
+G5 G4 Eb5 2 Eb6 Eb5 A5 2
+forte D5 Bb5 D6 4 A5 8 Eb5 8 Bb5 8 F5 8 C6 8 G5 8
+Ab5 8 C5 8 E5 8 Bb4 8 F5 8 C5 8 Eb5 8 A4 8
+Bb4 D5 2 ff D4 Ab3 Ab4 2 ;m21
+G4 G3 Eb4 2 Eb4 A4 Eb5 2
+forte D4 Bb4 D5 4 A4 8 Eb4 8 Bb4 8 F4 8 C5 8 G4 8
+Ab4 8 C4 8 E4 8 Bb3 8 F4 8 C4 8 Eb4 8 A3 8
+Bb3 D4 2 R 2
+ff Bb3 Bb4 2 Bb4 Bb5 4. R 8 ;m26
+p Gb4 2 Gb5 2
+Eb5 2. B4 4
+Ab4 4 Bb4 4 mp B4 8. Eb5 16 Db5 4
+mf B4 2 mp Bb4 2
+p Eb4 2 Eb5 2
+B4 2. Ab4 4
+F4 4 Gb4 4 mp Ab4 8. B4 16 Bb4 4
+mf Ab4 2 mp Gb4 2
+p R 8 Eb3 8 Eb4 Bb3 8 Eb3 8 R 8 Eb3 8 Eb4 Bb3 8 Eb3 8
+R 8 Eb3 8 Eb4 B3 8 Eb3 8 R 8 Eb3 8 Eb4 B3 8 Eb3 8
+R 8 Ab3 8 D4 F4 8 Ab3 8 R 8 Ab3 8 D4 F4 8 Ab3 8
+R 8 Gb3 8 Eb4 B3 8 Gb3 8 R 8 Gb3 8 Eb4 B3 8 Gb3 8
+R 8 Gb3 8 Db4 Gb4 8 Gb3 8 R 8 Gb3 8 D4 Gb4 8 Gb3 8
+R 8 Gb3 8 Eb4 Gb4 8 Gb3 8 R 8 Gb3 8 Eb4 Gb4 8 Gb3 8
+R 8 B3 8 F4 Ab4 8 B3 8 R 8 mp B3 8 F4 Ab4 8 B3 8
+mf R 8 Bb3 8 Db4 Gb4 8 Bb3 8 R 8 Bb3 8 Db4 Gb4 8 Bb3 8
+forte R 8 Bb3 8 E4 Bb4 8 Bb3 8 R 8 Bb3 8 E4 Bb4 8 Bb3 8
+R 8 C4 8 F4 A4 8 C4 8 R 8 C4 8 F4 8 C4 8
+mf R 8 Bb3 Db4 E4 8 R 8 C4 F4 8 R 8 forte Db4 G4 8 R 8 E4 A4 8
+ff R 8 C4 8 F4 8 C4 8 R 8 A3 8 C4 8 A3 8
+mp R 8 Bb3 8 E4 Bb4 8 Bb3 8 R 8 Bb3 8 E4 Bb4 8 Bb3 8
+R 8 C4 8 F4 A4 8 C4 8 R 8 C4 8 F4 8 C4 8
+R 8 Bb3 Db4 E4 8 R 8 mf C4 F4 8 R 8 forte Db4 G4 8  R 8 E4 A4 8
+C4 F4 2 R 2
+p G5 Eb4 G4 2 C5 C4 4. D5 D4 8 END_LAZY DAMPER 5 0 LAZY ;m51
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+mf G5 G4 2 p C5 C4 4. D5 D4 8 ; m53
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+forte G5 G4 2 p C5 C4 4. D5 D4 8
+mf Eb5 Eb4 8. R 16 mp E5 E4 8. R 16 F5 F4 8. R 16 p C#5 C#4 8. R 16 ;m56
+pp C#5 4 D4 D5 Bb4 4 R 4 D4 D5 Bb4 4 ; m 57
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 Eb4 Eb5 Bb4 8 R 8
+Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 Eb4 Eb5 Bb4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 F4 F5 A4 8 R 8
+p F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 mp G4 C#5 E5 8 R 8
+mf F4 D5 8 R 8 F4 D5 8 R 8 R 4 F4 D5 8 R 8
+forte F4 G4 8 R 8 F4 G4 8 R 8 R 4 F4 G4 8 R 8
+mf F4 A4 8 R 8 mp F4 A4 8 R 8 R 4 p F4 A4 8 R 8
+Bb3 E4 G4 8 R 8 Bb3 E4 G4 8 R 8 R 4 Bb3 E4 G4 8 R 8
+F4 C4 8 R 8 F4 C4 8 R 8 R 4 F4 C4 8 R 8
+Bb3 C4 8 R 8 Bb3 C4 8 R 8 R 4 C4 8 R 8
+mf G5 Eb4 G4 2 C5 C4 4. D5 D4 8 ; m 73
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+forte G5 G4 2 mf C5 C4 4. D5 D4 8 ; m75
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+forte G5 G4 2 mp C5 C4 4. D5 D4 8
+mf Eb5 Eb4 4 E5 E4 4 mp F5 F4 4 C#5 C#4 4 ;m78
+ppp D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8 ;m79
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 mp Eb4 Eb5 Bb4 8 R 8
+mp Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 Eb4 Eb5 Bb4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 F4 F5 A4 8 R 8
+F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 G4 C#5 E5 8 R 8
+forte F4 D5 8 R 8 F4 D5 8 R 8 R 4 F4 D5 8 R 8
+F4 G4 8 R 8 F4 G4 8 R 8 R 4 F4 G4 8 R 8
+mf F4 A4 8 R 8 F4 A4 8 R 8 R 4 mp F4 A4 8 R 8
+Bb3 E4 G4 8 R 8 Bb3 E4 G4 8 R 8 R 4 Bb3 E4 G4 8 R 8
+F4 C4 8 R 8 F4 C4 8 R 8 R 4 F4 C4 8 R 8
+Bb3 C4 8 R 8 Bb3 C4 8 R 8 R 4 C4 8 R 8
+mp G5 G4 Eb4 2 mf C5 C4 4. D5 D4 8 ; m95
+forte Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2 ;m96
+ff G5 G4 2 C5 C4 4. D5 D4 8 ;m97
+Eb5 Eb4 4 fff E5 E4 4 F5 F4 4 C5 C4 8. R 16 ;m98
+END_LAZY DAMPER 5 127 LAZY R 2 Bb4 1 Db5 2
+Gb4 2 Gb5 2 END_LAZY DAMPER 5 0 LAZY
+E4 Gb3 2 E5 E6 Bb5 C6 2 ;m102
+G6 5/8 forte F6 8 E6 8 Eb6 8
+R 8 F5 8 E5 8 Eb5 8 R 8 F4 8 E4 8 Eb4 8
+ff C4 D4 2 forte E4 8 F#4 8 G4 8 A4 8
+G4 Bb4 8 R 8 G4 B4 8 R 8 G4 C5 8 R 8 G4 D5 8 R 8
+G4 Eb5 8 R 8 G4 G6 8 R 8 F4 Bb4 F5 8 R 8 Eb4 A4 8 R 8
+ff D4 F4 Bb4 2 Ab4 D5 Ab5 2
+G4 G5 Eb5 2 Eb5 Eb6 A5 2
+forte D5 D6 Bb5 4 A5 8 Eb5 8 Bb5 8 F5 8 C6 8 G5 8
+A5 8 C5 8 E5 8 Bb4 8 F5 8 C5 8 Eb5 8 A4 8
+Bb4 D5 2 ff Ab3 D5 Ab4 2
+G3 G4 Eb4 2 Eb4 Eb5 A4 2
+D5 D4 Bb4 4 A4 8 Eb4 8 Bb4 8 F4 8 C5 8 G4 8
+A4 8 C4 8 E4 8 Bb3 8 F4 8 B3 8 Eb4 8 C4 8
+Bb3 D4 4 R 8 Ab4 8 R 8 F4 8 R 8 D4 8  ; first measure of  first ending
+R 8 Bb3 8 R 8 Ab3 8 R 8 F3 8 R 8 D3 8 ; second measure of first ending
+Eb4 Bb3 G3 2 G4 Bb4 Eb5 2
+Ab4 C5 2 Ab4 D5 Ab5 2
+G4 Eb5 G5 4 Ab4 Bb4 D5 4 Bb4 Eb5 4 F4 F5 D5 4
+F4 Bb4 D5 4 Eb4 A4 4 F4 Bb4 4 F4 C5 4
+F4 2 F4 B4 F5 2
+F4 Ab4 Bb4 2 Ab4 Eb5 Ab5 2
+F4 Bb4 D5 4 C5 D5 C6 4 Bb4 Eb5 Bb5 4 G4 Eb5 4
+C5 Eb5 F5 2 Bb4 D5 G5 7/16 R 16  ;m8 rep
+Eb4 2 p Db5 2
+C5 2. Bb4 4
+R 1 ;m011 repeat
+vel 66 D5 2. vel 72 C5 4 ;m012
+vel 74 B4 2 vel 78 F5 2 ;m013
+vel 82  Eb5 G3 2. vel 88 D5 G3 4 ;m014
+vel 90  A3 2 vel 94 A3 2 ;m015
+vel 100  F5 D3 2. vel 107 Eb5 C3 4 ;m016
+vel 110  D5 Bb4 D4 2 Ab5 D5 Ab4 2 ;m017
+G5 G4 Eb5 2 Eb6 Eb5 A5 2
+forte D5 Bb5 D6 4 A5 8 Eb5 8 Bb5 8 F5 8 C6 8 G5 8
+Ab5 8 C5 8 E5 8 Bb4 8 F5 8 C5 8 Eb5 8 A4 8
+Bb4 D5 2 ff D4 Ab3 Ab4 2
+G4 G3 Eb4 2 Eb4 A4 Eb5 2
+forte D4 Bb4 D5 4 A4 8 Eb4 8 Bb4 8 F4 8 C5 8 G4 8
+Ab4 8 C4 8 E4 8 Bb3 8 F4 8 C4 8 Eb4 8 A3 8
+Bb3 D4 2 R 2
+ff Bb3 Bb4 2 Bb4 Bb5 2
+p Gb4 2 Gb5 2
+Eb5 2. B4 4
+Ab4 4 Bb4 4 mp B4 8. Eb5 16 Db5 4
+mf B4 2 mp Bb4 2
+p Eb4 2 Eb5 2
+B4 2. Ab4 4
+F4 4 Gb4 4 mp Ab4 8. B4 16 Bb4 4
+mf Ab4 2 mp Gb4 2
+p R 8 Eb3 8 Eb4 Bb3 8 Eb3 8 R 8 Eb3 8 Eb4 Bb3 8 Eb3 8
+R 8 Eb3 8 Eb4 B3 8 Eb3 8 R 8 Eb3 8 Eb4 B3 8 Eb3 8
+R 8 Ab3 8 D4 F4 8 Ab3 8 R 8 Ab3 8 D4 F4 8 Ab3 8
+R 8 Gb3 8 Eb4 B3 8 Gb3 8 R 8 Gb3 8 Eb4 B3 8 Gb3 8
+R 8 Gb3 8 Db4 Gb4 8 Gb3 8 R 8 Gb3 8 D4 Gb4 8 Gb3 8
+R 8 Gb3 8 Eb4 Gb4 8 Gb3 8 R 8 Gb3 8 Eb4 Gb4 8 Gb3 8
+R 8 B3 8 F4 Ab4 8 B3 8 R 8 mp B3 8 F4 Ab4 8 B3 8
+mf R 8 Bb3 8 Db4 Gb4 8 Bb3 8 R 8 Bb3 8 Db4 Gb4 8 Bb3 8
+forte R 8 Bb3 8 E4 Bb4 8 Bb3 8 R 8 Bb3 8 E4 Bb4 8 Bb3 8
+R 8 C4 8 F4 A4 8 C4 8 R 8 C4 8 F4 8 C4 8
+mf R 8 Bb3 Db4 E4 8 R 8 C4 F4 8 R 8 forte Db4 G4 8 R 8 E4 A4 8
+ff R 8 C4 8 F4 8 C4 8 R 8 A3 8 C4 8 A3 8
+mp R 8 Bb3 8 E4 Bb4 8 Bb3 8 R 8 Bb3 8 E4 Bb4 8 Bb3 8
+R 8 C4 8 F4 A4 8 C4 8 R 8 C4 8 F4 8 C4 8
+R 8 Bb3 Db4 E4 8 R 8 mf C4 F4 8 R 8 forte Db4 G4 8  R 8 E4 A4 8
+C4 F4 2 R 2
+p G5 Eb4 G4 2 C5 C4 4. D5 D4 8 END_LAZY DAMPER 5 0 LAZY ;m51
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+mf G5 G4 2 p C5 C4 4. D5 D4 8 ; m53
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+forte G5 G4 2 p C5 C4 4. D5 D4 8
+mf Eb5 Eb4 8. R 16 mp E5 E4 8. R 16 F5 F4 8. R 16 p C#5 C#4 8. R 16 ;m56 rep
+pp C#5 4 D4 D5 Bb4 4 R 4 D4 D5 Bb4 4 ; m 57
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 Eb4 Eb5 Bb4 8 R 8
+Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 Eb4 Eb5 Bb4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 F4 F5 A4 8 R 8
+p F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 mp G4 C#5 E5 8 R 8
+mf F4 D5 8 R 8 F4 D5 8 R 8 R 4 F4 D5 8 R 8
+forte F4 G4 8 R 8 F4 G4 8 R 8 R 4 F4 G4 8 R 8
+mf F4 A4 8 R 8 mp F4 A4 8 R 8 R 4 p F4 A4 8 R 8
+Bb3 E4 G4 8 R 8 Bb3 E4 G4 8 R 8 R 4 Bb3 E4 G4 8 R 8
+F4 C4 8 R 8 F4 C4 8 R 8 R 4 F4 C4 8 R 8
+Bb3 C4 8 R 8 Bb3 C4 8 R 8 R 4 C4 8 R 8
+mf G5 Eb4 G4 2 C5 C4 4. D5 D4 8 ; m 73
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+forte G5 G4 2 C5 C4 4. D5 D4 8 ; m75
+Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2
+forte G5 G4 2 mp C5 C4 4. D5 D4 8
+mf Eb5 Eb4 4 E5 E4 4 mp F5 F4 4 C#5 C#4 4 ;m78
+ppp D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8 ;m79
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+D4 D5 Bb4 8 R 8 D4 D5 Bb4 8 R 8 R 4 D4 D5 Bb4 8 R 8
+Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 mp Eb4 Eb5 Bb4 8 R 8
+mp Eb4 Eb5 Bb4 8 R 8 Eb4 Eb5 Bb4 8 R 8 R 4 Eb4 Eb5 Bb4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+Eb4 Eb5 A4 8 R 8 Eb4 Eb5 A4 8 R 8 R 4 Eb4 Eb5 A4 8 R 8
+F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 F4 F5 A4 8 R 8
+F4 F5 A4 8 R 8 F4 F5 A4 8 R 8 R 4 G4 C#5 E5 8 R 8
+forte F4 D5 8 R 8 F4 D5 8 R 8 R 4 F4 D5 8 R 8
+F4 G4 8 R 8 F4 G4 8 R 8 R 4 F4 G4 8 R 8
+mf F4 A4 8 R 8 F4 A4 8 R 8 R 4 mp F4 A4 8 R 8
+Bb3 E4 G4 8 R 8 Bb3 E4 G4 8 R 8 R 4 Bb3 E4 G4 8 R 8
+F4 C4 8 R 8 F4 C4 8 R 8 R 4 F4 C4 8 R 8
+Bb3 C4 8 R 8 Bb3 C4 8 R 8 R 4 C4 8 R 8
+mp G5 G4 Eb4 2 mf C5 C4 4. D5 D4 8 ; m95
+forte Eb5 Eb4 8 R 8 F5 F4 8 R 8 F#5 F#4 Bb3 2 ;m96
+ff G5 G4 2 C5 C4 4. D5 D4 8 ;m97
+Eb5 Eb4 4 fff E5 E4 4 F5 F4 4 C5 C4 8. R 16 ;m98 rep
+END_LAZY DAMPER 5 127 LAZY R 2 Bb4 1 Db5 2
+Gb4 2 Gb5 2 END_LAZY DAMPER 5 0 LAZY
+E4 Gb3 2 E5 E6 Bb5 C6 2 ;m102
+G6 5/8 forte F6 8 E6 8 Eb6 8
+R 8 F5 8 E5 8 Eb5 8 R 8 F4 8 E4 8 Eb4 8
+ff C4 D4 2 forte E4 8 F#4 8 G4 8 A4 8
+G4 Bb4 8 R 8 G4 B4 8 R 8 G4 C5 8 R 8 G4 D5 8 R 8
+G4 Eb5 8 R 8 G4 G6 8 R 8 F4 Bb4 F5 8 R 8 Eb4 A4 8 R 8
+ff D4 F4 Bb4 2 Ab4 D5 Ab5 2
+G4 G5 Eb5 2 Eb5 Eb6 A5 2
+forte D5 D6 Bb5 4 A5 8 Eb5 8 Bb5 8 F5 8 C6 8 G5 8
+A5 8 C5 8 E5 8 Bb4 8 F5 8 C5 8 Eb5 8 A4 8
+Bb4 D5 2 ff Ab3 D5 Ab4 2
+G3 G4 Eb4 2 Eb4 Eb5 A4 2
+D5 D4 Bb4 4 A4 8 Eb4 8 Bb4 8 F4 8 C5 8 G4 8
+A4 8 C4 8 E4 8 Bb3 8 F4 8 B3 8 Eb4 8 C4 8
+Bb3 D4 4 R 4 ff D4 F4 Bb4 6/4 ; second ending m 118 119
+R 1 
+R 1
+ff R 2 B3 B4 1 ;m122
+forte Bb3 Bb4 1 ;123
+Ab3 Ab4 1 ;124
+Gb3 Gb4 4. F3 F4 8 ;125
+Ab3 Ab4 2 ff E5 G3 G4 Db4 E4 1 ;m 126
+forte Eb4 Eb5 1 ;m 127
+ff Db4 Db5 1 B3 B4 4. Bb3 Bb4 8 ;m 128
+fff Ab1 Ab2 Ab3 Ab4 2 Ab3 B3 Eb4 Ab4 B4 Eb5 Ab5 2 ;m 130
+fff Ab3 Db4 E4 Ab4 Db5 E5 2 Ab3 Db4 E4 G4 Db5 E5 G5 Db6 2 ;m 131
+ff Ab3 Eb4 Ab4 B4 Eb5 Ab5 B5 4 Bb3 E4 G4 Db5 E5 G5 4 B3 Eb3 Ab4 Eb5 Ab5 4 Db4 E4 Bb4 Db5 E5 Bb5 4 ;m 132
+Eb4 G4 Bb4 Eb5 G5 4 F4 Ab4 B4 D5 4 G4 Bb4 Eb5 4 Eb4 16 R 16 Eb5 16 R 16 ;m133
+B3 16 R 16 B4 16 R 16 G3 16 R 16 G4 16 forte R 16 Ab3 16 R 16 Ab4 16 R 16 Bb3 16 R 16 Bb4 16 R 16 ;m 134
+mf G3 16 R 16 G4 16 R 16 D3 16 R 16 D4 16 R 16 mp Eb3 16 R 16 Eb4 16 R 16 R 8 Eb4 16 R 16 ;m 135
+p figure1(B3,G3,Ab3,Bb3,50) figure1(G3,D3,Eb3,Eb4,50) ;m 136
+figure1(B3,G3,Ab3,Bb3,50) figure1(G3,D3,Eb3,Eb4,50) ;m 137
+figure1(B3,G3,Ab3,Ab4,50) mp figure1(Eb4,Bb3,B3,B4,50) ;m 138
+mf figure1(Ab4,D4,Eb4,Eb5,50) forte figure1(B4,G4,Ab4,Bb4,56) ;m 139
+figure1(Gb4,D4,Eb4,F4,62) figure1(D4,A3,Bb3,Bb4,62) ;m 140
+figure1(Gb4,D4,Eb4,F4,65) figure1(D4,A3,Bb3,Bb4,65) ;m 141
+figure1(Gb4,D4,Eb4,Eb5,68) figure1(Bb4,F4,Gb4,Gb5,68) ;m 142
+figure1(Eb5,A4,Bb4,Bb5,70) figure1(Gb5,D4,Eb5,F5,70) ;m 143
+figure1(Db5,A4,Bb4,C5,73) figure1(Ab4,E4,F4,F5,73) ;m 144
+figure1(Db5,A4,Bb4,C5,76) figure1(Ab4,E4,F4,F5,76) ;m 145
+figure1(Db5,A4,Bb4,Db5,79) figure1(Bb4,E4,F4,Bb4,79) ;m 146
+figure1(F4,C4,Db4,F4,81) figure1(Db4,A3,Bb3,Db5,81) ;m 147
+figure1(Bb4,F#4,G4,G5,84) figure1(E5,A4,Bb4,Db5,84) ;m 148
+figure1(Bb4,F#4,G4,G5,85) figure1(E5,A4,Bb4,Db5,85) ;m 149
+figure1(Bb4,F#4,G4,Bb4,86) figure1(G4,D#4,E4,G4,86) ;m 150
+figure1(E4,A3,Bb3,Db4,87) figure1(Bb3,F#3,G3,C4,87) ;m 151
+figure1(Ab3,E3,F3,G3,90) figure1(D3,B2,C3,C4,90) ;m 152
+figure1(Ab3,E3,F3,G3,90) figure1(E4,B2,C3,C4,90) ;m 153
+figure1(Ab3,E3,F3,F4,90) figure1(C4,G3,Ab3,Ab4,90) ;m 154
+figure1(F4,B3,C4,C5,90) figure1(Ab4,E4,F4,Ab4,90) ;m 155
+figure1(F4,C#4,D4,Ab5,90) figure1(F5,C#5,D5,Ab5,90) ;m 156
+END_LAZY DAMPER 5 0 LAZY figure1(F5,C#5,D5,G5,90) figure1(Eb5,B4,C5,F4,90) ;m 157
+figure1(D4,A#3,B3,F5,90) figure1(D5,A#4,B4,F5,90) ;m 158
+END_LAZY DAMPER 5 0 LAZY figure1(D5,A#4,B4,Eb5,90) figure1(C5,F#4,G4,Db5,90) ;m 159
+END_LAZY DAMPER 5 127 LAZY figure1(Bb4,F#4,G4,Db6,90) figure1(Bb5,F#5,G5,Db6,90) ;m 160
+END_LAZY DAMPER 5 0 LAZY figure1(Bb5,F#5,G5,C6,90) figure1(Ab5,E5,F5,Bb4,90) ;m 161
+END_LAZY DAMPER 5 127 LAZY figure1(G4,D#4,E4,Bb5,90) figure1(G5,D#5,E5,Bb5,90) ;m 162
+END_LAZY DAMPER 5 0 LAZY figure1(G5,D#5,E5,Ab5,90) figure1(F5,Bb4,C5,Gb5,90) ;m 163
+Gb4 4 R 2.
+R 4/1
+
+
+
+fff R 2 F4 2 ;m169
+E3 Bb3 Db4 2 Bb4 E5 Bb5 2 ;m170
+ff Ab4 F5 Ab5 4 Bb4 Db5 E5 4 C5 F5 4 G4 G5 Db5 4
+G4 C5 E5 4 Ab4 B4 4 G4 C5 4 R 8 C5 16 R 8.
+Ab4 16 R 8. E4 16 R 8. ff F4 16 R 8. G4 16 R 8. ;m173
+forte E4 16 R 8. B3 16 R 8. mf C4 16 R 8. Db5 16 R 8.
+mp Bb4 16 R 8. F4 16 R 8. p Gb4 16 R 8. Ab4 16 R 8.
+p F4 16 R 8. C4 16 R 8. Db4 16 R 8. Db4 16 R 16 ; m176
+figure1(A3,F3,Gb3,Ab3,50) figure1(F3,C3,Db3,Db4,50)
+figure1(A3,F3,Gb3,Ab3,52) figure1(F3,C3,Db3,Db4,52) ;m178
+END_LAZY DAMPER 5 127 LAZY figure1(A3,F3,Gb3,Gb4,55) figure1(Db4,Ab3,A3,A4,55)
+figure1(Gb4,C4,Db4,Db5,56) END_LAZY DAMPER 5 0 LAZY figure1(A4,F4,Gb4,Ab4,56) ;m180
+END_LAZY DAMPER 5 127 LAZY figure1(E4,C4,Db4,Eb4,59) C4 8 G3 8 END_LAZY DAMPER 5 0 LAZY Ab3 8 Ab4 8
+END_LAZY DAMPER 5 127 LAZY figure1(E4,C4,Db4,Eb4,62) C4 8 G3 8 END_LAZY DAMPER 5 0 LAZY Ab3 8 Ab4 8
+END_LAZY DAMPER 5 127 LAZY figure1(E4,C4,Db4,Db5,65) figure1(Ab4,Eb4,Fb4,E5,65) 
+Db5 8 G4 8 Ab4 8 END_LAZY DAMPER 5 0 LAZY Ab5 8 figure1(E5,C5,Db5,Eb5,68) 
+figure1(B4,G4,Ab4,Bb4,70) figure1(G4,D4,Eb4,Eb5,70) 
+figure1(B4,G4,Ab4,Bb4,73) figure1(G4,D4,Eb4,Eb5,73) 
+figure1(B4,G4,Ab4,B4,75) figure1(Ab4,D4,Eb4,Ab4,75)
+figure1(Eb4,Bb3,B3,Eb4,78) figure1(B3,G3,Ab3,B4,78)
+figure1(Ab4,E4,F4,F5,81) figure1(D5,G4,Ab4,B4,81) 
+figure1(Ab4,E4,F4,F5,84) mp figure1(D5,G4,Ab4,B4,84) ; m190
+figure1(Ab4,E4,F4,`Ab4 Ab3',87) figure1(F4 F3,C#4 C#3,D4 D3,F4 F3,87) ;m191
+figure1(D4 D3,G3 G2,Ab3 Ab2,B3 B2,90) figure1(Ab3 Ab2,E3 E2,F3 F2,Bb3 Bb2,90) ;m192
+forte figure1(Gb3 Gb2,D3 D2,Eb3 Eb2,F3 F2,90) figure1(D3 D2,A2 A1,Bb2 Bb1,Bb3 Bb2,90) ;m193
+figure1(Gb3 Gb2,D3 D2,Eb3 Eb2,F3 F2,90) figure1(D3 D2,A2 A1,Bb2 Bb1,Bb3 Bb2,90) ;m194
+figure1(Gb3 Gb2,D3 D2,Eb3 Eb2,Eb4 Eb3,90) figure1(Bb3 Bb2,F3 F2,Gb3 Gb2,Gb3 Gb4,90)
+END_LAZY DAMPER 5 127 LAZY figure1(Eb4 Eb3,A3 A2,Bb3 Bb2,Bb3 Bb4,90) figure1(Gb4 Gb3,D4 D3,Eb4 Eb3,Gb4,90) END_LAZY DAMPER 5 0 LAZY ;m196
+END_LAZY DAMPER 5 127 LAZY figure1(Eb4,B3,C4,Gb5,90) figure1(Eb5,B4,C5,Gb5,90) ;m197
+END_LAZY DAMPER 5 0 LAZY figure1(Eb5,B4,C5,F5,90) figure1(Eb5,A4,Bb4,Eb4,90)  ;m198
+END_LAZY DAMPER 5 127 LAZY figure1(C4,G#3,A3,Eb5,90) C5 8 G#4 8 END_LAZY DAMPER 5 0 LAZY A4 8 Eb5 8 ;m199
+figure1(C5,G#4,A4,Db5,90) figure1(Bb4,E4,F4,B4,90) ;m200
+END_LAZY DAMPER 5 127 LAZY figure1(Ab4,E4,F4,B5,90) Ab5 8 E5 8 END_LAZY DAMPER 5 0 LAZY F5 8 B5 8
+figure1(Ab5,E5,F5,Bb5,90) figure1(Gb5,D5,Eb5,Ab4,90)
+END_LAZY DAMPER 5 127 LAZY figure1(F4,C#4,D4,Ab5,90) F5 8 C#5 8 D5 8 END_LAZY DAMPER 5 0 LAZY Ab5 8
+figure1(F5,C#5,D5,Gb5,90) figure1(Eb5,Bb4,B4,F5,90)
+figure1(D5,Bb4,B4,Eb5,90) figure1(C5,G#4,A4,D5,90) 
+forte figure1(B4,G4,Ab4,C5,90) ff figure1(A4,F4,Gb4,Bb4,107)
+fff figure1(Ab4,E4,F4,Bb4,107) figure1(Ab4,D4,Eb4,Bb4,107) 
+figure1(Ab4,C#4,D4,Bb4,107) Ab4 8 C#4 8 D4 8 Eb4 5/8 ;m208
+fff Db5 Bb4 G4 2 ;m209
+fff Ab4 C5 2 Ab4 Ab5 D5 2 ;m210
+ff G4 Eb5 G5 8 R 8 Ab4 Bb4 D5 8 R 8 G4 Bb4 Eb5 8 R 8 F4 C5 F5 8 R 8
+F4 Bb4 D5 8 R 8 Eb4 A4 8 R 8 F4 Bb4 8 R 8 G4 C5 8 R 8
+fff F3 2 F4 B4 F5 2
+fff F4 Ab4 Bb4 2 Ab4 Eb5 Ab5 2
+ff F4 Bb4 D5 4 C5 C6 D5 4 Bb4 Eb5 Bb5 4 G4 Eb5 4
+C5 Eb5 F5 2 Bb4 D5 G5 2
+ff Eb4 2 forte Db5 2 ;m217
+C5 2. Bb4 4
+A4 4 Bb4 4 ff B4 4 ff C5 4
+forte D5 2 mf C5 2 ;m220
+B4 2 F5 2
+Eb5 2. D5 4
+mf C#5 4 D5 4 forte D#5 4 ff E5 4
+F5 D3 2 Eb5 C3 2
+ff Bb2 F3 D4 Bb4 D5 2 Bb3 F4 Ab4 D5 Ab5 2
+Bb3 Eb4 G4 Eb5 G5 2 Bb3 Gb4 Eb5 A5 Eb6 2
+forte Bb3 F4 D5 D6 Bb5 4 A5 8 Eb5 8 Bb5 8 F5 8 C6 8 G5 8
+Ab5 8 C5 8 E5 8 Bb4 8 F5 8 C5 8 Eb5 8 A4 8 
+Bb4 D5 2 ff Ab3 Ab4 D4 2
+ff G3 G4 Eb4 2 Eb4 Eb5 A4 2 ;m230
+forte D4 D5 Bb4 4 A4 8 Eb4 8 Bb4 8 F4 8 C5 8 G4 8
+Ab4 8 C4 8 E4 8 Bb3 8 F4 8 C4 8 Eb4 8 A3 8
+Bb2 Bb3 D4 2 Bb3 2
+ff Bb3 Bb4 2 Bb4 Bb5 4. R 8 ;m234
+p Gb3 Gb4 2 Gb4 Gb5 2 
+mp Eb4 Eb5 2. B3 B4 4 END_LAZY DAMPER 5 0 LAZY ;m236
+Ab3 Ab4 4 Bb3 Bb4 4 B3 B4 8. Eb4 Eb5 16 Db4 Db5 4
+mf B3 B4 2 Bb3 Bb4 2
+mp B4 Gb4 2 p G4 B5 2
+p Ab4 Ab5 2. E4 E5 4 ;m240
+p Db4 Db5 4 Eb4 Eb5 4 mp E4 E5 8. Ab4 Ab5 16 Gb4 Gb5 4
+mf E4 E5 2 p Eb4 Eb5 2
+pp R 8 Ab3 8 Ab4 Eb4 8 Ab3 8 R 8 Ab3 8 Ab4 Eb4 8 Ab3 8 
+R 8 Ab3 8 Ab4 Fb4 8 Ab3 8 R 8 Ab3 8 Ab4 Fb4 8 Ab3 8 
+R 8 G3 8 Db4 Eb4 8 G3 8 R 8 G3 8 Db4 Eb4 8 G3 8 
+R 8 Ab3 8 B3 Eb4 8 Ab3 8 R 8 Ab3 8 B3 Eb4 8 Ab3 8 
+mp R 8 B3 8 B4 Gb4 8 B3 8 R 8 B3 8 B4 G4 8 B3 8 
+p R 8 B3 8 Ab4 B4 8 B3 8 R 8 B3 8 Ab4 B4 8 B3 8 
+mp R 8 E4 8 Bb4 Db5 8 E4 8 R 8 E4 8 Bb4 Db5 8 E4 8
+mf R 8 Eb4 8 Gb4 B4 8 Eb4 8 R 8 Eb4 8 Gb4 B4 8 Eb4 8 ;m250
+forte R 8 Eb4 8 Eb5 A4 8 Eb4 8 R 8 Eb4 8 Eb5 A4 8 Eb4 8 
+R 8 F4 8 Bb4 D5 8 F4 8 R 8 F4 8 Bb4 D5 8 F4 8 
+R 8 Eb4 Gb4 A4 16 R 8. ff F4 Bb4 16 R 8. mf Gb4 C5 16 R 8. A4 D5 16 R 16
+mp R 8 F4 8 Bb4 8 F4 8 R 8 D4 8 F4 8 D4 8
+R 8 Eb4 8 A4 Eb5 8 Eb4 8 R 8 Eb4 8 A4 Eb5 8 Eb4 8
+R 8 F4 8 Bb4 D5 8 F4 8 R 8 F4 8 Bb4 8 F4 8
+R 8 Eb4 Gb4 A4 16 R 8. mp F4 Bb4 16 R 8. mf Gb4 C5 16 R 8. A4 D5 16 R 16
+F4 Bb4 2 END_LAZY DAMPER 5 127 LAZY R 2
+p D4 16 Ab4 16 C5 16 C6 5/16 F4 F5 4. END_LAZY DAMPER 5 0 LAZY G4 G5 8
+Ab4 Ab5 8 R 8 Bb4 Bb5 8 R 8 Eb4 B4 B5 2 ;m260
+mp C6 C5 2 p F4 F5 4. G4 G5 8
+Ab4 Ab5 8 R 8 Bb4 Bb5 8 R 8 B4 B5 2
+mf C5 C6 2 p F4 F5 4. G4 G5 8
+mp Ab4 Ab5 4 mf A4 A5 8 R 8 mp Bb4 Bb5 8 R 8 p F#4 F#5 8 R 8 
+pp F#4 F#5 4 G4 G5 Eb5 4 R 4 G4 G5 Eb5 4
+G4 Eb5 G5 8 R 8 G4 Eb5 G5 8 R 8 R 4 G4 Eb5 G5 8 R 8 
+G4 Eb5 G5 8 R 8 G4 Eb5 G5 8 R 8 R 4 G4 Eb5 G5 8 R 8 
+G4 Eb5 G5 8 R 8 G4 Eb5 G5 8 R 8 R 4 G4 Eb5 G5 8 R 8 
+Ab4 Eb5 Ab5 8 R 8 Ab4 Eb5 Ab5 8 R 8 R 4 Ab4 Eb5 Ab5 8 R 8 
+Ab4 Eb5 Ab5 8 R 8 Ab4 Eb5 Ab5 8 R 8 R 4 Ab4 Eb5 Ab5 8 R 8 ;m270
+Ab4 D5 Ab5 8 R 8 Ab4 D5 Ab5 8 R 8 R 4 Ab4 D5 Ab5 8 R 8 
+Ab4 D5 Ab5 8 R 8 Ab4 D5 Ab5 8 R 8 R 4 Ab4 D5 Ab5 8 R 8 
+Bb4 D5 Bb5 8 R 8 Bb4 D5 Bb5 8 R 8 R 4 Bb4 D5 Bb5 8 R 8 
+Bb4 D5 Bb5 8 R 8 Bb4 D5 Bb5 8 R 8 R 4 C5 F#5 A5 8 R 8
+Bb4 G5 8 R 8 Bb4 G5 8 R 8 R 4 Bb4 G5 8 R 8 
+Bb4 C5 8 R 8 Bb4 C5 8 R 8 R 4 Bb4 C5 8 R 8 
+Bb4 D5 8 R 8 Bb4 D5 8 R 8 R 4 Bb4 D5 8 R 8 
+Eb4 A4 C5 8 R 8 Eb4 A4 C5 8 R 8 R 4 Eb4 A4 C5 8 R 8 
+F4 Bb4 8 R 8 F4 Bb4 8 R 8 R 4 F4 Bb4 8 R 8 
+Eb4 F4 8 R 8 Eb4 F4 8 R 8 R 4 F4 8 R 8 ;m280
+p D4 16 Ab4 16 C5 16 C6 5/16 F5 F4 4. G5 G4 8
+Ab4 Ab5 8 R 8 Bb4 Bb5 8 R 8 B4 B5 Eb4 2
+mp C5 C6 2 p F4 F5 4. G4 G5 8
+Ab4 Ab5 8 R 8 Bb4 Bb5 8 R 8 B4 B5 2
+mf C5 C6 2 p F4 F5 4. mp G4 G5 8
+mf Ab4 Ab5 4 mp A4 A5 4 Bb4 Bb5 4 p F4 F5 4
+pp G4 G5 Eb5 8 R 8 G4 G5 Eb5 8 R 8 R 4 G4 G5 Eb5 8 R 8 
+G4 G5 Eb5 8 R 8 G4 G5 Eb5 8 R 8 R 4 G4 G5 Eb5 8 R 8 
+G4 G5 Eb5 8 R 8 G4 G5 Eb5 8 R 8 R 4 G4 G5 Eb5 8 R 8 
+G4 G5 Eb5 8 R 8 G4 G5 Eb5 8 R 8 R 4 G4 G5 Eb5 8 R 8  ;m290
+Ab4 Ab5 Eb5 8 R 8 Ab4 Ab5 Eb5 8 R 8 R 4 Ab4 Ab5 Eb5 8 R 8
+Ab4 Ab5 Eb5 8 R 8 Ab4 Ab5 Eb5 8 R 8 R 4 Ab4 Ab5 Eb5 8 R 8 
+Ab4 Ab5 D5 8 R 8 Ab4 Ab5 D5 8 R 8 R 4 Ab4 Ab5 D5 8 R 8 
+Ab4 Ab5 D5 8 R 8 Ab4 Ab5 D5 8 R 8 R 4 Ab4 Ab5 D5 8 R 8 
+Bb4 Bb5 D5 8 R 8 Bb4 Bb5 D5 8 R 8 R 4 Bb4 Bb5 D5 8 R 8 
+Bb4 Bb5 D5 8 R 8 Bb4 Bb5 D5 8 R 8 R 4 C5 F#5 A5 8 R 8
+Bb4 G5 8 R 8 Bb4 G5 8 R 8 R 4 Bb4 G5 8 R 8 
+Bb4 C5 8 R 8 Bb4 C5 8 R 8 R 4 Bb4 C5 8 R 8 
+Bb4 D5 8 R 8 Bb4 D5 8 R 8 R 4 Bb4 D5 8 R 8 
+Eb4 A4 C5 8 R 8 Eb4 A4 C5 8 R 8 R 4 Eb4 A4 C5 8 R 8 ;m300
+F4 Bb4 8 R 8 F4 Bb4 8 R 8 R 4 F4 Bb4 8 R 8 
+Eb4 F4 8 R 8 Eb4 F4 8 R 8 R 4 F4 8 R 8 
+p Ab4 C5 C6 2 F4 F5 4. G4 G5 8
+Ab4 Ab5 8 R 8 Bb4 Bb5 8 R 8 B4 B5 2
+mp C5 C6 2 p F4 F5 4. G4 G5 8 
+Ab4 Ab5 4 mf A4 A5 4 mf Bb4 Bb5 4 mf F4 F5 4
+END_LAZY DAMPER 5 127 LAZY forte R 2 Eb4 2
+Gb3 2 Gb4 2 
+B3 2 B4 2 END_LAZY DAMPER 5 0 LAZY
+A3 B2 2 A4 A5 Eb5 F5 2 ;m310
+C5 C6 F5 Ab5 5/8 Bb5 8 A5 8 Ab5 8 
+R 8 Bb4 8 A4 8 Ab4 8 R 8 Bb3 8 A3 8 Ab3 8
+ff B3 D4 G4 2 forte A4 8 B4 8 C5 8 D5 8 
+C5 Eb5 4 C5 E5 4 C5 F5 4 C5 G5 4
+C5 Ab5 4 C5 C6 4 Bb4 Eb5 Bb5 4 Ab4 Bb4 D5 4
+ff G4 Bb4 Eb5 2 Db5 Db6 G5 2
+ff C5 C6 Ab5 2 Ab5 Ab6 D6 2
+forte G5 G6 Eb6 4 Ab5 D6 4 Bb5 Eb6 4 C6 F6 4
+F5 D6 4 Eb5 A5 4 F5 Bb5 4 D5 Ab5 4
+ff Eb5 G5 2 ff Db4 Db5 G4 2 ;m320
+ff C4 C5 Ab4 2 Ab4 Ab5 D5 2
+forte G4 G5 Eb5 4 Ab4 D5 4 Bb4 Eb5 4 ff C5 F5 4
+forte F4 D5 4 Eb4 A4 4 F4 Bb4 4 ff G4 C5 4
+forte C4 Ab4 4 Bb3 E4 4 C4 F4 4 ff D4 G4 4
+forte G3 Eb4 4 F3 B3 4 G3 C4 4 ff F#3 F#4 C4 Eb4 1
+C4 C5 Eb4 F#4 1
+C4 C5 Eb4 G4 1
+C4 C5 Eb4 A4 1 
+F4 Ab4 Bb4 D5 8 D4 8 
+F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 ;m330
+F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 ;m331
+F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 ;m332
+F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 8 D4 8 F4 Ab4 Bb4 D5 4 F4 Ab4 Bb4 D5 D4 4
+Eb4 Eb5 G4 Bb4 8 R 8 Eb3 8 G3 8 Ab3 8 G3 8 Ab3 8 C4 8 
+Eb4 8 D4 8 Eb4 8 G4 8 Ab4 8 G4 8 Ab4 8 C5 8
+Eb5 8 D5 8 Eb5 8 G5 8 Ab5 8 G5 8 Ab5 8 C6 8
+Eb6 8 D6 8 Eb6 8 G6 8 Ab6 8 G6 8 Ab6 8 C7 8
+G6 Bb6 Eb7 4 R 3/4
+G4 Bb4 Eb5 2 G4 Bb4 Eb5 4. R 8 
+G3 Bb3 Eb4 2/1 ;m340
+
+END_LAZY
+DELAY 10 END_OF_TRACK
+

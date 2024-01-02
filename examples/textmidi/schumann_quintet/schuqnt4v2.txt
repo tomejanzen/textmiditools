@@ -1,0 +1,528 @@
+; $Author: janzent $
+; $Log: schuqnt4v2.txt,v $
+; Revision 1.1.1.1  2004/12/28 19:40:42  janzent
+; import moremiscprog and textmidi
+;
+; Revision 1.21  2003/11/02 23:04:42  root
+; done
+;
+; Revision 1.20  2003/10/28 02:06:17  root
+; all done before final finesses
+;
+; Revision 1.19  2003/10/25 01:58:03  root
+; to around 180
+;
+; Revision 1.18  2003/10/24 01:23:14  root
+; last notes to m137
+;
+; Revision 1.17  2003/10/23 01:55:08  root
+; more final notes to around 120
+;
+; Revision 1.16  2003/10/22 02:13:35  root
+; Jenny's last notes through m47
+;
+; Revision 1.15  2003/08/02 00:42:00  root
+; long tonews done
+;
+; Revision 1.14  2003/07/19 21:47:53  root
+; fix dyanamiscs add applause
+;
+; Revision 1.13  2003/07/12 01:01:08  root
+; pauess m224, adj dyns
+;
+; Revision 1.12  2003/07/12 00:35:54  root
+; fibonacci rits
+;
+; Revision 1.11  2003/06/27 01:31:44  root
+; cheat to get a pause before start
+;
+; Revision 1.10  2003/06/03 23:49:04  root
+; narrow stereo field
+;
+; Revision 1.9  2003/05/26 20:46:48  root
+; staccto articulation
+;
+; Revision 1.8  2003/04/24 00:38:47  root
+; added intmidi macro, amcr macro-ized pan and c program
+;
+; Revision 1.7  2003/04/20 16:11:34  root
+; done before coach
+;
+; Revision 1.6  2003/04/19 01:39:09  root
+; half done with dynamics fixes
+;
+; Revision 1.5  2003/04/15 00:51:34  root
+; some dynamics roughed in
+;
+; Revision 1.4  2003/04/10 11:11:10  root
+; minor fixes
+;
+; Revision 1.3  2003/04/08 00:35:01  root
+; finished draft
+;
+; Revision 1.2  2003/04/07 00:33:54  root
+; weekend work
+;
+; Revision 1.1  2003/04/03 02:27:05  root
+; Initial revision
+;
+;
+; $Date: 2004/12/28 19:40:42 $
+; $Header: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4v2.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Id: schuqnt4v2.txt,v 1.1.1.1 2004/12/28 19:40:42 janzent Exp $
+; $Locker:  $
+; $Name:  $
+; $Revision: 1.1.1.1 $
+; $RCSfile: schuqnt4v2.txt,v $
+; $Source: /mnt/hdc5/CVSROOT/thomas/moremiscprog/textmidi/3dschuqnt/schuqnt4v2.txt,v $
+; $State: Exp $
+; Robert Schumann Piano Quintet Fourth Movement ; Violin 2
+
+;Schumann Quintet in textmidi language © 2003 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+STARTTRACK
+TRACK SECOND VIOLIN
+INSTRUMENT VIOLIN
+program(midi_channel_violin2, Violin)
+pan(midi_channel_violin2,-10)
+LAZY
+chan midi_channel_violin2 
+mp
+R 1 ;m000
+trem82(`C4 Eb4') trem82(`C4 Eb4') ; m001
+trem82(`Bb3 D4') trem82(`C4 Eb4')  ; m002
+trem82(`Bb3 D4') trem82(`C4 Eb4')  ; m003
+trem82(`Bb3 D4') trem82(`A3 D4')  ; m004
+trem82(`Bb3 D4') forte  trem82(`C4 Eb4')  ; m005
+mp trem82(`Bb3 D4') trem82(`C4 Eb4')  ; m006
+trem82(`Bb3 D4') trem82(`C4 Eb4')  ; m007
+trem82(`Bb3 D4') trem82(`A3 D4')  ; m008
+trem82(`Bb3 D4') trem82(`Bb3 G4')  ; m009
+forte  trem82(`Bb3 F4') mp trem82(`Bb3 F4')  ; m010
+forte  trem82(`Bb3 G4') mp trem82(`G3 Eb4') ; m011
+forte  trem82(`G3 D4') mp trem82(`G3 D4')  ; m012
+forte  trem82(`G3 Eb4') mp trem82(`C4 Eb4')   ; m013
+trem82(`Bb3 D4') trem82(`C4 Eb4')  ; m014
+trem82(`Bb3 D4') trem82(`C4 Eb4')   ; m015
+trem82(`Bb3 D4') trem82(`A3 D4')   ; m016
+trem82(`Bb3 D4') trem82(`C4 Eb4')   ; m017
+trem82(`Bb3 D4') trem82(`C4 Eb4')   ; m018
+trem82(`Bb3 D4') trem82(`C4 Eb4')   ; m019
+trem82(`Bb3 D4') trem82(`D4 A3')  ; m020
+Bb3 D4 2 R 2 ; m021
+forte  trem82decres(Bb3) R 2 ; m022
+forte  trem82decres(`C4') R 2 ; m023
+forte  trem82decres(`Bb3') R 2  ; m024
+mp  Bb3 4 Bb3 4 forte  trem82decres(`Bb3')  ; m025
+forte  R 2 trem82decres(`C4')  ; m026
+forte  R 2 trem82decres(`Bb3')  ; m027
+mp R 2 Bb3 4 Bb3 4  ; m028
+mp R 2 trem82(`Bb4 D5') ; m029
+trem82(`A4 D5') trem82(`Bb4 D5') ; m030
+trem82(`A4 D5') trem82(`Bb4 D5')  ; m031
+trem82(`A4 D5') trem82(`A4 G4')  ; m032
+trem82(`A4 F4') trem82(`G4 Bb4')  ; m033
+trem82(`F4 A4') trem82(`D4 Bb4')  ; m034
+trem82(`F4 A4') trem82(`E4 G4')  ; m035
+trem82(`D4 F4') trem82(`C#4 E4')  ; m036
+ppp D4 4 R 8 graces(G3,A3)  Bb3 2 ; m037
+mp R 4 R 8 graces(G3,A3)  Bb3 2  ; m038
+forte R 4 R 8 graces(G3,A3)  Bb3 2  ; m039
+R 2 Bb3 4 Bb3 4  ; m040
+Bb3 4. graces(Bb4,C5) ff D5 4 forte C5 4 ; m041
+Bb4 4 G4 4 C4 4 C#4 4 ; m042
+D4 7/16 R 16 pppp D4 2 ; m043
+E4 2 F#4 2 ; m044
+D4 2 pizz(2) D4 4 E4 4  ; m045
+E4 4 R 4 D#4 4 R 4 ; m046
+E4 4 endpizz(2,41) R 4 caesura8 G4 2 ; m047
+A4 2 B4 2 ; m048
+G4 2 pizz(2) A4 4 A4 4  ; m049
+A4 4 R 4 G#4 4 R 4 ; m050
+A4 4 endpizz(2,41) R 4 R 2 ; m051
+R 1 ; m052
+R 2 mf stac4(D5) stac4(E5) ; m053
+D5 4 C5 4 B4 4 A#4 4 ; m054
+C5 4 B4 4 stac4(E5) stac4(F5) ; m055
+E5 4 D5 4 C5 4 B4 4 ; m056
+D5 4 C5 4 forte stac4(G4) stac4(A4) ; m057
+G4 4 F4 4 E4 4 D#4 4 ; m058
+F4 4 E4 4 stac4(D4) stac4(C4) ; m059
+B3 2 stac4(C4) stac4(D4)  ; m060
+C4 2 stac4(E4) stac4(F4)  ; m061
+E4 4 D4 4 C4 4 B3 4 ; m062
+D4 4 C4 4 stac4(B3) stac4(A3)  ; m063
+G#3 2 stac4(A3) stac4(B3)  ; m064
+A3 4 R 4 R 2 ; m065
+p D4 2/1 ; m066
+ ; m067
+D4 1 ; m068
+mp Eb4 2 G3 G4 1 ; m069
+G3 G4 2 ; m070
+mf G3 G4 4 R 4 R 2 ; m071
+D4 F#4 4 R 4 R 2 ; m072
+B3 G4 4 R 4 END_LAZY DELAY 1 LAZY mf trem84(G3) trem84(A3)  ; m073
+trem84(Bb3) trem84(B3) trem84(C4) trem84(C#4)  ; m074
+trem84(D4) trem84(E4) trem84(F#4) trem84(G4)  ; m075
+forte trem84(`D4 A4') trem84(`D4 B4') trem84(`D4 C5') trem84(`D4 D5') ; m076
+G4 4 END_LAZY DELAY 239 LAZY ; m077
+;double bar
+p E4 B4 4 R 4 ;m 077b
+D4 B4 4 R 4 B3 G4 4 R 4  ; m078
+B3 F#4 4 R 4 B3 E4 4 R 4 ; m079
+B3 D4 4 R 4 A#3 F#4 4 R 4 ; m080
+mf B3 F#4 4 R 4 p B3 G4 4 R 4 ; m081
+B3 F#4 4 R 4 B3 E4 4 R 4  ; m082
+B3 D4 4 R 4  pp B3 4 R 4  ; m083
+B3 4 R 4  A#3 4 R 4   ; m084
+B3 4 R 4 longtone27(2,B3,7/4,50,75) ; m085
+ ; m086
+R 4 R 2 ; m087
+R 1  ; m088
+R 2 cresctone(2,B3,1,40,62) ; m089
+E4 2 ; m090
+decresctone(2,D#4,1/2,62,40) R 2 ; m091
+R 1 ; m092
+R 2 p E4 G#4 6/4 ; m093
+ ; m094
+E4 G4 6/4 ; m095 four sharps
+R 2 ; m096
+R 1  ; m097
+R 1  ; m098
+R 1  ; m099
+R 1 ; m100
+R 2 p decresctone(2,D4,10/4,50,20) ; m101
+ ; m102
+ ; m103
+R 1  ; m104
+R 2 F4 6/4 ; m105
+ ; m106
+decresctone(2,F#4,1,50,20) ; m107
+R 1  ; m108
+longtone(2,F#4,1,35,50) ; m109
+R 1 ; m110
+pp D4 F#4 15/4 ; m111
+ ; m112
+ ; m113
+R 4 ; m114
+R 1 ; m115
+p B3 B4 1 ; m116
+R 1 ; m117
+B3 B4 1 ; m118
+A3 2 F#4 7/6 ; m119
+E4 6 D#4 6 ; m120
+E4 2 G#4 2 ; m121
+E4 2 B3 2 ; m122
+C#4 2 A#4 7/6 ; m123
+G#4 6 G4 6 ; m124
+G#4 2 B4 2 ; m125
+G#4 2 D#4 2 ; m126
+C#4 2 A#4 2 ; m127
+A#4 6 R 6 G#4 6 R 6 G4 6 R 6 ; m128
+G#4 2 B4 2  ; m129
+G#4 2 vel 72 stac8r8(D#4) vel 74 stac8r8(E4)  ; m130
+vel 76 stac8r8(D#4) vel 78 stac8r8(C#4) vel 80 stac8r8(B3) vel 82 stac8r8(A#3)  ; m131
+vel 84 stac8r8(C#4) vel 86 stac8r8(B3) vel 88 eightr8(D#4) vel 90 eightr8(E4)  ; m132
+vel 92 eightr8(D#4) vel 94 eightr8(C#4) vel 96 eightr8(B3) vel 98 eightr8(A#3)  ; m133
+vel 100 eightr8(B3) vel 102 eightr8(A#3) vel 104 eightr8(D#4) vel 106 eightr8(E4)  ; m134
+vel 108 eightr8(D#4) vel 110 eightr8(C#4) vel 112 eightr8(B3) vel 114 eightr8(A#3)  ; m135
+vel 116 eightr8(B3) vel 118 eightr8(A#3) p trem82(G#4) ; m136
+trem82(G#4) trem82(G#4) ; m137
+trem82(G#4) trem82(E4)  ; m138
+trem82(D#4) trem82(D#4)  ; m139
+trem82(D#4) trem82(`G#3 G#4')  ; m140
+trem82(`G#3 G#4') trem82(`G#3 G#4')  ; m141
+trem82(`G#3 G#4') trem82(`E4')  ; m142
+trem82(`D#4') trem82(`D#4')  ; m143
+trem82(`G#4') trem82(`G#5')  ; m144
+trem82(`F#5') trem82(`F#5')  ; m145
+trem82(`G#5') trem82(`E5')  ; m146
+trem82(`D#5') trem82(`D#5')  ; m147
+trem82(`E5') trem82(`G#4')  ; m148
+trem82(`F#4') trem82(`G#4')  ; m149
+trem82(`F#4') trem82(`D#4')  ; m150
+trem82(`D#4') trem82(`D4')  ; m151
+trem82(`D#4') trem82(`D#4')  ; m152
+trem82(`D#4') trem82(`D#4')  ; m153
+trem82(`D#4') trem82(`B3')  ; m154
+trem82(`A#3') trem82(`A#3')  ; m155
+A#3 2 pp B3 2  ; m156
+R 2  B3 2 ; m157
+R 2  B3 2 ; m158
+R 2 articulate(B3) ; m159
+B3 2 articulate(D#4) ; m160
+R 2 articulate(E4) ; m161
+R 2 articulate(F#4) ; m162
+R 2 articulate(F#4) ; m163
+R 2  ; m164a
+ ;double bar; 3 flats
+p trem82(`Gb4 Bb4')  ;m164b
+mp trem82(`F4 Bb4') mp trem82(`Gb4 Bb4')  ; m165
+trem82(`F4 Bb4') trem82(`Gb4 Bb4')  ; m166
+trem82(`F4') trem82(`F4')  ; m167
+trem82(`F4 Db4') trem82(`Bb3 Gb4')  ; m168
+trem82(`Bb3 F4') trem82(`Bb3 Gb4')  ; m169
+trem82(`Bb3 F4') trem82(`Bb3 Gb4')  ; m170
+trem82(`Bb3 F4') trem82(`A3 F4')  ; m171
+ppp Bb3 2 pp Gb4 2 ; m172
+pp R 2  Gb4 2  ; m173
+p R 2  Gb4 2  ; m174
+mp R 2 p Gb4 4 Gb4 4  ; m175
+mf Gb4 4. graces(Gb4,Ab4) ff Gb4 4 forte Ab4 4 ; m176
+Gb4 4 Eb4 4 Ab3 4 A3 4 ; m177
+Bb3 4. R 8 pppp Bb4 2/1 ; m178
+ ; m179
+p pizz(2) C5 4 C5 4 ; m180
+C5 4 R 4 B4 4 R 4 ; m181
+C5 4 R 4 endpizz(2,41) C5 2 ; m182
+Db5 2 Eb5 2 ; m183
+C5 2 pizz(2) F5 4 F5 4 ; m184
+F5 4 R 4 E5 4 R 4 ; m185
+F5 4 endpizz(2,41) R 4 R 2 ; m186
+R 1  ; m187
+R 2 mp stac4(Bb4) stac4(C5) ; m188
+Bb4 4 Ab4 4 G4 4 F#4 4 ; m189
+Ab4 4 G4 4 stac4(C5) stac4(Db5) ; m190
+C5 4 Bb4 4 Ab4 4 G4 4 ; m191
+Bb4 4 Ab4 4 stac4(Eb4) stac4(F4) ; m192
+Eb4 4 Db4 4 C4 4 B3 4 ; m193
+Db4 4 C4 4 stac4(Bb3) stac4(Ab3)  ; m194
+forte G3 2 stac4(Ab3) stac4(Bb3)  ; m195
+Ab3 2 stac4(C5) stac4(Db5)  ; m196
+C5 4 Bb4 4 Ab4 4 G4 4 ; m197
+Bb4 4 Ab4 4 stac4(G4) stac4(F4)  ; m198
+E4 2 stac4(F4) stac4(G4)  ; m199
+F4 2 R 2 ; m200
+R 1 ; m201
+R 2 p stac4(Gb4) stac4(Ab4)  ; m202
+Gb4 4 E4 4 Eb4 4 D4 4  ; m203
+E4 4 Eb4 4 Eb4 1 ; m204
+Eb4 2 ; m205
+Eb4 G4 2 R 2 ; m206
+D4 F4 2 R 2 ; m207
+Eb4 2 forte trem82(Eb4) ; m208
+trem82(Eb4) trem82(Eb4)  ; m209
+trem82(`Eb4 G4') trem82(`Eb4 G4')   ; m210
+trem82(`D4 Bb4') trem82(`D4 Bb4')  ; m211
+Eb4 4 R 4 forte trem82(`C5 Eb5')  ; m212
+trem82(`Bb4 D5') trem82(`C5 Eb5')  ; m213
+trem82(`Bb4 D5') trem82(`A4 C5')  ; m214
+trem82(`G4 Bb4') trem82(`F#4 A4')  ; m215
+trem82(`G4') trem82(`G4 Eb4')  ; m216
+trem82(`D4 G4') trem82(`G4 Eb4')  ; m217
+trem82(`D4 G4') trem82(`C4 Eb4')  ; m218
+trem82(`Bb3 D4') trem82(`A3 D4')  ; m219
+G3 4 R 4 ff Bb3 4 D4 4 ; m220
+Eb4 2 Bb3 4 D4 4 ; m221
+trem84(`Eb4') trem84(`G4') trem84(`Bb4') trem84(`D5')   ; m222
+trem84(`Eb5') trem84(`G5') trem84(`Bb5') trem84(`D6')  ; m223
+Eb6 3/8 R 8 ppp C5 2 ; m224
+Bb4 2 Bb4 2 ; m225
+C5 2 C5 2 ; m226
+pp Bb4 2 Bb4 2  ; m227
+C5 2 C5 2  ; m228
+mp Bb4 2 Bb4 1  ; m229
+F4 2 ; m230
+pp Ab4 2 F4 2  ; m231
+G4 2 pp C5 2 ; m232
+Bb4 2 Bb4 2 ; m233
+C5 2 C5 2 ; m234
+Bb4 2 Bb4 2 ; m235
+C5 2 C5 2 ; m236
+Bb4 2 Bb4 1 ; m237
+F4 2 ; m238
+Bb4 2 Bb4 1  ; m239
+END_LAZY NOTE_ON 2 Eb4 64 LAZY
+Bb4 1 ;m240
+Ab4 1 ;m241
+G4  1 ;m242
+F4  1 ;m243
+END_LAZY NOTE_OFF 2 Eb4 64 LAZY
+forte Eb4 2 ; m244
+D4 2 Db4 Eb4 2 ; m245
+Db4 Eb4 2 C4 Eb4 2 ; m246
+Bb3 Eb4 2 Bb3 D4 2 ; m247
+Bb3 Eb4 4. R 8 p stac8(C5) mf stac8(Eb5) p stac8(D5) stac8(C5)  ; m248
+stac8(C5) mf stac8(Bb4) p stac8(A4) stac8(G4) stac8(Bb4) mf stac8(A4) p stac8(G4) stac8(F#4)  ; m249
+stac8(G4) mf stac8(G4) p stac8(A4) stac8(Bb4) stac8(G4) mf stac8(F#4) p stac8(E4) stac8(F#4)  ; m250
+stac8(G4) mf stac8(D4) p stac8(Eb4) stac8(D4) stac8(D4) mf stac8(C4) p stac8(Bb3) stac8(A3)  ; m251
+C4 8 Bb3 8 A3 8 G3 8 G4 2 ; m252
+D4 4 F4 4 mp G4 3/4 ; m253
+p F4 2 E4 2 ; m254
+F4 4 G4 4 A4 4 ; m255
+D4 4 F4 4 G4 2 ; m256
+R 1 ; m257
+R 1 ; m258
+R 1 ; m259
+R 1 ; m260
+R 1 ; m261
+R 2 forte G5 8 Ab5 8 G5 8 F5 8  ; m262
+F5 8 Eb5 8 D5 8 C5 8 Eb5 8 D5 8 C5 8 B4 8 ; m263
+C5 8 C5 8 D5 8 Eb5 8 C5 8 B4 8 A4 8 B4 8  ; m264
+C5 8 G4 8 Ab4 8 G4 8 G4 8 F4 8 Eb4 8 D4 8  ; m265
+C4 8 G4 8 F4 8 C5 8 Bb4 8 C5 8 Bb4 8 Ab4 8  ; m266
+ff G4 4/26 forte Bb4 3/26 Eb5 3/26 G5 3/26 ff Ab5 4/26 forte Eb5 3/26 C5 3/26 Ab4 3/26  ; m267
+ff G4 4/26 forte Bb4 3/26 Eb5 3/26 G5 3/26 ff F5 4/26 forte C5 3/26 Ab4 3/26 F4 3/26  ; m268
+ff Eb4 4/26 forte G4 3/26 C5 3/26 Eb5 3/26 ff F5 4/26 forte C5 3/26 Ab4 3/26 F4 3/26  ; m269
+ff Eb4 4/26 forte G4 3/26 C5 3/26 Eb5 3/26 ff Db5 4/26 forte Ab4 3/26 F4 3/26 Db4 3/26  ; m270
+ff C4 4/26 forte Eb4 3/26 Ab4 3/26 C5 3/26 ff Db5 4/26 forte Ab4 3/26 F4 3/26 Db4 3/26  ; m271
+ff C4 4/26 forte Eb4 3/26 Ab4 3/26 C5 3/26 ff C4 8 C4 8 forte Eb4 8 Eb4 8  ; m272
+trem82(G4) trem84(C4) trem84(Eb4) ; m273
+G4 2 caesura8 R 2 ; m274
+p END_LAZY NOTE_ON 2 Bb3 25 NOTE_ON 2 Bb4 25 LAZY R 1 ; m275 
+R 1 ; m276
+R 1 ; m277
+R 1 ; m278
+R 1 ; m279
+R 1 ; m280
+R 1 ; m281
+END_LAZY NOTE_OFF 2 Bb3 64 LAZY R 2 END_LAZY NOTE_OFF 2 Bb4 64 LAZY 
+Eb4 8 R 8 F4 8 R 8  ; m282
+Eb4 8 R 8 Db4 8 R 8 C4 8 R 8 B3 8 R 8  ; m283
+Db4 8 R 8 C4 8 R 8 Bb3 8 R 8 B3 8 R 8  ; m284
+C4 8 R 8 Db4 8 R 8 C4 8 R 8 Db4 8 R 8   ; m285
+D4 8 R 8 Eb4 8 R 8 forte C4 Ab4 2 ; m286
+Bb3 G4 2 Ab3 F4 2 ; m287
+G3 Eb4 2 R 2 ; m288
+R 1 ; m289
+R 2 C4 G4 Eb5 2 ; m290
+Bb3 G4 D5 2 Ab3 Eb4 C5 2 ; m291
+G3 Eb4 Bb4 2 R 2 ; m292
+R 2 p Db4 4 Eb4 4  ; m293
+Eb4 4 Eb4 4 Eb4 4 Eb4 4  ; m294
+Eb4 4 Eb4 4 D4 4 Eb4 4 ;m295
+E4 4  F4  4 F4  4 G4 4 ; m296
+G4 4 Ab4 4 Bb4 4 Bb4 4 ; m297
+Bb4 4 Bb4 4 Bb4 4 Bb4 4  ; m298
+Bb4 4 Bb4 4 Bb4 4 Bb4 4  ; m299
+ff trem82(`G3 Eb4') trem82(`G3 Eb4') ; m300
+trem82(`G3 Eb4') trem82(`G3 Eb4')  ; m301
+trem82(`Ab3 F4') trem82(`Ab3 F4')  ; m302
+trem82(`Ab3 F4') trem82(`Ab3 F4')  ; m303
+trem82(`G3 Eb4') trem82(`G3 Eb4')  ; m304
+trem82(`G3 Eb4') trem82(`G3 Eb4')  ; m305
+trem82(`Ab3 Eb4') trem82(`Ab3 Eb4')  ; m306
+trem82(`Ab3 Eb4') trem82(`Ab3 Eb4')  ; m307
+trem82(`G3 Eb4') trem84(`G3 Eb4') fff trem84(`Ab3 Eb4')  ; m308
+ff trem82(`G3 Eb4') trem84(`G3 Eb4') fff trem84(`Ab3 Eb4')  ; m309
+ff trem82(`G3 Eb4') trem84(`G3 Eb4') trem84(`Bb3')  ; m310
+trem84(`G3') trem84(`Bb3') trem84(`Eb4') trem84(`G4')  ; m311
+Bb4 1 ; m312
+Bb4 F5 1 ; m313
+fff Bb4 Eb5 1 ; m314
+fff Bb4 E5 1  ; m315
+ff Bb4 F5 2 Ab4 F5 2 ; m316
+Ab4 F5 2 Ab4 Eb5 2  ; m317
+fff Ab4 D5 2 R 2 ; m318
+R 1 ; m319
+R 2 forte stac4(Eb4) stac4(G4) ; m320
+Ab4 2 stac4(Eb4) stac4(G4) ; m321
+stac4(F4) stac4(Bb3) stac4(C4) stac4(D4) ; m322
+stac4(Eb4) stac4(G4) stac4(Bb4) stac4(Bb3) ; m323
+stac4(C4) stac4(Bb3) stac4(A3) stac4(C4) ; m324
+stac4(Bb3) stac4(D4) stac4(C4) stac4(Eb4) ; m325
+D4 2 R 2 ; m326
+ff Bb4 1 ; m327
+forte stac4(A4) stac4(A4) stac4(Bb4) stac4(C5) ; m328
+D5 2 stac4(D5) stac4(C5) ; m329
+Bb4 2 Bb4 1 ; m330
+Bb4 4 Ab4 4 ; m331
+G4 2 R 2 ; m332
+R 1  ; m333
+R 1 ; m334
+R 1 ; m335
+R 1 ; m336
+R 1 ; m337
+ff Bb3 9/4 ; m338
+ ; m339
+A3 4 Bb3 4 C4 4 ; m340
+D4 2 D4 4 C4 4 ; m341
+Bb3 2 R 2 ; m342
+R 1  ; m343
+R 1 ; m344
+R 1 ; m345
+R 1 ; m346
+ff D4 1 ; m347
+ff C5 1 ; m348
+forte Bb4 2 A4 2 ; m349
+G4 2 F4 2 ; m350
+E4 2 stac4(E4) stac4(F4) ; m351
+stac4(G4) stac4(E4) stac4(F4) stac4(G4) ; m352
+stac4(Ab4) stac4(C4) stac4(D4) stac4(E4) ; m353
+stac4(F4) stac4(Ab3) stac4(Bb3) stac4(C4) ; m354
+Bb3 4 R 4 R 2 ; m355
+R 1 ; m356
+ff Eb4 1 ; m357
+ff Db5 1 ; m358
+forte C5 2 Bb4 2 ; m359
+stac4(Ab4) stac4(F4) stac4(G4) stac4(Ab4)  ; m360
+stac4(D4) stac4(F4) stac4(Ab4) stac4(G4)  ; m361
+stac4(F4) stac4(D4) stac4(Eb4) stac4(F4)  ; m362
+G4 2 stac4(G4) stac4(Ab4) ; m363
+stac4(Bb4) stac4(G4) stac4(Ab4) stac4(Bb4) ; m364
+stac4(C5) stac4(E5) stac4(G5) stac4(F5) ; m365
+stac4(E5) stac4(C5) stac4(D5) stac4(E5) ; m366
+ff F5 1 ; m367
+ff Eb6 1 ; m368
+forte D6 2 C6 2 ; m369
+Bb5 2 Bb4 Ab5 2 ; m370
+Bb4 G5 2 stac4(Bb3) stac4(D4) ; m371
+stac4(Eb4) stac4(G4) stac4(Bb4) stac4(D5) ; m372
+stac4(Eb5) stac4(G5) stac4(Bb5) stac4(D6) ; m373
+Eb6 2 stac4(A3) stac4(C4) ; m374
+fff Eb4 2 ff trem84(A3) trem84(C4)   ; m375
+trem84(Eb4) trem84(Gb4) trem84(A4) trem84(C5)  ; m376
+trem84(Eb5) trem84(Gb5) trem84(A5) trem84(C6)  ; m377
+Eb6 2 p C5 2 ; m378
+Bb4 2 Bb4 2 ; m379
+C5 2 C5 2 ; m380
+Bb4 2 Bb4 2 ; m381
+C5 2 C5 2 ; m382
+Bb4 2 Bb4 1  ; m383
+F4 2 ; m384
+Ab4 2 F4 2  ; m385
+G4 2 p C5 2 ; m386
+Bb4 2 Bb4 2 ; m387
+C5 2 C5 2 ; m388
+Bb4 2 Bb4 2 ; m389
+C5 2 C5 2  ; m390
+Bb4 2 Bb4 1  ; m391
+F4 2 ; m392
+Bb4 2 Bb4 1 ; m393
+END_LAZY NOTE_ON 2 Eb4 64 LAZY
+Bb4 1 ;m394
+Ab4 1 ;m395
+G4  1 ;m396
+F4  1 ;m397
+END_LAZY NOTE_OFF 2 Eb4 64 LAZY
+forte Eb4 2 ; m398
+D4 2 Db4 Eb4 2 ; m399
+Db4 Eb4 2 C4 Eb4 2 ; m400
+Bb3 Eb4 2 Bb3 D4 2 ; m401
+trem82(`Bb3 Eb4') trem82(`Bb3 Eb4') ; m402
+trem82(`Bb3 F4') trem82(`Bb3 F4')  ; m403
+trem82(`Bb3 G4') trem82(`Bb3 G4')  ; m404
+trem82(`C4 Ab4') trem82(`D4 Bb4')  ; m405
+trem82(`Eb4 Bb4') trem82(`Eb4 Bb4')  ; m406
+trem82(`D4 Bb4') trem82(`D4 Bb4')  ; m407
+trem82(`Eb4 Bb4') trem82(`Eb4 Bb4')  ; m408
+trem82(`C4 Ab4') trem82(`D4 Bb4')  ; m409
+trem82(`Eb4 Bb4') trem82(`Eb4 Bb4')  ; m410
+trem82(`C4 Ab4') trem82(`D4 Bb4')  ; m411
+trem82(`Eb4 Bb4') trem84(`Bb4') trem84(`Eb5')  ; m412
+trem84(`C5') trem84(`Ab4') trem84(`F4') trem84(`Bb4')  ; m413
+trem84(`G4') trem84(`Eb4') trem84(`Bb4') trem84(`Eb5')  ; m414
+trem84(`C5') trem84(`Ab4') trem84(`F4') trem84(`Bb4')  ; m415
+trem84(`G4') trem84(`Eb4') trem84(`C4') trem84(`F4')  ; m416
+trem84(`D4') trem84(`Bb3') trem84(`G3') trem84(`C5')  ; m417
+trem84(`Ab4') trem84(`F4') trem84(`D4') trem84(`G4')  ; m418
+trem84(`Eb4') trem84(`C4') trem84(`Ab3') trem84(`C4')  ; m419
+Bb3 4 R 4 Bb3 F4 D5 4 R 4 ; m420
+Bb3 G4 Eb5 4 R 4 R 2 ; m421
+R 1 ; m422
+Bb3 G4 Eb5 2 R 2 ; m423
+Bb3 G4 Eb5 2 R 2  ; m424
+Bb3 G4 Eb5 2 R 2  ; m425
+G3 Eb4 2 R 2 ; m426
+G3 Eb4 2 R 2  ; m427
+END_LAZY
+END_OF_TRACK

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.66
+# TextMIDITools Version 1.0.67
 # textmidiform.py 1.0
-# Copyright © 2023 Thomas E. Janzen
+# Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -29,7 +29,8 @@ class VoiceWindow(tkinter.Toplevel):
         self.high_pitch = StringVar()
         self.channel = IntVar()
         self.program = StringVar()
-        self.walking = tkinter.IntVar()
+        #self.walking = tkinter.IntVar()
+        self.walking = tkinter.DoubleVar(value=0.0)
         # no variable for pan
         self.follow = tkinter.StringVar()
         self.leader = StringVar()
@@ -106,10 +107,15 @@ class VoiceWindow(tkinter.Toplevel):
         self.program_spinbox.set(self.general_midi_list[self.xml_form['voices'][vox]['program'] - 1])
         self.program_spinbox['state'] = 'readonly'
 
-        self.walking.set(self.xml_form['voices'][vox]['walking'])
-        self.walking_checkbutton = tkinter.ttk.Checkbutton(self.frame, text='walking', variable=self.walking)
+        self.walking_scroll_label = tkinter.ttk.Label(self.frame, text='Random.............................Walking')
+        self.walking_label = tkinter.ttk.Label(self.frame, text='Walking')
+        self.walking_scrollbar = tkinter.ttk.Scrollbar(self.frame, command=self.walking_callback)
+        self.walking_scrollbar['orient'] = 'horizontal'
+        self.walking_scrollbar.bind('<B1-Motion>', self.walking_callback)
+        tempwalking = self.xml_form['voices'][vox]['walking']
+        self.walking_scrollbar.set(tempwalking, tempwalking)
 
-        self.pan_scroll_label = tkinter.ttk.Label(self.frame, text='-pi..................0..................pi')
+        self.pan_scroll_label = tkinter.ttk.Label(self.frame,     text='-pi..................0..................pi')
         self.pan_label = tkinter.ttk.Label(self.frame, text='Pan')
         self.pan_scrollbar = tkinter.ttk.Scrollbar(self.frame, command=self.pan_callback)
         self.pan_scrollbar['orient'] = 'horizontal'
@@ -193,7 +199,12 @@ class VoiceWindow(tkinter.Toplevel):
         self.program_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
         self.program_spinbox.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
-        self.walking_checkbutton.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
+        the_row = the_row + 1
+        self.walking_scroll_label.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
+        the_row = the_row + 1
+        self.walking_label.grid(row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
+        self.walking_scrollbar.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
+
         the_row = the_row + 1
         self.pan_scroll_label.grid(row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
@@ -297,7 +308,7 @@ class VoiceWindow(tkinter.Toplevel):
                 vd['low_pitch'] = 'A0'
                 vd['high_pitch'] = 'C8'
                 vd['channel'] = 1
-                vd['walking'] = 0
+                vd['walking'] = 0.0
                 vd['program'] = 1
                 vd['pan'] = 0
                 fd = {}
@@ -343,7 +354,7 @@ class VoiceWindow(tkinter.Toplevel):
             self.follow_delay_entry['state'] = 'normal'
             self.inversion_checkbutton['state'] = 'normal'
             self.retrograde_checkbutton['state'] = 'normal'
-            self.walking_checkbutton['state'] = 'disabled'
+            #self.walking_scrollbar.activate('none')
             self.follow_interval.set(self.xml_form['voices'][vox]['follower']['interval'])
             self.interval_type.set(self.xml_form['voices'][vox]['follower']['interval_type'])
             self.follow_interval.set(self.xml_form['voices'][vox]['follower']['interval'])
@@ -373,7 +384,9 @@ class VoiceWindow(tkinter.Toplevel):
             self.follow_delay_entry.update()
             self.inversion_checkbutton.update()
             self.retrograde_checkbutton.update()
-            self.walking_checkbutton['state'] = 'normal'
+            #self.walking_scrollbar.activate('arrow1')
+            #self.walking_scrollbar.activate('arrow2')
+            #self.walking_scrollbar.activate('slider')
 
     def leader_callback(self, event=None, *args):
         self.xml_form['voices'][self.voice_number.get()]['follower']['leader'] = self.leader.get()
@@ -386,9 +399,9 @@ class VoiceWindow(tkinter.Toplevel):
         vox = int(self.voice_number.get())
         self.xml_form['voices'][vox]['program'] = GeneralMIDIInstrumentDict[prog_index][gm_program_index]
 
-    def walking_callback(self, *args):
-        vox = int(self.voice_number.get())
-        self.xml_form['voices'][vox]['walking'] = self.walking.get()
+#def walking_callback(self, *args):
+#        vox = int(self.voice_number.get())
+#        self.xml_form['voices'][vox]['walking'] = self.walking.get()
 
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
@@ -432,7 +445,7 @@ class VoiceWindow(tkinter.Toplevel):
         follow = int(self.follow.get())
         if (follow == 1):
             self.xml_form['voices'][vox]['follower']['follow'] = 1
-            self.walking_checkbutton['state'] = 'disabled'
+            #self.walking_scrollbar.activate('none')
             self.leader_spinbox['state'] = 'normal'
             self.scaler_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
@@ -442,7 +455,9 @@ class VoiceWindow(tkinter.Toplevel):
             self.retrograde_checkbutton['state'] = 'normal'
         else:
             self.xml_form['voices'][vox]['follower']['follow'] = 0
-            self.walking_checkbutton['state'] = 'normal'
+            #self.walking_scrollbar.activate('arrow1')
+            #self.walking_scrollbar.activate('arrow2')
+            #self.walking_scrollbar.activate('slider')
             self.leader_spinbox['state'] = 'disabled'
             self.scaler_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
@@ -450,6 +465,51 @@ class VoiceWindow(tkinter.Toplevel):
             self.follow_delay_entry['state'] = 'disabled'
             self.inversion_checkbutton['state'] = 'disabled'
             self.retrograde_checkbutton['state'] = 'disabled'
+
+    def walking_callback(self, action, sign = 0, unitspage='None'):
+        vox = int(self.voice_number.get())
+        firstlastlist = self.walking_scrollbar.get()
+        setting = 0.0
+        if (action == 'scroll'):
+            if (unitspage == 'pages'):
+                delta = float(sign) / 6.0
+                setting = firstlastlist[1]
+                if ((setting <= 0.0) and (delta < 0.0)):
+                    delta = 0.0
+                if ((setting >= 1.0) and (delta > 0.0)):
+                    delta = 0.0
+                setting = setting + delta
+                self.walking_scrollbar.set(setting, setting)
+                value = setting
+                self.xml_form['voices'][vox]['walking'] = value
+            else:
+                if (unitspage == 'units'):
+                    delta = float(sign) / 64.0
+                    setting = firstlastlist[1]
+                    if ((setting <= 0.0) and (delta < 0.0)):
+                        delta = 0.0
+                    if ((setting >= 1.0) and (delta > 0.0)):
+                        delta = 0.0
+                    setting = setting + delta
+                    self.walking_scrollbar.set(setting, setting)
+                    value = setting
+                    self.xml_form['voices'][vox]['walking'] = value
+        else:
+            if (action == 'moveto'):
+                setting = float(sign)
+                if (setting <= 0.0):
+                    setting = 0.0
+                if (setting > 1.0):
+                    setting = 1.0
+                self.walking_scrollbar.set(setting, setting)
+                value = setting
+                self.xml_form['voices'][vox]['walking'] = value
+            else:
+                if (action == 'goto'):
+                    setting = firstlastlist[0]
+                    self.walking_scrollbar.set(firstlastlist[0])
+                    value = setting
+                    self.xml_form['voices'][vox]['walking'] = value
 
     def pan_callback(self, action, sign, unitspage='None'):
         vox = int(self.voice_number.get())

@@ -19,7 +19,7 @@
 @author Thomas E. Janzen
 @end titlepage
 @copying
-Copyright @copyright{} 2023 Thomas E. Janzen.
+Copyright @copyright{} 2024 Thomas E. Janzen.
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2
@@ -474,8 +474,11 @@ The Program is the MIDI program name from General MIDI used for the current voic
 @node Walking
 @section Walking
 @cindex Walking
-The walking flag sets walking for a voice.  In walking mode, a voice ignores
+The walking value sets the probability of a voice being in walking mode, note to note.  In walking mode, a voice ignores
 the Form Pitch curve and follows the Melodic Probabilities.
+The value ranges from 0.0 (random melody) to 1.0 (walking up and down the scale).  
+A value between 0.0 and 1.0 represents the probability of the voice being in walking mode, note to note.
+This makes it possible for a single voice to randomly be in either walking or random (jumpy) mode.
 
 @node Pan
 @section Pan

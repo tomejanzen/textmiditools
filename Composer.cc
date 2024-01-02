@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.66
+// TextMIDITools Version 1.0.67
 //
-// Copyright © 2023 Thomas E. Janzen
+// Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -387,7 +387,19 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     MelodyProbabilities::MelodyDirection
                         direction{xml_form.melody_probabilities()
                         (random_double())};
-                    if (xml_form.voices()[tr].walking())
+                    bool crisp_walking{};
+                    if (1.0 == xml_form.voices()[tr].walking())
+                    {
+                        crisp_walking = true;
+                    }
+                    else
+                    {
+                        if (xml_form.voices()[tr].walking() > 0.0)
+                        {
+                            crisp_walking = (xml_form.voices()[tr].walking() > random_double()) ? true : false;
+                        }
+                    }
+                    if (crisp_walking)
                     {
                         // first walking note should be in mid-scale
                         if (track_note_events[tr].empty()) [[unlikely]]

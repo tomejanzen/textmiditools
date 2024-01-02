@@ -19,7 +19,7 @@
 @author Thomas E. Janzen
 @end titlepage
 @copying
-Copyright @copyright{} 2023 Thomas E. Janzen.
+Copyright @copyright{} 2024 Thomas E. Janzen.
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2
@@ -698,37 +698,53 @@ the exact character of the music might not repeat at all for long pieces.
 In addition to this approach to musical form, @command{textmidicgm}
 specifies a musical work as having:
 @itemize
-@item a length in seconds;
-@cindex length of composition
-@item a scale, defined as the full scale in MIDI key numbers;
-@cindex scale
-@item a pulse, which forces notes to start together on a number of
+@item name: the name of the piece;
+@item len: a length in seconds for the entire piece;
+@cindex len
+@item min_note_len: the global mininum length of a note in seconds;
+@item max_note_len: the global maximum length of a note in seconds;
+@item scale: the full scale in MIDI key numbers;
+@cindex scale 
+@item pulse: which forces notes to start together on a number of
 pulses per second;
 @cindex pulse
-@item in the XML form file, probabilities of a walking voice rising,
-falling, or repeating the last key number;
-@cindex melody probabilities
+@item melody_probabilities: the cumulative probabilities of a walking-mode melody 
+taking a step up, down, or repeating the last key number;
+@item pitch_form: as described above;
+@item rhythm_form: as described above;
+@item dynamic_form: as described above;
+@item texture_form: as described above;
+@cindex melody_probabilities;
 @item a number of voices, each of which has the following attributes:
 @cindex voices
 @itemize
-@item a range of key numbers from minimum to maximum.
-If the form requires pitches out of range for a voice, it remains quiet;
-@cindex voice range
-@item a MIDI channel;
-@cindex voice channel
-@item in the XML form file, a MIDI program,
+@item low_pitch: a pitch below which the voice is tacet;
+@cindex low_pitch;
+@item high_pitch: a pitch above which the voice is tacet;
+@cindex high_pitch;
+@item channel: the MIDI voice channel;
+@item walking: the probability that a voice is in walking mode, randomized note to note.
+A zero makes the voices always random key (or somewhat jumpy); a 1.0 makes the voice walk
+in the scale.  A value between 0.0 and 1.0 is the probability that the voice will be
+walking, note event to note event; if not walking, leap randomly.
+@item program: in the XML form file, a MIDI program,
 mapped by General MIDI to an instrument sound;
-@cindex voice program
-@item In the XML file the voices also have a pan value;
-@cindex voice pan
-@item in the XML file each voice can be defined as a follower by
-scale interval or chromatic interval;
-@cindex voice as follower
+@cindex voice program;
+@item pan: a left-right stereo pan value;
+@cindex pan;
+@item in the XML file each voice can be defined as a follower by:
+@itemize
+@item follow: 0 to be a unique melody; 1 to follow another voice
+@item leader: the leader voice to follow (with voices numbered 0...).
+The leader may be a higher-numbered voice.
+@item interval_type: a scaler or chromatic interval;
+@item interval: the interval, from -128 to + 128;
+@item delay: a rational musical rhythm value to delay after the leader;
+@item inversion: 0 to not invert the melody; 1 to invert;
+@item retrograde: 0 to copy the leader forwards; 1 to copy it in reverse time.
 @end itemize
 @end itemize
-
-The XML form file add amplitude and offset for all sinusoids that specify
-the musical form.
+@end itemize
 
 @node The Original Text Form File
 @chapter The Original Text Form File
@@ -1025,6 +1041,15 @@ Their defaults are both 0.5; this is how AlgoRhythms set them.
 @cindex voice program
 Each voice has a program, which is a 1-based MIDI program.  Refer to
 General MIDI for the instrument assignments to program numbers.
+@item Fuzzy Walking:
+In the XML file the walking value represents the probability that
+a voice will be in walking mode from note event to note event.
+It is a value from 0.0 to 1.0, inclusive.  This is compatible with
+the boolean flag used before 2024, because the flag was stored as 0
+or 1 in the XML file.  A value of 0.0 means non-walking, and 1.0 means
+always walking.  A value of 0.5 means that the voice will have a 
+50% chance of being in either walking or random mode.  Other values
+between 0 and 1 may be used.
 @item Voice Pan:
 @cindex voice pan
 The pan value for a voice can be specified for the entire piece of music.
@@ -1146,7 +1171,7 @@ The version 1 format is:
             <low_pitch_>C1</low_pitch_>
             <high_pitch_>C7</high_pitch_>
             <channel_>15</channel_>
-            <walking_>1</walking_>
+            <walking_>1.0</walking_>
             <program_>1</program_>
             <pan_>0</pan_>
             <follower_ class_id="7" tracking_level="0" version="0">
@@ -1160,7 +1185,7 @@ The version 1 format is:
             <low_pitch_>C1</low_pitch_>
             <high_pitch_>C7</high_pitch_>
             <channel_>15</channel_>
-            <walking_>1</walking_>
+            <walking_>1.0</walking_>
             <program_>1</program_>
             <pan_>0</pan_>
             <follower_>
@@ -1174,7 +1199,7 @@ The version 1 format is:
             <low_pitch_>C1</low_pitch_>
             <high_pitch_>C7</high_pitch_>
             <channel_>15</channel_>
-            <walking_>1</walking_>
+            <walking_>1.0</walking_>
             <program_>1</program_>
             <pan_>0</pan_>
             <follower_>
@@ -1188,7 +1213,7 @@ The version 1 format is:
             <low_pitch_>C1</low_pitch_>
             <high_pitch_>C7</high_pitch_>
             <channel_>15</channel_>
-            <walking_>1</walking_>
+            <walking_>0.5</walking_>
             <program_>1</program_>
             <pan_>0</pan_>
             <follower_>
@@ -1208,193 +1233,193 @@ The version 2 format after 1 May 2023 is:
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE boost_serialization>
 <boost_serialization signature="serialization::archive" version="18">
-	<xml_form class_id="0" tracking_level="0" version="2">
-		<name_>inversion</name_>
-		<len_>60</len_>
-		<min_note_len_>0.0</min_note_len_>
-		<max_note_len_>2.0</max_note_len_>
-		<scale_ class_id="1" tracking_level="0" version="0">
-			<count>75</count>
-			<item_version>0</item_version>
-			<item>C-1</item>
-			<item>D-1</item>
-			<item>E-1</item>
-			<item>F-1</item>
-			<item>G-1</item>
-			<item>A-1</item>
-			<item>B-1</item>
-			<item>C0</item>
-			<item>D0</item>
-			<item>E0</item>
-			<item>F0</item>
-			<item>G0</item>
-			<item>A0</item>
-			<item>B0</item>
-			<item>C1</item>
-			<item>D1</item>
-			<item>E1</item>
-			<item>F1</item>
-			<item>G1</item>
-			<item>A1</item>
-			<item>B1</item>
-			<item>C2</item>
-			<item>D2</item>
-			<item>E2</item>
-			<item>F2</item>
-			<item>G2</item>
-			<item>A2</item>
-			<item>B2</item>
-			<item>C3</item>
-			<item>D3</item>
-			<item>E3</item>
-			<item>F3</item>
-			<item>G3</item>
-			<item>A3</item>
-			<item>B3</item>
-			<item>C4</item>
-			<item>D4</item>
-			<item>E4</item>
-			<item>F4</item>
-			<item>G4</item>
-			<item>A4</item>
-			<item>B4</item>
-			<item>C5</item>
-			<item>D5</item>
-			<item>E5</item>
-			<item>F5</item>
-			<item>G5</item>
-			<item>A5</item>
-			<item>B5</item>
-			<item>C6</item>
-			<item>D6</item>
-			<item>E6</item>
-			<item>F6</item>
-			<item>G6</item>
-			<item>A6</item>
-			<item>B6</item>
-			<item>C7</item>
-			<item>D7</item>
-			<item>E7</item>
-			<item>F7</item>
-			<item>G7</item>
-			<item>A7</item>
-			<item>B7</item>
-			<item>C8</item>
-			<item>D8</item>
-			<item>E8</item>
-			<item>F8</item>
-			<item>G8</item>
-			<item>A8</item>
-			<item>B8</item>
-			<item>C9</item>
-			<item>D9</item>
-			<item>E9</item>
-			<item>F9</item>
-			<item>G9</item>
-		</scale_>
-		<pulse_>8.0</pulse_>
-		<melody_probabilities_ class_id="2" tracking_level="0" version="0">
-			<down_>0.25</down_>
-			<same_>0.5</same_>
-			<up_>0.75</up_>
-		</melody_probabilities_>
-		<pitch_form_ class_id="3" tracking_level="0" version="0">
-			<mean_sine_ class_id="4" tracking_level="0" version="0">
-				<period_>180.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</mean_sine_>
-			<range_sine_>
-				<period_>180.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</range_sine_>
-		</pitch_form_>
-		<rhythm_form_>
-			<mean_sine_>
-				<period_>180.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</mean_sine_>
-			<range_sine_>
-				<period_>180.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</range_sine_>
-		</rhythm_form_>
-		<dynamic_form_>
-			<mean_sine_>
-				<period_>180.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</mean_sine_>
-			<range_sine_>
-				<period_>180.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</range_sine_>
-		</dynamic_form_>
-		<texture_form_>
-			<period_>180.0</period_>
-			<phase_>0.0</phase_>
-			<amplitude_>0.5</amplitude_>
-			<offset_>0.5</offset_>
-		</texture_form_>
-		<voices_ class_id="5" tracking_level="0" version="0">
-			<count>2</count>
-			<item_version>0</item_version>
-			<item class_id="6" tracking_level="0" version="0">
-				<low_pitch_>A0</low_pitch_>
-				<high_pitch_>C8</high_pitch_>
-				<channel_>1</channel_>
-				<walking_>0</walking_>
-				<program_>1</program_>
-				<pan_>0</pan_>
-				<follower_ class_id="7" tracking_level="0" version="2">
-					<follow_>0</follow_>
-					<leader_>2147483647</leader_>
-					<interval_type_>0</interval_type_>
-					<interval_>0</interval_>
-					<delay_ class_id="8" tracking_level="0" version="0">
-						<numerator_>0</numerator_>
-						<denominator_>0</denominator_>
-					</delay_>
-					<inversion_>0</inversion_>
-					<retrograde_>0</retrograde_>
-				</follower_>
-			</item>
-			<item>
-				<low_pitch_>A0</low_pitch_>
-				<high_pitch_>C8</high_pitch_>
-				<channel_>1</channel_>
-				<walking_>0</walking_>
-				<program_>1</program_>
-				<pan_>0</pan_>
-				<follower_>
-					<follow_>1</follow_>
-					<leader_>0</leader_>
-					<interval_type_>1</interval_type_>
-					<interval_>0</interval_>
-					<delay_>
-						<numerator_>0</numerator_>
-						<denominator_>0</denominator_>
-					</delay_>
-					<inversion_>1</inversion_>
-					<retrograde_>0</retrograde_>
-				</follower_>
-			</item>
-		</voices_>
-		<arrangement_definition_ class_id="9" tracking_level="0" version="0">
-			<algorithm_>1</algorithm_>
-			<period_>100000.0</period_>
-		</arrangement_definition_>
-	</xml_form>
+    <xml_form class_id="0" tracking_level="0" version="2">
+        <name_>inversion</name_>
+        <len_>60</len_>
+        <min_note_len_>0.0</min_note_len_>
+        <max_note_len_>2.0</max_note_len_>
+        <scale_ class_id="1" tracking_level="0" version="0">
+            <count>75</count>
+            <item_version>0</item_version>
+            <item>C-1</item>
+            <item>D-1</item>
+            <item>E-1</item>
+            <item>F-1</item>
+            <item>G-1</item>
+            <item>A-1</item>
+            <item>B-1</item>
+            <item>C0</item>
+            <item>D0</item>
+            <item>E0</item>
+            <item>F0</item>
+            <item>G0</item>
+            <item>A0</item>
+            <item>B0</item>
+            <item>C1</item>
+            <item>D1</item>
+            <item>E1</item>
+            <item>F1</item>
+            <item>G1</item>
+            <item>A1</item>
+            <item>B1</item>
+            <item>C2</item>
+            <item>D2</item>
+            <item>E2</item>
+            <item>F2</item>
+            <item>G2</item>
+            <item>A2</item>
+            <item>B2</item>
+            <item>C3</item>
+            <item>D3</item>
+            <item>E3</item>
+            <item>F3</item>
+            <item>G3</item>
+            <item>A3</item>
+            <item>B3</item>
+            <item>C4</item>
+            <item>D4</item>
+            <item>E4</item>
+            <item>F4</item>
+            <item>G4</item>
+            <item>A4</item>
+            <item>B4</item>
+            <item>C5</item>
+            <item>D5</item>
+            <item>E5</item>
+            <item>F5</item>
+            <item>G5</item>
+            <item>A5</item>
+            <item>B5</item>
+            <item>C6</item>
+            <item>D6</item>
+            <item>E6</item>
+            <item>F6</item>
+            <item>G6</item>
+            <item>A6</item>
+            <item>B6</item>
+            <item>C7</item>
+            <item>D7</item>
+            <item>E7</item>
+            <item>F7</item>
+            <item>G7</item>
+            <item>A7</item>
+            <item>B7</item>
+            <item>C8</item>
+            <item>D8</item>
+            <item>E8</item>
+            <item>F8</item>
+            <item>G8</item>
+            <item>A8</item>
+            <item>B8</item>
+            <item>C9</item>
+            <item>D9</item>
+            <item>E9</item>
+            <item>F9</item>
+            <item>G9</item>
+        </scale_>
+        <pulse_>8.0</pulse_>
+        <melody_probabilities_ class_id="2" tracking_level="0" version="0">
+            <down_>0.25</down_>
+            <same_>0.5</same_>
+            <up_>0.75</up_>
+        </melody_probabilities_>
+        <pitch_form_ class_id="3" tracking_level="0" version="0">
+            <mean_sine_ class_id="4" tracking_level="0" version="0">
+                <period_>180.0</period_>
+                <phase_>0.0</phase_>
+                <amplitude_>0.5</amplitude_>
+                <offset_>0.5</offset_>
+            </mean_sine_>
+            <range_sine_>
+                <period_>180.0</period_>
+                <phase_>0.0</phase_>
+                <amplitude_>0.5</amplitude_>
+                <offset_>0.5</offset_>
+            </range_sine_>
+        </pitch_form_>
+        <rhythm_form_>
+            <mean_sine_>
+                <period_>180.0</period_>
+                <phase_>0.0</phase_>
+                <amplitude_>0.5</amplitude_>
+                <offset_>0.5</offset_>
+            </mean_sine_>
+            <range_sine_>
+                <period_>180.0</period_>
+                <phase_>0.0</phase_>
+                <amplitude_>0.5</amplitude_>
+                <offset_>0.5</offset_>
+            </range_sine_>
+        </rhythm_form_>
+        <dynamic_form_>
+            <mean_sine_>
+                <period_>180.0</period_>
+                <phase_>0.0</phase_>
+                <amplitude_>0.5</amplitude_>
+                <offset_>0.5</offset_>
+            </mean_sine_>
+            <range_sine_>
+                <period_>180.0</period_>
+                <phase_>0.0</phase_>
+                <amplitude_>0.5</amplitude_>
+                <offset_>0.5</offset_>
+            </range_sine_>
+        </dynamic_form_>
+        <texture_form_>
+            <period_>180.0</period_>
+            <phase_>0.0</phase_>
+            <amplitude_>0.5</amplitude_>
+            <offset_>0.5</offset_>
+        </texture_form_>
+        <voices_ class_id="5" tracking_level="0" version="0">
+            <count>2</count>
+            <item_version>0</item_version>
+            <item class_id="6" tracking_level="0" version="0">
+                <low_pitch_>A0</low_pitch_>
+                <high_pitch_>C8</high_pitch_>
+                <channel_>1</channel_>
+                <walking_>0</walking_>
+                <program_>1</program_>
+                <pan_>0</pan_>
+                <follower_ class_id="7" tracking_level="0" version="2">
+                    <follow_>0</follow_>
+                    <leader_>2147483647</leader_>
+                    <interval_type_>0</interval_type_>
+                    <interval_>0</interval_>
+                    <delay_ class_id="8" tracking_level="0" version="0">
+                        <numerator_>0</numerator_>
+                        <denominator_>0</denominator_>
+                    </delay_>
+                    <inversion_>0</inversion_>
+                    <retrograde_>0</retrograde_>
+                </follower_>
+            </item>
+            <item>
+                <low_pitch_>A0</low_pitch_>
+                <high_pitch_>C8</high_pitch_>
+                <channel_>1</channel_>
+                <walking_>0</walking_>
+                <program_>1</program_>
+                <pan_>0</pan_>
+                <follower_>
+                    <follow_>1</follow_>
+                    <leader_>0</leader_>
+                    <interval_type_>1</interval_type_>
+                    <interval_>0</interval_>
+                    <delay_>
+                        <numerator_>0</numerator_>
+                        <denominator_>0</denominator_>
+                    </delay_>
+                    <inversion_>1</inversion_>
+                    <retrograde_>0</retrograde_>
+                </follower_>
+            </item>
+        </voices_>
+        <arrangement_definition_ class_id="9" tracking_level="0" version="0">
+            <algorithm_>1</algorithm_>
+            <period_>100000.0</period_>
+        </arrangement_definition_>
+    </xml_form>
 </boost_serialization>
 @end example
 

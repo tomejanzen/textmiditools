@@ -1,8 +1,8 @@
 //
-// TextMIDITools Version 1.0.66
+// TextMIDITools Version 1.0.67
 //
 // textmidi 1.0.6
-// Copyright © 2023 Thomas E. Janzen
+// Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
@@ -83,7 +83,7 @@ namespace textmidi
                     std::string low_pitch = "",
                     std::string high_pitch = "",
                     std::uint32_t channel = 0U,
-                    bool walking = false,
+                    double walking = 0.0,
                     std::string program = std::string("1"),
                     std::int32_t pan = 0,
                     Follower follower = Follower{})
@@ -102,7 +102,7 @@ namespace textmidi
               : low_pitch_{textmidi::num_to_note(v.low_pitch_, prefer_sharp)},
                 high_pitch_{textmidi::num_to_note(v.high_pitch_, prefer_sharp)},
                 channel_{v.channel_ + 1},
-                walking_{v.walking_},
+                walking_{v.walking_ ? 1.0 : 0.0},
                 program_{"1"},
                 pan_{},
                 follower_()
@@ -113,8 +113,8 @@ namespace textmidi
             void high_pitch(std::string_view high_pitch) noexcept;
             std::uint32_t channel() const noexcept;
             void channel(std::uint32_t channel) noexcept;
-            bool walking() const noexcept;
-            void walking(bool walking) noexcept;
+            double walking() const noexcept;
+            void walking(double walking) noexcept;
 
             std::string program() const noexcept;
             void program(std::string program) noexcept;
@@ -126,7 +126,7 @@ namespace textmidi
             std::string low_pitch_;
             std::string high_pitch_;
             std::uint32_t channel_; // one-based in VoiceXml
-            bool walking_;
+            double walking_;
             std::string program_;
             std::int32_t pan_; // 0 = center, negative is left, positive is right.
             Follower follower_;

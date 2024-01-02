@@ -1,3 +1,14 @@
+2024-01-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidicgm.texi, textmidiformedit.texi, VoiceWindow.py, 
+        Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability
+        that a voice will be in walking mode from note to note, but be backwards-
+        compatible with old XML form files.
+
+2023-11-28     Thomas E. Janzen <janzentome@gmail.com>
+        * dynamics.cfg, main.cc, Makefile.am, Makefile.in, MidiEvents.cc, 
+        MidiMaps.h, miditext.cc, Options.h, smustextmidi.cc, SmusTrackEvent.cc,
+        textmidicgm.cc, textmidi.l: Make settable values for dynamics symbols.
+
 2023-08-24     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc: note events were being pushed onto the wrong track's container.
         They should be pushed on the "tr", the track index, not "i" which was incremented.

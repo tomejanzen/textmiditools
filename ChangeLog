@@ -1,3 +1,6 @@
+2024-01-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix setting of walking scrollbar from file.
+
 2024-01-01     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, textmidicgm.texi, textmidiformedit.texi, VoiceWindow.py, 
         Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability

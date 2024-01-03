@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.67
+# TextMIDITools Version 1.0.68
 # textmidiform.py 1.0
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -337,7 +337,8 @@ class VoiceWindow(tkinter.Toplevel):
         self.program_spinbox['state'] = 'readonly'
         self.low_pitch.set(self.xml_form['voices'][vox]['low_pitch'])
         self.high_pitch.set(self.xml_form['voices'][vox]['high_pitch'])
-        self.walking.set(self.xml_form['voices'][vox]['walking'])
+        tempwalking = self.xml_form['voices'][vox]['walking']
+        self.walking_scrollbar.set(tempwalking, tempwalking)
 
         the_pan = float(self.xml_form['voices'][vox]['pan']) / 128.0 + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)

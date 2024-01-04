@@ -1,3 +1,7 @@
+2024-01-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.cc: random(), which generates a random form,
+        should make a random value for walking that is in [0.0...1.0) or similar.
+
 2024-01-02     Thomas E. Janzen <janzentome@gmail.com>
         * textmidiformedit.py: fix setting of walking scrollbar from file.
 

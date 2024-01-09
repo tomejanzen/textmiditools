@@ -1,0 +1,209 @@
+END_LAZY
+TEMPO 348
+TIME_SIGNATURE 3 4 24
+KEY_SIGNATURE d
+LAZY
+
+; start of repeat 1
+;m 9
+R 2.
+;m 10
+R 2.
+;m 11
+R 2.
+;m 12
+R 2.
+;m 13
+R 2.
+;m 14
+R 2.
+;m 15
+R 2.
+;m 16
+R 2.
+;m 17
+R 2.
+;m 18
+R 2.
+;m 19
+R 2.
+;m 20
+R 2.
+;m 21
+R 2.
+;m 22
+R 2.
+;m 23
+R 2.
+;m 24
+R 2.
+;m 25
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 31
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 40
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 51
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;Letter A(N)
+END_LAZY TEXT Letter A(N)
+LAZY
+;m 57
+R 2.
+R 2.
+R 2.
+;p 27
+;m 60
+END_LAZY TEXT p 27
+LAZY
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 69
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;Letter B(O)
+END_LAZY TEXT Letter B(O)
+LAZY
+;m 77
+R 2.
+;m 78
+R 2.
+R 2.
+;m 80
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 87
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;Letter C
+END_LAZY TEXT Letter C
+LAZY
+R 2.
+R 2.
+;m 95
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 101
+R 2.
+R 2.
+;m 103
+R 2.
+R 2.
+;m 105
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 110
+R 2.
+R 2.
+;p 28
+END_LAZY TEXT p 28
+LAZY
+;m 112
+R 2.
+R 2.
+R 2.
+;m 115
+R 2.
+R 2.
+;Letter D
+END_LAZY TEXT Letter D
+LAZY
+;m 117
+     R 2.
+R 2.
+;m 119
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 126
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 133
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 140
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+R 2.
+;m 147
+R 2.
+R 2.
+R 2.
+R 2.
+; end of repeated section
+

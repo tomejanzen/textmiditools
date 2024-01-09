@@ -1,0 +1,486 @@
+;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+; start second repeated section
+;p 29
+
+;m 301
+pp
+Bb4 Eb5 G4 Eb3 Eb2 8 R 4 Bb3 Eb4 G3 8 Bb3 Eb4 G3 8 R 8
+vel +3
+G5 Eb6 Eb5 C4 C3 8 R 4 C5 Eb5 G4 8 C5 Eb5 G4 8 R 8
+vel +3
+C5 Eb5 Ab4 Ab3 Ab2 8 R 4 C4 Eb4 Ab3 8 C4 Eb4 Ab3 8 R 8
+vel +3
+Ab5 F6 F5 C4 F4 F3 8 R 4 C5 F5 Ab4 8 C5 F5 Ab4 8 R 8
+vel +3
+Db5 F5 Ab4 Db4 Db3 8 R 4 F4 Db4 8 F4 Db4 8 R 8
+vel +3
+Db6 F6 F5 Bb3 Bb2 8 R 4 Db5 F5 Bb4 8 Db5 F5 Bb4 8 R 8
+vel +3
+Db5 Gb5 Bb4 Gb3 Gb2 8 R 4 Db4 Gb4 Bb3 8 Db4 Gb4 Bb3 8 R 8
+;m 308
+vel +3
+Bb5 Gb6 Gb5 Eb4 Eb3 8 R 4 Eb5 Gb5 Bb4 8 Eb5 Gb5 Bb4 8 R 8
+vel +3
+Eb5 Gb5 B4 B3 B2 8 R 4 Eb4 Gb4 B3 8 Eb4 Gb4 B3 8 R 8
+vel +3
+B5 Ab6 Ab5 Eb4 Ab4 Ab3 8 R 4 Eb5 Ab5 B4 8 Eb5 Ab5 B4 8 R 8
+vel +4
+E5 Ab5 B4 E4 E3 8 R 4 E4 Ab4 B3 8 E4 Ab4 B3 8 R 8
+vel +4
+E6 Ab6 Ab5 Db4 Db3 8 R 4 E5 Ab5 Db5 8 E5 Ab5 Db5 8 R 8
+vel +4
+E5 A5 Db5 A3 A2 8 R 4 A4 A3 8 A4 A3 8 R 8
+vel +4
+A6 A5 A2 8 R 4 A5 A4 A3 8 A5 A4 A3 8 R 8
+;m 315
+pedaldown
+forte
+Bb5 Bb4 Bb3 Bb2 8 R 4 Bb4 Bb3 8 Bb4 Bb3 8 R 8
+Bb6 Bb5 Bb2 8 R 4 Bb5 Bb4 Bb3 8 Bb5 Bb4 Bb3 8 R 8
+pedalchange
+ff
+B4 B5 B2 B3 8 R 4 B3 B4 8 B3 B4 4
+B6 B5 B2 B1 8 R 4 B5 B4 B3 B2 8 B5 B4 B3 B2 8 R 8
+pedalup
+; key change
+p
+B3 8 R 4 B2 8 B2 8 R 8
+E3 E2 8 R 8 Gb3 Eb3 8 R 8 G3 E3 8 R 8
+B2 Eb3 Gb3 B1 8 R 8 G3 E3 8 R 8 A3 Gb3 8 R 8
+;m 322
+B5 B4 G3 E3 8 R 8 B3 G3 8 B4 8 B4 B3 G3 8 R 8
+E5 E4 G3 B3 E3 8 R 8 Eb5 Gb5 Gb4 A3 Gb3 8 R 8 E5 G5 G4 G3 E3 8 R 8
+Eb5 Gb5 Gb4 Gb3 A3 B2 8 R 8 E5 G5 G4 G3 E3 8 R 8 Gb5 A5 A4 Gb3 Eb3 8 R 8
+E5 G5 G4 B3 8 R 8 G5 B5 B4 8 B2 8 G5 B5 B4 B2 8 R 8
+G5 B5 B4 E3 E2 8 R 8 Gb5 A5 A4 Gb3 8 R 8 E5 G5 G4 G3 8 R 8
+Gb5 A5 A4 Gb3 B2 8 R 8 E5 G5 G4 G3 8 R 8 Eb5 Gb5 Gb4 A3 8 R 8
+E6 Ab3 E3 8 R 8 E4 E3 8 E5 8 E5 E4 E3 8 R 8
+E5 A5 A4 C4 E4 E3 8 R 8 Ab5 B5 B4 D4 B3 8 R 8 A5 C6 C5 C4 A3 8 R 8
+Ab5 B5 B4 B3 D4 E3 8 R 8 A5 C6 C5 C4 A3 8 R 8 B5 D6 D5 B3 Ab3 8 R 8
+;m 331
+A5 C6 C5 E4 8 R 8 C6 E6 E5 8 E3 8 C6 E6 E5 E3 8 R 8
+C6 E6 E5 A3 A2 8 R 8 B5 D6 D5 B3 Ab3 8 R 8 A5 C6 C5 C4 A3 8 R 8
+B5 D6 D5 Ab3 B3 E3 8 R 8 A5 C6 C5 C4 A3 8 R 8 Ab5 B5 B4 D4 B3 8 R 8
+E6 E5 C4 A3 8 R 8 E4 C4 8 E5 8 E5 E4 C4 8 R 8
+E5 A5 A4 C4 E4 A3 8 R 8 Ab5 B5 B4 D4 B3 8 R 8 A5 C6 C5 C4 A3 8 R 8
+Ab5 B5 B4 B3 D4 E3 8 R 8 A5 C6 C5 C4 A3 8 R 8 B5 D6 D5 B3 Ab3 8 R 8
+
+;Letter E
+;m 337
+pedaldown
+forte
+F2 8 R 4 F1 8 F1 8 R 8
+pedalup
+p
+F5 A5 A4 C4 F4 A3 8 R 8 G5 Bb5 Bb4 Bb3 G3 8 R 8 A5 C6 C5 A3 F3 8 R 8
+;m 339
+G5 Bb5 Bb4 D4 F4 Bb3 8 R 8 A5 C6 C5 C4 F4 A3 8 R 8 Bb5 D6 D5 Bb3 F4 G3 8 R 8
+pedaldown
+forte
+F2 8 R 4 F1 8 F1 8 R 8
+pedalup
+p
+A5 C6 C5 F4 A3 8 R 8 G5 E6 E5 Bb3 G3 8 R 8 A5 F6 F5 A3 F3 8 R 8
+G5 E6 E5 Bb3 C4 G3 8 R 8 A5 F6 F5 A3 C4 F3 8 R 8 Bb5 G6 G5 G3 C4 E3 8 R 8
+pedaldown
+forte
+F2 8 R 4 F1 8 F1 8 R 8
+pedalup
+p
+A4 C5 F5 A5 F6 F4 8 R 8 Bb4 G5 Bb5 F6 G4 8 R 8 A4 A5 C6 F6 F4 8 R 8
+Bb4 D5 G5 Bb5 F6 F4 8 R 8 C5 A5 C6 F6 A4 8 R 8 Bb4 Bb5 D6 F6 G4 8 R 8
+pedaldown
+forte
+F2 8 R 4 F1 8 F1 8 R 8
+pedalup
+;p 30
+
+;m 347
+p
+A6 A5 C5 F4 8 R 8 G6 C6 E5 G4 8 R 8 F6 C6 F5 A4 8 R 8
+G6 C6 G4 E5 F4 8 R 8 F6 C6 F5 A4 8 R 8 E6 C6 G5 Bb4 8 R 8
+A5 F6 F5 A4 C5 F4 8 R 8 Bb5 G6 G5 Bb4 G4 8 R 8 C6 A6 A5 A4 F4 8 R 8
+vel -1
+C6 A6 A5 F3 8 R 8 Bb5 G6 G5 8 F2 8 A5 F6 F5 F2 8 R 8
+vel -1
+A5 F6 F5 A4 C5 F4 8 R 8 Bb5 G6 G5 Bb4 G4 8 R 8 A5 F6 F5 C5 A4 8 R 8
+vel -1
+E5 G4 C4 8 R 8 F5 G4 C4 8 R 8 G5 Bb4 C4 8 R 8
+vel -1
+G5 Bb4 C5 8 R 8 F5 A4 8 C4 8 E5 G4 C4 8 R 8
+vel -1
+E5 G4 C4 8 R 8 F5 A4 C4 8 R 8 E5 G4 C4 8 R 8
+vel -1
+F5 D6 D5 F4 A4 D4 8 R 8 G5 E6 E5 G4 E4 8 R 8 A5 F6 F5 F4 D4 8 R 8
+;m 356
+vel -1
+A5 F6 F5 D4 8 R 8 G5 E6 E5 8 D3 8 F5 D6 D5 D3 8 R 8
+vel -1
+F5 D6 D5 F4 A4 D4 8 R 8 G5 E6 E5 G4 E4 8 R 8 F5 D6 D5 A4 F4 8 R 8
+vel -1
+Db5 E4 A3 8 R 8 D5 F4 A3 8 R 8 E5 G4 A3 8 R 8
+vel -1
+E5 G4 A3 8 R 8 D5 F4 8 A2 8 Db5 E4 A2 8 R 8
+;Letter (V)
+
+vel -1
+Db5 E4 A3 G3 8 R 8 D5 F4 A3 F3 8 R 8 Db5 E4 A3 G3 8 R 8
+pp
+F5 D6 D5 A3 F3 8 R 8 G5 E6 E5 G3 E3 8 R 8 A5 F6 F5 F3 D3 8 R 8
+A5 F6 F5 A4 8 R 8 G5 E6 E5 8 A3 8 F5 D6 D5 A3 8 R 8
+F5 D6 D5 A3 F3 8 R 8 G5 E6 E5 A3 E3 8 R 8 F5 D6 D5 A3 F3 8 R 8
+Db5 E4 A3 G3 8 R 8 D5 F4 A3 F3 8 R 8 E5 G4 A3 E3 8 R 8
+;m 365
+E5 G4 A3 8 R 8 D5 F4 8 A2 8 Db5 E4 A2 8 R 8
+G3 A3 E4 Db5 8 R 8 F3 A3 F4 D5 8 R 8 G3 A3 E4 Db5 8 R 8
+A5 A4 Db4 G3 8 R 8 D4 F3 8 A4 8 A4 E4 E3 8 R 8
+A4 D5 F4 A3 D3 8 R 8 Db5 E5 E4 A3 8 R 8 D5 F5 F4 A3 8 R 8
+Db5 E5 E4 A3 A2 8 R 8 D5 F5 F4 A3 8 R 8 E5 G5 G4 A3 8 R 8
+D5 F5 F4 A3 8 R 8 F5 A5 A4 8 A2 8 F5 A5 A4 A2 8 R 8
+F5 A5 A4 F3 D3 8 R 8 G5 A5 E5 G3 E3 8 R 8 F5 A5 D5 A3 F3 8 R 8
+G5 A5 E5 G3 E3 8 R 8 F5 A5 D5 A3 F3 8 R 8 E5 A5 Db5 A3 G3 8 R 8
+;m 373
+A6 A5 D4 F3 8 R 8 F4 A4 A3 8 A5 8 A5 F4 A4 A3 8 R 8
+D6 D5 F4 A4 A3 8 R 8 Db6 E6 E5 G4 E4 8 R 8 D6 F6 F5 F4 D4 8 R 8
+Db6 E6 E5 E4 G4 A3 8 R 8 D6 F6 F5 F4 D4 8 R 8 E6 G6 G5 E4 Db4 8 R 8
+D6 F6 F5 D4 F4 A3 8 R 8 A5 F5 8 A2 8 A5 F5 A2 8 R 8
+A4 F3 D3 8 R 8 G3 E3 8 A3 8 A3 F3 8 R 8
+A4 Db4 E3 8 R 8 D4 F3 8 A3 8 A3 E4 G3 8 R 8
+A5 D4 F3 8 R 8 Db4 E3 8 A4 8 A4 D4 F3 8 R 8
+G5 D3 B2 8 R 8 Eb3 C3 8 G4 8 G4 F3 D3 8 R 8
+;m 381
+G4 C4 Eb3 8 R 8 B3 D3 8 G3 8 G3 C4 Eb3 8 R 8
+G4 D4 B3 8 R 8 Eb4 C4 8 G3 8 G3 F4 D4 8 R 8
+G5 Eb4 C4 8 R 8 D4 B3 8 G4 8 G4 Eb4 C4 8 R 8
+Ab4 D5 F4 Bb3 8 R 8 Eb5 G4 8 Bb2 8 F5 A4 Bb2 8 R 8
+Eb5 G4 Bb2 8 R 8 D5 F4 8 Bb1 8 Eb5 G4 Bb1 8 R 8
+Ab4 D5 F4 Bb3 8 R 8 Eb5 G4 8 Bb2 8 F5 A4 Bb2 8 R 8
+Eb5 G4 Bb4 8 R 8 D5 F4 8 Bb3 8 Eb5 G4 Bb3 8 R 8
+Bb5 Bb4 F4 D4 8 R 8 G4 Eb4 8 Bb4 8 Bb4 Ab4 F4 8 R 8
+;m 389
+Bb3 G4 Bb4 Eb5 8 R 8 D5 F5 Ab4 8 Bb2 8 Eb5 G5 G4 Bb2 8 R 8
+;Letter F
+
+;m 390
+pedaldown
+Ab4- D5- Ab5- F3 Bb2 8 R 8 R 8 F2 Bb1 8 F2 Bb1 8 R 8
+;m 391
+Bb3 8 R 4 Bb2 8 Bb2 8 R 8
+;m 392
+Bb2- F3- Ab3- D4 8 R 4 D3 8 D3 8 R 8
+;m 393
+F4 8 R 4 F3 8 F3 8 -Ab4 -D5 -Ab5 -Bb2 -F3 -Ab3 8
+pedalup
+;m 394
+Bb3 Eb4 Bb4 G5 8 R 8 F5 Ab4 8 Bb2 8 Eb5 G4 Bb2 8 R 8
+;m 395
+Bb3 Eb4 Bb4 G5 Bb5 8 R 8 F5 Ab5 8 Bb2 8 Bb2 G5 Eb5 8 R 8
+;m 396
+Bb3 Eb4 Bb4 G5 8 R 8 F5 Ab4 8 Bb2 8 Bb2 G4 Eb5 8 R 8
+;m p 31
+
+;m 397
+Bb3 Eb4 Bb5 G5 Bb4 8 R 8 F5 Ab5 8 Bb2 8 Bb2 Eb5 G5 8 R 8
+;m 398
+pedaldown
+vel +6
+Ab4- D5- Ab5- F3 Bb2 8 R 8 R 8 F2 Bb1 8 F2 Bb1 8 R 8
+;m 399
+vel +6
+Bb3 8 R 4 Bb2 8 Bb2 8 R 8
+;m 400
+vel +6
+Bb2- F3- Ab3- D4 8 R 4 D3 8 D3 8 R 8
+;m 401
+vel +6
+F4 8 R 4 F3 8 F3 8 -Ab4 -D5 -Ab5 -Bb2 -F3 -Ab3 8
+pedalchange
+;m 402
+vel +6
+A4- D5- A5- A2 F3 A3 8 R 4 A1 F2 8 A1 F2 8 R 8
+;m 403
+vel +6
+A3 8 R 4 A2 8 A2 8 R 8
+;m 404
+vel +6
+A2- A3- F3- D4 8 R 4 D3 8 D3 8 R 8
+;m 405 line 2
+vel +6
+F4 8 R 4 F3 8 F3 8 -A2 -A3 -F3 -A4 -D5 -A5 8
+pedalup
+;m 406
+forte
+A2 F3 A3 A4 D5 A5 8 R 4 F2 A2 D3 F3 A3 D4 8 F2 A2 D3 F3 A3 D4 8 R 8
+;m 407
+F3 A3 D4 F4 A4 D5 8 R 4 F2 A2 D3 F3 A3 D4 8 F2 A2 D3 F3 A3 D4 8 R 8
+pedalchange
+;m 408
+A2 F3 A3 A4 D5 A5 8 R 4 F2 A2 D3 F3 A3 D4 8 F2 A2 D3 F3 A3 D4 8 R 8
+;m 409
+F3 A3 D4 F4 A4 D5 8 R 4 F2 A2 D3 F3 A3 D4 8 F2 A2 D3 F3 A3 D4 8 R 8
+pedalchange
+;Letter G
+
+;m 410
+ff
+D2 A2 D3 A5 D6 F6 A6 8 R 4 F3 A3 D4 A4 D5 A5 8 F3 A3 D4 A4 D5 A5 8 R 8
+D2 A2 D3 A5 D6 F6 A6 8 R 4 F3 A3 D4 A4 D5 A5 8 F3 A3 D4 A4 D5 A5 8 R 8
+D2 A2 D3 A5 D6 F6 A6 8 R 4 F3 A3 D4 A4 D5 A5 8 F3 A3 D4 A4 D5 A5 8 R 8
+;m 413
+D2 A2 D3 A5 D6 F6 A6 8 R 4 F3 A3 D4 A4 D5 A5 8 F3 A3 D4 A4 D5 A5 8 R 8
+;m 414
+D2 F2 A2 A5 D6 F6 A6 8 D3 8 D2 F2 A2 8 D3 A5 A4 8 D2 F2 A2 A4 A5 8 D3 8
+;m 415
+pedalchange
+D5 D6 D2 48 F2 48 A2 48 D3 16 R 8 E6 E5 8 F3 A3 D4 8 F3 A3 D4 F6 F5 8 R 8
+pedalchange
+;m 416
+D2 A2 D3 E6 E5 8 R 8 F6 F5 8 A3 D4 F3 8 G6 G5 A3 D4 F3 8 R 8
+pedalchange
+;m 417
+F6 F5 A2 D3 D2 8 R 8 E6 E5 8 A3 D4 F3 8 D6 D5 A3 D4 F3 8 R 8
+pedalchange
+
+vel +15 Bb6 Bb5 A2 D3 D2 8 R 8 vel -15 A6 A5 8 A3 D4 F3 8 G6 G5 A3 D4 F3 8 R 8
+pedalchange
+vel +15 F6 F5 A2 D3 D2 8 R 8 vel -15 E6 E5 8 A3 D4 F3 8 D6 D5 A3 D4 F3 8 R 8
+pedalchange
+vel +15 Db6 Db5 A2 D3 D2 8 R 8 vel -15 D6 D5 8 A3 D4 F3 8 E6 E5 A3 D4 F3 8 R 8
+;m 421
+vel +15 D6 D5 A2 D3 D2 8 R 8 vel -15 Db6 Db5 8 A3 D4 F3 8 D6 D5 A3 D4 F3 8 R 8
+vel +15 Bb6 Bb5 A2 D3 D2 8 R 8 vel -15 A6 A5 8 A3 D4 F3 8 G6 G5 A3 D4 F3 8 R 8
+vel +15 F6 F5 A2 D3 D2 8 R 8 vel -15 E6 E5 8 A3 D4 F3 8 D6 D5 A3 D4 F3 8 R 8
+vel +15 Db6 Db5 A2 D3 D2 8 R 8 vel -15 D6 D5 8 A3 D4 F3 8 E6 E5 A3 D4 F3 8 R 8
+vel +15 D6 D5 A2 D3 D2 8 R 8 vel -15 Db6 Db5 8 A3 D4 F3 8 D6 D5 A3 D4 F3 8 R 8
+C6 C5 Eb4 Eb3 8 R 8 D6 D5 D4 D3 8 R 8 Eb6 Eb5 C4 C3 8 R 8
+D5 G5 G4 Bb3 Bb2 8 R 8 A5 A4 8 D4 D3 8 Bb5 Bb4 D4 D3 8 R 8
+D5 A5 A4 Gb3 Gb2 8 R 8 Bb5 Bb4 8 D4 D3 8 C6 C5 D4 D3 8 R 8
+D5 Bb5 Bb4 G3 G2 8 R 8 A5 A4 8 D4 D3 8 G5 G4 D4 D3 8 R 8
+;m 430
+vel +15 G5 Eb6 Eb5 G3 Eb4 Eb3 8 R 8 vel -15 D6 D5 D4 D3 8 R 8 C6 C5 C4 C3 8 R 8
+vel +15 Bb5 Bb4 Bb3 Bb2 8 R 8 vel -15 A5 A4 A3 A2 8 R 8 G5 G4 G3 G2 8 R 8
+vel +15 F5 F4 F3 F2 8 R 8 vel -15 Eb5 Eb4 8 F2 F1 8 D5 D4 F2 F1 8 R 8
+vel +15 C5 C4 F3 F2 8 R 8 vel -15 Bb4 Bb3 8 F2 F1 8 A4 A3 F2 F1 8 R 8
+vel +15 G5 G4 F3 F2 8 R 8 vel -15 F5 F4 8 F2 F1 8 Eb5 Eb4 F2 F1 8 R 8
+pedalup
+vel +15 D5 D4 F3 F2 8 R 8 vel -15 Eb5 Eb4 8 C4 C3 8 F5 F4 Bb3 Bb2 8 R 8
+vel +15 G5 G4 A3 A2 8 R 8 vel -15 A5 A4 8 G3 G2 8 Bb5 Bb4 F3 F2 8 R 8
+vel +15 C6 C5 Eb3 Eb2 8 R 8 vel -15 D6 D5 8 D3 D2 8 Eb6 Eb5 C3 C2 8 R 8
+;Letter H
+forte
+F5- F6- Bb2 Bb1 8 R 8 piano R 2
+;p 32
+
+;m 439
+G5- Bb3 8 R 4 F4 8 F4 8 -F5 -G5 -F6 8
+vel +5 G5- F5- Eb3 8 R 4  G4 F4 8 G4 F4 8 -F6 -G5 -F5 8
+vel +5 Eb5- G5- Eb6- C3 8 R 4  Eb4 G4 C5 8 Eb4 G4 C5 8 -Eb5 -G5 -Eb6 8
+vel +5 Eb5- A5- Eb6- F3 8 R 4  Eb4 A4 C5 8 Eb4 A4 C5 8 -Eb5 -A5 -Eb6 8
+vel +5 D5- D6- Bb5- Bb2 8 R 4  D4 F4 Bb4 8 D4 F4 Bb4 8 -D5 -D6 -Bb5 8
+vel -10 Db5- Db6- Bb5- F3 8 R 4 Db4 F4 Bb4 8 Db4 F4 Bb4 8 -Db5 -Db6 -Bb5 8
+vel -10 C5- C6- A5- F3 8 R 4 C4 F4 A4 8 C4 F4 A4 8 -C5 -C6 -A5 8
+pedaldown
+p
+Bb5 Bb4 Bb3 Bb2 1.
+
+pedalchange
+;rest
+A2 A3 A4 A5- 2.
+;m 449
+A3 8 R 4 A4 8 A4 8 -A5 8
+pedalup
+vel +5
+A5- B5- A3 8 R 4 B4 A4 8 B4 A4 8 -A5 -B5 8
+vel +5
+G5- B5- E6- A3 8 R 4 G4 B4 E5 8 B4 E5 G4 8 -G5 -B5 -E6 8
+pedaldown
+vel +5
+G5- Bb5- E6- A3 8 R 4 G4 Bb4 E5 8 Bb4 E5 G4 8 -G5 -Bb5 -E6 8
+pedalchange
+vel -5
+F#5- A5- D6- A3 8 R 4 A4 D5 Gb4 8 A4 D5 Gb4 8 -F#5 -A5 -D6 8
+pedalchange
+vel -5
+F5- A5- D6- A3 8 R 4 A4 D5 F4 8 A4 D5 F4 8 -F5 -A5 -D6 8
+pedalchange
+vel -5
+E5- A5- C#6- A3 8 R 4 A4 Db5 E4 8 A4 Db5 E4 8 -E5 -A5 -C#6 8
+pedalchange
+p 
+A2- 2.
+pedalup
+A4 8 R 4 A3 8 A3 8 R 8
+;m 458
+vel +5
+Bb4 A4 8 R 4 Bb3 A3 8 Bb3 A3 8 -A2 8
+;m 459
+vel +5
+A2 G4 Bb4 E5 8 R 4 G3 Bb3 E4 8 G3 Bb3 E4 8 R 8
+;m 460
+vel +5
+A2 G4 A4 E5 8 R 4 E4 A3 G3 8 E4 A3 G3 8 R 8
+;m 461
+vel -5
+A4 D5 Gb4 A2 8 R 4 D4 A3 Gb3 8 D4 A3 Gb3 8 R 8
+;m 462
+vel -5
+Ab4 D5 F4 A2 8 R 4 D4 Ab3 F3 8 D4 Ab3 F3 8 R 8
+;m 463
+vel -5
+G4 Db5 E4 A2 8 R 4 Db4 G3 E3 8 Db4 G3 E3 8 R 8
+p
+A4- A5- A3 8 R 4 A2 8 A2 8 -A4 -A5 8
+vel +8
+F#5- F#6- B5- A3 8 R 4 A2 8 A2 8 -B5 8
+;m 466
+vel +8
+D#6- A3 B3 8 R 4 A2 8 A2 8 -F#5 -F#6 -D#6 8
+vel +8
+G5- E6- G6- G3 B3 E4 8 R 4 G2 8 G2 8 -G5 -E6 -G6 8
+vel +8
+E5- C#6- E6- G3 A3 E4 8 R 4 G2 8 G2 8 -E5 -C#6 -E6 8
+vel +8
+F#5- D6- F#6- Gb3 A3 D4 8 R 4 Gb2 8 Gb2 8 -F#5 -D6 -F#6 8
+vel +8
+A5- D6- A6- F3 A3 D4 8 R 4 F2 8 F2 8 -A5 -D6 -A6 8
+vel +4
+G5- C#6- A6- E3 A3 Db4 8 R 4 E2 -G5 -C#6 -A6 8 E2 C#4 C#5 8 R 8
+;Letter I
+ff
+pedaldown
+D4- D5- D3 D2 8 R 4 D2 D3 -D4 -D5 8 D2 D3 E4 E5 8 F#4 F#5  8
+pedalchange
+D3 D4 G4 G5 8 R 4 D2 D3 8 Gb5 Gb4 D2 D3 8 R 8
+;m 474
+pedalchange
+D3 D4 E4 E5 8 R 4 D2 D3 8 D2 D3 D4 D5 8 R 8
+;m 475
+pedalchange
+D2 D3 E4 E5 8 R 4 D2 D3 8 D2 D3 C#4 C#5 8 R 8
+;m 476
+pedalchange
+F#4- D5- F#5- D3 D4 8 R 4 D3 D2 -F#4 -D5 -F#5 8 G4 E5 G5 D3 D2 8 A4 F#5 A5 8
+;m 477
+pedalchange
+D3 D4 B4 G5 B5 8 R 4 D2 D3 8 D2 D3 A4 F#5 A5 8 R 8
+;m 478
+pedalchange
+D3 D4 G4 E5 G5 8 R 4 D2 D3 8 D2 D3 F#4 D5 F#5 8 R 8
+;m 479
+pedalchange
+D3 D4 G4 E5 G5 8 R 4 D2 D3 8 D2 D3 E4 Db5 E5 8 R 8
+;m 480
+pedalchange
+D5 D6 D4 D3 8 R 8 D5- F5- D6- 8 D3 D2 -D5 -F5 -D6 8 D3 D2 E5 G5 E6 8 F5 A5 F6 8
+;m 481
+pedalchange
+D3 D4 G5 Bb5 G6 8 R 8 G5 Bb5 G6 8 D2 D3 8 D2 D3 F5 A5 F6 8 R 8
+;p 33
+
+;m 482
+pedalchange
+D3 D4 E5 G5 E6 8 R 8 E5 G5 E6 8 D3 D2 8 F5 D6 D5 D3 D2 8 R 8
+;m 483
+pedalchange
+G5 E6 E5 D4 D3 8 R 8 G5 E6 E5 8 D3 D2 8 E5 Db6 Db5 D3 D2 8 R 8
+;m 484
+pedalchange
+F5 D6 F6 D4 D3 8 R 8 F5- D6- F6- 8 D3 D2 -F5 -D6 -F6 8 G5 E6 G6 D3 D2 8 A5 F6 A6 8
+;m 485
+pedalchange
+D3 D4 Bb5 G6 Bb6 8 R 8 G6 Bb6 Bb5 8 D3 D2 8 F6 A6 A5 D3 D2 8 R 8
+pedalchange
+E6 G6 G5 D4 D3 8 R 8 E6 G6 G5 8 D3 D2 8 D6 F6 F5 D3 D2 8 R 8
+pedalchange
+E6 G6 G5 D4 D3 8 R 8 E6 G6 G5 8 D3 D2 8 Db6 E6 E5 D3 D2 8 R 8
+pedalchange
+D6 F6 F5 D4 D3 8 R 4 F5 F4 D3 D2 8 F5 F4 D3 D2 8 R 8
+pedalup
+F6 F5 D4 D3 8 R 8 G6 G5 E4 E3 8 R 8 A6 A5 F4 F3 8 R 8
+pedaldown
+Bb6 Bb5 G4 G3 8 R 4 Bb2 G2 8 Bb2 G2 8 R 8
+pedalup
+;m 491
+Bb5 Bb4 Bb3 G3 8 R 8 C6 C5 G3 E3 8 R 8 D6 D5 F3 D3 8 R 8
+pedaldown
+E6 E5 E3 C4 C3 8 R 4 E5 E4 C3 C2 8 E5 E4 C3 C2 8 R 8
+pedalup
+E6 E5 C4 C3 8 R 8 F6 F5 D4 D3 8 R 8 G6 G5 E4 E3 8 R 8
+pedaldown
+A6 A5 F4 F3 8 R 4 A2 F2 8 A2 F2 8 R 8
+pedalup
+A4 A3 F3 8 R 8 F4 A3 D3 8 R 8 E4 A3 C3 8 R 8
+;Letter K
+
+;m 496
+p
+D5- C3- A3- D4 D3 4 E4 E3 4 Gb4 Gb3 -C3 -A3 4
+;m 497
+-D5 Bb2- G3- G4- 4 E5 4 F#5 -Bb2 -G3 4
+;m 498
+vel +7
+G5- -G4 -G3 4 F3 F4 4 Eb3 Eb4 -G5 -Bb2 4
+;m 499
+vel +7
+G4- Eb5- G5- Bb3 Bb2 4 Ab3 Ab2 4 G3 G2 -G4 -Eb5 -G5 4
+;m 500
+vel -12
+G2- G3- G5- E5 Bb4 4 F5 A4 -G5 4 Bb4- -G5 -G2 -G3 4
+;m 501
+A2- A3- -G5 -Bb4 E5 4 A4 D5 F5 4 G4 C#5 E5 -A2 -A3 8 Bb2 16 G3 16
+;m 502
+pedaldown
+p
+Bb3- G5- Eb6- G6- G4 4 F4 4 Eb4 -G5 -Eb6 -G6 4
+;m 503
+vel +7
+G5- Eb6- G6- -Bb3 G4 4 
+    pedalup
+    F4 Ab3 4 Eb4 G3 -G5 -Eb6 -G6 4
+;m 504
+vel +7
+G5- E6- G6- G3 Bb3 E4 4 F4 A3 4 G4 Bb3 4
+;m 505
+vel +7
+Bb3 E4 G4 -G5 -E6 -G6 4 A3 D4 F4 F5 D6 F6 4 E6 G6 G5 Db4 E4 G3 4
+;m 506
+vel +15 A6 A5 D4 F4 F3 8 R 8 vel -15 F6 F5 D4 D3 8 R 8 Bb6 Bb5 G4 G3 8 R 8
+vel +15 G6 G5 E4 E3 8 R 8 vel -15 E6 E5 Db4 Db3 8 R 8 A6 A5 A3 A2 8 R 8
+vel +15 A4 F5 F4 D4 D3 8 R 8 vel -15 D5 G4 Bb3 Bb2 8 R 8 D5 G5 Bb4 G3 G2 8 R 8
+vel +15 B4 D5 E5 E4 Ab3 Ab2 8 R 8 vel -15 A4 Db5 E4 A3 A2 8 R 8 D5 F5 F4 A3 A2 8 R 8
+;m 510
+vel +15 F5 A5 A4 D3 D2 8 R 8 vel -15 F6 F5 D4 D3 8 R 8 Bb6 Bb5 G4 G3 8 R 8
+vel +15 G6 G5 E4 D3 8 R 8 vel -15 E6 E5 Db4 Db3 8 R 8 A6 A5 A3 A2 8 R 8
+vel +15 F5 A5 A4 A3 A2 8 R 8 vel -15 D5 A5 A4 F3 F2 8 R 8 G5 A5 A4 Bb3 Bb2 8 R 8
+vel +15 E5 A5 A4 G3 G2 8 R 8 vel -15 Db5 A5 A4 E3 E2 8 R 8 F5 A5 A4 A3 A2 8 R 8
+;m 514
+pedaldown
+vel +15 D6 F6 F5 D3 D2 8 R 8 vel -15 A5 D6 F5 8 D5 D4 8 F6 A6 A5 D5 D4 8 R 8
+pedalchange
+;m 515
+vel +15 E6 G6 G5 A4 A3 8 R 8 vel -15 Db6 E6 G5 8 A3 A2 8 A6 G5 A3 A2 8 R 8
+pedalchange
+vel +15 D6 F6 F5 D3 D2 8 R 8 vel -15 A5 D6 F5 8 D5 D4 8 F6 A6 A5 D5 D4 8 R 8
+pedalchange
+vel +15 E6 G6 G5 A4 A3 8 R 8 vel -15 Db6 E6 G5 8 A3 A2 8 Db6 A6 G5 A3 A2 8 R 8
+pedalchange
+pp
+A4 G4 8 R 8 Db5 E4 8 R 8 E5 Db4 8 R 8
+;m 519
+A2 G3 G4 G5 4 E3 Db5 Db6 4 Db3 E5 E6 4
+;m 520
+G5- G6- A2 E3 G3 4 Db4 4 E4 4
+A3 G4 -G5 -G6 4 Db4 E5 E6 4 E4 Db5 Db6 4
+pedalup
+D6 D5 D3 D2 8 R 4 A3 D4 F3 8 A3 D4 F3 8 R 8
+A5 F6 F5 A3 A2 8 R 4 A4 D5 F4 8 A4 D5 F4 8 R 8
+A4 D5 F4 F3 F2 8 R 4 A3 D4 F3 8 A3 D4 F3 8 R 8
+;m 525
+F5 D6 D5 D3 D2 8 R 4 A4 D5 F4 8 A4 D5 F4 8 R 8
+;m 526
+A4 D5 F4 8 R 8 R 2
+;general pause
+R 2.
+R 2.
+R 2.
+

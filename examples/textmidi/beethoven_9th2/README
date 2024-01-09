@@ -1,1 +1,56 @@
-placeholder
+Ludwig van Beethoven, Symphony # 9, 2nd Movement (molto vivace).
+Arranged for solo piano by Franz Liszt.
+Put into the Creative Commons.
+© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+This collection of files will build into the Molto vivace of
+the d minor symphony (the 9th symphony) of Ludwig van Beethoven
+as transcribed for piano solo by Franz Liszt.
+The make file requires the m4 macro processor and the 
+TextMIDITools program textmidi, currently on github.
+
+To build, first build and install the program textmidi.
+Then, 
+    make -f lvb9_2.make
+
+MIDI Program 1 is set to specify a grand piano sound from
+General MIDI.
+
+This is a replacement in textmidi language for a version uploaded
+in 1994 to the Classical MIDI Archives, now the Classical Archives.
+This replacement was done in 2021 and prepared for github in 2024.
+The 1994 version was done in Electronic Arts' Deluxe Music Construction
+Set; the rendering is highly mechanical and seems to have 
+MIDI file errors (primarily missing NOTE-OFFs).
+The file was saved as an SMUS (Simple Musical Score) and converted
+to MIDI with Thomas Janzen's tool SMUSMIDI.
+This version is not included here.
+
+Files named lvb9_2*_piano1.m4 contain the right hand part.
+Files named lvb9_2*_piano2.m4 contain the left  hand part.
+Files named lvb9_2*_tempo.m4 contain a tempo track.
+Files named "lvb9_2repeat1*" are for the first section that is marked with
+repeat signs.
+Files named "lvb9_2repeat2*" are for the second section that is marked with
+repeat signs.
+
+The order of sections is as follows:
+
+    fanfare
+    repeat1
+    repeat1
+    bridge
+    repeat2
+    repeat2
+    repeat2
+    repeat3
+    repeat3
+    repeat4
+    repeat4
+    ending
+    fanfare
+    repeat1
+    bridge
+    repeat2
+    coda
+

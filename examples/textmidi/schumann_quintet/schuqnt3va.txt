@@ -236,7 +236,7 @@ stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) mf stac8b(Ab3)  ;m10
 p stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3)  ;m106
 stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) stac8b(Ab3) mf stac8b(G3)  ;m107
 p stac8b(A3) vel 53 stac8b(B3) vel 56 stac8b(C4) vel 59 stac8b(D4) vel 62 stac8b(E4) vel 65 stac8b(F4)  ;m108
-vel 68 stac8b(G4) velf 71 stac8b(A4) vel 74 stac8b(B4) vel 75 C5 4 stac8b(Bb4)  ;m109
+vel 68 stac8b(G4) vel 71 stac8b(A4) vel 74 stac8b(B4) vel 75 C5 4 stac8b(Bb4)  ;m109
 vel 80 mordent4(A4,Bb4) stac8b(G4) vel 85 mordent4(F4,G4) stac8b(Eb4) ;m110
 forte mordent4(D4,Eb4) stac8b(C4) Bb3 4 stac8b(Bb3) ;m111
 stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) stac8b(Bb3) ;m112

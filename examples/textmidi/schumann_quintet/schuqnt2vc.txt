@@ -89,7 +89,7 @@ F3 4 R 8 vel 48 Bb2 8 vel 46 C3 4 R 8 vel 44 C3 8 ;m17
 vel 42 F2 4 R 4 vel 40 D2 4 R 4 ;m18
 Eb2 4 R 4 R 4. F2 8 ;m19
 G2 4. vel 42 G2 8 vel 44 G2 4. vel 46 G2 8 ;m20
-48 Ab2 2 vel 45 G2 2 ;m21
+Ab2 2 vel 45 G2 2 ;m21
 pp  F2 4 R 4 D2 4 R 4 ;m22
 Eb2 4 R 4 R 4. F2 8 ;m23
 G2 4. vel 38 G2 8 vel 36 G2 4. vel 34 G2 8 ;m24 first ending
@@ -105,7 +105,7 @@ F3 4 R 8 vel 48 Bb2 8 vel 46 C3 4 R 8 vel 44 C3 8 ;m17
 vel 42 F2 4 R 4 vel 40 D2 4 R 4 ;m18
 Eb2 4 R 4 R 4. F2 8 ;m19
 G2 4. vel 42 G2 8 vel 44 G2 4. vel 46 G2 8 ;m20
-48 Ab2 2 vel 45 G2 2 ;m21
+Ab2 2 vel 45 G2 2 ;m21
 pp  F2 4 R 4 D2 4 R 4 ;m22
 Eb2 4 R 4 R 4. F2 8 ;m23
 vel 38 G2 4. vel 36 G2 8 vel 34 G2 4. vel 32 G2 8 ;m26 second ending

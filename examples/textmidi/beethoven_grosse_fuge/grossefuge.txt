@@ -1,0 +1,10830 @@
+
+;Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;define(`pppp',`vel 20')
+;define(`ppp',`vel 31')
+;define(`pp',`vel 42')
+;define(`p',`vel 53')
+;define(`mp',`vel 64')
+;define(`mf',`vel 76')
+;define(`forte',`vel 87')
+;define(`ff',`vel 98')
+;define(`fff',`vel 109')
+;define(`ffff',`vel 120')
+
+;Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FILEHEADER 6 384 
+TEXT Grosse Fuge by Ludwig van Beethoven
+COPYRIGHT Thomas E. Janzen 2020
+
+STARTTRACK
+TEXT Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  "© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+TIME_SIGNATURE 6 8 24
+TEMPO 162
+KEY_SIGNATURE G
+
+LAZY
+vel 127
+;page 4
+;m 0
+END_LAZY
+KEY_SIGNATURE G
+LAZY
+;pickup
+R 2.
+;m 1
+R 2.
+;m 2
+R 2.
+;m 3
+R 2.
+;m 4
+R 4.
+R 4.
+;m 5
+R 2.
+;m 6
+R 2.
+;m 7
+R 2.
+;m 8
+R 2.
+;m 9
+R 2.
+;m 10
+R 2.
+;m 11
+R 2.
+;m 12
+R 4.
+R 4.
+;m 13
+R 2.
+;m 14
+R 2.
+;m 15
+R 4.
+R 4.
+;m 16
+R 2.
+;m 17
+R 2.
+;m 18
+R 4.
+END_LAZY
+TEMPO 80
+LAZY
+R 4.
+END_LAZY
+TIME_SIGNATURE 2 4 24
+KEY_SIGNATURE F
+TEMPO 60
+LAZY
+;m 19 
+R 2
+;m 20
+R 2
+;m 21
+R 2
+;m 22
+END_LAZY TEMPO 56
+LAZY
+R 4
+END_LAZY TEMPO 52
+LAZY
+R 4
+;m 23
+END_LAZY TEMPO 60
+LAZY
+R 2
+;m 24
+R 2
+;m 25
+R 2
+;m 26
+END_LAZY
+TEMPO 56
+LAZY
+R 4
+END_LAZY
+TEMPO 52
+LAZY
+R 8
+END_LAZY
+TEMPO 48
+LAZY
+R 8
+;m 27
+R 4
+END_LAZY
+TEMPO 32
+LAZY
+R 4
+END_LAZY
+TIME_SIGNATURE 4 4 24
+KEY_SIGNATURE Bb
+TEMPO 120
+LAZY
+;m 28
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+R 1
+;m 29
+R 1
+;m 30
+R 1
+;m 31
+R 1
+;m 32
+R 4
+R 4
+R 2
+;m 33
+R 1
+;m 34
+R 1
+;m 35
+R 1
+;m 36
+R 1
+;m 37
+R 1
+;m 38
+R 1
+;m 39
+R 1
+;m 40
+R 1
+;page 4
+;m 41
+R 1
+;m 42
+R 1
+;m 43
+R 1
+;m 44
+R 1
+;m 45
+R 1
+;m 46
+R 1
+;m 47
+R 1
+;m 48
+R 1
+;m 49
+R 1
+;m 50
+R 1
+;m 51
+R 1
+;m 52
+R 1
+;m 53
+R 1
+;m 54
+R 1
+;m 55
+R 1
+;m 56
+R 1
+;m 57
+R 1
+;m 58
+R 1
+;m 59
+R 1
+;m 60
+R 1
+;m 61
+R 1
+;m 62
+R 1
+;m 63
+R 1
+;m 64
+R 1
+;m 65
+R 1
+;m 66
+R 1
+;page 6
+;m 67
+R 1
+;m 68
+R 1
+;m 69
+R 1
+;m 70
+R 1
+;m 71
+R 1
+;m 72
+R 1
+;m 73
+R 1
+;m 74
+R 1
+;m 75
+R 1
+;m 76
+R 1
+;m 77
+R 1
+;m 78
+R 1
+;m 79
+R 1
+;m 80
+R 1
+;m 81
+R 1
+;m 82
+R 1
+;m 83
+R 1
+;m 84
+R 1
+;m 85
+R 1
+;m 86
+R 1
+;m 87
+R 1
+;m 88
+R 1
+;m 89
+R 1
+;m 90
+R 1
+;m 91
+R 1
+;m 92
+R 1
+;m 93
+R 1
+;m 94
+R 1
+;m 95
+R 1
+;m 96
+R 1
+;page 8
+;m 97
+R 1
+;m 98
+R 1
+;m 99
+R 1
+;m 100
+R 1
+;m 101
+R 1
+;m 102
+R 1
+;m 103
+R 1
+;m 104
+R 1
+;m 105
+R 1
+;m 106
+R 1
+;m 107
+R 1
+;m 108
+R 1
+;m 109
+R 1
+;m 110
+R 1
+;m 111
+R 1
+;m 112
+R 1
+;m 113
+R 1
+;m 114
+R 1
+;m 115
+R 1
+;m 116
+R 1
+;m 117
+R 1
+;m 118
+R 1
+;m 119
+R 1
+;m 120
+R 1
+;m 121
+R 1
+;m 122
+R 1
+;m 123
+R 1
+;m 124
+R 1
+;m 125
+R 1
+;m 126
+R 1
+;page 10
+;m 127
+R 1
+;m 128
+R 1
+;m 129
+R 1
+;m 130
+R 1
+;m 131
+R 1
+;m 132
+R 1
+;m 133
+R 1
+;m 134
+R 1
+;m 135
+R 1
+;m 136
+R 1
+;m 137
+R 1
+;m 138
+R 1
+;m 139
+R 1
+;m 140
+R 1
+;m 141
+R 1
+;m 142
+R 1
+;m 143
+R 1
+;m 144
+R 1
+;m 145
+R 1
+;m 146
+R 1
+;m 147
+R 1
+;m 148
+R 1
+;m 149
+R 1
+;m 150
+R 1
+;m 151
+R 1
+;m 152
+R 1
+;m 153
+R 1
+;m 154
+R 1
+;m 155
+R 1
+;m 156
+R 1
+;m 157
+R 1
+;m 158
+R 1
+;m 159
+R 1
+;m 160
+R 2.
+R 1/6
+END_LAZY
+TEMPO 20
+LAZY
+R 1/12
+;page 12
+END_LAZY
+TIME_SIGNATURE 2 4 24
+KEY_SIGNATURE Gb
+TEMPO 56
+LAZY
+;m 161
+END_LAZY
+KEY_SIGNATURE Gb
+LAZY
+R 2
+;m 162
+R 2
+;m 163
+R 2
+;m 164
+R 2
+;m 165
+R 2
+;m 166
+R 2
+;m 167
+R 2
+;m 168
+R 2
+;m 169
+R 2
+;m 170
+R 2
+;m 171
+R 2
+;m 172
+R 2
+;m 173
+R 2
+;m 174
+R 2
+;m 175
+R 2
+;m 176
+R 2
+;m 177
+R 2
+;m 178
+R 2
+;m 179
+R 2
+;m 180
+R 2
+;m 181
+R 2
+;m 182
+R 2
+;m 183
+R 2
+;m 184
+R 2
+;m 185
+R 2
+;m 186
+R 2
+;m 187
+R 2
+;m 188
+R 2
+;m 189
+R 2
+;m 190
+R 2
+;m 191
+R 2
+;m 192
+R 2
+;m 193
+R 2
+;m 194
+R 2
+;m 195
+R 2
+;m 196
+R 2
+;page 14
+;m 197
+R 2
+;m 198
+R 2
+;m 199
+R 2
+;m 200
+R 2
+;m 201
+R 2
+;m 202
+R 2
+;m 203
+R 2
+;m 204
+R 2
+;m 205
+R 2
+;m 206
+R 2
+;m 207
+R 2
+;m 208
+R 2
+;m 209
+R 2
+;m 210
+R 2
+;m 211
+R 2
+;m 212
+R 2
+;m 213
+R 2
+;m 214
+R 2
+;m 215
+R 2
+;m 216
+R 2
+;m 217
+R 2
+;m 218
+R 2
+;m 219
+R 2
+;m 220
+R 2
+;m 221
+R 2
+;m 222
+R 2
+;m 223
+R 2
+;m 224
+R 2
+;m 225
+R 2
+;m 226
+R 2
+;m 227
+R 2
+;m 228
+R 2
+;m 229
+R 2
+;m 230
+R 2
+;m 231
+R 2
+;m 232
+R 2
+;m 233
+R 2
+;m 234
+R 2
+;page 16
+END_LAZY
+TIME_SIGNATURE 6 8 24
+KEY_SIGNATURE Bb
+TEMPO 207
+LAZY
+;m 235
+R 2.
+;m 236
+R 2.
+;m 237
+R 2.
+;m 238
+R 2.
+;m 239
+R 2.
+;m 240
+R 2.
+;m 241
+R 2.
+;m 242
+R 2.
+;m 243
+R 2.
+;m 244
+R 2.
+;m 245
+R 2.
+;m 246
+R 2.
+;m 247
+R 2.
+;m 248
+R 2.
+;m 249
+R 2.
+;m 250
+R 2.
+;m 251
+R 2.
+;m 252
+R 2.
+;m 253
+R 2.
+;m 254
+R 2.
+;m 255
+R 2.
+;m 256
+R 2.
+;m 257
+R 2.
+;m 258
+R 2.
+;m 259
+R 2.
+;m 260
+R 2.
+;m 261
+R 2.
+;m 262
+R 2.
+;m 263
+R 2.
+;m 264
+R 2.
+;m 265
+R 2.
+;m 266
+R 2.
+;m 267
+R 2.
+;m 268
+R 2.
+;m 269
+R 2.
+;m 270
+R 2.
+;m 271
+R 2.
+;m 272
+R 2.
+;m 273
+R 2.
+;m 274
+R 2.
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+;m 275
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+R 2.
+;m 276
+R 2.
+;m 277
+R 2.
+;m 278
+R 2.
+;m 279
+R 2.
+;m 280
+R 2.
+;m 281
+R 2.
+;m 282
+R 2.
+;m 283
+R 2.
+;m 284
+R 2.
+;m 285
+R 2.
+;m 286
+R 2.
+;page 18
+;m 287
+R 2.
+;m 288
+R 2.
+;m 289
+R 2.
+;m 290
+R 2.
+;m 291
+R 2.
+;m 292
+R 2.
+;m 293
+R 2.
+;m 294
+R 2.
+;m 295
+R 2.
+;m 296
+R 2.
+;m 297
+R 2.
+;m 298
+R 2.
+;m 299
+R 2.
+;m 300
+R 2.
+;m 301
+R 2.
+;m 302
+R 2.
+;m 303
+R 2.
+;m 304
+R 2.
+;m 305
+R 2.
+;m 306
+R 2.
+;m 307
+R 2.
+;m 308
+R 2.
+;m 309
+R 2.
+;m 310
+R 2.
+;m 311
+R 2.
+;m 312
+R 2.
+;m 313
+R 2.
+;m 314
+R 2.
+;m 315
+R 2.
+;m 316
+R 2.
+;m 317
+R 2.
+;m 318
+R 2.
+;m 319
+R 2.
+;m 320
+R 2.
+;m 321
+R 2.
+;m 322
+R 2.
+;m 323
+R 2.
+;m 324
+R 2.
+;m 325
+R 2.
+;m 326
+R 2.
+;m 327
+R 2.
+;m 328
+R 2.
+;m 329
+R 2.
+;m 330
+R 2.
+;m 331
+R 2.
+;m 332
+R 2.
+;m 333
+R 2.
+;m 334
+R 2.
+;m 335
+R 2.
+;m 336
+R 2.
+;m 337
+R 2.
+;m 338
+R 2.
+;m 339
+R 2.
+;m 340
+R 2.
+;m 341
+R 2.
+;m 342
+R 2.
+;m 343
+R 2.
+;m 344
+R 2.
+;m 345
+R 2.
+;m 346
+R 2.
+;m 347
+R 2.
+;m 348
+R 2.
+;m 349
+R 2.
+;m 350
+R 2.
+;m 351
+R 2.
+;m 352
+R 2.
+;m 353
+R 2.
+;m 354
+R 2.
+END_LAZY
+TEMPO 216
+LAZY
+;page 20
+;m 355
+R 2.
+;m 356
+R 2.
+;m 357
+R 2.
+;m 358
+R 2.
+;m 359
+R 2.
+;m 360
+R 2.
+;m 361
+R 2.
+;m 362
+R 2.
+;m 363
+R 2.
+;m 364
+R 2.
+;m 365
+R 2.
+;m 366
+R 2.
+;m 367
+R 2.
+;m 368
+R 2.
+;m 369
+R 2.
+;m 370
+R 2.
+;m 371
+R 2.
+;m 372
+R 2.
+;m 373
+R 2.
+;m 374
+R 2.
+;m 375
+R 2.
+;m 376
+R 2.
+;m 377
+R 2.
+;m 378
+R 2.
+;m 379
+R 2.
+;m 380
+R 2.
+;m 381
+R 2.
+;m 382
+R 2.
+;m 383
+R 2.
+;m 384
+R 2.
+;m 385
+R 2.
+;m 386
+R 2.
+;m 387
+R 2.
+;m 388
+R 2.
+;m 389
+R 2.
+;m 390
+R 2.
+;m 391
+R 2.
+;m 392
+R 2.
+;m 393
+R 2.
+;m 394
+R 2.
+;m 395
+R 2.
+;m 396
+R 2.
+;m 397
+R 2.
+;m 398
+R 2.
+;m 399
+R 2.
+;m 400
+R 2.
+;m 401
+R 2.
+;m 402
+R 2.
+;m 403
+R 2.
+;m 404
+R 2.
+;m 405
+R 2.
+;m 406
+R 2.
+;m 407
+R 2.
+;m 408
+R 2.
+;m 409
+R 2.
+;m 410
+R 2.
+;m 411
+R 2.
+;m 412
+R 2.
+;m 413
+R 2.
+;m 414
+R 2.
+;m 415
+R 2.
+;page 22
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+;m 416
+R 2.
+;m 417
+R 2.
+;m 418
+R 2.
+;m 419
+R 2.
+;m 420
+R 2.
+;m 421
+R 2.
+;m 422
+R 2.
+;m 423
+R 2.
+;m 424
+R 2.
+;m 425
+R 2.
+;m 426
+R 2.
+;m 427
+R 2.
+;m 428
+R 2.
+;m 429
+R 2.
+;m 430
+R 2.
+;m 431
+R 2.
+;m 432
+R 2.
+;m 433
+R 2.
+;m 434
+R 2.
+;m 435
+R 2.
+;m 436
+R 2.
+;m 437
+R 2.
+;m 438
+R 2.
+;m 439
+R 2.
+;m 440
+R 2.
+;m 441
+R 2.
+;m 442
+R 2.
+;m 443
+R 2.
+;m 444
+R 2.
+;m 445
+R 2.
+;m 446
+R 2.
+;m 447
+R 2.
+;m 448
+R 2.
+;m 449
+R 2.
+;m 450
+R 2.
+;m 451
+R 2.
+;m 452
+R 2.
+;m 453
+R 2.
+;m 454
+R 2.
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+;m 455
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+R 2.
+;m 456
+R 2.
+;m 457
+R 2.
+;m 458
+R 2.
+;m 459
+R 2.
+;m 460
+R 2.
+;m 461
+R 2.
+;m 462
+R 2.
+;m 463
+R 2.
+;m 464
+R 2.
+;m 465
+R 2.
+;m 466
+R 2.
+;m 467
+R 2.
+;m 468
+R 2.
+;m 469
+R 2.
+;m 470
+R 2.
+;m 471
+R 2.
+;m 472
+R 2.
+;m 473
+R 2.
+;m 474
+R 2.
+;page 24
+;m 475
+R 2.
+;m 476
+R 2.
+;m 477
+R 2.
+;m 478
+R 2.
+;m 479
+R 2.
+;m 480
+R 2.
+;m 481
+R 2.
+;m 482
+R 2.
+;m 483
+R 2.
+;m 484
+R 2.
+;m 485
+R 2.
+;m 486
+R 2.
+;m 487
+R 2.
+;m 488
+R 2.
+;m 489
+R 2.
+;m 490
+R 2.
+;m 491
+R 2.
+;m 492
+R 2.
+;m 493
+R 2.
+;m 494
+R 2.
+END_LAZY
+TIME_SIGNATURE 2 4 24
+TEMPO 58
+LAZY
+;m 495
+R 2
+;m 496
+R 2
+;m 497
+R 2
+;m 498
+R 2
+;m 499
+R 2
+;m 500
+R 2
+;m 501
+R 2
+;m 502
+R 2
+;m 503
+R 2
+;m 504
+R 2
+;m 505
+R 2
+;m 506
+R 2
+;m 507
+R 2
+;m 508
+R 2
+;m 509
+R 2
+;m 510
+R 2
+;m 511
+R 2
+;m 512
+R 2
+;m 513
+R 2
+;m 514
+END_LAZY
+TEMPO 60
+LAZY
+R 2
+;m 515
+END_LAZY
+TEMPO 63
+LAZY
+R 2
+;m 516
+END_LAZY
+TEMPO 65
+LAZY
+R 2
+;m 517
+END_LAZY
+TEMPO 68
+LAZY
+R 2
+;m 518
+END_LAZY
+TEMPO 71
+LAZY
+R 2
+;m 519
+END_LAZY
+TEMPO 73
+LAZY
+R 2
+;m 520
+END_LAZY
+TEMPO 76
+LAZY
+R 2
+;m 521
+END_LAZY
+TEMPO 79
+LAZY
+R 2
+;m 522
+END_LAZY
+TEMPO 82
+LAZY
+R 2
+;m 523
+END_LAZY
+TEMPO 86
+LAZY
+R 2
+;m 524
+END_LAZY
+TEMPO 89
+LAZY
+R 2
+;page 26
+END_LAZY
+TEMPO 93
+LAZY
+;m 525
+R 2
+END_LAZY
+TEMPO 96
+LAZY
+;m 526
+R 2
+END_LAZY
+TEMPO 100
+LAZY
+;m 527
+R 2
+END_LAZY
+TEMPO 104
+LAZY
+;m 528
+R 2
+END_LAZY
+TEMPO 108
+LAZY
+;m 529
+R 2
+END_LAZY
+TEMPO 112
+LAZY
+;m 530
+R 2
+END_LAZY
+TEMPO 117
+LAZY
+;m 531
+END_LAZY
+TEMPO 121
+LAZY
+R 2
+;m 532
+END_LAZY
+TEMPO 126
+LAZY
+R 2
+;m 533
+R 2
+;m 534
+R 2
+END_LAZY
+TIME_SIGNATURE 6 8 24
+KEY_SIGNATURE Bb
+TEMPO 198
+LAZY
+;m 535
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+R 2.
+;m 536
+R 2.
+;m 537
+R 2.
+;m 538
+R 2.
+;m 539
+R 2.
+;m 540
+R 2.
+;m 541
+R 2.
+;m 542
+R 2.
+;m 543
+R 2.
+;m 544
+R 2.
+;m 545
+R 2.
+;m 546
+R 2.
+;m 547
+R 2.
+;m 548
+R 2.
+;m 549
+R 2.
+;m 550
+R 2.
+;m 551
+R 2.
+;m 552
+R 2.
+;m 553
+R 2.
+;m 554
+R 2.
+;m 555
+R 2.
+;m 556
+R 2.
+;m 557
+R 2.
+;m 558
+R 2.
+;m 559
+R 2.
+;m 560
+R 2.
+;m 561
+R 2.
+;m 562
+R 2.
+;m 563
+R 2.
+;m 564
+R 2.
+;m 565
+R 2.
+;m 566
+R 2.
+;m 567
+R 2.
+;m 568
+R 2.
+;m 569
+R 2.
+;m 570
+R 2.
+;m 571
+R 2.
+;m 572
+R 2.
+;m 573
+R 2.
+;m 574
+R 2.
+;m 575
+R 2.
+;m 576
+R 2.
+;m 577
+R 2.
+;m 578
+R 2.
+;m 579
+R 2.
+;m 580
+R 2.
+;m 581
+R 2.
+;m 582
+R 2.
+;m 583
+R 2.
+;m 584
+R 2.
+;m 585
+R 2.
+;m 586
+R 2.
+;page 28
+;m 587
+R 2.
+;m 588
+R 2.
+;m 589
+R 2.
+;m 590
+R 2.
+;m 591
+R 2.
+;m 592
+R 2.
+;m 593
+R 2.
+;m 594
+R 2.
+;m 595
+R 2.
+;m 596
+R 2.
+;m 597
+R 2.
+;m 598
+R 2.
+;m 599
+R 2.
+;m 600
+R 2.
+;m 601
+R 2.
+;m 602
+R 2.
+;m 603
+R 2.
+;m 604
+R 2.
+;m 605
+R 2.
+;m 606
+R 2.
+;m 607
+R 2.
+;m 608
+R 2.
+;m 609
+R 2.
+;m 610
+R 2.
+;m 611
+R 2.
+;m 612
+R 2.
+;m 613
+R 2.
+;m 614
+R 2.
+;m 615
+R 2.
+;m 616
+R 2.
+;m 617
+R 2.
+;m 618
+R 2.
+;m 619
+R 2.
+;m 620
+R 2.
+;m 621
+R 2.
+;m 622
+R 2.
+;m 623
+R 2.
+;m 624
+R 2.
+;m 625
+R 2.
+;m 626
+R 2.
+;m 627
+R 2.
+;m 628
+R 2.
+;m 629
+R 2.
+;m 630
+R 2.
+;m 631
+R 2.
+;m 632
+R 2.
+;m 633
+R 2.
+;m 634
+R 2.
+;m 635
+R 2.
+;m 636
+R 2.
+;m 637
+R 2.
+;m 638
+R 2.
+;m 639
+R 2.
+;m 640
+R 2.
+;m 641
+R 2.
+;m 642
+R 2.
+;m 643
+R 2.
+;m 644
+R 2.
+;m 645
+R 2.
+;m 646
+R 2.
+;m 647
+R 2.
+;m 648
+R 2.
+;m 649
+R 2.
+;m 650
+R 2.
+;m 651
+R 2.
+;m 652
+R 2.
+;m 653
+R 2.
+;m 654
+R 2.
+;m 655
+R 2.
+;m 656
+R 2.
+;m 657
+R 2.
+;m 658
+R 2.
+END_LAZY
+TIME_SIGNATURE 4 4 24
+TEMPO 120
+LAZY
+;m 659
+R 4
+R 4
+R 2
+;m 660
+R 1
+;m 661
+R 1
+;page 30
+END_LAZY
+TIME_SIGNATURE 2 4 24
+TEMPO 60
+LAZY
+;m 662
+R 2
+;m 663
+R 2
+;m 664a
+; I made it a regular 2/4 bar to do the fermata
+R 2
+END_LAZY
+TIME_SIGNATURE 3 8 24
+TEMPO 198
+LAZY
+;m 664b
+R 4.
+END_LAZY
+TIME_SIGNATURE 6 8 24
+LAZY
+;m 665
+R 2.
+;m 666
+R 2.
+;m 667
+R 2.
+;m 668
+R 2.
+;m 669
+R 2.
+;m 670
+R 2.
+;m 671
+R 2.
+;m 672
+R 2.
+;m 673
+R 2.
+;m 674
+R 2.
+;m 675
+R 2.
+;m 676
+R 2.
+;m 677
+R 2.
+;m 678
+R 2.
+;m 679
+R 2.
+;m 680
+R 2.
+;m 681
+R 2.
+;m 682
+R 2.
+;m 683
+R 2.
+;m 684
+R 2.
+;m 685
+R 2.
+;m 686
+R 2.
+;m 687
+R 2.
+;m 688
+R 2.
+;m 689
+R 2.
+;m 690
+R 2.
+;m 691
+R 2.
+;m 692
+R 2.
+;m 693
+R 2.
+;m 694
+R 2.
+;m 695
+R 2.
+;m 696
+R 2.
+;m 697
+R 2.
+;m 698
+R 2.
+;m 699
+R 2.
+;m 700
+R 2.
+;m 701
+R 2.
+;m 702
+R 2.
+;m 703
+R 2.
+;m 704
+R 2.
+;m 705
+R 2.
+;m 706
+R 2.
+;m 707
+R 2.
+;m 708
+R 2.
+;m 709
+R 2.
+;m 710
+R 2.
+;m 711
+R 2.
+;m 712
+R 2.
+;m 713
+R 2.
+;m 714
+R 2.
+;m 715
+R 2.
+;m 716
+R 2.
+;m 717
+R 2.
+;m 718
+R 2.
+;m 719
+R 2.
+;m 720
+R 2.
+;m 721
+R 2.
+;m 722
+R 2.
+;m 723
+R 2.
+;m 724
+R 2.
+;m 725
+R 2.
+;m 726
+R 2.
+;m 727
+R 2.
+;m 728
+R 2.
+;m 729
+R 2.
+;m 730
+R 2.
+;m 731
+R 2.
+;m 732
+R 2.
+;m 733
+R 2.
+;m 734
+R 2.
+;m 735
+R 2.
+;m 736
+R 2.
+;m 737
+R 2.
+;m 738
+R 2.
+;m 739
+R 2.
+;m 740
+R 2.
+;m 741
+R 2.
+;m 742
+R 2.
+;m 743
+R 2.
+; fine
+END_LAZY
+END_OF_TRACK
+
+;include(`grossefuge.click.m4')
+STARTTRACK
+TRACK Primo Right Hand
+TEXT "Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+INSTRUMENT Piano
+;PROGRAM primorhchan Violin
+PROGRAM 1 1
+PAN 1 -10
+LAZY
+vel 127
+chan 1
+;page 4
+;m 0
+;pickup
+END_LAZY
+KEY_SIGNATURE G
+LAZY
+R 4.
+R 4
+vel 110
+END_LAZY
+DAMPER 1 127
+LAZY
+D6 G6 16
+G5 16
+;m 1
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+;m 2
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+D6 G6 16
+G5 16
+;m 3
+vel 120
+D6 G6 G5 9/8
+;m 4
+vel 110
+END_LAZY
+DAMPER 1 0
+LAZY
+G5 15/8
+;m 5
+
+;m 6
+
+;m 7
+vel 120
+G#5 2.
+;m 8
+F6 2.
+;m 9
+E6 2.
+;m 10
+G#5 2.
+;m 11
+vel 110
+A5 4 R 8
+F#6 4 R 8
+;m 12
+G6 1/16 A6 1/16 G6 1/24 F#6 1/24 G6 1/24 
+R 8
+R 4.
+;m 13
+R 4 G5 8 G#5 4 F6 8
+;m 14
+E6 8 R 8
+G#5 8 A5 4 F#6 8
+;m 15
+G6 8 R 8 R 8 R 4 R 8
+;m 16
+R 4 B4 8 C5 4 Bb5 8
+;m 17
+A5 8 R 8 C#5 8 D5 4 B5 8
+;m 18
+C6 8 R 4 R 4.
+;m 19
+END_LAZY
+KEY_SIGNATURE F
+LAZY
+vel 52
+R 4 F4 4
+;m 20
+Gb4 4 Eb5 4
+;m 21
+Db5 4 E4 4
+;m 22
+F4 4 E5 4
+;m 23
+F5 4 R 4
+;m 24
+R 2
+;m 25
+R 2
+;m 26
+R 16 R 16 F4 16 E4 16 
+D4 16 C4 16 D4 16 Bb3 16 
+;m 27
+A3 4 R 4
+;m 28
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 43
+R 4 vel +10 Bb3 8 vel -10 Bb3 8 R 4 vel +10 Bb3 8 vel -10 Bb3 8 
+;m 29
+R 4 vel +10 B3 8 vel -10 B3 8 R 4 vel +10 Ab4 8 vel -10 Ab4 8 
+;m 30
+R 4 vel +10 G4 8 vel -10 G4 8 
+R 4 vel +10 B3 8 vel -10 C4 8 
+;m 31
+R 4 vel +10 C4 8 vel -10 C4 8 
+A4 8 Bb4 8 Bb4 8 Bb4 8 
+;m 32
+A4 8 A4 8
+R 4
+vel 110
+vel +15 R 8 vel -15 R 16 D4 16 F5 8 R 16 F5 16 
+;m 33
+vel +15 F5 8 vel -15 R 16 D4 16 F5 8 R 16 F5 16 vel +15 F5 8 vel -15 R 16 D4 16 Ab5 8 R 16 Ab5 16 
+;m 34
+vel +15 Ab5 8 vel -15 R 16 G5 16 G5 8 R 16 F5 16  vel +15 F5 8 vel -15 R 16 Eb5 16 Eb5 8 R 16 D5 16  
+;m 35
+vel +15 Eb5 8 vel -15 R 16 Eb4 16 Eb5 8 R 16 Eb5 16 vel +15 Eb5 8 vel -15 R 16 Eb4 16 G5 8 R 16 G5 16 
+;m 36
+vel +15 G5 8 vel -15 R 16 F5 16 F5 8 R 16 Eb5 16  vel +15 Eb5 8 vel -15 R 16 D5 16 D5 8 R 16 E5 16  
+;m 37
+F5 4 A5 8 A5 8
+R 4 vel +10 A4 8 vel -10 A4 8 
+;m 38
+R 4 vel +10 A5 8 vel -10 A5 8 R 4 vel +10 F#5 8 vel -10 F#5 8 
+;m 39
+R 4 vel +10 G5 8 vel -10 G5 8 R 4 vel +10 Bb5 8 vel -10 Bb5 8 
+;m 40
+R 4 D5 8 E5 8 E4 8 F4 8 Eb5 8 Eb5 8
+;page 4
+;m 41
+vel +15 D5 8 vel -15 R 16 Bb5 16 D5 8 R 16 D5 16 vel +15 D5 8 vel -15 R 16 Ab5 16 F5 8 R 16 F5 16 
+;m 42
+vel +15 F5 8 vel -15 R 16 Eb5 16 D5 8 R 16 Ab5 16 vel +15 Ab5 8 vel -15 R 16 G5 16 F6 8 R 16 B5 16 
+;m 43
+vel +15 C6 8 vel -15 R 16 G5 16 C5 8 R 16 C5 16 vel +15 C5 8 vel -15 R 16 G5 16 Eb5 8 R 16 Eb5 16 
+;m 44
+vel +15 F5 8 vel -15 R 16 D6 16 D6 8 R 16 C6 16 vel +15 C6 8 vel -15 R 16 D5 16 F5 8 R 16 G5 16 
+;m 45
+C5 4 F4 8 F4 8 R 4 vel +10 F4 8 vel -10 F4 8 
+;m 46
+R 4 vel +10 F#4 8 vel -10 F#4 8 R 4 vel +10 Eb5 8 vel -10 Eb5 8 
+;m 47
+R 4 vel +10 D5 8 vel -10 D5 8 R 4 vel +10 F#4 8 vel -10 G4 8 
+;m 48
+R 4 vel +10 G4 8 vel -10 G4 8 
+E5 8 F5 8 Eb5 8 Eb6 8 
+;m 49
+D6 8 D6 8 Eb6 8 Eb6 8 D6 8 D6 8 C6 8 C6 8 
+;m 50
+B5 8 B5 8 Bb5 8 Bb5 8 A5 8 A5 8 Ab5 8 Ab5 8 
+;m 51
+G5 8 G5 8 Gb5 8 Gb5 8 
+vel +15 F5 8 vel -15 R 16 D4 16 F5 8 R 16 F5 16 
+;m 52
+vel +15 F5 8 vel -15 R 16 D4 16 F5 8 R 16 F5 16 
+vel +15 F5 8 vel -15 R 16 D5 16 Ab5 8 R 16 Ab5 16 
+;m 53
+vel +15 Ab5 8 vel -15 R 16 G5 16 G5 8 R 16 F5 16  vel +15 F5 8 vel -15 R 16 Eb5 16 Eb5 8 R 16 D5 16  
+;m 54
+vel +15 Eb5 8 vel -15 R 16 Eb4 16 Eb5 8 R 16 Eb5 16 vel +15 Eb5 8 vel -15 R 16 Eb4 16 G5 8 R 16 Gb5 16 
+;m 55
+vel +15 Gb5 8 vel -15 R 16 F5 16 F5 8 R 16 Eb5 16  vel +15 Eb5 8 vel -15 R 16 D5 16 D5 8 R 16 E5 16  
+;m 56
+vel +15 F5 8 vel -15 R 16 F5 16 Bb5 8 R 16 Bb5 16 vel +15 Bb5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 C5 16 
+;m 57
+vel +15 C#5 8 vel -15 R 16 D5 16 D5 8 R 16 Eb5 16 vel +15 E5 8 vel -15 R 16 F5 16 R 8 R 16 R 16 
+;m 58
+vel +15 R 8 vel -15 R 16 Bb4 16 G5 8 R 16 Ab5 16 vel +15 A5 8 vel -15 R 16 Bb5 16 Bb5 8 R 16 B5 16 
+;m 59
+vel +15 B5 8 vel -15 R 16 C6 16 D6 8 R 16 Eb6 16 vel +15 G5 8 vel -15 R 16 Eb6 16 D5 8 R 16 F6 16 
+;m 60
+G6 12 Eb6 12 D6 12 C6 12 Bb5 12 Ab5 12  G5 12 Db6 12 C6 12 Bb5 12 Ab5 12 G5 12  
+;m 61
+Bb5 12 G5 12 Ab5 12 Ab5 12 F5 12 G5 12  G5 12 C5 12 F5 12 F5 12 Bb4 12 E5 12  
+;m 62
+F5 12 B4 12 C5 12 F5 12 E5 12 F5 12  C5 12 F5 12 G5 12 A5 12 G5 12 A5 12  
+;m 63
+Ab5 12 C5 12 D5 12 Eb5 12 C5 12 D5 12  Bb5 12 F5 12 G5 12 Bb5 12 B5 12 C6 12  
+;m 64
+C6 12 D6 12 Bb5 12
+Bb3 8 Bb3 8
+R 4 vel +10 Bb3 8 vel -10 Bb3 8 
+;m 65
+R 4 vel +10 B3 8 vel -10 B3 8 R 4 vel +10 Ab4 8 vel -10 Ab4 8 
+;m 66
+R 4 vel +10 G4 8 vel -10 G4 8 R 4 vel +10 B3 8 vel -10 C4 8 
+;page 6
+;m 67
+R 4 vel +10 C4 8 vel -10 C4 8 
+A4 8 Bb4 8 Bb4 8 Bb4 8 
+;m 68
+Bb4 8 C5 8 C5 8 C5 8 C5 8 Bb4 8 Eb5 8 Eb5 8 
+;m 69
+D5 8 G5 8 G5 8 G5 8 
+vel +15 R 8 vel -15 R 16 D5 16 D6 8 R 16 D6 16 
+;m 70
+vel +15 D6 8 vel -15 R 16 G5 16 D6 8 R 16 D6 16 vel +15 D6 8 vel -15 R 16 G4 16 F6 8 R 16 F6 16 
+;m 71
+vel +15 F6 8 vel -15 R 16 Eb6 16 Eb6 8 R 16 Db6 16  vel +15 Db6 8 vel -15 R 16 C6 16 C6 8 R 16 Bb5 16  
+;m 72
+vel +15 Bb5 8 vel -15 R 16 D5 16 A5 8 R 16 A5 16 vel +15 A5 8 vel -15 R 16 A4 16 Eb6 8 R 16 Eb6 16 
+;m 73
+vel +15 Eb6 8 vel -15 R 16 D6 16 D6 8 R 16 C6 16  vel +15 C6 8 vel -15 R 16 B5 16 B5 8 R 16 D6 16  
+;m 74
+C6 4 R 4
+vel +15 R 8 vel -15 R 16 D5 16 D5 8 R 16 F5 16 
+;m 75
+vel +15 F5 8 vel -15 R 16 Eb5 16 E5 8 R 16 G5 16 vel +15 G5 8 vel -15 R 16 F#5 16 G5 8 R 16 Bb5 16 
+;m 76
+vel +15 Bb5 8 vel -15 R 16 A5 16 B5 8 R 16 D6 16 vel +15 D6 8 vel -15 R 16 C#6 16 D6 8 R 16 F6 16 
+;m 77
+vel +15 E6 8 vel -15 R 16 E5 16 E5 8 R 16 G5 16 
+F5 8 R 8 F#5 8 R 8
+;m 78
+R 8. D4 16 D4 8 R 16 F4 16 vel +15 Eb4 8 vel -15 R 8 E4 8 R 8  
+;m 79
+R 8. F5 16 F5 8 R 16 A5 16 vel +15 F#5 8 vel -15 R 8 G5 8 R 8  
+;m 80
+G#5 8 R 8 A5 8 R 8 D#6 8 R 8 E6 8 R 8
+;m 81
+F6 4
+F5 8 F5 8 
+R 4 vel +10 F5 8 vel -10 F5 8 
+;m 82
+R 4 vel +10 F#5 8 vel -10 F#5 8 R 4 vel +10 Eb6 8 vel -10 Eb6 8 
+;m 83
+R 4 vel +10 D6 8 vel -10 D6 8 R 4 vel +10 F#5 8 vel -10 G5 8 
+;m 84
+R 4 vel +10 G5 8 vel -10 G5 8 
+E6 8 E6 8 F6 8 F6 8 
+;m 85
+F#6 8 F#6 8 F#5 8 F#5 8 
+F#4 8 F#4 8 
+R 4
+;m 86
+G6 8 G6 8 G5 8 G5 8 
+G4 8 G4 8 
+R 4
+;m 87
+D6 8 D6 8 Bb4 8 Bb4 8 
+E4 8 E4 8 
+R 4
+;m 88
+C6 8 C6 8 F5 8 F5 8 D6 8 D6 8 G4 8 G4 8 
+;m 89
+D5 8 D5 8 G5 8 G5 8 E6 8 E6 8 A4 8 A4 8 
+;m 90
+E5 8 E5 8 A5 8 A5 8 G6 8 G6 8 G5 8 G5 8 
+;m 91
+A6 8 A6 8 F#4 8 F#4 8 
+vel +15 R 8 vel -15 R 16 A5 16 Eb6 8 R 16 Eb6 16 
+;m 92
+vel +15 Eb6 8 vel -15 R 16 D6 16 D6 8 R 16 F#6 16  vel +15 F#6 8 vel -15 R 16 G6 16 G6 8 R 16 A6 16  
+;m 93
+Bb6 4 R 4
+vel +15 R 8 vel -15 R 16 G5 16 G6 8 R 16 G6 16 
+;m 94
+vel +15 G6 8 vel -15 R 16 C#6 16 D6 8 R 16 E6 16 vel +15 E6 8 vel -15 R 16 F6 16 F6 8 R 16 E6 16 
+;m 95
+vel +15 E6 8 vel -15 R 16 E6 16 E6 8 R 16 F#6 16 
+G6 4 R 4
+;m 96
+vel +15 R 8 vel -15 R 16 C#6 16 C#6 8 R 16 D6 16 
+E6 4 R 4
+;page 8
+;m 97
+vel +15 R 8 vel -15 R 16 C#5 16 C#5 8 R 16 D5 16 
+E5 4 R 4
+;m 98
+vel +15 R 8 vel -15 R 16 E6 16 E6 8 R 16 F6 16 vel +15 G6 8 vel -15 R 16 E5 16 Bb5 8 R 16 Bb5 16 
+;m 99
+vel +15 Bb5 8 vel -15 R 16 Ab5 16 Ab5 8 R 16 G5 16  vel +15 G5 8 vel -15 R 16 F5 16 F5 8 R 16 E5 16  
+;m 100
+vel +15 E5 8 vel -15 R 16 Ab4 16 Ab4 8 R 16 G4 16 
+G4 4 R 4
+;m 101
+r 2
+vel +15 R 8 vel -15 R 16 C5 16 C6 8 R 16 C6 16 
+;m 102
+vel +15 C6 8 vel -15 R 16 Bb5 16 Bb5 8 R 16 Ab5 16  vel +15 Ab5 8 vel -15 R 16 G5 16 G5 8 R 16 F5 16  
+;m 103
+F5 4 R 4
+vel +15 R 8 vel -15 R 16 E4 16 Bb5 8 R 16 Bb5 16 
+;m 104
+vel +15 Bb5 8 vel -15 R 16 E4 16 Bb5 8 R 16 Bb5 16 vel +15 Bb5 8 vel -15 R 16 E4 16 Db6 8 R 16 C6 16 
+;m 105
+vel +15 C6 8 vel -15 R 16 A4 16 C6 8 R 16 C6 16 vel +15 C6 8 vel -15 R 16 A4 16 Eb6 8 R 16 D6 16 
+;m 106
+vel +15 D6 8 vel -15 R 16 D5 16 D6 8 R 16 D6 16 vel +15 D6 8 vel -15 R 16 D5 16 F6 8 R 16 F6 16 
+;m 107
+vel +15 F6 8 vel -15 R 16 D5 16 F#6 8 R 16 F#6 16 vel +15 F#6 8 vel -15 R 16 D5 16 G6 8 R 16 G6 16 
+;m 108
+vel +15 G6 8 vel -15 R 16 D5 16 G#6 8 R 16 G#6 16 vel +15 G#6 8 vel -15 R 16 D5 16 A6 8 R 16 A6 16 
+;m 109
+vel +15 A6 8 vel -15 R 16 D5 16 Bb6 8 R 16 G6 16 vel +15 F6 8 vel -15 R 16 G6 16 A6 8 R 16 A6 16 
+;m 110
+vel +15 A6 8 vel -15 R 16 Eb6 16 D6 8 R 16 D4 16 vel +15 D4 8 vel -15 R 16 F6 16 F6 8 R 16 E6 16 
+;m 111
+D6 4 R 2.
+;m 112
+R 8. G4 16 Bb4 8 R 16 Bb4 16 vel +15 Ab4 8 vel -15 R 8 A4 8 R 8 
+;m 113
+Bb4 8 vel +10 Bb5 8 vel -10 Bb5 8 R 8
+R 8 vel +10 Bb5 8 vel -10 Bb5 8 vel +10 R 8 vel -10  
+;m 114
+R 8 vel +10 B5 8 vel -10 B5 8 vel +10 R 8 vel -10  R 8 vel +10 G6 8 vel -10 G6 8 vel +10 R 8 vel -10  
+;m 115
+R 8 vel +10 G6 8 vel -10 G6 8 vel +10 R 8 vel -10  R 8 vel +10 B5 8 vel -10 B5 8 vel +10 R 8 vel -10  
+;m 116
+R 8 C6 8 C6 8 A6 8 Bb6 8
+R 16 Bb5 16 C7 8 R 16 C7 16
+;m 117
+vel +15 C7 8 vel -15 R 16 A5 16 C7 8 R 16 C7 16 vel +15 C7 8 vel -15 R 16 A5 16 Eb6 8 R 16 Eb6 16 
+;m 118
+vel +15 Eb6 8 vel -15 R 16 D6 16 D6 8 R 16 C6 16  
+Bb5 16 R 16 Eb5 16 D5 16 C5 16 R 16 Bb4 16 A4 16 
+;m 119
+G4 16 R 16 D5 16 C5 16 Bb4 16 R 16 G4 16 F4 16 E4 16 R 16 Db5 16 C5 16 Bb4 16 R 16 G5 16 F5 16 
+;m 120
+E5 16 R 16 Bb5 16 C6 16 Db6 16 R 16 D6 16 E6 16 
+vel +15 Gb6 8 vel -15 R 16 F6 16 F6 8 R 16 Eb6 16  
+;m 121
+D6 4 R 4
+vel +15 F6 8 vel -15 R 16 Eb6 16 Eb6 8 R 16 Db6 16  
+;m 122
+C6 4 R 4
+vel +15 Eb6 8 vel -15 R 16 Db6 16 Db6 8 R 16 C6 16  
+;m 123
+vel +15 C6 8 vel -15 R 16 Bb5 16 Bb5 8 R 16 Ab5 16  vel +15 Ab5 8 vel -15 R 16 G5 16 G5 8 R 16 F5 16  
+;m 124
+vel +15 F5 8 vel -15 R 16 Eb5 16 D5 8 R 16 Db5 16 
+C5 16 R 16 Eb5 16 F5 16 G5 16 R 16 Ab5 16 Bb5 16 
+;m 125
+C6 16 R 16 G5 16 Ab5 16 Bb5 16 R 16 C6 16 Db6 16 Eb6 16 R 16 Ab5 16 Bb5 16 C6 16 R 16 C6 16 Db6 16 
+;m 126
+Eb6 16 R 16 Eb6 16 F6 16 Gb6 16 R 16 R 16 Gb6 16 F6 4 R 4
+;page 10
+;m 127
+vel +15 R 8 vel -15 R 16 D5 16 F6 8 R 16 F6 16 vel +15 F6 8 vel -15 R 16 F6 16 Ab6 8 R 16 Ab6 16 
+;m 128
+vel +15 Ab6 8 vel -15 R 16 G6 16 G6 8 R 16 F6 16  vel +15 F6 8 vel -15 R 16 Eb6 16 Eb6 8 R 16 F6 16  
+;m 129
+vel +15 G6 8 vel -15 R 16 Ab6 16 Ab6 8 R 16 Bb6 16  
+Bb6 4 R 4
+;m 130
+vel +15 Bb5 8 vel -15 R 16 C6 16 C6 8 R 16 Db6 16 vel +15 Db6 8 vel -15 R 16 Db4 16 C4 8 R 16 C4 16 
+;m 131
+C4 8 E4 8 E4 8 R 8
+R 8 vel +10 Db6 8 vel -10 Db6 8 vel +10 R 8 vel -10  
+;m 132
+R 8 vel +10 G6 8 vel -10 G6 8 vel +10 R 8 vel -10  R 8 vel +10 C6 8 vel -10 C6 8 vel +10 R 8 vel -10  
+;m 133
+vel +15 A5 8 vel -15 R 16 Bb5 16 Bb5 8 R 16 C6 16  vel +15 C6 8 vel -15 R 16 D6 16 D6 8 R 16 Eb6 16  
+;m 134
+vel +15 Eb6 8 vel -15 R 16 F6 16 F6 8 R 16 F6 16 vel +15 F6 8 vel -15 R 16 G6 16 A6 8 R 16 Bb6 16 
+;m 135
+vel +15 Ab6 8 vel -15 R 16 G6 16 G6 8 R 16 F6 16  vel +15 F6 8 vel -15 R 16 Eb6 16 Eb6 8 R 16 D6 16  
+;m 136
+vel +15 D6 8 vel -15 R 16 C6 16 C6 8 R 16 Bb5 16  vel +15 Bb5 8 vel -15 R 16 Ab5 16 Ab5 8 R 16 G5 16  
+;m 137
+G5 8 G5 8 G5 8 R 8
+R 8 vel +10 F6 8 vel -10 F6 8 vel +10 R 8 vel -10  
+;m 138
+R 8 vel +10 B5 8 vel -10 B5 8 vel +10 R 8 vel -10  R 8 vel +10 C6 8 vel -10 C6 8 vel +10 R 8 vel -10  
+;m 139
+R 8 vel +10 C6 8 vel -10 C6 8 vel +10 R 8 vel -10  R 8 vel +10 D6 8 vel -10 D6 8 vel +10 R 8 vel -10  
+;m 140
+R 8 F6 8 F6 8 A6 8
+Bb6 12 D5 12 F6 12 F6 12 D5 12 F6 12  
+;m 141
+F6 12 D5 12 F6 12 F6 12 D5 12 Ab5 12  Ab5 12 G5 12 F5 12 F5 12 Eb5 12 D5 12  
+;m 142
+Eb5 12 Eb4 12 Eb5 12 Eb5 12 Eb4 12 G5 12  G5 12 F5 12 Eb5 12 Eb5 12 D5 12 E5 12  
+;m 143
+F5 12 C6 12 A6 12 A6 12 C6 12 C7 12  C7 12 Bb6 12 A6 12 A6 12 G6 12 F#6 12  
+;m 144
+G6 12 G5 12 D6 12 D6 12 D5 12 Bb5 12  Bb5 12 A5 12 G6 12 G6 12 F6 12 A6 12  
+;m 145
+Bb6 12 F6 12 D6 12 Bb5 12 F5 12 D6 12  D6 12 Eb6 12 F6 12 F6 12 G6 12 Ab6 12  
+;m 146
+G6 12 G5 12 G6 12 G6 12 G5 12 Eb6 12  Eb6 12 D6 12 C7 12 C7 12 Bb6 12 G6 12  
+;m 147
+A6 8 F5 8 F5 8 F5 8 F#5 8 Eb6 8 D6 8 D6 8
+;m 148
+D6 8 G5 8 G5 8 G5 8 G5 8 E6 8 Eb6 8 Eb6 8
+;m 149
+D6 12 C6 12 Bb5 12 Bb6 12 A6 12 C7 12  Bb6 12 A6 12 G6 12 Ab6 12 G6 12 F6 12  
+;m 150
+G6 12 F6 12 Eb6 12 Eb6 12 D6 12 F6 12  Eb6 12 D6 12 C6 12 D6 12 C6 12 Bb5 12  
+;m 151
+C7 12 Bb6 12 A6 12 Ab6 12 G6 12 Bb6 12  Ab6 12 G6 12 F6 12 G6 12 F6 12 Eb6 12  
+;m 152
+F6 12 Eb6 12 D6 12 Eb6 12 D6 12 C6 12  D6 12 C6 12 B5 12 C6 12 Bb5 12 A5 12  
+;m 153
+D6 12 C6 12 B5 12 Eb6 12 D6 12 C6 12  F6 12 Eb6 12 D6 12 G6 12 F6 12 E6 12  
+;m 154
+A6 12 G6 12 F#6 12 Bb6 12 A6 12 G6 12  C7 12 Bb6 12 A6 12 D6 12 Eb6 12 C6 12  
+;m 155
+vel +15 F6 8 vel -15 R 16 D4 16 F6 8 R 16 F6 16 vel +15 F6 8 vel -15 R 16 D5 16 Ab6 8 R 16 Ab6 16 
+;m 156
+vel +15 Ab6 8 vel -15 R 16 G6 16 G6 8 R 16 F6 16 vel +15 F6 8 vel -15 R 16 Eb6 16 E6 8 R 16 G6 16 
+;m 157
+vel +15 G6 8 vel -15 R 16 F6 16 F6 8 R 16 Eb6 16  vel +15 Eb6 8 vel -15 R 16 D6 16 D6 8 R 16 Eb6 16  
+;m 158
+Eb6 5/8 R 16 A4 16 Eb6 8 R 16 Eb6 16
+;m 159
+Eb6 5/8 R 16 A3 16 Eb5 8 R 16 Eb5 16
+;m 160
+Db5 8 R 16 Bb4 16 Db6 4. R 16 Bb3 16 Db6 5/16
+;page 12
+;m 161
+END_LAZY
+KEY_SIGNATURE Gb
+LAZY
+vel 43
+     C4 16 Db4 9/128 Cb5 7/128 Bb4 8 R 8
+;m 162
+R 94/1536 Ab3 16 Bb3 8/128 vel +4 Gb4 98/1536 vel -4  
+F4 8 Db5 98/1536 vel -10 Cb5 94/1536 
+;m 163
+Cb5 94/1536 Bb4 16 vel +4 Bb5 98/1536 vel -4 Ab5 8/128  Ab5 94/1536 Gb5 16 vel +4 Db6 98/1536 vel -4 Cb6 8/128 
+;m 164
+Cb6 94/1536 Bb5 16 vel +4 Eb6 98/1536 vel -4 Db6 8/128  Db6 94/1536 Cb6 16 vel +4 Db6 98/1536 vel -4 Bb5 8/128 
+;m 165
+Db6 94/1536 Cb6 16 vel +4 Eb6 98/1536 vel -4 Db6 8/128  Db6 94/1536 Cb6 16 vel +4 Db6 98/1536 vel -4 Bb5 8/128 
+;m 166
+vel +4 Bb5 98/1536 vel -4 Ab5 8/128 Gb5 16 F5 94/1536  vel +4 Eb5 98/1536 vel -4 Db5 8/128 Eb5 16 Cb5 94/1536 
+;m 167
+Bb4 8 R 8 R 4
+;m 168
+R 94/1536 R 16 vel +4 Db5 98/1536 vel -4 Cb5 8/128  Cb5 94/1536 Bb4 16 vel +4 Bb5 98/1536 vel -4 Ab5 8/128 
+;m 169
+Gb5 8 R 8 R 4
+;m 170
+Cb5 16 Bb4 16 vel +6 Eb5 16 vel -6 Db5 16 
+R 4
+;m 171
+R 4
+Db5 16 Cb5 16 vel +6 Db5 16 vel -6 Bb4 16 
+;m 172
+R 2
+;m 173
+R 16 R 16 vel +6 F5 16 vel -6 Eb5 16  Eb5 16 Db5 16 vel +6 Ab5 16 vel -6 Gb5 16 
+;m 174
+Gb5 16 F5 16 vel +6 Bb5 16 vel -6 Ab5 16  Ab5 16 Gb5 16 vel +6 Ab5 16 vel -6 F5 16 
+;m 175
+Ab5 16 Gb5 16 vel +6 Bb5 16 vel -6 Ab5 16  Ab5 16 Gb5 16 vel +6 Ab5 16 vel -6 F5 16 
+;m 176
+vel +6 F5 16 vel -6 Eb5 16 Db5 16 C5 16 
+Bb4 16 Ab4 16 vel +6 Bb4 16 vel -6 Gb4 16 
+;m 177
+F4 8 R 8
+R 94/1536 F5 16 vel +4 Eb5 98/1536 vel -4 F4 8/128 
+;m 178
+Gb4 16 R 16 R 8 
+R 16 R 16 vel +6 Ab4 16 vel -6 Gb4 16 
+;m 179
+Gb4 16 F4 16 vel +6 F5 16 vel -6 Eb5 16  Eb5 16 Db5 16 vel +6 Ab5 16 vel -6 Gb5 16 
+;m 180
+Gb5 16 F5 16 vel +6 Bb5 16 vel -6 Ab5 16  Ab5 16 Gb5 16 vel +6 Ab5 16 vel -6 F5 16 
+;m 181
+Ab5 16 Gb5 16 vel +6 Bb5 16 vel -6 Ab5 16  Ab5 16 Gb5 16 vel +6 Ab5 16 vel -6 F5 16 
+;m 182
+vel +6 F5 16 vel -6 Eb5 16 Db5 16 C5 16 
+Bb4 16 Ab4 16 vel +6 Bb4 16 vel -6 Gb4 16 
+;m 183
+F4 8 F5 9/128 Eb5 7/128 
+Eb5 94/1536 Db5 16 vel +4 Ab5 98/1536 vel -4 Gb5 8/128 
+;m 184
+F5 8 R 8 R 4
+;m 185
+R 2
+;m 186
+R 2
+;m 187
+R 2
+;m 188
+R 2
+;m 189
+R 4 Db5 4
+;m 190
+D5 4 Cb6 4
+;m 191
+Bb5 4 D5 4
+;m 192
+Eb5 4 C6 4
+;m 193
+Db6 4 R 4
+;m 194
+vel +6 Bb4 16 vel -6 Ab4 16 Bb4 16 C5 16  vel +6 Db5 16 vel -6 C5 16 Db5 16 Eb5 16 
+;m 195
+vel +6 F5 16 vel -6 Eb5 16 F5 16 Gb5 16 
+Ab5 8 R 8
+;m 196
+R 4 D5 4
+;page 14
+;m 197
+Eb5 4 Cb6 4
+;m 198
+Bb5 4 Eb5 4
+;m 199
+E5 4 Db6 4
+;m 200
+C6 4 E5 4
+;m 201
+F5 4
+Db6 16 C6 16 vel +6 Db6 16 vel -6 Bb5 16 
+;m 202
+Bb5 16 A5 16 vel +6 Gb5 16 vel -6 F5 16  F5 16 Eb5 16 vel +6 D5 16 vel -6 C5 16 
+;m 203
+C5 16 Bb4 16 vel +6 A4 16 vel -6 Bb4 16  Eb4 16 D4 16 vel +6 Eb4 16 vel -6 C4 16 
+;m 204
+C4 16 Bb3 16 vel +6 Eb4 16 vel -6 D4 16  D4 16 F4 16 vel +6 Eb4 16 vel -6 D4 16 
+;m 205
+vel +6 Ab4 16 vel -6 G4 16 F4 16 G4 16 
+vel +6 Cb6 16 vel -6 Bb5 16 vel +6 Cb6 16 vel -6 Ab5 16 
+;m 206
+vel +6 Ab5 16 vel -6 G5 16 F5 16 Eb5 16  vel +6 G5 16 vel -6 Ab5 16 G5 16 Bb5 16 
+;m 207
+vel +6 G5 16 vel -6 Ab5 16 Bb5 16 C6 16  vel +6 Eb6 16 vel -6 Db6 16 Eb6 16 C6 16 
+;m 208
+vel +6 C6 16 vel -6 Db6 16 Eb6 16 F6 16  vel +6 F6 16 vel -6 Gb6 16 F6 16 Ab6 16 
+;m 209
+vel +6 F6 16 vel -6 Gb6 16 Ab6 16 Bb6 16 
+Db6 2
+;m 210
+
+vel +6 F5 16 vel -6 Gb5 16 F5 16 Ab5 16 
+;m 211
+vel +6 F5 16 vel -6 Gb5 16 Ab5 16 Bb5 16 
+Gb5 4
+;m 212
+G5 4 Fb6 4
+;m 213
+Eb6 4 G5 4
+;m 214
+Ab5 4 F6 4
+;m 215
+Gb6 4 D6 8 Eb6 4.
+;m 216
+
+Bb5 8 Cb6 4.
+;m 217
+G5 8 Ab5 4.
+;m 218
+Gb5 8 Eb5 8
+;m 219
+F5 4 C5 4
+;m 220
+Db5 4 Cb6 4
+;m 221
+Bb5 4 F5 4
+;m 222
+Gb5 4 Gb6 8 Cb6 9/128 Bb5 7/128
+;m 223
+vel +6
+Bb5 16 vel +3 Ab5 16 vel +3 Ab6 16 vel +3 Gb6 16 vel +3 Gb6 16 vel +3 F6 16 vel +3 Cb7 16 vel +3 Bb6 16
+;m 224
+vel +3 Bb6 16 vel +3 Ab6 16 vel +3 Cb7 16 vel +3 Bb6 16
+vel +3 Ab6 8 vel +3 Db5 16 Cb5 16
+vel 90
+;m 225
+Cb5 16 Bb4 16 vel +6 Bb5 16 vel -6 Ab5 16  Ab5 16 Gb5 16 vel +6 Db6 16 vel -6 Cb6 16 
+;m 226
+Cb6 16 Bb5 16 vel +6 Eb6 16 vel -6 Db6 16  Db6 16 Cb6 16 vel +6 Db6 16 vel -6 Bb5 16 
+;m 227
+Db6 16 Cb6 16 vel +6 Eb6 16 vel -6 Db6 16  Db6 16 Cb6 16 vel +6 Db6 16 vel -6 Bb5 16 
+;m 228
+vel +6 Bb5 16 vel -6 Ab5 16 Gb5 16 F5 16  Eb5 16 Db5 16 vel +6 Eb5 16 vel -6 Cb5 16 
+;m 229
+vel 75
+Cb5 16 Bb4 16 vel +6 Cb5 16 vel -6 Ab4 16 
+vel +6 Ab4 16 vel -6 Gb4 16 F4 16 Eb4 16 
+;m 230
+vel 62
+Gb4 16 F4 16 vel +6 Gb4 16 vel -6 Eb4 16 
+vel +6 Eb4 16 vel -6 Db4 16 C4 16 Bb3 16 
+;m 231
+vel 52
+vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5 vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5  
+;m 232
+vel -5
+vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5 vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5  
+;m 233
+vel 43
+vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5 vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5  
+;m 234
+vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5 vel -5 Db4 16 C4 16 vel +6 Db4 16 vel -6 C4 16  vel +5  
+;page 16
+;m 235
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 110
+END_LAZY
+KEY_SIGNATURE Bb
+END_LAZY
+D4 4 R 8 R 4.
+;m 236
+R 2.
+;m 237
+vel +10 R 4 vel -10 F4 8 Gb4 4 Eb5 8  
+;m 238
+vel +10 D5 8 vel -10 R 8 F#4 8 G4 4 E5 8 
+;m 239
+vel 90
+F5 8 R 8 R 8 
+vel 52
+D4 4.
+;m 240
+Eb4 8 R 8 R 8
+Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/24 D4 1/24 Eb4 1/24 
+;m 241
+D4 4 R 8 R 4.
+;m 242
+R 2.
+;m 243
+R 4.
+D5 1/16 Eb5 1/16 D5 1/16 Eb5 1/16 D5 1/24 C5 1/24 D5 1/24 
+;m 244
+vel +10 C5 4 vel -10 R 8 E5 4 R  8 
+;m 245
+vel +10 F5 4 vel -10 G5 8 A5 4 F5 8 
+;m 246
+vel +10 D5 4 vel -10 R 8 F#5 4 R  8 
+;m 247
+vel +10 G5 4 vel -10 A5 8 Bb5 4 G5 8 
+;m 248
+R 2.
+;m 249
+R 2.
+;m 250
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 251
+vel +10 Bb5 4 vel -10 C6 8 D6 4 Bb5 8 
+;m 252
+vel +10 G6 4 vel -10 R 8 F6 4 R  8 
+;m 253
+vel +10 Eb6 4 vel -10 D6 8 C6 4 G6 8  
+;m 254
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 255
+vel +10 Bb5 4 vel -10 R 8 F4 4 R  8 
+;m 256
+vel +10 F4 4 vel -10 R 8 F5 4 R  8 
+;m 257
+F5 4 R 8 D6 4.
+;m 258
+Eb6 8 R 4
+Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/24 D6 1/24 Eb6 1/24 
+;m 259
+D6 4 R 8
+D5 1/16 Eb5 1/16 D5 1/16 Eb5 1/16 D5 1/24 C5 1/24 D5 1/24 
+;m 260
+vel +10 C5 4 vel -10 R 8 Bb4 E5 4 R  8 
+;m 261
+vel +10 F5 4 vel -10 G5 8 A5 4 F5 8  
+;m 262
+vel +10 R 4 vel -10 C#5 8 D5 4 C6 8  
+;m 263
+Bb5 4 R 8 R 4.
+;m 264
+vel +10 G6 4 vel -10 R 8 F6 4 R  8 
+;m 265
+Eb6 4 D6 8 C6 4 G6 8
+;m 266
+R 2.
+;m 267
+R 2.
+;m 268
+vel +10 G6 4 vel -10 R 8 F6 4 R  8 
+;m 269
+vel +10 Eb6 4 vel -10 D6 8 C6 4 G6 8  
+;m 270
+vel +10 F5 4 vel -10 R 8 A5 4 R 8  
+;m 271
+vel +10 Bb5 4 vel -10 R 8 G5 4 R  8 
+;m 272
+vel 62
+vel +10 B5 4 vel -10 R 8 C6 4 R  8 
+;m 273
+vel 75
+R 4. Eb5 4 R 8
+;m 274
+vel 90
+Eb5 G5 4 R 8 
+vel 110
+Eb5 Ab5 4 R 8
+;m 275
+END_LAZY
+KEY_SIGNATURE bb
+LAZY
+R 2.
+;m 276
+R 2.
+;m 277
+R 2.
+;m 278
+R 2.
+;m 279
+R 2.
+;m 280
+R 2.
+;m 281
+R 2.
+;m 282
+R 2.
+;m 283
+R 2.
+;m 284
+vel +10 R 4 vel -10 C6 8 Bb5 4 Db5 8  
+;m 285
+vel +10 R 4 vel -10 Ab5 8 G5 4 Bb4 8  
+;m 286
+vel +10 R 4 vel -10 F6 8 E6 4 G5 8  
+;page 18
+;m 287
+vel +10 R 4 vel -10 G6 8 F6 4 Ab5 8  
+;m 288
+vel +10 R 4 vel -10 Ab6 8 G6 4 Bb5 8  
+;m 289
+vel +10 R 4 vel -10 Bb6 8 Ab6 4 Bb5 8  
+;m 290
+vel +10 R 4 vel -10 Bb6 8 Fb6 4 Eb6 8  
+;m 291
+Eb6 4 R 8 R 4.
+;m 292
+R 2.
+;m 293
+R 2.
+;m 294
+R 2.
+;m 295
+R 2.
+;m 296
+R 2.
+;m 297
+R 2.
+;m 298
+R 4. Eb5 15/8
+;m 299
+
+;m 300
+
+;m 301
+E5 2.
+;m 302
+Db6 2.
+;m 303
+C6 2.
+;m 304
+E5 2.
+;m 305
+vel +10 F5 4 vel -10 R 8 D6 4 R  8 
+;m 306
+Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/24 C6 1/24 Db6 1/24 
+;m 307
+vel +10 Eb5 4 vel -10 R 8 C6 4 R  8 
+;m 308
+Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/24 Ab5 1/24 Bb5 1/24 
+;m 309
+vel +10 C5 4 vel -10 R 8 Bb5 4 R  8 
+;m 310
+Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/24 G5 1/24 Ab5 1/24 
+;m 311
+G5 4 R 8 A3 4.
+;m 312
+Bb3 4. G4 4 R 8
+;m 313
+R 4. E4 4.
+;m 314
+F4 4. F5 2.
+;m 315
+
+E5 4.
+;m 316
+F5 4. Eb6 4 R 8
+;m 317
+R 4. C5 2.
+;m 318
+
+A5 4 R 8
+;m 319
+vel +10 R 4 vel -10 Eb6 8 D6 4 F5 8  
+;m 320
+R 2.
+;m 321
+vel +10 R 4 vel -10 Gb5 8 F5 4 Ab4 8  
+;m 322
+R 4. Eb5 15/8
+;m 323
+
+;m 324
+
+;m 325
+Fb5 2.
+;m 326
+Db6 4. Eb5 5/8
+;m 327
+
+R 8
+C6 4 R 8
+;m 328
+Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/24 C6 1/24 Db6 1/24 
+;m 329
+C6 4 R 2
+;m 330
+R 4. Db5 5/8
+;m 331
+
+R 8 Bb5 4 R 8
+;m 332
+Cb6 1/16 Db6 1/16 Cb6 1/16 Db6 1/16 Cb6 1/16 Db6 1/16 Cb6 1/16 Db6 1/16 Cb6 1/16 Db6 1/16 Cb6 1/24 Bb5 1/24 Cb6 1/24 
+;m 333
+Bb5 4 R 2
+;m 334
+R 4. B4 5/8
+;m 335
+
+R 8 G#5 4 R 8
+;m 336
+A5 1/16 B5 1/16 A5 1/16 B5 1/16 A5 1/16 B5 1/16 A5 1/16 B5 1/16 A5 1/16 B5 1/16 A5 1/24 G#5 1/24 A5 1/24 
+;m 337
+G#5 4 R 2
+;m 338
+R 4.  A5 5/8
+;m 339
+
+R 8 F#6 4 R 8
+;m 340
+G6 1/16 A6 1/16 G6 1/16 A6 1/16 G6 1/16 A6 1/16 G6 1/16 A6 1/16 G6 1/16 A6 1/16 G6 1/24 F#6 1/24 G6 1/24 
+;m 341
+F#6 4 R 2
+;m 342
+R 4. D5 5/8
+;m 343
+
+R 8 B5 4 R 8
+;m 344
+B5 1/16 C6 1/16 B5 1/16 C6 1/16 B5 1/16 C6 1/16 B5 1/16 C6 1/16 B5 1/16 C6 1/16 B5 1/24 A5 1/24 B5 1/24 
+;m 345
+C6 4 R 2
+;m 346
+R 4. C5 5/8
+;m 347
+
+R 8
+A5 4 R 8
+;m 348
+A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/24 G5 1/24 A5 1/24 
+;m 349
+Ab5 4 R 2
+;m 350
+R 4. Ab4 5/8
+;m 351
+
+R 8 F5 4 R 8
+;m 352
+F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/24 E5 1/24 F5 1/24 
+;m 353
+E5 8 E4 8 C5 8 F#4 8 G4 8 E5 8  
+;m 354
+B4 8 C5 8 G5 8 Ab5 8 G5 8 C5 8  
+;page 20
+;m 355
+F5 8 Ab4 8 G4 8 G4 8 E4 8 F4 8  
+;m 356
+E4 8 B4 8 C5 8 Db5 8 C5 8 Bb4 8  
+;m 357
+A4 4 R 2
+;m 358
+R 2.
+;m 359
+R 2.
+;m 360
+R 4.
+Eb6 8 D6 8 C6 8 
+;m 361
+Bb5 8 C#6 8 D6 8 D6 8 A6 8 Bb6 8  
+;m 362
+D6 8 C#7 8 D7 8 A6 8 Bb6 8 D7 8  
+;m 363
+Eb7 4 R 2
+;m 364
+F5 8 D6 8 Eb6 8 F6 8 G6 8 Ab6 8  
+;m 365
+G6 8 A5 8 Bb5 8 A5 8 Bb5 8 G6 8  
+;m 366
+F#6 8 G6 8 Bb6 8 
+Db6 9/8
+;m 367
+
+;m 368
+Db6 8 R 4 A6 4 R 8
+;m 369
+Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/24 A6 1/24 Bb6 1/24 
+;m 370
+vel +10 Db6 4 vel -10 R 8 A6 4 R  8 
+;m 371
+Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/16 C7 1/16 Bb6 1/24 A6 1/24 Bb6 1/24 
+;m 372
+Db5 4 R 8 Gb5 15/8
+;m 373
+
+;m 374
+
+;m 375
+G5 2.
+;m 376
+Fb6 2.
+;m 377
+Eb6 2.
+;m 378
+vel +10 G5 4 vel -10 R 8 Ab5 4 R  8 
+;m 379
+F6 8 R 4
+Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/24 Ab6 1/24 Gb6 1/24 
+;m 380
+
+;m 381
+
+F6 1/16 Gb6 1/16 F6 1/16 Gb6 1/16 F6 1/24 Gb6 1/24 F6 1/24 
+;m 382
+Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/24 F6 1/24 Eb6 1/24 
+;m 383
+
+Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/24 Eb6 1/24 Db6 1/24 
+;m 384
+C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/24 D6 1/24 C6 1/24 
+;m 385
+
+;m 386
+
+;m 387
+
+Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/24 C6 1/24 Bb5 1/24 
+;m 388
+Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/24 C5 1/24 Bb4 1/24 
+Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/16 C6 1/16 Bb5 1/24 C6 1/24 Bb5 1/24 
+;m 389
+
+A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/16 Bb5 1/16 A5 1/24 Bb5 1/24 A5 1/24 
+;m 390
+
+
+;m 391
+
+Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/24 Bb5 1/24 Ab5 1/24 
+;m 392
+
+Ab6 1/16 Bb6 1/16 Ab6 1/16 Bb6 1/16 Ab6 1/16 Bb6 1/16 Ab6 1/16 Bb6 1/16 Ab6 1/16 Bb6 1/16 Ab6 1/24 Bb6 1/24 Ab6 1/24 
+;m 393
+
+Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/16 Ab6 1/16 Gb6 1/24 Ab6 1/24 Gb6 1/24 
+;m 394
+
+;m 395
+
+F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/24 G6 1/24 F6 1/24 
+;m 396
+
+;m 397
+
+Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/24 F6 1/24 Eb6 1/24 
+;m 398
+
+;m 399
+
+Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/24 F5 1/24 Eb5 1/24 
+;m 400
+
+Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/24 F6 1/24 Eb6 1/24 
+;m 401
+
+Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/16 Eb6 1/16 Db6 1/24 Eb6 1/24 Db6 1/24 
+;m 402
+
+;m 403
+
+C6 1/16 Db6 1/16 C6 1/16 Db6 1/16 C6 1/16 Db6 1/16 C6 1/16 Db6 1/16 C6 1/16 Db6 1/16 C6 1/24 Db6 1/24 C6 1/24 
+;m 404
+
+C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/24 Bb5 1/24 C6 1/24 
+;m 405
+
+;m 406
+D6 4 R 8 R 4.
+;m 407
+R 2.
+;m 408
+R 4.
+Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/24 D5 1/24 Eb5 1/24 
+;m 409
+
+;m 410
+F5 4 R 8 R 4.
+;m 411
+R 2.
+;m 412
+R 4.
+G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/16 Ab5 1/16 G5 1/24 F5 1/24 G5 1/24 
+;m 413
+;m 414
+Ab5 4 R 8 R 4.
+;m 415
+R 2.
+;page 22
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+;m 416
+vel 52
+R 2.
+;m 417
+R 2.
+;m 418
+R 4.
+vel 110
+D5 8 Eb5 8 Eb6 13/8
+;m 419
+
+;m 420
+
+;m 421
+D6 2.
+;m 422
+vel 110
+E5 8 F5 5/8
+;m 423
+R 2.
+;m 424
+R 4 D5 8 C7 4 Cb7 8
+;m 425
+Bb6 4 Ab6 8 Ab6 4 G6 8
+;m 426
+G6 4 F6 8 F6 4 Eb6 8
+;m 427
+Eb6 4 Ab5 8 Ab5 4 G5 8
+;m 428
+G5 4 R 8 R 4.
+;m 429
+R 4 Bb5 8 Ab6 4 G6 8
+;m 430
+Ab6 4 R 8 R 4.
+;m 431
+vel +10 Ab6 4 vel -10 G6 8 G6 4 F6 8 
+;m 432
+vel +10 F6 4 vel -10 F5 8 F6 4 F6 8 
+;m 433
+vel +10 Eb6 4 vel -10 Bb5 8 Bb6 4 Bb6 8 
+;m 434
+Bb6 4 R 8
+D5 8 Eb5 8 Eb6 7/8
+;m 435
+
+;m 436
+Db6 4 R 8
+D5 8 Eb5 8 Db6 7/8
+;m 437
+
+;m 438
+C6 4 R 8 R 4.
+;m 439
+R 2.
+;m 440
+C7 2.
+;m 441
+Bb6 4 R 8 R 4 Db6 8
+;m 442
+vel +10 Db6 4 vel -10 Eb6 8 Eb6 4 F6 8 
+;m 443
+vel +10 F6 4 vel -10 Eb6 8 Eb6 4 D6 8 
+;m 444
+vel +10 Eb6 4 vel -10 Db6 8 Db6 4 C6 8 
+;m 445
+vel +10 Ab5 4 vel -10 Bb5 8 Bb5 4 C6 8 
+;m 446
+vel +10 C6 4 vel -10 Bb5 8 C6 4 Db6 8 
+;m 447
+Db6 4 R 8 R 4.
+;m 448
+B5 8 C6 8 C7 10/8
+;m 449
+
+;m 450
+vel +10 Bb6 4 vel -10 Ab6 8 Ab6 4 G6 8 
+;m 451
+vel +10 Ab5 4 vel -10 Ab6 8 Ab6 4 Ab6 8 
+;m 452
+vel +10 Ab6 4 vel -10 G6 8 G6 4 F6 8 
+;m 453
+vel +10 Eb6 G6 4 vel -10 R 8 Eb6 Ab6 4 R  8 
+;m 454
+vel +10 Eb6 Ab6 4 vel -10 R 8 Eb6 G6 4 R  8 
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+;m 455
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+R 2.
+;m 456
+R 2.
+;m 457
+R 2.
+;m 458
+R 2.
+;m 459
+R 2.
+;m 460
+R 2.
+;m 461
+Ab5 1.
+;m 462
+
+;m 463
+A5 2.
+;m 464
+Bb6 4 R 8 R 4.
+;m 465
+vel +10 A5 4 vel -10 Bb5 8 Bb5 4 C6 8 
+;m 466
+vel +10 C6 4 vel -10 Db6 8 D6 4 Eb6 8 
+;m 467
+D6 4 R 8 R 4.
+;m 468
+vel +10 R 4 vel -10 D5 8 Cb7 4 Cb7 8  
+;m 469
+vel +10 Cb7 4 vel -10 Bb6 8 Bb6 4 Ab6 8 
+;m 470
+vel +10 F6 4 vel -10 Eb6 8 Eb6 4 D6 8 
+;m 471
+vel +10 G6 4 vel -10 Ab6 8 Ab6 4 Bb6 8 
+;m 472
+vel +10 Bb5 4 vel -10 Cb6 8 C6 4 Db6 8 
+;m 473
+Db6 4 R 8 R 4.
+;m 474
+R 2.
+;page 24
+;m 475
+vel +10 A5 4 vel -10 Bb5 8 B5 4 C6 8 
+;m 476
+vel +10 C6 4 vel -10 Db6 8 D6 4 Eb6 8 
+;m 477
+vel +10 Eb6 4 vel -10 F6 8 F6 4 G6 8 
+;m 478
+vel +10 Ab6 4 vel -10 Bb6 8 C7 4 R 8 
+;m 479
+Ab6 1.
+;m 480
+;m 481
+Gb6 2.
+;m 482
+A5 4 R 8 R 4.
+;m 483
+F6 1.
+;m 484
+
+;m 485
+Eb6 2.
+;m 486
+F5 4 R 8 R 4.
+;m 487
+Db6 1.
+;m 488
+
+;m 489
+C6 2.
+;m 490
+D5 4 R 2
+;m 491
+Cb6 9/8
+;m 492
+
+D5 8 R 4
+;m 493
+Bb5 4.  Db5 8 R 4
+;m 494
+vel +10 Ab5 4 vel -10 C5 8 Eb5 4 Ab4 8 
+;m 495
+R 4 D6 4
+;m 496
+Eb6 4 Db7 4
+;m 497
+C7 4 G5 4
+;m 498
+Ab5 4 Gb6 4
+;m 499
+F6 4 A5 4
+;m 500
+Bb5 4 Ab6 4
+;m 501
+G6 4 Bb5 4
+;m 502
+C6 4 Db6 4
+;m 503
+vel 75
+C6 8 C6 16 Bb5 16
+Bb5 94/1536 Ab5 16 vel +4 Bb6 98/1536 vel -4 Ab6 8/128 
+;m 504
+Ab6 16 G6 16 vel +6 C7 16 vel -6 Bb6 16  vel +6 Bb6 16 vel -6 Ab6 16 G6 16 F6 16 
+;m 505
+F6 16 Eb6 16 vel +6 F6 16 vel -6 Eb6 16  Db6 16 C6 16 vel +6 Db6 16 vel -6 Bb5 16 
+;m 506
+Db6 16 C6 16 vel +6 Bb6 16 vel -6 Ab6 16  Ab6 16 F6 16 vel +6 Gb6 16 vel -6 Eb6 16 
+;m 507
+Eb6 16 Db6 16 vel +6 C6 16 vel -6 Db6 16  Eb6 16 Db6 16 vel +6 Eb6 16 vel -6 C6 16 
+;m 508
+Eb6 94/1536 Db6 16 C6 8/128 vel +4 Bb6 98/1536 vel -4 
+vel +4 Bb6 98/1536 vel -4 Ab6 8/128 G6 16 F6 94/1536 
+;m 509
+vel +6 F6 16 vel -6 Eb6 16 D6 16 Eb6 16  vel +6 F6 16 vel -6 Eb6 16 F6 16 Db6 16 
+;m 510
+vel +6 F6 16 vel -6 Eb6 16 Db6 16 C6 16  C6 16 Bb5 16 vel +6 C6 16 vel -6 Ab5 16 
+;m 511
+Ab5 16 G5 16 vel +6 Ab5 16 vel -6 F5 16  Eb5 16 R 16 vel +6 Ab5 16 vel -6 r 16 
+;m 512
+C6 16 vel +4 R 98/1536 vel -4 Eb6 16 R 94/1536  Ab6 16 vel +4 R 98/1536 vel -4 R 16 r 94/1536 
+;m 513
+R 4 
+vel 90 
+Bb3 1
+;m 514
+
+;m 515
+
+R 4
+;m 516
+R 2
+;m 517
+R 4
+vel 90
+Bb3 2.
+;m 518
+
+;m 519
+vel 75
+C4 4 R 4
+;m 520
+R 2
+;m 521
+R 4
+vel 52
+C4 1
+;m 522
+
+;m 523
+
+R 4
+;m 524
+R 2
+;page 26
+;m 525
+R 4
+C4 4
+;m 526
+Db4 2.
+;m 527
+
+R 4
+;m 528
+R 2
+;m 529
+R 4
+vel 43
+D4 4
+;m 530
+Eb4 2.
+;m 531
+
+R 4
+;m 532
+R 2
+;m 533
+R 4
+Eb4 2.
+;m 534
+
+;m 535
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 90
+D4 4 R 8
+vel 52
+D4 4.
+;m 536
+Eb4 4 R 8
+Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/24 D4 1/24 Eb4 1/24 
+;m 537
+D4 4 R 8 R 4.
+;m 538
+R 2.
+;m 539
+R 4.
+D5 1/16 Eb5 1/16 D5 1/16 Eb5 1/16 D5 1/24 C5 1/24 D5 1/24 
+;m 540
+vel +10 C5 4 vel -10 R 8 E5 4 R  8 
+;m 541
+vel +10 F5 4 vel -10 G5 8 A5 4 F5 8 
+;m 542
+vel +10 D5 4 vel -10 R 8 F#5 4 R  8 
+;m 543
+vel +10 G5 4 vel -10 A5 8 Bb5 4 G5 8 
+;m 544
+R 2.
+;m 545
+R 2.
+;m 546
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 547
+vel +10 Bb5 4 vel -10 C6 8 D6 4 Bb5 8 
+;m 548
+vel +10 G6 4 vel -10 R 8 F6 4 R  8 
+;m 549
+vel +10 Eb6 4 vel -10 D6 8 C6 4 G6 8 
+;m 550
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 551
+vel +10 Bb5 4 vel -10 R 8 F4 4 R  8 
+;m 552
+vel +10 F4 4 vel -10 R 8 F5 4 R  8 
+;m 553
+F5 4 R 8 D6 4.
+;m 554
+Eb6 4 R 8
+Eb6 1/16 F6 1/16 Eb6 1/16 F6 1/16 Eb6 1/24 D6 1/24 Eb6 1/24 
+;m 555
+D6 4 R 8
+D5 1/16 Eb5 1/16 D5 1/16 Eb5 1/16 D5 1/24 C5 1/24 D5 1/24 
+;m 556
+vel +10 C5 4 vel -10 R 8 Bb4 E5 4 R  8 
+;m 557
+vel +10 F5 4 vel -10 G5 8 A5 4 F5 8 
+;m 558
+vel +10 R 4 vel -10 C#5 8 D5 4 C6 8  
+;m 559
+Bb5 4 R 8 R 4.
+;m 560
+vel +10 G6 4 vel -10 R 8 F6 4 R  8 
+;m 561
+vel +10 Eb6 4 vel -10 D6 8 C6 4 G6 8 
+;m 562
+R 2.
+;m 563
+R 2.
+;m 564
+vel +10 G6 4 vel -10 R 8 F6 4 R  8 
+;m 565
+vel +10 Eb6 4 vel -10 D6 8 C6 4 G6 8 
+;m 566
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 567
+Bb5 4 A5 8 Bb5 5/8
+;m 568
+vel 62
+A5 8 Bb5 5/8 
+;m 569
+A5 8 Bb5 5/8 
+;m 570
+vel 75
+A5 8 Bb5 5/8 
+;m 571
+vel 90
+A5 8 Bb5 4 Bb6 4.
+;m 572
+
+A6 8 G6 5/8 
+;m 573
+vel 75
+G6 8 F6 5/8 
+;m 574
+vel 62
+F6 8 Eb6 4.
+;m 575
+vel 52
+D6 4. D6 4 Bb5 8
+;m 576
+Bb6 5/8 Bb5 8 
+;m 577
+D6 5/8 F6 8 
+;m 578
+D6 5/8 Eb6 8 
+;m 579
+D6 5/8 F6 8 
+;m 580
+D6 5/8 E6 8 
+;m 581
+vel 75
+F6 5/8 G6 8 
+;m 582
+vel 62
+G6 5/8 G6 8 
+;m 583
+vel 52
+F6 4 R 8 R 4.
+;m 584
+R 2.
+;m 585
+R 2.
+;m 586
+R 2.
+;page 28
+;m 587
+R 4
+Eb5 8 D5 5/8 
+;m 588
+D5 8 C5 5/8 
+;m 589
+C5 8 Bb4 5/8 
+;m 590
+Bb4 8 A4 4.
+;m 591
+Bb4 4 R 8 R 4.
+;m 592
+R 2.
+;m 593
+R 2.
+;m 594
+R 2.
+;m 595
+vel 43
+R 4. R 4 Db5 8
+;m 596
+C5 5/8 Eb5 8 
+;m 597
+D5 5/8 F5 8 
+;m 598
+Eb5 5/8 F5 4.
+;m 599
+
+F5 8 Eb5 4 D5 4.
+;m 600
+
+Db5 8 C5 4 Bb4 8
+;m 601
+A4 1.
+;m 602
+
+;m 603
+B4 4 Ab5 8 G5 4 F5 4.
+;m 604
+
+F6 8 Eb6 4 D6 8
+;m 605
+C6 1.
+;m 606
+
+;m 607
+vel +10 D6 4 vel -10 Eb6 8 D6 4 C7 8 
+;m 608
+vel +10 Bb6 4 vel -10 C7 8 Bb6 4 A6 8 
+;m 609
+G6 4 A6 8 G6 4 F6 4.
+;m 610
+
+Eb6 8 D6 4 C6 4.
+;m 611
+
+Bb5 8 Bb5 9/8
+;m 612
+;m 613
+B5 2.
+;m 614
+Ab6 2.
+;m 615
+G6 2.
+;m 616
+B5 2.
+;m 617
+C6 18/8
+;m 618
+
+;m 619
+
+;m 620
+A6 1.
+;m 621
+
+;m 622
+G#6 4 R 2
+;m 623
+R 2.
+;m 624
+A6 1.
+;m 625
+
+;m 626
+G#6 4 R 8 R 4.
+;m 627
+R 2.
+;m 628
+A6 20/8
+;m 629
+
+;m 630
+
+;m 631
+vel 90
+R 8 A6 4 R 8
+;m 632
+R 4. Bb6 4 R 8
+;m 633
+R 4. A5 4 R 8
+;m 634
+R 4. Bb5 4 R 8
+;m 635
+R 4. A5 4 R 8
+;m 636
+vel +10 Bb5 4 vel -10 R 8 C6 4 R  8 
+;m 637
+vel +10 D6 4 vel -10 R 8 A6 4 R  8 
+;m 638
+vel +10 Bb6 4 vel -10 R 8 Bb5 D6 4 R  8 
+;m 639
+vel 52
+C6 4 B5 8 C6 5/8 
+;m 640
+vel 62
+B5 8 C6 5/8 
+;m 641
+vel 75
+B5 8 C6 5/8 
+;m 642
+D6 8 Eb6 1
+;m 643
+vel 90
+D6 8
+;m 644
+Eb6 5/8 D6 8 
+;m 645
+vel 75
+Eb6 5/8 D6 8 
+;m 646
+vel 62
+Eb6 5/8 F6 8 
+;m 647
+vel 52
+Gb6 5/8 F6 8 
+;m 648
+vel 62
+Gb6 5/8 F6 8 
+;m 649
+vel 75
+Gb6 5/8 F6 8 
+;m 650
+vel +10 Eb6 4 vel -10 D6 8 C6 4 B5 8 
+;m 651
+vel 90
+B5 4 C6 8 F5 5/8
+;m 652
+
+C6 8 F5 5/8 
+;m 653
+C5 8 F4 5/8 
+;m 654
+vel 75
+C5 8 F4 5/8 
+;m 655
+vel 62
+Bb4 8 Eb4 5/8 
+;m 656
+vel 52
+Ab4 8 D4 5/8 
+;m 657
+G4 8 C4 5/8 
+;m 658
+vel 43
+F4 8 Bb3 4.
+;m 659
+Bb3 4
+vel 110
+R 4
+
+vel +15 R 8 vel -15 R 16 D4 16 F5 8 R 16 F5 16 
+;m 660
+vel +15 F5 8 vel -15 R 16 D4 16 F5 8 R 16 F5 16 vel +15 F5 8 vel -15 R 16 D4 16 Ab5 8 R 16 Ab5 16 
+;m 661
+Ab5 4 R 4 R 2
+;page 30
+;m 662
+vel 43
+R 8 D5 16 C5 16 C5 16 Bb4 16 R 8
+;m 663
+R 8 F5 16 Eb5 16 Eb5 16 D5 16 Ab5 16 G5 16
+;m 664
+G5 16 F5 16 R 8 R 4
+;m 664b
+vel 110
+Bb5 18/8
+;m 665
+
+;m 666
+
+;m 667
+
+B5 2.
+;m 668
+
+Ab6 2.
+;m 669
+
+G6 2.
+;m 670
+
+B5 2.
+;m 671
+
+C6 2.
+;m 672
+
+Bb6 2.
+;m 673
+
+A6 2.
+;m 674
+
+F5 2.
+;m 675
+
+Eb6 2.
+;m 676
+
+D6 2.
+;m 677
+
+G6 2.
+;m 678
+
+F6 2.
+;m 679
+
+Eb6 2.
+;m 680
+
+D6 5/8
+;m 681
+
+R 8
+Db6 4 R 8
+;m 682
+C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/16 D6 1/16 C6 1/24 Bb5 1/24 C6 1/24 
+;m 683
+Bb5 4 R 8 R 4.
+;m 684
+vel +10 R 4 vel -10 B5 8 C6 4 A6 8  
+;m 685
+vel 75
+Bb6 8 R 8 Bb4 8 B4 4 Ab5 8
+;m 686
+vel 62
+G5 8 R 8 B4 8 C5 4 A5 25/8
+;m 687
+vel 52
+;m 688
+vel 43
+;m 689
+
+;m 690
+
+;m 691
+Bb5 2.
+;m 692
+Bb4 2.
+;m 693
+B4 2.
+;m 694
+Ab5 2.
+;m 695
+G5 2.
+;m 696
+D5 2.
+;m 697
+Eb5 2.
+;m 698
+Bb5 1.
+;m 699
+
+;m 700
+B5 2.
+;m 701
+C6 2.
+;m 702
+A6 9/8
+;m 703
+
+Bb6 4 R 8
+;m 704
+R 4.
+vel 62
+F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/16 G6 1/16 F6 1/24 E6 1/24 F6 1/24 
+;m 705
+vel 75
+D6 4 R 8
+;m 706
+R 4.
+A5 2.
+;m 707
+vel 90
+Bb5 4 R 8
+;m 708
+R 4.
+F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/24 E5 1/24 F5 1/24 
+;m 709
+
+D5 4 R 8
+;m 710
+R 2.
+;m 711
+R 2.
+;m 712
+vel 62
+F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/24 E4 1/24 F4 1/24 
+D4 4 R 8
+;m 713
+R 2.
+;m 714
+vel 52
+F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/24 E4 1/24 F4 1/24 
+D4 4 R 8
+;m 715
+R 2.
+;m 716
+F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/24 E4 1/24 F4 1/24 
+D4 4 R 8
+;m 717
+vel 43
+C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/24 Bb3 1/24 C4 1/24 
+D4 4 R 8
+;m 718
+vel +10 R 4 vel -10 D5 8 F6 4 F6 8  
+;m 719
+vel 52
+vel +10 F6 4 vel -10 D5 8 F6 4 F6 8 
+;m 720
+vel +10 F6 4 vel -10 D5 8 Ab6 4 Ab6 4. 
+;m 721
+G6 4. F6 4. 
+;m 722
+Eb6 4. D6 8 
+;m 723
+vel +10 Eb6 4 vel -10 Eb5 8 Eb6 4 Eb6 8 
+
+;m 724
+vel 62
+vel +10 Eb6 4 vel -10 Eb5 8 G6 4 G6 4. 
+;m 725
+F6 4. Eb6 4. 
+;m 726
+D6 4. C6 8 
+;m 727
+Eb6 4 D6 4. Eb6 4. 
+;m 728
+D6 4. C6 4. 
+;m 729
+vel 75
+Bb5 4. C6 4. 
+;m 730
+Bb5 4. Ab5 4. 
+;m 731
+G5 8 G6 4 Ab6 4. 
+;m 732
+G6 4. F6 4. 
+;m 733
+Eb6 8 G6 4 F6 4. 
+;m 734
+vel 90
+Eb6 8 D6 4 C6 8 
+;m 735
+vel +10 Bb5 4 vel -10 F4 8 D5 4 D5 8 
+;m 736
+vel +10 C5 4 vel -10 C5 8 A5 4 A5 8 
+;m 737
+vel +10 Bb5 4 vel -10 F5 8 D6 4 D6 8 
+;m 738
+vel 110
+vel +10 C6 4 vel -10 A5 8 F6 4 F6 8 
+;m 739
+F6 4 R 8 R 4.
+;m 740
+vel +10 R 4 vel -10 A5 8 F6 4 F6 8  
+;m 741
+F6 4 R 8 R 4.
+;m 742
+vel +10 R 4 vel -10 A5 8 F6 4 F6 8  
+;m 743
+ticks primorh 743
+F5 Bb5 4 R 8 R 4.
+; fine
+END_LAZY
+END_OF_TRACK
+
+STARTTRACK
+TRACK Primo Left Hand
+TEXT "Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+INSTRUMENT Piano
+;PROGRAM primolhchan Violin
+PROGRAM 2 1
+PAN 2 -12
+LAZY
+vel 127
+chan 2
+;page 4
+;m 0
+END_LAZY
+KEY_SIGNATURE G
+LAZY
+;pickup
+R 4.
+R 4
+vel 110
+END_LAZY
+DAMPER 2 127
+LAZY
+G4 16
+D5 16
+;m 1
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+;m 2
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+G4 16
+D5 16
+;m 3
+vel 120
+D5 G4  9/8
+;m 4
+END_LAZY
+DAMPER 2 0
+LAZY
+vel 110
+G4 15/8
+;m 5
+
+;m 6
+
+;m 7
+vel 120
+G#4 2.
+;m 8
+F5 2.
+;m 9
+E5 2.
+;m 10
+G#4 2.
+;m 11
+vel 110
+A4 4 R 8
+F#5 4 R 8
+;m 12
+G5 1/16 A5 1/16 G5 1/24 F#5 1/24 G5 1/24 
+R 8
+R 4.
+;m 13
+vel +10 R 4 vel -10 G4 8 G#4 4 F5 8  
+;m 14
+vel +10 E5 8 vel -10 R 8 G#4 8 A4 4 F#5 8  
+;m 15
+G5 8 R 8 R 8 R 4 R 8
+;m 16
+vel +10 R 4 vel -10 B3 8 C4 4 Bb4 8  
+;m 17
+vel +10 A4 8 vel -10 R 8 C#4 8 D4 4 B4 8  
+;m 18
+C5 8 R 8 R 8 R 4 R 8
+;m 19 
+END_LAZY
+KEY_SIGNATURE F
+LAZY
+vel 52
+R 2
+;m 20
+R 4 C4 4
+;m 21
+Db4 2.
+;m 22
+
+G4 Bb4 4
+;m 23
+F4 A4 4 R 4
+;m 24
+R 2
+;m 25
+R 94/1536 R 16 vel +4 D5 98/1536 vel -4 C5 8/128 
+vel +4 C5 98/1536 vel -4 Bb4 94/1536 vel +4 C5 98/1536 vel -4 A4 94/1536 
+;m 26
+A4 16 G4 16 R 8 R 4
+;m 27
+R 2
+;m 28
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 43
+R 1
+;m 29
+R 1
+;m 30
+R 1
+;m 31
+R 1
+;m 32
+vel 110
+R 1
+;m 33
+R 1
+;m 34
+R 1
+;m 35
+R 1
+;m 36
+R 2
+vel +15 R 8 vel -15 R 16 Bb3 16 C5 8 R 16 C5 16 
+;m 37
+vel +15 C5 8 vel -15 R 16 A3 16 C5 8 R 16 C5 16 vel +15 C5 8 vel -15 R 16 A3 16 Eb5 8 R 16 Eb5 16 
+;m 38
+vel +15 Eb5 8 vel -15 R 16 D5 16 D5 8 R 16 C5 16  vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 A4 16  
+;m 39
+vel +15 Bb4 8 vel -15 R 16 Bb3 16 Bb4 8 R 16 Bb4 16 vel +15 Bb4 8 vel -15 R 16 Bb3 16 D5 8 R 16 D5 16 
+;m 40
+vel +15 D5 8 vel -15 R 16 C5 16 C5 8 R 16 Bb4 16  vel +15 Bb4 8 vel -15 R 16 A4 16 A4 8 R 16 C5 16  
+;page 4
+;m 41
+Bb4 8 R 16 Bb3 16 Bb4 8 Bb4 8 R 4 Bb4 8 Bb4 8
+;m 42
+R 4 vel +10 B4 8 vel -10 B4 8 R 4 vel +10 Ab5 8 vel -10 Ab5 8 
+;m 43
+R 4 vel +10 G5 8 vel -10 G5 8 R 4 vel +10 B4 8 vel -10 C5 8 
+;m 44
+R 4 vel +10 C5 8 vel -10 C5 8 
+A5 8 Bb5 8 Bb5 8 Bb5 8 
+;m 45
+A5 8 A5 8 R 4F5 8 F5 8 R 4
+;m 46
+C6 8 C6 8 R 4F#5 8 F#5 8 R 4
+;m 47
+G5 8 G5 8 R 4D6 8 D6 8 R 4
+;m 48
+E5 8 E5 8 C6 8 C6 8 C6 8 C6 8 F5 8 F5 8 
+;m 49
+vel +15 F5 8 vel -15 R 16 A5 16 A5 8 R 16 C6 16 vel +15 Bb5 8 vel -15 R 16 F#5 16 F#5 8 R 16 A5 16 
+;m 50
+G5 8 R 16 D5 16 Db5 8 C5 8 C5 8 C5 8 Cb5 8 Cb5 8
+;m 51
+vel +15 Bb4 8 vel -15 R 16 Bb4 16 A4 8 R 16 C5 16 vel +15 A4 8 vel -15 R 16 Bb4 16 Eb5 8 R 16 C5 16 
+;m 52
+vel +15 D5 8 vel -15 R 16 D5 16 C5 8 R 16 Bb4 16 vel +15 Bb4 8 vel -15 R 16 F5 16 Eb5 8 R 16 D5 16 
+;m 53
+vel +15 D5 8 vel -15 R 16 Eb5 16 Eb4 8 R 16 F4 16 vel +15 B4 8 vel -15 R 16 C5 16 C5 8 R 16 F4 16 
+;m 54
+vel +15 Eb4 8 vel -15 R 16 Eb5 16 F5 8 R 16 G5 16 vel +15 G5 8 vel -15 R 16 C5 16 Eb5 8 R 16 Eb5 16 
+;m 55
+vel +15 A4 8 vel -15 R 16 Bb4 16 B4 8 R 16 C5 16 vel +15 Gb4 8 vel -15 R 16 F4 16 F4 8 R 16 G4 16 
+;m 56
+vel +15 G4 8 vel -15 R 16 F4 16 F4 8 R 16 F5 16 vel +15 D5 8 vel -15 R 16 Eb5 16 Eb4 8 R 16 Eb4 16 
+;m 57
+vel +15 Ab4 8 vel -15 R 16 Ab4 16 G4 8 R 16 G4 16 vel +15 F4 8 vel -15 R 16 F4 16 F4 8 R 16 F#4 16 
+;m 58
+vel +15 F#4 8 vel -15 R 16 G4 16 Bb4 8 R 16 Bb4 16 vel +15 Bb4 8 vel -15 R 16 Bb4 16 G5 8 R 16 F5 16 
+;m 59
+Eb5 4 R 4
+vel +15 R 8 vel -15 R 16 G3 16 Bb4 8 R 16 Bb4 16 
+;m 60
+vel +15 Bb4 8 vel -15 R 16 G3 16 Bb4 8 R 16 Bb4 16 vel +15 Bb4 8 vel -15 R 16 G3 16 Db5 8 R 16 Db5 16 
+;m 61
+vel +15 Db5 8 vel -15 R 16 C5 16 C5 8 R 16 Bb4 16  vel +15 Bb4 8 vel -15 R 16 Ab4 16 Ab4 8 R 16 G4 16  
+;m 62
+vel +15 Ab4 8 vel -15 R 16 Ab3 16 Ab4 8 R 16 Ab4 16 
+vel +15 A4 8 vel -15 R 16 A3 16 C5 8 R 16 C5 16 
+;m 63
+vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 Ab4 16  vel +15 Ab4 8 vel -15 R 16 G4 16 G4 8 R 16 A4 16  
+;m 64
+A4 12 Bb4 12 F4 12 D5 12 C5 12 Bb4 12  Ab4 12 G4 12 F4 12 F5 12 Eb5 12 D5 12  
+;m 65
+F5 12 G5 12 Eb5 12 Eb5 12 F5 12 D5 12  D5 12 Eb5 12 C5 12 C5 12 F5 12 B4 12  
+;m 66
+B4 12 D5 12 C5 12 G5 12 F5 12 Eb5 12  Eb5 12 D5 12 C5 12 D5 12 F5 12 Eb5 12  
+;page 6
+;m 67
+Eb5 12 Ab4 12 D5 12 D5 12 G4 12 C5 12  C5 12 F4 12 F5 12 F5 12 G4 12 G5 12  
+;m 68
+G5 12 G4 12 G5 12 G5 12 A4 12 A5 12  A5 12 D5 12 Bb5 12 Bb5 12 C5 12 C6 12  
+;m 69
+R 12 C6 12 D6 12 R 12 D5 12 Eb5 12  Bb4 12 C5 12 Bb4 12 A4 12 G4 12 F#4 12  
+;m 70
+G4 12 F4 12 Eb4 12 G4 8 G4 8 
+R 4 vel +10 G4 8 vel -10 G4 8 
+;m 71
+R 4 vel +10 Ab4 8 vel -10 Ab4 8 R 4 vel +10 G5 8 vel -10 G5 8 
+;m 72
+R 4 vel +10 F#5 8 vel -10 F#5 8 R 4 vel +10 F#4 8 vel -10 F#4 8 
+;m 73
+R 4 vel +10 F4 8 vel -10 F4 8 R 4 vel +10 F5 8 vel -10 F5 8 
+;m 74
+vel +15 G5 8 vel -15 R 16 C4 16 C4 8 R 16 Eb4 16 
+D4 4 R 4
+;m 75
+R 8. G4 16 G4 8 R 16 C5 16 vel +15 C5 4 vel -15 R 4 
+;m 76
+R 8. D5 16 D5 8 R 16 G5 16 vel +15 G5 4 vel -15 R 4 
+;m 77
+R 8. C#4 16 C#4 8 R 16 E4 16 vel +15 D4 8 vel -15 R 8 D5 8 R 8  
+;m 78
+D5 8 R 8 G5 8 R 8
+R 8. G4 16 G4 8 R 16 Bb4 16 vel +15 Ab4 8 vel -15 R 8 A4 8 R 8  
+;m 79
+
+Bb4 12 B4 12 C5 12 C5 12 G4 12 Bb4 12  
+;m 80
+Bb4 12 B4 12 C5 12 C5 12 F5 12 C5 12  R 12 C5 12 C6 12 C6 12 A5 12 Bb5 12  
+;m 81
+B5 12 D6 12 C6 12 C6 12 E6 12 F6 12  F5 12 G5 12 A5 12 A5 12 Bb5 12 C6 12  
+;m 82
+F#5 12 A5 12 G5 12 C6 12 D5 12 Eb5 12  A5 12 C6 12 Bb5 12 B5 12 D6 12 C6 12  
+;m 83
+A5 12 C6 12 Bb5 12 D5 12 F#5 12 G5 12  A5 12 C6 12 Bb5 12 D5 12 Eb5 12 D5 12  
+;m 84
+D5 12 E5 12 F5 12 D5 12 F5 12 E5 12  G5 12 D6 12 C6 12 C6 12 F5 12 G5 12  
+;m 85
+A5 12 D6 12 C6 12 B5 12 D6 12 C6 12  A5 12 C6 12 Bb5 12 G5 12 Bb5 12 A5 12  
+;m 86
+R 12 Eb5 12 D5 12 Bb4 12 D5 12 C5 12  G5 12 Eb5 12 D5 12 F#5 12 A5 12 G5 12  
+;m 87
+R 12 A5 12 G5 12 A5 12 C6 12 Bb5 12  G5 12 Bb5 12 A5 12 F5 12 A5 12 G5 12  
+;m 88
+R 12 G5 12 F5 12 C5 12 Eb5 12 D5 12  F5 12 Ab5 12 G5 12 D5 12 F5 12 E5 12  
+;m 89
+R 12 Ab4 12 G4 12 D4 12 F4 12 E4 12  Bb4 12 A4 12 G4 12 E4 12 G4 12 F4 12  
+;m 90
+Bb4 12 G4 12 E4 12 F4 4
+vel +15 R 8 vel -15 R 16 G4 16 A5 8 R 16 A5 16 
+;m 91
+vel +15 A5 8 vel -15 R 16 F#4 16 A5 8 R 16 A5 16 vel +15 A5 8 vel -15 R 16 F#4 16 C6 8 R 16 C6 16 
+;m 92
+vel +15 C6 8 vel -15 R 16 Bb5 16 Bb5 8 R 16 A5 16  vel +15 A5 8 vel -15 R 16 G5 16 G5 8 R 16 F#5 16  
+;m 93
+vel +15 G5 8 vel -15 R 16 E4 16 G5 8 R 16 G5 16 vel +15 G5 8 vel -15 R 16 E4 16 Bb5 8 R 16 Bb5 16 
+;m 94
+vel +15 Bb5 8 vel -15 R 16 A5 16 A5 8 R 16 G5 16  vel +15 G5 8 vel -15 R 16 F5 16 F5 8 R 16 G5 16  
+;m 95
+vel +15 G5 8 vel -15 R 16 A5 16 A5 8 R 16 A5 16 vel +15 Bb5 8 vel -15 R 16 D5 16 D5 8 R 16 E5 16 
+;m 96
+F5 4 R 4
+vel +15 A4 8 vel -15 R 16 B4 16 B4 8 R 16 C#5 16  
+;page 8
+;m 97
+vel +15 D5 8 vel -15 R 16 E5 16 E5 8 R 16 F5 16  
+G5 4 R 4
+;m 98
+R 8. G5 16 G5 8 R 16 A5 16 vel +15 Bb5 4 vel -15 R 4 
+;m 99
+vel +15 R 8 vel -15 R 16 E4 16 Bb5 8 R 16 Bb5 16 vel +15 Bb5 8 vel -15 R 16 Ab5 16 Ab5 8 R 16 G5 16 
+;m 100
+vel +15 G5 8 vel -15 R 16 F5 16 F5 8 R 16 E5 16  
+E5 4 R 4
+;m 101
+vel +15 R 8 vel -15 R 16 C5 16 C6 8 R 16 C6 16 vel +15 C6 8 vel -15 R 16 Bb5 16 Bb5 8 R 16 Ab5 16 
+;m 102
+vel +15 Ab5 8 vel -15 R 16 G5 16 G5 8 R 16 F5 16  vel +15 F5 8 vel -15 R 16 E5 16 E5 8 R 16 Ab4 16  
+;m 103
+vel +15 F4 8 vel -15 R 16 E4 16 C5 8 R 16 C5 16 vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 Ab4 16 
+;m 104
+G4 4 R 4
+vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 Bb4 16  
+;m 105
+A4 8 R 8 R 4 vel +15 A4 8 vel -15 R 16 G4 16 G4 8 R 16 F#4 16  
+;m 106
+vel +15 F#4 8 vel -15 R 16 G4 16 G4 8 R 16 A4 16   vel +15 B4 8 vel -15 R 16 C5 16 C5 8 R 16 D5 16  
+;m 107
+vel +15 A4 8 vel -15 R 16 A4 16 Eb4 8 R 16 D4 16 vel +15 D4 8 vel -15 R 16 F#4 16 D4 8 R 16 D5 16 
+;m 108
+vel +15 D5 8 vel -15 R 16 F4 16 F4 8 R 16 E4 16 vel +15 E4 8 vel -15 R 16 F4 16 E4 8 R 16 Eb4 16 
+;m 109
+vel +15 C5 8 vel -15 R 16 Bb4 16 Eb5 8 R 16 D5 16 vel +15 D5 8 vel -15 R 16 D5 16 D5 8 R 16 C#5 16 
+;m 110
+vel +15 C5 8 vel -15 R 16 C5 16 C5 8 R 16 Bb4 16 vel +15 F4 8 vel -15 R 16 D5 16 C#5 8 R 16 C#5 16 
+;m 111
+D5 4 R 4 R 2
+;m 112
+vel +15 R 8 vel -15 R 16 Bb3 16 D4 8 R 16 D4 16 
+Cb4 8 R 8 C4 8 C5 8
+;m 113
+D5 8 F5 16 Eb5 16 D5 16 R 16 D5 16 C5 16 
+Bb4 16 R 16 Ab5 16 G5 16 F5 16 R 16 Eb5 16 D5 16 
+;m 114
+C5 16 R 16 D5 16 Eb5 16 D5 16 R 16 Eb5 16 F5 16 
+G5 16 R 16 R 16 C4 16 Eb5 8 R 16 Eb5 16
+;m 115
+vel +15 Eb5 8 vel -15 R 16 Eb4 16 Eb5 8 R 16 Eb5 16 
+vel +15 E5 8 vel -15 R 16 E4 16 G5 8 R 16 G5 16 
+;m 116
+vel +15 G5 8 vel -15 R 16 F5 16 F5 8 R 16 Eb5 16  
+D5 16 R 16 C5 16 D5 16 E5 16 R 16 F5 16 G5 16 
+;m 117
+A5 16 R 16 F5 8 F5 8 R 8 R 8 F5 8 F5 8 R 8
+;m 118
+R 8 vel +10 F#5 8 vel -10 F#5 8 vel +10 R 8 vel -10  R 8 vel +10 D6 8 vel -10 D6 8 vel +10 R 8 vel -10  
+;m 119
+R 8 vel +10 D6 8 vel -10 G5 8 vel +10 r 8 vel -10 
+R 8 vel +10 G5 8 vel -10 G5 8 vel +10 R 8 vel -10  
+;m 120
+R 8 G5 8 G5 8 C6 8 C6 8 F5 8 F5 8 R 8 
+;m 121
+R 8 F5 8 F5 8 Bb5 8 Bb5 8 Eb5 8 Eb5 8 Eb5 8 
+;m 122
+Eb5 16 R 16 F5 16 G5 16 Ab5 16 R 16 Bb5 16 C6 16 
+vel +15 Db6 8 vel -15 R 16 F5 16 F5 8 R 16 Eb5 16  
+;m 123
+Db5 16 R 16 D5 16 Eb5 16 F5 16 R 16 G4 16 Ab4 16 
+vel +15 Bb4 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 Ab4 16 
+;m 124
+G4 4 R 4
+vel +15 R 8 vel -15 R 16 C4 16 Eb5 8 R 16 Eb5 16 
+;m 125
+vel +15 Eb5 8 vel -15 R 16 C4 16 Eb5 8 R 16 Eb5 16 vel +15 Eb5 8 vel -15 R 16 C4 16 Gb5 8 R 16 Gb5 16 
+;m 126
+vel +15 Gb5 8 vel -15 R 16 F5 16 F5 8 R 16 Eb5 16  vel +15 Eb5 8 vel -15 R 16 D5 16 D5 8 R 16 C5 16  
+;page 10
+;m 127
+vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 A4 16  
+F4 16 R 16 G4 16 Ab4 16 D5 16 R 16 Eb4 16 F4 16 
+;m 128
+Eb4 16 R 16 Bb4 16 Eb5 16 D4 16 R 16 Ab4 16 D5 16 G4 16 R 16 G3 16 Ab3 16 Bb3 16 R 16 Bb3 16 C4 16 
+;m 129
+vel +15 Bb3 8 vel -15 R 16 Eb5 16 Eb5 8 R 16 Db5 16  vel +15 Db5 8 vel -15 R 16 C5 16 C5 8 R 16 Bb4 16  
+;m 130
+vel +15 Bb4 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 Bb4 16 vel +15 Bb4 8 vel -15 R 16 Bb4 16 Bb5 8 R 16 Bb5 16 
+;m 131
+vel +15 Bb5 8 vel -15 R 16 Ab5 16 Ab5 8 R 16 G5 16  vel +15 G5 8 vel -15 R 16 F5 16 F5 8 R 16 E5 16  
+;m 132
+vel +15 E5 8 vel -15 R 16 Db5 16 Db5 8 R 16 C5 16  vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 A4 16  
+;m 133
+F4 8 F5 8 F5 8 R 8 R 8 Eb6 8 Eb6 8 R 8 
+;m 134
+R 8 vel +10 A5 8 vel -10 A5 8 vel +10 R 8 vel -10  R 8 vel +10 Bb5 8 vel -10 Bb5 8 vel +10 R 8 vel -10  
+;m 135
+vel +15 D4 8 vel -15 R 16 Eb4 16 Eb4 8 R 16 F4 16  vel +15 F4 8 vel -15 R 16 G4 16 G4 8 R 16 Ab4 16  
+;m 136
+vel +15 Ab4 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 C5 16  vel +15 C5 8 vel -15 R 16 D5 16 D5 8 R 16 Eb5 16  
+;m 137
+F5 8 R 8 R 8 G4 8 G4 8 R 8 R 8 F5 8 
+;m 138
+F5 8 R 8 R 8 C5 8 C5 8 R 8 R 8 C5 8 
+;m 139
+vel +15 C5 8 vel -15 R 16 Eb5 16 Eb5 8 R 16 F5 16 vel +15 Eb5 8 vel -15 R 16 D5 16 D5 8 R 16 Bb5 16 
+;m 140
+vel +15 Bb5 8 vel -15 R 16 D6 16 D6 8 R 16 F6 16 
+F6 8 R 8 R 4
+;m 141
+R 1
+;m 142
+R 2 R 4 R 12 Bb3 12 C5 12
+;m 143
+C5 12 A3 12 C5 12 C5 12 A3 12 Eb5 12  Eb5 12 D5 12 C5 12 C5 12 Bb4 12 A4 12  
+;m 144
+Bb4 12 Bb3 12 Bb4 12 Bb4 12 Bb3 12 D5 12  D5 12 C5 12 Bb4 12 Bb4 12 A4 12 C5 12  
+;m 145
+R 8 Bb4 8 Bb4 8 Bb4 8 B4 8 Ab5 8 Ab5 8 G5 8 
+;m 146
+G5 8 C5 8 C5 8 C5 8 C5 8 A5 8 Bb5 8 Bb4 8 
+;m 147
+A4 12 C5 12 F4 12 A4 12 C5 12 A4 12  F#4 12 G4 12 F#5 12 F#5 12 G5 12 C6 12  
+;m 148
+Bb5 12 G5 12 Bb4 12 G4 12 D5 12 Bb4 12  G4 12 A4 12 Bb4 12 C5 12 F4 12 A4 12  
+;m 149
+Bb4 8 D5 8 D5 8 D5 8 D5 8 Bb5 8 Ab5 8 Ab5 8 
+;m 150
+G5 12 B3 12 C4 12 C4 12 D4 12 B3 12  
+C4 8 F4 8 Bb3 8 F4 8 
+;m 151
+F4 8 C4 8 C4 8 C4 8 C4 8 Ab4 8 G4 8 G4 8 
+;m 152
+F4 8 R 8 R 4 R 4 R 8 F4 8
+;m 153
+D5 8 F5 8 Eb5 8 G5 8 F5 8 Ab5 8 G5 8 Bb5 8 
+;m 154
+A5 8 C6 8 Bb5 8 D6 8 C6 8 C5 8 Bb4 8 A4 8 
+;m 155
+F5 12 Eb5 12 D5 12 R 12 Eb5 12 C5 12  C5 12 D5 12 Bb4 12 Ab4 12 G4 12 F4 12  
+;m 156
+F4 12 G4 12 Eb4 12 Eb4 12 F4 12 D4 12  
+C4 4 R 4
+;m 157
+Eb5 12 F5 12 D5 12 D5 12 Eb5 12 Bb4 12  
+vel +15 A5 8 vel -15 R 16 Bb5 16 F5 8 R 16 A5 16 
+;m 158
+B5 12 C6 12 A5 12 G5 12 A5 12 F5 12  
+C6 4 R 4
+;m 159
+Eb5 12 F5 12 D5 12 D5 12 Eb5 12 C5 12  
+A5 4 R 4
+;m 160
+C5 12 Db5 12 Db4 12 Ab4 12 Bb4 12 Gb4 12  Db5 12 Bb4 12 Gb4 12 F4 12 Gb4 12 Bb3 12  
+;page 12
+;m 161
+END_LAZY
+KEY_SIGNATURE Gb
+LAZY
+vel 43
+R 2
+;m 162
+R 2
+;m 163
+r 2
+;m 164
+R 2
+;m 165
+R 2
+;m 166
+R 2
+;m 167
+R 2
+;m 168
+R 2
+;m 169
+R 16 R 16 vel +6 Bb4 16 vel -6 Ab4 16  Ab4 16 Gb4 16 vel +6 Db5 16 vel -6 Cb5 16 
+;m 170
+R 4 Db5 16 Cb5 16 vel +6 Db5 16 vel -6 Bb4 16 
+;m 171
+Db5 16 Cb5 16 vel +6 Eb5 16 vel -6 Db5 16 
+R 4
+;m 172
+vel +6 Bb4 16 vel -6 Ab4 16 Gb4 16 F4 16 
+Eb4 16 Db4 16 vel +6 Eb4 16 vel -6 Cb4 16 
+;m 173
+Bb3 8 R 8 Db4 4
+;m 174
+D4 4 Cb5 4
+;m 175
+Bb4 4 D4 4 
+;m 176
+Eb4 4 C5 4
+;m 177
+Db5 8 R 8 R 4
+;m 178
+R 16 vel +6 Eb5 16 vel -6 Db5 16 Eb4 16  F4 16 vel +6 Db5 16 vel -6 C5 16 Eb4 16 
+;m 179
+vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5 vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5  
+;m 180
+vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5 vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5  
+;m 181
+vel -5 Gb4 16 Ab4 16 vel +6 Gb4 16 vel -6 Ab4 16  vel +5 vel -5 Gb4 16 Ab4 16 vel +6 Gb4 16 vel -6 Ab4 16  vel +5  
+;m 182
+Gb4 16 vel +6 Ab4 16 vel -6 Eb4 16 Ab4 16  Eb4 16 vel +6 Gb4 16 vel -6 Eb4 16 Ab4 16 
+;m 183
+Ab4 8 R 8 R 4
+;m 184
+R 16 R 16 vel +6 Bb4 16 vel -6 Ab4 16  Ab4 16 Gb4 16 vel +6 Db5 16 vel -6 Cb5 16 
+;m 185
+Bb4 8 Bb4 9/128 Ab4 7/128
+Ab4 16 Gb4 16 vel +6 Bb4 16 vel -6 Ab4 16 
+;m 186
+Bb4 8 R 8 G4 4
+;m 187
+Ab4 4 Bb4 4
+;m 188
+Cb5 5/16 Bb4 16 vel +5 Cb5 16 vel -5 Ab4 16
+;m 189
+Gb4 15/128 F4 9/128 Eb4 16 Eb4 94/1536 Db4 16 vel +4 Ab4 98/1536 vel -4 Gb4 8/128 
+;m 190
+Gb4 94/1536 F4 16 vel +4 Cb5 98/1536 vel -4 Bb4 8/128  Ab4 94/1536 Gb4 16 vel +4 Ab4 98/1536 vel -4 F4 8/128 
+;m 191
+Ab4 94/1536 Gb4 16 vel +4 Bb4 98/1536 vel -4 Ab4 8/128  Ab4 94/1536 Gb4 16 vel +4 Ab4 98/1536 vel -4 F4 8/128 
+;m 192
+F4 94/1536 Eb4 16 vel +4 Db5 98/1536 vel -4 C5 8/128  Bb4 94/1536 Ab4 16 vel +4 Bb4 98/1536 vel -4 Gb4 8/128 
+;m 193
+Gb4 16 F4 16 Gb4 16 Ab4 16 Bb4 16 Ab4 16 Bb4 16 Cb5 16 
+;m 194
+Db4 8 R 8 R 16 Bb4 9/128 Ab4 7/128 Gb4 16
+;m 195
+F4 16 vel +6 Gb4 16 vel -6 F4 16 Eb4 16 
+Eb4 16 Db4 16 vel +6 Ab4 16 vel -6 Gb4 16 
+;m 196
+Gb4 16 F4 16 vel +6 Cb5 16 vel -6 Bb4 16  Ab4 16 Gb4 16 vel +6 Ab4 16 vel -6 F4 16 
+;page 14
+;m 197
+vel +4 Ab4 98/1536 vel -4 Gb4 8/128 F4 16 Eb4 94/1536  F4 8 R 8
+;m 198
+Bb3 8 R 8 Bb4 94/1536 A4 16 vel +4 Bb4 98/1536 vel -4 G4 8/128 
+;m 199
+vel +4 Bb4 98/1536 vel -4 G4 8/128 F4 16 E4 94/1536  G4 8 R 8
+;m 200
+C5 8 R 8
+Db5 16 C5 16 vel +6 Db5 16 vel -6 Bb4 16 
+;m 201
+vel +6 Bb4 16 vel -6 A4 16 G4 16 F4 16  vel +6 Bb4 16 vel -6 A4 16 Bb4 16 G4 16 
+;m 202
+C4 16 vel +6 C5 16 vel -6 Bb4 16 A4 16 
+C5 16 A3 16 vel +6 Bb3 16 vel -6 C4 16 
+;m 203
+vel -5 C4 16 D4 16 vel +6 C4 16 vel -6 D4 16  vel +5 
+A4 4
+;m 204
+Bb4 4 Ab5 4
+;m 205
+G5 4 Ab4 16 G4 16 vel +6 Ab4 16 vel -6 F4 16 
+;m 206
+F4 16 Eb4 16 vel +6 Ab4 16 vel -6 G4 16  Bb4 16 Ab4 16 vel +6 Bb4 16 vel -6 G4 16 
+;m 207
+vel +6 Bb4 16 vel -6 Ab4 16 G4 16 Ab4 16  C4 4
+;m 208
+Db4 4
+Ab4 16 Gb4 16 vel +6 Ab4 16 vel -6 F4 16 
+;m 209
+vel +6 Ab4 16 vel -6 Gb4 16 F4 16 Gb4 16  vel +6 Ab4 16 vel -6 Bb4 16 Ab4 16 Cb5 16 
+;m 210
+vel +6 Ab4 16 vel -6 Bb4 16 Cb5 16 Db5 16 
+Eb5 16 Db5 16 vel +6 Eb5 16 vel -6 Cb5 16 
+;m 211
+Cb5 16 Bb4 16 vel +6 F5 16 vel -6 Gb5 16  Cb6 16 Bb5 16 vel +6 Cb6 16 vel -6 Ab5 16 
+;m 212
+Ab5 16 Bb5 16 vel +6 Cb6 16 vel -6 Bb5 16  Bb5 16 Ab5 16 vel +6 Bb5 16 vel -6 Gb5 16 
+;m 213
+Bb5 16 Ab5 16 vel +6 Cb6 16 vel -6 Bb5 16  Fb5 16 Eb5 16 vel +6 Fb5 16 vel -6 Db5 16 
+;m 214
+vel +6 Db5 16 vel -6 Cb5 16 Bb4 16 Ab4 16 
+Cb6 16 Bb5 16 vel +6 Cb6 16 vel -6 Ab5 16 
+;m 215
+Ab5 16 Gb5 16 vel +6 Cb6 16 vel -6 Bb5 16 
+Gb5 16 F5 16 Gb5 16 F5 16 
+;m 216
+F5 16 Eb5 16 vel +6 Ab5 16 vel -6 Gb5 16 
+vel -5 Eb4 16 Db4 16 vel +6 Eb4 16 vel -6 Db4 16  vel +5 
+;m 217
+Db5 16 Cb5 16 Bb4 16 Cb5 16 
+vel -5 Db5 16 Eb5 16 vel +6 Db5 16 vel -6 Eb5 16  vel +5 
+;m 218
+vel -5 G4 16 Ab4 16 vel +6 G4 16 vel -6 Ab4 16  vel +5 
+vel -5 Ab4 16 Gb4 16 vel +6 Ab4 16 vel -6 Gb4 16  vel +5 
+;m 219
+Gb4 16 F4 16 vel +6 F4 16 vel -6 Eb4 16  Eb4 16 Db4 16 vel +6 Ab4 16 vel -6 Gb4 16 
+;m 220
+Gb4 16 F4 16 vel +6 Ab4 16 vel -6 Gb4 16 
+F4 8 R 8
+;m 221
+R 8 Bb4 9/128 Ab4 7/128
+Ab4 16 Gb4 16 vel +6 Db5 16 vel -6 Cb5 16 
+;m 222
+vel +3 Cb5 16 vel +3 Bb4 16 vel +3 Bb5 16 vel +3 Ab5 16 vel +3 Ab5 16 vel +3 Gb5 16 vel +3 Ab5 16 Gvel +3 B5 16
+;m 223
+vel +3 Gb5 16 vel +3 F5 16 vel +3 Cb6 16 vel +3 Bb5 16 vel +3 Bb5 16 vel +3 Ab5 16 vel +3 Ab5 16 vel +3 F5 16
+;m 224
+vel +3 Gb5 16 vel +3 F5 16 vel +3 Ab5 16 vel +3 Gb5 16
+vel +3 F5 8 
+vel 90
+R 8
+;m 225
+R 16 R 16 Bb4 16 Ab4 16 Ab4 16 Gb4 16 Db5 16 Cb5 16 
+;m 226
+Cb5 16 Bb4 16 Eb5 16 Db5 16 Db5 16 Cb5 16 Db5 16 Bb4 16 
+;m 227
+Db5 16 Cb5 16 Eb5 16 Db5 16 Db5 16 Cb5 16 Db5 16 Bb4 16 
+;m 228
+Bb4 16 Ab4 16 Gb4 16 F4 16 Eb4 16 Db4 16 Eb4 16 Cb4 16 
+;m 229
+vel 75
+Cb4 16 D4 16 Bb3 16 D4 16 Bb3 16 Eb4 16 Ab3 16 Gb3 16 
+;m 230
+vel 62
+vel -5 A3 16 C4 16 vel +6 A3 16 vel -6 C4 16  vel +5 
+F3 16 Bb3 16 F3 16 r 16 
+;m 231
+vel 52
+vel -5 F3 16 Bb3 16 vel +6 F3 16 vel -6 Bb3 16  vel +5 vel -5 F3 16 Bb3 16 vel +6 F3 16 vel -6 Bb3 16  vel +5  
+;m 232
+vel -5
+vel -5 F3 16 Bb3 16 vel +6 F3 16 vel -6 Bb3 16  vel +5 vel -5 F3 16 Bb3 16 vel +6 F3 16 vel -6 Bb3 16  vel +5  
+;m 233
+vel 43
+vel -5 F3 16 Bb3 16 vel +6 F3 16 vel -6 Bb3 16  vel +5 vel -5 F3 16 Bb3 16 vel +6 F3 16 vel -6 Bb3 16  vel +5  
+;m 234
+vel -5 F3 16 A3 16 vel +6 F3 16 vel -6 A3 16  vel +5 vel -5 F3 16 A3 16 vel +6 F3 16 vel -6 A3 16  vel +5  
+;page 16
+;m 235
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 110
+Bb3 4 R 8 R 4.
+;m 236
+R 2.
+;m 237
+vel +10 R 4 vel -10 F3 8 Gb3 4 Eb4 8  
+;m 238
+vel +10 D4 8 vel -10 R 8 F#3 8 G3 4 E4 8  
+;m 239
+vel 90
+F4 8 
+vel 52
+R 4 
+R 4.
+;m 240
+R 2.
+;m 241
+R 4.
+D5 4.
+;m 242
+Eb5 4 R 8
+Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/24 D5 1/24 Eb5 1/24 
+;m 243
+vel +10 D5 4 vel -10 R 8 F4 4 R  8 
+;m 244
+vel +10 F4 4 vel -10 R 8 Bb4 C5 4 R  8 
+;m 245
+vel +10 A4 C5 4 vel -10 R 8 R 4 R  8 
+;m 246
+vel +10 R 4 vel -10 C#4 8 D4 4 C5 8  
+;m 247
+Bb4 8 R 4 R 4.
+;m 248
+vel +10 G5 4 vel -10 R 8 F5 4 R  8 
+;m 249
+vel +10 Eb5 4 vel -10 D5 8 C5 4 G5 8 
+;m 250
+vel +10 R 4 vel -10 E4 8 F4 4 Eb5 8  
+;m 251
+D5 8 R 4 R 4.
+;m 252
+vel +10 R 4 vel -10 Bb4 8 B4 4 G5 8  
+;m 253
+vel +10 G5 4 vel -10 F5 8 Eb5 4 C5 8 
+;m 254
+vel +10 D5 4 vel -10 R 8 Eb5 4 R  8 
+;m 255
+D5 4 R 8 R 4.
+;m 256
+R 2.
+;m 257
+vel +10 R 4 vel -10 Bb4 8 B4 4 Ab5 8  
+;m 258
+vel +10 G5 8 vel -10 R 8 B4 8 C5 4 A5 8 
+;m 259
+vel +10 Bb5 8 vel -10 R 8 R 8 F4 4 R 8 
+;m 260
+vel +10 F4 4 vel -10 B3 8 C4 4 Bb4 8 
+;m 261
+A4 4 R 8 R 4.
+;m 262
+vel +10 D5 4 vel -10 R 8 F#5 4 R  8 
+;m 263
+vel +10 G5 4 vel -10 A5 8 Bb5 4 G5 8 
+;m 264
+vel +10 R 4 vel -10 Bb4 8 B4 4 G5 8  
+;m 265
+vel +10 R 4 vel -10 B4 8 C5 4 G5 8  
+;m 266
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 267
+vel +10 Bb5 4 vel -10 C6 8 D6 4 Bb5 8 
+;m 268
+vel +10 G5 4 vel -10 R 8 G5 G4 4 R  8 
+;m 269
+vel +10 G5 4 vel -10 B4 8 C5 4 Eb5 8 
+;m 270
+vel +10 D5 4 vel -10 R 8 Eb5 4 R  8 
+;m 271
+vel +10 D5 4 vel -10 R 8 G4 4 R  8 
+;m 272
+vel 62
+vel +10 B4 4 vel -10 R 8 Eb4 4 R  8 
+;m 273
+vel 75
+vel +10 G4 4 vel -10 R 8 Ab4 4 R  8 
+;m 274
+vel 90
+vel +10 Eb4 Bb4 4 vel -10 R 8 Eb4 C5 4 R  8 
+;m 275
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+vel 110
+R 2.
+;m 276
+vel +10 R 4 vel -10 F5 8 Eb5 4 Gb4 8  
+;m 277
+vel +10 R 4 vel -10 Db5 8 C5 4 Eb4 8  
+;m 278
+vel +10 R 4 vel -10 Bb4 8 A4 4 C4 8  
+;m 279
+vel +10 R 4 vel -10 C5 8 Bb4 4 Db4 8  
+;m 280
+vel +10 R 4 vel -10 Db5 8 C5 4 Eb4 8  
+;m 281
+vel +10 R 4 vel -10 Eb5 8 Db5 4 Fb4 8  
+;m 282
+vel +10 R 4 vel -10 Db5 8 C5 4 F4 8  
+;m 283
+G4 4 R 8 A3 4.
+;m 284
+Bb3 4. G4 4 R 8
+;m 285
+R 4. A4 4.
+;m 286
+Bb4 4. G5 4 R 8
+;page 18
+;m 287
+R 4. Ab3 4.
+;m 288
+C4 4. G4 4 R 8
+;m 289
+R 4.
+F4 4.
+;m 290
+G4 5/8 Ab4 13/8
+;m 291
+
+;m 292
+
+;m 293
+A4 2.
+;m 294
+Gb5 2.
+;m 295
+F5 2.
+;m 296
+A4 2.
+;m 297
+vel +10 Bb4 4 vel -10 R 8 G5 4 R  8 
+;m 298
+Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/16 Bb5 1/16 Ab5 1/24 G5 1/24 Ab5 1/24 
+;m 299
+G5 4 R 8 C4 4.
+;m 300
+Db4 4 Bb4 8 G4 Bb4 15/8
+;m 301
+
+;m 302
+
+;m 303
+Ab4 2.
+;m 304
+Db5 5/8 Bb4 8
+;m 305
+vel +10 Ab4 4 vel -10 G4 8 Ab4 4 Ab5 8 
+;m 306
+vel +10 Bb4 4 vel -10 R 8 G5 4 R  8 
+;m 307
+C5 1/16 Db5 1/16 C5 1/16 Db5 1/16 C5 1/16 Db5 1/16 C5 1/16 Db5 1/16 C5 1/16 Db5 1/16 C5 1/24 Bb4 1/24 C5 1/24 
+;m 308
+vel +10 Gb4 4 vel -10 R 8 Db5 4 R  8 
+;m 309
+G4 1/16 Ab4 1/16 G4 1/16 Ab4 1/16 G4 1/16 Ab4 1/16 G4 1/16 Ab4 1/16 G4 1/16 Ab4 1/16 G4 1/24 F4 1/24 G4 1/24 
+;m 310
+vel +10 F4 4 vel -10 R 8 F5 4 R  8 
+;m 311
+E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/16 F5 1/16 E5 1/24 F5 1/24 E5 1/24 
+;m 312
+;m 313
+F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/24 E5 1/24 F5 1/24 
+;m 314
+Db6 4 R 8 F4 15/8
+
+;m 315
+
+;m 316
+;m 317
+Gb4 2.
+;m 318
+Eb5 2.
+;m 319
+D5 4 R 8 C5 4.
+;m 320
+D5 4. Bb5 4 R 8
+;m 321
+R 4. Eb5 4.
+;m 322
+F5 4. D6 4 Eb6 4.
+;m 323
+
+R 8 R 4. 
+;m 324
+vel +10 R 4 vel -10 C6 8 Bb5 4 Db5 8  
+;m 325
+vel +10 R 4 vel -10 Ab5 8 G5 4 Bb4 8  
+;m 326
+vel +10 R 4 vel -10 Ab4 8 G4 4 Bb3 8  
+;m 327
+vel +10 R 4 vel -10 Bb4 8 Ab4 4 Eb4 8  
+;m 328
+R 4. Ab4 5/8
+;m 329
+R 8 F5 4 R 8
+;m 330
+Gb5 1/16 Ab5 1/16 Gb5 1/16 Ab5 1/16 Gb5 1/16 Ab5 1/16 Gb5 1/16 Ab5 1/16 Gb5 1/16 Ab5 1/16 Gb5 1/24 F5 1/24 Gb5 1/24 
+;m 331
+F5 4 R 8 R 4.
+;m 332
+R 4.
+F#4 5/8
+;m 333
+R 8 D#5 4 R 8
+;m 334
+E5 1/16 F#5 1/16 E5 1/16 F#5 1/16 E5 1/16 F#5 1/16 E5 1/16 F#5 1/16 E5 1/16 F#5 1/16 E5 1/24 D#5 1/24 E5 1/24 
+;m 335
+D#5 4 R 8 R 4.
+;m 336
+R 4.
+E4 5/8
+;m 337
+R 8
+C#4 4 R 8
+;m 338
+D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/24 C#5 1/24 D5 1/24 
+;m 339
+vel +10 C#5 4 vel -10 R 8 D5 4 R  8 
+;m 340
+vel +10 C#5 4 vel -10 B5 8 A5 4 C#5 8 
+;m 341
+vel +10 C5 4 vel -10 R 8 F#4 4 R  8 
+;m 342
+F#4 1/16 G4 1/16 F#4 1/16 G4 1/16 F#4 1/16 G4 1/16 F#4 1/16 G4 1/16 F#4 1/16 G4 1/16 F#4 1/24 E4 1/24 F#4 1/24 
+;m 343
+vel +10 G4 4 vel -10 R 8 D5 4 R  8 
+;m 344
+D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/16 E5 1/16 D5 1/24 C5 1/24 D5 1/24 
+;m 345
+vel +10 C5 4 vel -10 R 8 E4 4 R  8 
+;m 346
+E4 1/16 F4 1/16 E4 1/16 F4 1/16 E4 1/16 F4 1/16 E4 1/16 F4 1/16 E4 1/16 F4 1/16 E4 1/24 D4 1/24 E4 1/24 
+;m 347
+vel +10 F4 4 vel -10 R 8 F5 4 R  8 
+;m 348
+F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/16 G5 1/16 F5 1/24 E5 1/24 F5 1/24 
+;m 349
+F5 4 R 8 R 4.
+;m 350
+R 4.
+F4 5/8
+;m 351
+
+R 8 Ab4 4 R 8
+;m 352
+G3 8 Ab3 8 F4 8 G4 8 F4 8 B3 8  
+;m 353
+C4 4 R 8 R 4.
+;m 354
+R 2.
+;page 20
+;m 355
+R 2.
+;m 356
+R 4.
+F4 15/8
+;m 357
+
+;m 358
+
+;m 359
+vel +10 Gb4 4 vel -10 R 8 E5 4 R  8 
+;m 360
+F5 1/16 Gb5 1/16 F5 1/16 Gb5 1/16 F5 1/16 Gb5 1/16 F5 1/16 Gb5 1/16 F5 1/16 Gb5 1/16 F5 1/24 Eb5 1/24 F5 1/24 
+;m 361
+D5 8 A5 8 Bb5 8 F5 8 C#6 8 D6 8  
+;m 362
+R 8 E5 8 F5 8 C#5 8 D5 8 Bb5 8  
+;m 363
+A5 8 Eb5 8 F5 8 Gb5 8 F5 8 Eb5 8  
+;m 364
+D5 8 C6 8 Bb5 8 Ab5 8 G5 8 F5 8  
+;m 365
+Eb5 8 F#5 8 G5 8 F#5 8 G5 8 Bb5 8  
+;m 366
+A5 8 Bb5 8 Db6 8 A5 8 Bb5 8 G5 8  
+;m 367
+Db5 8 A5 8 Bb5 8 Bb5 8 A5 8 Eb5 8  
+;m 368
+Db5 8 E5 8 F5 8 Gb5 8 F5 8 Db5 8  
+;m 369
+R 8 E5 8 F5 8 Gb5 8 F5 8 C5 8  
+;m 370
+R 8 Bb4 8 F5 8 Gb5 8 F5 8 Db5 8  
+;m 371
+R 8 C5 8 Db5 8 Db5 8 C5 8 Eb4 8  
+;m 372
+R 8 Bb4 8 Db4 8 Cb5 8 Bb4 8 Db4 8  
+;m 373
+Bb4 8 C5 8 Db5 8 Eb5 8 Db5 8 Gb4 8  
+;m 374
+Eb5 8 Db5 8 Bb4 8 Cb5 8 Bb4 8 Db4 8  
+;m 375
+Db5 8 Fb4 8 Db4 8 Db4 8 Fb4 8 Db5 8  
+;m 376
+R 8 G4 8 G5 8 Ab5 8 G5 8 G4 8  
+;m 377
+Ab4 8 Cb5 8 Ab5 8 Ab4 8 Cb5 8 Ab5 8  
+;m 378
+Ab4 8 E5 8 F5 8 Gb5 8 F5 8 Db5 8  
+;m 379
+Gb5 8 F5 8 Ab4 8 Ab5 8 Gb5 8 Bb4 8  
+;m 380
+Eb5 8 Db5 8 Gb4 8 A4 8 Bb4 8 Db5 8  
+;m 381
+B4 8 C5 8 A5 8 Bb5 8 A5 8 C5 8  
+;m 382
+Db5 8 C5 8 Eb4 8 D4 8 Eb4 8 C5 8  
+;m 383
+D4 8 Eb4 8 C5 8 A4 8 Bb4 8 Gb5 8  
+;m 384
+B4 8 C5 8 A5 8 
+C4 12/8
+;m 385
+
+;m 386
+
+B3 8 C4 8 C5 8
+;m 387
+R 4. C4 8 Db4 8 Db5 8 
+;m 388
+R 4. C4 8 Db4 8 Bb4 8 
+;m 389
+R 4.
+Eb4 2.
+;m 390
+
+D4 8 Eb4 8 Eb5 8 
+;m 391
+R 4.
+E4 8 F4 8 F5 8 
+;m 392
+R 4.
+D5 8 Eb5 8 F5 8 
+;m 393
+R 4.
+Gb4 2.
+;m 394
+
+F4 8 Gb4 8 Eb5 8 
+;m 395
+R 4.
+G3 8 Ab3 8 Ab4 8 
+;m 396
+R 4.
+A4 8 Bb4 8 Ab5 8 
+;m 397
+R 4.
+Bb3 2.
+;m 398
+
+A4 8 Bb4 8 Bb5 8 
+;m 399
+R 4.
+C4 2.
+;m 400
+
+B4 8 C5 8 C6 8 
+;m 401
+R 4.
+C4 8 Db4 8 Bb4 8 
+;m 402
+R 4.
+A4 8 Bb4 8 Gb5 8 
+;m 403
+R 4.
+Eb4 2.
+;m 404
+
+D4 8 Eb4 8 C5 8 
+;m 405
+R 4.
+B4 8 C5 8 A5 8 
+;m 406
+R 4.
+C#5 8 D5 8 Bb5 8 
+;m 407
+Bb4 4 R 8 R 4.
+;m 408
+R 4.
+Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/16 Cb5 1/16 Bb4 1/24 Ab4 1/24 Bb4 1/24 
+;m 409
+
+;m 410
+Cb5 4 R 8 R 4.
+;m 411
+R 2.
+;m 412
+R 4.
+Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/24 Cb5 1/24 Db5 1/24 
+;m 413
+;m 414
+vel +10 Eb5 4 vel -10 R 8 Ab4 4 R  8 
+;m 415
+vel +10 Gb4 4 vel -10 R 8 F4 4 R  8 
+;page 22
+;m 416
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+Eb4 4 
+vel 52
+R 2
+;m 417
+vel +10 R 4 vel -10 G3 8 Bb4 4 Bb4 8  
+;m 418
+Bb4 4 R 2
+vel 110
+;m 419
+R 2.
+;m 420
+vel +10 R 4 vel -10 Eb4 8 G5 4 G5 8  
+;m 421
+vel +10 G5 4 vel -10 F5 8 F5 4 Eb5 8 
+;m 422
+vel 110
+vel +10 D5 4 vel -10 Db5 8 C5 4 Bb4 8 
+;m 423
+vel +10 F5 4 vel -10 E5 8 Eb5 4 D5 8 
+;m 424
+F5 4 R 8 R 4.
+;m 425
+vel +10 R 4 vel -10 Bb4 8 Bb5 4 Bb5 8  
+;m 426
+vel +10 Bb5 4 vel -10 Ab5 8 Ab5 4 G5 8 
+;m 427
+vel +10 G5 4 vel -10 F5 8 F5 4 Bb4 8 
+;m 428
+vel +10 Bb4 4 vel -10 G4 8 C5 4 C5 8 
+;m 429
+Bb4 4 R 8 R 4.
+;m 430
+R 4. A4 8 Bb4 8 Ab5 13/8
+;m 431
+
+;m 432
+
+;m 433
+G5 2.
+;m 434
+A4 8 Bb4 5/8
+;m 435
+vel +10 A4 4 vel -10 Bb4 8 Bb4 4 C5 8 
+;m 436
+vel +10 G4 4 vel -10 C5 8 Bb4 4 Bb3 8 
+;m 437
+vel +10 Bb3 4 vel -10 Bb4 8 Ab4 4 G4 8 
+;m 438
+Ab4 4 R 8 B4 8 C5 8 C6 7/8
+;m 439
+
+;m 440
+Bb5 4 R 8
+B4 8 C5 8 Bb5 7/8
+;m 441
+;m 442
+vel +10 Ab5 4 vel -10 Gb5 8 Gb5 4 F5 8 
+;m 443
+vel +10 F5 4 vel -10 Gb5 8 Gb5 4 Ab5 8 
+;m 444
+Ab5 2.
+;m 445
+vel +10 Gb5 4 vel -10 Db5 8 Db5 4 Eb5 8 
+;m 446
+F5 4 R 8 R 4.
+;m 447
+vel +10 Bb5 4 vel -10 C6 8 C6 4 Db6 8 
+;m 448
+vel +10 A5 4 vel -10 Bb5 8 Bb5 4 C6 8 
+;m 449
+vel +10 A4 4 vel -10 Bb4 8 Bb4 4 C5 8 
+;m 450
+vel +10 F5 4 vel -10 Fb5 8 Eb5 4 Eb5 8 
+;m 451
+vel +10 Eb5 4 vel -10 Db5 8 Db5 4 C5 8 
+;m 452
+vel +10 Cb5 4 vel -10 Bb4 8 Bb4 4 Ab4 8 
+;m 453
+vel +10 Bb4 Db5 Eb5 4 vel -10 R 8 Ab4 C5 Eb5 4 R  8 
+;m 454
+vel +10 Bb4 Db5 Eb5 4 vel -10 R 8 Bb4 Db5 Eb5 G5 4 R  8 
+;m 455
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+R 2.
+;m 456
+R 2.
+;m 457
+R 2.
+;m 458
+R 2.
+;m 459
+Db5 1.
+;m 460
+
+;m 461
+C5 2.
+;m 462
+Eb4 4 R 8 R 4.
+;m 463
+vel +10 R 4 vel -10 C4 8 Eb5 4 Eb5 8  
+;m 464
+vel +10 Eb5 4 vel -10 Db5 8 Db5 4 C5 8 
+;m 465
+vel +10 C5 4 vel -10 Gb5 8 Gb5 4 A4 8 
+;m 466
+vel +10 A4 4 vel -10 Bb4 8 B4 4 C5 8 
+;m 467
+vel +10 F4 4 vel -10 D4 8 F5 4 F5 8 
+;m 468
+vel +10 F5 4 vel -10 F4 8 Ab5 4 Ab5 8 
+;m 469
+Ab5 1.
+;m 470
+
+;m 471
+G5 2.
+;m 472
+vel +10 Bb4 4 vel -10 F4 8 Eb4 4 G4 8 
+;m 473
+vel +10 Eb5 4 vel -10 F5 8 F#5 4 G5 8 
+;m 474
+vel +10 Ab5 4 vel -10 A5 8 A5 4 Bb5 8 
+;page 24
+;m 475
+Eb5 1.
+;m 476
+
+;m 477
+Db5 4. Eb4 8 R 4
+;m 478
+vel +10 C5 4 vel -10 Eb4 8 Ab4 4 C4 8 
+;m 479
+vel +10 R 4 vel -10 D4 8 Cb6 4 Cb6 8  
+;m 480
+vel +10 Cb6 4 vel -10 D5 8 Cb6 4 Cb6 8 
+;m 481
+vel +10 A5 4 vel -10 C5 8 Gb5 4 Gb5 8 
+;m 482
+vel +10 Gb5 4 vel -10 C5 8 Gb5 4 Gb5 8 
+;m 483
+vel +10 Db5 4 vel -10 A4 8 Db5 4 Db5 8 
+;m 484
+vel +10 Db5 4 vel -10 A4 8 Db6 4 Db6 8 
+;m 485
+vel +10 C6 4 vel -10 A4 8 C5 4 C5 8 
+;m 486
+vel +10 C5 4 vel -10 A4 8 C6 4 C6 8 
+;m 487
+vel +10 C6 4 vel -10 Bb4 8 Bb5 4 Bb5 8 
+;m 488
+vel +10 Bb5 4 vel -10 G4 8 G5 4 G5 8 
+;m 489
+vel +10 G5 4 vel -10 Ab4 8 Ab5 4 Ab5 8 
+;m 490
+vel +10 Ab5 4 vel -10 D4 8 F5 4 F5 8 
+;m 491
+vel +10 F5 4 vel -10 D4 F4 8 D5 4 D5 8 
+;m 492
+vel +10 D5 4 vel -10 F4 8 Ab5 4 Ab5 8 
+;m 493
+vel +10 Db5 4 vel -10 G4 8 Eb5 4 Eb5 8 
+;m 494
+C5 4 Eb5 8 C4 4 C5 16 Bb4 16
+;m 495
+vel 75
+Bb4 16 Ab4 16 vel +6 C5 16 vel -6 Bb4 16  Bb4 16 Ab4 16 vel +6 Bb5 16 vel -6 Ab5 16 
+;m 496
+Ab5 16 G5 16 vel +6 C6 16 vel -6 Bb5 16 
+vel +6 Bb5 16 vel -6 Ab5 16 G5 16 F5 16 
+;m 497
+F5 16 Eb5 16 vel +6 Ab5 16 vel -6 C5 16  F5 16 Eb5 16 vel +6 F5 16 vel -6 Db5 16 
+;m 498
+vel +6 Db5 16 vel -6 C5 16 Bb4 16 Ab4 16  vel +6 Ab4 16 vel -6 Gb4 16 F4 16 Eb4 16 
+;m 499
+vel +6 Eb4 16 vel -6 Db4 16 C4 16 Db4 16  Gb5 16 F5 16 vel +6 Gb5 16 vel -6 Eb5 16 
+;m 500
+vel +6 Eb5 16 vel -6 Db5 16 C5 16 Bb4 16  Ab4 16 G4 16 vel +6 Ab4 16 vel -6 F4 16 
+;m 501
+vel +6 F4 16 vel -6 Eb4 16 D4 16 Eb4 16  Bb4 16 Ab4 16 vel +6 Bb4 16 vel -6 G4 16 
+;m 502
+vel +6 Ab4 16 vel -6 G4 16 F4 16 Eb4 16  vel +6 Eb5 16 vel -6 Db5 16 C5 16 Bb4 16 
+;m 503
+Db5 16 C5 16 vel +6 Db5 16 vel -6 Eb5 16 
+vel 90
+F5 4
+;m 504
+Eb5 4 G4 4
+;m 505
+Ab4 4 Bb4 4
+;m 506
+Ab4 4 C5 4
+;m 507
+Db5 4 C5 4
+;m 508
+Bb4 4 D4 4
+;m 509
+Eb4 4 Db5 4
+;m 510
+Eb4 Eb5 4 F4 Ab4 F5 4
+;m 511
+F4 Ab4 4
+Ab4 Cb5 8 Ab4 C5 4
+;m 512
+
+Ab5 8 C5 8 R 8
+;m 513
+R 4 
+vel 90
+G3 1
+;m 514
+
+;m 515
+
+R 4
+;m 516
+R 2
+;m 517
+R 4
+vel 90
+G3 1
+;m 518
+
+;m 519
+
+R 4
+;m 520
+R 2
+;m 521
+R 4
+vel 52
+G3 1
+;m 522
+
+;m 523
+
+R 4
+;m 524
+R 2
+;page 26
+;m 525
+R 4 A3 2
+;m 526
+
+Bb3 2
+;m 527
+
+R 4
+;m 528
+R 2
+;m 529
+R 4
+vel 43
+B3 2
+;m 530
+
+C4 2
+;m 531
+
+R 4
+;m 532
+R 2
+;m 533
+R 4
+B3 2
+;m 534
+
+C4 4
+;m 535 6/8
+END_LAZY
+KEY_SIGNATURE Bb
+END_LAZY
+vel 90
+F3 4 
+vel 52
+R 8 R 4.
+;m 536
+R 2.
+;m 537
+R 4.
+D5 4.
+;m 538
+Eb5 4 R 8
+Eb5 1/16 F5 1/16 Eb5 1/16 F5 1/16 Eb5 1/24 D5 1/24 Eb5 1/24 
+;m 539
+vel +10 D5 4 vel -10 R 8 F4 4 R  8 
+;m 540
+vel +10 F4 4 vel -10 R 8 Bb4 C5 4 R  8 
+;m 541
+vel +10 A4 C5 4 vel -10 R 8 R 4 R  8 
+;m 542
+vel +10 R 4 vel -10 C#4 8 D4 4 C5 8  
+;m 543
+Bb4 8 R 4 R 4.
+;m 544
+vel +10 G5 4 vel -10 R 8 F5 4 R  8 
+;m 545
+vel +10 Eb5 4 vel -10 D5 8 C5 4 G5 8 
+;m 546
+vel +10 R 4 vel -10 E4 8 F4 4 Eb5 8  
+;m 547
+D5 8 R 4 R 4.
+;m 548
+vel +10 R 4 vel -10 Bb4 8 B4 4 G5 8  
+;m 549
+vel +10 G5 4 vel -10 F5 8 Eb5 4 C5 8 
+;m 550
+vel +10 D5 4 vel -10 R 8 Eb5 4 R  8 
+;m 551
+D5 4 R 8 R 4.
+;m 552
+R 2.
+;m 553
+vel +10 R 4 vel -10 Bb4 8 B4 4 Ab5 8  
+;m 554
+vel +10 G5 8 vel -10 R 8 B4 8 C5 4 A5 8 
+;m 555
+Bb5 8 R 4
+F4 4 R 8
+;m 556
+vel +10 F4 4 vel -10 B3 8 C4 4 Bb4 8 
+;m 557
+A4 4 R 8 R 4.
+;m 558
+vel +10 D5 4 vel -10 R 8 F#5 4 R  8 
+;m 559
+vel +10 G5 4 vel -10 A5 8 Bb5 4 G5 8 
+;m 560
+vel +10 R 4 vel -10 Bb4 8 B4 4 G5 8  
+;m 561
+vel +10 R 4 vel -10 B4 8 C5 4 G5 8  
+;m 562
+vel +10 F5 4 vel -10 R 8 A5 4 R  8 
+;m 563
+vel +10 Bb5 4 vel -10 C6 8 D6 4 Bb5 8 
+;m 564
+vel +10 G5 4 vel -10 R 8 G4 G5 4 R  8 
+;m 565
+vel +10 G5 4 vel -10 B4 8 C5 4 Eb5 8 
+;m 566
+vel +10 D5 4 vel -10 R 8 Eb5 4 R  8 
+;m 567
+Bb4 4 A4 8 Bb4 5/8
+;m 568
+vel 62
+A4 8 Bb4 5/8
+;m 569
+
+A4 8 Bb4 5/8
+;m 570
+vel 75
+A4 8 Bb4 5/8
+;m 571
+vel 90
+A4 8 Bb4 4 Bb5 3/8
+;m 572
+
+A5 8 G5 4 Bb5 2.
+;m 573
+vel 75
+Bb5 8
+;m 574
+vel 62
+B5 4 C6 4. F5 16. F5 32 
+;m 575
+vel 52
+D5 5/8 F5 8
+;m 576
+D5 5/8 Eb5 8
+;m 577
+D5 5/8 F5 8
+;m 578
+D5 5/8 Eb5 8
+;m 579
+D5 4 A5 8 Bb5 5/8
+;m 580
+
+A5 8 Bb5 5/8
+;m 581
+vel 75
+Bb4 8 A4 4 Bb4 4.
+;m 582
+vel 62
+A5 8 Bb5 4 Bb4 8
+;m 583
+vel 52
+A4 4 R 8 R 4.
+;m 584
+R 2.
+;m 585
+R 2.
+;m 586
+R 2.
+;page 28
+;m 587
+R 4. R 4 E4 8
+;m 588
+F4 5/8 D4 8
+;m 589
+Eb4 5/8 C#4 8
+;m 590
+D4 4 Db4 8 C4 4 Gb4 8
+;m 591
+F4 4 R 8 R 4 
+vel 43
+Eb4 8
+;m 592
+D4 4 R 8 R 4 Db4 8
+;m 593
+C4 4 R 8 R 4 C4 8
+;m 594
+Bb3 4 R 8 R 4 Ab3 8
+;m 595
+G3 4 Eb4 8 E4 5/8
+;m 596
+
+E4 8 F4 5/8
+;m 597
+
+F#4 8 G4 5/8
+;m 598
+
+G4 8 Ab4 2.
+;m 599
+
+G4 11/8
+;m 600
+
+;m 601
+
+G4 8 F4 4 Eb4 4.
+;m 602
+
+Eb4 8 D4 4 C4 8
+;m 603
+B3 9/8
+;m 604
+
+B4 4.
+;m 605
+C5 4 Bb5 8 A5 4 G5 4.
+;m 606
+
+Gb5 8 F5 4 Eb5 8
+;m 607
+
+D5 4 C6 8 Bb5 4 A5 4.
+;m 608
+
+G5 4. F5 8
+;m 609
+Eb5 4 F5 8 Eb5 4 D5 4.
+;m 610
+
+C5 8 Bb4 4 A4 8
+;m 611
+D4 2.
+;m 612
+G4 2.
+;m 613
+Ab4 2.
+;m 614
+F4 2.
+;m 615
+C4 Eb4 2.
+;m 616
+D4 2.
+;m 617
+C4 2.
+;m 618
+A4 1.
+;m 619
+;m 620
+C5 1.
+;m 621
+
+;m 622
+B4 4 R 8 R 4.
+;m 623
+R 2.
+;m 624
+C5 1.
+;m 625
+
+;m 626
+B4 4 R 8 R 4.
+;m 627
+R 2.
+;m 628
+C5 20/8
+;m 629
+
+;m 630
+
+;m 631
+
+R 8
+vel 90
+C5 F5 4 R 8
+;m 632
+R 4. D5 F5 4 R 8
+;m 633
+R 4. C5 F5 4 R 8
+;m 634
+R 4. D5 F5 4 R 8
+;m 635
+R 4. Gb5 4 R 8
+;m 636
+vel +10 F5 4 vel -10 R 8 F5 4 R  8 
+;m 637
+vel +10 F5 4 vel -10 R 8 F5 C6 4 R  8 
+;m 638
+vel +10 F5 D6 4 vel -10 R 8 Bb4 D5 F5 4 R  8 
+;m 639
+vel 52
+Eb5 5/8 A4 4.
+;m 640
+vel 62
+Eb5 8 A4 5/8
+;m 641
+vel 75
+Eb5 8 A4 5/8
+;m 642
+
+B4 8 C5 5/8
+;m 643
+vel 90
+A5 8 A5 4 Bb5 8
+;m 644
+A5 5/8 Bb5 8
+;m 645
+vel 75
+A5 5/8 Bb5 8
+;m 646
+vel 62
+A5 4 Bb5 8 C5 4 D5 8
+;m 647
+vel 52
+A4 4 G#4 8 A4 5/8
+;m 648
+vel 62 
+G#4 8 A4 5/8
+;m 649
+vel 75
+G#4 8 A4 5/8
+;m 650
+Bb4 8 C5 4 D5 8
+;m 651
+vel 90
+vel +10 C5 4 vel -10 Bb4 8 A4 4 Bb4 8 
+;m 652
+vel +10 C5 4 vel -10 Bb4 8 A4 4 Bb4 8 
+;m 653
+R 4. Gb5 4 F5 8
+;m 654
+vel 75
+R 4. G5 4 F5 8
+;m 655
+vel 62
+R 4. Bb5 4 Ab5 8
+;m 656
+vel 52
+R 4. Ab5 4 G5 8
+;m 657
+R 4. G5 4 F5 8
+;m 658
+vel 43
+R 4. F5 4 Eb5 8
+;m 659
+Eb5 4
+vel 110
+R 4
+R 2
+;m 660
+R 4 vel +10 Bb3 8 vel -10 Bb3 8 R 4 vel +10 Bb3 8 vel -10 Bb3 8 
+;m 661
+R 1
+;page 30
+;m 662
+vel 43
+R 4.
+F4 16 Eb4 16
+;m 663
+Eb4 16 D4 16 Ab4 16 G4 16 G4 16 F4 16 R 8
+;m 664a
+R 2
+;m 664b is 3/8
+vel 110
+Bb4 18/8
+;m 665
+
+;m 666
+
+;m 667
+
+B4 2.
+;m 668
+
+Ab5 2.
+;m 669
+
+G5 2.
+;m 670
+
+B4 2.
+;m 671
+
+C5 2.
+;m 672
+
+Bb5 2.
+;m 673
+
+A5 2.
+;m 674
+
+F4 2.
+;m 675
+
+Eb5 2.
+;m 676
+
+D5 2.
+;m 677
+
+G5 2.
+;m 678
+
+F5 2.
+;m 679
+
+Eb5 2.
+;m 680
+
+D5 5/8
+;m 681
+
+R 8
+Db5 4 R 8
+;m 682
+C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/24 Bb4 1/24 C5 1/24 
+;m 683
+Bb4 4 R 8 R 4.
+;m 684
+vel +10 R 4 vel -10 B4 8 C5 4 A5 8  
+;m 685
+vel 75
+Bb5 8 R 4 R 4.
+;m 686
+vel 62
+R 2.
+;m 687
+vel 52
+R 2.
+;m 688
+vel 43
+R 2.
+;m 689
+F4 1.
+;m 690
+
+;m 691
+G4 2.
+;m 692
+G4 2.
+;m 693
+F4 2.
+;m 694
+D4 2.
+;m 695
+Eb4 2.
+;m 696
+Cb5 2.
+;m 697
+Bb4 2.
+;m 698
+D4 2.
+;m 699
+Eb4 2.
+;m 700
+G4 2.
+;m 701
+Gb4 2.
+;m 702
+F4 4. Eb4 4.
+;m 703
+Eb5 4. D5 4 R 8
+;m 704
+R 4.
+vel 62
+C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/16 D5 1/16 C5 1/24 Bb4 1/24 C5 1/24 
+;m 705
+vel 75
+D5 4 R 8
+;m 706
+R 4.
+C5 2.
+;m 707
+vel 90
+Bb4 4 R 8
+;m 708
+R 4.
+C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/24 Bb3 1/24 C4 1/24 
+;m 709
+
+D4 4 R 8
+;m 710
+R 2.
+;m 711
+R 2.
+;m 712
+vel 62
+C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/24 Bb3 1/24 C4 1/24  Bb3 4 R 8
+;m 713
+R 2.
+;m 714
+vel 52
+C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/24 Bb3 1/24 C4 1/24  Bb3 4 R 8
+;m 715
+R 2.
+;m 716
+C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/24 Bb3 1/24 C4 1/24  Bb3 4 R 8
+;m 717
+vel 43
+R 2.
+;m 718
+Ab4 1/16 Bb4 1/16 Ab4 1/16 Bb4 1/16 Ab4 1/24 G4 1/24 Ab4 1/24  Bb4 Ab4 F4 4 Bb4 13/8
+;m 719
+vel 52
+
+;m 720
+
+;m 721
+B4 2.
+;m 722
+Ab5 2.
+;m 723
+G5 2.
+;m 724
+vel 62
+B4 2.
+;m 725
+C5 2.
+;m 726
+A5 2.
+;m 727
+Bb5 2.
+;m 728
+F#5 2.
+;m 729
+vel 75
+G5 2.
+;m 730
+D5 2.
+;m 731
+Eb5 2.
+;m 732
+B4 2.
+;m 733
+C5 2.
+;m 734
+vel 90
+F5 2.
+;m 735
+vel +10 F4 4 vel -10 D4 8 Bb4 4 Bb4 8 
+;m 736
+vel +10 A4 4 vel -10 A4 8 F4 4 F4 8 
+;m 737
+vel +10 F4 4 vel -10 Bb4 8 F4 4 F4 8 
+;m 738
+vel 110
+vel +10 F4 4 vel -10 A4 8 F5 4 F5 8 
+;m 739
+vel +10 F5 4 vel -10 D5 8 Bb5 4 Bb5 8 
+;m 740
+vel +10 A5 4 vel -10 A4 8 F5 4 F5 8 
+;m 741
+vel +10 F5 4 vel -10 D5 8 Bb5 4 Bb5 8 
+;m 742
+vel +10 A5 4 vel -10 A4 8 F5 4 F5 8 
+;m 743
+ticks primolh 743
+F4 Bb4 D5 4 R 8 R 4.
+; fine
+END_LAZY
+END_OF_TRACK
+
+STARTTRACK
+TRACK Secondo Right Hand
+TEXT Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  "© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+INSTRUMENT Piano
+;PROGRAM secondorhchan Viola
+PROGRAM 3 1
+PAN 3 12
+LAZY
+vel 127
+chan 3 
+;page 4
+;m 0
+END_LAZY
+KEY_SIGNATURE G
+LAZY
+;pickup
+R 4.
+R 4
+vel 110
+END_LAZY
+DAMPER 3 127
+LAZY
+G3 D3 16
+G2 16
+;m 1
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+;m 2
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+G3 D3 16
+G2 16
+
+;m 3
+vel 120
+G3 D3 G2 9/8
+
+;m4
+END_LAZY
+DAMPER 3 0
+LAZY
+vel 110
+G3 15/8
+;m 5
+
+;m 6
+
+;m 7
+vel 120
+G#3 2.
+;m 8
+F4 2.
+;m 9
+E4 2.
+;m 10
+G#3 2.
+;m 11
+vel 110
+A3 4 R 8
+F#4 4 R 8
+;m 12
+G4 1/16 A4 1/16 G4 1/24 F#4 1/24 G4 1/24 
+R 8
+R 4.
+;m 13
+vel +10 R 4 vel -10 G3 8 G#3 4 F4 8  
+;m 14
+vel +10 E4 8 vel -10 R 8 G#3 8 A3 4 F#4 8  
+;m 15
+G4 8 R 8 R 8 R 4 R 8
+;m 16
+vel +10 R 4 vel -10 B2 8 C3 4 Bb3 8  
+;m 17
+vel +10 A3 8 vel -10 R 8 C#3 8 D3 4 B3 8  
+;m 18
+C4 8 R 8 R 8 R 4 R 8
+;m 19
+END_LAZY
+KEY_SIGNATURE F
+LAZY
+vel 52
+R 2
+;m 20
+R 4
+; the F3 is in secondorhextra
+A3 4
+;m 21
+Bb3 2.
+;m 22
+
+G3 Db4 4
+;m 23
+A3 C4 4
+R 8
+C4 9/128 Bb3 7/128
+;m 24
+Bb3 94/1536 A3 16 vel +4 D4 98/1536 vel -4 C4 8/128  C4 94/1536 Bb3 16 vel +4 C4 98/1536 vel -4 A3 8/128 
+;m 25
+Bb3 8 R 8 R 4
+;m 26
+R 2
+;m 27
+R 4
+R 4
+;m 28
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 43
+R 1
+;m 29
+R 1
+;m 30
+R 1
+;m 31
+R 1
+;m 32
+R 4
+R 4
+vel 110
+R 2
+;m 33
+R 4 vel +10 Bb3 8 vel -10 Bb3 8 R 4 vel +10 Bb3 8 vel -10 Bb3 8 
+;m 34
+R 4 vel +10 B3 8 vel -10 B3 8 R 4 vel +10 Ab4 8 vel -10 Ab4 8 
+;m 35
+R 4 vel +10 G4 8 vel -10 G4 8 
+R 4 vel +10 B3 8 vel -10 C4 8 
+;m 36
+R 8 R 8 C4 8 C4 8 A4 8 Bb4 8 Bb4 8 Bb4 8 
+;m 37
+A4 8 A4 8 R 4 R 2
+;m 38
+R 1
+;m 39
+R 1
+;m 40
+R 1
+;page 4
+;m 41
+R 2
+Bb3 8 Bb3 8 R 4
+;m 42
+G3 8 G3 8 R 4
+G3 8 G3 8 R 4
+;m 43
+C3 8 C3 8 R 4
+Bb3 8 Bb3 8 R 4
+;m 44
+A3 8 A3 8 F3 8 F3 8 
+vel +15 Eb4 8 vel -15 R 16 D4 16 D4 8 R 16 E4 16 
+;m 45
+vel +15 F4 8 vel -15 R 16 F3 16 A3 8 R 16 A3 16 vel +15 A3 8 vel -15 R 16 F3 16 C4 8 R 16 C4 16 
+;m 46
+vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 A3 16  vel +15 A3 8 vel -15 R 16 G3 16 G3 8 R 16 F#3 16  
+;m 47
+vel +15 G3 8 vel -15 R 16 D3 16 G3 8 R 16 G3 16 vel +15 G3 8 vel -15 R 16 D3 16 Bb3 8 R 16 Bb3 16 
+;m 48
+vel +15 Bb3 8 vel -15 R 16 A3 16 E3 8 R 16 G3 16 vel +15 G4 8 vel -15 R 16 F4 16 F4 8 R 16 A4 16 
+;m 49
+vel +15 Bb4 8 vel -15 R 16 C5 16 C5 8 R 16 A4 16 vel +15 F4 8 vel -15 R 16 A4 16 A4 8 R 16 F#4 16 
+;m 50
+vel +15 G4 8 vel -15 R 16 F4 16 E4 8 R 16 G4 16 
+F4 8 R 8 R 4
+;m 51
+vel +15 R 8 vel -15 R 16 Eb4 16 C4 8 R 16 Eb4 16 vel +15 D4 8 vel -15 R 16 D4 16 C4 8 R 16 A3 16 
+;m 52
+vel +15 Bb3 8 vel -15 R 16 F4 16 Eb4 8 R 16 D4 16 vel +15 D4 8 vel -15 R 16 F3 16 C3 8 R 16 F3 16 
+;m 53
+vel +15 F3 8 vel -15 R 16 Eb3 16 Eb3 8 R 16 D3 16 vel +15 D4 8 vel -15 R 16 C4 16 C4 8 R 16 B3 16 
+;m 54
+vel +15 C4 8 vel -15 R 16 C4 16 C4 8 R 16 C4 16 vel +15 C4 8 vel -15 R 16 G4 16 Eb4 8 R 16 Eb4 16 
+;m 55
+vel +15 Eb4 8 vel -15 R 16 D4 16 D4 8 R 16 C4 16  vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 C3 16  
+;m 56
+vel +15 C3 8 vel -15 R 16 C3 16 Eb3 8 R 16 D3 16 vel +15 F3 8 vel -15 R 16 G3 16 Bb2 8 R 16 Bb2 16 
+;m 57
+vel +15 Bb3 8 vel -15 R 16 Bb3 16 Bb2 8 R 16 Bb2 16 vel +15 Bb3 8 vel -15 R 16 Bb3 16 D3 8 R 16 D3 16 
+;m 58
+vel +15 D3 8 vel -15 R 16 Eb3 16 E3 8 R 16 F3 16 vel +15 F4 8 vel -15 R 16 Eb4 16 Eb4 8 R 16 D4 16 
+;m 59
+vel +15 C4 8 vel -15 R 16 C4 16 F3 8 R 16 F3 16 
+Eb3 8 R 8 R 4
+;m 60
+R 4 vel +10 Eb4 8 vel -10 Eb4 8 R 4 vel +10 Eb4 8 vel -10 Eb4 8 
+;m 61
+R 4 vel +10 E4 8 vel -10 E4 8 R 4 vel +10 Db5 8 vel -10 Db5 8 
+;m 62
+R 4 vel +10 C5 8 vel -10 C5 8 
+R 4 vel +10 E4 8 vel -10 F4 8 
+;m 63
+R 4 vel +10 F4 8 vel -10 F4 8 
+D5 8 Eb5 8 Eb5 8 Eb5 8 
+;m 64
+D5 8 R 8
+R 12 Eb3 12 D3 12 
+D3 12 Eb3 12 F3 12 D3 12 Eb3 12 F3 12  
+;m 65
+Bb2 12 Eb3 12 Bb2 12 
+Ab3 8 R 16 Ab3 16
+G3 8 R 16 G3 16
+F3 8 R 16 F3 16
+;m 66
+G3 4 R 4 R 2
+;page 6
+;m 67
+R 1
+;m 68
+R 1
+;m 69
+R 1
+;m 70
+R 2
+vel +15 R 8 vel -15 R 16 G3 16 D4 8 R 16 D4 16 
+;m 71
+C4 4 R 4
+vel +15 R 8 vel -15 R 16 C3 16 C4 8 R 16 C4 16 
+;m 72
+C4 4 R 4 vel +15 R 8 vel -15 R 16 F#2 16 C4 8 R 16 C4 16 
+;m 73
+D4 4 R 4 vel +15 R 8 vel -15 R 16 D3 16 D3 8 R 16 F3 16 
+;m 74
+vel +15 Eb3 8 vel -15 R 16 Eb3 16 Eb3 8 R 16 C4 16 vel +15 F3 8 vel -15 R 16 G3 16 G3 8 R 16 D4 16 
+;m 75
+C4 4 R 4 vel +15 R 8 vel -15 R 16 D3 16 D3 8 R 16 G3 16 
+;m 76
+A3 4 R 4 vel +15 R 8 vel -15 R 16 A3 16 A3 8 R 16 D4 16 
+;m 77
+E4 4 R 4
+vel +15 R 8 vel -15 R 16 A3 16 A3 8 R 16 C4 16 
+;m 78
+Bb3 8 R 8 B3 8 R 8 vel +15 C4 8 vel -15 R 16 G3 16 G3 8 R 16 E3 16 
+;m 79
+C4 8 R 8 F3 8 R 8 vel +15 R 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 G3 16 
+;m 80
+vel +15 C3 8 vel -15 R 16 A3 16 A3 8 R 16 F4 16 vel +15 A3 8 vel -15 R 16 Bb3 16 C5 8 R 16 C5 16 
+;m 81
+vel +15 C5 8 vel -15 R 16 A3 16 C5 8 R 16 C5 16 vel +15 C5 8 vel -15 R 16 A3 16 Eb5 8 R 16 Eb5 16 
+;m 82
+vel +15 Eb5 8 vel -15 R 16 D5 16 D5 8 R 16 C5 16  vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 A4 16  
+;m 83
+vel +15 Bb4 8 vel -15 R 16 Bb3 16 Bb4 8 R 16 Bb4 16 vel +15 Bb4 8 vel -15 R 16 Bb3 16 D4 8 R 16 D4 16 
+;m 84
+vel +15 D4 8 vel -15 R 16 C4 16 C4 8 R 16 Bb3 16  vel +15 Bb3 8 vel -15 R 16 A3 16 A3 8 R 16 Bb3 16  
+;m 85
+Bb3 12 B3 12 C4 12 D4 12 B3 12 C4 12  C4 12 A3 12 Bb3 12 Bb3 12 G3 12 A3 12  
+;m 86
+Eb4 12 C4 12 D4 12 D4 12 B3 12 C4 12  Eb4 12 C4 12 D4 12 Eb3 12 C#3 12 D3 12  
+;m 87
+C3 12 A2 12 Bb2 12 C4 12 A3 12 Bb3 12  Bb3 12 G3 12 A3 12 A3 12 F3 12 G3 12  
+;m 88
+G3 12 C3 12 F3 12 Eb3 12 C3 12 D3 12  F3 12 D3 12 G3 12 F3 12 D3 12 E3 12  
+;m 89
+F3 12 D3 12 G3 12 F3 12 D3 12 E3 12  G3 12 E3 12 A3 12 G3 12 E3 12 F3 12  
+;m 90
+G3 12 E3 12 A3 12 G3 12 E3 12 F3 12  D4 12 B3 12 C#4 12 E4 12 C4 12 D4 12  
+;m 91
+Eb4 12 C4 12 A3 12 Eb3 12 C3 12 A3 12  B2 12 D3 12 C3 12 G3 12 Bb3 12 A3 12  
+;m 92
+F#3 12 A3 12 Bb3 12 G3 12 D4 12 C4 12  C4 12 C5 12 Bb4 12 Bb4 12 D5 12 C5 12  
+;m 93
+A3 12 C4 12 Bb3 12 D3 12 F3 12 E3 12  A3 12 C4 12 Bb3 12 D4 12 F4 12 E4 12  
+;m 94
+D3 12 F3 12 E3 12 B3 12 D4 12 C#4 12  B4 12 D5 12 C#5 12 C#5 12 E5 12 D5 12  
+;m 95
+B4 12 D5 12 C#5 12 B4 12 D5 12 C5 12  A4 12 C5 12 B4 12 A4 12 C5 12 Bb4 12  
+;m 96
+A4 12 Bb4 12 G4 12 G4 12 A4 12 F4 12  
+vel +15 E4 8 vel -15 R 16 A4 16 A4 8 R 16 G4 16 
+;page 8
+;m 97
+F4 4 R 4 vel +15 E4 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 A4 16 
+;m 98
+G4 8 G4 8 F4 8 F4 8 E4 8 E4 8 E4 8 E4 8 
+;m 99
+E5 8 E5 8 E4 8 E4 8 E3 8 E3 8 Db4 8 Db4 8 
+;m 100
+vel +15 C4 8 vel -15 R 16 C3 16 C4 8 R 16 C4 16 vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 Ab3 16 
+;m 101
+vel +15 Ab3 8 vel -15 R 16 G3 16 G3 8 R 16 F3 16 
+F3 4 R 4
+;m 102
+R 2
+vel +15 R 8 vel -15 R 16 C3 16 C4 8 R 16 C4 16 
+;m 103
+vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 Ab3 16  vel +15 Ab3 8 vel -15 R 16 G3 16 G3 8 R 16 F3 16  
+;m 104
+vel +15 E3 8 vel -15 R 16 G3 16 F3 8 R 16 E3 16 vel +15 E3 8 vel -15 R 16 G4 16 E4 8 R 16 F4 16 
+;m 105
+vel +15 F4 8 vel -15 R 16 C4 16 A3 8 R 16 G3 16 vel +15 F#3 8 vel -15 R 16 G3 16 G3 8 R 16 A3 16 
+;m 106
+vel +15 A3 8 vel -15 R 16 D4 16 D4 8 R 16 C4 16 vel +15 B3 8 vel -15 R 16 A3 16 A3 8 R 16 G#3 16 
+;m 107
+vel +15 A3 8 vel -15 R 16 A3 16 A3 8 R 16 D3 16 vel +15 D3 8 vel -15 R 16 A3 16 A3 8 R 16 G3 16 
+;m 108
+vel +15 D3 8 vel -15 R 16 D4 16 D4 8 R 16 D3 16 vel +15 D3 8 vel -15 R 16 D3 16 C#3 8 R 16 C3 16 
+;m 109
+vel +15 A3 8 vel -15 R 16 G3 16 G4 8 R 16 G4 16 vel +15 G4 8 vel -15 R 16 F4 16 E4 8 R 16 E3 16 
+;m 110
+vel +15 Eb3 8 vel -15 R 16 A3 16 F3 8 R 16 F3 16 vel +15 F3 8 vel -15 R 16 F3 16 A3 8 R 16 A3 16 
+;m 111
+vel +15 D3 8 vel -15 R 16 D4 16 F4 8 R 16 F4 16 
+Eb4 8 R 8 E4 8 R 8
+;m 112
+vel +15 F4 8 vel -15 R 16 F3 16 F3 8 R 16 E3 16 
+F3 8 R 8 Eb3 8 R 8
+;m 113
+D3 4 R 2.
+;m 114
+R 2
+R 8 F4 16 Eb4 16 D4 16 R 16 C4 16 B3 16
+;m 115
+C4 16 R 16 Ab3 16 G3 16 F3 16 R 16 Eb3 16 D3 16 C3 16 R 16 D3 16 E3 16 D3 16 R 16 E3 16 F3 16 
+;m 116
+E3 16 R 16 F3 16 G3 16 F3 16 R 16 D4 16 C4 16 Bb3 16 R 16 E3 16 F3 16 G3 16 R 16 A3 16 Bb3 16 
+;m 117
+A3 4 R 4 R 2
+;m 118
+R 2
+vel +15 R 8 vel -15 R 16 G2 16 Bb3 8 R 16 Bb3 16 
+;m 119
+vel +15 Bb3 8 vel -15 R 16 G2 16 Bb3 8 R 16 Bb3 16 vel +15 Bb3 8 vel -15 R 16 G3 16 Db5 8 R 16 Db5 16 
+;m 120
+vel +15 Db5 8 vel -15 R 16 C5 16 C5 8 R 16 Bb4 16 
+A4 8 R 4.
+;m 121
+vel +15 Cb5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 Ab4 16 
+G4 4 R 4
+;m 122
+vel +15 R 8 vel -15 R 16 C3 16 Eb4 8 R 16 Eb4 16 
+Ab3 16 R 16 Bb3 16 C4 16 Db4 16 R 16 Db4 16 Eb4 16 
+;m 123
+F4 16 R 16 Bb3 16 C4 16 D4 16 R 16 Eb4 16 F4 16 G4 16 R 16 Bb3 16 C4 16 D4 16 R 16 Eb4 16 F4 16 
+;m 124
+Bb3 16 R 16 G3 16 Ab3 16 Bb3 16 R 16 C4 16 Db4 16 Eb4 16 R 16 Ab3 16 G3 16 F3 16 R 16 Eb3 16 Db3 16 
+;m 125
+C3 16 R 16 C4 16 Bb3 16 Ab3 16 R 16 G3 16 F3 16 Eb3 16 R 16 Ab3 16 G3 16 F3 16 R 16 Eb3 16 Db3 16 
+;m 126
+vel +15 C3 8 vel -15 R 16 A2 16 C4 8 R 16 C4 16 vel +15 C4 8 vel -15 R 16 A2 16 Eb4 8 R 16 Eb4 16 
+;page 10
+;m 127
+vel +15 Eb4 8 vel -15 R 16 D4 16 D4 8 R 16 C4 16  vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 Bb3 16  
+;m 128
+vel +15 Bb3 8 vel -15 R 16 Bb2 16 Ab2 8 R 16 Ab3 16 
+Bb3 16 R 16 Eb3 16 F3 16 G3 16 R 16 G3 16 Ab3 16 
+;m 129
+vel +15 Bb3 8 vel -15 R 16 Eb3 16 Eb3 8 R 16 G3 16 vel +15 G3 8 vel -15 R 16 Eb3 16 D3 8 R 16 Eb3 16 
+;m 130
+vel +15 Eb3 8 vel -15 R 16 Ab3 16 Ab3 8 R 16 G3 16 vel +15 G3 8 vel -15 R 16 G4 16 G4 8 R 16 G4 16 
+;m 131
+G4 8 R 8 R 8
+C3 8 C3 8 R 4
+Bb3 8 Bb3 8 R 4
+;m 132
+
+E3 8 F3 8 R 4
+F3 8 F3 8 R 4
+;m 133
+
+F4 8 F4 8 R 4
+C5 8 C5 8 R 4
+;m 134
+
+C4 8 C4 8 R 4
+F4 8
+;m 135
+F3 8
+Bb2 8 Bb2 8 R 8
+R 8 vel +10 Ab3 8 vel -10 Ab3 8 vel +10 R 8 vel -10  
+;m 136
+R 8 vel +10 D3 8 vel -10 D3 8 vel +10 R 8 vel -10  R 8 vel +10 Eb3 8 vel -10 Eb3 8 vel +10 R 8 vel -10  
+;m 137
+vel +15 F3 8 vel -15 R 16 Eb4 16 Eb4 8 R 16 D4 16  vel +15 D4 8 vel -15 R 16 C4 16 C4 8 R 16 B3 16  
+;m 138
+vel +15 B3 8 vel -15 R 16 Ab3 16 Ab3 8 R 16 G3 16  vel +15 G3 8 vel -15 R 16 F4 16 F4 8 R 16 E4 16  
+;m 139
+vel +15 Eb4 8 vel -15 R 16 Gb3 16 F3 8 R 16 C4 16 vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 Bb3 G3 16 
+;m 140
+vel +15 Bb3 F3 8 vel -15 R 16 Bb3 Eb3 16 Bb3 D3 8 R 16 F3 C3 16 
+F3 Bb2 8 R 8 R 4
+;m 141
+R 8 Bb3 8 Bb3 8 Bb3 8 B3 8 Ab4 8 Ab4 8 G4 8 
+;m 142
+G4 8 B3 8 B3 8 C4 8 A4 8 Bb4 8 Bb4 8 Bb4 8 
+;m 143
+A4 8 R 8 R 2.
+;m 144
+R 2.
+R 12 Eb3 12 F4 12 
+;m 145
+F4 12 D3 12 F4 12 F4 12 D3 12 Ab4 12  Ab4 12 G4 12 F4 12 F4 12 Eb4 12 D4 12  
+;m 146
+Eb4 12 Eb3 12 Eb4 12 Eb4 12 Eb3 12 G4 12  G4 12 F4 12 Eb4 12 Eb4 12 D4 12 E4 12  
+;m 147
+F4 12 C3 12 A3 12 A3 12 C3 12 C4 12  C4 12 Bb3 12 A3 12 A3 12 G3 12 F#3 12  
+;m 148
+G3 12 C#3 12 C#4 12 D4 12 D3 12 Bb3 12  Bb3 12 A3 12 G3 12 Gb3 12 F3 12 Eb3 12  
+;m 149
+D3 12 F#3 12 G3 12 Bb2 12 D3 12 F#3 12  G3 12 D4 12 Eb4 12 D4 12 Eb4 12 F4 12  
+;m 150
+Bb3 8 G4 8 G4 8 G4 8 G4 8 Eb5 8 D5 8 D5 8 
+;m 151
+C5 12 E3 12 F3 12 F3 12 G3 12 C3 12  C3 12 F3 12 Bb2 12 Bb2 12 Eb3 12 Ab2 12  
+;m 152
+D3 8 F3 8 F3 8 F3 8 F3 8 D4 8 C4 8 Eb4 8 
+;m 153
+D4 8 D3 8 C3 8 E3 8 D3 8 F3 8 Eb3 8 G3 8 
+;m 154
+F3 8 A3 8 D3 8 Bb3 8 F3 8 A3 8 G3 8 Eb4 8 
+;m 155
+Ab3 12 G3 12 F3 12 D3 12 G3 12 Eb3 12  Eb3 12 D3 12 F3 12 F3 12 Eb3 12 D3 12  
+;m 156
+D3 4 R 4
+D5 12 Eb5 12 C5 12 C5 12 Db5 12 C5 12  
+;m 157
+vel +15 C5 8 vel -15 R 16 D4 16 Bb3 8 R 16 Bb3 16 
+C4 12 D4 12 Bb3 12 Bb3 12 B3 12 C4 12  
+;m 158
+C4 4 R 4
+B3 12 C4 12 A3 12 G3 12 A3 12 F3 12  
+;m 159
+A3 4  R 4
+D4 12 Eb4 12 C4 12 B3 12 C4 12 A3 12  
+;m 160
+Bb3 4 R 4
+Cb4 12 Db4 12 Bb3 12 Ab3 12 Bb3 12 Gb3 12  
+;page 12
+;m 161
+END_LAZY
+KEY_SIGNATURE Gb
+LAZY
+vel 43
+R 4 R 94/1536 Bb3 16 vel +4 B3 98/1536 vel -4 Ab4 8/128 
+;m 162
+Gb4 8 R 8
+R 94/1536 G3 16 vel +4 Ab3 98/1536 vel -4 F4 8/128 
+;m 163
+Gb4 8 Gb4 16 Bb4 16 vel -5 Gb4 16 Bb4 16 vel +6 Gb4 16 vel -6 Bb4 16  vel +5 
+;m 164
+vel -5 Gb4 Bb4 16 Db5 16 vel +6 Gb4 Bb4 16 vel -6 Db5 16  vel +5 vel -5 Gb4 Bb4 16 Db5 16 vel +6 Gb4 Bb4 16 vel -6 Db5 16  vel +5  
+;m 165
+vel -5 F4 Ab4 16 Cb5 16 vel +6 F4 Ab4 16 vel -6 Cb5 16  vel +5 
+F4 Ab4 16 Cb5 16 Bb4 16 Gb4 16 
+;m 166
+vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5 vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5  
+;m 167
+Gb4 8 R 8 R 4
+;m 168
+R 94/1536 R 16 vel +4 Bb4 98/1536 vel -4 Ab4 8/128  Ab4 94/1536 Gb4 16 vel +4 Db5 98/1536 vel -4 Cb5 8/128 
+;m 169
+Bb4 8 R 8 Gb3 4
+;m 170
+G3 4 Fb4 4
+;m 171
+Eb4 4 G3 4
+;m 172
+Ab3 4 F4 4
+;m 173
+Gb4 16 vel +6 Bb4 16 vel -6 Ab4 16 Gb4 16 
+Gb4 16 F4 16 vel +6 F4 16 vel -6 Gb4 16 
+;m 174
+vel +6 Bb4 16 vel -6 Ab4 16 Gb4 16 F4 16 
+F4 16 Eb4 16 vel +6 F4 16 vel -6 D4 16 
+;m 175
+F4 16 Eb4 16 vel +6 Gb4 16 vel -6 F4 16 
+vel -5 F4 16 Ab4 16 vel +6 F4 16 vel -6 Ab4 16  vel +5 
+;m 176
+Ab4 16 Gb4 16 vel +6 F4 16 vel -6 Gb4 16  Gb4 16 F4 16 vel +6 Gb4 16 vel -6 Eb4 16 
+;m 177
+Db4 16 vel +6 Gb4 16 vel -6 F4 16 G3 16 
+Ab3 8 R 8
+;m 178
+R 4 R 16 vel +6 F4 16 vel -6 Eb4 16 C4 16 
+;m 179
+vel -5 Db4 16 F4 16 vel +6 Db4 16 vel -6 F4 16  vel +5 vel -5 Db4 16 F4 16 vel +6 Db4 16 vel -6 F4 16  vel +5  
+;m 180
+vel -5 Db4 16 F4 16 vel +6 Db4 16 vel -6 F4 16  vel +5 vel -5 Db4 16 F4 16 vel +6 Db4 16 vel -6 F4 16  vel +5  
+;m 181
+vel -5 Eb4 16 Gb4 16 vel +6 Eb4 16 vel -6 Gb4 16  vel +5 vel -5 Eb4 16 Gb4 16 vel +6 Eb4 16 vel -6 Gb4 16  vel +5  
+;m 182
+Eb4 16 Gb4 16 R 8 R 4
+;m 183
+F4 8 R 8 R 4
+;m 184
+R 2
+;m 185
+R 16 R 16 vel +6 Db4 16 vel -6 Cb4 16  Cb4 16 Bb3 16 vel +6 Db4 16 vel -6 Cb4 16 
+;m 186
+Cb4 16 Bb3 16 vel +6 Eb4 16 vel -6 Db4 16  Db4 16 Cb4 16 vel +6 Db4 16 vel -6 Bb3 16 
+;m 187
+Db4 16 Cb4 16 vel +6 Eb4 16 vel -6 Db4 16  Db4 16 Cb4 16 vel +6 Db4 16 vel -6 Bb3 16 
+;m 188
+Bb3 16 Ab3 16 vel +6 Gb4 16 vel -6 F4 16  Eb4 16 Db4 16 vel +6 Eb4 16 vel -6 Cb4 16 
+;m 189
+vel +4 Bb3 98/1536 vel -4 Ab3 8/128 Bb3 16 C4 94/1536 
+Ab3 8 F3 8
+;m 190
+Ab3 8 R 8 D3 8 R 8
+;m 191
+Eb3 8 R 8 Ab3 8 R 8
+;m 192
+Gb3 8 R 8 Eb4 8 R 8
+;m 193
+Eb3 16 Db3 16 Eb3 16 F3 16 Gb3 16 F3 16 Gb3 16 Ab3 16 
+;m 194
+Gb3 16 F3 16 Gb3 16 Ab3 16 Bb3 16 Ab3 16 Bb3 16 C4 16 
+;m 195
+vel +6 Db4 16 vel -6 Bb3 16 Ab3 16 Gb3 16 
+Gb3 16 F3 16 vel +6 F4 16 vel -6 Eb4 16 
+;m 196
+Ab3 8 R 8 R 4
+;page 14
+;m 197
+R 4
+Ab3 94/1536 Gb3 16 vel +4 Ab3 98/1536 vel -4 F3 8/128 
+;m 198
+vel +4 Ab3 98/1536 vel -4 Gb3 8/128 F3 16 Eb3 94/1536 
+G3 8 R 8
+;m 199
+G3 E4 8 R 8
+Bb3 16 A3 16 vel +6 Bb3 16 vel -6 G3 16 
+;m 200
+vel +6 Bb3 16 vel -6 A3 16 G3 16 F3 16  Bb3 16 A3 16 vel +6 Bb3 16 vel -6 G3 16 
+;m 201
+G3 16 vel +6 C4 16 vel -6 Bb3 16 A3 16 
+E3 4
+;m 202
+F3 4 Eb4 8 Eb3 8
+;m 203
+Eb3 16 F3 16 vel +6 Gb3 16 vel -6 F3 16  Gb3 16 F3 16 vel +6 Gb3 16 vel -6 Eb3 16 
+;m 204
+Eb3 16 D3 16 vel +6 C4 16 vel -6 Bb3 16  Bb3 16 Ab3 16 vel +6 G3 16 vel -6 F3 16 
+;m 205
+vel +6 F3 16 vel -6 Eb3 16 D3 16 Eb3 16 
+Db3 4
+;m 206
+Eb3 4 Db4 4
+;m 207
+C4 4
+Gb3 16 F3 16 vel +6 Gb3 16 vel -6 Eb3 16 
+;m 208
+Gb3 16 F3 16 vel +6 Eb3 16 vel -6 Db3 16  Cb4 16 Bb3 16 vel +6 Cb4 16 vel -6 Ab3 16 
+;m 209
+Cb4 16 Bb3 16 vel +6 Ab3 16 vel -6 Gb3 16  F3 16 Gb3 16 vel +6 F3 16 vel -6 Ab3 16 
+;m 210
+vel +6 F3 16 vel -6 Gb3 16 Ab3 16 Bb3 16 
+Cb4 16 Bb3 16 Ab3 16 vel +6 F4 16 vel -6 
+;m 211
+R 16 R 16 vel +6 Bb4 16 vel -6 Ab4 16  Ab4 16 Gb4 16 vel +6 Db5 16 vel -6 Cb5 16 
+;m 212
+Cb5 16 Bb4 16 vel +6 Eb5 16 vel -6 Db5 16  Db5 16 Cb5 16 vel +6 Db5 16 vel -6 Bb4 16 
+;m 213
+Db5 16 Cb5 16 vel +6 Eb5 16 vel -6 Db5 16  Db5 16 Cb5 16 vel +6 Db5 16 vel -6 Bb4 16 
+;m 214
+vel +6 Bb4 16 vel -6 Ab4 16 Gb4 16 F4 16  Eb5 16 Db5 16 vel +6 Eb5 16 vel -6 Cb5 16 
+;m 215
+vel +6 Cb5 16 vel -6 Bb4 16 Ab4 16 Gb4 16  Bb4 16 Ab4 16 vel +6 Bb4 16 vel -6 Ab4 16 
+;m 216
+vel +6 Ab4 16 vel -6 Gb4 16 F4 16 Eb4 16  Gb4 16 Fb4 16 vel +6 Gb4 16 vel -6 Fb4 16 
+;m 217
+vel +6 Fb4 16 vel -6 Eb4 16 Db4 16 Cb4 16  Eb4 16 Db4 16 vel +6 Eb4 16 vel -6 Db4 16 
+;m 218
+Fb4 16 Eb4 16 vel +6 F4 16 vel -6 Eb4 16  F4 16 Eb4 16 vel +6 Gb4 16 vel -6 Eb4 16 
+;m 219
+vel +6 Eb4 16 vel -6 Db4 16 Ab3 16 Gb3 16  Gb3 16 F3 16 vel +6 F4 16 vel -6 Eb4 16 
+;m 220
+Eb4 16 Db4 16 vel +6 F4 16 vel -6 Eb4 16 
+Db4 8 Bb3 9/128 Ab3 7/128
+;m 221
+Ab3 16 Gb3 16 vel +6 Db4 16 vel -6 Cb4 16  Cb4 16 Bb3 16 vel +6 Bb4 16 vel -6 Ab4 16 
+;m 222
+Ab4 16 Gb4 16 vel +6 Db5 16 vel -6 Cb5 16 
+Cb5 16 vel +3 Bb4 16 vel +3 Db4 16 vel +3 Db5 16
+;m 223
+vel +3 Db4 16 vel +3 Db5 16
+vel +3 Db4 16 vel +3 Db5 16
+vel +3 Db4 16 vel +3 Db5 16
+vel +3 Db4 16 vel +3 Db5 16
+;m 224
+vel +3 Db4 16 vel +3 Db5 16
+vel +3 Db4 16 vel +3 Db5 16
+vel +3 Db4 16 vel +3 Db5 16
+vel 90
+Db3 16 Cb3 16
+;m 225
+vel 90
+Cb3 16 Bb2 16 Bb3 16 Ab3 16 Ab3 16 Gb3 16 Db4 16 Cb4 16 
+;m 226
+Cb4 16 Bb3 16 Eb4 16 Db4 16 Db4 16 Cb4 16 Db4 16 Bb3 16 
+;m 227
+Db4 16 Cb4 16 Eb4 16 Db4 16 Db4 16 Cb4 16 Db4 16 Bb3 16 
+;m 228
+Bb3 16 Ab3 16 Gb3 16 F3 16 Eb3 16 Db3 16 Eb3 16 Cb3 16 
+;m 229
+vel 75
+vel -5 D3 16 F3 16 vel +6 D3 16 vel -6 F3 16  vel +5 
+vel +6 F3 16 vel -6 Eb3 16 D3 16 Eb3 16 
+;m 230
+vel 62
+C3 16 Eb3 16 A2 C3 16 F3 16 
+vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5 
+;m 231
+vel 52
+vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5 vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5  
+;m 232
+vel -5
+vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5 vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5  
+;m 233
+vel 43
+vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5 vel -5 Bb2 16 C3 16 vel +6 Bb2 16 vel -6 C3 16  vel +5  
+;m 234
+vel -5 A2 16 Eb3 16 vel +6 A2 16 vel -6 Eb3 16  vel +5 vel -5 A2 16 Eb3 16 vel +6 A2 16 vel -6 Eb3 16  vel +5  
+;page 16
+;m 235
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 110
+D3 4 R 8 R 4.
+;m 236
+vel +10 R 4 vel -10 B3 8 C4 4 A4 8  
+;m 237
+Bb4 8 R 4 R 4.
+;m 238
+R 2.
+;m 239
+R 4.
+vel 52
+F3 4 R 8
+;m 240
+F3 4 R 8
+F3 4 R 8
+;m 241
+vel +10 F3 4 vel -10 Bb3 8 B3 4 Ab4 8 
+;m 242
+vel +10 G4 8 vel -10 R 8 B3 8 C4 4 A4 8 
+;m 243
+vel +10 Bb4 8 vel -10 R 8 E3 8 F3 4 D4 8 
+;m 244
+vel +10 C4 8 vel -10 R 8 B2 8 C3 4 Bb3 8 
+;m 245
+A3 8 R 4 R 4.
+;m 246
+vel +10 D3 4 vel -10 R 8 D3 C4 4 R  8 
+;m 247
+vel +10 G3 Bb3 4 vel -10 R 8 R 4 R  8 
+;m 248
+vel +10 R 4 vel -10 Bb3 8 B3 4 G4 8  
+;m 249
+vel +10 R 4 vel -10 B3 8 C4 4 Eb4 8  
+;m 250
+vel +10 D4 4 vel -10 R 8 C4 4 R  8 
+;m 251
+Bb3 4 R 2
+;m 252
+R 2.
+;m 253
+vel +10 R 4 vel -10 B4 8 C5 4 C4 G4 8  
+;m 254
+vel +10 D4 F4 4 vel -10 R 8 C5 4 R  8 
+;m 255
+Bb4 4 R 8 D4 4.
+;m 256
+Eb4 4 R 8
+Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/24 D4 1/24 Eb4 1/24 
+;m 257
+vel +10 D4 4 vel -10 R 8 F4 4 R  8 
+;m 258
+vel +10 F4 4 vel -10 R 8 F4 4 R  8 
+;m 259
+vel +10 R 4 vel -10 E3 8 F3 4 D4 8  
+;m 260
+vel +10 F3 C4 4 vel -10 B2 8 C3 4 Bb3 8 
+;m 261
+A3 4 R 2
+;m 262
+vel +10 D4 4 vel -10 R 8 F#4 4 R  8 
+;m 263
+vel +10 G4 4 vel -10 A4 8 Bb4 4 G4 8 
+;m 264
+vel +10 G3 4 vel -10 R 8 G3 4 R  8 
+;m 265
+vel +10 Eb4 4 vel -10 R 8 G3 4 R  8 
+;m 266
+vel +10 D4 4 vel -10 R 8 C4 Eb4 A4 4 R  8 
+;m 267
+vel +10 Bb4 4 vel -10 C5 8 D5 4 Bb4 8 
+;m 268
+vel +10 Bb4 4 vel -10 Bb3 8 B3 4 G4 8 
+;m 269
+vel +10 G3 G4 4 vel -10 R 8 G3 4 R  8 
+;m 270
+vel +10 Bb3 4 vel -10 R 8 C4 4 R  8 
+;m 271
+vel +10 Bb3 4 vel -10 R 8 G3 4 R  8 
+;m 272
+vel 62
+vel +10 B3 4 vel -10 R 8 C4 4 R  8 
+;m 273
+vel 75
+vel +10 G3 4 vel -10 R 8 Ab3 4 R  8 
+;m 274
+vel 90
+vel +10 Db3 4 vel -10 R 8 C3 4 R  8 
+;m 275
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+vel 110
+R 2.
+;m 276
+R 2.
+;m 277
+R 2.
+;m 278
+R 2.
+;m 279
+R 2.
+;m 280
+R 2.
+;m 281
+R 2.
+;m 282
+R 4. Eb4 15/8
+;m 283
+;m 284
+;m 285
+E4 2.
+;m 286
+Db5 2.
+;page 18
+;m 287
+C5 2.
+;m 288
+E4 2.
+;m 289
+vel +10 F4 4 vel -10 R 8 D5 4 R  8 
+;m 290
+Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/16 Eb5 1/16 Db5 1/24 C5 1/24 Db5 1/24 
+;m 291
+C5 4 R 8
+B2 4.
+;m 292
+C3 4. Ab3 4 R 8
+;m 293
+R 4. D3 4.
+;m 294
+Eb3 4. C4 4 R 8
+;m 295
+R 4.
+Bb3 4.
+;m 296
+C4 4. F4 4 R 8
+;m 297
+R 4. Bb3 4.
+;m 298
+C4 4. Ab4 4 R 8
+;m 299
+R 2.
+;m 300
+vel +10 R 4 vel -10 C4 8 Bb3 4 Db3 8  
+;m 301
+vel +10 R 4 vel -10 Ab3 8 G3 4 Bb2 8  
+;m 302
+vel +10 R 4 vel -10 F4 8 E4 4 G3 8  
+;m 303
+vel +10 R 4 vel -10 G4 8 F4 4 Ab3 8  
+;m 304
+vel +10 R 4 vel -10 C5 8 Bb4 4 Db4 8  
+;m 305
+vel +10 R 4 vel -10 Bb3 8 Ab3 4 C3 8  
+;m 306
+vel +10 R 4 vel -10 C4 8 Bb3 4 Db3 8  
+;m 307
+vel +10 R 4 vel -10 Bb3 8 Ab3 4 C3 8  
+;m 308
+vel +10 R 4 vel -10 Eb4 8 Db4 4 Gb3 8  
+;m 309
+vel +10 R 4 vel -10 Ab3 8 G3 4 C3 8  
+;m 310
+vel +10 R 4 vel -10 G4 8 F4 4 B3 8  
+;m 311
+R 2.
+;m 312
+vel +10 R 4 vel -10 C4 8 Bb3 4 Db3 8  
+;m 313
+R 2.
+;m 314
+vel +10 R 4 vel -10 Eb4 8 Db4 4 F3 8  
+;m 315
+R 4. Bb4 4.
+;m 316
+A4 4. C4 4.
+;m 317
+R 4. Gb3 4.
+;m 318
+Eb3 4. C3 4 Bb3 13/8
+;m 319
+
+;m 320
+
+;m 321
+Cb4 2.
+;m 322
+Ab4 2.
+;m 323
+G4 4 R 8
+F3 4.
+;m 324
+G3 4. Db4 4 R 8
+;m 325
+R 4. Db4 4.
+;m 326
+A4 4. Bb4 4 R 8
+;m 327
+vel +10 R 4 vel -10 Db4 8 C4 4 C3 8  
+;m 328
+vel +10 R 4 vel -10 Eb4 8 Db4 4 Eb3 8  
+;m 329
+vel +10 C4 4 vel -10 Bb4 8 Ab4 4 Db4 8 
+;m 330
+Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/24 Db4 1/24 Eb4 1/24 
+;m 331
+Db4 4 R 8 R 4.
+;m 332
+vel +10 R 4 vel -10 Eb5 8 Db5 4 Db4 8  
+;m 333
+vel +10 R 4 vel -10 G#4 8 F#4 4 B3 8  
+;m 334
+C#4 1/16 D#4 1/16 C#4 1/16 D#4 1/16 C#4 1/16 D#4 1/16 C#4 1/16 D#4 1/16 C#4 1/16 D#4 1/16 C#4 1/24 B3 1/24 C#4 1/24 
+;m 335
+vel +10 B3 4 vel -10 C#5 8 B4 4 E4 8 
+;m 336
+vel +10 D#4 4 vel -10 C#4 8 B3 4 E3 8 
+;m 337
+vel +10 B3 4 vel -10 F#4 8 E4 4 A3 8 
+;m 338
+B3 1/16 C#4 1/16 B3 1/16 C#4 1/16 B3 1/16 C#4 1/16 B3 1/16 C#4 1/16 B3 1/16 C#4 1/16 B3 1/24 A3 1/24 B3 1/24 
+;m 339
+vel +10 A3 4 vel -10 B4 8 A4 4 D4 8 
+;m 340
+R 4. A4 5/8
+;m 341
+
+R 8
+C4 4 R 8
+;m 342
+C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/16 D4 1/16 C4 1/24 B3 1/24 C4 1/24 
+;m 343
+B3 4 R 8 R 4.
+;m 344
+R 4. G4 5/8
+;m 345
+
+r 8 Bb3 4 R 8
+;m 346
+Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/24 A3 1/24 Bb3 1/24 
+;m 347
+A3 4 R 2
+;m 348
+R 4.
+F4 5/8
+;m 349
+
+R 8 Ab3 4 R 8
+;m 350
+Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/24 G3 1/24 Ab3 1/24 
+;m 351
+F3 4 R 2
+;m 352
+R 4.
+C3 15/8
+;m 353
+
+;m 354
+
+;page 20
+;m 355
+vel +10 Db3 4 vel -10 R 8 B3 4 R  8 
+;m 356
+C4 1/16 Db4 1/16 C4 1/16 Db4 1/16 C4 1/16 Db4 1/16 C4 1/16 Db4 1/16 C4 1/16 Db4 1/16 C4 1/24 B3 1/24 C4 1/24 
+;m 357
+E3 8 F3 8 C4 8 G#3 8 A3 8 C4 8  
+;m 358
+B3 8 C4 8 A3 8 Bb3 8 A3 8 C4 8  
+;m 359
+Bb3 8 Bb4 8 C5 8 Db5 8 C5 8 Bb4 8  
+;m 360
+A4 8 G4 8 F4 8 
+Bb3 15/8
+;m 361
+
+;m 362
+
+;m 363
+vel +10 Cb4 4 vel -10 R 8 A4 4 R  8 
+;m 364
+Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/24 A4 1/24 Bb4 1/24 
+;m 365
+R 4. G3 11/8
+;m 366
+;m 367
+
+ R 8
+A4 4 R 8
+;m 368
+Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/24 A4 1/24 Bb4 1/24 
+;m 369
+vel +10 Db3 4 vel -10 R 8 A3 4 R  8 
+;m 370
+Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/24 A3 1/24 Bb3 1/24 
+;m 371
+vel +10 Db3 4 vel -10 R 8 A3 4 R  8 
+;m 372
+Bb3 1/16 C4 1/16 Bb3 1/16 C4 1/16 Bb3 1/24 C4 1/24 Bb3 1/24 
+Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 
+;m 373
+
+;m 374
+
+;m 375
+
+;m 376
+
+;m 377
+
+;m 378
+
+;m 379
+Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/24 Db4 1/24 Cb4 1/24 
+Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/16 Cb4 1/16 Bb3 1/24 Cb4 1/24 Bb3 1/24 
+;m 380
+
+;m 381
+A3 4 R 2
+;m 382
+R 4. Gb2 15/8
+;m 383
+
+;m 384
+
+;m 385
+A2 11/16
+Gb3 16
+;m 386
+F3 2.
+;m 387
+Bb2 1.
+;m 388
+
+;m 389
+C3 2.
+;m 390
+A3 2.
+;m 391
+D3 1.
+;m 392
+
+;m 393
+Eb3 11/16
+Db4 16
+;m 394
+Cb4 2.
+;m 395
+F3 1.
+;m 396
+
+;m 397
+Gb3 2.
+;m 398
+Eb4 2.
+;m 399
+A3 1.
+;m 400
+
+;m 401
+Bb2 11/16
+Ab3 16
+;m 402
+Gb3 2.
+;m 403
+C3 9/8
+;m 404
+
+F3 2.
+;m 405
+
+F4 4.
+;m 406
+Bb3 F4 4 R 8
+Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/24 Gb3 1/24 Ab3 1/24 
+;m 407
+
+;m 408
+Bb3 4 R 8
+Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/16 Ab4 1/16 Gb4 1/24 F4 1/24 Gb4 1/24 
+;m 409
+
+;m 410
+Ab4 4 R 8
+Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/16 Db4 1/16 Cb4 1/24 Bb3 1/24 Cb4 1/24 
+;m 411
+
+;m 412
+Db4 4 R 8
+Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/16 C5 1/16 Bb4 1/24 Ab4 1/24 Bb4 1/24 
+;m 413
+;m 414
+Cb5 4 R 8 Eb3 Cb4 4 R 8
+;m 415
+Eb3 Bb3 4 R 8 D3 Bb3 4 R 8
+;page 22
+;m 416
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+Eb3 Bb3 4 Eb3 8 G4 4 G4 8
+;m 417
+vel 52
+G4 4 R 2
+;m 418
+vel 110
+R 2.
+;m 419
+R 2.
+;m 420
+R 2.
+;m 421
+R 2.
+;m 422
+vel 110
+R 4. A3 8 Bb3 8 Ab4 13/8
+;m 423
+
+;m 424
+
+;m 425
+G4 2.
+;m 426
+A3 8 Bb3 5/8
+;m 427
+R 2.
+;m 428
+vel +10 R 4 vel -10 Eb3 8 G4 4 G4 8  
+;m 429
+vel +10 G4 4 vel -10 F4 8 F4 4 Eb4 8 
+;m 430
+vel +10 D4 4 vel -10 Db4 8 C4 4 Bb3 8 
+;m 431
+vel +10 F4 4 vel -10 Eb4 8 Eb4 4 D4 8 
+;m 432
+vel +10 D4 4 vel -10 F3 8 Eb3 4 D3 8 
+;m 433
+vel +10 Eb3 4 vel -10 F4 8 F4 4 Eb4 8 
+;m 434
+vel +10 Bb3 4 vel -10 Ab3 8 G3 4 G4 8 
+;m 435
+vel +10 Eb4 4 vel -10 Db4 8 Db4 4 C4 8 
+;m 436
+Eb4 2.
+;m 437
+vel +10 Db4 4 vel -10 G3 8 Ab3 4 Bb3 8 
+;m 438
+C4 4 R 2
+;m 439
+vel +10 Ab3 F4 4 vel -10 G4 8 G4 4 Ab4 8 
+;m 440
+vel +10 E4 4 vel -10 F4 8 F4 4 G4 8 
+;m 441
+vel +10 G4 4 vel -10 Ab4 8 Ab4 4 Bb4 8 
+;m 442
+F4 4 R 8 G3 8 Ab3 8 Ab4 7/8
+;m 443
+
+;m 444
+Gb4 4 R 8 G3 8 Ab3 8 Gb4 7/8
+;m 445
+
+;m 446
+E4 8 F4 8 Db5 10/8
+;m 447
+
+;m 448
+C5 4 R 2
+;m 449
+F4 2.
+;m 450
+vel +10 F4 4 vel -10 Bb4 8 Bb4 4 Bb3 8 
+;m 451
+vel +10 C4 4 vel -10 Bb3 8 Bb3 4 Ab3 8 
+;m 452
+vel +10 F3 4 vel -10 F3 8 F3 4 F3 8 
+;m 453
+vel +10 Eb3 4 vel -10 R 8 Eb4 4 R  8 
+;m 454
+vel +10 Eb4 4 vel -10 R 8 Eb3 Eb4 4 R  8 
+;m 455
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+R 2.
+;m 456
+R 2.
+;m 457
+Eb4 1.
+;m 458
+
+;m 459
+Db4 2.
+;m 460
+Fb3 4 R 2
+;m 461
+C4 2.
+;m 462
+vel +10 C3 4 vel -10 C4 8 Eb5 4 Eb5 8 
+;m 463
+vel +10 Eb5 4 vel -10 A3 8 Gb4 4 Gb4 8 
+;m 464
+vel +10 Gb4 4 vel -10 Bb4 8 Bb4 4 A4 8 
+;m 465
+F4 1.
+;m 466
+
+;m 467
+D3 1.
+;m 468
+
+;m 469
+Ab4 2.
+;m 470
+vel +10 Cb4 4 vel -10 Gb4 8 Gb4 4 F4 8 
+;m 471
+vel +10 Bb3 4 vel -10 Ab3 8 F3 4 G3 8 
+;m 472
+vel +10 G3 4 vel -10 Ab3 8 A3 4 Bb3 8 
+;m 473
+G3 1.
+;m 474
+
+;page 24
+;m 475
+A3 2.
+;m 476
+Gb4 4 R 2
+;m 477
+Bb3 4. G4 8 R 4
+;m 478
+vel +10 C3 Eb3 4 vel -10 Ab3 8 C3 Eb3 4 C4 8 
+;m 479
+vel +10 F3 Ab3 4 vel -10 Fb3 8 F3 4 D4 8 
+;m 480
+vel +10 R 4 vel -10 E4 8 F4 4 D5 8  
+;m 481
+vel +10 R 4 vel -10 D4 8 Eb4 4 C5 8  
+;m 482
+vel +10 R 4 vel -10 D3 8 Eb3 4 C4 8  
+;m 483
+vel +10 R 4 vel -10 F3 8 A3 4 F4 8  
+;m 484
+vel +10 R 4 vel -10 F4 8 A4 4 F5 8  
+;m 485
+vel +10 R 4 vel -10 F3 8 Gb3 4 Eb4 8  
+;m 486
+vel +10 R 4 vel -10 F4 8 Gb4 4 Eb5 8  
+;m 487
+vel +10 R 4 vel -10 F3 8 G3 4 Db4 8  
+;m 488
+vel +10 R 4 vel -10 Eb4 8 E4 4 Bb4 8  
+;m 489
+vel +10 R 4 vel -10 D3 8 Eb3 4 C4 8  
+;m 490
+vel +10 R 4 vel -10 Bb3 8 Cb4 4 Ab4 8  
+;m 491
+vel +10 R 4 vel -10 G3 8 Ab3 4 F4 8  
+;m 492
+vel +10 R 4 vel -10 D4 8 Bb4 4 B4 8  
+;m 493
+vel +10 R 4 vel -10 C4 8 Db4 4 Bb4 8  
+;m 494
+vel +10 R 4 vel -10 G3 8 Ab3 4 Eb4 8  
+;m 495
+C4 Eb4 8 R 8 F4 4
+;m 496
+Eb4 4 G3 4
+;m 497
+Ab3 4 Bb3 4
+;m 498
+Ab3 4 C3 4
+;m 499
+Db3 4 C4 4
+;m 500
+Bb3 4 D3 4
+;m 501
+Eb3 4 Db4 4
+;m 502
+D4 4 G3 4
+;m 503
+vel 75
+Ab3 16 Ab2 16 C4 16 C4 16 C4 16 F4 16 D3 16 D3 16 
+;m 504
+G3 16 Bb2 16 Db4 16 Db4 16 Db4 16 Bb3 16 Eb3 16 Eb3 16 
+;m 505
+Eb3 16 C3 16 Eb4 16 Eb4 16 Eb4 16 G4 16 Eb3 16 Eb3 16 
+;m 506
+Eb3 16 C3 16 Eb4 16 Eb4 16 Eb4 16 F4 16 Ab3 16 Ab3 16 
+;m 507
+Ab3 16 F3 16 F4 16 F4 16 F4 16 A4 16 F3 16 F3 16 
+;m 508
+F3 16 vel +4 D3 98/1536 vel -4 F4 16 F4 94/1536  F3 16 vel +4 Bb3 98/1536 vel -4 Bb2 16 Bb2 94/1536 
+;m 509
+Bb2 16 Eb3 16 G3 16 G3 16 G3 16 Db4 16 G2 16 G2 16 
+;m 510
+G2 16 Ab2 16 C4 16 C4 16 C4 16 Ab3 16 F2 16 F2 16 
+;m 511
+F2 16 Ab2 16 Cb4 16 Cb4 16 Cb4 16 Ab3 16 Ab2 16 Ab2 16 
+;m 512
+Ab2 16 Eb3 16 Ab3 C4 16 Ab3 C4 16 
+Ab3 C4 8 R 8
+;m 513
+R 4 
+vel 90
+Eb3 1
+;m 514
+
+;m 515
+
+R 4
+;m 516
+R 2
+;m 517
+R 4
+vel 90
+Eb3 2
+;m 518
+
+vel 75 Db3 4
+;m 519
+C3 4 R 4
+;m 520
+R 2
+;m 521
+vel 52
+R 4 C3 1
+;m 522
+
+;m 523
+
+R 4
+;m 524
+R 2
+;page 26
+;m 525
+R 2
+;m 526
+R 4 E3 2
+;m 527
+
+F3 8 R 8
+;m 528
+R 2
+;m 529
+R 2
+vel 43
+;m 530
+R 4
+F3 2
+;m 531
+
+Gb3 8 R 8
+;m 532
+R 2
+;m 533
+R 2
+;m 534
+R 4
+Gb3 4
+;m 535
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 90
+A3 4 
+vel 52
+Bb3 8 F3 4 R 8
+;m 536
+vel +10 F3 4 vel -10 R 8 F3 4 R  8 
+;m 537
+vel +10 F3 4 vel -10 Bb3 8 B3 4 Ab4 8 
+;m 538
+vel +10 G4 8 vel -10 R 8 B3 8 C4 4 A4 8 
+;m 539
+vel +10 Bb4 8 vel -10 R 8 E3 8 F3 4 D4 8 
+;m 540
+vel +10 C4 8 vel -10 R 8 B2 8 C3 4 Bb3 8 
+;m 541
+A3 8 R 4 R 4.
+;m 542
+vel +10 D3 4 vel -10 R 8 D3 C4 4 R  8 
+;m 543
+G3 Bb3 4 R 8 R 4.
+;m 544
+vel +10 R 4 vel -10 Bb3 8 B3 4 G4 8  
+;m 545
+vel +10 R 4 vel -10 B3 8 C4 4 Eb4 8  
+;m 546
+vel +10 D4 4 vel -10 R 8 C4 4 R  8 
+;m 547
+Bb3 4 R 8 R 4.)
+;m 548
+R 2.
+;m 549
+vel +10 R 4 vel -10 B4 8 C5 4 C4 G4 8  
+;m 550
+vel +10 D4 F4 4 vel -10 R 8 C5 4 R  8 
+;m 551
+Bb4, 4 R 8 D4 4.
+;m 552
+Eb4 4 R 8
+Eb4 1/16 F4 1/16 Eb4 1/16 F4 1/16 Eb4 1/24 D4 1/24 Eb4 1/24 
+;m 553
+vel +10 D4 4 vel -10 R 8 F4 4 R  8 
+;m 554
+vel +10 F4 4 vel -10 R 8 F4 4 R  8 
+;m 555
+vel +10 F4 4 vel -10 E3 8 F3 4 D4 8 
+;m 556
+vel +10 F3 C4 4 vel -10 B2 8 C3 4 Bb3 8 
+;m 557
+A3 4 R 2
+;m 558
+vel +10 D4 4 vel -10 R 8 F#4 4 R  8 
+;m 559
+vel +10 G4 4 vel -10 A4 8 Bb4 4 G4 8 
+;m 560
+vel +10 G3 4 vel -10 R 8 G3 4 R  8 
+;m 561
+vel +10 Eb4 4 vel -10 R 8 G3 4 R  8 
+;m 562
+vel +10 D4 4 vel -10 R 8 C4 Eb4 A4 4 R  8 
+;m 563
+vel +10 Bb4 4 vel -10 C5 8 D5 4 Bb4 8 
+;m 564
+vel +10 Bb4 4 vel -10 Bb3 8 B3 4 G4 8 
+;m 565
+vel +10 G3 G4 4 vel -10 R 8 G3 4 R  8 
+;m 566
+Bb3 4 R 8 C4 4 R 16 Ab4 16
+;m 567
+F4 5/8 Ab4 8
+;m 568
+vel 62
+F#4 5/8 G4 8
+;m 569
+F4 5/8 Ab4 8
+;m 570
+vel 75
+F#4 5/8 G4 8
+;m 571
+vel 90
+E4 5/8 F4 8
+;m 572
+G4 4. Bb4 4 C5 8
+;m 573
+vel 75
+vel +10 C5 4 vel -10 C#5 8 D5 4 D5 8 
+;m 574
+vel 62
+vel +10 D5 4 vel -10 Eb5 8 Eb5 4 C5 12 Ab4 24 
+;m 575
+vel 52
+F4 5/8 Ab4 8 
+;m 576
+F#4 5/8 G4 8 
+;m 577
+F4 5/8 Ab4 8 
+;m 578
+F#4 5/8 G4 8 
+;m 579
+Bb4 4
+A4 8 Bb4 5/8 
+;m 580
+A4 8 G4 5/8 
+;m 581
+vel 75
+G4 8 F4 5/8 
+;m 582
+vel 62
+F4 8 E4 4.
+;m 583
+vel 52
+F4 4 R 8 R 4 Eb3 8
+;m 584
+D3 5/8 F3 8 
+;m 585
+Eb3 5/8 Gb3 8 
+;m 586
+F3 4. G3 4 A3 8
+;page 28
+;m 587
+Bb3 4 R 8 R 4 G3 8
+;m 588
+Ab3 4 R 8 R 4 F3 8
+;m 589
+G3 4 R 8 R 4 E3 8
+;m 590
+F3 4 R 8 R 4 Eb3 8
+;m 591
+D3 4 Ab3 8 G3 5/8 
+;m 592
+G3 8 F3 5/8 
+;m 593
+F3 8 Eb3 5/8 
+;m 594
+
+Eb3 8 D3 4.
+;m 595
+Eb3 4 R 2
+;m 596
+R 2.
+;m 597
+R 2.
+;m 598
+R 4. 
+vel 43
+Bb3 4 R 8
+;m 599
+R 4. Eb3 4 R 8
+;m 600
+E3 8 R 4 Db4 8 R 4
+;m 601
+C4 8 R 4 A3 C4 8 R 4
+;m 602
+R 2.
+;m 603
+R 4.
+G3 8 R 4
+;m 604
+vel +10 Ab3 4 vel -10 R 8 F4 4 R  8 
+;m 605
+vel +10 Eb4 4 vel -10 R 8 R 4 R  8 
+;m 606
+vel +10 R 4 vel -10 R 8 C5 4 R  8 
+;m 607
+vel +10 F4 4 vel -10 R 8 A4 4 R  8 
+;m 608
+vel +10 D4 4 vel -10 R 8 Bb4 4 R  8 
+;m 609
+vel +10 Eb4 4 vel -10 R 8 G4 4 R  8 
+;m 610
+vel +10 C4 4 vel -10 R 8 F4 4 R  8 
+;m 611
+G3 Bb3 2.
+;m 612
+G3 D4 2.
+;m 613
+F3 Ab3 D4 2.
+;m 614
+D3 B3 2.
+;m 615
+Eb3 2.
+;m 616
+Ab3 2.
+;m 617
+A3 2.
+;m 618
+C4 2.
+;m 619
+E4 1.
+;m 620
+
+;m 621
+E4 9/4
+;m 622
+
+;m 623
+
+;m 624
+E4 1.
+;m 625
+
+;m 626
+E4 1.
+;m 627
+
+;m 628
+vel 52
+E4 2.
+;m 629
+vel 62
+C4 2.
+;m 630
+vel 75
+F3 1
+;m 631
+R 8 F3 4 R 8
+;m 632
+vel 90
+R 4. D4 F4 4 R 8
+;m 633
+R 4. C4 F4 4 R 8
+;m 634
+R 4. F3 D4 F4 4 R 8
+;m 635
+R 4. Eb5 4 R 8
+;m 636
+vel +10 D5 4 vel -10 R 8 A4 4 R  8 
+;m 637
+vel +10 Bb4 4 vel -10 R 8 F3 C4 4 R  8 
+;m 638
+vel +10 F3 Bb3 4 vel -10 R 8 F3 Bb3 D4 4 R  8 
+;m 639
+vel 52
+A4 4 R 8 R 4 F4 8
+;m 640
+vel 62
+Gb4 5/8 F4 8 
+;m 641
+vel 75
+Gb4 5/8 F4 8 
+;m 642
+Gb4 5/8 G4 8 
+;m 643
+vel 90
+A4 4 C5 4. Bb4 8
+;m 644
+C5 5/8 Bb4 8 
+;m 645
+vel 75
+C5 5/8 Bb4 8 
+;m 646
+vel 62
+vel +10 C5 4 vel -10 Bb4 8 A4 4 D4 8 
+;m 647
+vel 52
+Eb4 4 F4 8 Eb4 5/8 
+;m 648
+vel 62
+F4 8 Eb4 5/8 
+;m 649
+vel 75
+F4 8 Eb4 5/8 
+;m 650
+F4 8 F4 4 F4 7/8
+;m 651
+vel 90
+;m 652
+F4 4. Gb4 4 F4 8
+;m 653
+vel +10 C4 4 vel -10 Bb3 8 A3 4 Bb3 8 
+;m 654
+vel 75
+vel +10 C4 4 vel -10 Bb3 8 A3 4 Bb3 8 
+;m 655
+vel 62
+vel +10 Bb3 4 vel -10 Ab3 8 G3 4 Ab4 8 
+;m 656
+vel 52
+vel +10 Ab3 4 vel -10 G3 8 F3 4 G3 8 
+;m 657
+vel +10 G3 4 vel -10 F3 8 Eb3 4 F3 8 
+;m 658
+vel 43
+vel +10 F3 4 vel -10 Eb3 8 D3 4 Eb3 8 
+;m 659
+C5 4
+vel 110
+R 4
+R 2
+;m 660
+R 1
+;m 661
+R 1
+;page 30
+;m 662
+vel 43
+R 4 Bb3 4
+;m 663
+Cb4 4 Ab4 4
+;m 664a
+R 2
+;m 664b
+vel 110
+Bb3 9/4
+;m 665
+
+;m 666
+
+;m 667
+
+B3 2.
+;m 668
+
+Ab4 2.
+;m 669
+
+G4 2.
+;m 670
+
+B3 2.
+;m 671
+
+C4 2.
+;m 672
+
+Bb4 2.
+;m 673
+
+A4 2.
+;m 674
+
+F3 2.
+;m 675
+
+Eb3 Eb4 2.
+;m 676
+
+D3 D4 2.
+;m 677
+
+G3 G4 2.
+;m 678
+
+F3 F4 2.
+;m 679
+
+Eb3 Eb4 2.
+;m 680
+
+D3 D4 5/8
+;m 681
+R 8
+Db3 Db4 4 R 8
+;m 682
+C4 C2 1/16 D4 D2 1/16 C4 C2 1/16 D4 D2 1/16 C4 C2 1/16 D4 D2 1/16 C4 C2 1/16 D4 D2 1/16 C4 C2 1/16 D4 D2 1/16 C4 C2 1/24 Bb3 Bb1 1/24 C4 C2 1/24 
+;m 683
+vel +10 Bb3 4 vel -10 Bb3 8 D4 4 Ab4 8 
+;m 684
+vel +10 G4 8 vel -10 R 8 D3 8 Eb3 4 C4 8 
+;m 685
+vel 75
+D3 8 R 4 R 4.
+;m 686
+vel 62
+R 2.
+;m 687
+vel 52
+C4 3/1
+;m 688
+vel 43
+;m 689
+
+;m 690
+
+;m 691
+G3 2.
+;m 692
+Bb3 2.
+;m 693
+Ab3 2.
+;m 694
+F3 2.
+;m 695
+G3 2.
+;m 696
+Ab3 2.
+;m 697
+G3 2.
+;m 698
+F3 Ab3 2.
+;m 699
+G3 2.
+;m 700
+G3 2.
+;m 701
+Gb3 2.
+;m 702
+F3 4. C4 2.
+;m 703
+
+Bb3 4 R 8
+;m 704
+R 4.
+vel 62
+A4 1/16 Bb4 1/16 A4 1/16 Bb4 1/16 A4 1/16 Bb4 1/16 A4 1/16 Bb4 1/16 A4 1/16 Bb4 1/16 A4 1/24 G4 1/24 A4 1/24 
+;m 705
+vel 75
+Bb4 4 R 8
+;m 706
+R 4.
+Eb4 2.
+;m 707
+vel 90
+D4 4 R 8
+;m 708
+R 4.
+Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/24 G3 1/24 Ab3 1/24 
+;m 709
+
+Bb3 4 R 8
+;m 710
+R 2.
+;m 711
+R 2.
+;m 712
+vel 62
+A3 1/16 Bb3 1/16 A3 1/16 Bb3 1/16 A3 1/24 G3 1/24 A3 1/24  F3 4 R 8
+;m 713
+R 2.
+;m 714
+vel 52
+A3 1/16 Bb3 1/16 A3 1/16 Bb3 1/16 A3 1/24 G3 1/24 A3 1/24  F3 4 R 8
+;m 715
+R 2.
+;m 716
+A3 1/16 Bb3 1/16 A3 1/16 Bb3 1/16 A3 1/24 G3 1/24 A3 1/24  F3 4 R 8
+;m 717
+vel 43
+R 2.
+;m 718
+A3 1/16 Bb3 1/16 A3 1/16 Bb3 1/16 A3 1/24 G3 1/24 A3 1/24  D3 8 F3 8 Ab3 8
+;m 719
+vel 52
+D3 8 Ab3 8 F3 8 D4 8 F3 8 D4 8  
+;m 720
+F3 Ab3 8 D4 8 F3 Ab3 8 D4 8 F3 Ab3 8 D4 8  
+;m 721
+F3 8 D4 F4 8 F3 8 D4 F4 8 F3 8 D4 F4 8  
+;m 722
+F3 8 B3 F4 8 F3 8 B3 F4 8 F3 8 B3 F4 8  
+;m 723
+G3 8 B3 Eb4 8 G3 8 B3 Eb4 8 G3 8 B3 Eb4 8  
+;m 724
+vel 62
+G3 8 Eb4 G4 8 G3 8 Eb4 G4 8 G3 8 Eb4 G4 8  
+;m 725
+G3 8 Eb4 G4 8 G3 8 C4 Eb4 8 G3 8 C4 Eb4 8  
+;m 726
+F3 8 C4 Eb4 8 F3 8 C4 Eb4 8 F3 8 C4 Eb4 8  
+;m 727
+F3 8 Bb3 D4 8 F3 8 Bb3 D4 8 D3 8 Bb3 8  
+;m 728
+D3 8 A3 8 D3 8 A3 8 D3 8 A3 8  
+;m 729
+vel 75
+D3 8 Bb3 8 D3 8 Bb3 8 D3 8 Bb3 8  
+;m 730
+F3 8 Bb3 8 F3 8 Bb3 8 F3 8 Bb3 8  
+;m 731
+G3 8 Eb4 8 G3 8 Eb4 8 G3 8 Eb4 8  
+;m 732
+G3 8 D4 8 G3 8 D4 8 G3 8 D4 8  
+;m 733
+G3 8 Eb4 8 G3 8 Eb4 8 G3 8 Eb4 8  
+;m 734
+vel 90
+A3 8 Eb4 8 A3 8 Eb4 8 A3 8 Eb4 8  
+;m 735
+D4 8 F3 8 Bb3 8 F3 8 Bb3 8 F3 8  
+;m 736
+A3 C4 8 F3 8 A3 C4 8 F3 8 A3 C4 8 F3 8  
+;m 737
+Bb3 D4 8 F3 8 Bb3 D4 8 F3 8 Bb3 D4 8 F3 8  
+;m 738
+vel 110
+A3 C4 8 F3 8 A3 C4 8 F3 8 C4 Eb4 8 F3 8  
+;m 739
+Bb3 D4 8 F3 8 Bb3 D4 8 F3 8 Bb3 D4 8 F3 8  
+;m 740
+A3 C4 8 F3 8 A3 C4 8 F3 8 C4 Eb4 8 F3 8  
+;m 741
+Bb3 D4 8 F3 8 Bb3 D4 8 F3 8 Bb3 D4 8 F3 8  
+;m 742
+A3 C4 8 F3 8 A3 C4 8 F3 8 C4 Eb4 8 F3 8  
+;m 743
+ticks secondorh 743
+F3 Bb3 D4 4 R 8 R 4.
+; fine
+END_LAZY
+END_OF_TRACK
+
+STARTTRACK
+TRACK Secondo Right Hand Extra
+TEXT "Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+INSTRUMENT Piano
+;PROGRAM secondorhchan Viola
+PROGRAM 3 1
+LAZY
+vel 127
+chan 3
+;page 4
+;m 0
+;pickup
+R 2.
+;m 1
+R 2.
+;m 2
+R 2.
+;m 3
+R 2.
+;m 4
+R 4.
+R 4.
+;m 5
+R 2.
+;m 6
+R 2.
+;m 7
+R 2.
+;m 8
+R 2.
+;m 9
+R 2.
+;m 10
+R 2.
+;m 11
+R 2.
+;m 12
+R 4.
+R 4.
+;m 13
+R 2.
+;m 14
+R 2.
+;m 15
+R 4.
+R 4.
+;m 16
+R 2.
+;m 17
+R 2.
+;m 18
+R 4.
+R 4.
+;m 19 
+R 2
+;m 20
+R 4
+vel 52
+F3 1
+;m 21
+
+;m 22
+
+R 4
+;m 23
+R 2
+;m 24
+R 2
+;m 25
+R 2
+;m 26
+R 2
+;m 27
+R 4
+R 4
+;m 28
+vel 43
+R 1
+;m 29
+R 1
+;m 30
+R 1
+;m 31
+R 1
+;m 32
+R 4
+R 4
+vel 110
+R 2
+;m 33
+R 1
+;m 34
+R 1
+;m 35
+R 1
+;m 36
+R 1
+;m 37
+R 1
+;m 38
+R 1
+;m 39
+R 1
+;m 40
+R 1
+;page 4
+;m 41
+R 1
+;m 42
+R 1
+;m 43
+R 1
+;m 44
+R 1
+;m 45
+R 1
+;m 46
+R 1
+;m 47
+R 1
+;m 48
+R 1
+;m 49
+R 1
+;m 50
+R 1
+;m 51
+R 1
+;m 52
+R 1
+;m 53
+R 1
+;m 54
+R 1
+;m 55
+R 1
+;m 56
+R 1
+;m 57
+R 1
+;m 58
+R 1
+;m 59
+R 1
+;m 60
+R 1
+;m 61
+R 1
+;m 62
+R 1
+;m 63
+R 1
+;m 64
+R 1
+;m 65
+R 1
+;m 66
+R 1
+;page 6
+;m 67
+R 1
+;m 68
+R 1
+;m 69
+R 1
+;m 70
+R 1
+;m 71
+R 1
+;m 72
+R 1
+;m 73
+R 1
+;m 74
+R 1
+;m 75
+R 1
+;m 76
+R 1
+;m 77
+R 1
+;m 78
+R 1
+;m 79
+R 1
+;m 80
+R 1
+;m 81
+R 1
+;m 82
+R 1
+;m 83
+R 1
+;m 84
+R 1
+;m 85
+R 1
+;m 86
+R 1
+;m 87
+R 1
+;m 88
+R 1
+;m 89
+R 1
+;m 90
+R 1
+;m 91
+R 1
+;m 92
+R 1
+;m 93
+R 1
+;m 94
+R 1
+;m 95
+R 1
+;m 96
+R 1
+;page 8
+;m 97
+R 1
+;m 98
+R 1
+;m 99
+R 1
+;m 100
+R 1
+;m 101
+R 1
+;m 102
+R 1
+;m 103
+R 1
+;m 104
+R 1
+;m 105
+R 1
+;m 106
+R 1
+;m 107
+R 1
+;m 108
+R 1
+;m 109
+R 1
+;m 110
+R 1
+;m 111
+R 1
+;m 112
+R 1
+;m 113
+R 1
+;m 114
+R 1
+;m 115
+R 1
+;m 116
+R 1
+;m 117
+R 1
+;m 118
+R 1
+;m 119
+R 1
+;m 120
+R 1
+;m 121
+R 1
+;m 122
+R 1
+;m 123
+R 1
+;m 124
+R 1
+;m 125
+R 1
+;m 126
+R 1
+;page 10
+;m 127
+R 1
+;m 128
+R 1
+;m 129
+R 1
+;m 130
+R 1
+;m 131
+R 1
+;m 132
+R 1
+;m 133
+R 1
+;m 134
+R 1
+;m 135
+R 1
+;m 136
+R 1
+;m 137
+R 1
+;m 138
+R 1
+;m 139
+R 1
+;m 140
+R 1
+;m 141
+R 1
+;m 142
+R 1
+;m 143
+R 1
+;m 144
+R 1
+;m 145
+R 1
+;m 146
+R 1
+;m 147
+R 1
+;m 148
+R 1
+;m 149
+R 1
+;m 150
+R 1
+;m 151
+R 1
+;m 152
+R 1
+;m 153
+R 1
+;m 154
+R 1
+;m 155
+R 1
+;m 156
+R 1
+;m 157
+R 1
+;m 158
+R 1
+;m 159
+R 1
+;m 160
+R 1
+;page 12
+;m 161
+vel 43
+R 2
+;m 162
+R 2
+;m 163
+R 2
+;m 164
+R 2
+;m 165
+R 2
+;m 166
+R 2
+;m 167
+R 2
+;m 168
+R 2
+;m 169
+R 2
+;m 170
+R 2
+;m 171
+R 2
+;m 172
+R 2
+;m 173
+R 2
+;m 174
+R 2
+;m 175
+R 2
+;m 176
+R 2
+;m 177
+R 2
+;m 178
+R 2
+;m 179
+R 2
+;m 180
+R 2
+;m 181
+R 2
+;m 182
+R 2
+;m 183
+R 2
+;m 184
+R 2
+;m 185
+R 2
+;m 186
+R 2
+;m 187
+R 2
+;m 188
+R 2
+;m 189
+R 2
+;m 190
+R 2
+;m 191
+R 2
+;m 192
+R 2
+;m 193
+R 2
+;m 194
+R 2
+;m 195
+R 2
+;m 196
+R 2
+;page 14
+;m 197
+R 2
+;m 198
+R 2
+;m 199
+R 2
+;m 200
+R 2
+;m 201
+R 2
+;m 202
+R 2
+;m 203
+R 2
+;m 204
+R 2
+;m 205
+R 2
+;m 206
+R 2
+;m 207
+R 2
+;m 208
+R 2
+;m 209
+R 2
+;m 210
+R 2
+;m 211
+R 2
+;m 212
+R 2
+;m 213
+R 2
+;m 214
+R 2
+;m 215
+R 2
+;m 216
+R 2
+;m 217
+R 2
+;m 218
+R 2
+;m 219
+R 2
+;m 220
+R 2
+;m 221
+R 2
+;m 222
+R 2
+;m 223
+R 2
+;m 224
+R 2
+;m 225
+R 2
+;m 226
+R 2
+;m 227
+R 2
+;m 228
+R 2
+;m 229
+R 2
+;m 230
+R 2
+;m 231
+R 2
+;m 232
+R 2
+;m 233
+vel 43
+R 2
+;m 234
+R 2
+;page 16
+;m 235
+vel 110
+R 2.
+;m 236
+R 2.
+;m 237
+R 2.
+;m 238
+R 2.
+;m 239
+R 2.
+;m 240
+R 2.
+;m 241
+R 2.
+;m 242
+R 2.
+;m 243
+R 2.
+;m 244
+R 2.
+;m 245
+R 2.
+;m 246
+R 2.
+;m 247
+R 2.
+;m 248
+R 2.
+;m 249
+R 2.
+;m 250
+R 2.
+;m 251
+R 2.
+;m 252
+R 2.
+;m 253
+R 2.
+;m 254
+R 2.
+;m 255
+R 2.
+;m 256
+R 2.
+;m 257
+R 2.
+;m 258
+R 2.
+;m 259
+R 2.
+;m 260
+R 2.
+;m 261
+R 2.
+;m 262
+R 2.
+;m 263
+R 2.
+;m 264
+R 2.
+;m 265
+R 2.
+;m 266
+R 2.
+;m 267
+R 2.
+;m 268
+R 2.
+;m 269
+R 2.
+;m 270
+R 2.
+;m 271
+R 2.
+;m 272
+R 2.
+;m 273
+R 2.
+;m 274
+R 2.
+;m 275
+R 2.
+;m 276
+R 2.
+;m 277
+R 2.
+;m 278
+R 2.
+;m 279
+R 2.
+;m 280
+R 2.
+;m 281
+R 2.
+;m 282
+R 2.
+;m 283
+R 2.
+;m 284
+R 2.
+;m 285
+R 2.
+;m 286
+R 2.
+;page 18
+;m 287
+R 2.
+;m 288
+R 2.
+;m 289
+R 2.
+;m 290
+R 2.
+;m 291
+R 2.
+;m 292
+R 2.
+;m 293
+R 2.
+;m 294
+R 2.
+;m 295
+R 2.
+;m 296
+R 2.
+;m 297
+R 2.
+;m 298
+R 2.
+;m 299
+R 2.
+;m 300
+R 2.
+;m 301
+R 2.
+;m 302
+R 2.
+;m 303
+R 2.
+;m 304
+R 2.
+;m 305
+R 2.
+;m 306
+R 2.
+;m 307
+R 2.
+;m 308
+R 2.
+;m 309
+R 2.
+;m 310
+R 2.
+;m 311
+R 2.
+;m 312
+R 2.
+;m 313
+R 2.
+;m 314
+R 2.
+;m 315
+R 2.
+;m 316
+R 2.
+;m 317
+R 2.
+;m 318
+R 2.
+;m 319
+R 2.
+;m 320
+R 2.
+;m 321
+R 2.
+;m 322
+R 2.
+;m 323
+R 2.
+;m 324
+R 2.
+;m 325
+R 2.
+;m 326
+R 2.
+;m 327
+R 2.
+;m 328
+R 2.
+;m 329
+R 2.
+;m 330
+R 2.
+;m 331
+R 2.
+;m 332
+R 2.
+;m 333
+R 2.
+;m 334
+R 2.
+;m 335
+R 2.
+;m 336
+R 2.
+;m 337
+R 2.
+;m 338
+R 2.
+;m 339
+R 2.
+;m 340
+R 2.
+;m 341
+R 2.
+;m 342
+R 2.
+;m 343
+R 2.
+;m 344
+R 2.
+;m 345
+R 2.
+;m 346
+R 2.
+;m 347
+R 2.
+;m 348
+R 2.
+;m 349
+R 2.
+;m 350
+R 2.
+;m 351
+R 2.
+;m 352
+R 2.
+;m 353
+R 2.
+;m 354
+R 2.
+;page 20
+;m 355
+R 2.
+;m 356
+R 2.
+;m 357
+R 2.
+;m 358
+R 2.
+;m 359
+R 2.
+;m 360
+R 2.
+;m 361
+R 2.
+;m 362
+R 2.
+;m 363
+R 2.
+;m 364
+R 2.
+;m 365
+R 2.
+;m 366
+R 2.
+;m 367
+R 2.
+;m 368
+R 2.
+;m 369
+R 2.
+;m 370
+R 2.
+;m 371
+R 2.
+;m 372
+R 2.
+;m 373
+R 2.
+;m 374
+R 2.
+;m 375
+R 2.
+;m 376
+R 2.
+;m 377
+R 2.
+;m 378
+R 2.
+;m 379
+R 2.
+;m 380
+R 2.
+;m 381
+R 2.
+;m 382
+R 2.
+;m 383
+R 2.
+;m 384
+R 2.
+;m 385
+R 2.
+;m 386
+R 2.
+;m 387
+R 2.
+;m 388
+R 2.
+;m 389
+R 2.
+;m 390
+R 2.
+;m 391
+R 2.
+;m 392
+R 2.
+;m 393
+R 2.
+;m 394
+R 2.
+;m 395
+R 2.
+;m 396
+R 2.
+;m 397
+R 2.
+;m 398
+R 2.
+;m 399
+R 2.
+;m 400
+R 2.
+;m 401
+R 2.
+;m 402
+R 2.
+;m 403
+R 2.
+;m 404
+R 2.
+;m 405
+R 2.
+;m 406
+R 2.
+;m 407
+R 2.
+;m 408
+R 2.
+;m 409
+R 2.
+;m 410
+R 2.
+;m 411
+R 2.
+;m 412
+R 2.
+;m 413
+R 2.
+;m 414
+R 2.
+;m 415
+R 2.
+;page 22
+;m 416
+R 2.
+;m 417
+R 2.
+;m 418
+vel 110
+R 2.
+;m 419
+R 2.
+;m 420
+R 2.
+;m 421
+R 2.
+;m 422
+R 2.
+;m 423
+R 2.
+;m 424
+R 2.
+;m 425
+R 2.
+;m 426
+R 2.
+;m 427
+R 2.
+;m 428
+R 2.
+;m 429
+R 2.
+;m 430
+R 2.
+;m 431
+R 2.
+;m 432
+R 2.
+;m 433
+R 2.
+;m 434
+R 2.
+;m 435
+R 2.
+;m 436
+R 2.
+;m 437
+R 2.
+;m 438
+R 2.
+;m 439
+R 2.
+;m 440
+R 2.
+;m 441
+R 2.
+;m 442
+R 2.
+;m 443
+R 2.
+;m 444
+R 2.
+;m 445
+R 2.
+;m 446
+R 2.
+;m 447
+R 2.
+;m 448
+R 2.
+;m 449
+R 2.
+;m 450
+R 2.
+;m 451
+R 2.
+;m 452
+R 2.
+;m 453
+R 2.
+;m 454
+R 2.
+;m 455
+R 2.
+;m 456
+R 2.
+;m 457
+R 2.
+;m 458
+R 2.
+;m 459
+R 2.
+;m 460
+R 2.
+;m 461
+R 2.
+;m 462
+R 2.
+;m 463
+R 2.
+;m 464
+R 2.
+;m 465
+R 2.
+;m 466
+R 2.
+;m 467
+R 2.
+;m 468
+R 2.
+;m 469
+R 2.
+;m 470
+R 2.
+;m 471
+R 2.
+;m 472
+R 2.
+;m 473
+R 2.
+;m 474
+R 2.
+;page 24
+;m 475
+R 2.
+;m 476
+R 2.
+;m 477
+R 2.
+;m 478
+R 2.
+;m 479
+R 2.
+;m 480
+R 2.
+;m 481
+R 2.
+;m 482
+R 2.
+;m 483
+R 2.
+;m 484
+R 2.
+;m 485
+R 2.
+;m 486
+R 2.
+;m 487
+R 2.
+;m 488
+R 2.
+;m 489
+R 2.
+;m 490
+R 2.
+;m 491
+R 2.
+;m 492
+R 2.
+;m 493
+R 2.
+;m 494
+R 2.
+;m 495
+R 2
+;m 496
+R 2
+;m 497
+R 2
+;m 498
+R 2
+;m 499
+R 2
+;m 500
+R 2
+;m 501
+R 2
+;m 502
+R 2
+;m 503
+R 2
+;m 504
+R 2
+;m 505
+R 2
+;m 506
+R 2
+;m 507
+R 2
+;m 508
+R 2
+;m 509
+R 2
+;m 510
+R 2
+;m 511
+R 2
+;m 512
+R 2
+;m 513
+R 2
+;m 514
+R 2
+;m 515
+R 2
+;m 516
+R 2
+;m 517
+R 2
+;m 518
+R 2
+;m 519
+R 2
+;m 520
+R 2
+;m 521
+R 2
+;m 522
+R 2
+;m 523
+R 2
+;m 524
+R 2
+;page 26
+;m 525
+R 2
+;m 526
+R 2
+;m 527
+R 2
+;m 528
+R 2
+;m 529
+R 2
+;m 530
+R 2
+;m 531
+R 2
+;m 532
+R 2
+;m 533
+R 2
+;m 534
+R 2
+;m 535
+R 2.
+;m 536
+R 2.
+;m 537
+R 2.
+;m 538
+R 2.
+;m 539
+R 2.
+;m 540
+R 2.
+;m 541
+R 2.
+;m 542
+R 2.
+;m 543
+R 2.
+;m 544
+R 2.
+;m 545
+R 2.
+;m 546
+R 2.
+;m 547
+R 2.
+;m 548
+R 2.
+;m 549
+R 2.
+;m 550
+R 2.
+;m 551
+R 2.
+;m 552
+R 2.
+;m 553
+R 2.
+;m 554
+R 2.
+;m 555
+R 2.
+;m 556
+R 2.
+;m 557
+R 2.
+;m 558
+R 2.
+;m 559
+R 2.
+;m 560
+R 2.
+;m 561
+R 2.
+;m 562
+R 2.
+;m 563
+R 2.
+;m 564
+R 2.
+;m 565
+R 2.
+;m 566
+R 2.
+;m 567
+R 2.
+;m 568
+R 2.
+;m 569
+R 2.
+;m 570
+R 2.
+;m 571
+R 2.
+;m 572
+R 2.
+;m 573
+R 2.
+;m 574
+R 2.
+;m 575
+R 2.
+;m 576
+R 2.
+;m 577
+R 2.
+;m 578
+R 2.
+;m 579
+R 2.
+;m 580
+R 2.
+;m 581
+R 2.
+;m 582
+R 2.
+;m 583
+R 2.
+;m 584
+R 2.
+;m 585
+R 2.
+;m 586
+R 2.
+;page 28
+;m 587
+R 2.
+;m 588
+R 2.
+;m 589
+R 2.
+;m 590
+R 2.
+;m 591
+R 2.
+;m 592
+R 2.
+;m 593
+R 2.
+;m 594
+R 2.
+;m 595
+R 2.
+;m 596
+R 2.
+;m 597
+R 2.
+;m 598
+R 2.
+;m 599
+R 2.
+;m 600
+R 2.
+;m 601
+R 2.
+;m 602
+R 2.
+;m 603
+R 2.
+;m 604
+R 2.
+;m 605
+R 2.
+;m 606
+R 2.
+;m 607
+R 2.
+;m 608
+R 2.
+;m 609
+R 2.
+;m 610
+R 2.
+;m 611
+R 2.
+;m 612
+R 2.
+;m 613
+R 2.
+;m 614
+R 2.
+;m 615
+R 2.
+;m 616
+R 2.
+;m 617
+R 2.
+;m 618
+R 2.
+;m 619
+R 2.
+;m 620
+R 2.
+;m 621
+R 2.
+;m 622
+R 2.
+;m 623
+R 2.
+;m 624
+R 2.
+;m 625
+R 2.
+;m 626
+R 2.
+;m 627
+R 2.
+;m 628
+R 2.
+;m 629
+R 2.
+;m 630
+R 2.
+;m 631
+R 2.
+;m 632
+R 2.
+;m 633
+R 2.
+;m 634
+R 2.
+;m 635
+R 2.
+;m 636
+R 2.
+;m 637
+R 2.
+;m 638
+R 2.
+;m 639
+R 2.
+;m 640
+R 2.
+;m 641
+R 2.
+;m 642
+R 2.
+;m 643
+R 2.
+;m 644
+R 2.
+;m 645
+R 2.
+;m 646
+R 2.
+;m 647
+R 2.
+;m 648
+R 2.
+;m 649
+R 2.
+;m 650
+R 2.
+;m 651
+R 2.
+;m 652
+R 2.
+;m 653
+R 2.
+;m 654
+R 2.
+;m 655
+R 2.
+;m 656
+R 2.
+;m 657
+R 2.
+;m 658
+R 2.
+;m 659
+R 4
+R 4
+R 2
+;m 660
+R 1
+;m 661
+R 1
+;page 30
+;m 662
+vel 43
+R 2
+;m 663
+R 2
+;m 664a
+; I made it a regular 2/4 bar to do the fermata
+R 2
+;m 664b
+R 4.
+;m 665
+R 2.
+;m 666
+R 2.
+;m 667
+R 2.
+;m 668
+R 2.
+;m 669
+R 2.
+;m 670
+R 2.
+;m 671
+R 2.
+;m 672
+R 2.
+;m 673
+R 2.
+;m 674
+R 2.
+;m 675
+R 2.
+;m 676
+R 2.
+;m 677
+R 2.
+;m 678
+R 2.
+;m 679
+R 2.
+;m 680
+R 2.
+;m 681
+R 2.
+;m 682
+R 2.
+;m 683
+R 2.
+;m 684
+R 2.
+;m 685
+R 2.
+;m 686
+R 2.
+;m 687
+R 2.
+;m 688
+R 2.
+;m 689
+R 2.
+;m 690
+R 2.
+;m 691
+R 2.
+;m 692
+R 2.
+;m 693
+R 2.
+;m 694
+R 2.
+;m 695
+R 2.
+;m 696
+R 2.
+;m 697
+R 2.
+;m 698
+R 2.
+;m 699
+R 2.
+;m 700
+R 2.
+;m 701
+R 2.
+;m 702
+R 2.
+;m 703
+R 2.
+;m 704
+R 2.
+;m 705
+R 2.
+;m 706
+R 2.
+;m 707
+R 2.
+;m 708
+R 2.
+;m 709
+R 2.
+;m 710
+R 2.
+;m 711
+R 2.
+;m 712
+R 2.
+;m 713
+R 2.
+;m 714
+R 2.
+;m 715
+R 2.
+;m 716
+R 2.
+;m 717
+R 2.
+;m 718
+R 2.
+;m 719
+R 2.
+;m 720
+R 2.
+;m 721
+R 2.
+;m 722
+R 2.
+;m 723
+R 2.
+;m 724
+R 2.
+;m 725
+R 2.
+;m 726
+R 2.
+;m 727
+R 2.
+;m 728
+R 2.
+;m 729
+R 2.
+;m 730
+R 2.
+;m 731
+R 2.
+;m 732
+R 2.
+;m 733
+R 2.
+;m 734
+R 2.
+;m 735
+R 2.
+;m 736
+R 2.
+;m 737
+R 2.
+;m 738
+R 2.
+;m 739
+R 2.
+;m 740
+R 2.
+;m 741
+R 2.
+;m 742
+R 2.
+;m 743
+R 2.
+; fine
+END_LAZY
+END_OF_TRACK
+
+STARTTRACK
+TRACK Secondo Left Hand
+TEXT "Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
+INSTRUMENT Piano
+;PROGRAM 4 Cello
+PROGRAM 4 1
+PAN 4 12
+LAZY
+vel 127
+chan 4
+;page 4
+;m 0
+END_LAZY
+KEY_SIGNATURE G
+LAZY
+;pickup
+R 4.
+R 4
+vel 110
+END_LAZY
+DAMPER 4 127
+LAZY
+G1 16
+D2 16
+;m 1
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+;m 2
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+G1 16
+D2 16
+;m 3
+vel 120
+G1 D2 9/8
+;m 4
+END_LAZY
+DAMPER 4 0
+LAZY
+vel 110
+G1 G2 15/8
+;m 5
+
+;m 6
+
+;m 7
+vel 120
+G#1 G#2 2.
+;m 8
+F2 F3 2.
+;m 9
+E2 E3 2.
+;m 10
+G#1 G#2 2.
+;m 11
+vel 110
+A1 A2 4 R 8
+F#2 F#3 4 R 8
+;m 12
+G2 G3 4 R 8 R 4.
+;m 13
+vel +10 R 4 vel -10 G2 8 G#2 4 F3 8  
+;m 14
+vel +10 E3 8 vel -10 R 8 G#2 8 A2 4 F#3 8  
+;m 15
+G3 8 R 4 R 4.
+;m 16
+R 2.
+;m 17
+R 2.
+;m 18
+R 4.
+R 4.
+;m 19 
+END_LAZY
+KEY_SIGNATURE F
+LAZY
+vel 52
+R 2
+;m 20
+R 4 F1 F2 1.
+;m 21
+
+;m 22
+
+;m 23
+
+F2 4
+;m 24
+F#2 4 Eb3 4
+;m 25
+D3 4 F#2 4
+;m 26
+G2 4 E3 4
+;m 27
+F3 4
+R 4
+;m 28
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 43
+R 9/1
+;m 29
+
+;m 30
+
+;m 31
+
+;m 32
+vel 110
+
+;m 33
+
+;m 34
+
+;m 35
+
+;m 36
+
+;m 37
+R 4 vel +10 F3 8 vel -10 F3 8 R 4 vel +10 F3 8 vel -10 F3 8 
+;m 38
+R 4 vel +10 F#3 8 vel -10 F#3 8 R 4 vel +10 Eb4 8 vel -10 Eb4 8 
+;m 39
+R 4 vel +10 D4 8 vel -10 D4 8 
+R 4 vel +10 F#3 8 vel -10 G3 8 
+;m 40
+R 4 vel +10 G3 8 vel -10 G3 8 
+vel +15 R 8 vel -15 R 16 Eb3 16 F4 8 R 16 F4 16 
+;page 4
+;m 41
+vel +15 F4 8 vel -15 R 16 D3 16 F4 8 R 16 F4 16 vel +15 F4 8 vel -15 R 16 D3 16 Ab4 8 R 16 Ab4 16 
+;m 42
+vel +15 Ab4 8 vel -15 R 16 G4 16 G4 8 R 16 F4 16  vel +15 F4 8 vel -15 R 16 Eb4 16 Eb4 8 R 16 D4 16  
+;m 43
+vel +15 Eb4 8 vel -15 R 16 Eb3 16 Eb4 8 R 16 Eb4 16 vel +15 Eb4 8 vel -15 R 16 Eb3 16 G4 8 R 16 G4 16 
+;m 44
+vel +15 G4 8 vel -15 R 16 F4 16 F4 8 R 16 Eb4 16 vel +15 R 8 vel -15 R 16 Bb2 16 C4 8 R 16 C4 16 
+;m 45
+vel +15 C4 8 vel -15 R 16 A2 16 C3 8 R 16 C3 16 vel +15 C3 8 vel -15 R 16 A1 16 Eb3 8 R 16 Eb3 16 
+;m 46
+vel +15 Eb3 8 vel -15 R 16 D3 16 D3 8 R 16 C3 16  vel +15 C3 8 vel -15 R 16 Bb2 16 Bb2 8 R 16 A2 16  
+;m 47
+vel +15 Bb2 8 vel -15 R 16 Bb1 16 Bb2 8 R 16 Bb2 16 vel +15 Bb2 8 vel -15 R 16 Bb1 16 D3 8 R 16 D3 16 
+;m 48
+vel +15 D3 8 vel -15 R 16 C3 16 C3 8 R 16 Bb2 16 vel +15 Bb3 8 vel -15 R 16 A3 16 A3 8 R 16 C4 16 
+;m 49
+vel +15 Bb3 8 vel -15 R 16 F3 16 F3 8 R 16 F3 16 vel +15 Bb3 8 vel -15 R 16 D3 16 D3 8 R 16 D3 16 
+;m 50
+G3 8 R 8 R 4 R 8. Eb3 16 D3 8 R 16 F3 16
+;m 51
+Eb3 4 R 2.
+;m 52
+R 4 vel +10 Bb1 Bb2 8 vel -10 Bb1 Bb2 8 R 4 vel +10 Bb1 Bb2 8 vel -10 Bb1 Bb2 8 
+;m 53
+R 4 vel +10 B1 B2 8 vel -10 B1 B2 8 R 4 vel +10 Ab2 Ab3 8 vel -10 Ab2 Ab3 8 
+;m 54
+R 4 vel +10 G2 G3 8 vel -10 G2 G3 8 
+R 4 vel +10 B1 B2 8 vel -10 C2 C3 8 
+;m 55
+R 4 vel +10 C2 8 vel -10 C2 8 
+A2 8 Bb2 8 Bb1 Bb2 8 Bb1 Bb2 8 
+;m 56
+A1 A2 8 A1 A2 8 Ab1 Ab2 8 Ab1 Ab2 8 G1 G2 8 G1 G2 8 Gb1 Gb2 8 Gb1 Gb2 8 
+;m 57
+F1 F2 8 F1 F2 8 Eb1 Eb2 8 Eb1 Eb2 8 D1 D2 8 D1 D2 8 C2 C3 8 C2 C3 8 
+;m 58
+Bb1 Bb2 8 Bb1 Bb2 8 Ab1 Ab2 8 Ab1 Ab2 8 G1 G2 8 G1 G2 8 G2 G3 8 G2 G3 8 
+;m 59
+Ab1 Ab2 8 Ab1 Ab2 8 A1 A2 8 A1 A2 8 Bb1 Bb2 8 Bb1 Bb2 8 Bb2 Bb3 8 Bb2 Bb3 8 
+;m 60
+R 3/1
+;m 61
+
+;m 62
+
+;m 63
+R 2
+vel +15 R 8 vel -15 R 16 Eb2 16 F3 8 R 16 F3 16 
+;m 64
+vel +15 F3 8 vel -15 R 16 D2 16 F3 8 R 16 F3 16 vel +15 F3 8 vel -15 R 16 D2 16 Ab3 8 R 16 Ab3 16 
+;m 65
+vel +15 Ab3 8 vel -15 R 16 G3 16 G3 8 R 16 F3 16  vel +15 F3 8 vel -15 R 16 Eb3 16 Eb3 8 R 16 D3 16  
+;m 66
+vel +15 Eb3 8 vel -15 R 16 Eb2 16 Eb3 8 R 16 Eb3 16 vel +15 Eb3 8 vel -15 R 16 Eb2 16 G3 8 R 16 F#3 16 
+;page 6
+;m 67
+vel +15 G3 8 vel -15 R 16 F3 16 F3 8 R 16 Eb3 16  vel +15 Eb3 8 vel -15 R 16 D3 16 D3 8 R 16 E3 16  
+;m 68
+vel +15 F3 8 vel -15 R 16 E3 16 E3 8 R 16 F#3 16  vel +15 F#3 8 vel -15 R 16 G3 16 G3 8 R 16 A3 16  
+;m 69
+vel +15 A3 8 vel -15 R 16 Bb3 16 B3 8 R 16 C4 16 vel +15 C4 8 vel -15 R 16 D4 16 D4 8 R 16 C4 16 
+;m 70
+B3 12 D4 12 C4 12 C4 12 B3 12 Ab3 12  G3 12 F3 12 Eb3 12 D3 12 C3 12 B2 12  
+;m 71
+B2 12 C3 12 Db3 12 C3 12 Ab2 12 Bb2 12  Bb2 12 G2 12 Ab2 12 Ab2 12 F2 12 G2 12  
+;m 72
+G2 12 E2 12 F#2 12 Eb3 12 C#3 12 D3 12  D3 12 B2 12 C3 12 A2 12 Bb2 12 C3 12  
+;m 73
+C3 12 A2 12 Bb2 12 Bb2 12 G2 12 Ab2 12  Ab2 12 D2 12 G2 12 F2 12 D2 12 G2 12  
+;m 74
+G2 12 Eb2 12 G2 12 D2 12 C2 12 G2 12  C2 12 B1 12 G2 12 Ab1 12 G1 12 B1 12  
+;m 75
+C2 12 B2 12 C3 12 C3 12 A2 12 Bb2 12  Bb2 12 G2 12 A2 12 A2 12 F#2 12 G2 12  
+;m 76
+G2 12 E2 12 F#2 12 G2 12 D2 12 F2 12  F2 12 D2 12 E2 12 E2 12 C#2 12 D2 12  
+;m 77
+D2 12 C#2 12 A2 12 C#3 12 A2 12 E3 12  E3 12 C#3 12 D3 12 D3 12 C3 12 A2 12  
+;m 78
+A2 12 F#2 12 G2 12 G2 12 B2 12 D3 12  D3 12 B2 12 C3 12 C3 12 E3 12 G3 12  
+;m 79
+G3 12 E3 12 F3 12 D3 12 B2 12 C3 12  
+vel +15 C3 8 vel -15 R 16 E2 16 E2 8 R 16 G2 16 
+;m 80
+E2 8 E2 8 F1 F2 8 F1 F2 8 F#1 F#2 8 F#1 F#2 8 G1 G2 8 G1 G2 8 
+;m 81
+vel +15 A1 A2 8 vel -15 R 16 F3 16 A4 8 R 16 A4 16 vel +15 A4 8 vel -15 R 16 F3 16 C5 8 R 16 C5 16 
+;m 82
+vel +15 C5 8 vel -15 R 16 Bb4 16 Bb4 8 R 16 A4 16  vel +15 A4 8 vel -15 R 16 G4 16 G4 8 R 16 F#4 16  
+;m 83
+vel +15 G4 8 vel -15 R 16 G3 16 G4 8 R 16 G4 16 vel +15 G4 8 vel -15 R 16 G3 16 Bb3 8 R 16 Bb3 16 
+;m 84
+vel +15 Bb2 8 vel -15 R 16 A1 16 C3 8 R 16 C3 16 vel +15 C3 8 vel -15 R 16 C2 16 C3 8 R 16 C3 16 
+;m 85
+vel +15 C3 8 vel -15 R 16 A1 16 Eb3 8 R 16 Eb3 16 vel +15 Eb3 8 vel -15 R 16 D3 16 D3 8 R 16 C3 16 
+;m 86
+vel +15 C3 8 vel -15 R 16 Bb2 16 Bb2 8 R 16 A2 16 vel +15 Bb2 8 vel -15 R 16 Bb1 16 Bb2 8 R 16 Bb2 16 
+;m 87
+vel +15 Bb2 8 vel -15 R 16 Bb1 16 D3 8 R 16 D3 16 vel +15 D3 8 vel -15 R 16 C3 16 C3 8 R 16 Bb2 16 
+;m 88
+vel +15 Bb2 8 vel -15 R 16 A2 16 A2 8 R 16 Bb2 16  vel +15 Bb2 8 vel -15 R 16 B2 16 B2 8 R 16 C3 16  
+;m 89
+vel +15 C3 8 vel -15 R 16 B2 16 B2 8 R 16 C3 16  vel +15 C3 8 vel -15 R 16 C#3 16 C#3 8 R 16 D3 16  )
+;m 90
+vel +15 D3 8 vel -15 R 16 C#3 16 D3 8 R 16 D3 16 vel +15 D3 8 vel -15 R 16 E3 16 E3 8 R 16 F3 16 
+;m 91
+F#3 4 C2 8 C2 8
+F#3 8 F#3 8 F#4 8 F#4 8 
+;m 92
+R 8 R 8 D2 8 D2 8 D3 8 D3 8 D4 8 D4 8 
+;m 93
+R 8 R 8 C#2 8 C#2 8 C#3 8 C#3 8 C#4 8 C#4 8 
+;m 94
+R 8 R 8 A2 8 A2 8 A4 8 A4 8 Bb4 8 Bb4 8 
+;m 95
+A4 8 A4 8 A4 8 A4 8 G4 8 G4 8 G4 8 G4 8 
+;m 96
+vel +15 F4 8 vel -15 R 16 E4 16 E4 8 R 16 D4 16 vel +15 C#4 8 vel -15 R 16 F4 16 F4 8 R 16 E4 16 
+;page 8
+;m 97
+D4 4 R 4
+vel +15 C#4 8 vel -15 R 16 G4 16 G4 8 R 16 F4 16 
+;m 98
+E4 8 E4 8 D4 8 D4 8 C#4 8 C#4 8 C4 8 C4 8 
+;m 99
+C2 8 C2 8 C3 8 C3 8 C4 8 C4 8 R 8 R 8 
+;m 100
+R 4 vel +10 C2 8 vel -10 C2 8 
+vel +15 C3 8 vel -15 R 16 C2 16 C4 8 R 16 C4 16 
+;m 101
+vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 Ab3 16  vel +15 Ab3 8 vel -15 R 16 G3 16 G3 8 R 16 F3 16  
+;m 102
+vel +15 F3 8 vel -15 R 16 C2 16 C3 8 R 16 C3 16 vel +15 C3 8 vel -15 R 16 Bb2 16 Bb2 8 R 16 Ab2 16 
+;m 103
+vel +15 Ab2 8 vel -15 R 16 G2 16 G2 8 R 16 F2 16 vel +15 F2 8 vel -15 R 16 E3 16 E2 8 R 16 F2 16 
+;m 104
+vel +15 G2 8 vel -15 R 16 Db2 16 Db2 8 R 16 C2 16  
+C2 4 R 4
+;m 105
+vel +15 G3 8 vel -15 R 16 F3 16 F3 8 R 16 Eb3 16  
+D3 4 R 4
+;m 106
+vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 A3 16  
+G#3 4 R 4
+;m 107
+vel +15 D2 D3 8 vel -15 R 16 C2 C3 16 C2 C3 8 R 16 Bb1 Bb2 16 vel +15 A1 A2 8 vel -15 R 16 C2 C3 16 C2 C3 8 R 16 B1 B2 16 
+;m 108
+vel +15 B1 B2 8 vel -15 R 16 Bb1 Bb2 16 Bb1 Bb2 8 R 16 Bb1 Bb2 16 vel +15 Bb1 Bb2 8 vel -15 R 16 A1 A2  16 A1 A2 8 R 16 G1 G2 16 
+;m 109
+vel +15 F#1 F#2 8 vel -15 R 16 G1 G2 16 G1 G2 8 R 16 Bb1 Bb2 16 vel +15 Bb1 Bb2 8 vel -15 R 16 A1 A2 16 G1 G2 8 R 16 G1 G2 16 
+;m 110
+vel +15 F#1 F#2 8 vel -15 R 16 F1 F2 16 B1 B2 8 R 16 B1 B2 16 vel +15 B1 B2 8 vel -15 R 16 A1 A2 16 A1 A2 8 R 16 A1 A2 16 
+;m 111
+D2 4 R 4 
+vel +15 R 8 vel -15 R 16 G3 16 Bb3 8 R 16 Bb3 16 
+;m 112
+A3 8 R 8 R 4
+vel +15 R 8 vel -15 R 16 D3 16 F4 8 R 16 F4 16 
+;m 113
+vel +15 F4 8 vel -15 R 16 D3 16 F4 8 R 16 F4 16 vel +15 F4 8 vel -15 R 16 D3 16 Ab4 8 R 16 Ab4 16 
+;m 114
+vel +15 Ab4 8 vel -15 R 16 G4 16 G4 8 R 16 F4 16 
+Eb4 16 R 16 Ab3 16 G3 16 F3 16 R 16 Eb3 16 D3 16 
+;m 115
+Eb3 16 R 16 F2 16 G2 16 G2 16 R 16 A2 16 B2 16 
+C2 16 R 16 R 8 R 4
+;m 116
+R 2
+R 16 R 16 Bb2 16 A2 16 G2 16 R 16 F2 16 E2 16 
+;m 117
+F2 16 R 16 D3 16 C3 16 Bb2 16 R 16 A2 16 G2 16 A2 16 R 16 D4 16 C4 16 Bb3 16 R 16 A3 16 G3 16 
+;m 118
+F#3 16 R 16 G3 16 A3 16 D3 16 R 16 E3 16 F#3 16 
+G3 4 
+R 8 vel +10 G3 8 vel -10 G3 8 vel +10 R 8 vel -10  
+;m 119
+R 8 vel +10 C3 8 vel -10 C3 8 vel +10 R 8 vel -10  
+R 8 vel +10 C4 8 vel -10 C4 8 vel +10 R 8 vel -10  
+;m 120
+R 8 vel +10 F3 8 vel -10 F3 8 vel +10 R 8 vel -10  
+R 8 vel +10 Bb3 8 vel -10 Bb3 8 vel +10 R 8 vel -10  
+;m 121
+R 8 vel +10 Eb3 8 vel -10 Eb3 8 vel +10 R 8 vel -10  
+R 8 Bb2 8
+;m 122
+Bb2 8 R 16 Ab2 16 Ab2 8 R 16 Gb2 16
+F2 4 R 8
+Ab2 8
+;m 123
+vel +15 A2 8 vel -15 R 16 G2 16 G2 8 R 16 F2 16  
+Eb2 16 R 16 G2 16 Ab2 16 Bb2 16 R 16 C3 16 Db3 16 
+;m 124
+Eb3 16 R 16 Eb2 16 F2 16 G2 16 R 16 Ab2 16 Bb2 16 C3 16 R 16 F2 16 Eb2 16 Db2 16 R 16 C2 16 Bb1 16 
+;m 125
+Ab1 16 R 16 Ab2 16 G2 16 F2 16 R 16 Eb2 16 Db2 16 C2 16 R 16 F2 16 Eb2 16 Db2 16 R 16 C2 16 Bb1 16 
+;m 126
+A1 16 R 16 Bb1 16 C2 16 F1 16 R 16 G1 16 A1 16 A1 16 R 16 C2 16 F2 16 F2 16 R 16 G2 16 A2 16 
+;page 10
+;m 127
+Bb1 16 R 16 F2 16 Bb2 16 C3 16 R 16 D3 16 Eb3 16 D3 16 R 16 Eb3 16 F3 16 Bb1 16 R 16 C2 16 D2 16 
+;m 128
+vel +15 Eb2 8 vel -15 R 16 G1 16 Bb2 8 R 16 Bb2 16 vel +15 Bb2 8 vel -15 R 16 G1 16 Db3 8 R 16 Db3 16 
+;m 129
+vel +15 Db3 8 vel -15 R 16 C3 16 C3 8 R 16 Bb2 16  vel +15 Bb2 8 vel -15 R 16 Ab2 16 Ab2 8 R 16 G2 16  
+;m 130
+vel +15 G2 8 vel -15 R 16 F2 16 F2 8 R 16 Eb2 16 vel +15 Eb2 8 vel -15 R 16 Eb2 16 E2 8 R 16 E2 16 
+;m 131
+E2 8 C2 8 C2 8 r 8
+R 8 vel +10 Bb2 8 vel -10 Bb2 8 vel +10 R 8 vel -10  
+;m 132
+R 8 vel +10 E2 8 vel -10 E2 8 vel +10 R 8 vel -10  R 8 vel +10 F2 8 vel -10 F2 8 vel +10 R 8 vel -10  
+;m 133
+vel +15 Eb4 8 vel -15 R 16 D4 16 D4 8 R 16 C4 16  vel +15 C4 8 vel -15 R 16 Bb3 16 Bb3 8 R 16 A3 16  
+;m 134
+vel +15 A3 8 vel -15 R 16 G3 16 G3 8 R 16 F3 16  vel +15 F3 8 vel -15 R 16 Eb3 16 Eb3 8 R 16 D3 16  
+;m 135
+D3 8 R 8
+R 8 vel +10 Bb1 8 vel -10 Bb1 8 vel +10 R 8 vel -10  R 8 vel +10 F2 8 vel -10 F2 8 vel +10 R 8 vel -10  
+;m 136
+R 8 vel +10 F1 8 vel -10 F1 8 vel +10 R 8 vel -10  
+R 8 Eb2 8
+;m 137
+vel +15 D2 8 vel -15 R 16 C3 16 C3 8 R 16 B2 16  vel +15 B2 8 vel -15 R 16 Ab2 16 Ab2 8 R 16 G2 16  )
+;m 138
+vel +15 G3 8 vel -15 R 16 F3 16 F3 8 R 16 Eb3 16 vel +15 Eb3 8 vel -15 R 16 D3 16 Db3 8 R 16 C3 16 
+;m 139
+vel +15 C3 8 vel -15 R 16 Bb2 16 Bb2 8 R 16 A2 16 vel +15 Bb2 8 vel -15 R 16 G2 16 F2 8 R 16 Eb2 16 
+;m 140
+vel +15 D2 8 vel -15 R 16 C2 16 Bb1 8 R 16 Eb2 16 
+D2 8 R 4.
+;m 141
+R 2/1
+;m 142
+
+;m 143
+R 8 F3 8 F3 8 F3 8 F#3 8 Eb4 8 Eb4 8 D4 8 
+;m 144
+D4 8 F#3 8 F#3 8 G3 8 G3 8 E4 8 Eb4 8 Eb4 8 
+;m 145
+D4 8 R 8 R 4 R 2
+;m 146
+R 2 R 4 R 12 Bb1 12 C3 12
+;m 147
+C3 12 A1 12 C3 12 C3 12 A1 12 Eb3 12  Eb3 12 D3 12 C3 12 C3 12 Bb2 12 A2 12  
+;m 148
+Bb2 12 Bb1 12 Bb2 12 Bb2 12 Bb1 12 D3 12  D3 12 C3 12 Bb2 12 Bb2 12 A2 12 C3 12  
+;m 149
+Bb2 12 A2 12 G2 12 G2 12 F#2 12 A2 12  G2 12 F3 12 Eb3 12 F3 12 Eb3 12 D3 12  
+;m 150
+Eb3 12 D3 12 C3 12 C3 12 B2 12 D3 12  C3 12 Bb2 12 A2 12 Bb2 12 A2 12 G2 12  
+;m 151
+A2 12 G2 12 F2 12 F2 12 Eb2 12 G2 12  F2 12 Eb2 12 D2 12 Eb2 12 D2 12 C2 12  
+;m 152
+D2 12 C2 12 B1 12 C2 12 Bb1 12 A1 12  Bb1 12 A1 12 G#1 12 A1 12 G1 12 F1 12  
+;m 153
+Bb1 12 A1 12 G1 12 C2 12 Bb1 12 A1 12  D2 12 C2 12 Bb1 12 Eb2 12 D2 12 C2 12  
+;m 154
+F2 12 Eb2 12 D2 12 G2 12 F2 12 E2 12  A2 12 G2 12 F2 12 G2 12 Eb2 12 F2 12  
+;m 155
+vel +15 Bb1 8 vel -15 R 16 D3 16 Bb1 8 R 16 Bb1 16 vel +15 Bb1 8 vel -15 R 16 D3 16 Bb1 8 R 16 B1 16 
+;m 156
+vel +15 G1 8 vel -15 R 16 B2 16 G1 8 R 16 G1 16 vel +15 C2 8 vel -15 R 16 C3 16 Bb2 8 R 16 Bb2 16 
+;m 157
+vel +15 A2 8 vel -15 R 16 Ab2 16 Ab2 8 R 16 G2 16 vel +15 Gb2 8 vel -15 R 16 F2 16 F1 8 R 16 F2 16 
+;m 158
+vel +15 F1 8 vel -15 R 16 F2 16 F1 8 R 16 A2 16 vel +15 F1 8 vel -15 R 16 C3 16 F2 8 R 16 F1 16 
+;m 159
+vel +15 Gb1 8 vel -15 R 16 Gb2 16 A1 8 R 16 A2 16 vel +15 C2 8 vel -15 R 16 C3 16 Gb2 8 R 16 Gb1 16 
+;m 160
+vel +15 Gb1 8 vel -15 R 16 Gb2 16 Bb1 8 R 16 Bb2 16 vel +15 Bb1 8 vel -15 R 16 Db3 16 Gb2 8 R 16 Gb1 16 
+;page 12
+;m 161
+END_LAZY
+KEY_SIGNATURE Gb
+LAZY
+vel 43
+R 2
+;m 162
+R 2
+;m 163
+R 2
+;m 164
+R 16 vel +4 Gb3 98/1536 vel -4 C4 16 Db4 94/1536  Db4 8 R 8
+;m 165
+R 2
+;m 166
+R 94/1536 C3 16 vel +4 Db3 98/1536 vel -4 Db4 8/128  Db4 8 R 8
+;m 167
+R 94/1536 R 16 vel +4 Bb3 98/1536 vel -4 Ab3 8/128  Ab3 94/1536 Gb3 16 vel +4 Db4 98/1536 vel -4 Cb4 8/128 
+;m 168
+Bb3 8 R 8 R 4
+;m 169
+10/2
+;m 170
+;m 171
+;m 172
+;m 173
+;m 174
+;m 175
+;m 176
+;m 177
+;m 178
+;m 179
+R 8 Ab3 8 Ab3 8 Ab3 8 
+;m 180
+vel +6 Ab3 16 vel -6 C3 16 Db3 16 Ab3 16  Ab3 8 R 8
+;m 181
+R 8 Ab3  8 Ab3  8 Ab3  8
+;m 182
+vel +6 Ab3 16 vel -6 G3 16 Ab3 16 C4 16  C4 8 C4 8
+;m 183
+Db4 8 R 8 R 4
+;m 184
+R 16 R 16 vel +6 Db4 16 vel -6 Cb4 16  Cb4 16 Bb3 16 vel +6 Bb3 16 vel -6 Ab3 16 
+;m 185
+Gb3 8 R 8 Gb2 4
+;m 186
+G2 4 Fb3 4
+;m 187
+Eb3 4 G2 4
+;m 188
+Ab2 4 F3 4
+;m 189
+vel +4 Gb3 98/1536 vel -4 F3 8/128 Gb3 16 Ab3 94/1536 
+F3 8 Db3 8
+;m 190
+Bb2 8 R 4.
+;m 191
+R 4 Bb2 8 R 8
+;m 192
+Eb3 8 R 8 Ab2 8 R 8
+;m 193
+Ab2 16 R 16 Ab2 16 R 16 Gb2 16 R 16 F2  16 R 16
+;m 194
+Gb2 16 R 16 F2 16 R 16 Eb2 16 R 16 Ab2 16 R 16
+;m 195
+R 4 Db2 4
+;m 196
+D2 4 Cb3 4
+;page 14
+;m 197
+Bb2 4 D2 4
+;m 198
+Eb2 4 Db3 4
+;m 199
+C3 4 E2 4
+;m 200
+F2 2
+;m 201
+F1 F2 1
+;m 202
+
+;m 203
+Bb1 Bb2 1
+;m 204
+
+;m 205
+Eb2 1
+;m 206
+
+;m 207
+Ab1 Ab2 2.
+;m 208
+
+Db2 5/4
+;m 209
+
+;m 210
+
+;m 211
+Gb3 8 R 8 Gb3 8 R 8
+;m 212
+Gb3 8 R 8 Gb3 8 R 8
+;m 213
+Gb3 8 R 8 Gb3 8 R 8
+;m 214
+Gb3 8 R 8 Gb3 8 R 8
+;m 215
+Gb3 4 Bb3 4
+;m 216
+Eb4 8 Eb3 8 Gb3 4
+;m 217
+Cb4 8 Cb3 8 Bb3 4
+;m 218
+Cb4 4 C3 C4 4
+;m 219
+Db3 8 R 8 Db3 8 R 8
+;m 220
+Db3 8 R 8 Db3 8 R 8
+;m 221
+Db3 8 R 8 Db3 8 R 8
+;m 222
+Db3 8 R 8 Db3 8 R 8
+;m 223
+vel +12 Db3 8 R 8 vel +12 Db3 8 R 8
+;m 224
+vel +12 Db3 8 R 8 vel +12 Db3 8 vel 90 Db2 9/128 Cb2 7/128
+;m 225
+Cb2 16 Bb1 16 vel +6 Bb2 16 vel -6 Ab2 16  Ab2 16 Gb2 16 vel +6 Db3 16 vel -6 Cb3 16 
+;m 226
+Cb3 16 Bb2 16 vel +6 Eb3 16 vel -6 Db3 16  Db3 16 Cb3 16 vel +6 Db3 16 vel -6 Bb2 16 
+;m 227
+Db3 16 Cb3 16 vel +6 Eb3 16 vel -6 Db3 16  Db3 16 Cb3 16 vel +6 Db3 16 vel -6 Bb2 16 
+;m 228
+vel +6 Bb2 16 vel -6 Ab2 16 Gb2 16 F2 16  Eb2 16 Db2 16 vel +6 Eb2 16 vel -6 Cb2 16 
+;m 229
+vel 75
+vel -5 Bb1 16 Bb2 16 vel +6 Bb1 16 vel -6 Bb2 16  vel +5 
+vel -5 Eb2 16 Bb2 16 vel +6 Eb2 16 vel -6 Bb2 16  vel +5 
+;m 230
+vel 62
+vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5 
+vel -5 Bb1 16 F2 16 vel +6 Bb1 16 vel -6 F2 16  vel +5 
+;m 231
+vel 52
+vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5 vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5  
+;m 232
+vel -5
+vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5 vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5  
+;m 233
+vel 43
+vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5 vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5  
+;m 234
+vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5 vel -5 F1 16 F2 16 vel +6 F1 16 vel -6 F2 16  vel +5  
+;page 16
+;m 235
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 110
+vel +10 Bb1 Bb2 4 vel -10 Bb2 8 B2 4 Ab3 8 
+;m 236
+vel +10 G3 8 vel -10 R 8 B2 8 C3 4 A3 8 
+;m 237
+Bb3 8 R 4 R 4.
+;m 238
+R 2.
+;m 239
+vel 52
+vel +10 R 4 vel -10 Bb2 8 B2 4 Ab3 8  
+;m 240
+vel +10 G3 8 vel -10 R 8 B2 8 C3 4 A3 8 
+;m 241
+vel +10 Bb3 4 vel -10 R 8 F3 4 R  8 
+;m 242
+vel +10 F2 4 vel -10 R 8 F2 4 R  8 
+;m 243
+vel +10 Bb2 4 vel -10 R 8 Bb2 4 R  8 
+;m 244
+vel +10 A2 4 vel -10 R 8 G2 4 R  8 
+;m 245
+F2 4 R 2
+;m 246
+vel +10 Bb2 4 vel -10 R 8 A2 4 R  8 
+;m 247
+G2 4 R 2
+;m 248
+vel +10 Eb3 4 vel -10 R 8 D3 4 R  8 
+;m 249
+C3 4 R 2
+;m 250
+vel +10 F3 4 vel -10 R 8 F2 4 R  8 
+;m 251
+Bb2 4 R 2
+;m 252
+vel +10 Eb4 4 vel -10 R 8 D4 4 R  8 
+;m 253
+C4 4 R 8 R 4 Eb3 8
+;m 254
+vel +10 F3 4 vel -10 R 8 F3 4 R  8 
+;m 255
+vel +10 Bb3 4 vel -10 Bb2 8 B2 4 Ab3 8 
+;m 256
+vel +10 G3 8 vel -10 R 8 B2 8 C3 4 A3 8 
+;m 257
+Bb3 8 R 4 F3 4 R 8
+;m 258
+vel +10 F3 4 vel -10 R 8 F3 4 R  8 
+;m 259
+vel +10 F3 4 vel -10 R 8 Bb2 4 R  8 
+;m 260
+vel +10 A2 4 vel -10 R 8 G2 4 R  8 
+;m 261
+F2 4 R 2
+;m 262
+vel +10 Bb3 4 vel -10 R 8 A3 4 R  8 
+;m 263
+G3 4 R 2
+;m 264
+vel +10 Eb2 4 vel -10 R 8 D2 4 R  8 
+;m 265
+vel +10 C2 4 vel -10 R 8 Eb2 4 R  8 
+;m 266
+vel +10 F2 4 vel -10 R 8 F3 4 R  8 
+;m 267
+vel +10 Bb2 4 vel -10 R 8 Bb3 D4 F4 4 R  8 
+;m 268
+vel +10 Eb2 4 vel -10 R 8 D2 4 R  8 
+;m 269
+vel +10 C2 4 vel -10 R 8 Eb3 4 R  8 
+;m 270
+vel +10 F3 4 vel -10 R 8 F2 4 R  8 
+;m 271
+vel +10 Bb2 4 vel -10 R 8 G2 4 R  8 
+;m 272
+vel 62
+vel +10 B2 4 vel -10 R 8 C3 4 R  8 
+;m 273
+vel 75
+R 2.
+;m 274
+vel 90
+R 4.
+Ab2 15/8
+;m 275
+END_LAZY
+KEY_SIGNATURE Ab
+LAZY
+vel 110
+
+;m 276
+
+;m 277
+A2 2.
+;m 278
+Gb3 2.
+;m 279
+F3 2.
+;m 280
+A2 2.
+;m 281
+vel +10 Bb2 4 vel -10 R 8 G3 4 R  8 
+;m 282
+Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/24 G3 1/24 Ab3 1/24 
+;m 283
+G3 4 R 2
+;m 284
+R 2.
+;m 285
+R 2.
+;m 286
+R 2.
+;page 18
+;m 287
+R 2.
+;m 288
+R 2.
+;m 289
+R 2.
+;m 290
+R 2.
+;m 291
+R 2.
+;m 292
+vel +10 R 4 vel -10 F2 8 Eb2 4 Gb1 8  
+;m 293
+vel +10 R 4 vel -10 Db3 8 C3 4 Eb2 8  
+;m 294
+vel +10 R 4 vel -10 Bb2 8 A2 4 C2 8  
+;m 295
+vel +10 R 4 vel -10 C3 8 Bb2 4 Db2 8  
+;m 296
+vel +10 R 4 vel -10 Db3 8 C3 4 Eb2 8  
+;m 297
+vel +10 R 4 vel -10 Eb3 8 Db3 4 Fb2 8  
+;m 298
+vel +10 Eb2 4 vel -10 Db3 8 C3 4 Eb2 8 
+;m 299
+Eb2 4 R 8 A2 4.
+;m 300
+Bb2 4. G3 4 R 8
+;m 301
+R 4. C2 4.
+;m 302
+A2 4. Bb2 4.
+;m 303
+R 4. Ab2 4. 
+;m 304
+Bb2 4. G3 4 R 8
+;m 305
+R 4. F2 4. 
+;m 306
+G2 4. Eb3 4.
+;m 307
+R 4. Ab2 4.
+;m 308
+Bb2 4. Gb3 4 R 8
+;m 309
+R 4. E2 4.
+;m 310
+F2 4. C2 15/8
+;m 311
+
+;m 312
+
+;m 313
+Db2 2.
+;m 314
+Bb2 2.
+;m 315
+A2 4 R 8 Db4 4.
+;m 316
+vel +10 C4 4 vel -10 Gb3 8 F3 4 A2 8 
+;m 317
+vel +10 R 4 vel -10 F3 8 Eb3 4 F2 8  
+;m 318
+vel +10 R 4 vel -10 Gb2 8 F2 4 F1 8  
+;m 319
+R 2.
+;m 320
+vel +10 R 4 vel -10 C3 8 Bb2 4 D2 8  
+;m 321
+R 2.
+;m 322
+vel +10 R 4 vel -10 G3 8 F3 4 Ab2 8  
+;m 323
+vel +10 R 4 vel -10 Ab2 8 G2 4 Bb1 8  
+;m 324
+R 4. Eb2 17/8
+;m 325
+;m 326
+
+;m 327
+R 8
+Ab2 4 R 8
+;m 328
+Bb2 1/16 C3 1/16 Bb2 1/16 C3 1/16 Bb2 1/16 C3 1/16 Bb2 1/16 C3 1/16 Bb2 1/16 C3 1/16 Bb2 1/24 Ab2 1/24 Bb2 1/24 
+;m 329
+Ab2 4 R 2
+;m 330
+vel +10 R 4 vel -10 Bb3 8 Ab3 4 Db3 8  
+;m 331
+vel +10 Db3 4 vel -10 R 8 Gb3 4 R  8 
+;m 332
+Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/16 Bb3 1/16 Ab3 1/24 Gb3 1/24 Ab3 1/24 
+;m 333
+Gb3 4 R 2
+;m 334
+vel +10 R 4 vel -10 G#3 8 F#3 4 A#2 8  
+;m 335
+vel +10 B2 4 vel -10 R 8 E2 4 R  8 
+;m 336
+F#2 1/16 G#2 1/16 F#2 1/16 G#2 1/16 F#2 1/16 G#2 1/16 F#2 1/16 G#2 1/16 F#2 1/16 G#2 1/16 F#2 1/24 E2 1/24 F#2 1/24 
+;m 337
+E2 4 R 2
+;m 338
+vel +10 R 4 vel -10 F#3 8 E3 4 A2 8  
+;m 339
+vel +10 A2 4 vel -10 R 8 D4 4 R  8 
+;m 340
+E4 1/16 F#4 1/16 E4 1/16 F#4 1/16 E4 1/16 F#4 1/16 E4 1/16 F#4 1/16 E4 1/16 F#4 1/16 E4 1/24 D4 1/24 E4 1/24 
+;m 341
+vel +10 D4 4 vel -10 R 8 A3 4 R  8 
+;m 342
+A3 1/16 B3 1/16 A3 1/16 B3 1/16 A3 1/16 B3 1/16 A3 1/16 B3 1/16 A3 1/16 B3 1/16 A3 1/24 G3 1/24 A3 1/24 
+;m 343
+vel +10 G3 4 vel -10 R 8 F4 4 R  8 
+;m 344
+F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/16 G4 1/16 F4 1/24 E4 1/24 F4 1/24 
+;m 345
+vel +10 E4 4 vel -10 R 8 G3 4 R  8 
+;m 346
+G3 1/16 A3 1/16 G3 1/16 A3 1/16 G3 1/16 A3 1/16 G3 1/16 A3 1/16 G3 1/16 A3 1/16 G3 1/24 F3 1/24 G3 1/24 
+;m 347
+F3 4 R 2
+;m 348
+R 4. C4 5/8
+;m 349
+
+R 8 F3 4 R 8
+;m 350
+F3 1/16 G3 1/16 F3 1/16 G3 1/16 F3 1/16 G3 1/16 F3 1/16 G3 1/16 F3 1/16 G3 1/16 F3 1/24 E3 1/24 F3 1/24 
+;m 351
+vel +10 Db3 4 vel -10 R 8 Db2 4 R  8 
+;m 352
+Db2 1/16 Eb2 1/16 Db2 1/16 Eb2 1/16 Db2 1/16 Eb2 1/16 Db2 1/16 Eb2 1/16 Db2 1/16 Eb2 1/16 Db2 1/24 C2 1/24 Db2 1/24 
+;m 353
+C2 4 R 2
+;m 354
+R 2.
+;page 20
+;m 355
+R 2.
+;m 356
+R 2.
+;m 357
+R 2.
+;m 358
+R 2.
+;m 359
+R 2.
+;m 360
+R 2.
+;m 361
+R 2.
+;m 362
+R 2.
+;m 363
+R 2.
+;m 364
+R 4. Eb3 15/8
+;m 365
+
+;m 366
+
+;m 367
+vel +10 E3 4 vel -10 R 8 C4 4 R  8 
+;m 368
+Db4 1/16 Eb4 1/16 Db4 1/16 Eb4 1/16 Db4 1/16 Eb4 1/16 Db4 1/16 Eb4 1/16 Db4 1/16 Eb4 1/16 Db4 1/24 C4 1/24 Db4 1/24 
+;m 369
+vel +10 F2 4 vel -10 R 8 C3 4 R  8 
+;m 370
+Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/24 C3 1/24 Db3 1/24 
+;m 371
+vel +10 Gb2 4 vel -10 R 8 C3 4 R  8 
+;m 372
+Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/16 Eb3 1/16 Db3 1/24 Eb3 1/24 Db3 1/24 
+;m 373
+Gb1 Gb2 3/1
+;m 374
+
+;m 375
+
+;m 376
+
+;m 377
+Gb1 Gb2 9/4
+;m 378
+
+;m 379
+
+;m 380
+Gb2 Gb3 4 R 8 F1 15/8
+;m 381
+
+;m 382
+
+;m 383
+Gb1 11/16 F2 16
+;m 384
+Eb2 2.
+;m 385
+A1 1.
+;m 386
+
+;m 387
+Bb1 2.
+;m 388
+Gb2 2.
+;m 389
+C2 1.
+;m 390
+
+;m 391
+D2 11/16 Cb3 16
+;m 392
+Bb2 2.
+;m 393
+Eb2 1.
+;m 394
+
+;m 395
+F2 2.
+;m 396
+D3 2.
+;m 397
+Gb2 1.
+;m 398
+
+;m 399
+A2 11/16 Gb3 16
+;m 400
+F3 2.
+;m 401
+Bb1 1.
+;m 402
+
+;m 403
+C2 2.
+;m 404
+A2  14/8
+;m 405
+
+;m 406
+
+R 8
+F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/16 Gb2 1/16 F2 1/24 Eb2 1/24 F2 1/24 
+;m 407
+
+;m 408
+Gb2 4 R 2
+;m 409
+R 2.
+;m 410
+R 4.
+Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/24 G2 1/24 Ab2 1/24 
+;m 411
+
+;m 412
+Bb2 4 R 2
+;m 413
+R 2.
+;m 414
+Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/16 Bb2 1/16 Ab2 1/24 G2 1/24 Ab2 1/24 
+;m 415
+vel +10 Bb2 4 vel -10 R 8 Bb1 Bb2 4 R  8 
+;page 22
+;m 416
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+Eb2 4 R 2
+vel 52
+;m 417
+R 2.
+;m 418
+vel 110
+R 2.
+;m 419
+R 2.
+;m 420
+R 2.
+;m 421
+R 2.
+;m 422
+vel 110
+R 2.
+;m 423
+R 2.
+;m 424
+R 2.
+;m 425
+R 2.
+;m 426
+R 4.
+D3 8 Eb3 8 Eb4 13/8
+;m 427
+
+;m 428
+
+;m 429
+D4 2.
+;m 430
+E3 8 F3 5/8
+;m 431
+R 2.
+;m 432
+vel +10 R 4 vel -10 D3 8 C4 4 Cb4 8  
+;m 433
+vel +10 Bb3 4 vel -10 Ab3 8 Ab3 4 G3 8 
+;m 434
+vel +10 G3 4 vel -10 F3 8 Eb3 4 Db3 8 
+;m 435
+vel +10 C3 4 vel -10 Bb2 8 Bb2 4 A2 8 
+;m 436
+vel +10 Bb2 4 vel -10 Ab2 8 Ab2 4 G2 8 
+;m 437
+vel +10 F2 4 vel -10 Fb2 8 Eb2 4 Eb2 8 
+;m 438
+vel +10 Eb2 4 vel -10 Db2 8 Db2 4 C2 8 
+;m 439
+vel +10 C2 4 vel -10 Bb3 8 Bb3 4 C4 8 
+;m 440
+vel +10 G3 4 vel -10 Ab3 8 Ab3 4 Bb3 8 
+;m 441
+vel +10 E2 4 vel -10 F2 8 F2 4 G2 8 
+;m 442
+vel +10 F2 4 vel -10 Eb2 8 Eb2 4 Db2 8 
+;m 443
+vel +10 D3 4 vel -10 Eb3 8 Eb3 4 F3 8 
+;m 444
+Eb3 4 R 2
+;m 445
+Eb4 2.
+;m 446
+Db4 4 R 8 E3 8 F3 8 F4 7/8
+;m 447
+
+;m 448
+Eb4 4 R 8 E3 8 F3 8 Eb4 7/8
+;m 449
+
+;m 450
+Db4 4 R 8 D2 8 Eb2 8 Db3 8
+;m 451
+C3 4 R 8 D2 8 Eb2 8 C3 8
+;m 452
+D3 4 R 8 D2 8 Eb2 8 D3 8
+;m 453
+vel +10 Eb2 4 vel -10 R 8 Ab2 4 R  8 
+;m 454
+vel +10 Eb3 4 vel -10 R 8 Eb2 4 R  8 
+;m 455
+END_LAZY
+KEY_SIGNATURE Eb
+LAZY
+Ab1 Ab2 1.
+;m 456
+
+;m 457
+A1 A2 2.
+;m 458
+Gb2 Gb3 4 R 2
+;m 459
+Bb1 Bb2 2.
+;m 460
+G2 G3 4 R 2
+;m 461
+C2 C3 2.
+;m 462
+Ab2 Ab3 4 R 2
+;m 463
+F3 1.
+;m 464
+
+;m 465
+Eb3 2.
+;m 466
+F2 4 R 2
+;m 467
+Bb2 1.
+;m 468
+
+;m 469
+Cb3 2.
+;m 470
+Ab3 4 R 2
+;m 471
+Eb3 1.
+;m 472
+
+;m 473
+Db3 2.
+;m 474
+Fb2 4 R 2
+;page 24
+;m 475
+C3 2.
+;m 476
+Eb2 4 R 2
+;m 477
+Bb2 4. Db2 8 R 4
+;m 478
+vel +10 Ab2 4 vel -10 C2 8 Eb2 4 Ab1 8 
+;m 479
+D2 D3 8 Eb2 Eb3 8 Eb2 Eb3 8 R 4.
+;m 480
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 481
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 482
+R 4 Eb2 8 Eb2 8 R 4
+;m 483
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 484
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 485
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 486
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 487
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 488
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 489
+R 4 Eb2 8 Eb2 8 R 4
+;m 490
+R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
+;m 491
+vel +10 R 4 vel -10 Eb2 8 F3 4 F3 8  
+;m 492
+vel +10 F3 4 vel -10 Eb2 8 F3 4 F3 8 
+;m 493
+vel +10 G3 4 vel -10 Eb2 8 G3 4 G3 8 
+;m 494
+vel +10 Ab3 4 vel -10 Eb2 8 Ab2 4 Ab2 8 
+;m 495
+vel 75
+Ab2 8 R 8 R 4
+;m 496
+R 16 vel +6 Ab1 16 vel -6 Ab2 16 Ab2 16  Ab2 16 vel +6 Ab1 16 vel -6 Ab2 16 Ab2 16 
+;m 497
+vel +5
+Ab2 8 
+vel -5
+R 4.
+;m 498
+R 16 vel +6 C2 16 vel -6 Eb3 16 Eb3 16  Eb3 16 vel +6 C2 16 vel -6 Eb3 16 Eb3 16 
+;m 499
+vel +5
+Db2 8 
+vel -5
+R 4.
+;m 500
+R 16 vel +6 Db2 16 vel -6 F3 16 F3 16  F3 16 vel +6 Db2 16 vel -6 F3 16 F3 16 
+;m 501
+vel +5
+Eb2 8 
+vel -5
+R 4.
+;m 502
+R 16 vel +6 Eb2 16 vel -6 Eb3 16 Eb3 16  Eb3 16 vel +6 Eb2 16 vel -6 Eb3 16 Eb3 16 
+;m 503
+vel +5
+Eb3 8 
+vel -5
+R 8 
+vel 90
+D2 4
+;m 504
+Eb2 4 Db2 Db3 4
+;m 505
+C2 C3 4
+G1 G2 4
+;m 506
+Ab1 Ab2 4 Gb2 Gb3 4
+;m 507
+F2 F3 4 A1 A2 4
+;m 508
+Bb1 Bb2 4 Ab2 4
+;m 509
+G2 4 Bb1 4
+;m 510
+C2 4 Db2 4
+;m 511
+D2 4 Eb2 3/8
+;m 512
+Eb2 Eb3 8 
+Eb2 Eb3 8 
+R 8
+;m 513
+R 4
+vel 90
+Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 
+;m 514
+
+;m 515
+
+R 4
+;m 516
+R 2
+;m 517
+R 4
+vel 90
+Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 
+;m 518
+vel 75
+Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 Eb2 48 F2 48 
+;m 519
+vel 62
+E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 
+R 4
+;m 520
+R 2
+;m 521
+R 4
+vel 52
+E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 E2 48 F2 48 
+;m 522
+
+;m 523
+
+R 4
+;m 524
+R 2
+;page 26
+;m 525
+R 4
+F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 F2 48 G2 48 
+;m 526
+
+;m 527
+
+R 8 R 4
+;m 528
+R 2
+;m 529
+R 4
+vel 43
+F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 G2 24 F2 24 
+;m 530
+
+;m 531
+
+R 4.
+;m 532
+R 2
+;m 533
+R 4
+F2 16 G2 16 F2 16 G2 16 F2 16 G2 16 F2 16 G2 16 F2 16 G2 16 F2 16 G2 16 
+;m 534
+
+;m 535
+END_LAZY
+KEY_SIGNATURE Bb
+LAZY
+vel 90
+Bb1 4
+vel 52
+Bb2 8 B2 4 Ab3 8
+;m 536
+vel +10 G3 8 vel -10 R 8 B2 8 C3 4 A3 8 
+;m 537
+vel +10 Bb3 8 vel -10 R 8 R 8 F3 4 R 8 
+;m 538
+vel +10 F2 4 vel -10 R 8 F2 4 R  8 
+;m 539
+vel +10 Bb2 4 vel -10 R 8 Bb2 4 R  8 
+;m 540
+vel +10 A2 4 vel -10 R 8 G2 4 R  8 
+;m 541
+vel +10 F2 4 vel -10 R 8 R 4 R  8 
+;m 542
+vel +10 Bb2 4 vel -10 R 8 A2 4 R  8 
+;m 543
+vel +10 G2 4 vel -10 R 8 R 4 R  8 
+;m 544
+vel +10 Eb3 4 vel -10 R 8 D3 4 R  8 
+;m 545
+vel +10 C3 4 vel -10 R 8 R 4 R  8 
+;m 546
+vel +10 F3 4 vel -10 R 8 F2 4 R  8 
+;m 547
+vel +10 Bb2 4 vel -10 R 8 R 4 R  8 
+;m 548
+vel +10 Eb4 4 vel -10 R 8 D4 4 R  8 
+;m 549
+C4 4 R 8 R 4 Eb3 8
+;m 550
+vel +10 F3 4 vel -10 R 8 F3 4 R  8 
+;m 551
+vel +10 Bb3 4 vel -10 Bb2 8 B2 4 Ab3 8 
+;m 552
+vel +10 G3 8 vel -10 R 8 B2 8 C3 4 A3 8 
+;m 553
+vel +10 Bb3 8 vel -10 R 8 R 8 F3 4 R 8 
+;m 554
+vel +10 F3 4 vel -10 R 8 F3 4 R  8 
+;m 555
+vel +10 F3 4 vel -10 R 8 Bb2 4 R  8 
+;m 556
+vel +10 A2 4 vel -10 R 8 G2 4 R  8 
+;m 557
+vel +10 F2 4 vel -10 R 8 R 4 R  8 
+;m 558
+vel +10 Bb3 4 vel -10 R 8 A3 4 R  8 
+;m 559
+vel +10 G3 4 vel -10 R 8 R 4 R  8 
+;m 560
+vel +10 Eb2 4 vel -10 R 8 D2 4 R  8 
+;m 561
+vel +10 C2 4 vel -10 R 8 Eb2 4 R  8 
+;m 562
+vel +10 F2 4 vel -10 R 8 F3 4 R  8 
+;m 563
+vel +10 Bb2 4 vel -10 R 8 Bb3 D4 F4 4 R  8 
+;m 564
+vel +10 Eb2 4 vel -10 R 8 D2 4 R  8 
+;m 565
+vel +10 C2 4 vel -10 R 8 Eb3 4 R  8 
+;m 566
+vel +10 F3 4 vel -10 R 8 F2 4 R  8 
+;m 567
+D4 5/8 F4 8 
+;m 568
+vel 62
+D4 5/8 Eb4 8 
+;m 569
+D4 5/8 F4 8 
+;m 570
+vel 75
+D4 5/8 Eb4 8 
+;m 571
+vel 90
+C#4 5/8 D4 8 
+;m 572
+Eb4 5/8 E4 8 
+;m 573
+vel 75
+F4 5/8 F4 8 
+;m 574
+vel 62
+F4 4. G4 4 A4 8
+;m 575
+vel 52
+Bb4 4
+A4 8 Bb4 5/8 
+;m 576
+A4 8 Bb4 5/8 
+;m 577
+A4 8 Bb4 5/8 
+;m 578
+A4 8 Bb4 4.
+;m 579
+F4 5/8 D4 8 
+;m 580
+G3 5/8 Db3 8 
+;m 581
+vel 75
+C3 5/8 C4 8 
+;m 582
+vel 62
+C3 5/8 C3 8 
+;m 583
+vel 52
+F3 4
+F2 8 F#2 5/8 
+;m 584
+F#2 8 G2 5/8 
+;m 585
+Ab2 8 A2 5/8 
+;m 586
+Bb2 8 B2 4 C3 8
+;page 28
+;m 587
+D3 4 R 2
+;m 588
+R 2.
+;m 589
+R 2.
+;m 590
+R 2.
+;m 591
+vel 43
+R 5/8 A2 8
+;m 592
+Bb2 5/8 G2 8 
+;m 593
+Ab2 5/8 F#2 8 
+;m 594
+G2 5/8 F2 8 
+;m 595
+Eb2 4 R 8 R 4 G3 8
+;m 596
+Ab3 4 R 8 R 4 A3 8 
+;m 597
+Bb3 4 R 8 R 4 B3 8
+;m 598
+C4 4 R 8 R 4 D4 8 
+;m 599
+Eb4 4 R 2
+;m 600
+R 2.
+;m 601
+R 4.
+F2 8 R 4
+;m 602
+F#2 8 R 4 Eb3 8 R 4
+;m 603
+D3 8 R 5/8
+;m 604
+R 2.
+;m 605
+R 4. B2 8 R 4
+;m 606
+C3 8 R 4 A3 8 R 4
+;m 607
+Bb3 8 R 4 F#2 8 R 4
+;m 608
+G3 8 R 4 D2 8 R 4
+;m 609
+Eb3 8 R 4 B2 8 R 4
+;m 610
+C3 8 R 4 F3 8 R 4
+;m 611
+G2 1.
+;m 612
+
+;m 613
+C2 9/4
+;m 614
+
+;m 615
+
+;m 616
+F2 9/4
+;m 617
+
+;m 618
+
+;m 619
+E2 9/4
+;m 620
+
+;m 621
+
+;m 622
+R 2.
+;m 623
+R 2.
+;m 624
+E2 1.
+;m 625
+
+;m 626
+R 2.
+;m 627
+R 2.
+;m 628
+vel 52
+E2 2.
+;m 629
+vel 62
+F2 2.
+;m 630
+vel 75
+F4 1
+;m 631
+
+R 8 F4 4 R 8
+;m 632
+vel 90
+R 4. Bb3 4 R 8
+;m 633
+R 4. F3 4 R 8
+;m 634
+R 4. Bb2 4 R 8
+;m 635
+R 4. F4 4 R 8
+;m 636
+vel +10 Bb3 4 vel -10 R 8 F3 4 R  8 
+;m 637
+vel +10 Bb2 4 vel -10 R 8 F2 4 R  8 
+;m 638
+vel +10 D2 4 vel -10 R 8 Bb1 Bb2 4 R  8 
+;m 639
+vel 52
+F3 13/4
+;m 640
+vel 62
+;m 641
+vel 75
+;m 642
+
+;m 643
+vel 90
+F4 8 Gb4 5/8 
+;m 644
+F4 8 Gb4 5/8 
+;m 645
+vel 75
+F4 8 Gb4 5/8 
+;m 646
+vel 62
+F4 8 Gb4 4 F4 8
+;m 647
+vel 52
+C4 4 B3 8
+C4 5/8 B3 8 
+;m 648
+vel 62
+C4 5/8 B3 8 
+;m 649
+vel 75
+C4 5/8 D4 8 
+;m 650
+Eb4 1
+;m 651
+vel 90
+
+D4 8
+;m 652
+Eb4 5/8 D4 8 
+;m 653
+Eb3 5/8 D3 8 
+;m 654
+vel 75
+Eb3 5/8 D3 8 
+;m 655
+vel 62
+D3 5/8 C3 8 
+;m 656
+vel 52
+C3 5/8 Bb2 8 
+;m 657
+vel 43
+Bb2 5/8 Ab2 8 
+;m 658
+Ab2 5/8 G2 8 
+;m 659
+F2 4
+vel 110
+R 4
+R 2
+;m 660
+R 1
+;m 661
+R 1
+;page 30
+;m 662
+vel 43
+R 2
+;m 663
+R 2
+;m 664a
+; I made it a regular 2/4 bar to do the fermata
+R 2
+;m 664b
+vel 110
+Bb1 Bb2 9/4
+;m 665
+
+;m 666
+
+;m 667
+
+B1 B2 2.
+;m 668
+
+Ab2 Ab3 2.
+;m 669
+
+G2 G3 2.
+;m 670
+
+B1 B2 2.
+;m 671
+
+C2 C3 2.
+;m 672
+
+Bb2 Bb3 2.
+;m 673
+
+A2 A3 2.
+;m 674
+
+F1 F2 2.
+;m 675
+
+Eb2 2.
+;m 676
+
+D2 2.
+;m 677
+
+G2 2.
+;m 678
+
+F2 2.
+;m 679
+
+Eb2 2.
+;m 680
+
+D2 5/8
+;m 681
+R 8
+Db2 4 R 8
+;m 682
+C3 2.
+;m 683
+Bb1 Bb2 4 R 2
+;m 684
+R 4.
+F2 4.
+;m 685
+vel 75
+Bb2 4 R 2
+;m 686
+vel 62
+R 4.
+F2 3/1
+;m 687
+vel 52
+;m 688
+vel 43
+;m 689
+
+;m 690
+
+Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 Eb2 1/16 F2 1/16 
+;m 691
+
+;m 692
+
+;m 693
+
+;m 694
+
+;m 695
+
+;m 696
+
+;m 697
+
+;m 698
+
+;m 699
+
+;m 700
+
+;m 701
+
+;m 702
+F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/24 E2 1/24 F2 1/24 
+;m 703
+
+Bb2 4 R 8
+;m 704
+R 2.
+;m 705
+R 2.
+;m 706
+R 4.
+F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/16 G2 1/16 F2 1/24 E2 1/24 F2 1/24 
+;m 707
+vel 90
+Bb2 4 R 8
+;m 708
+R 2.
+;m 709
+R 2.
+;m 710
+R 4.
+A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/24 G2 1/24 A2 1/24 
+;m 711
+
+Bb2 4 R 8
+;m 712
+vel 62
+R 2.
+;m 713
+A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/24 G2 1/24 A2 1/24 
+Bb2 4 R 8
+;m 714
+vel 52
+R 2.
+;m 715
+A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/24 G2 1/24 A2 1/24 
+Bb2 4 R 8
+;m 716
+R 2.
+;m 717
+vel 43
+A2 1/16 Bb2 1/16 A2 1/16 Bb2 1/16 A2 1/24 G2 1/24 A2 1/24 
+Bb2 4 R 8
+;m 718
+R 4.
+Bb1 15/8
+;m 719
+;m 720
+;m 721
+vel 75
+B1 2.
+;m 722
+Ab2 2.
+;m 723
+G2 2.
+;m 724
+vel 62
+B1 2.
+;m 725
+C2 2.
+;m 726
+A1 A2 2.
+;m 727
+Bb1 Bb2 2.
+;m 728
+F#1 F#2 2.
+;m 729
+vel 75
+G1 G2 2.
+;m 730
+D2 2.
+;m 731
+Eb2 2.
+;m 732
+B1 B2 2.
+;m 733
+C2 C3 2.
+;m 734
+vel 90
+F2 F3 2.
+;m 735
+vel +10 F2 4 vel -10 D2 8 F2 4 F2 8 
+;m 736
+vel +10 F2 4 vel -10 Eb2 8 F2 4 F2 8 
+;m 737
+vel +10 F2 4 vel -10 D2 8 F2 4 F2 8 
+;m 738
+vel 110
+vel +10 F2 4 vel -10 F2 8 F1 4 F1 8 
+;m 739
+Bb1 4 R 2
+;m 740
+vel +10 R 4 vel -10 F2 8 F1 4 F1 8  
+;m 741
+Bb1 4 R 2
+;m 742
+vel +10 R 4 vel -10 F2 8 F1 4 F1 8  
+;m 743
+ticks secondolh 743
+Bb1 Bb2 4 R 2
+; fine
+END_LAZY
+END_OF_TRACK
+
+

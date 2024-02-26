@@ -1,5 +1,6 @@
 #!/usr/bin/m4
 changecom(`;')
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 define(`pppp',`vel 10')
 define(`ppp',`vel 30')
 define(`pp',`vel 40')

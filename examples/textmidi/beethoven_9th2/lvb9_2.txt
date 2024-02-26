@@ -1,5 +1,6 @@
 #!/usr/bin/m4
 
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 
 
 
@@ -30,7 +31,7 @@ TEXT © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 
 LAZY
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY
 TEMPO 348
 TIME_SIGNATURE 3 4 24
@@ -55,6 +56,7 @@ R 1.
 
 
 
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY
 TEMPO 348
 TIME_SIGNATURE 3 4 24
@@ -265,6 +267,7 @@ R 2.
 ; end of repeated section
 
 
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY
 TEMPO 348
 TIME_SIGNATURE 3 4 24
@@ -475,7 +478,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 293 between the repeat sections
 R 2.
 R 2.
@@ -488,7 +491,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY TEXT vel 50 29
 LAZY
 ;m 301
@@ -855,7 +858,7 @@ R 2.
 R 2.
 R 2.
 ; end of first ending new year's eve
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY TEXT vel 50 29
 LAZY
 ;m 301
@@ -1208,7 +1211,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 771
 R 2.
 ;m 772
@@ -1277,7 +1280,7 @@ R 1
 R 1
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 END_LAZY KEY_SIGNATURE D 
 LAZY
@@ -1299,7 +1302,7 @@ R 1
 R 1
 ;m 806.1
 R 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 END_LAZY KEY_SIGNATURE D 
 LAZY
@@ -1321,7 +1324,7 @@ R 1
 ; the next measure has the repeat sign in the middle of it.
 ;m 813
 R 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 814
 R 1
 ;m 815
@@ -1468,7 +1471,7 @@ R 1
 
 ;m 882 next measure has the end repeat in mid-bar
 R 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 814
 R 1
 ;m 815
@@ -1613,7 +1616,7 @@ R 1
 R 1
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; second ending
 ;m 951
 R 1
@@ -1650,7 +1653,7 @@ R 4
 END_LAZY
 TEMPO 348
 LAZY
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY
 TEMPO 348
 TIME_SIGNATURE 3 4 24
@@ -1675,6 +1678,7 @@ R 1.
 
 
 
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY
 TEMPO 348
 TIME_SIGNATURE 3 4 24
@@ -1885,7 +1889,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 293 between the repeat sections
 R 2.
 R 2.
@@ -1898,7 +1902,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 END_LAZY TEXT vel 50 29
 LAZY
 ;m 301
@@ -2251,7 +2255,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 771
 R 2.
 ;m 772
@@ -2330,7 +2334,7 @@ TRACK Piano1
 PROGRAM 1 1
 LAZY 
 chan 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 1
 vel 110
 END_LAZY DAMPER 1 127 LAZY 
@@ -2354,7 +2358,7 @@ END_LAZY DAMPER 1 0 LAZY
 R 1.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of first repeat
 ;m 9
 vel 40
@@ -2662,7 +2666,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of first repeat
 ;m 9
 vel 40
@@ -2970,7 +2974,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 293 between the repeat sections
 vel 40
 A4 D5 F4 D3 D2 8 R 4 A3 D4 F3 8 A3 D4 F3 8 R 8
@@ -2984,7 +2988,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start second repeated section
 ;p 29
 
@@ -3486,7 +3490,7 @@ G4 Bb4 Eb4 G3 Bb3 Eb3 8 R 8 R 2
 2.
 2.
 ; end of first ending new year's eve
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start second repeated section
 ;p 29
 
@@ -3973,7 +3977,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;second ending
 
 vel 40
@@ -4067,7 +4071,7 @@ vel 50
 D4 8 R 8 B3 8 -D5 8 A3 E5- 8 R 8 G3 8 -E5 8
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 vel 50
 
@@ -4089,7 +4093,7 @@ G5 D5 B2 8 R 8 G5 E5 Db3 8 R 8 Gb5 D4 D3 8 R 8 D5 Gb5 Ab3 8 R 8
 E5 Db5 A3 8 R 4. D5- D5- D4 8 R 8 Db4 8 R 8
 ;m 806.1
 D4 8 R 8 B3 8 -D5 8 E5- A3 8 R 8 G3 8 -D5 -E5 8
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 vel 50
 
@@ -4110,7 +4114,7 @@ G5 D5 B2 8 R 8 G5 E5 Db3 8 R 8 Gb5 D4 D3 8 R 8 D5 Gb5 Ab3 8 R 8
 ; the next measure has the repeat sign in the middle of it.
 ;m 813
 A3 Db5 E5 8 R 4.  D2- D3 4 E3 4
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 vel 50
 ;m 814
 Gb3 4 G3 4 A3 D3- 4 B3 -D3 -D2 4
@@ -4281,7 +4285,7 @@ B1 B2 B4 G5 B5 8 R 8 G5 B5 B4 G2 G1 8 R 8 Gb5 Db6 Db5 A2 A1 8 R 8 Gb5 Db6 Db5 A3
 
 ;m 882 =951 next measure has the end repeat in mid-bar
 Gb5 D6 D5 D3 D2 4 R 4 D2- D3 4 E3 4
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 vel 50
 ;m 814
 Gb3 4 G3 4 A3 D3- 4 B3 -D3 -D2 4
@@ -4450,7 +4454,7 @@ F#4- A4- D5- F#5- Gb3 Gb2 4 E3 E2 4 D3 D2 -F#4 -A4 -D5 -F#5 4 C3 C2 G4 G5 8 A4 A
 B1 B2 B4 G5 B5 8 R 8 G5 B5 B4 G2 G1 8 R 8 Gb5 Db6 Db5 A2 A1 8 R 8 Gb5 Db6 Db5 A3 A2 8 R 8
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; second ending
 ;m 882=951
 vel 90 Gb5 D6 D5 D3 D2 4 R 4 vel 50 D3- D4- D5 D6 8 R 8 C#5 C#6 8 R 8
@@ -4629,7 +4633,7 @@ D3- Bb3- D4- D5 D6 4 Bb4 Bb5 4 A4 A5 4 G4 G5 -D3 -Bb3 -D4 4
 
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 1
 vel 110
 END_LAZY DAMPER 1 127 LAZY 
@@ -4653,7 +4657,7 @@ END_LAZY DAMPER 1 0 LAZY
 R 1.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of first repeat
 ;m 9
 vel 40
@@ -4961,7 +4965,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 293 between the repeat sections
 vel 40
 A4 D5 F4 D3 D2 8 R 4 A3 D4 F3 8 A3 D4 F3 8 R 8
@@ -4975,7 +4979,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start second repeated section
 ;p 29
 
@@ -5462,7 +5466,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 vel 40
 ;m 771
 vel +10
@@ -5571,7 +5575,7 @@ TRACK Piano2
 PROGRAM 1 1
 LAZY 
 chan 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;p 26
 ; segno
 ;m 1
@@ -5588,7 +5592,7 @@ R 2.
 R 1.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of repeat 1
 ;m 9
 R 2.
@@ -5800,7 +5804,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of repeat 1
 ;m 9
 R 2.
@@ -6012,7 +6016,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 293 between the repeat sections
 R 2.
 R 2.
@@ -6025,7 +6029,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 301
 R 2.
 R 2.
@@ -6388,7 +6392,7 @@ R 2.
 R 2.
 R 2.
 ; end of first ending new year's eve
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 301
 R 2.
 R 2.
@@ -6736,7 +6740,7 @@ R 2.
 ; start of first ending
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;second ending
 
 
@@ -6803,7 +6807,7 @@ R 1
 R 1
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 
 
@@ -6825,7 +6829,7 @@ R 1
 R 1
 ;m 806.1
 R 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 
 
@@ -6847,7 +6851,7 @@ R 1
 ; the next measure has the repeat sign in the middle of it.
 ;m 813
 R 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 814
 R 1
 ;m 815
@@ -6994,7 +6998,7 @@ R 1
 
 ;m 882 next measure has the end repeat in mid-bar
 R 1
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 814
 R 1
 ;m 815
@@ -7139,7 +7143,7 @@ R 1
 R 1
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; second ending
 ;m 951
 R 1
@@ -7236,7 +7240,7 @@ R 1
 
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;p 26
 ; segno
 ;m 1
@@ -7253,7 +7257,7 @@ R 2.
 R 1.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of repeat 1
 ;m 9
 R 2.
@@ -7465,7 +7469,7 @@ R 2.
 ; end of repeated section
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 293 between the repeat sections
 R 2.
 R 2.
@@ -7478,7 +7482,7 @@ R 2.
 R 2.
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 301
 R 2.
 R 2.
@@ -7826,7 +7830,7 @@ R 2.
 ; start of first ending
 
 
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ;m 771
 R 2.
 ;m 772

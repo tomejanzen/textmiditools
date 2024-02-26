@@ -1,4 +1,4 @@
-;© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 ; start of 8-bar presto repeat
 END_LAZY KEY_SIGNATURE D 
 LAZY

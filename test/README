@@ -1,1 +1,95 @@
-dummy
+======================================================================
+    TextMIDITools/test -- Test files for MIDI file converters.
+
+                    Thomas E. Janzen
+                    <janzentome@gmail.com>
+
+======================================================================
+What is this?
+======================================================================
+
+General Information
+
+TextMIDITools/test is a test script and 7 lists of MIDI files from the
+classical archive (https://www.classicalarchives.com).  These MIDI
+files are not provided here but seem to still be available from
+classicalarchives.com.
+
+The converters are:
+textmidi - convert a text representation of a MIDI file into a binary
+           standard MIDI file.
+miditext - convert a binary standard MIDI file into a text representation.
+
+The smustextmidi program is not tested by textmidiroundtriptest.py.
+
+Run as follows:
+
+./textmidiroundtriptest.py classical_archives0.txt
+./textmidiroundtriptest.py classical_archives1.txt
+./textmidiroundtriptest.py classical_archives2.txt
+./textmidiroundtriptest.py classical_archives3.txt
+./textmidiroundtriptest.py classical_archives4.txt
+./textmidiroundtriptest.py classical_archives5.txt
+./textmidiroundtriptest.py classical_archives6.txt
+
+At this time, all textmidi file pairs match exactly, and 98-99% of
+MIDI files compare exactly.  Those that do not match are assumed
+to be MIDI files that violate the MIDI SMF specification and will
+probably not be investigated further.
+
+======================================================================
+Features
+======================================================================
+
+* textmidiroundtriptest.py
+  + Uses the textmidi utility to convert an original MIDI file to a
+  textmidi file, then
+  + Uses the miditext utility to convert the resulting textmidi file
+  back into a Standard MIDI File, then
+  + Uses the textmidi utility to convert the second MIDI file to
+  a second textmidi file, then
+  + compares the original and converted MIDI file, then
+  + compares the first and second textmidi files.
+  + Reports the total number of input files, and the percentages
+  of identical pairs of MIDI and textmidi files.
+  + As it operates on each file, reports if one of the comparisons
+  fails and gives the name of the failing files.
+  + Since some, especially older, MIDI files violate the
+  way that MIDI running status is to be used, the textmidi program
+  and the textmidiroundtriptest.py script support the writing of
+  MIDI files that misuse running status in the same way, so that
+  files can be made to match, showing that there are no other
+  differences.   The different running status policies are:
+      1. standard; textmidi's interpretation of the spec
+         The file list should read either:
+         classical_archives/bach/BachAnnaMagdalenaNotebook/6/3men.mid
+         or
+         classical_archives/bach/BachAnnaMagdalenaNotebook/6/3men.mid,standard
+      2. never; also put out the status byte (the command+channel).
+         Hence the file list line should read:
+           classical_archives/bach/BachAnnaMagdalenaNotebook/0/anna-18.mid,never
+      3. persistentaftermeta; MIDI META events do not reset running status
+         The file list line should read:
+         classical_archives/bach/Bach_BWV1000-1013/4/chacona.mid,persistentaftermeta
+      4. persistentaftersysex; MIDI SYSEX events do not reset running status
+      5. persistentaftersysexormeta; neither SYSEX or META events reset running status
+  The MIDI files used were downloaded or purchased by about 2005; it possible that
+  some of them were later repaired, replaced, or deleted.
+
+======================================================================
+Where to get a copy
+======================================================================
+
+The latest release of TextMIDITools are available at:
+github.
+
+======================================================================
+How to install
+======================================================================
+
+The test files are not installed in a system area but may be run
+from the path to which the package was de-archived.
+
+textmidiroundtriptest.py is written to work on linux and uses the diff utility.
+
+

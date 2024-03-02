@@ -1303,19 +1303,20 @@ An R inserts a rest.
 C4 4 R 4 E4 4
 @end smallexample
 
-Any LAZY mode directives must be after a duration and before a notename.
+Any LAZY mode directives must be after a duration and before a notename or rest.
 The chan directive and the vel directive (and other dynamics) apply to all following
 notes until another directive changes them.
 
 @smallexample
-c#4 e4- 4. chan 3 d4 f4 8 e4 g4 4. ff f4 ab4 8 g4 b4 4. vel -5 a4 c5 8 -e4 b4 d5 4. c5 eb5 8
+c#4 e4- 4. chan 3 d4 f4 8 e4 g4 4. ff f4 ab4 8 g4 b4 4. 
+vel -5 a4 c5 8 -e4 b4 d5 4. c5 eb5 8
 @end smallexample
 
 @node Using m4 with @command{textmidi}
 @chapter Using m4 with @command{textmidi}
 @cindex m4
 It can be convenient to use the m4 macro processor.  A trill that is defined
-as an m4 macro need not be painstakingly written by hand.
+as an m4 macro need not be painstakingly written multiple times by hand.
 Note that as the @command{textmidi} comment character is a semicolon ";",
 you should change the m4 comment character to semicolon using
 the m4 directive changecom.

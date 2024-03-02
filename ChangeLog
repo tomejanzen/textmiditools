@@ -1,3 +1,27 @@
+2024-03-01     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc: remove comment written to textmidi file
+        of the number of bytes in a track.
+        * textmidi.py, classical_archive[0123456].txt: 
+        Rewrite test scripts for textmidi and miditext, move to
+        test directory.
+
+2024-02-25     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: minor changes to use of pan_map in
+        PAN and CONTROL PAN blocks.  Notice repeated code
+        to be refactored TODO.
+
+2024-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: add CONTROL [chan] CHANNEL_VOLUME 100
+        to beginning of tracks with General MIDI instruments.
+
+2024-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven_grosse_fuge: Add example of Beethoven's
+        own piano-duo transcription of his Grosse Fuge for string quartet.
+
+2024-01-08     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven9th_2: Add example of molto vivace of the
+        Beethoven d minor symphony.
+
 2024-01-03     Thomas E. Janzen <janzentome@gmail.com>
         * MusicalForm.cc: random(), which generates a random form,
         should make a random value for walking that is in [0.0...1.0) or similar.
@@ -10,6 +34,9 @@
         Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability
         that a voice will be in walking mode from note to note, but be backwards-
         compatible with old XML form files.
+
+2023-12-21     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/schuqnt: Add example of Schumann Quintet in textmidi.
 
 2023-11-28     Thomas E. Janzen <janzentome@gmail.com>
         * dynamics.cfg, main.cc, Makefile.am, Makefile.in, MidiEvents.cc, 

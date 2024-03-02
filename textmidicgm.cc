@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.69
+// TextMIDITools Version 1.0.70
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.69\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.70\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.69\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.70\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";

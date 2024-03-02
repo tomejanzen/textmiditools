@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.69
+// TextMIDITools Version 1.0.70
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -684,9 +684,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             << "LAZY\nchan " << voice.channel() << '\n';
 #endif
         textmidi_str.clear();
-        ((((((((((((textmidi_str += "STARTTRACK\nTRACK ") += lexical_cast<string>(track_index))
+        (((((((((((((((textmidi_str += "STARTTRACK\nTRACK ") += lexical_cast<string>(track_index))
             += "\nPROGRAM ") += lexical_cast<string>(voice.channel())) += ' ') += lexical_cast<string>(voice.program()))
             += "\nPAN ") += lexical_cast<string>(voice.channel())) += ' ') += lexical_cast<string>(voice.pan()))
+            += "\nCONTROL ") += lexical_cast<string>(voice.channel())) += " CHANNEL_VOLUME 100\n")
             += "\nLAZY\nchan ") += lexical_cast<string>(voice.channel())) += '\n';
         textmidi_file << textmidi_str;
         int lastVel{128};

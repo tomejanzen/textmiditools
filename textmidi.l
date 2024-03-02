@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.69
+** TextMIDITools Version 1.0.70
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -955,10 +955,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(control_id);
 
     to_upper(control_value_str);
-    const auto position = pan_map(control_value_str);
-    if (position)
+    const auto map_iter{pan_map(control_value_str)};
+    if (map_iter)
     {
-        control_value = *position;
+        control_value = *map_iter;
     }
     else
     {
@@ -1061,11 +1061,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(control_pan[0]);
 
     to_upper(panstring);
-    const auto pan = pan_map(panstring);
+    const auto map_iter{pan_map(panstring)};
     int32_t pancode{};
-    if (pan)
+    if (map_iter)
     {
-        pancode = *pan;
+        pancode = *map_iter;
     }
     else
     {

@@ -439,7 +439,7 @@ sixteenthshalf3(R,R,Bb3,Ab3,Ab3,Gb3,Db4,Cb4)
 ;m 168
 Bb3 8 R 8 R 4
 ;m 169
-10/2
+R 10/2
 ;m 170
 ;m 171
 ;m 172

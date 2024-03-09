@@ -1,13 +1,27 @@
-These files are the textmidi-language files for the Piano Quintet Op. 44 by
+======================================================================
+    TextMIDITools/examples/textmidi/schumann_quintet
+
+                    Thomas E. Janzen
+                    <janzentome@gmail.com>
+
+======================================================================
+What is this?
+======================================================================
+
+General Information
+
+The files herein are textmidi-language files for the musical work that is 
+the Piano Quintet Op. 44 by
 Robert Schumann, written in 1842.  These files were written by Thomas E. Janzen
 in about 2003 and following using the first version of the textmidi program.
-This quintet rendering was coached by Massachusetts violist and string
+This quintet rendering was coached by eastern-Massachusetts violist and string
 instructor Jenny Stirling.
 
 The base source files were written using the m4 macro preprocessor, hence
 filenames that end in ".m4".  Using m4 made it possible to write such
 verbosities as trills and swells/fades on a note in a simpler way in the track
-files.
+files.  The m4 utility is not in general required to make MIDI SMF files 
+with textmidi.
 
 Each instrument (violin 1, violin 2, viola, cello, and piano) has its own m4
 track file.  In addition, there are 2 to 4 files for the piano, for left-hand,
@@ -28,3 +42,23 @@ favorite player did not support it; therefore the version of this Quintet on
 classicalarchives.com does not include pressure at all in the second movement
 (although Schumann indicated swells and fades).  The version here uses Channel
 Pressure.
+
+======================================================================
+Features
+======================================================================
+The file serves as a demonstration of the textmidi program.
+The use of the m4 macro preproecessor simplifies the expression of the
+musical events.
+
+======================================================================
+Where to get a copy
+======================================================================
+The latest release of TextMIDITools are available at:
+github.
+
+======================================================================
+How to install
+======================================================================
+The example is in the de-archived kit for TextMIDITools created by
+github when a new release of TextMIDITools is created.
+It has not been included in the kit file separately created for releases.

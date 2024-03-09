@@ -1,0 +1,42 @@
+0 no failures
+1 no failures
+2 no failures
+3 no failures
+4 no failures
+5 no failures
+6 no failures
+never had no failures
+
+persistentaftermeta had 100% FAILURES
+
+
+   358    358  20866 classical_archives0.txt
+   370    370  21462 classical_archives1.txt
+   359    359  20912 classical_archives2.txt
+   362    362  20954 classical_archives3.txt
+   344    344  20135 classical_archives4.txt
+   370    370  21746 classical_archives5.txt
+   384    384  22420 classical_archives6.txt
+  2559   2559 167575 classical_archives_never.txt
+     3      3    178 classical_archives_otherfails.txt
+    52     52   4102 classical_archives_persistentaftermeta.txt
+  5161   5161 320350 total
+
+
+Fri Mar  8 08:38:10 PM EST 2024
+
+powersettests0.txt 0/87 mid differ 
+powersettests1.txt 12/101 mid differ
+powersettests2.txt 2/87 mid differ
+powersettests3.txt 11/100 mid differ
+powersettests4.txt 16/103 mid differ
+powersettests5.txt 10/97 mid differ
+
+   87    87  5326 powersettests0.txt
+  101   101  6349 powersettests1.txt
+   87    87  5152 powersettests2.txt
+  100   100  6163 powersettests3.txt
+  103   103  6531 powersettests4.txt
+   97    97  5924 powersettests5.txt
+  575   575 35445 total
+

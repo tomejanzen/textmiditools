@@ -1,6 +1,5 @@
 classical_archives/Schumann/Schumann_Top/0/rsch33.mid
 classical_archives/bach/BachAnnaMagdalenaNotebook/6/2men.mid
-classical_archives/bach/Bach_Anhang/0/bjs-ming.mid,persistentaftermeta
 classical_archives/bach/Bach_BWV1000-1013/1/cs1-4sar.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs2-2all.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs3-5bou.mid
@@ -105,8 +104,6 @@ classical_archives/beethoven/Beethoven_ChamberMusic/021/beet_son.mid
 classical_archives/beethoven/Beethoven_ChamberMusic/1/son24-4.mid
 classical_archives/beethoven/Beethoven_ChamberMusic/2/bestqu2b.mid
 classical_archives/beethoven/Beethoven_ChamberMusic/4/beet87_4.mid
-classical_archives/beethoven/Beethoven_MissaSolemnis/4/be123ad.mid,persistentaftermeta
-classical_archives/beethoven/Beethoven_OtherPianoSolo/0/afav.mid,persistentaftermeta
 classical_archives/beethoven/Beethoven_OtherPianoSolo/0/be126n6.mid
 classical_archives/beethoven/Beethoven_OtherPianoSolo/021/tw_woo14.mid
 classical_archives/beethoven/Beethoven_OtherPianoSolo/023/beba33-4.mid
@@ -114,7 +111,6 @@ classical_archives/beethoven/Beethoven_OtherPianoSolo/023/beet_129.mid
 classical_archives/beethoven/Beethoven_Sonatas/023/bems2.mid
 classical_archives/beethoven/Beethoven_Sonatas/023/bems3.mid
 classical_archives/beethoven/Beethoven_Sonatas/2/moon3.mid
-classical_archives/beethoven/Beethoven_Sonatas/prs/moonlite.mid,persistentaftermeta
 classical_archives/beethoven/Beethoven_Symphony1/012/beesy12.mid
 classical_archives/beethoven/Beethoven_Symphony1/013/bt_s1_2.mid
 classical_archives/beethoven/Beethoven_Symphony1/013/bt_s1_4.mid
@@ -163,7 +159,6 @@ classical_archives/chopin/Chopin_Etudes/2/ch_etu12.mid
 classical_archives/chopin/Chopin_Etudes/3/chnvet02.mid
 classical_archives/chopin/Chopin_Etudes/7/chop1003.mid
 classical_archives/chopin/Chopin_Polonaises/013/chopol_a.mid
-classical_archives/chopin/Chopin_Preludes/0/chpr28_2.mid
 classical_archives/chopin/Chopin_Preludes/0/mtcp628.mid
 classical_archives/chopin/Chopin_Preludes/1/prelud24.mid
 classical_archives/chopin/Chopin_Preludes/7/chpn-p9.mid
@@ -274,7 +269,6 @@ classical_archives/mendelssohn/Mendelssohn_Various1/023/mearca.mid
 classical_archives/mozart/Mozart_ChamberMusicK379/0/kv581a.mid
 classical_archives/mozart/Mozart_ChamberMusicK379/8/moz487_1.mid
 classical_archives/mozart/Mozart_ChamberMusicK379/9/eknm1.mid
-classical_archives/mozart/Mozart_ChamberMusic_K378/011/wamkv364.mid,persistentaftermeta
 classical_archives/mozart/Mozart_ChamberMusic_K378/2/mozsinfo.mid
 classical_archives/mozart/Mozart_ChamberMusic_K378/3/div1al.mid
 classical_archives/mozart/Mozart_ChamberMusic_K378/3/div1an.mid
@@ -358,7 +352,6 @@ classical_archives/schubert/Schubert_PianoSonatas/1/sy_ss104.mid
 classical_archives/schubert/Schubert_PianoSonatas/3/d958-3.mid
 classical_archives/schubert/Schubert_PianoVarious/021/erste_wa.mid
 classical_archives/schubert/Schubert_PianoVarious/024/scbt0946.mid
-classical_archives/schubert/Schubert_PianoVarious/6/schu33_1.mid,persistentaftermeta
 classical_archives/schubert/Schubert_PianoVarious/8/schmome1.mid
 classical_archives/schubert/Schubert_SymphonicWorks/012/jksb417b.mid
 classical_archives/schubert/Schubert_SymphonicWorks/1/ssmph9-2.mid

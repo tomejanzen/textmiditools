@@ -24,18 +24,33 @@ The smustextmidi program is not tested by textmidiroundtriptest.py.
 
 Run as follows:
 
-./textmidiroundtriptest.py classical_archives0.txt
-./textmidiroundtriptest.py classical_archives1.txt
-./textmidiroundtriptest.py classical_archives2.txt
-./textmidiroundtriptest.py classical_archives3.txt
-./textmidiroundtriptest.py classical_archives4.txt
-./textmidiroundtriptest.py classical_archives5.txt
-./textmidiroundtriptest.py classical_archives6.txt
+./textmidiroundtriptest.py classical_archives0.txt [all 358 match]
+./textmidiroundtriptest.py classical_archives1.txt [all 370 match]
+./textmidiroundtriptest.py classical_archives2.txt [all 359 match]
+./textmidiroundtriptest.py classical_archives3.txt [all 362 match]
+./textmidiroundtriptest.py classical_archives4.txt [all 344 match]
+./textmidiroundtriptest.py classical_archives5.txt [all 370 match]
+./textmidiroundtriptest.py classical_archives6.txt [all 384 match]
+./textmidiroundtriptest.py classical_archives_never.txt [all 2559 match; 
+    the original files do not apply MIDI "running status" at all]
+./textmidiroundtriptest.py classical_archives_otherfails.txt [only all 55 MIDI file compares fail]
 
-At this time, all textmidi file pairs match exactly, and 98-99% of
+At this time, all textmidi text file pairs match exactly, and 98-99% of
 MIDI files compare exactly.  Those that do not match are assumed
 to be MIDI files that violate the MIDI SMF specification and will
-probably not be investigated further.
+probably not be investigated further.  A small sample were found to 
+inconsistently apply MIDI "running status".
+
+Power set tests are meant to nearly completely cover all combinations of
+a set of MIDI features.  The script textmidiroundtriptest.py runs on these
+files as well.  The text files compare the same in all cases:
+
+powersettests0.txt [0/87 midi files differ] 
+powersettests1.txt [12/101 midi files differ]
+powersettests2.txt [2/87 midi files differ]
+powersettests3.txt [11/100 midi files differ]
+powersettests4.txt [16/103 midi files differ]
+powersettests5.txt [10/97 midi files differ]
 
 ======================================================================
 Features

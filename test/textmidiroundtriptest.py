@@ -35,7 +35,6 @@ def testmidi(filename, an_option = "standard"):
     tempmidifilepath = Path(temp_directory_name.name)
     tempmidifilepath = tempmidifilepath.joinpath(filenamepath.name) 
 
-#/usr/bin/env sed -i -f ~/me/janzent/sed/starttrack.sed ${temp_directory_name}/${bn}.txt
     retextmidifilepath = Path(temp_directory_name.name)
     retextmidifilepath = retextmidifilepath.joinpath('_B' + filenamepath.with_suffix('.txt').name)
 
@@ -49,7 +48,6 @@ def testmidi(filename, an_option = "standard"):
     remiditext_lines = remiditext_log.readlines() 
     remiditext_log.close()
 
-#/usr/bin/env sed -i -f ~/me/janzent/sed/starttrack.sed ${temp_directory_name}/${bn}_B.txt
     diff_midi_cmd = "/usr/bin/env diff -s " + filenamepath.as_posix() + ' ' + tempmidifilepath.as_posix()
     diff_midi_log = os.popen(diff_midi_cmd, 'r')
     diff_midi_lines = diff_midi_log.readlines()
@@ -61,6 +59,7 @@ def testmidi(filename, an_option = "standard"):
         if (search_rtn):
             if search_rtn.group(1) == "differ":
                 midi_differ_count = midi_differ_count + 1
+                print(line)
             else:
                 if search_rtn.group(1) == "are identical":
                     midi_identical_count = midi_identical_count + 1

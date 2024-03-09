@@ -1,7 +1,2728 @@
+2024-03-08     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi: Format the README files. Change the name of
+        bach_wtc_i_prelude_vii.  Fix a mistake in tenor m. 62 of missing rest,
+        found by the new textmidi feature on stray rhythms.
+
+2024-03-08     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: Create new start state to capture rhythms but reject
+        a lone rhythm in lazy mode.
+        * test/classical_archives?.txt, test/classical_archives_never.txt, 
+        test/classical_archives_persistentaftermeta.txt,
+        test/classical_archives_otherfails.txt: Move 
+        bad running status examples and other fails out of the main fails into 
+        separate files.
+        * test/textmidiroundtriptest.py: print if MIDI file compare
+        fails.
 2024-03-01     Thomas E. Janzen <janzentome@gmail.com>
         * miditext.cc: remove comment written to textmidi file
         of the number of bytes in a track.
-        * textmidi.py, classical_archive[0123456].txt: 
+        * textmidiroundtriptest.py, classical_archive[0123456].txt: 
+        Rewrite test scripts for textmidi and miditext, move to
+        test directory.
+
+2024-02-25     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: minor changes to use of pan_map in
+        PAN and CONTROL PAN blocks.  Notice repeated code
+        to be refactored TODO.
+
+2024-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: add CONTROL [chan] CHANNEL_VOLUME 100
+        to beginning of tracks with General MIDI instruments.
+
+2024-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven_grosse_fuge: Add example of Beethoven's
+        own piano-duo transcription of his Grosse Fuge for string quartet.
+
+2024-01-08     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven9th_2: Add example of molto vivace of the
+        Beethoven d minor symphony.
+
+2024-01-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.cc: random(), which generates a random form,
+        should make a random value for walking that is in [0.0...1.0) or similar.
+
+2024-01-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix setting of walking scrollbar from file.
+
+2024-01-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidicgm.texi, textmidiformedit.texi, VoiceWindow.py, 
+        Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability
+        that a voice will be in walking mode from note to note, but be backwards-
+        compatible with old XML form files.
+
+2023-12-21     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/schuqnt: Add example of Schumann Quintet in textmidi.
+
+2023-11-28     Thomas E. Janzen <janzentome@gmail.com>
+        * dynamics.cfg, main.cc, Makefile.am, Makefile.in, MidiEvents.cc, 
+        MidiMaps.h, miditext.cc, Options.h, smustextmidi.cc, SmusTrackEvent.cc,
+        textmidicgm.cc, textmidi.l: Make settable values for dynamics symbols.
+
+2023-08-24     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: note events were being pushed onto the wrong track's container.
+        They should be pushed on the "tr", the track index, not "i" which was incremented.
+        The index "i" has been deleted.
+        The symptom was that following higher priority voices seemed to work but following
+        lower priority tracks (e.g., track 0 followed track 1), failed to write any tracks.
+
+2023-08-20     Thomas E. Janzen <janzentome@gmail.com>
+	* GeneralMIDI.cc, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        guitar range was an octave high.  textmidiformedit: transpose spinbox
+        didn't set when files were loaded.
+
+2023-08-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am Makefile.in:  Compile with std=c++23.  
+
+2023-08-01     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, MIDIKeyString.h, Makefile, Makefile.am, Makefile.in, 
+        Midi.cc, Midi.h, NoteEvent.h, Options.h, SmusTrackEvent.h, Track.h, 
+        cgmlegacy.h, config.h, config.h.in, config.status, configure:
+        make constexpr that are inside namespaces as inline.
+
+2023-07-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h: delete obsolete unused externs.
+        * Midi.h, main.cc, textmidi.{l,h}:
+        use a Singleton Pattern for the global values.  eww.
+
+2023-07-30     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, main.cc, textmidi.{l,h}:
+        make running_status a unique_ptr.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: ensure dec IO manipulator is used
+        after any use of hex, probably unnecessarily.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc: fix mishandling of default runningstatus="STANDARD,
+        not "standard".
+
+2023-07-18     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h, MidiMaps.{h,cc}, textmidi.cc, MidiMaps.cc,
+        MidiEvents.{h,cc}, Midi.{h,cc}, main.cc:
+        Add support to textmidi for a variety of misuse of MIDI running status
+        in order to support testing with input files that had been created 
+        by incorrectly written MIDI file software.
+        Changed the runningstatus option in textmidi.
+
+2023-07-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc: Fix unbounded recursion.
+        * add debian/ packaging support
+
+2023-06-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: fix compiler error "used but not defined" on ticks 
+        functions by removing the base class's declarations of them.
+
+2023-06-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, Composer.h, Midi.h, MidiEvents.h, MusicalForm.h,
+        NoteEvent.h, RhythmRational.h, SmusTrackEvent.h, Track.h, Voice.h, cgmlegacy.h:
+        Apply rule of 5: virtual base classes should have all 5 special functions defaulted.
+        * MidiEvents{h,cc}: apply bridge pattern by creating separate implementation class
+        for MidiEvent.
+
+2023-06-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc:  handle improper key signatures.
+
+2023-05-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, RhythmRational.cc, cgmlegacy.cc,
+        textmidi.l, textmidicgm.cc: Build with -pedantic and fix.
+
+2023-05-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        Fix issue with file load setting program low/high_pitch by adding buttons
+        to the Voice Window marked "From Program", meaning, if the program is
+        a clarinet, then pushing "From Program" will set a low pitch or high pitch
+        suitable for a clarinet patch.  Add "Defaults" menu item to the plot window.
+        Repair defects that were revealed by a load file test.
+
+2023-05-09     Thomas E. Janzen <janzentome@gmail.com>
+         * AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
+         Continue applying Python TCL/Tk widget variables (StringVar and IntVar),
+         and applying the callbacks to those and not the widgets.
+
+2023-05-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, VoiceWindow.py, textmidiformedit.py:
+        Modernize and correct and rewrite usage of Python TCL/Tk, esp. wrt 
+        use of widget variables correctly.
+
+2023-05-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, defaults.form.xml, defaults_1_voice_range_0.form.xml, 
+        defaults_2_voice_follow.form.xml, defaults_2_voice_follow_walk.form.xml,
+        defaults_2_voice_follow_walk_scalar.form.xml,
+        defaults_2_voice_follow_walk_tritone.form.xml, 
+        notes20230506.txt, textmidiformedit.py:
+        Test. Put default name into save form file and save Postscript file
+        dialogs.  Add default extensions into each.
+        Set first note of walking voice to mid-scale.
+        * textmidiformedit.py, VoiceWindow.py: repair usage of IntVar. Use get/set.
+        Repair disable/enable of follow-only widgets, and walking, which is
+        anti-follow.
+
+2023-05-05     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: Make form plot lines more readable.
+        Add boundaries for excess thresholds.
+
+2023-05-04     Thomas E. Janzen <janzentome@gmail.com>
+        * VoiceWindow.py, textmidiformedit.py: overhaul draw_form().
+        * Composer.cc, Voice.h, VoiceWindow.py, textmidiformedit.py:
+        Add support for follower voice inversion.
+
+2023-05-03     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Composer.cc, FormFrame.py, Sine.py, Voice.h, 
+        VoiceWindow.py, textmidiformedit.py: Add voice/follow/retrograde and
+        voice/follow/follow_pitch (default true). Retrograde seems to work
+        but follow_pitch disable is not implemented yet.
+
+2023-05-02     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, Sine.py: overhaul
+        Form Window to add widgets for sine offset and amplitude.
+
+2023-05-01     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiString.cc, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py:
+        Straighten out interoperability of XML form files from
+        and to textmidicgm and from and to textmidiformedit.py.
+
+2023-04-30     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, textmidiformedit.py, VoiceWindow.py:
+        Catch up python GUI with additions of follower delay and
+        arrangements in XML.
+
+2023-04-29     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, NoteEvent.h:  Activate follower delay (for canons).
+        Add exception for out of range leader_ as index.
+        Test and fix new XML format in the C++ code.
+
+2023-04-24     Thomas E. Janzen <janzentome@gmail.com>
+               * Arrangements.{cc,h}, Composer.{cc,h}, textmidicgm.cc, textmidicgm.texi:
+        rename track scrambling to arrangements.  Improve documentation of
+        arrangements.  Change arrangement "None" to "Identity" and document.
+        * textmidi.l: Remove the linefeed from definition of LINE.
+ 
+2023-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{h,cc}, textmidicgm.texi, HeapsAlgorithmTemplate.h:
+        Change HeapsAlgorithmTemplate.h to construct from the
+        array to permute and its length.  Document all of the Arrangers.
+
+2023-04-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MusicalForm.cc, textmidicgm.texi:
+        Redefine track scrambling to be easier to see what it will do.
+        It will play a track if it is in the list in the track scrambled
+        vector, for the number of voices playing, from element 0 on.
+        I don't know how it worked before, it was haphazardly written.
+
+2023-04-19     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{cc,h}, Composer.cc, HeapsAlgorithmTemplate.h: Replace
+        Heaps Algorithm with one developed from original paper.
+
+2023-04-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc, Arrangements.h, Composer.cc:
+        Integrate Arrangements in order to accomodate Heaps permutation algorithm.
+
+2023-04-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h, Makefile.am, buildkit.bash,
+       textmidicgm.cc textmidicgm.texi: Integrate Arrangements
+       for track scrambling.  Sort of working.
+
+2023-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, Makefile.am textmidi.l MidiString.{h,cc}: move
+        string escape and quotes handling out of textmidi
+        and miditext.
+
+2023-03-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: ticks command didn't clear running status,
+        even though it writes a text meta event.
+        Changed to clear running status as required by MIDI spec.
+
+2023-03-21     Thomas E. Janzen <janzentome@gmail.com>
+        * midi3d.pl: Add a script to compute MIDI 3-D values for textmidi.
+
+2023-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMaps.h,textmidi.l,Composer.cc,MidiEvents.cc,MusicalForm.h,main.cc,
+        miditext.cc,smustextmidi.cc: C++ tactics and cleanup.
+        Concatenate strings for output esp. to cerr.
+        Reserve room in vectors prior to using back_inserter.
+        Procedurize conversion of hex and decimal strings for textmidi.l
+        Remove types from pair, replace with make_pair().
+        Use cbegin() and cend() when applicable.
+        Replace use of distance() with for-initialized variable.
+
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc,Composer.h,MIDIKeyString.h,MidiEvents.cc,MidiEvents.h,
+        MusicalForm.cc,NoteEvent.cc,NoteEvent.h,RhythmRational.cc,RhythmRational.h,
+        Scales.cc,Scales.h,Track.h,main.cc,rational_support.cc,textmidi.vim:
+        Apply constexpr where possible.  Make Scales.h use string_view.
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
+        Add symbols for MIDI 3D to textmidi.  miditext does not support them
+        fully because it would require a threadable state machine to do it.
+
+2023-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc,miditext.cc: protect against overwriting the input file
+        because of giving the same name for both the input and output files.
+        * textmidi.l,textmidi.h: add policy to RunningStatus.  Add use of 
+        RunningStatus policy to textmidi.l.  This permits getting a 
+        true comparison on a round-trip of MIDI files that never use
+        running status to abbreviate the commands.
+        * Midi.h, MidiMaps.{h,cc}: Add MIDI 3D constants.
+
+        * MidiEvents.cc,MidiMaps.h,SmusTrackEvent.cc,main.cc,textmidi.l,textmidi.texi:
+        Apply std::optional to the bidirectional map NumStringMap in Midi.h.
+
+2023-03-16     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.texi,textmidi.l,MidiMaps.h,MidiEvents.cc,SmusTrackEvent.cc:
+        Give MidiMaps an operator() that 
+        returns validity with the mapped result.  Found a bug in which the pan 
+        code was mapped using Excess64 even if the CONTROL event was not written
+        using the string "PAN".  It should not add Excess64 if the CONTROL was 
+        written with a numeric control ID.  There was also a mistake in the 
+        abbreviated form for PAN to down-cased the value (left-center-right).
+        * MidiMaps.cc: fill in more constants for controller values.
+        * textmidi.texi: clean up CONTROL synonyms.
+
+2023-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.{h,cc},MidiMaps.{h,cc},textmidi.l,textmidi.texi,textmidi.vim:
+        Revamp handling of modes from Table IV in the MIDI spec.  Add LOCAL_CONTROL,
+        OMNI_{ON,OFF}, MONO_ON, POLY_ON.  Clean up and permite using values ON, OFF,
+        hexadecimal or decimal; support the abbreviated forms for modes.  Document in textmidi.l.
+
+2023-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, MidiMaps.{h,cc}, textmidi.l, textmidi.vim,
+        textmidi.texi:
+        Repair usage of byte values: decimal should be accepted; 1- and 2- digit
+        hexadecial ("0x1" and "0x01") should be accepted.  Also add ALL_CALL
+        constant for device ID for miditext and textmidi and document in textmidi.texi.
+
+2023-03-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, MidiMaps.cc, textmidi.gdb, textmidi.l:
+        Rewrite textidi handling of SYSEX to allow use of names for
+        subids, and subid1s.  Probably won't add vendors.
+        * Midi.h: make array<>'s constexpr.
+
+2023-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, MidiEvents.{h,c}, textmidi.l: Move RunningStatus class
+        from MidiEvents to Midi.  Rewrite textmidi.l to use the RunningStatus
+        class.  Clear running status at Meta and Sysex events per spec.
+        "Meta events and sysex events cancel any running status that was in effect."
+        RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
+        * Midi.h, MidiMaps.{h,cc}, textmidi.l, textmidi.texi: Handle some SYSEX standard messages
+        using some symbols in textmidi.l.
+
+2023-03-09b     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMaps.{h,cc}: add common sysex subids.
+
+2023-03-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: Improve miditext --lazy.
+        * textmidi.texi: Add detail on LYRIC events.
+
+2023-03-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.h, GeneralMIDI.{cc,h}, MIDIKeyString.cc, Makefile, Makefile.am, 
+        Makefile.in, Midi.{cc,h}, MidiEvents.{cc,h}, SmusTrackEvent.{cc,h}, 
+        autom4te.cache/requests, miditext.cc, smustextmidi.cc, textmidi.l, 
+        MidiMaps.{h,cc}: Create MidiMaps.{h,cc} and move MIDI maps to MidiMaps.
+        Fix buildkit.sh to copy MidiEvents.{h,cc} instead of MidiMessages.{h,cc}.
+
+2023-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, textmidi.l, textmidi.texi: Put the increment
+        and decrement of channels and program numbers in a named function.
+        * textmidi.texi: fix bare braces.
+
+2023-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, textmidi.l, textmidi.texi:  clean up CONTROL,
+        continue to maintain the abbreviated forms for some controls.
+        * Midi.{h,cc}, MidiEvents.{h,cc}, textmidi.l, textmidi.vim:
+        Support XMF PATCH TYPE and update textmidi.vim editor environment.
+
+2023-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.{.h,cc}, GeneralMIDI.{h,cc}, Midi.{h,cc}, MidiEvents.cc, 
+        * miditext.cc, textmidi.l, textmidi.texi, textmidi.vim, textmidicgm.cc:
+        Eliminate CONTROL synonyms; they all have to be "CONTROL [chan] [id] [value].
+        Propagate use of NumStringMap template; move more maps into Midi.h/cc.
+        This eliminates duplicate maps in different direections at least mostly.
+        Make ON and OFF work with softpedal and sostenuto.
+
+2023-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: use string_view in string/code maps.
+        * MIDIKeyString.h, Midi.cc, Midi.h, MidiEvents.cc, SmusTrackEvent.cc,
+        * SmusTrackEvent.h, textmidi.l, textmidi.texi: use a new bidirectional
+        map for strings and numbers.
+
+2023-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: Make some names case-insensitive:
+        control ID names; text event types; control synonyms, on and off.
+        * miditext.cc, textmidi.l, MidiEvents.cc: use vector reserve on
+        byte vectors and event vectors based on 3.3 bytes/MIDI event.
+        * MidiEvents.cc/2600: fix a bug of missing LAZY command in miditext --lazy.
+        In miditext --lazy conversion, write zero-long notes if a non-note event 
+        occurs with zero delay after a note-on.  Document in miditext.texi.
+
+2023-02-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.l: change text_09 to device_name.
+        Change text_08 to program_name.
+        Fix text events getting the last character trimmed off
+        if they are not quoted.
+        Support many named control IDs in textmidi.
+        * miditext.cc: support the control change ID strings.
+        Fix mishandling of empty string events with quotes.
+
+2023-02-27     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, GeneralMIDI.cc, MIDIKeyString.cc, Midi.cc, MidiEvents.h, 
+        MusicalForm.cc, RhythmRational.cc, Scales.cc, SmusTrackEvent.cc, 
+        Voice.cc, main.cc, miditext.cc, rational_support.cc, smustextmidi.cc, 
+        textmidicgm.cc, writesmus.cc: remove namespace qualifications
+        esp. "std::" from .cc files mostly; add count of rigid rhythms
+        to miditext --verbose, to make it easier to identify moused-in scores as
+        opposed to played-in scores.
+        * textmidi.l: Make the line counter slightly more accurate.
+
+2023-02-26     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix duplicate rests at beginning of tracks in
+        miditext --lazy usage.  The policies for making rests for
+        the end of notes and after meta events are different and interferred
+        with one another.  Also applied more ranges in nearby code.
+
+2023-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * MIDIKeyString.cc, Midi.h, MidiEvents.cc, MidiEvents.h,
+        SmusTrackEvent.cc, Voice.h, cgmlegacy.h, main.cc, miditext.cc,
+        smustextmidi.cc, textmidi.l, textmidicgm.cc:  Last night
+        broke threaded miditext for converting TO lazy mode textmidi.
+        This seems to work and still has the same statistics on
+        ordinary DETAIL-mode-based conversions.
+        There were too many static class members (hidden globals)
+        that created race conditions in threads.
+
+2023-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, Midi.h, textmidi.l:  Change
+        regular expression for recognizing floating-point tempo in textmidi.l
+        Define constants for SecondsPerMinute and UsecPerSecond in Midi.h
+        Apply those names.
+        * Composer.cc MidiEvents.cc MusicalForm.{cc,h} textmidi.l:
+        Apply more ranges and range algorithms, and back_inserters.
+        * MidiEvents.h, RhythmRational.h, SmusTrackEvent.h, cgmlegacy.h:
+        check all single-arguments c-tors are explicit.
+        * Composer.h MidiEvents.{cc,h} Midi.h miditext.cc Random*.h smustextmidi.cc 
+        textmidicgm.cc Track.h: dump the typedefs in favor of using clauses.
+
+2023-02-20     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: mark consume_stream() private since it's
+        called only by constructors.
+        * miditext.texi: explain testing, and differences in round-trip
+        recreated MIDI files.
+        * Composer.{h,cc}: add a random generator that ranges::shuffles will use.
+        * Composer.cc: Use ranges for track shuffling etc.
+        Also remove defet of leaders_topo_sort.resize().
+        * Composer.h: track scrambling option was spelled wrong with a capital:
+        nextPermutation but s/b nextpermutation and previouspermutation.
+        * smustextmidi.cc: use C++ back_inserter in the transform() of NoteEvents.
+
+2023-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: textmidi will no longer write a leading zero byte
+        for variable-length values.  This accounts for most of the
+        differences between original MIDI files used for testing and
+        those produced by textmidi.  MIDI's spec probably allows for the
+        zero byte, but it should not be there.
+        * MidiEvents.{h,cc}: RAII applied, by having constructors in MidiEvents
+        call consume_stream() rather than the factory.  All of the 891 test files compare 
+        text files exactly; 1/3 of them compare re-created MIDI files exactly.
+
+2023-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.vim, textmidi., textmidi.texi, MidiEvents.{h,cc}:
+        Fix some found defects.  Primarily C++ usage and design of MidiEvents.
+        Divide responsibilities in miditext between recognize() functions 
+        and consume_stream() functions.  Reduce line count about 35 net lines.
+        Update documentation; properly support TEXT_0[8-F].  Remove running_status
+        from classes for events that don't use it anyway (leave it in the voice 
+        channel events).  Organize code in MidiEvents to put functions in the
+        same order in MidiEvents.h and MidiEvents.cc.
+
+2023-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix print out of out-of-range MIDI data values.
+
+2023-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * General: rewrite most stream output as the buiding of a string, and output
+        of the string.  Start using C++20 ranges.  Reduce compiler warnings.
+        * miditext.cc: replace thread with jthread.  Replace endl with newline.
+        Also change file read to read the entire file at once.
+
+2023-02-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.cc MidiEvents,cc, NoteEvent.cc, RhythmRational.cc, main.cc, testmidi.bash,
+        textmidi.{h,l}: Change the globals in textmidi into a global pointer to a
+        struct of features.
+        * miditext.cc: Print error about extra data at the end of the MIDI file.
+        * Composer.h GnuPlot.h MIDIKeyString.h Midi.h MidiEvents.{cc,h} MusicalForm.h 
+        NoteEvent.h Options.h RandomDouble.h RandomInt.h RhythmRational.h Scales.h 
+        Track.h Voice.h cgmlegacy.h miditext.cc rational_support.h textmidi.h textmidi.l:
+        Replace Midi.h's arrays with vectors; this meant they could not be constexpr,
+        so that propagated everywhere.  Also change prefix_len in MidiEvents.h
+        to not be constexpr as a result.  Add _H to include idempotent checks.
+        Add data range checks to input binary MIDI data in miditext.
+        Permit but report over-long MIDI files, that is, that have extra data 
+        after the last track.  Create special constexpr of channel voice commands
+        so that they could be used where needed.  A typed enum class did not compile.
+
+2023-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.in, MidiMessages.{h,cc}}->MidiEvents.{h,cc},
+        miditext.cc: Change name MidiMessages to MidiEvents
+        and all related class names etc.
+        * MidiEvents.{cc,h}: Put function definitions into .cc.
+        Put function definitions in .cc in the same order as in .h.
+
+2023-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, MidiMessages.cc, textmidi.texi: refine UNKNOWN_META.
+        * Don't require the length in the text version.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.cc MidiMessages.h, textmidi.vim,textmidi.texi, 
+        textmidi.l: Support Unknown Meta events as hexadecimal data.
+        Support SMPTE_OFFSET properly, exposing frames per second in textmidi files.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc, Midi.h, textmidi.l: permit 3-digit hours in SMPTE_OFFSET
+        but give an error message from textmidi and miditext for hours over 23.
+        * textmidi.l: Fix SMPTEOffset regression that left off the hours.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc textmidi.l Midi.h: Fix defects with SEQUENCE_NUMBER.
+        miditext wrote the wrong name.  textmidi neglected to write the meta 
+        prefix (0xFF).
+        * MidiMessages.cc: fix handling of zero-length string events.
+
+2023-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.{h,cc}, textmidi.l:  Straighten out
+        SEQUENCER_SPECIFIC; fix spelling; adjust for 2- and
+        3- byte channel voice commands in "recognize()";
+        use classical archive MIDI files to test round-trip
+        conversion: MIDI->text->MIDI->text.
+        Text events in textmidi support escapes for
+        double-quotes, carriage-returns, line-feeds, tabs,
+        vertical tabs, bells, formfeed, and backspace.
+        MidiMessages.cc: Fix a bug that prevented channel 16
+        from being used.  Make TEMPO command take a simple floating-
+        point number.  Include SEQUENCE_NUMBER number event.
+        Fix POLYPRESSURE print error.
+        * all.cc: stream output now saves and restores formatting flags.
+        * textmidi.l: Fix pitch bend values to shift by 7 bits and not 8.
+        Fix int_to_vec().
+        * RhythmRational.{cc,h}: improve robustness of input operator.
+
+2023-01-18     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Fixed defect in stream output
+        for CHANNEL_POLYPRESSURE.
+        * MidiMessages.cc, Midi.cc, NoteEvent.cc, RhythmRational.cc:
+        Stream output now saves/restores stream format flags.
+        * texinfo.tex, compile, depcomp, missing, ylwrap: 
+        Added some missing files to make a build more convenient.
+
+2023-01-04     Thomas E. Janzen <janzentome@gmail.com>
+
+2022-04-25     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext by fixing
+        insert_rests().  Passes prelude1_II.com and sacre tests.
+        * prelude1_II.com: add a test script. 
+
+2022-04-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext --lazy
+        to do round-trip test on prelude1_II.txt.
+        Seems to be alright except for detache lazy in 
+        musescore, but timidity plays it ok and a miditext on it
+        looks OK.
+
+2022-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: reconcile integer types and
+        insert end-of-lines after each note event.
+        Fix missing rests after note_on with velocity of 0.
+        Fix quantization of rests.
+        * MidiMessages.fig: mispelling
+
+2022-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.texi: correct spelling, add details
+        about the keyboard and about voice following.
+
+2022-03-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: refactor
+        preparing to print textmidi text in lazy mode
+        to encapsulate the preparation for lazy inside
+        PrintLazyEvent which got renamed PrintLazyTrack.
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: fix quantize.
+        the lazy fix broke quantize by using tick counts after
+        quantiziation had been applied to RhythmRationals
+        e.g, wholes_to_next_event() and wholes_to_noteoff().
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: remove unused lazy parameter in c-tor
+        of PrintLazyEvent.
+
+2022-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc, MidiMessages.cc: pass a simple textmidi --lazy test
+        for overlapping notes.
+        * miditext.cc, textmidi.l, textmidi.cc, SmusTrackEvent.cc,
+        Composer.cc, smustextmidi.cc, MidiMessages.cc: Always write
+        the file format when writing textmidi text files.
+        make the program that write textmidi text files write
+        text that looks more alike.  Make smustextmidi put the
+        text meta events into the first MIDI (tempo) track.
+        Improve behavior of miditext --lazy overall and 
+        remove the block on the --lazy option.
+
+2022-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: extra delays are gone in miditext --lazy.
+
+2022-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: recovered basic function
+        of miditext --lazy.  Quantization probably does not work.
+
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: a little cleanup.
+        Only write a hard-coded END_OF_TRACK if there was no SMUS
+        EndOfTrack in the SMUS track (0xFF).  The end-of-track in
+        the SMUS track appears to be optional, since the chunk
+        length is given anyway.
+        Refactor the code to write "LAZY" or "END_LAZY" only when
+        needed (procedurize it better from earlier today).
+        
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: name constants.
+        Track state "LAZY" to avoid redundant END_LAZY/LAZY pairs.
+        Change type of SmusTrackEvent decision and data to int type
+        with static storage.
+
+2022-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am: add rational_support to clean target.
+        * SmusTrackEvent.cc smustextmidi.cc textmidi.l: remove unused and
+        fix tie in/out mistake in smustextmidi that would add a pitch
+        to the tied_vec_ every time it appeared even though it was
+        in the same continuous tied note.
+
+2022-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, miditext.cc, MidiMessages.cc: Tried to fix bugs in
+        miditext --lazy feature but postponed until a re-analysis.
+
+2022-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, TextmidiUtils.h, textmidi.l, textmidi.cc, smustextmidi.cc,
+        writesmus.cc, miditext.cc:
+        Move io_bytes to TextmidiUtils.h.
+        * smustextmidi.cc: remove extra data structure trackEventVec.
+        * Composer.cc, NoteEvent.{h,cc}: remove the double rep of rhythm (duration).
+
+2022-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.h, smustextmidi.cc,SmusTrackEvent.cc,writesmus.cc:
+        Change name of SmusTrackEvent to SmusTrackEventFilePod
+        * SmusTrackEvent.h, smustextmidi.cc, miditext.cc, SmusTrackEvent.cc:
+        remove dependence on MidiMessages.h when it's really Midi.h or nothing.
+        * *.fig: fix fonts; fix dependencies per above; add Composer class.
+
+2022-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.cc: smustextmidi was printing a whole note as 1/1
+        rather than as 1.  Check for a 1/1 rational before using 
+        operator<<(os, RhythmRational&).
+        * Composer.{cc,h}: Make Composer a class.
+        * *.cc *.h: put all cgm namespace code under namespace textmidi.
+
+2022-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, Composer.cc, Midi.h, MusicalForm.h: move
+        MinDynamic and MaxDynamic to Midi.h
+
+2022-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: remove duplication typedef of MidiStreamVector.
+        * dependencies.fig, textmidi.fig: add diagrams.
+
+2022-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.{cc,h}, smustextmidi.cc, writesmus.cc:
+        Fix SmusTrackEventVolume::textmidi to not repeat volume
+        commands as textmidi "vel" commands.  The solution was to
+        make current_dynamic static and re-init it at the beginning
+        of each track to 64.
+        Also fix them to use dynamics_reverse_map to output the
+        dynamic markings used by textmidi and miditext.
+
+2022-02-18     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.cc: Fix whole notes with a zero denominator.
+        This fixes missing whole note lengths in smustextmidi.
+        * Makefile.am: lists of sources per program are fixed.
+        * RhythmRational.cc: Fix print_rhythm to print 4 wholes as 4/1.
+        * SmusTrackEvent.cc: Fix duration() not recognizing a whole note.
+
+2022-02-17     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: always reduce the rationals for rhythm when using 
+        lazy mode in the miditext program.  This allows miditext to output 
+        dotted notes in lazy mode output.
+        * MidiMessages.{h,cc}, Midi.h, textmidi.l: create dynamics maps
+        and use in textmidi and miditext; fix miditext issue of not 
+        output dynamic markings.
+
+2022-02-16     Thomas E. Janzen <janzentome@gmail.com>
+        * writesmus.cc, writesmus.make: write for testing smustextmidi.
+        * RhythmRational.cc: If rhythms are dotted, they have a numerator of 1,
+        so we can use the abbreviated form (where a "1/4." (dotted quarter) note
+        is "4." ).
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}: rename as RhythmRational.{h,cc}
+        * Composer.cc, MidiMessages.cc, MidiMessages.h,
+        NoteEvent.cc, NoteEvent.h, SmusTrackEvent.cc,
+        SmusTrackEvent.h, Track.h, buildkit.bash, miditext.cc,
+        rational_support.cc, rational_support.h, smustextmidi.cc:
+        find all rhythm printing and make them use print_rhythm().
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Track.{h,cc}, TextmidiRational.cc: Remove extra operator<<(rational)
+        and edit the one in TextmidiRational to print 4 for 1/4 and 4/1 for 4/1.
+        * MidiMessages.cc, SmusTrackEvent.h, miditext.cc, smustextmidi.cc, TextmidiRational.cc,
+        NoteEvent.h, Track.h, TextmidiRational.h, MidiMessages.h, SmusTrackEvent.cc, Composer.cc:
+        Also remove typedefs of TextmidiRational and just use the name TextmidiRational.
+
+2022-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}, SmusTrackEvent.cc, miditext.cc, MidiMessages.cc, Composer.cc:
+        Complete work integrating TextmidiRational.
+
+2022-02-13     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, SmusTrackEvent.h, SmusTrackEvent.cc, MidiMessages.cc, 
+        * rational_support.{h,cc}, Track.h, TextmidiRational.{h,cc}, NoteEvent.h
+        * Composer.cc, miditext.cc, smustextmidi.cc, MidiMessages.h, TextmidiRational.cc:
+        Use pair init without template args; dispose of boost::rational and replace
+        with TextmidiRational.  This stopped hard-to-track-down crashes of smustextmidi.
+
+2022-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h: use std::shuffle rather than random_shuffle, 
+        now deleted from C++.
+        * RandomDouble.h, RandomInt.h: add inclusion guards; to RandomInt.h add
+        min() and max() member functions and a typedef of result_type
+        so that std::shuffle can use them.
+        * MIDIKeyString.cc: remove unnecessary double braces.
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: replace double quotes with single quotes
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * All files: update copyright to 2022.  Update version to 1.0.18.
+        * textmidi.texi, textmidiformedit.texi: fix errors and update.
+
+2022-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, KeyboardWindow.py: make keyboard smaller.
+
+2022-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py, textmidiformedit.py: remove widget variables where possible.
+        Make spinboxes readonly where possible, only make writable temporarily when necessary.
+        Fix a couple bugs discovered along the way.
+
+2022-02-06     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py: simplify usage to correct behavior as the voice number changes.
+        Remove widget variables for Sine and Voice.  It makes the interface slower but 
+        on Voice the Entry and Spinbox values would propagate to other voices for no reason.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.py, VoiceWindow.py: finish using General MIDI names in program entry.
+        * KeyboardWindow.py, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py: set screen positions.
+        * Fix an issue with widget update on Voice-program.  
+        * Change colors on form plot but verify on Postscript output.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: Make file names the same as the main window names.
+        * GeneralMIDI.py: add General MIDI instruments for the spinbo in the voice window
+        * VoiceWindow.py: Use GeneralMIDI iun the program spinbox
+        * Composer.cc: refactor some code into local functions. 
+
+2022-02-02     Thomas E. Janzen <janzentome@gmail.com>
+        * voice.py, textmidiformedit.py, allforms.py: fix checkbox behavior;
+        fix reads from the form XML file for min/max note len, name, len, pulse, down, same up;
+        fix writes of voice pan.  Fix follow radio buttons write to file.
+        Later continue to fix assignments.  Use get/set on StringVar; use delete/insert
+        on changing Entry.  Except the min/max key seems to work setting the StringVar.
+        * texmidicgm.texi: add descriptions of trackscramble and trackscrambleperiod
+
+2022-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix scale length error in saving XML Form files.
+        * Voice.h, Composer.h, textmidicgm.cc, Composer.cc: Add track scrambling feature
+
+2022-01-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidi.l, MusicalForm.h, MusicalForm.cc: Use MaxDynamic
+        and MinDynamic names where appropriate instead of magic numbers.
+
+2022-01-17     Thomas E. Janzen <janzentome@gmail.com>
+        * Most: Show correct version
+        * *.texi: Correct spelling of Association
+
+2022-01-07     Thomas E. Janzen <janzentome@gmail.com>
+        * FormPlotWindow.png, KeyboardWindow.png, MusicalFormWindow.png, VoiceWindow.png: add images
+        * textmidiformedit.texi: Add images of the GUI windows and more explanation.
+        * textmidi.l, textmidi.texi: change default detache value to zero (0).
+
+2022-01-06     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, textmidiformedit.py, sine.py, voice.py, keyboard.py:
+        Remove trailing spaces, make keyboard bigger, make middle C bolder on keyboard.
+
+2022-01-04     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, voice.py: make spinboxes use ButtonRelease-1 event and not focus out or
+        decrement and increment.
+
+2021-12-31     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, form.py, sine.py, textmidiformedit.py, voice.py: Upgrade per "Modern Tkinter" by Roseman.
+
+2021-11-20     Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: rewrite clampscale in fewer statements.
+        * Composer.cc: remove unused objects.
+
+2021-11-19     Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.cc: cleanup usage of form file names; reported wrong name if verbose
+        with a random form; move declarations closer to usage.
+        * MusicalForm.h, MusicalForm.cc, textmidicgm.cc, textmidicgm.texi: add option 
+        --clampscale to clamp the scale in each form to not exceed the union 
+        of the voice ranges.
+
+2021-10-14    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidiformedit.py: Fix mean curve inversion due to left-handed plotting 
+        coordinates; add a save-postscript menu item; draw curves using create_polygon
+        rather than create_line.
+
+2021-10-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Scales.cc: Added the "Bs" to the Chromatic scale by textmidicgm.
+        * Makefile.am, fixtempo.pl: Use /usr/bin/env instead of full paths for utilities.
+        * textmidiformedit.texi: added documentation
+        * textmidiformedit.py: added
+        * allforms.py: added
+        * form.py: added
+        * sine.py: added
+        * voice.py: added
+
+2021-09-03    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
+        with the same channel won't set different programs.  This creates functions
+        or single-valued relations: track->channel; channel->program.  These are
+        in addition to the function channel->pan.
+
+2021-09-02    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
+        Add comments describing Melody Probabilities as cumulative.  Increase the 
+        possible number of voices in a random form to 24.
+        * textmidicgm.texi:  Correct description of melody probabilities and update
+        description of randomized melody probabilities (using the --random option).
+
+2021-09-01    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
+        to spread for near the left to near the right.  The symptom was that
+        idiophone-only random forms were bunching up the instruments way over 
+        on the right.  Now a single channel score should put them in the center
+        although the percussion instruments in TiMidity++ seem to be panned 
+        stereo samples, so channel 10 is always centered.
+
+2021-08-31    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: Remove the kluge that put a quiet note at the beginning of the
+        tempo track to force generation of silent starts of tracks by TiMidity++.
+        Loop time by using musical ratios instead of chrono time.  This results in
+        more accurate alignment at the end, but the individual tracks can still
+        be a measure longer than requested because they don't exceed the maximum
+        time until they have generated the last note.
+
+2021-08-30    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi.l: fix accumulated time defect so that tracks that should be
+        the same length in ticks are or at least only a tick off at the end.
+        This can make very fast tracks a very different length, and was noticed
+        with fast tracks written by textmidicgm.  This was an accumulating
+        floating-point addition error, esp. wrt conversion to int types.
+        * Composer.cc: Removed the forced percussion event (a kluge for
+        separate track recording) part of the music time, so that it is not
+        extra time.
+        Trying to rationalize rhythm due to short tracks from textmidicgm.
+        * NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
+
+2021-08-29    Thomas E. Janzen <janzentome@gmail.com>
+
+        * main.cc: remove old block that checks if you would overwrite a file
+        but leave check if --answer is set.
+
+2021-08-26    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: After a random form is created,
+        remove scale notes that are too high or low for any or the
+        General MIDI patches selected in random().  This avoids lots of repeated very 
+        high or low notes when the pitch curve is beyond any instrument's range
+        and the end of the scale.  This could still happen with small-range instruments.
+        * textmidiform.py: add to tree.  Has a file widget, reads in the XML form file
+        and draws the graph of the form.
+        * MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
+
+2021-08-23    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.texi: correct description of random selection of channel to
+        coerce channel 10 for idiophones.
+
+2021-08-18    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.cc: handle boost xml serialization exceptions.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
+        to return it to its previous meaning of if (0 == pulse_per_rhythm)
+        but not activating a bug.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
+        as a work-around for a crash due to a possible bug in boost::rational.
+
+2021-08-12    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
+        * miditext: Rewrite/rename from mididisasm.
+        * smustextmidi: Rewrite of SMUSMIDI to output textmidi text.
+        * textmidicgm: Rewrite from AlgoRhythms without a GUI; to produce textmidi text files; use C++20.
+        Change output format to textmidi text output, which can be
+        converted into MIDI Standard MIDI Files by textmidi.
+
+2003    Thomas E. Janzen <janzentome@gmail.com>
+
+        * smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
+        Remove extra NULL text events; fix key signatures.
+
+2002-12-29 Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
+        which was published on the Classical MIDI Archive.
+        * mididisasm: First private version.
+
+1999-09-18 Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi:  Initial private version.
+
+1994-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Version 3.0 for Commodore Amiga computers.
+
+1992-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Version 2.0, now textmidicgm.
+        On Fred Fish Disk 606 for Commodore Amiga computers.
+
+1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com>
+
+        * SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
+        Commodore Amiga.
+
+1990-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Initial revision 1.0
+        on Fred Fish Disk 356 for Commodore Amiga computers.
+
+2024-03-01     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc: remove comment written to textmidi file
+        of the number of bytes in a track.
+        * textmidiroundtriptest.py, classical_archive[0123456].txt: 
+        Rewrite test scripts for textmidi and miditext, move to
+        test directory.
+
+2024-02-25     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: minor changes to use of pan_map in
+        PAN and CONTROL PAN blocks.  Notice repeated code
+        to be refactored TODO.
+
+2024-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: add CONTROL [chan] CHANNEL_VOLUME 100
+        to beginning of tracks with General MIDI instruments.
+
+2024-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven_grosse_fuge: Add example of Beethoven's
+        own piano-duo transcription of his Grosse Fuge for string quartet.
+
+2024-01-08     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven9th_2: Add example of molto vivace of the
+        Beethoven d minor symphony.
+
+2024-01-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.cc: random(), which generates a random form,
+        should make a random value for walking that is in [0.0...1.0) or similar.
+
+2024-01-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix setting of walking scrollbar from file.
+
+2024-01-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidicgm.texi, textmidiformedit.texi, VoiceWindow.py, 
+        Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability
+        that a voice will be in walking mode from note to note, but be backwards-
+        compatible with old XML form files.
+
+2023-12-21     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/schuqnt: Add example of Schumann Quintet in textmidi.
+
+2023-11-28     Thomas E. Janzen <janzentome@gmail.com>
+        * dynamics.cfg, main.cc, Makefile.am, Makefile.in, MidiEvents.cc, 
+        MidiMaps.h, miditext.cc, Options.h, smustextmidi.cc, SmusTrackEvent.cc,
+        textmidicgm.cc, textmidi.l: Make settable values for dynamics symbols.
+
+2023-08-24     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: note events were being pushed onto the wrong track's container.
+        They should be pushed on the "tr", the track index, not "i" which was incremented.
+        The index "i" has been deleted.
+        The symptom was that following higher priority voices seemed to work but following
+        lower priority tracks (e.g., track 0 followed track 1), failed to write any tracks.
+
+2023-08-20     Thomas E. Janzen <janzentome@gmail.com>
+	* GeneralMIDI.cc, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        guitar range was an octave high.  textmidiformedit: transpose spinbox
+        didn't set when files were loaded.
+
+2023-08-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am Makefile.in:  Compile with std=c++23.  
+
+2023-08-01     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, MIDIKeyString.h, Makefile, Makefile.am, Makefile.in, 
+        Midi.cc, Midi.h, NoteEvent.h, Options.h, SmusTrackEvent.h, Track.h, 
+        cgmlegacy.h, config.h, config.h.in, config.status, configure:
+        make constexpr that are inside namespaces as inline.
+
+2023-07-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h: delete obsolete unused externs.
+        * Midi.h, main.cc, textmidi.{l,h}:
+        use a Singleton Pattern for the global values.  eww.
+
+2023-07-30     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, main.cc, textmidi.{l,h}:
+        make running_status a unique_ptr.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: ensure dec IO manipulator is used
+        after any use of hex, probably unnecessarily.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc: fix mishandling of default runningstatus="STANDARD,
+        not "standard".
+
+2023-07-18     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h, MidiMaps.{h,cc}, textmidi.cc, MidiMaps.cc,
+        MidiEvents.{h,cc}, Midi.{h,cc}, main.cc:
+        Add support to textmidi for a variety of misuse of MIDI running status
+        in order to support testing with input files that had been created 
+        by incorrectly written MIDI file software.
+        Changed the runningstatus option in textmidi.
+
+2023-07-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc: Fix unbounded recursion.
+        * add debian/ packaging support
+
+2023-06-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: fix compiler error "used but not defined" on ticks 
+        functions by removing the base class's declarations of them.
+
+2023-06-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, Composer.h, Midi.h, MidiEvents.h, MusicalForm.h,
+        NoteEvent.h, RhythmRational.h, SmusTrackEvent.h, Track.h, Voice.h, cgmlegacy.h:
+        Apply rule of 5: virtual base classes should have all 5 special functions defaulted.
+        * MidiEvents{h,cc}: apply bridge pattern by creating separate implementation class
+        for MidiEvent.
+
+2023-06-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc:  handle improper key signatures.
+
+2023-05-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, RhythmRational.cc, cgmlegacy.cc,
+        textmidi.l, textmidicgm.cc: Build with -pedantic and fix.
+
+2023-05-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        Fix issue with file load setting program low/high_pitch by adding buttons
+        to the Voice Window marked "From Program", meaning, if the program is
+        a clarinet, then pushing "From Program" will set a low pitch or high pitch
+        suitable for a clarinet patch.  Add "Defaults" menu item to the plot window.
+        Repair defects that were revealed by a load file test.
+
+2023-05-09     Thomas E. Janzen <janzentome@gmail.com>
+         * AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
+         Continue applying Python TCL/Tk widget variables (StringVar and IntVar),
+         and applying the callbacks to those and not the widgets.
+
+2023-05-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, VoiceWindow.py, textmidiformedit.py:
+        Modernize and correct and rewrite usage of Python TCL/Tk, esp. wrt 
+        use of widget variables correctly.
+
+2023-05-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, defaults.form.xml, defaults_1_voice_range_0.form.xml, 
+        defaults_2_voice_follow.form.xml, defaults_2_voice_follow_walk.form.xml,
+        defaults_2_voice_follow_walk_scalar.form.xml,
+        defaults_2_voice_follow_walk_tritone.form.xml, 
+        notes20230506.txt, textmidiformedit.py:
+        Test. Put default name into save form file and save Postscript file
+        dialogs.  Add default extensions into each.
+        Set first note of walking voice to mid-scale.
+        * textmidiformedit.py, VoiceWindow.py: repair usage of IntVar. Use get/set.
+        Repair disable/enable of follow-only widgets, and walking, which is
+        anti-follow.
+
+2023-05-05     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: Make form plot lines more readable.
+        Add boundaries for excess thresholds.
+
+2023-05-04     Thomas E. Janzen <janzentome@gmail.com>
+        * VoiceWindow.py, textmidiformedit.py: overhaul draw_form().
+        * Composer.cc, Voice.h, VoiceWindow.py, textmidiformedit.py:
+        Add support for follower voice inversion.
+
+2023-05-03     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Composer.cc, FormFrame.py, Sine.py, Voice.h, 
+        VoiceWindow.py, textmidiformedit.py: Add voice/follow/retrograde and
+        voice/follow/follow_pitch (default true). Retrograde seems to work
+        but follow_pitch disable is not implemented yet.
+
+2023-05-02     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, Sine.py: overhaul
+        Form Window to add widgets for sine offset and amplitude.
+
+2023-05-01     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiString.cc, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py:
+        Straighten out interoperability of XML form files from
+        and to textmidicgm and from and to textmidiformedit.py.
+
+2023-04-30     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, textmidiformedit.py, VoiceWindow.py:
+        Catch up python GUI with additions of follower delay and
+        arrangements in XML.
+
+2023-04-29     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, NoteEvent.h:  Activate follower delay (for canons).
+        Add exception for out of range leader_ as index.
+        Test and fix new XML format in the C++ code.
+
+2023-04-24     Thomas E. Janzen <janzentome@gmail.com>
+               * Arrangements.{cc,h}, Composer.{cc,h}, textmidicgm.cc, textmidicgm.texi:
+        rename track scrambling to arrangements.  Improve documentation of
+        arrangements.  Change arrangement "None" to "Identity" and document.
+        * textmidi.l: Remove the linefeed from definition of LINE.
+ 
+2023-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{h,cc}, textmidicgm.texi, HeapsAlgorithmTemplate.h:
+        Change HeapsAlgorithmTemplate.h to construct from the
+        array to permute and its length.  Document all of the Arrangers.
+
+2023-04-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MusicalForm.cc, textmidicgm.texi:
+        Redefine track scrambling to be easier to see what it will do.
+        It will play a track if it is in the list in the track scrambled
+        vector, for the number of voices playing, from element 0 on.
+        I don't know how it worked before, it was haphazardly written.
+
+2023-04-19     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{cc,h}, Composer.cc, HeapsAlgorithmTemplate.h: Replace
+        Heaps Algorithm with one developed from original paper.
+
+2023-04-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc, Arrangements.h, Composer.cc:
+        Integrate Arrangements in order to accomodate Heaps permutation algorithm.
+
+2023-04-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h, Makefile.am, buildkit.bash,
+       textmidicgm.cc textmidicgm.texi: Integrate Arrangements
+       for track scrambling.  Sort of working.
+
+2023-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, Makefile.am textmidi.l MidiString.{h,cc}: move
+        string escape and quotes handling out of textmidi
+        and miditext.
+
+2023-03-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: ticks command didn't clear running status,
+        even though it writes a text meta event.
+        Changed to clear running status as required by MIDI spec.
+
+2023-03-21     Thomas E. Janzen <janzentome@gmail.com>
+        * midi3d.pl: Add a script to compute MIDI 3-D values for textmidi.
+
+2023-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMaps.h,textmidi.l,Composer.cc,MidiEvents.cc,MusicalForm.h,main.cc,
+        miditext.cc,smustextmidi.cc: C++ tactics and cleanup.
+        Concatenate strings for output esp. to cerr.
+        Reserve room in vectors prior to using back_inserter.
+        Procedurize conversion of hex and decimal strings for textmidi.l
+        Remove types from pair, replace with make_pair().
+        Use cbegin() and cend() when applicable.
+        Replace use of distance() with for-initialized variable.
+
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc,Composer.h,MIDIKeyString.h,MidiEvents.cc,MidiEvents.h,
+        MusicalForm.cc,NoteEvent.cc,NoteEvent.h,RhythmRational.cc,RhythmRational.h,
+        Scales.cc,Scales.h,Track.h,main.cc,rational_support.cc,textmidi.vim:
+        Apply constexpr where possible.  Make Scales.h use string_view.
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
+        Add symbols for MIDI 3D to textmidi.  miditext does not support them
+        fully because it would require a threadable state machine to do it.
+
+2023-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc,miditext.cc: protect against overwriting the input file
+        because of giving the same name for both the input and output files.
+        * textmidi.l,textmidi.h: add policy to RunningStatus.  Add use of 
+        RunningStatus policy to textmidi.l.  This permits getting a 
+        true comparison on a round-trip of MIDI files that never use
+        running status to abbreviate the commands.
+        * Midi.h, MidiMaps.{h,cc}: Add MIDI 3D constants.
+
+        * MidiEvents.cc,MidiMaps.h,SmusTrackEvent.cc,main.cc,textmidi.l,textmidi.texi:
+        Apply std::optional to the bidirectional map NumStringMap in Midi.h.
+
+2023-03-16     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.texi,textmidi.l,MidiMaps.h,MidiEvents.cc,SmusTrackEvent.cc:
+        Give MidiMaps an operator() that 
+        returns validity with the mapped result.  Found a bug in which the pan 
+        code was mapped using Excess64 even if the CONTROL event was not written
+        using the string "PAN".  It should not add Excess64 if the CONTROL was 
+        written with a numeric control ID.  There was also a mistake in the 
+        abbreviated form for PAN to down-cased the value (left-center-right).
+        * MidiMaps.cc: fill in more constants for controller values.
+        * textmidi.texi: clean up CONTROL synonyms.
+
+2023-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.{h,cc},MidiMaps.{h,cc},textmidi.l,textmidi.texi,textmidi.vim:
+        Revamp handling of modes from Table IV in the MIDI spec.  Add LOCAL_CONTROL,
+        OMNI_{ON,OFF}, MONO_ON, POLY_ON.  Clean up and permite using values ON, OFF,
+        hexadecimal or decimal; support the abbreviated forms for modes.  Document in textmidi.l.
+
+2023-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, MidiMaps.{h,cc}, textmidi.l, textmidi.vim,
+        textmidi.texi:
+        Repair usage of byte values: decimal should be accepted; 1- and 2- digit
+        hexadecial ("0x1" and "0x01") should be accepted.  Also add ALL_CALL
+        constant for device ID for miditext and textmidi and document in textmidi.texi.
+
+2023-03-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, MidiMaps.cc, textmidi.gdb, textmidi.l:
+        Rewrite textidi handling of SYSEX to allow use of names for
+        subids, and subid1s.  Probably won't add vendors.
+        * Midi.h: make array<>'s constexpr.
+
+2023-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, MidiEvents.{h,c}, textmidi.l: Move RunningStatus class
+        from MidiEvents to Midi.  Rewrite textmidi.l to use the RunningStatus
+        class.  Clear running status at Meta and Sysex events per spec.
+        "Meta events and sysex events cancel any running status that was in effect."
+        RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
+        * Midi.h, MidiMaps.{h,cc}, textmidi.l, textmidi.texi: Handle some SYSEX standard messages
+        using some symbols in textmidi.l.
+
+2023-03-09b     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMaps.{h,cc}: add common sysex subids.
+
+2023-03-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: Improve miditext --lazy.
+        * textmidi.texi: Add detail on LYRIC events.
+
+2023-03-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.h, GeneralMIDI.{cc,h}, MIDIKeyString.cc, Makefile, Makefile.am, 
+        Makefile.in, Midi.{cc,h}, MidiEvents.{cc,h}, SmusTrackEvent.{cc,h}, 
+        autom4te.cache/requests, miditext.cc, smustextmidi.cc, textmidi.l, 
+        MidiMaps.{h,cc}: Create MidiMaps.{h,cc} and move MIDI maps to MidiMaps.
+        Fix buildkit.sh to copy MidiEvents.{h,cc} instead of MidiMessages.{h,cc}.
+
+2023-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, textmidi.l, textmidi.texi: Put the increment
+        and decrement of channels and program numbers in a named function.
+        * textmidi.texi: fix bare braces.
+
+2023-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, textmidi.l, textmidi.texi:  clean up CONTROL,
+        continue to maintain the abbreviated forms for some controls.
+        * Midi.{h,cc}, MidiEvents.{h,cc}, textmidi.l, textmidi.vim:
+        Support XMF PATCH TYPE and update textmidi.vim editor environment.
+
+2023-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.{.h,cc}, GeneralMIDI.{h,cc}, Midi.{h,cc}, MidiEvents.cc, 
+        * miditext.cc, textmidi.l, textmidi.texi, textmidi.vim, textmidicgm.cc:
+        Eliminate CONTROL synonyms; they all have to be "CONTROL [chan] [id] [value].
+        Propagate use of NumStringMap template; move more maps into Midi.h/cc.
+        This eliminates duplicate maps in different direections at least mostly.
+        Make ON and OFF work with softpedal and sostenuto.
+
+2023-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: use string_view in string/code maps.
+        * MIDIKeyString.h, Midi.cc, Midi.h, MidiEvents.cc, SmusTrackEvent.cc,
+        * SmusTrackEvent.h, textmidi.l, textmidi.texi: use a new bidirectional
+        map for strings and numbers.
+
+2023-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: Make some names case-insensitive:
+        control ID names; text event types; control synonyms, on and off.
+        * miditext.cc, textmidi.l, MidiEvents.cc: use vector reserve on
+        byte vectors and event vectors based on 3.3 bytes/MIDI event.
+        * MidiEvents.cc/2600: fix a bug of missing LAZY command in miditext --lazy.
+        In miditext --lazy conversion, write zero-long notes if a non-note event 
+        occurs with zero delay after a note-on.  Document in miditext.texi.
+
+2023-02-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.l: change text_09 to device_name.
+        Change text_08 to program_name.
+        Fix text events getting the last character trimmed off
+        if they are not quoted.
+        Support many named control IDs in textmidi.
+        * miditext.cc: support the control change ID strings.
+        Fix mishandling of empty string events with quotes.
+
+2023-02-27     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, GeneralMIDI.cc, MIDIKeyString.cc, Midi.cc, MidiEvents.h, 
+        MusicalForm.cc, RhythmRational.cc, Scales.cc, SmusTrackEvent.cc, 
+        Voice.cc, main.cc, miditext.cc, rational_support.cc, smustextmidi.cc, 
+        textmidicgm.cc, writesmus.cc: remove namespace qualifications
+        esp. "std::" from .cc files mostly; add count of rigid rhythms
+        to miditext --verbose, to make it easier to identify moused-in scores as
+        opposed to played-in scores.
+        * textmidi.l: Make the line counter slightly more accurate.
+
+2023-02-26     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix duplicate rests at beginning of tracks in
+        miditext --lazy usage.  The policies for making rests for
+        the end of notes and after meta events are different and interferred
+        with one another.  Also applied more ranges in nearby code.
+
+2023-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * MIDIKeyString.cc, Midi.h, MidiEvents.cc, MidiEvents.h,
+        SmusTrackEvent.cc, Voice.h, cgmlegacy.h, main.cc, miditext.cc,
+        smustextmidi.cc, textmidi.l, textmidicgm.cc:  Last night
+        broke threaded miditext for converting TO lazy mode textmidi.
+        This seems to work and still has the same statistics on
+        ordinary DETAIL-mode-based conversions.
+        There were too many static class members (hidden globals)
+        that created race conditions in threads.
+
+2023-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, Midi.h, textmidi.l:  Change
+        regular expression for recognizing floating-point tempo in textmidi.l
+        Define constants for SecondsPerMinute and UsecPerSecond in Midi.h
+        Apply those names.
+        * Composer.cc MidiEvents.cc MusicalForm.{cc,h} textmidi.l:
+        Apply more ranges and range algorithms, and back_inserters.
+        * MidiEvents.h, RhythmRational.h, SmusTrackEvent.h, cgmlegacy.h:
+        check all single-arguments c-tors are explicit.
+        * Composer.h MidiEvents.{cc,h} Midi.h miditext.cc Random*.h smustextmidi.cc 
+        textmidicgm.cc Track.h: dump the typedefs in favor of using clauses.
+
+2023-02-20     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: mark consume_stream() private since it's
+        called only by constructors.
+        * miditext.texi: explain testing, and differences in round-trip
+        recreated MIDI files.
+        * Composer.{h,cc}: add a random generator that ranges::shuffles will use.
+        * Composer.cc: Use ranges for track shuffling etc.
+        Also remove defet of leaders_topo_sort.resize().
+        * Composer.h: track scrambling option was spelled wrong with a capital:
+        nextPermutation but s/b nextpermutation and previouspermutation.
+        * smustextmidi.cc: use C++ back_inserter in the transform() of NoteEvents.
+
+2023-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: textmidi will no longer write a leading zero byte
+        for variable-length values.  This accounts for most of the
+        differences between original MIDI files used for testing and
+        those produced by textmidi.  MIDI's spec probably allows for the
+        zero byte, but it should not be there.
+        * MidiEvents.{h,cc}: RAII applied, by having constructors in MidiEvents
+        call consume_stream() rather than the factory.  All of the 891 test files compare 
+        text files exactly; 1/3 of them compare re-created MIDI files exactly.
+
+2023-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.vim, textmidi., textmidi.texi, MidiEvents.{h,cc}:
+        Fix some found defects.  Primarily C++ usage and design of MidiEvents.
+        Divide responsibilities in miditext between recognize() functions 
+        and consume_stream() functions.  Reduce line count about 35 net lines.
+        Update documentation; properly support TEXT_0[8-F].  Remove running_status
+        from classes for events that don't use it anyway (leave it in the voice 
+        channel events).  Organize code in MidiEvents to put functions in the
+        same order in MidiEvents.h and MidiEvents.cc.
+
+2023-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix print out of out-of-range MIDI data values.
+
+2023-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * General: rewrite most stream output as the buiding of a string, and output
+        of the string.  Start using C++20 ranges.  Reduce compiler warnings.
+        * miditext.cc: replace thread with jthread.  Replace endl with newline.
+        Also change file read to read the entire file at once.
+
+2023-02-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.cc MidiEvents,cc, NoteEvent.cc, RhythmRational.cc, main.cc, testmidi.bash,
+        textmidi.{h,l}: Change the globals in textmidi into a global pointer to a
+        struct of features.
+        * miditext.cc: Print error about extra data at the end of the MIDI file.
+        * Composer.h GnuPlot.h MIDIKeyString.h Midi.h MidiEvents.{cc,h} MusicalForm.h 
+        NoteEvent.h Options.h RandomDouble.h RandomInt.h RhythmRational.h Scales.h 
+        Track.h Voice.h cgmlegacy.h miditext.cc rational_support.h textmidi.h textmidi.l:
+        Replace Midi.h's arrays with vectors; this meant they could not be constexpr,
+        so that propagated everywhere.  Also change prefix_len in MidiEvents.h
+        to not be constexpr as a result.  Add _H to include idempotent checks.
+        Add data range checks to input binary MIDI data in miditext.
+        Permit but report over-long MIDI files, that is, that have extra data 
+        after the last track.  Create special constexpr of channel voice commands
+        so that they could be used where needed.  A typed enum class did not compile.
+
+2023-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.in, MidiMessages.{h,cc}}->MidiEvents.{h,cc},
+        miditext.cc: Change name MidiMessages to MidiEvents
+        and all related class names etc.
+        * MidiEvents.{cc,h}: Put function definitions into .cc.
+        Put function definitions in .cc in the same order as in .h.
+
+2023-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, MidiMessages.cc, textmidi.texi: refine UNKNOWN_META.
+        * Don't require the length in the text version.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.cc MidiMessages.h, textmidi.vim,textmidi.texi, 
+        textmidi.l: Support Unknown Meta events as hexadecimal data.
+        Support SMPTE_OFFSET properly, exposing frames per second in textmidi files.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc, Midi.h, textmidi.l: permit 3-digit hours in SMPTE_OFFSET
+        but give an error message from textmidi and miditext for hours over 23.
+        * textmidi.l: Fix SMPTEOffset regression that left off the hours.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc textmidi.l Midi.h: Fix defects with SEQUENCE_NUMBER.
+        miditext wrote the wrong name.  textmidi neglected to write the meta 
+        prefix (0xFF).
+        * MidiMessages.cc: fix handling of zero-length string events.
+
+2023-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.{h,cc}, textmidi.l:  Straighten out
+        SEQUENCER_SPECIFIC; fix spelling; adjust for 2- and
+        3- byte channel voice commands in "recognize()";
+        use classical archive MIDI files to test round-trip
+        conversion: MIDI->text->MIDI->text.
+        Text events in textmidi support escapes for
+        double-quotes, carriage-returns, line-feeds, tabs,
+        vertical tabs, bells, formfeed, and backspace.
+        MidiMessages.cc: Fix a bug that prevented channel 16
+        from being used.  Make TEMPO command take a simple floating-
+        point number.  Include SEQUENCE_NUMBER number event.
+        Fix POLYPRESSURE print error.
+        * all.cc: stream output now saves and restores formatting flags.
+        * textmidi.l: Fix pitch bend values to shift by 7 bits and not 8.
+        Fix int_to_vec().
+        * RhythmRational.{cc,h}: improve robustness of input operator.
+
+2023-01-18     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Fixed defect in stream output
+        for CHANNEL_POLYPRESSURE.
+        * MidiMessages.cc, Midi.cc, NoteEvent.cc, RhythmRational.cc:
+        Stream output now saves/restores stream format flags.
+        * texinfo.tex, compile, depcomp, missing, ylwrap: 
+        Added some missing files to make a build more convenient.
+
+2023-01-04     Thomas E. Janzen <janzentome@gmail.com>
+
+2022-04-25     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext by fixing
+        insert_rests().  Passes prelude1_II.com and sacre tests.
+        * prelude1_II.com: add a test script. 
+
+2022-04-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext --lazy
+        to do round-trip test on prelude1_II.txt.
+        Seems to be alright except for detache lazy in 
+        musescore, but timidity plays it ok and a miditext on it
+        looks OK.
+
+2022-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: reconcile integer types and
+        insert end-of-lines after each note event.
+        Fix missing rests after note_on with velocity of 0.
+        Fix quantization of rests.
+        * MidiMessages.fig: mispelling
+
+2022-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.texi: correct spelling, add details
+        about the keyboard and about voice following.
+
+2022-03-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: refactor
+        preparing to print textmidi text in lazy mode
+        to encapsulate the preparation for lazy inside
+        PrintLazyEvent which got renamed PrintLazyTrack.
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: fix quantize.
+        the lazy fix broke quantize by using tick counts after
+        quantiziation had been applied to RhythmRationals
+        e.g, wholes_to_next_event() and wholes_to_noteoff().
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: remove unused lazy parameter in c-tor
+        of PrintLazyEvent.
+
+2022-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc, MidiMessages.cc: pass a simple textmidi --lazy test
+        for overlapping notes.
+        * miditext.cc, textmidi.l, textmidi.cc, SmusTrackEvent.cc,
+        Composer.cc, smustextmidi.cc, MidiMessages.cc: Always write
+        the file format when writing textmidi text files.
+        make the program that write textmidi text files write
+        text that looks more alike.  Make smustextmidi put the
+        text meta events into the first MIDI (tempo) track.
+        Improve behavior of miditext --lazy overall and 
+        remove the block on the --lazy option.
+
+2022-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: extra delays are gone in miditext --lazy.
+
+2022-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: recovered basic function
+        of miditext --lazy.  Quantization probably does not work.
+
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: a little cleanup.
+        Only write a hard-coded END_OF_TRACK if there was no SMUS
+        EndOfTrack in the SMUS track (0xFF).  The end-of-track in
+        the SMUS track appears to be optional, since the chunk
+        length is given anyway.
+        Refactor the code to write "LAZY" or "END_LAZY" only when
+        needed (procedurize it better from earlier today).
+        
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: name constants.
+        Track state "LAZY" to avoid redundant END_LAZY/LAZY pairs.
+        Change type of SmusTrackEvent decision and data to int type
+        with static storage.
+
+2022-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am: add rational_support to clean target.
+        * SmusTrackEvent.cc smustextmidi.cc textmidi.l: remove unused and
+        fix tie in/out mistake in smustextmidi that would add a pitch
+        to the tied_vec_ every time it appeared even though it was
+        in the same continuous tied note.
+
+2022-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, miditext.cc, MidiMessages.cc: Tried to fix bugs in
+        miditext --lazy feature but postponed until a re-analysis.
+
+2022-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, TextmidiUtils.h, textmidi.l, textmidi.cc, smustextmidi.cc,
+        writesmus.cc, miditext.cc:
+        Move io_bytes to TextmidiUtils.h.
+        * smustextmidi.cc: remove extra data structure trackEventVec.
+        * Composer.cc, NoteEvent.{h,cc}: remove the double rep of rhythm (duration).
+
+2022-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.h, smustextmidi.cc,SmusTrackEvent.cc,writesmus.cc:
+        Change name of SmusTrackEvent to SmusTrackEventFilePod
+        * SmusTrackEvent.h, smustextmidi.cc, miditext.cc, SmusTrackEvent.cc:
+        remove dependence on MidiMessages.h when it's really Midi.h or nothing.
+        * *.fig: fix fonts; fix dependencies per above; add Composer class.
+
+2022-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.cc: smustextmidi was printing a whole note as 1/1
+        rather than as 1.  Check for a 1/1 rational before using 
+        operator<<(os, RhythmRational&).
+        * Composer.{cc,h}: Make Composer a class.
+        * *.cc *.h: put all cgm namespace code under namespace textmidi.
+
+2022-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, Composer.cc, Midi.h, MusicalForm.h: move
+        MinDynamic and MaxDynamic to Midi.h
+
+2022-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: remove duplication typedef of MidiStreamVector.
+        * dependencies.fig, textmidi.fig: add diagrams.
+
+2022-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.{cc,h}, smustextmidi.cc, writesmus.cc:
+        Fix SmusTrackEventVolume::textmidi to not repeat volume
+        commands as textmidi "vel" commands.  The solution was to
+        make current_dynamic static and re-init it at the beginning
+        of each track to 64.
+        Also fix them to use dynamics_reverse_map to output the
+        dynamic markings used by textmidi and miditext.
+
+2022-02-18     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.cc: Fix whole notes with a zero denominator.
+        This fixes missing whole note lengths in smustextmidi.
+        * Makefile.am: lists of sources per program are fixed.
+        * RhythmRational.cc: Fix print_rhythm to print 4 wholes as 4/1.
+        * SmusTrackEvent.cc: Fix duration() not recognizing a whole note.
+
+2022-02-17     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: always reduce the rationals for rhythm when using 
+        lazy mode in the miditext program.  This allows miditext to output 
+        dotted notes in lazy mode output.
+        * MidiMessages.{h,cc}, Midi.h, textmidi.l: create dynamics maps
+        and use in textmidi and miditext; fix miditext issue of not 
+        output dynamic markings.
+
+2022-02-16     Thomas E. Janzen <janzentome@gmail.com>
+        * writesmus.cc, writesmus.make: write for testing smustextmidi.
+        * RhythmRational.cc: If rhythms are dotted, they have a numerator of 1,
+        so we can use the abbreviated form (where a "1/4." (dotted quarter) note
+        is "4." ).
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}: rename as RhythmRational.{h,cc}
+        * Composer.cc, MidiMessages.cc, MidiMessages.h,
+        NoteEvent.cc, NoteEvent.h, SmusTrackEvent.cc,
+        SmusTrackEvent.h, Track.h, buildkit.bash, miditext.cc,
+        rational_support.cc, rational_support.h, smustextmidi.cc:
+        find all rhythm printing and make them use print_rhythm().
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Track.{h,cc}, TextmidiRational.cc: Remove extra operator<<(rational)
+        and edit the one in TextmidiRational to print 4 for 1/4 and 4/1 for 4/1.
+        * MidiMessages.cc, SmusTrackEvent.h, miditext.cc, smustextmidi.cc, TextmidiRational.cc,
+        NoteEvent.h, Track.h, TextmidiRational.h, MidiMessages.h, SmusTrackEvent.cc, Composer.cc:
+        Also remove typedefs of TextmidiRational and just use the name TextmidiRational.
+
+2022-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}, SmusTrackEvent.cc, miditext.cc, MidiMessages.cc, Composer.cc:
+        Complete work integrating TextmidiRational.
+
+2022-02-13     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, SmusTrackEvent.h, SmusTrackEvent.cc, MidiMessages.cc, 
+        * rational_support.{h,cc}, Track.h, TextmidiRational.{h,cc}, NoteEvent.h
+        * Composer.cc, miditext.cc, smustextmidi.cc, MidiMessages.h, TextmidiRational.cc:
+        Use pair init without template args; dispose of boost::rational and replace
+        with TextmidiRational.  This stopped hard-to-track-down crashes of smustextmidi.
+
+2022-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h: use std::shuffle rather than random_shuffle, 
+        now deleted from C++.
+        * RandomDouble.h, RandomInt.h: add inclusion guards; to RandomInt.h add
+        min() and max() member functions and a typedef of result_type
+        so that std::shuffle can use them.
+        * MIDIKeyString.cc: remove unnecessary double braces.
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: replace double quotes with single quotes
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * All files: update copyright to 2022.  Update version to 1.0.18.
+        * textmidi.texi, textmidiformedit.texi: fix errors and update.
+
+2022-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, KeyboardWindow.py: make keyboard smaller.
+
+2022-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py, textmidiformedit.py: remove widget variables where possible.
+        Make spinboxes readonly where possible, only make writable temporarily when necessary.
+        Fix a couple bugs discovered along the way.
+
+2022-02-06     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py: simplify usage to correct behavior as the voice number changes.
+        Remove widget variables for Sine and Voice.  It makes the interface slower but 
+        on Voice the Entry and Spinbox values would propagate to other voices for no reason.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.py, VoiceWindow.py: finish using General MIDI names in program entry.
+        * KeyboardWindow.py, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py: set screen positions.
+        * Fix an issue with widget update on Voice-program.  
+        * Change colors on form plot but verify on Postscript output.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: Make file names the same as the main window names.
+        * GeneralMIDI.py: add General MIDI instruments for the spinbo in the voice window
+        * VoiceWindow.py: Use GeneralMIDI iun the program spinbox
+        * Composer.cc: refactor some code into local functions. 
+
+2022-02-02     Thomas E. Janzen <janzentome@gmail.com>
+        * voice.py, textmidiformedit.py, allforms.py: fix checkbox behavior;
+        fix reads from the form XML file for min/max note len, name, len, pulse, down, same up;
+        fix writes of voice pan.  Fix follow radio buttons write to file.
+        Later continue to fix assignments.  Use get/set on StringVar; use delete/insert
+        on changing Entry.  Except the min/max key seems to work setting the StringVar.
+        * texmidicgm.texi: add descriptions of trackscramble and trackscrambleperiod
+
+2022-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix scale length error in saving XML Form files.
+        * Voice.h, Composer.h, textmidicgm.cc, Composer.cc: Add track scrambling feature
+
+2022-01-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidi.l, MusicalForm.h, MusicalForm.cc: Use MaxDynamic
+        and MinDynamic names where appropriate instead of magic numbers.
+
+2022-01-17     Thomas E. Janzen <janzentome@gmail.com>
+        * Most: Show correct version
+        * *.texi: Correct spelling of Association
+
+2022-01-07     Thomas E. Janzen <janzentome@gmail.com>
+        * FormPlotWindow.png, KeyboardWindow.png, MusicalFormWindow.png, VoiceWindow.png: add images
+        * textmidiformedit.texi: Add images of the GUI windows and more explanation.
+        * textmidi.l, textmidi.texi: change default detache value to zero (0).
+
+2022-01-06     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, textmidiformedit.py, sine.py, voice.py, keyboard.py:
+        Remove trailing spaces, make keyboard bigger, make middle C bolder on keyboard.
+
+2022-01-04     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, voice.py: make spinboxes use ButtonRelease-1 event and not focus out or
+        decrement and increment.
+
+2021-12-31     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, form.py, sine.py, textmidiformedit.py, voice.py: Upgrade per "Modern Tkinter" by Roseman.
+
+2021-11-20     Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: rewrite clampscale in fewer statements.
+        * Composer.cc: remove unused objects.
+
+2021-11-19     Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.cc: cleanup usage of form file names; reported wrong name if verbose
+        with a random form; move declarations closer to usage.
+        * MusicalForm.h, MusicalForm.cc, textmidicgm.cc, textmidicgm.texi: add option 
+        --clampscale to clamp the scale in each form to not exceed the union 
+        of the voice ranges.
+
+2021-10-14    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidiformedit.py: Fix mean curve inversion due to left-handed plotting 
+        coordinates; add a save-postscript menu item; draw curves using create_polygon
+        rather than create_line.
+
+2021-10-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Scales.cc: Added the "Bs" to the Chromatic scale by textmidicgm.
+        * Makefile.am, fixtempo.pl: Use /usr/bin/env instead of full paths for utilities.
+        * textmidiformedit.texi: added documentation
+        * textmidiformedit.py: added
+        * allforms.py: added
+        * form.py: added
+        * sine.py: added
+        * voice.py: added
+
+2021-09-03    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
+        with the same channel won't set different programs.  This creates functions
+        or single-valued relations: track->channel; channel->program.  These are
+        in addition to the function channel->pan.
+
+2021-09-02    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
+        Add comments describing Melody Probabilities as cumulative.  Increase the 
+        possible number of voices in a random form to 24.
+        * textmidicgm.texi:  Correct description of melody probabilities and update
+        description of randomized melody probabilities (using the --random option).
+
+2021-09-01    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
+        to spread for near the left to near the right.  The symptom was that
+        idiophone-only random forms were bunching up the instruments way over 
+        on the right.  Now a single channel score should put them in the center
+        although the percussion instruments in TiMidity++ seem to be panned 
+        stereo samples, so channel 10 is always centered.
+
+2021-08-31    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: Remove the kluge that put a quiet note at the beginning of the
+        tempo track to force generation of silent starts of tracks by TiMidity++.
+        Loop time by using musical ratios instead of chrono time.  This results in
+        more accurate alignment at the end, but the individual tracks can still
+        be a measure longer than requested because they don't exceed the maximum
+        time until they have generated the last note.
+
+2021-08-30    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi.l: fix accumulated time defect so that tracks that should be
+        the same length in ticks are or at least only a tick off at the end.
+        This can make very fast tracks a very different length, and was noticed
+        with fast tracks written by textmidicgm.  This was an accumulating
+        floating-point addition error, esp. wrt conversion to int types.
+        * Composer.cc: Removed the forced percussion event (a kluge for
+        separate track recording) part of the music time, so that it is not
+        extra time.
+        Trying to rationalize rhythm due to short tracks from textmidicgm.
+        * NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
+
+2021-08-29    Thomas E. Janzen <janzentome@gmail.com>
+
+        * main.cc: remove old block that checks if you would overwrite a file
+        but leave check if --answer is set.
+
+2021-08-26    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: After a random form is created,
+        remove scale notes that are too high or low for any or the
+        General MIDI patches selected in random().  This avoids lots of repeated very 
+        high or low notes when the pitch curve is beyond any instrument's range
+        and the end of the scale.  This could still happen with small-range instruments.
+        * textmidiform.py: add to tree.  Has a file widget, reads in the XML form file
+        and draws the graph of the form.
+        * MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
+
+2021-08-23    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.texi: correct description of random selection of channel to
+        coerce channel 10 for idiophones.
+
+2021-08-18    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.cc: handle boost xml serialization exceptions.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
+        to return it to its previous meaning of if (0 == pulse_per_rhythm)
+        but not activating a bug.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
+        as a work-around for a crash due to a possible bug in boost::rational.
+
+2021-08-12    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
+        * miditext: Rewrite/rename from mididisasm.
+        * smustextmidi: Rewrite of SMUSMIDI to output textmidi text.
+        * textmidicgm: Rewrite from AlgoRhythms without a GUI; to produce textmidi text files; use C++20.
+        Change output format to textmidi text output, which can be
+        converted into MIDI Standard MIDI Files by textmidi.
+
+2003    Thomas E. Janzen <janzentome@gmail.com>
+
+        * smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
+        Remove extra NULL text events; fix key signatures.
+
+2002-12-29 Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
+        which was published on the Classical MIDI Archive.
+        * mididisasm: First private version.
+
+1999-09-18 Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi:  Initial private version.
+
+1994-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Version 3.0 for Commodore Amiga computers.
+
+1992-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Version 2.0, now textmidicgm.
+        On Fred Fish Disk 606 for Commodore Amiga computers.
+
+1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com>
+
+        * SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
+        Commodore Amiga.
+
+1990-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Initial revision 1.0
+        on Fred Fish Disk 356 for Commodore Amiga computers.
+
+        * miditext.cc: remove comment written to textmidi file
+        of the number of bytes in a track.
+        * textmidiroundtriptest.py, classical_archive[0123456].txt: 
+        Rewrite test scripts for textmidi and miditext, move to
+        test directory.
+
+2024-02-25     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: minor changes to use of pan_map in
+        PAN and CONTROL PAN blocks.  Notice repeated code
+        to be refactored TODO.
+
+2024-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: add CONTROL [chan] CHANNEL_VOLUME 100
+        to beginning of tracks with General MIDI instruments.
+
+2024-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven_grosse_fuge: Add example of Beethoven's
+        own piano-duo transcription of his Grosse Fuge for string quartet.
+
+2024-01-08     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven9th_2: Add example of molto vivace of the
+        Beethoven d minor symphony.
+
+2024-01-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.cc: random(), which generates a random form,
+        should make a random value for walking that is in [0.0...1.0) or similar.
+
+2024-01-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix setting of walking scrollbar from file.
+
+2024-01-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidicgm.texi, textmidiformedit.texi, VoiceWindow.py, 
+        Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability
+        that a voice will be in walking mode from note to note, but be backwards-
+        compatible with old XML form files.
+
+2023-12-21     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/schuqnt: Add example of Schumann Quintet in textmidi.
+
+2023-11-28     Thomas E. Janzen <janzentome@gmail.com>
+        * dynamics.cfg, main.cc, Makefile.am, Makefile.in, MidiEvents.cc, 
+        MidiMaps.h, miditext.cc, Options.h, smustextmidi.cc, SmusTrackEvent.cc,
+        textmidicgm.cc, textmidi.l: Make settable values for dynamics symbols.
+
+2023-08-24     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: note events were being pushed onto the wrong track's container.
+        They should be pushed on the "tr", the track index, not "i" which was incremented.
+        The index "i" has been deleted.
+        The symptom was that following higher priority voices seemed to work but following
+        lower priority tracks (e.g., track 0 followed track 1), failed to write any tracks.
+
+2023-08-20     Thomas E. Janzen <janzentome@gmail.com>
+	* GeneralMIDI.cc, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        guitar range was an octave high.  textmidiformedit: transpose spinbox
+        didn't set when files were loaded.
+
+2023-08-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am Makefile.in:  Compile with std=c++23.  
+
+2023-08-01     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, MIDIKeyString.h, Makefile, Makefile.am, Makefile.in, 
+        Midi.cc, Midi.h, NoteEvent.h, Options.h, SmusTrackEvent.h, Track.h, 
+        cgmlegacy.h, config.h, config.h.in, config.status, configure:
+        make constexpr that are inside namespaces as inline.
+
+2023-07-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h: delete obsolete unused externs.
+        * Midi.h, main.cc, textmidi.{l,h}:
+        use a Singleton Pattern for the global values.  eww.
+
+2023-07-30     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, main.cc, textmidi.{l,h}:
+        make running_status a unique_ptr.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: ensure dec IO manipulator is used
+        after any use of hex, probably unnecessarily.
+
+2023-07-21     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc: fix mishandling of default runningstatus="STANDARD,
+        not "standard".
+
+2023-07-18     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.h, MidiMaps.{h,cc}, textmidi.cc, MidiMaps.cc,
+        MidiEvents.{h,cc}, Midi.{h,cc}, main.cc:
+        Add support to textmidi for a variety of misuse of MIDI running status
+        in order to support testing with input files that had been created 
+        by incorrectly written MIDI file software.
+        Changed the runningstatus option in textmidi.
+
+2023-07-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc: Fix unbounded recursion.
+        * add debian/ packaging support
+
+2023-06-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: fix compiler error "used but not defined" on ticks 
+        functions by removing the base class's declarations of them.
+
+2023-06-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, Composer.h, Midi.h, MidiEvents.h, MusicalForm.h,
+        NoteEvent.h, RhythmRational.h, SmusTrackEvent.h, Track.h, Voice.h, cgmlegacy.h:
+        Apply rule of 5: virtual base classes should have all 5 special functions defaulted.
+        * MidiEvents{h,cc}: apply bridge pattern by creating separate implementation class
+        for MidiEvent.
+
+2023-06-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc:  handle improper key signatures.
+
+2023-05-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, RhythmRational.cc, cgmlegacy.cc,
+        textmidi.l, textmidicgm.cc: Build with -pedantic and fix.
+
+2023-05-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+        Fix issue with file load setting program low/high_pitch by adding buttons
+        to the Voice Window marked "From Program", meaning, if the program is
+        a clarinet, then pushing "From Program" will set a low pitch or high pitch
+        suitable for a clarinet patch.  Add "Defaults" menu item to the plot window.
+        Repair defects that were revealed by a load file test.
+
+2023-05-09     Thomas E. Janzen <janzentome@gmail.com>
+         * AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
+         Continue applying Python TCL/Tk widget variables (StringVar and IntVar),
+         and applying the callbacks to those and not the widgets.
+
+2023-05-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, VoiceWindow.py, textmidiformedit.py:
+        Modernize and correct and rewrite usage of Python TCL/Tk, esp. wrt 
+        use of widget variables correctly.
+
+2023-05-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, defaults.form.xml, defaults_1_voice_range_0.form.xml, 
+        defaults_2_voice_follow.form.xml, defaults_2_voice_follow_walk.form.xml,
+        defaults_2_voice_follow_walk_scalar.form.xml,
+        defaults_2_voice_follow_walk_tritone.form.xml, 
+        notes20230506.txt, textmidiformedit.py:
+        Test. Put default name into save form file and save Postscript file
+        dialogs.  Add default extensions into each.
+        Set first note of walking voice to mid-scale.
+        * textmidiformedit.py, VoiceWindow.py: repair usage of IntVar. Use get/set.
+        Repair disable/enable of follow-only widgets, and walking, which is
+        anti-follow.
+
+2023-05-05     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: Make form plot lines more readable.
+        Add boundaries for excess thresholds.
+
+2023-05-04     Thomas E. Janzen <janzentome@gmail.com>
+        * VoiceWindow.py, textmidiformedit.py: overhaul draw_form().
+        * Composer.cc, Voice.h, VoiceWindow.py, textmidiformedit.py:
+        Add support for follower voice inversion.
+
+2023-05-03     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Composer.cc, FormFrame.py, Sine.py, Voice.h, 
+        VoiceWindow.py, textmidiformedit.py: Add voice/follow/retrograde and
+        voice/follow/follow_pitch (default true). Retrograde seems to work
+        but follow_pitch disable is not implemented yet.
+
+2023-05-02     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, Sine.py: overhaul
+        Form Window to add widgets for sine offset and amplitude.
+
+2023-05-01     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiString.cc, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py:
+        Straighten out interoperability of XML form files from
+        and to textmidicgm and from and to textmidiformedit.py.
+
+2023-04-30     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, textmidiformedit.py, VoiceWindow.py:
+        Catch up python GUI with additions of follower delay and
+        arrangements in XML.
+
+2023-04-29     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, NoteEvent.h:  Activate follower delay (for canons).
+        Add exception for out of range leader_ as index.
+        Test and fix new XML format in the C++ code.
+
+2023-04-24     Thomas E. Janzen <janzentome@gmail.com>
+               * Arrangements.{cc,h}, Composer.{cc,h}, textmidicgm.cc, textmidicgm.texi:
+        rename track scrambling to arrangements.  Improve documentation of
+        arrangements.  Change arrangement "None" to "Identity" and document.
+        * textmidi.l: Remove the linefeed from definition of LINE.
+ 
+2023-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{h,cc}, textmidicgm.texi, HeapsAlgorithmTemplate.h:
+        Change HeapsAlgorithmTemplate.h to construct from the
+        array to permute and its length.  Document all of the Arrangers.
+
+2023-04-22     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MusicalForm.cc, textmidicgm.texi:
+        Redefine track scrambling to be easier to see what it will do.
+        It will play a track if it is in the list in the track scrambled
+        vector, for the number of voices playing, from element 0 on.
+        I don't know how it worked before, it was haphazardly written.
+
+2023-04-19     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{cc,h}, Composer.cc, HeapsAlgorithmTemplate.h: Replace
+        Heaps Algorithm with one developed from original paper.
+
+2023-04-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc, Arrangements.h, Composer.cc:
+        Integrate Arrangements in order to accomodate Heaps permutation algorithm.
+
+2023-04-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h, Makefile.am, buildkit.bash,
+       textmidicgm.cc textmidicgm.texi: Integrate Arrangements
+       for track scrambling.  Sort of working.
+
+2023-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, Makefile.am textmidi.l MidiString.{h,cc}: move
+        string escape and quotes handling out of textmidi
+        and miditext.
+
+2023-03-31     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: ticks command didn't clear running status,
+        even though it writes a text meta event.
+        Changed to clear running status as required by MIDI spec.
+
+2023-03-21     Thomas E. Janzen <janzentome@gmail.com>
+        * midi3d.pl: Add a script to compute MIDI 3-D values for textmidi.
+
+2023-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMaps.h,textmidi.l,Composer.cc,MidiEvents.cc,MusicalForm.h,main.cc,
+        miditext.cc,smustextmidi.cc: C++ tactics and cleanup.
+        Concatenate strings for output esp. to cerr.
+        Reserve room in vectors prior to using back_inserter.
+        Procedurize conversion of hex and decimal strings for textmidi.l
+        Remove types from pair, replace with make_pair().
+        Use cbegin() and cend() when applicable.
+        Replace use of distance() with for-initialized variable.
+
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc,Composer.h,MIDIKeyString.h,MidiEvents.cc,MidiEvents.h,
+        MusicalForm.cc,NoteEvent.cc,NoteEvent.h,RhythmRational.cc,RhythmRational.h,
+        Scales.cc,Scales.h,Track.h,main.cc,rational_support.cc,textmidi.vim:
+        Apply constexpr where possible.  Make Scales.h use string_view.
+
+2023-03-18     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.cc,MidiMaps.cc,MidiMaps.h,textmidi.l,textmidi.vim:
+        Add symbols for MIDI 3D to textmidi.  miditext does not support them
+        fully because it would require a threadable state machine to do it.
+
+2023-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc,miditext.cc: protect against overwriting the input file
+        because of giving the same name for both the input and output files.
+        * textmidi.l,textmidi.h: add policy to RunningStatus.  Add use of 
+        RunningStatus policy to textmidi.l.  This permits getting a 
+        true comparison on a round-trip of MIDI files that never use
+        running status to abbreviate the commands.
+        * Midi.h, MidiMaps.{h,cc}: Add MIDI 3D constants.
+
+        * MidiEvents.cc,MidiMaps.h,SmusTrackEvent.cc,main.cc,textmidi.l,textmidi.texi:
+        Apply std::optional to the bidirectional map NumStringMap in Midi.h.
+
+2023-03-16     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.texi,textmidi.l,MidiMaps.h,MidiEvents.cc,SmusTrackEvent.cc:
+        Give MidiMaps an operator() that 
+        returns validity with the mapped result.  Found a bug in which the pan 
+        code was mapped using Excess64 even if the CONTROL event was not written
+        using the string "PAN".  It should not add Excess64 if the CONTROL was 
+        written with a numeric control ID.  There was also a mistake in the 
+        abbreviated form for PAN to down-cased the value (left-center-right).
+        * MidiMaps.cc: fill in more constants for controller values.
+        * textmidi.texi: clean up CONTROL synonyms.
+
+2023-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h,MidiEvents.{h,cc},MidiMaps.{h,cc},textmidi.l,textmidi.texi,textmidi.vim:
+        Revamp handling of modes from Table IV in the MIDI spec.  Add LOCAL_CONTROL,
+        OMNI_{ON,OFF}, MONO_ON, POLY_ON.  Clean up and permite using values ON, OFF,
+        hexadecimal or decimal; support the abbreviated forms for modes.  Document in textmidi.l.
+
+2023-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, MidiMaps.{h,cc}, textmidi.l, textmidi.vim,
+        textmidi.texi:
+        Repair usage of byte values: decimal should be accepted; 1- and 2- digit
+        hexadecial ("0x1" and "0x01") should be accepted.  Also add ALL_CALL
+        constant for device ID for miditext and textmidi and document in textmidi.texi.
+
+2023-03-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, MidiMaps.cc, textmidi.gdb, textmidi.l:
+        Rewrite textidi handling of SYSEX to allow use of names for
+        subids, and subid1s.  Probably won't add vendors.
+        * Midi.h: make array<>'s constexpr.
+
+2023-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.{h,cc}, MidiEvents.{h,c}, textmidi.l: Move RunningStatus class
+        from MidiEvents to Midi.  Rewrite textmidi.l to use the RunningStatus
+        class.  Clear running status at Meta and Sysex events per spec.
+        "Meta events and sysex events cancel any running status that was in effect."
+        RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
+        * Midi.h, MidiMaps.{h,cc}, textmidi.l, textmidi.texi: Handle some SYSEX standard messages
+        using some symbols in textmidi.l.
+
+2023-03-09b     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMaps.{h,cc}: add common sysex subids.
+
+2023-03-09     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: Improve miditext --lazy.
+        * textmidi.texi: Add detail on LYRIC events.
+
+2023-03-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.h, GeneralMIDI.{cc,h}, MIDIKeyString.cc, Makefile, Makefile.am, 
+        Makefile.in, Midi.{cc,h}, MidiEvents.{cc,h}, SmusTrackEvent.{cc,h}, 
+        autom4te.cache/requests, miditext.cc, smustextmidi.cc, textmidi.l, 
+        MidiMaps.{h,cc}: Create MidiMaps.{h,cc} and move MIDI maps to MidiMaps.
+        Fix buildkit.sh to copy MidiEvents.{h,cc} instead of MidiMessages.{h,cc}.
+
+2023-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, textmidi.l, textmidi.texi: Put the increment
+        and decrement of channels and program numbers in a named function.
+        * textmidi.texi: fix bare braces.
+
+2023-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiEvents.cc, textmidi.l, textmidi.texi:  clean up CONTROL,
+        continue to maintain the abbreviated forms for some controls.
+        * Midi.{h,cc}, MidiEvents.{h,cc}, textmidi.l, textmidi.vim:
+        Support XMF PATCH TYPE and update textmidi.vim editor environment.
+
+2023-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.{.h,cc}, GeneralMIDI.{h,cc}, Midi.{h,cc}, MidiEvents.cc, 
+        * miditext.cc, textmidi.l, textmidi.texi, textmidi.vim, textmidicgm.cc:
+        Eliminate CONTROL synonyms; they all have to be "CONTROL [chan] [id] [value].
+        Propagate use of NumStringMap template; move more maps into Midi.h/cc.
+        This eliminates duplicate maps in different direections at least mostly.
+        Make ON and OFF work with softpedal and sostenuto.
+
+2023-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: use string_view in string/code maps.
+        * MIDIKeyString.h, Midi.cc, Midi.h, MidiEvents.cc, SmusTrackEvent.cc,
+        * SmusTrackEvent.h, textmidi.l, textmidi.texi: use a new bidirectional
+        map for strings and numbers.
+
+2023-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: Make some names case-insensitive:
+        control ID names; text event types; control synonyms, on and off.
+        * miditext.cc, textmidi.l, MidiEvents.cc: use vector reserve on
+        byte vectors and event vectors based on 3.3 bytes/MIDI event.
+        * MidiEvents.cc/2600: fix a bug of missing LAZY command in miditext --lazy.
+        In miditext --lazy conversion, write zero-long notes if a non-note event 
+        occurs with zero delay after a note-on.  Document in miditext.texi.
+
+2023-02-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.l: change text_09 to device_name.
+        Change text_08 to program_name.
+        Fix text events getting the last character trimmed off
+        if they are not quoted.
+        Support many named control IDs in textmidi.
+        * miditext.cc: support the control change ID strings.
+        Fix mishandling of empty string events with quotes.
+
+2023-02-27     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, GeneralMIDI.cc, MIDIKeyString.cc, Midi.cc, MidiEvents.h, 
+        MusicalForm.cc, RhythmRational.cc, Scales.cc, SmusTrackEvent.cc, 
+        Voice.cc, main.cc, miditext.cc, rational_support.cc, smustextmidi.cc, 
+        textmidicgm.cc, writesmus.cc: remove namespace qualifications
+        esp. "std::" from .cc files mostly; add count of rigid rhythms
+        to miditext --verbose, to make it easier to identify moused-in scores as
+        opposed to played-in scores.
+        * textmidi.l: Make the line counter slightly more accurate.
+
+2023-02-26     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix duplicate rests at beginning of tracks in
+        miditext --lazy usage.  The policies for making rests for
+        the end of notes and after meta events are different and interferred
+        with one another.  Also applied more ranges in nearby code.
+
+2023-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * MIDIKeyString.cc, Midi.h, MidiEvents.cc, MidiEvents.h,
+        SmusTrackEvent.cc, Voice.h, cgmlegacy.h, main.cc, miditext.cc,
+        smustextmidi.cc, textmidi.l, textmidicgm.cc:  Last night
+        broke threaded miditext for converting TO lazy mode textmidi.
+        This seems to work and still has the same statistics on
+        ordinary DETAIL-mode-based conversions.
+        There were too many static class members (hidden globals)
+        that created race conditions in threads.
+
+2023-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MidiEvents.cc, Midi.h, textmidi.l:  Change
+        regular expression for recognizing floating-point tempo in textmidi.l
+        Define constants for SecondsPerMinute and UsecPerSecond in Midi.h
+        Apply those names.
+        * Composer.cc MidiEvents.cc MusicalForm.{cc,h} textmidi.l:
+        Apply more ranges and range algorithms, and back_inserters.
+        * MidiEvents.h, RhythmRational.h, SmusTrackEvent.h, cgmlegacy.h:
+        check all single-arguments c-tors are explicit.
+        * Composer.h MidiEvents.{cc,h} Midi.h miditext.cc Random*.h smustextmidi.cc 
+        textmidicgm.cc Track.h: dump the typedefs in favor of using clauses.
+
+2023-02-20     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.h: mark consume_stream() private since it's
+        called only by constructors.
+        * miditext.texi: explain testing, and differences in round-trip
+        recreated MIDI files.
+        * Composer.{h,cc}: add a random generator that ranges::shuffles will use.
+        * Composer.cc: Use ranges for track shuffling etc.
+        Also remove defet of leaders_topo_sort.resize().
+        * Composer.h: track scrambling option was spelled wrong with a capital:
+        nextPermutation but s/b nextpermutation and previouspermutation.
+        * smustextmidi.cc: use C++ back_inserter in the transform() of NoteEvents.
+
+2023-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: textmidi will no longer write a leading zero byte
+        for variable-length values.  This accounts for most of the
+        differences between original MIDI files used for testing and
+        those produced by textmidi.  MIDI's spec probably allows for the
+        zero byte, but it should not be there.
+        * MidiEvents.{h,cc}: RAII applied, by having constructors in MidiEvents
+        call consume_stream() rather than the factory.  All of the 891 test files compare 
+        text files exactly; 1/3 of them compare re-created MIDI files exactly.
+
+2023-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, textmidi.vim, textmidi., textmidi.texi, MidiEvents.{h,cc}:
+        Fix some found defects.  Primarily C++ usage and design of MidiEvents.
+        Divide responsibilities in miditext between recognize() functions 
+        and consume_stream() functions.  Reduce line count about 35 net lines.
+        Update documentation; properly support TEXT_0[8-F].  Remove running_status
+        from classes for events that don't use it anyway (leave it in the voice 
+        channel events).  Organize code in MidiEvents to put functions in the
+        same order in MidiEvents.h and MidiEvents.cc.
+
+2023-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc: fix print out of out-of-range MIDI data values.
+
+2023-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * General: rewrite most stream output as the buiding of a string, and output
+        of the string.  Start using C++20 ranges.  Reduce compiler warnings.
+        * miditext.cc: replace thread with jthread.  Replace endl with newline.
+        Also change file read to read the entire file at once.
+
+2023-02-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.cc MidiEvents,cc, NoteEvent.cc, RhythmRational.cc, main.cc, testmidi.bash,
+        textmidi.{h,l}: Change the globals in textmidi into a global pointer to a
+        struct of features.
+        * miditext.cc: Print error about extra data at the end of the MIDI file.
+        * Composer.h GnuPlot.h MIDIKeyString.h Midi.h MidiEvents.{cc,h} MusicalForm.h 
+        NoteEvent.h Options.h RandomDouble.h RandomInt.h RhythmRational.h Scales.h 
+        Track.h Voice.h cgmlegacy.h miditext.cc rational_support.h textmidi.h textmidi.l:
+        Replace Midi.h's arrays with vectors; this meant they could not be constexpr,
+        so that propagated everywhere.  Also change prefix_len in MidiEvents.h
+        to not be constexpr as a result.  Add _H to include idempotent checks.
+        Add data range checks to input binary MIDI data in miditext.
+        Permit but report over-long MIDI files, that is, that have extra data 
+        after the last track.  Create special constexpr of channel voice commands
+        so that they could be used where needed.  A typed enum class did not compile.
+
+2023-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.in, MidiMessages.{h,cc}}->MidiEvents.{h,cc},
+        miditext.cc: Change name MidiMessages to MidiEvents
+        and all related class names etc.
+        * MidiEvents.{cc,h}: Put function definitions into .cc.
+        Put function definitions in .cc in the same order as in .h.
+
+2023-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, MidiMessages.cc, textmidi.texi: refine UNKNOWN_META.
+        * Don't require the length in the text version.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.cc MidiMessages.h, textmidi.vim,textmidi.texi, 
+        textmidi.l: Support Unknown Meta events as hexadecimal data.
+        Support SMPTE_OFFSET properly, exposing frames per second in textmidi files.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc, Midi.h, textmidi.l: permit 3-digit hours in SMPTE_OFFSET
+        but give an error message from textmidi and miditext for hours over 23.
+        * textmidi.l: Fix SMPTEOffset regression that left off the hours.
+
+2023-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc textmidi.l Midi.h: Fix defects with SEQUENCE_NUMBER.
+        miditext wrote the wrong name.  textmidi neglected to write the meta 
+        prefix (0xFF).
+        * MidiMessages.cc: fix handling of zero-length string events.
+
+2023-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMessages.{h,cc}, textmidi.l:  Straighten out
+        SEQUENCER_SPECIFIC; fix spelling; adjust for 2- and
+        3- byte channel voice commands in "recognize()";
+        use classical archive MIDI files to test round-trip
+        conversion: MIDI->text->MIDI->text.
+        Text events in textmidi support escapes for
+        double-quotes, carriage-returns, line-feeds, tabs,
+        vertical tabs, bells, formfeed, and backspace.
+        MidiMessages.cc: Fix a bug that prevented channel 16
+        from being used.  Make TEMPO command take a simple floating-
+        point number.  Include SEQUENCE_NUMBER number event.
+        Fix POLYPRESSURE print error.
+        * all.cc: stream output now saves and restores formatting flags.
+        * textmidi.l: Fix pitch bend values to shift by 7 bits and not 8.
+        Fix int_to_vec().
+        * RhythmRational.{cc,h}: improve robustness of input operator.
+
+2023-01-18     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Fixed defect in stream output
+        for CHANNEL_POLYPRESSURE.
+        * MidiMessages.cc, Midi.cc, NoteEvent.cc, RhythmRational.cc:
+        Stream output now saves/restores stream format flags.
+        * texinfo.tex, compile, depcomp, missing, ylwrap: 
+        Added some missing files to make a build more convenient.
+
+2023-01-04     Thomas E. Janzen <janzentome@gmail.com>
+
+2022-04-25     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext by fixing
+        insert_rests().  Passes prelude1_II.com and sacre tests.
+        * prelude1_II.com: add a test script. 
+
+2022-04-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc:  Try to fix miditext --lazy
+        to do round-trip test on prelude1_II.txt.
+        Seems to be alright except for detache lazy in 
+        musescore, but timidity plays it ok and a miditext on it
+        looks OK.
+
+2022-04-23     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: reconcile integer types and
+        insert end-of-lines after each note event.
+        Fix missing rests after note_on with velocity of 0.
+        Fix quantization of rests.
+        * MidiMessages.fig: mispelling
+
+2022-04-07     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.texi: correct spelling, add details
+        about the keyboard and about voice following.
+
+2022-03-24     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: refactor
+        preparing to print textmidi text in lazy mode
+        to encapsulate the preparation for lazy inside
+        PrintLazyEvent which got renamed PrintLazyTrack.
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: fix quantize.
+        the lazy fix broke quantize by using tick counts after
+        quantiziation had been applied to RhythmRationals
+        e.g, wholes_to_next_event() and wholes_to_noteoff().
+
+2022-03-19     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: remove unused lazy parameter in c-tor
+        of PrintLazyEvent.
+
+2022-03-17     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc, MidiMessages.cc: pass a simple textmidi --lazy test
+        for overlapping notes.
+        * miditext.cc, textmidi.l, textmidi.cc, SmusTrackEvent.cc,
+        Composer.cc, smustextmidi.cc, MidiMessages.cc: Always write
+        the file format when writing textmidi text files.
+        make the program that write textmidi text files write
+        text that looks more alike.  Make smustextmidi put the
+        text meta events into the first MIDI (tempo) track.
+        Improve behavior of miditext --lazy overall and 
+        remove the block on the --lazy option.
+
+2022-03-15     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: extra delays are gone in miditext --lazy.
+
+2022-03-13     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.{cc,h}, miditext.cc: recovered basic function
+        of miditext --lazy.  Quantization probably does not work.
+
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: a little cleanup.
+        Only write a hard-coded END_OF_TRACK if there was no SMUS
+        EndOfTrack in the SMUS track (0xFF).  The end-of-track in
+        the SMUS track appears to be optional, since the chunk
+        length is given anyway.
+        Refactor the code to write "LAZY" or "END_LAZY" only when
+        needed (procedurize it better from earlier today).
+        
+2022-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * smustextmidi.cc, SmusTrackEvent.{h,cc}: name constants.
+        Track state "LAZY" to avoid redundant END_LAZY/LAZY pairs.
+        Change type of SmusTrackEvent decision and data to int type
+        with static storage.
+
+2022-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Makefile.am: add rational_support to clean target.
+        * SmusTrackEvent.cc smustextmidi.cc textmidi.l: remove unused and
+        fix tie in/out mistake in smustextmidi that would add a pitch
+        to the tied_vec_ every time it appeared even though it was
+        in the same continuous tied note.
+
+2022-03-05     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, miditext.cc, MidiMessages.cc: Tried to fix bugs in
+        miditext --lazy feature but postponed until a re-analysis.
+
+2022-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, TextmidiUtils.h, textmidi.l, textmidi.cc, smustextmidi.cc,
+        writesmus.cc, miditext.cc:
+        Move io_bytes to TextmidiUtils.h.
+        * smustextmidi.cc: remove extra data structure trackEventVec.
+        * Composer.cc, NoteEvent.{h,cc}: remove the double rep of rhythm (duration).
+
+2022-03-03     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.h, smustextmidi.cc,SmusTrackEvent.cc,writesmus.cc:
+        Change name of SmusTrackEvent to SmusTrackEventFilePod
+        * SmusTrackEvent.h, smustextmidi.cc, miditext.cc, SmusTrackEvent.cc:
+        remove dependence on MidiMessages.h when it's really Midi.h or nothing.
+        * *.fig: fix fonts; fix dependencies per above; add Composer class.
+
+2022-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.cc: smustextmidi was printing a whole note as 1/1
+        rather than as 1.  Check for a 1/1 rational before using 
+        operator<<(os, RhythmRational&).
+        * Composer.{cc,h}: Make Composer a class.
+        * *.cc *.h: put all cgm namespace code under namespace textmidi.
+
+2022-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, Composer.cc, Midi.h, MusicalForm.h: move
+        MinDynamic and MaxDynamic to Midi.h
+
+2022-02-21     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h: remove duplication typedef of MidiStreamVector.
+        * dependencies.fig, textmidi.fig: add diagrams.
+
+2022-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.{cc,h}, smustextmidi.cc, writesmus.cc:
+        Fix SmusTrackEventVolume::textmidi to not repeat volume
+        commands as textmidi "vel" commands.  The solution was to
+        make current_dynamic static and re-init it at the beginning
+        of each track to 64.
+        Also fix them to use dynamics_reverse_map to output the
+        dynamic markings used by textmidi and miditext.
+
+2022-02-18     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.cc: Fix whole notes with a zero denominator.
+        This fixes missing whole note lengths in smustextmidi.
+        * Makefile.am: lists of sources per program are fixed.
+        * RhythmRational.cc: Fix print_rhythm to print 4 wholes as 4/1.
+        * SmusTrackEvent.cc: Fix duration() not recognizing a whole note.
+
+2022-02-17     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMessages.cc: always reduce the rationals for rhythm when using 
+        lazy mode in the miditext program.  This allows miditext to output 
+        dotted notes in lazy mode output.
+        * MidiMessages.{h,cc}, Midi.h, textmidi.l: create dynamics maps
+        and use in textmidi and miditext; fix miditext issue of not 
+        output dynamic markings.
+
+2022-02-16     Thomas E. Janzen <janzentome@gmail.com>
+        * writesmus.cc, writesmus.make: write for testing smustextmidi.
+        * RhythmRational.cc: If rhythms are dotted, they have a numerator of 1,
+        so we can use the abbreviated form (where a "1/4." (dotted quarter) note
+        is "4." ).
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}: rename as RhythmRational.{h,cc}
+        * Composer.cc, MidiMessages.cc, MidiMessages.h,
+        NoteEvent.cc, NoteEvent.h, SmusTrackEvent.cc,
+        SmusTrackEvent.h, Track.h, buildkit.bash, miditext.cc,
+        rational_support.cc, rational_support.h, smustextmidi.cc:
+        find all rhythm printing and make them use print_rhythm().
+
+2022-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Track.{h,cc}, TextmidiRational.cc: Remove extra operator<<(rational)
+        and edit the one in TextmidiRational to print 4 for 1/4 and 4/1 for 4/1.
+        * MidiMessages.cc, SmusTrackEvent.h, miditext.cc, smustextmidi.cc, TextmidiRational.cc,
+        NoteEvent.h, Track.h, TextmidiRational.h, MidiMessages.h, SmusTrackEvent.cc, Composer.cc:
+        Also remove typedefs of TextmidiRational and just use the name TextmidiRational.
+
+2022-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * TextmidiRational.{h,cc}, SmusTrackEvent.cc, miditext.cc, MidiMessages.cc, Composer.cc:
+        Complete work integrating TextmidiRational.
+
+2022-02-13     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.h, SmusTrackEvent.h, SmusTrackEvent.cc, MidiMessages.cc, 
+        * rational_support.{h,cc}, Track.h, TextmidiRational.{h,cc}, NoteEvent.h
+        * Composer.cc, miditext.cc, smustextmidi.cc, MidiMessages.h, TextmidiRational.cc:
+        Use pair init without template args; dispose of boost::rational and replace
+        with TextmidiRational.  This stopped hard-to-track-down crashes of smustextmidi.
+
+2022-02-12     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Composer.h: use std::shuffle rather than random_shuffle, 
+        now deleted from C++.
+        * RandomDouble.h, RandomInt.h: add inclusion guards; to RandomInt.h add
+        min() and max() member functions and a typedef of result_type
+        so that std::shuffle can use them.
+        * MIDIKeyString.cc: remove unnecessary double braces.
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: replace double quotes with single quotes
+
+2022-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * All files: update copyright to 2022.  Update version to 1.0.18.
+        * textmidi.texi, textmidiformedit.texi: fix errors and update.
+
+2022-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, KeyboardWindow.py: make keyboard smaller.
+
+2022-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py, textmidiformedit.py: remove widget variables where possible.
+        Make spinboxes readonly where possible, only make writable temporarily when necessary.
+        Fix a couple bugs discovered along the way.
+
+2022-02-06     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py: simplify usage to correct behavior as the voice number changes.
+        Remove widget variables for Sine and Voice.  It makes the interface slower but 
+        on Voice the Entry and Spinbox values would propagate to other voices for no reason.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.py, VoiceWindow.py: finish using General MIDI names in program entry.
+        * KeyboardWindow.py, VoiceWindow.py, textmidiformedit.py, AllFormsWindow.py: set screen positions.
+        * Fix an issue with widget update on Voice-program.  
+        * Change colors on form plot but verify on Postscript output.
+
+2022-02-04     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: Make file names the same as the main window names.
+        * GeneralMIDI.py: add General MIDI instruments for the spinbo in the voice window
+        * VoiceWindow.py: Use GeneralMIDI iun the program spinbox
+        * Composer.cc: refactor some code into local functions. 
+
+2022-02-02     Thomas E. Janzen <janzentome@gmail.com>
+        * voice.py, textmidiformedit.py, allforms.py: fix checkbox behavior;
+        fix reads from the form XML file for min/max note len, name, len, pulse, down, same up;
+        fix writes of voice pan.  Fix follow radio buttons write to file.
+        Later continue to fix assignments.  Use get/set on StringVar; use delete/insert
+        on changing Entry.  Except the min/max key seems to work setting the StringVar.
+        * texmidicgm.texi: add descriptions of trackscramble and trackscrambleperiod
+
+2022-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: fix scale length error in saving XML Form files.
+        * Voice.h, Composer.h, textmidicgm.cc, Composer.cc: Add track scrambling feature
+
+2022-01-28     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidi.l, MusicalForm.h, MusicalForm.cc: Use MaxDynamic
+        and MinDynamic names where appropriate instead of magic numbers.
+
+2022-01-17     Thomas E. Janzen <janzentome@gmail.com>
+        * Most: Show correct version
+        * *.texi: Correct spelling of Association
+
+2022-01-07     Thomas E. Janzen <janzentome@gmail.com>
+        * FormPlotWindow.png, KeyboardWindow.png, MusicalFormWindow.png, VoiceWindow.png: add images
+        * textmidiformedit.texi: Add images of the GUI windows and more explanation.
+        * textmidi.l, textmidi.texi: change default detache value to zero (0).
+
+2022-01-06     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, textmidiformedit.py, sine.py, voice.py, keyboard.py:
+        Remove trailing spaces, make keyboard bigger, make middle C bolder on keyboard.
+
+2022-01-04     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, voice.py: make spinboxes use ButtonRelease-1 event and not focus out or
+        decrement and increment.
+
+2021-12-31     Thomas E. Janzen <janzentome@gmail.com>
+        * allforms.py, form.py, sine.py, textmidiformedit.py, voice.py: Upgrade per "Modern Tkinter" by Roseman.
+
+2021-11-20     Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: rewrite clampscale in fewer statements.
+        * Composer.cc: remove unused objects.
+
+2021-11-19     Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.cc: cleanup usage of form file names; reported wrong name if verbose
+        with a random form; move declarations closer to usage.
+        * MusicalForm.h, MusicalForm.cc, textmidicgm.cc, textmidicgm.texi: add option 
+        --clampscale to clamp the scale in each form to not exceed the union 
+        of the voice ranges.
+
+2021-10-14    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidiformedit.py: Fix mean curve inversion due to left-handed plotting 
+        coordinates; add a save-postscript menu item; draw curves using create_polygon
+        rather than create_line.
+
+2021-10-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Scales.cc: Added the "Bs" to the Chromatic scale by textmidicgm.
+        * Makefile.am, fixtempo.pl: Use /usr/bin/env instead of full paths for utilities.
+        * textmidiformedit.texi: added documentation
+        * textmidiformedit.py: added
+        * allforms.py: added
+        * form.py: added
+        * sine.py: added
+        * voice.py: added
+
+2021-09-03    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: clean up selection of MIDI program so that 2 different voices
+        with the same channel won't set different programs.  This creates functions
+        or single-valued relations: track->channel; channel->program.  These are
+        in addition to the function channel->pan.
+
+2021-09-02    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: Change randomized Melody Probabilities to set silence to 0.125.
+        Add comments describing Melody Probabilities as cumulative.  Increase the 
+        possible number of voices in a random form to 24.
+        * textmidicgm.texi:  Correct description of melody probabilities and update
+        description of randomized melody probabilities (using the --random option).
+
+2021-09-01    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc, Midi.h: Rewrite distribution of pans in random forms.
+        to spread for near the left to near the right.  The symptom was that
+        idiophone-only random forms were bunching up the instruments way over 
+        on the right.  Now a single channel score should put them in the center
+        although the percussion instruments in TiMidity++ seem to be panned 
+        stereo samples, so channel 10 is always centered.
+
+2021-08-31    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: Remove the kluge that put a quiet note at the beginning of the
+        tempo track to force generation of silent starts of tracks by TiMidity++.
+        Loop time by using musical ratios instead of chrono time.  This results in
+        more accurate alignment at the end, but the individual tracks can still
+        be a measure longer than requested because they don't exceed the maximum
+        time until they have generated the last note.
+
+2021-08-30    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi.l: fix accumulated time defect so that tracks that should be
+        the same length in ticks are or at least only a tick off at the end.
+        This can make very fast tracks a very different length, and was noticed
+        with fast tracks written by textmidicgm.  This was an accumulating
+        floating-point addition error, esp. wrt conversion to int types.
+        * Composer.cc: Removed the forced percussion event (a kluge for
+        separate track recording) part of the music time, so that it is not
+        extra time.
+        Trying to rationalize rhythm due to short tracks from textmidicgm.
+        * NoteEvent.cc: If a musical rhythm is "1/D", just print the D.
+
+2021-08-29    Thomas E. Janzen <janzentome@gmail.com>
+
+        * main.cc: remove old block that checks if you would overwrite a file
+        but leave check if --answer is set.
+
+2021-08-26    Thomas E. Janzen <janzentome@gmail.com>
+
+        * MusicalForm.cc: After a random form is created,
+        remove scale notes that are too high or low for any or the
+        General MIDI patches selected in random().  This avoids lots of repeated very 
+        high or low notes when the pitch curve is beyond any instrument's range
+        and the end of the scale.  This could still happen with small-range instruments.
+        * textmidiform.py: add to tree.  Has a file widget, reads in the XML form file
+        and draws the graph of the form.
+        * MIDIKeystring.{cc,h}: Add CompareLowerNoteName for MusicalForm random().
+
+2021-08-23    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.texi: correct description of random selection of channel to
+        coerce channel 10 for idiophones.
+
+2021-08-18    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidicgm.cc: handle boost xml serialization exceptions.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: rewrite if (pulse_per_rhythm) line 100 to if (!pulse_per_rhythm),
+        to return it to its previous meaning of if (0 == pulse_per_rhythm)
+        but not activating a bug.
+
+2021-08-13    Thomas E. Janzen <janzentome@gmail.com>
+
+        * Composer.cc: rewrite if (0 == pulse_per_rhythm) line 100 to if (pulse_per_rhythm);
+        as a work-around for a crash due to a possible bug in boost::rational.
+
+2021-08-12    Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi: Rewrite, upgrade, improve MIDI 1.1 Music support.  Use C++20.
+        * miditext: Rewrite/rename from mididisasm.
+        * smustextmidi: Rewrite of SMUSMIDI to output textmidi text.
+        * textmidicgm: Rewrite from AlgoRhythms without a GUI; to produce textmidi text files; use C++20.
+        Change output format to textmidi text output, which can be
+        converted into MIDI Standard MIDI Files by textmidi.
+
+2003    Thomas E. Janzen <janzentome@gmail.com>
+
+        * smusmidi: Upgrade SMUSMIDI to work on linux/Intel x86 (make endian-agnostic)
+        Remove extra NULL text events; fix key signatures.
+
+2002-12-29 Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi: Improvements for use in creating a sequence of the Schumann Quintet,
+        which was published on the Classical MIDI Archive.
+        * mididisasm: First private version.
+
+1999-09-18 Thomas E. Janzen <janzentome@gmail.com>
+
+        * textmidi:  Initial private version.
+
+1994-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Version 3.0 for Commodore Amiga computers.
+
+1992-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Version 2.0, now textmidicgm.
+        On Fred Fish Disk 606 for Commodore Amiga computers.
+
+1992-- (approximately) Thomas E. Janzen <janzentome@gmail.com>
+
+        * SMUSMIDI: Version 1.0 released on Fred Fish Disk 537 for the
+        Commodore Amiga.
+
+1990-- Thomas E. Janzen <janzentome@gmail.com>
+
+        * AlgoRhythms: Initial revision 1.0
+        on Fred Fish Disk 356 for Commodore Amiga computers.
+
+
+2024-03-01     Thomas E. Janzen <janzentome@gmail.com>
+        * miditext.cc: remove comment written to textmidi file
+        of the number of bytes in a track.
+        * textmidiroundtriptest.py, classical_archive[0123456].txt: 
         Rewrite test scripts for textmidi and miditext, move to
         test directory.
 

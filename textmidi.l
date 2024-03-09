@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.70
+** TextMIDITools Version 1.0.71
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -499,6 +499,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 %s SYSEX_DEVICE_ID_STATE
 %s SYSEX_SUBID1_STATE
 %s SYSEX_REMAINDER_STATE
+%s LAZY_KEY_OR_REST_STATE
 
 %option noyywrap
 
@@ -1505,6 +1506,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     /* Recognize chan {channel} */
     }
     lazy::chord.push_back(keytie);    // save key number in lazy::chord;
+    BEGIN(LAZY_KEY_OR_REST_STATE);
   }
 
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
@@ -1566,6 +1568,17 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <LAZY_STATE>{SPACE}{RHYTHM} {
+    const string errstr{((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
+        += " Rhythm all by itself: ")
+        += BOOST_PP_STRINGIZE(__LINE__))
+        += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+        += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+        += '\n'};
+    cerr << errstr;
+  }
+
+<LAZY_KEY_OR_REST_STATE>{SPACE}{RHYTHM} {
     const string rhythmstr{yytext};
     istringstream iss(rhythmstr);
     double num1{1.0},

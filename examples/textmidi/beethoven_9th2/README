@@ -1,6 +1,19 @@
-Ludwig van Beethoven, Symphony # 9, 2nd Movement (molto vivace).
+======================================================================
+    TextMIDITools/examples/textmidi/beethoven_9th2
+
+                    Thomas E. Janzen
+                    <janzentome@gmail.com>
+
+======================================================================
+What is this?
+======================================================================
+
+General Information
+
+The files herein are textmidi-language files for the musical work that is 
+Ludwig van Beethoven's Symphony # 9, 2nd Movement (molto vivace),
 Arranged for solo piano by Franz Liszt.
-Put into the Creative Commons.
+This textmidi expression is put into the Creative Commons.
 © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
 
 This collection of files will build into the Molto vivace of
@@ -54,3 +67,15 @@ The order of sections is as follows:
     repeat2
     coda
 
+======================================================================
+Where to get a copy
+======================================================================
+The latest release of TextMIDITools are available at:
+github.
+
+======================================================================
+How to install
+======================================================================
+The example is in the de-archived kit for TextMIDITools created by
+github when a new release of TextMIDITools is created.
+It has not been included in the kit file separately created for releases.

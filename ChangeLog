@@ -1,7 +1,19 @@
+2024-03-09     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: Find a solution to: Create new start state to capture 
+        rhythms for chords in LAZY mode but reject a lone rhythm in lazy mode
+        and report as an error.
+        Also fix line counter by removing increments at lines 702 & 720.
+
+2024-03-09     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: yesterday chording was broken. put it back.
+
 2024-03-08     Thomas E. Janzen <janzentome@gmail.com>
         * examples/textmidi: Format the README files. Change the name of
         bach_wtc_i_prelude_vii.  Fix a mistake in tenor m. 62 of missing rest,
         found by the new textmidi feature on stray rhythms.
+        * test/powersettests?.txt: add.
+        * test/README: update
+        * examples/*/README: update
 
 2024-03-08     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.l: Create new start state to capture rhythms but reject

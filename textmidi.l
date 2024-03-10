@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.71
+** TextMIDITools Version 1.0.72
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -492,6 +492,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 %s FILE_HEADER_STATE
 %s LAZY_STATE
+%s LAZY_NOTE_OR_RHYTHM_STATE
 %s DETAIL_STATE
 %s TEXT_META_STATE
 %s TICKS_STATE
@@ -698,7 +699,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
     MidiStreamVector len_vec = int_to_vec(yystring.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
     ranges::copy(yystring, back_inserter(trackchunk));
-    TextMidiFeatures::me()->inc_line_ctr();
 
     BEGIN(DETAIL_STATE);
   }
@@ -716,7 +716,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
     MidiStreamVector len_vec = int_to_vec(ticks_str.length());
     ranges::copy(len_vec,  back_inserter(trackchunk));
     ranges::copy(ticks_str, back_inserter(trackchunk));
-    TextMidiFeatures::me()->inc_line_ctr();
 
     BEGIN(DETAIL_STATE);
   }
@@ -1489,7 +1488,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
   }
 
-<LAZY_STATE>{STARTLINE_OR_SPACE}{LAZY_PITCH_NAME} {
+<LAZY_STATE,LAZY_NOTE_OR_RHYTHM_STATE>{STARTLINE_OR_SPACE}{LAZY_PITCH_NAME} {
     string note_name{};
     istringstream iss(yytext);
     iss >> note_name;
@@ -1505,6 +1504,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     /* Recognize chan {channel} */
     }
     lazy::chord.push_back(keytie);    // save key number in lazy::chord;
+    BEGIN(LAZY_NOTE_OR_RHYTHM_STATE);
   }
 
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
@@ -1565,7 +1565,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     cerr << errstr;
   }
 
-<LAZY_STATE>{SPACE}{RHYTHM} {
+<LAZY_NOTE_OR_RHYTHM_STATE>{SPACE}{RHYTHM} {
     const string rhythmstr{yytext};
     istringstream iss(rhythmstr);
     double num1{1.0},

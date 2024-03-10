@@ -8,6 +8,7 @@
 
 import os
 import re
+import time
 import math
 import sys
 import tempfile
@@ -90,6 +91,7 @@ if __name__ == '__main__':
         list_handle = open(list_file_name, 'r')
         file_list = list_handle.readlines()
         list_handle.close()
+    starttime = time.asctime()
     for f in file_list:
         f = f.rstrip()
         filename_and_running_status = f.split(',')
@@ -103,5 +105,4 @@ if __name__ == '__main__':
 
     print ("Total: " , midi_count , " ; Identical text files : " , txt_identical_count , " Identical MIDI files: " , midi_identical_count , "\n")
     print ("Percentage identical MIDI files: " , ((midi_identical_count / midi_count)  * 100.0) , " ; Percentage identical text files: " , ((txt_identical_count / midi_count) * 100.0) , "\n")
-
-
+    print("Start time: ", starttime, " ; Finished Time: ", time.asctime(), '\n')

@@ -31,8 +31,6 @@ Run as follows:
 ./textmidiroundtriptest.py classical_archives4.txt [all 344 match]
 ./textmidiroundtriptest.py classical_archives5.txt [all 370 match]
 ./textmidiroundtriptest.py classical_archives6.txt [all 384 match]
-./textmidiroundtriptest.py classical_archives_never.txt [all 2559 match; 
-    the original files do not apply MIDI "running status" at all]
 ./textmidiroundtriptest.py classical_archives_otherfails.txt [only all 55 MIDI file compares fail]
 
 At this time, all textmidi text file pairs match exactly, and 98-99% of
@@ -51,6 +49,18 @@ powersettests2.txt [2/87 midi files differ]
 powersettests3.txt [11/100 midi files differ]
 powersettests4.txt [16/103 midi files differ]
 powersettests5.txt [10/97 midi files differ]
+
+There are MIDI files that never apply running status, but if
+textmidi --runningstatus never is used to convert them back from text to
+MIDI, they compare exactly:
+
+classical_archives_never0.txt
+classical_archives_never1.txt
+classical_archives_never2.txt
+classical_archives_never3.txt
+classical_archives_never4.txt
+classical_archives_never5.txt
+classical_archives_never6.txt
 
 ======================================================================
 Features

@@ -1,3 +1,8 @@
+2024-03-16     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.{l,texi}, RhythmRational.{h,cc}:
+        Support positive, simple continued fractions as
+        rhythmic durations.
+
 2024-03-09     Thomas E. Janzen <janzentome@gmail.com>
         * textmidi.l: Find a solution to: Create new start state to capture 
         rhythms for chords in LAZY mode but reject a lone rhythm in lazy mode

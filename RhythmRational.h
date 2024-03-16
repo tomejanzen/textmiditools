@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.72
+// TextMIDITools Version 1.0.73
 //
 // RhythmRational 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <list>
 #include <stdexcept>
 
 #include <boost/archive/xml_iarchive.hpp>
@@ -29,11 +30,13 @@ namespace textmidi
 {
     namespace rational
     {
+
 #pragma pack(8)
         class RhythmRational
         {
             public:
                 typedef std::int64_t value_type;
+                using SimpleContinuedFraction = std::pair<value_type, std::list<value_type>>;
                 explicit constexpr RhythmRational(std::int64_t numerator = 0L,
                     std::int64_t denominator = 1L, bool reduce_it = true)
                   : numerator_{numerator},
@@ -48,11 +51,23 @@ namespace textmidi
                         reduce();
                     }
                 }
+
+                operator double() const;
+
+                RhythmRational continued_fraction_list_to_rational(std::list<value_type> &denoms);
+
+                explicit RhythmRational(SimpleContinuedFraction scf)
+                  : numerator_{scf.first},
+                    denominator_{1L}
+                {
+                    *this += continued_fraction_list_to_rational(scf.second);
+                }
                 std::int64_t numerator() const noexcept;
                 std::int64_t denominator() const noexcept;
                 void numerator(std::int64_t numerator) noexcept;
                 void denominator(std::int64_t denominator) noexcept;
                 operator bool() const;
+                RhythmRational(const RhythmRational& ) = default;
                 bool operator==(const RhythmRational& comparand) const;
                 bool operator!=(const RhythmRational& comparand) const;
                 bool operator<(RhythmRational comparand) const;
@@ -63,6 +78,8 @@ namespace textmidi
                 RhythmRational& operator-=(RhythmRational subtractor);
                 RhythmRational& operator/=(RhythmRational divisor);
                 RhythmRational& operator*=(RhythmRational multiplier);
+                operator SimpleContinuedFraction() const;
+                RhythmRational reciprocal();
                 void reduce();
                 template<class Archive>
                     void serialize(Archive& arc, const unsigned int )
@@ -86,6 +103,8 @@ namespace textmidi
         RhythmRational abs(RhythmRational val);
         std::istream& operator>>(std::istream& is, RhythmRational& tr);
         std::ostream& operator<<(std::ostream& os, RhythmRational tr);
+        std::istream& operator>>(std::istream& is, RhythmRational::SimpleContinuedFraction& scf);
+        std::ostream& operator<<(std::ostream& os, RhythmRational::SimpleContinuedFraction scf);
         std::ostream& print_rhythm(std::ostream& os, const RhythmRational& ratio64);
     }
 #pragma pack()

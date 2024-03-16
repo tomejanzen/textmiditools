@@ -1281,6 +1281,77 @@ That is why the tick directive was added to aid in tick value debugging.
 C4 111/445 D4 1/4 E4 1/4 F4 1/4 R 4 A4 3/4 B4 2/3 C5 23/17
 @end smallexample
 
+The @command{textmidi} utility now gratuitously accepts rhythmic durations expressed as
+simple continued fractions.
+Information on the mathematical construct @quotedblleft{}continued fractions@quotedblright{}
+is available in many places on the world wide web.
+Note that the simple continued fractions available in @command{textmidi}
+must be positive, and overflow is not protected, so an overly-long fraction may
+crash @command{textmidi}.  There must be no spaces anywhere in the simple continued fraction
+from opening bracket to closing bracket.
+Lastly, simple continued fractions may NOT be dotted (as in dotted rhythms).
+
+@smallexample
+C4 4
+C4 1/4
+@end smallexample
+becomes
+@smallexample
+C4 [0;4]
+C4 [0;4]
+@end smallexample
+The conversion of simple, proper (less-than-1) fractions with a @quotedblleft{}1@quotedblright{}
+in the numerator is always similar; just put the integer part before the semicolon
+and the denominator after.  However even a simple dotted rhythm requires following an
+algorithm for conversion.
+@smallexample
+C4 3/4
+C4 2.
+C4 1/2.
+@end smallexample
+The 3/4 and dotted half become
+@smallexample
+3/4 = 1/(4/3) = 1/(1 + 1/3)
+@end smallexample
+The value 3/4 is less than  1, so the integer part is 0.
+Taking the denominators 1 and 3, the line in @command{textmidi} becomes
+@smallexample
+C4 [0;1,3]
+C4 [0;1,3]
+C4 [0;1,3]
+@end smallexample
+
+Rhythms greater than one, such as a multi-bar rest, will have a finite integer part:
+@smallexample
+R 5/4
+@end smallexample
+The 5/4 becomes
+@smallexample
+5/4 = 1 + 1/4
+@end smallexample
+which becomes
+@smallexample
+R [1;4]
+@end smallexample
+
+Also note that simple continued fractions can be written in two ways.  If the last
+denominator is greater than one, then you may subtract 1 from it, then add a 1 as the
+last denominator.
+
+@smallexample
+R [1;4]
+@end smallexample
+becomes
+@smallexample
+R [1;3,1]
+@end smallexample
+
+The other utilities, such as @command{miditext}, do not yet support simple continued fractions.
+However, to check your work, you can re-convert the MIDI file produced by @command{textmidi}
+into a lazy-mode text file using @command{miditext} using the @minus{}@minus{}lazy option;
+this will then produce conventional musical ratio durations in the textmidi language output
+that can be compared to your musical score.
+
 @node Ties
 @subsubsection Ties
 @cindex Ties

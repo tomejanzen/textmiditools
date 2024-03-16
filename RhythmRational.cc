@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.21
+// TextMIDITools Version 1.0.73
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -10,14 +10,18 @@
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
 
-#include <cmath> // abs()
-#include <type_traits> // swap()
-#include <string>
-#include <iostream>
-#include <cstdlib>
-#include <sstream>
-#include <regex>
 #include <cctype>
+#include <cmath> // abs()
+#include <cstdlib>
+
+#include <iostream>
+#include <numeric>
+#include <regex>
+#include <sstream>
+#include <string>
+#include <type_traits> // swap()
+
+#include <boost/lexical_cast.hpp>
 
 #include "RhythmRational.h"
 
@@ -380,5 +384,95 @@ ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
     }
     static_cast<void>(os.flags(flags));
     return os;
+}
+
+textmidi::rational::RhythmRational
+    textmidi::rational::RhythmRational::continued_fraction_list_to_rational(std::list<value_type> &denoms)
+{
+    RhythmRational rr{0L, 1L};
+    for (auto di{denoms.rbegin()}; di != denoms.rend(); ++di)
+    {
+        RhythmRational divisor{*di, 1L};
+        divisor += rr;
+        rr = divisor.reciprocal();
+    }
+    return rr;
+}
+
+istream& textmidi::rational::operator>>(istream& is, RhythmRational::SimpleContinuedFraction& scf)
+{
+    const regex continued_fraction_re{R"(\[([[:digit:]]+)(;[[:digit:]]+)*)"};
+    const regex continued_fraction_re2{R"(,([[:digit:]]+))"};
+    string s;
+    is >> s;
+    smatch matches{};
+    auto sts{regex_search(s, matches, continued_fraction_re)};
+    if (sts)
+    {
+        scf.first = boost::lexical_cast<int64_t>(matches[1]);
+        if (matches.length() > 2)
+        {
+            scf.second.insert(scf.second.end(), boost::lexical_cast<int64_t>(matches[2].str().substr(1)));
+            auto denom_begin{sregex_iterator(s.begin(), s.end(), continued_fraction_re2)};
+            auto denom_end{sregex_iterator()};
+            for (auto mi{denom_begin}; mi != denom_end; ++mi)
+            {
+                istringstream mi_iss{mi->str()};
+                int64_t denom;
+                char waste{};
+                mi_iss >> waste >> denom;
+                scf.second.insert(scf.second.end(), denom);
+            }
+        }
+    }
+    return is;
+}
+
+ostream& textmidi::rational::operator<<(ostream& os, textmidi::rational::RhythmRational::SimpleContinuedFraction scf)
+{
+    os << "[" << scf.first;
+    if (!scf.second.empty())
+    {
+        auto ni{scf.second.begin()};
+        os << ';' << *ni++;
+        while (ni != scf.second.end())
+        {
+            os << ',' << *ni++;
+        }
+    }
+    os << "]";
+    return os;
+}
+
+textmidi::rational::RhythmRational::operator SimpleContinuedFraction() const
+{
+    SimpleContinuedFraction scf{};
+    scf.first = numerator_ / denominator_;
+    auto a{numerator_ % denominator_};
+    auto b{denominator_};
+    while (a)
+    {
+        std::swap(a, b);
+        scf.second.push_back(a / b);
+        a %= b;
+    }
+    if (!scf.second.empty() && (*scf.second.rbegin() > 1L))
+    {
+        --*(scf.second.rbegin());
+        scf.second.push_back(1L);
+    }
+    return scf;
+}
+
+textmidi::rational::RhythmRational textmidi::rational::RhythmRational::reciprocal()
+{
+    return RhythmRational(denominator_, numerator_);
+}
+
+textmidi::rational::RhythmRational::operator double() const
+{
+    return static_cast<double>(numerator_ / denominator_)
+        + static_cast<double>(numerator_ % denominator_)
+        / static_cast<double>(denominator_);
 }
 

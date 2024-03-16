@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.72
+** TextMIDITools Version 1.0.73
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -27,6 +27,7 @@
 #include <climits>
 #include <cmath>
 #include <cstdlib>
+#include <cctype>
 
 #include <algorithm>
 #include <array> // scale step constant
@@ -55,12 +56,14 @@
 #include "MIDIKeyString.h"
 #include "MidiString.h"
 #include "textmidi.h" // For this file's interfaces to main.cc
+#include "RhythmRational.h"
 
 using namespace std;
 using namespace boost;
 using namespace boost::algorithm; // for to_upper(string)
 using namespace midi;
 using namespace textmidi;
+using namespace textmidi::rational;
 
 #if 0
 extern "C" int32_t yywrap (void) {};
@@ -446,7 +449,9 @@ SMPTE_CODE ([[:print:]]+{SOMESPACE}{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{
 
 ONOFF (ON|OFF)
 SLASH [\/]
-RHYTHM ({UINTEGER}({SLASH}{INTEGER})?[.]{0,2})
+SIMPLE_CONTINUED_FRACTION (\[{UINTEGER}(;{UINTEGER}(,{UINTEGER})*)?\])
+RATIO ({UINTEGER}({SLASH}{INTEGER})?)
+RHYTHM (({RATIO}[.]{0,2})|{SIMPLE_CONTINUED_FRACTION})
 NOTE_LETTER [A-Ga-g]
 OCTAVE_DIGIT [0-9]
 ACCIDENTAL (([b#x]?)|(bb))
@@ -1566,45 +1571,60 @@ DEVICE_ID (ALL_CALL|{BYTE})
   }
 
 <LAZY_NOTE_OR_RHYTHM_STATE>{SPACE}{RHYTHM} {
-    const string rhythmstr{yytext};
-    istringstream iss(rhythmstr);
-    double num1{1.0},
-           num2{1.0},
-           thedivisor{1.0},
+    string rhythmstr{yytext};
+    const auto pos{rhythmstr.find_first_not_of(" \t")};
+    const string rhythmsubstr{rhythmstr.substr(pos)};
+    double thedivisor{1.0},
            thenumerator{1.0};
     uint32_t total_duration{},
              note_duration{};
-    iss >> num1;
+    //int space = find_if(rhythmstr.begin(), rhythmstr.end(), [](unsigned char ch) { return !isspace(ch); } );
 
-    // a quarter note is "4" or "1/4".  A double whole note must be "2/1".
-    const size_t slashi{rhythmstr.find('/')};
-    if (slashi != rhythmstr.npos)
+    istringstream iss(rhythmsubstr);
+    if ('[' == rhythmsubstr[0])
     {
-        // we have a ratio
-        string num2str{rhythmstr, slashi + 1};
-        istringstream num2stream{num2str};
-        num2stream >> num2;
-        thenumerator = num1;
-        thedivisor   = num2;
+        RhythmRational::SimpleContinuedFraction scf{};
+        iss >> scf;
+        RhythmRational rrscf{scf};
+        thedivisor = static_cast<double>(rrscf.denominator());
+        thenumerator = static_cast<double>(rrscf.numerator());
     }
     else
     {
-        // we have a single number, which we divide into 1.0
-        thedivisor = num1;
-        if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
+        double num1{1.0},
+               num2{1.0};
+        iss >> num1;
+    
+        // a quarter note is "4" or "1/4".  A double whole note must be "2/1".
+        const size_t slashi{rhythmsubstr.find('/')};
+        if (slashi != rhythmsubstr.npos)
         {
-            const string errstr{((((((string{TextMidiFeatures::me()->text_filename()}
-                += ':') += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
-                += " A duration denominator that is > ticks per whole! ")
-                += lexical_cast<string>(thedivisor)) += '>')
-                += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole))
-                += '\n' };
-            cerr << errstr;
+            // we have a ratio
+            string num2str{rhythmsubstr, slashi + 1};
+            istringstream num2stream{num2str};
+            num2stream >> num2;
+            thenumerator = num1;
+            thedivisor   = num2;
+        }
+        else
+        {
+            // we have a single number, which we divide into 1.0
+            thedivisor = num1;
+            if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
+            {
+                const string errstr{((((((string{TextMidiFeatures::me()->text_filename()}
+                    += ':') += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
+                    += " A duration denominator that is > ticks per whole! ")
+                    += lexical_cast<string>(thedivisor)) += '>')
+                    += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole))
+                    += '\n' };
+                cerr << errstr;
+            }
         }
     }
     total_duration = delay_and_update_total_ticks(thenumerator, thedivisor,
-            ('.' == rhythmstr[rhythmstr.size() - 1]),
-            ('.' == rhythmstr[rhythmstr.size() - 2]));
+            ('.' == rhythmsubstr[rhythmsubstr.size() - 1]),
+            ('.' == rhythmsubstr[rhythmsubstr.size() - 2]));
     //
     // Subtract detache, to be added back in as a "rest".
     note_duration
@@ -1642,41 +1662,66 @@ DEVICE_ID (ALL_CALL|{BYTE})
 <LAZY_STATE>(r|R){SPACE}{RHYTHM} {
     string rhythmstr{yytext},
            discard{};
+    const auto pos{rhythmstr.find_first_not_of(" \t")};
+    string rhythmsubstr{rhythmstr.substr(pos)};
+    to_upper(rhythmsubstr);
+    istringstream iss{rhythmsubstr};
 
-    istringstream stringstream{rhythmstr};
     double num1{1.0},
            num2{1.0},
            thedivisor{1.0},
            thenumerator{1.0};
     uint32_t total_duration{240};
-    stringstream >> discard >> num1;
-    size_t slashi{rhythmstr.find('/')};
-    if (slashi != rhythmstr.npos)
+    int bracket{};
+    if ((bracket = rhythmsubstr.find('[')) != rhythmsubstr.npos)
     {
-        // we have a ratio
-        string num2str{rhythmstr, slashi + 1};
-        istringstream num2stream{num2str};
-        num2stream >> num2;
-        thenumerator = num1;
-        thedivisor   = num2;
+        string fractionstr{rhythmsubstr.substr(bracket)};
+        RhythmRational::SimpleContinuedFraction scf{};
+        istringstream iss2{fractionstr};
+        iss2 >> scf;
+        RhythmRational rrscf{scf};
+        thedivisor = static_cast<double>(rrscf.denominator());
+        thenumerator = static_cast<double>(rrscf.numerator());
     }
     else
     {
-        // we have a single number, which we divide into 1.0
-        thedivisor = num1;
-        if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
+#if 0
+        if (rhythmsubstr[0] == 'R')
         {
-            const string errstr{((((((string{TextMidiFeatures::me()->text_filename()} += ':')
-                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
-                += " A duration denominator that is > ticks per whole! ")
-                += lexical_cast<string>(thedivisor)) += '>')
-                += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole)) += '\n' };
-            cerr << errstr;
+            string rhythmsubstr2{rhythmsubstr.substr(1)};
+            auto pos2{rhythmsubstr2.find_first_not_of(" \t")};
+            rhythmsubstr = rhythmsubstr2.substr(pos2);
+        }
+#endif
+        iss >> discard >> num1;
+        size_t slashi{rhythmsubstr.find('/')};
+        if (slashi != rhythmsubstr.npos)
+        {
+            // we have a ratio
+            string num2str{rhythmsubstr, slashi + 1};
+            istringstream num2stream{num2str};
+            num2stream >> num2;
+            thenumerator = num1;
+            thedivisor   = num2;
+        }
+        else
+        {
+            // we have a single number, which we divide into 1.0
+            thedivisor = num1;
+            if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
+            {
+                const string errstr{((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+                    += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
+                    += " A duration denominator that is > ticks per whole! ")
+                    += lexical_cast<string>(thedivisor)) += '>')
+                    += lexical_cast<string>(global_ticks_per_quarter * QuartersPerWhole)) += '\n' };
+                cerr << errstr;
+            }
         }
     }
     total_duration = delay_and_update_total_ticks(thenumerator, thedivisor,
-            ('.' == rhythmstr[rhythmstr.size() - 1]),
-            ('.' == rhythmstr[rhythmstr.size() - 2]));
+            ('.' == rhythmsubstr[rhythmsubstr.size() - 1]),
+            ('.' == rhythmsubstr[rhythmsubstr.size() - 2]));
     accum_delay += total_duration;
   }
 

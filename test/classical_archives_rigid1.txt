@@ -1,0 +1,9 @@
+classical_archives/bach/Bach_BWV700-799/021/3_pt_06.mid,never
+classical_archives/bach/Bach_BWV700-799/021/3_pt_10.mid,never
+classical_archives/bach/Bach_BWV700-799/021/3_pt_12.mid,never
+classical_archives/bach/Bach_BWV800-845/023/bwv825_m.mid
+classical_archives/bach/Bach_BWV988-999/1/988-v01.mid
+classical_archives/bach/Bach_BWV988-999/1/988-v03.mid
+classical_archives/bach/Bach_BWV988-999/1/988-v06.mid
+classical_archives/bach/Bach_BWV988-999/1/988-v19.mid
+classical_archives/bach/Bach_BWV988-999/1/988-v22.mid

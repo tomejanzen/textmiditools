@@ -1,0 +1,4 @@
+classical_archives/handel/Handel_Various/5/handel3.mid
+classical_archives/haydn/Haydn_Trios/014/tb011m3.mid
+classical_archives/mozart/Mozart_AriettasSongs/004/zweistim.mid
+classical_archives/mozart/Mozart_Sacred/011/secchst.mid

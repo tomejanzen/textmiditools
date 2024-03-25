@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
-// miditext Version 1.0.73
+// miditext Version 1.0.74
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -40,6 +40,7 @@
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/case_conv.hpp> // to_upper
 
 #include "rational_support.h"
 #include "TextmidiUtils.h"
@@ -62,7 +63,6 @@ namespace
     constexpr char QuantizeTxt[]{"quantization ratio in quotes: \"1/32\""};
     const string LazyOpt{"lazy"};
     constexpr char LazyTxt[]{"Try to write in textmidi's lazy mode"};
-
 
     void find_tracks(MidiStreamIterator midiiter, MidiStreamIterator midiend,
             vector<StreamLengthPair>& track_iters, size_t expected_track_qty)
@@ -157,6 +157,7 @@ int main(int argc, char *argv[])
         ((QuantizeOpt + ",q").c_str(), program_options::value<string>(), QuantizeTxt)
         ((LazyOpt     + ",l").c_str(),                                       LazyTxt)
         ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
+        ((RhythmExpressionOpt + ",r").c_str(), program_options::value<string>(), RhythmExpressionTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.73\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.74\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
         cout << logstr;
@@ -187,7 +188,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.73\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.74\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -257,6 +258,24 @@ int main(int argc, char *argv[])
             dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
         } 
         midi::dynamics_map.reset(new midi::NumStringMap<int>{textmidi::read_dynamics_configuration(dynamics_configuration_file)});
+    }
+
+    if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
+    {
+        string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
+        to_upper(rhythm_expression_string);
+        if (midi::rhythm_expression_map.contains(rhythm_expression_string))
+        {
+            const rational::RhythmExpression rhythm_expression{rhythm_expression_map[rhythm_expression_string]};
+            switch (rhythm_expression)
+            {
+                case textmidi::rational::RhythmExpression::Rational:
+                  break;
+              case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
+                  textmidi::rational::print_rhythm.reset(new PrintRhythmSimpleContinuedFraction);
+                  break;
+            } 
+        }
     }
 
     if (answer && filesystem::exists(midi_filename))

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -2003,7 +2003,7 @@ ostream& textmidi::MidiChannelVoiceNoteRestEvent::text(ostream& os) const
     }
     RhythmRational duration{ticks_to_next_event(), ticks_per_whole_};
     duration.reduce();
-    print_rhythm(os, duration);
+    (*print_rhythm)(os, duration);
     os << '\n';
     static_cast<void>(os.flags(flags));
     return os;
@@ -2514,7 +2514,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
             // immediately after a note-on.  The delay will be written
             // after the non-note event.  You may want to edit the
             // output of ./miditext --lazy, which was the point in any case.
-            print_rhythm(os, note_on->wholes_to_next_event());
+            (*print_rhythm)(os, note_on->wholes_to_next_event());
             os << '\n';
         }
         else
@@ -2529,7 +2529,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
                 {
                     os << lazy_string(true);
                     os << rest->key_string() << ' ';
-                    print_rhythm(os, duration);
+                    (*print_rhythm)(os, duration);
                     os << '\n';
                 }
             }
@@ -2548,7 +2548,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
                 {
                     os << lazy_string(true);
                     os << rest->key_string() << ' ';
-                    print_rhythm(os, duration);
+                    (*print_rhythm)(os, duration);
                     os << '\n';
                 }
             }

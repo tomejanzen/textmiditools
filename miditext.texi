@@ -108,6 +108,8 @@ miditext [@b{@minus{}i}|@b{@minus{}@minus{}midi}] @var{midi_input_file} @b{@minu
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}q}|@b{@minus{}@minus{}quantize} @var{musical_ratio in quotes}] [@b{@minus{}l}|@b{@minus{}@minus{}lazy}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
 [@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
+[@b{@minus{}r}|@b{@minus{}@minus{}rhythmexpression} @var{rational}|@var{simplecontinuedfraction}
+
 @end smallexample
 
 @table @option
@@ -189,6 +191,13 @@ ffff=127
 fffff=127
 @end example
 
+@item -r, --rhythmexpression rational|simplecontinuedfraction
+@cindex @minus{}r
+@cindex @minus{}@minus{}rhythmexpression
+In lazy mode, select either a rational or simple continued fraction expression of rhythm.
+The default is a rational-like musical rhythm.
+
+See textmidi.pdf for details.
 
 @item -a, --answer
 @cindex @minus{}a

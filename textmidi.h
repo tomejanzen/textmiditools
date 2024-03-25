@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 #include "Midi.h"
 

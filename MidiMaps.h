@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #include <optional>
 
 #include "Midi.h"
+#include "RhythmRational.h"
 
 namespace midi
 {
@@ -148,6 +149,9 @@ namespace midi
     extern const NumStringMap<midi::Registered3dParameterLsbs> parm_3d_map;
 
     extern const NumStringMap<midi::RunningStatusPolicy> running_status_policy_map;
+
+    extern const NumStringMap<textmidi::rational::RhythmExpression> rhythm_expression_map;
+
 }
 
 #endif

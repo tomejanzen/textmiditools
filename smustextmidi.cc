@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -51,8 +51,10 @@
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/case_conv.hpp> // to_upper
 
 #include "Midi.h"
+#include "MidiMaps.h"
 #include "TextmidiUtils.h"
 #include "rational_support.h"
 #include "SmusTrackEvent.h"
@@ -62,6 +64,7 @@
 using namespace std;
 using namespace boost;
 using namespace textmidi;
+using namespace midi;
 using namespace textmidi::rational;
 using namespace smus;
 
@@ -124,6 +127,7 @@ int main(int argc, char *argv[])
         ((AnswerOpt   + ",a").c_str(),                                     AnswerTxt)
         ((TextmidiOpt + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
         ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
+        ((RhythmExpressionOpt + ",r").c_str(), program_options::value<string>(), RhythmExpressionTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -146,7 +150,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.73\n"}
+        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.74\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: <https://www\n"};
         cout << logstr;
@@ -155,7 +159,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.73\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.74\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -195,6 +199,24 @@ int main(int argc, char *argv[])
             dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
         } 
         midi::dynamics_map.reset(new midi::NumStringMap<int>{textmidi::read_dynamics_configuration(dynamics_configuration_file)});
+    }
+
+    if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
+    {
+        string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
+        to_upper(rhythm_expression_string);
+        if (midi::rhythm_expression_map.contains(rhythm_expression_string))
+        {
+            const rational::RhythmExpression rhythm_expression{rhythm_expression_map[rhythm_expression_string]};
+            switch (rhythm_expression)
+            {
+              case rational::RhythmExpression::Rational:
+                break;
+              case rational::RhythmExpression::SimpleContinuedFraction:
+                textmidi::rational::print_rhythm.reset(new PrintRhythmSimpleContinuedFraction);
+                break;
+            } 
+        }
     }
 
     string textmidi_filename;
@@ -378,7 +400,7 @@ int main(int argc, char *argv[])
     if (SmusTrackEventBase::delay_accum_)
     {
         textmidi_file << SmusTrackEventBase::i_am_lazy_string(true) << " R ";
-        print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_) << '\n';
+        (*print_rhythm)(textmidi_file, SmusTrackEventBase::delay_accum_) << '\n';
     }
     SmusTrackEventPitch::flush();
     if ((notes_per_track > 0) && !dynamic_cast<SmusTrackEventEnd*>(track_events[notes_per_track - 1].get()))
@@ -435,7 +457,7 @@ int main(int argc, char *argv[])
                 SmusTrackEventBase::i_am_lazy(true);
             }
             textmidi_file << "R ";
-            print_rhythm(textmidi_file, SmusTrackEventBase::delay_accum_)  << '\n';
+            (*print_rhythm)(textmidi_file, SmusTrackEventBase::delay_accum_)  << '\n';
         }
         SmusTrackEventPitch::flush();
         if ((notes_per_track > 0) && !dynamic_cast<SmusTrackEventEnd*>(track_events[notes_per_track - 1].get()))

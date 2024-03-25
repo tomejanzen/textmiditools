@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -280,6 +280,12 @@ const NumStringMap<midi::RunningStatusPolicy> midi::running_status_policy_map
     {"PERSISTENTAFTERMETA",  midi::RunningStatusPolicy::PersistentAfterMeta},
     {"PERSISTENTAFTERSYSEX", midi::RunningStatusPolicy::PersistentAfterSysex},
     {"PERSISTENTAFTERSYSEXORMETA", midi::RunningStatusPolicy::PersistentAfterSysexOrMeta},
+};
+
+const NumStringMap<textmidi::rational::RhythmExpression> midi::rhythm_expression_map
+{
+    {"RATIONAL", textmidi::rational::RhythmExpression::Rational},
+    {"SIMPLECONTINUEDFRACTION", textmidi::rational::RhythmExpression::SimpleContinuedFraction},
 };
 
 

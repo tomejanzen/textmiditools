@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -113,7 +113,7 @@ string SmusTrackEventBase::pre_rest()
     {
         oss << i_am_lazy_string(true);
         oss << "R ";
-        print_rhythm(oss, delay_accum());
+        (*print_rhythm)(oss, delay_accum());
         delay_accum(RhythmRational{});
         oss << '\n';
     }
@@ -224,7 +224,7 @@ string SmusTrackEventPitch::textmidi()
         if (!is_chorded())
         {
             delay_accum(delay_accum() + duration());
-            print_rhythm(oss, delay_accum()) << '\n';
+            (*print_rhythm)(oss, delay_accum()) << '\n';
             delay_accum(RhythmRational{0L});
         }
     }

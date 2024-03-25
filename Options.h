@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -26,5 +26,7 @@ const std::string TextmidiOpt{"textmidi"};
 inline constexpr char TextmidiTxt[]{"textmidi file"};
 const std::string DynamicsConfigurationOpt{"dynamics_configuration"};
 inline constexpr char DynamicsConfigurationTxt[]{"dynamics_configuration file"};
+const std::string RhythmExpressionOpt{"rhythmexpression"};
+inline constexpr char RhythmExpressionTxt[]{"rational or simplecontinuedfraction"};
 
 #endif

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // RhythmRational 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -20,6 +20,7 @@
 #include <iostream>
 #include <list>
 #include <stdexcept>
+#include <memory>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -30,6 +31,12 @@ namespace textmidi
 {
     namespace rational
     {
+        enum class RhythmExpression : int
+        {
+            Rational = 1,
+            SimpleContinuedFraction = 2,
+        };
+
 
 #pragma pack(8)
         class RhythmRational
@@ -105,7 +112,26 @@ namespace textmidi
         std::ostream& operator<<(std::ostream& os, RhythmRational tr);
         std::istream& operator>>(std::istream& is, RhythmRational::SimpleContinuedFraction& scf);
         std::ostream& operator<<(std::ostream& os, RhythmRational::SimpleContinuedFraction scf);
+#if 0
         std::ostream& print_rhythm(std::ostream& os, const RhythmRational& ratio64);
+#endif
+        struct PrintRhythmBase
+        {
+            virtual std::ostream& operator()(std::ostream& , const RhythmRational& ) = 0;
+            virtual ~PrintRhythmBase() {}
+        };
+
+        struct PrintRhythmRational : public PrintRhythmBase
+        {
+            std::ostream& operator()(std::ostream& os, const RhythmRational& tr);
+        };
+
+        struct PrintRhythmSimpleContinuedFraction : public PrintRhythmBase
+        {
+            std::ostream& operator()(std::ostream& os, const RhythmRational& tr);
+        };
+        extern std::unique_ptr<PrintRhythmBase> print_rhythm;
+
     }
 #pragma pack()
 

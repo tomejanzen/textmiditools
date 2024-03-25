@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -52,7 +52,7 @@ std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
         const auto note_name(textmidi::num_to_note(ne.pitch(), prefer_sharp));
         os << note_name << ' ';
     }
-    textmidi::rational::print_rhythm(os, ne.musical_rhythm());
+    (*textmidi::rational::print_rhythm)(os, ne.musical_rhythm());
     static_cast<void>(os.flags(flags));
     return os;
 }

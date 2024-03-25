@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.73
+** TextMIDITools Version 1.0.74
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -449,7 +449,8 @@ SMPTE_CODE ([[:print:]]+{SOMESPACE}{UINTEGER}:{UINTEGER}:{UINTEGER}:{UINTEGER}:{
 
 ONOFF (ON|OFF)
 SLASH [\/]
-SIMPLE_CONTINUED_FRACTION (\[{UINTEGER}(;{UINTEGER}(,{UINTEGER})*)?\])
+DIVISOR ([1-9]{DIGIT}*)
+SIMPLE_CONTINUED_FRACTION (\[{UINTEGER}(;{DIVISOR}(,{DIVISOR})*)?\])
 RATIO ({UINTEGER}({SLASH}{INTEGER})?)
 RHYTHM (({RATIO}[.]{0,2})|{SIMPLE_CONTINUED_FRACTION})
 NOTE_LETTER [A-Ga-g]
@@ -1685,14 +1686,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-#if 0
-        if (rhythmsubstr[0] == 'R')
-        {
-            string rhythmsubstr2{rhythmsubstr.substr(1)};
-            auto pos2{rhythmsubstr2.find_first_not_of(" \t")};
-            rhythmsubstr = rhythmsubstr2.substr(pos2);
-        }
-#endif
         iss >> discard >> num1;
         size_t slashi{rhythmsubstr.find('/')};
         if (slashi != rhythmsubstr.npos)

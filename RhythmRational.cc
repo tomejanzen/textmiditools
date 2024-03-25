@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.73
+// TextMIDITools Version 1.0.74
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -235,7 +235,7 @@ RhythmRational textmidi::rational::operator/(RhythmRational dividend, RhythmRati
 istream& textmidi::rational::operator>>(istream& is, RhythmRational& tr)
 {
     auto cnt{is.rdbuf()->in_avail()};
-    const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[[:digit:]]{1,19}))?)(.*))"};
+    const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[1-9][[:digit:]]{0,19}))?)(.*))"};
 
     enum MatchEnum
     {
@@ -335,57 +335,6 @@ void textmidi::rational::RhythmRational::make_denominators_coherent(RhythmRation
     b.unreduced_product(RhythmRational{b_factor, b_factor, false});
 }
 
-//
-// Print a lazy delay value using dotted rhythms.
-//
-ostream& textmidi::rational::print_rhythm(ostream& os, const RhythmRational& tr)
-{
-    auto flags{os.flags()};
-    auto tr_temp{tr};
-    tr_temp.reduce();
-    // textmidi has a convention for quickness of typing that
-    // a 1/4 note is written 4, or 1/4, or 2/8 etc.
-    // So a 4-wholenote long rhythm must be written 4/1.
-    if ((tr_temp.denominator() == 1L) && (tr_temp.numerator() != 1L))
-    {
-        os << dec << tr_temp.numerator() << '/' << tr_temp.denominator();
-    }
-    else
-    {
-        switch (tr_temp.numerator())
-        {
-          case 1L:
-            os << tr_temp.denominator() << ' ';
-            break;
-          case 3L: // single dot possible
-            if ((tr_temp.denominator() % 2L) == 0L)
-            {
-                os << (tr_temp.denominator() / 2L) << ".";
-            }
-            else
-            {
-                os << tr_temp;
-            }
-            break;
-          case 7L: // double dot possible
-            if ((tr_temp.denominator() % 4L) == 0L)
-            {
-                os << (tr_temp.denominator() / 4L) << "..";
-            }
-            else
-            {
-                os << tr_temp;
-            }
-            break;
-          default:
-            os << tr_temp;
-          break;
-        }
-    }
-    static_cast<void>(os.flags(flags));
-    return os;
-}
-
 textmidi::rational::RhythmRational
     textmidi::rational::RhythmRational::continued_fraction_list_to_rational(std::list<value_type> &denoms)
 {
@@ -401,7 +350,7 @@ textmidi::rational::RhythmRational
 
 istream& textmidi::rational::operator>>(istream& is, RhythmRational::SimpleContinuedFraction& scf)
 {
-    const regex continued_fraction_re{R"(\[([[:digit:]]+)(;[[:digit:]]+)*)"};
+    const regex continued_fraction_re{R"(\[([[:digit:]]+)(;[1-9][[:digit:]]{0,19})*)"};
     const regex continued_fraction_re2{R"(,([[:digit:]]+))"};
     string s;
     is >> s;
@@ -474,5 +423,70 @@ textmidi::rational::RhythmRational::operator double() const
     return static_cast<double>(numerator_ / denominator_)
         + static_cast<double>(numerator_ % denominator_)
         / static_cast<double>(denominator_);
+}
+
+std::unique_ptr<PrintRhythmBase> textmidi::rational::print_rhythm{new PrintRhythmRational};
+
+std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& os, const RhythmRational& tr)
+{
+    auto flags{os.flags()};
+    auto tr_temp{tr};
+    tr_temp.reduce();
+    if (tr_temp)
+    {
+        // textmidi has a convention for quickness of typing that
+        // a 1/4 note is written 4, or 1/4, or 2/8 etc.
+        // So a 4-wholenote long rhythm must be written 4/1.
+        if ((tr_temp.denominator() == 1L) && (tr_temp.numerator() != 1L))
+        {
+            os << dec << tr_temp.numerator() << '/' << tr_temp.denominator();
+        }
+        else
+        {
+            switch (tr_temp.numerator())
+            {
+              case 1L:
+                os << tr_temp.denominator() << ' ';
+                break;
+              case 3L: // single dot possible
+                if ((tr_temp.denominator() % 2L) == 0L)
+                {
+                    os << (tr_temp.denominator() / 2L) << ".";
+                }
+                else
+                {
+                    os << tr_temp;
+                }
+                break;
+              case 7L: // double dot possible
+                if ((tr_temp.denominator() % 4L) == 0L)
+                {
+                    os << (tr_temp.denominator() / 4L) << "..";
+                }
+                else
+                {
+                    os << tr_temp;
+                }
+                break;
+              default:
+                os << tr_temp;
+              break;
+            }
+        }
+    }
+    static_cast<void>(os.flags(flags));
+    return os;
+}
+
+std::ostream& textmidi::rational::PrintRhythmSimpleContinuedFraction::operator()(std::ostream& os, const RhythmRational& ratio64)
+{
+    auto flags{os.flags()};
+    if (ratio64)
+    {
+        auto scf{static_cast<RhythmRational::SimpleContinuedFraction>(ratio64)};
+        os << scf;
+    }
+    static_cast<void>(os.flags(flags));
+    return os;
 }
 

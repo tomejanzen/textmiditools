@@ -31,11 +31,42 @@ Run as follows:
 ./textmidiroundtriptest.py classical_archives4.txt [all 344 match]
 ./textmidiroundtriptest.py classical_archives5.txt [all 370 match]
 ./textmidiroundtriptest.py classical_archives6.txt [all 384 match]
+./textmidiroundtriptest.py classical_archives_never0.txt [all 366 match]
+./textmidiroundtriptest.py classical_archives_never1.txt [all 366 match]
+./textmidiroundtriptest.py classical_archives_never2.txt [all 366 match]
+./textmidiroundtriptest.py classical_archives_never3.txt [all 366 match]
+./textmidiroundtriptest.py classical_archives_never4.txt [all 366 match]
+./textmidiroundtriptest.py classical_archives_never5.txt [all 366 match]
+./textmidiroundtriptest.py classical_archives_never6.txt [all 363 match]
+
+
+
 ./textmidiroundtriptest.py classical_archives_otherfails.txt [only all 55 MIDI file compares fail]
 
-At this time, all textmidi text file pairs match exactly, and 98-99% of
-MIDI files compare exactly.  Those that do not match are assumed
-to be MIDI files that violate the MIDI SMF specification and will
+[bash shell syntax for redirection of logerr].
+
+For tests of miditext --lazy, rigid files are used.
+"Rigid" MIDI files are files that have rhythms that line up to 
+ordinary musical values and should render well as "LAZY" mode textmidi files.
+The following files all compare file pairs exactly and pass with miditext --lazy:
+./textmidiroundtriptest.py classical_archives_rigid0.txt lazy
+./textmidiroundtriptest.py classical_archives_rigid1.txt lazy
+./textmidiroundtriptest.py classical_archives_rigid2.txt lazy
+./textmidiroundtriptest.py classical_archives_rigid3.txt lazy
+
+The following rigid files have failures in lazy mode:
+./textmidiroundtriptest.py rigidretest.txt lazy verbose > rigidretestlog.txt 2>&1  [All 3 files compare exactly.]
+./textmidiroundtriptest.py rigidretest_mididiffer.txt lazy verbose  [8 files: 7 just fail MIDI file comparison; 1 fails both text and MIDI file comparison.]
+./textmidiroundtriptest.py rigidretest_txtdiffer.txt lazy verbose [38 files: All 38 fail MIDI file comparison; 15 textmidi file pairs fail comparisons]
+
+The miditext option "--lazy" is not fully implemented, but does well for many simple cases.
+One problem is if a MIDI has non-note events during playing (i.e., not between notes),
+there is no way to represent that in LAZY mode because LAZY mode display full note events from
+start to stop (similarly to SMUS files); there is no "inside the note".
+At a later time this might be addressed by permitting the discarding of non-note events.
+
+Those that do not match with detailed (non-lazy) conversion are often
+MIDI files that violate the MIDI SMF specification and will
 probably not be investigated further.  A small sample were found to 
 inconsistently apply MIDI "running status".
 

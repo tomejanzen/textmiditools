@@ -1,0 +1,3 @@
+classical_archives/bach/Bach_BWV700-799/021/3_pt_06.mid,never
+classical_archives/bach/Bach_BWV700-799/021/3_pt_10.mid,never
+classical_archives/bach/Bach_BWV700-799/021/3_pt_12.mid,never

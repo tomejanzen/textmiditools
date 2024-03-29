@@ -4,7 +4,6 @@ classical_archives/bach/Bach_BWV1000-1013/1/cs3-3cou.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs4-5bou.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs4-6gig.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs5-4sar.mid
-classical_archives/bach/Bach_BWV1000-1013/1/cs5-6gig.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs6-3cou.mid
 classical_archives/bach/Bach_BWV1000-1013/1/cs6-4sar.mid
 classical_archives/bach/Bach_BWV1000-1013/1/fp-4bou.mid

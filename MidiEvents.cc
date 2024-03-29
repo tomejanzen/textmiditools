@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.74
+// TextMIDITools Version 1.0.75
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -153,6 +153,23 @@ void textmidi::MidiEvent::ticks_to_next_note_on(int64_t ticks_to_next_note_on)
 constexpr RhythmRational textmidi::MidiEvent::wholes_to_next_event() const
 {
     return midi_event_impl_.wholes_to_next_event();
+}
+
+int textmidi::MidiEvent::events_to_next_note_on() const
+{
+    return midi_event_impl_.events_to_next_note_on();
+}
+int textmidi::MidiEvent::events_to_next_note_stop() const
+{
+    return midi_event_impl_.events_to_next_note_stop();
+}
+void textmidi::MidiEvent::events_to_next_note_on(int events_to_next_note_on)
+{
+    midi_event_impl_.events_to_next_note_on(events_to_next_note_on);
+}
+void textmidi::MidiEvent::events_to_next_note_stop(int events_to_next_note_stop)
+{
+    midi_event_impl_.events_to_next_note_stop(events_to_next_note_stop);
 }
 
 void textmidi::MidiEvent::wholes_to_next_event(
@@ -2353,6 +2370,7 @@ void textmidi::PrintLazyTrack::ticks_to_next_note_on()
                         note_on->ticks_to_next_note_on(
                             next_note_on->ticks_accumulated()
                                 - note_on->ticks_accumulated());
+                        note_on->events_to_next_note_on(distance(midi_delay_event_pairs_.begin(), delaymsgiter));
                         break;
                     }
                 }
@@ -2437,114 +2455,204 @@ void textmidi::PrintLazyTrack::wholes_of_note_on()
 void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
 {
     MidiEvent* mm{mdmp.second.get()};
-    auto* note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(mm)};
-    auto rem_if_zero_wholes_to_noteoff =
-        [](MidiChannelVoiceNoteOnEvent mcvnom) { return RhythmRational{}
-        == mcvnom.wholes_to_noteoff(); };
-    if (note_on)
+    auto* note{dynamic_cast<MidiChannelVoiceNoteEvent*>(mm)};
+    auto* note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note)};
+    auto* note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(note)};
+    // Define a function that determines if wholes_to_noteoff == 0.
+    if (note_on && (note_on->velocity() > 0))
     {
-        if (note_on->velocity())
+        // All add non-zero velocity note-ons to tied_list_.
+        tied_list_.push_back(*note_on);
+
+        int64_t next_event_ticks{note_on->ticks_accumulated() + note_on->ticks_to_next_event()};
+        for (auto& tl : tied_list_)
         {
-            // Write the velocity value if it has changed.
-            if (dynamic_ != note_on->velocity())
+            if ((tl.ticks_accumulated() + tl.ticks_to_next_event()) > note_on->ticks_accumulated())
             {
-                os << lazy_string(true);
-                if (dynamics_map->contains(note_on->velocity()))
-                {
-                    const auto dynamic{dynamics_map->at(note_on->velocity())};
-                    os << dynamic << '\n';
-                }
-                else
-                {
-                    os << "vel " << static_cast<int>(note_on->velocity()) << ' ';
-                }
-                dynamic_ = note_on->velocity();
+                next_event_ticks = (((tl.ticks_accumulated() + tl.ticks_to_next_event())
+                    < next_event_ticks) ? (tl.ticks_accumulated() + tl.ticks_to_next_event()) : next_event_ticks);
             }
-            // Write the channel value if it has changed.
-            if (note_on->channel() != channel_)
-            {
-                os << lazy_string(true);
-                channel_ = note_on->channel();
-                os << "chan " << static_cast<int>(channel_) << ' ';
-            }
-            // find out if there are notes that are tied in.
+        }
 
-            // There are tied-in notes.
-            // Find the soonest thing to happen.
-            //
-            // First write the notes that are tied into the present.
-            //
-            if (!tied_list_.empty())
-            {
-                for (auto& tiednote : tied_list_)
-                {
-                    os << lazy_string(true);
-                    os << '-';
-                    os << tiednote.key_string();
-                    if (tiednote.wholes_to_noteoff())
-                    {
-                        os << "- ";
-                    }
-                    else
-                    {
-                        auto rem_if_same_note_event
-                            = [tiednote](const MidiChannelVoiceNoteOnEvent& mcvnom)
-                            { return tiednote.local_status().running_status_value()
-                              == mcvnom.local_status().running_status_value(); } ;
-                        ranges::remove_if(tied_list_, rem_if_same_note_event);
-                        os << ' ';
-                    }
-                }
-                ranges::remove_if(tied_list_, rem_if_zero_wholes_to_noteoff);
-            }
+        auto minit{min_element(tied_list_.begin(), tied_list_.end(),
+            [](MidiChannelVoiceNoteOnEvent mcvnoe, MidiChannelVoiceNoteOnEvent res)
+            { return mcvnoe.wholes_to_noteoff() < res.wholes_to_noteoff(); } )};
+        RhythmRational min_wholes_to_noteoff{0L};
+        if (minit != tied_list_.end())
+        {
+            min_wholes_to_noteoff = minit->wholes_to_noteoff();
+        }
+        // If the velocity has changed, write out the vel command.
+        if (dynamic_ != note_on->velocity())
+        {
             os << lazy_string(true);
-
-            os << note_on->key_string();
-            if ((note_on->wholes_to_next_event())
-                && (note_on->wholes_to_noteoff() > note_on->wholes_to_next_event()))
+            // If it matches the velocity map then use a symbol instead of vel nn
+            if (dynamics_map->contains(note_on->velocity()))
             {
-                tied_list_.push_back(*note_on);
-                os << "- ";
+                const auto dynamic{dynamics_map->at(note_on->velocity())};
+                os << dynamic << '\n';
             }
             else
             {
-                os << ' ';
+                os << "vel " << static_cast<int>(note_on->velocity()) << ' ';
             }
-            // May print a zero-long delay if there was a non-note event
-            // immediately after a note-on.  The delay will be written
-            // after the non-note event.  You may want to edit the
-            // output of ./miditext --lazy, which was the point in any case.
-            (*print_rhythm)(os, note_on->wholes_to_next_event());
-            os << '\n';
+            dynamic_ = note_on->velocity();
         }
-        else
+
+        // If the channel has changed, write out the chan command.
+        if (note_on->channel() != channel_)
         {
-            ranges::remove_if(tied_list_, rem_if_zero_wholes_to_noteoff);
-            const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mm)};
-            if (rest)
+            os << lazy_string(true);
+            channel_ = note_on->channel();
+            os << "chan " << static_cast<int>(channel_) << '\n';
+        }
+
+        // if ticks_to_next_note_on is > 0, then write out the tied_list.
+        bool had_non_tied_in_onlies{true};
+        if (note_on->ticks_to_next_event())
+        {
+            for (auto& tiednote : tied_list_)
             {
-                RhythmRational duration{rest->wholes_to_next_event()};
-                duration.reduce();
-                if (duration)
+                // If the tied note started earlier, then tie it in to now.
+                if (tiednote.ticks_accumulated() < note_on->ticks_accumulated())
                 {
-                    os << lazy_string(true);
-                    os << rest->key_string() << ' ';
-                    (*print_rhythm)(os, duration);
-                    os << '\n';
+                    os << '-';
+                }
+                else
+                {
+                    had_non_tied_in_onlies = false;
+                }
+                os << tiednote.key_string();
+                // If the tied note ends later, then tie it to the future.
+
+                if ((tiednote.ticks_accumulated() + tiednote.ticks_to_noteoff())
+                        > next_event_ticks)
+                {
+                    os << "- ";
+                    had_non_tied_in_onlies = false;
+                }
+                else
+                {
+                    os << ' ';
+                }
+                if (tiednote.wholes_to_noteoff() > min_wholes_to_noteoff)
+                {
+                    tiednote.wholes_to_noteoff(tiednote.wholes_to_noteoff()
+                        - min_wholes_to_noteoff);
                 }
             }
+            const bool had_notes{!tied_list_.empty()};
+            const auto [erase_iter, new_end] = ranges::remove_if(tied_list_,
+                [next_event_ticks](const MidiChannelVoiceNoteOnEvent& mcvne)
+                { return ((mcvne.ticks_accumulated() + mcvne.ticks_to_noteoff())
+                  <= next_event_ticks); } );
+            tied_list_.erase(erase_iter, new_end);
+
+            RhythmRational wholes_to_event{note_on->ticks_to_next_event(), note_on->ticks_per_whole()};
+            if (had_notes)
+            {
+                if (wholes_to_event)
+                {
+                    (*print_rhythm)(os, wholes_to_event);
+                }
+                else
+                {
+                    if (had_non_tied_in_onlies && had_notes)
+                    {
+                        (*print_rhythm)(os, this->wholes_to_last_event());
+                    }
+                }
+            }
+            os << '\n';
         }
     }
-    else // not a note-on
+    else // velocity == 0 or noteoff
     {
-        if (!dynamic_cast<MidiChannelVoiceNoteOffEvent*>(mm))
+        // test note_on before note_on->velocity
+        if (note_off || (note_on && (note_on->velocity() == 0)))
+        {
+            auto minits{min_element(tied_list_.begin(), tied_list_.end(),
+                [note](MidiChannelVoiceNoteEvent res, MidiChannelVoiceNoteEvent mcvne)
+                { return (res.ticks_accumulated() + res.ticks_to_next_event())
+                   <     (mcvne.ticks_accumulated() + mcvne.ticks_to_next_event())
+                  && ((mcvne.ticks_accumulated() + mcvne.ticks_to_next_event()) >
+                         note->ticks_accumulated()) ; } )};
+
+            int64_t next_event_ticks{note_on->ticks_accumulated() + note_on->ticks_to_next_event()};
+            for (auto& tl : tied_list_)
+            {
+                if ((tl.ticks_accumulated() + tl.ticks_to_next_event()) > note_on->ticks_accumulated())
+                {
+                    next_event_ticks = (((tl.ticks_accumulated() + tl.ticks_to_next_event())
+                        < next_event_ticks) ? (tl.ticks_accumulated() + tl.ticks_to_next_event()) : next_event_ticks);
+                }
+            }
+
+            auto minit{min_element(tied_list_.begin(), tied_list_.end(),
+                [](MidiChannelVoiceNoteOnEvent mcvnoe, MidiChannelVoiceNoteOnEvent res)
+                { return mcvnoe.wholes_to_noteoff() < res.wholes_to_noteoff(); } )};
+            RhythmRational min_wholes_to_noteoff{0L};
+            if (minit != tied_list_.end())
+            {
+                min_wholes_to_noteoff = minit->wholes_to_noteoff();
+            }
+
+            bool had_non_tied_in_onlies{true};
+            if (note_on->ticks_to_next_event())
+            {
+                for (auto& tiednote : tied_list_)
+                {
+                    if (tiednote.ticks_accumulated() < note_on->ticks_accumulated())
+                    {
+                        os << '-';
+                    }
+                    else
+                    {
+                        had_non_tied_in_onlies = false;
+                    }
+                    os << tiednote.key_string();
+                    if ((tiednote.ticks_accumulated() + tiednote.ticks_to_noteoff()) > next_event_ticks)
+                    {
+                        os << "- ";
+                        had_non_tied_in_onlies = false;
+                    }
+                    else
+                    {
+                        os << ' ';
+                    }
+                }
+                const bool had_notes{!tied_list_.empty()};
+                const auto [erase_iter, new_end] = ranges::remove_if(tied_list_,
+                    [next_event_ticks](const MidiChannelVoiceNoteOnEvent& mcvne)
+                    { return ((mcvne.ticks_accumulated() + mcvne.ticks_to_noteoff())
+                      <= next_event_ticks); } );
+                tied_list_.erase(erase_iter, new_end);
+                RhythmRational wholes_to_event{note_on->ticks_to_next_event(), note_on->ticks_per_whole()};
+                if (had_notes)
+                {
+                    if (wholes_to_event)
+                    {
+                        (*print_rhythm)(os, wholes_to_event);
+                    }
+                    else
+                    {
+                        if (had_non_tied_in_onlies && had_notes)
+                        {
+                            (*print_rhythm)(os, this->wholes_to_last_event());
+                        }
+                    }
+                }
+                os << '\n';
+            }
+        }
+        else // not a note event
         {
             const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mm)};
             if (rest)
             {
                 RhythmRational duration{rest->wholes_to_next_event()};
                 duration.reduce();
-                if (duration)
+                if (duration > RhythmRational{})
                 {
                     os << lazy_string(true);
                     os << rest->key_string() << ' ';
@@ -2558,18 +2666,15 @@ void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
                 os << *mm << '\n';
             }
         }
-        else
-        {
-            ranges::remove_if(tied_list_, rem_if_zero_wholes_to_noteoff);
-        }
     }
     for (auto& tiednote : tied_list_)
     {
         if (tiednote.wholes_to_noteoff())
         {
-            tiednote.wholes_to_noteoff(tiednote.wholes_to_noteoff()       - mm->wholes_to_next_event());
+            tiednote.wholes_to_noteoff(tiednote.wholes_to_noteoff() - mm->wholes_to_next_event());
         }
     }
+    this->wholes_to_last_event(mm->wholes_to_next_event());
 }
 
 ostream& textmidi::operator<<(ostream& os, PrintLazyTrack& print_lazy_track)
@@ -2745,8 +2850,8 @@ void textmidi::PrintLazyTrack::insert_rests()
                     rest_start_ticks_accumulated
                         = rest->ticks_accumulated() + rest->ticks_to_next_event();
                     new_midi_delay_event_pairs.push_back(rest_pair);
+                    inrest = true;
                 }
-                inrest = true;
             }
         }
     }

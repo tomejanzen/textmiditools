@@ -168,6 +168,12 @@ divisible by a sixteenth-note.
 @cindex @minus{}@minus{}lazy
 Will attempt to output track data in textmidi's LAZY mode, an abbreviated
 text representation.
+@command{miditext --lazy} does well with simpler files and overlapping rhythms within a track.
+However, a known failure is on MIDI file inputs that have non-note events @b{during} a live note.
+This problem is put aside for now because there is no philosophy for what to do with
+events that happen during the life of a note because LAZY mode does not define @quotedblleft{}inside@quotedblright{} of a note.
+LAZY mode defines notes as events with a beginning and an end, as SMUS files do.   This is contrast to MIDI, which
+separates the note's start (NOTE_ON) and stop (NOTE_OFF or NOTE_ON with velocity zero).
 @item -y, --dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
 @cindex @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
 To set the MIDI velocity values for lazy dynamics expressed with @quotedblleft{}forte@quotedblright{}, @quotedblleft{}mf@quotedblright{}, etc.,

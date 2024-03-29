@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.74
+// TextMIDITools Version 1.0.75
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -432,7 +432,7 @@ std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& 
     auto flags{os.flags()};
     auto tr_temp{tr};
     tr_temp.reduce();
-    if (tr_temp)
+    if (tr_temp > RhythmRational{})
     {
         // textmidi has a convention for quickness of typing that
         // a 1/4 note is written 4, or 1/4, or 2/8 etc.
@@ -481,7 +481,7 @@ std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& 
 std::ostream& textmidi::rational::PrintRhythmSimpleContinuedFraction::operator()(std::ostream& os, const RhythmRational& ratio64)
 {
     auto flags{os.flags()};
-    if (ratio64)
+    if (ratio64 > RhythmRational{})
     {
         auto scf{static_cast<RhythmRational::SimpleContinuedFraction>(ratio64)};
         os << scf;

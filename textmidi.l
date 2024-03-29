@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.74
+** TextMIDITools Version 1.0.75
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -568,15 +568,21 @@ DEVICE_ID (ALL_CALL|{BYTE})
     BEGIN(LAZY_STATE);
   }
 
+<LAZY_STATE>LAZY|BRIEF {
+  }
+
 <LAZY_STATE>END_LAZY|DETAIL|END_BRIEF {
     BEGIN(DETAIL_STATE);
+  }
+
+<DETAIL_STATE>END_LAZY|DETAIL|END_BRIEF {
   }
 
 <DETAIL_STATE>{STARTTRACKTOKEN} {
     ++track_counter;
     if (TextMidiFeatures::me()->verbose())
     {
-        clog << "Found " << yytext << '\n';
+        cout << "Found " << yytext << '\n';
     }
     trackchunk.clear();
     trackchunk.reserve(33000); // about the longest track I've seen
@@ -1730,7 +1736,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 <<EOF>> {
     if (TextMidiFeatures::me()->verbose())
     {
-        clog << "Found " << track_counter
+        cout << "Found " << track_counter
              << " tracks and will set MIDI header accordingly.\n";
     }
     TextMidiFeatures::me()->midi_filestr().seekp(10);

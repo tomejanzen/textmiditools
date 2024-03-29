@@ -22,10 +22,10 @@ syntax keyword lazyEvent vel chan
 syntax keyword lazyRest r R
 syntax keyword lazycmd LAZY END_LAZY
 syntax match NOTE_LETTER "[A-G]\|[a-g]"
-"syntax match anote \([ABCDEFG]|[abcdefg]\)[b#]\?[0123456789]
 syntax match anote "[ABCDEFGabcdefg]\([b#]\)\?[0123456789]"
 syntax match DYNAMIC "\(^\|[^[:alnum:]]\)\(pppp\|ppp\|pp\|p\|mp\|mf\|forte\|ff\|fff\|ffff\|PPPP\|PPP\|PP\|P\|MP\|MF\|FORTE\|FF\|FFF\|FFFF\)\(+\?\)\([^[:alnum:]]\|$\)"
 
+syntax match simplecontinuedfraction "[[]\([0-9]\)\+\(;[1-9]\+\(,[1-9][0-9]*\)*\)[]]"
 syn match midicomment ";.*"
 hi def link midiEvent Statement
 hi def link CommandValue Type
@@ -36,6 +36,7 @@ hi def link SysexSubid Identifier
 hi def link SysexNonrtSubid1 Identifier
 hi def link SysexRtSubid1 Identifier
 hi def link midicomment Comment
+"hi def link simplecontinuedfraction Identifier
 hi def link anote Identifier
 hi def link lazyRest Identifier
 hi def link DYNAMIC Special

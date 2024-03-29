@@ -1,3 +1,15 @@
+2024-03-28     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{h,cc}: rewrite conversion to miditest --lazy.
+
+2024-03-27     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.cc: don't let print_rhythm print negative
+        rational numbers.
+        * textmidi.l: change clog output to cout.  
+        * MidiEvents.cc: get miditext --lazy to work better;
+        cf. PrintLazyTrack::print.
+        * test/textmidiroundtriptest.py: spruce up formatting.
+        * main.cc: Set text filename in TextMidiFeatures globals.
+
 2024-03-25     Thomas E. Janzen <janzentome@gmail.com>
         * test/classical_archives_rigid[0123].txt: lists of MIDI files
         that pass a round-trip test in lazy mode.

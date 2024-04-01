@@ -1,3 +1,18 @@
+2024-03-31     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{h,cc}, RhythmRational.cc, miditext.{cc,gdb},
+        * od.bash, test/README, textmidi.gdb:
+        get simplecontinuedfraction to pass the same tests as lazy does.
+        * Makefile.am, textmidicgm.cc:  Add --rhythmexpression option to textmidicgm.
+        * smutextmidi.texi, miditext.texi, texmidicgm.texi: describe
+        --rhythmexpression option; use @minus{} for dashes in more places.
+        * miditext.cc, textmidicgm.cc, smustextmidi.cc: change single-character
+        option to "-e" for --rhythmexpression.
+
+2024-03-30     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.cc: mishandled [21;2,1,1,1] and crashed
+        by indexing [2] on the ";2", which only indexes to 1 and was
+        in matches[2].
+
 2024-03-28     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{h,cc}: rewrite conversion to miditest --lazy.
 

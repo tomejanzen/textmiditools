@@ -210,20 +210,21 @@ textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
 [@b{@minus{}z}|@b{@minus{}@minus{}arrangements} @lbracechar{}rotateright | rotateleft | reverse 
 | previouspermutation | nextpermutation | swappairs | shuffle | skip | heaps @rbracechar{}
 [@b{@minus{}y}|@b{@minus{}@minus{}arrangementsperiod} @lbracechar{}time in seconds@rbracechar{}
+[@b{@minus{}e}|@b{@minus{}@minus{}rhythmexpression} @var{rational}|@var{simplecontinuedfraction}
 [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 @end smallexample
 
 @table @option
 @cindex @command{textmidicgm} command line options.
-@item -f, --form @var{text_form_file}
+@item @minus{}f, @minus{}@minus{}form @var{text_form_file}
 The input file: a text file in the format used in the original 1990 version, probably.
 Use of this file format is deprecated.
 @cindex form
-@item -x, --xmlform @var{xml_form_file}
+@item @minus{}x, @minus{}@minus{}xmlform @var{xml_form_file}
 @cindex xmlform
 The input file: an XML file supporting more features.  If @minus{}@minus{}random is
 specified, the form's output file.
-@item -r, --update
+@item @minus{}r, @minus{}@minus{}update
 @cindex update
 Update a version 0 XML form file to version 2.  Has no effect on version 2 files.
 for 
@@ -231,7 +232,7 @@ for
 textmidicgm --xmlformfile symphony.form.xml --update
 @end smallexample
 produces a file called update_symphony.form.xml that is a version 2 XML form file.
-@item -r, --random
+@item @minus{}r, @minus{}@minus{}random
 @cindex random xml_form_file_base
 Make a random form, write it to the base filename given, adding @quotedblleft{}.form.xml@quotedblright{} and exit.
 @itemize
@@ -310,19 +311,19 @@ L---------C---------R
 After the random form file has been written it may be edited, then used
 as an input to the @minus{}@minus{}xmlform option.
 @cindex @minus{}@minus{}instruments
-@item -i, --instruments @lbracechar{}piano chromaticpercussion organ guitar bass strings ensemble brass reed pipe synthlead synthpad syntheffects ethnic percussive soundeffects all melodic idiophone...@rbracechar{}
+@item @minus{}i, @minus{}@minus{}instruments @lbracechar{}piano chromaticpercussion organ guitar bass strings ensemble brass reed pipe synthlead synthpad syntheffects ethnic percussive soundeffects all melodic idiophone...@rbracechar{}
 Select the groups of General MIDI instruments (patches) to use.  The selections may be repeated to affect their probability of being selected.  For example,
 @quotedblleft{}strings strings piano@quotedblright{} will create a complement in the form file that is twice as likely to have strings as pianos.
 Note that idiophones appear on channel 10, as per the MIDI 1.1 spec, and the range of scale used will be limited to the range given in the MIDI spec for idiophones,
 and will also be limited to the scale used. The default is all non-idiophones.
 @cindex @minus{}o,@minus{}@minus{}textmidi
-@item -o, --textmidi textmidi_output_file
+@item @minus{}o, @minus{}@minus{}textmidi textmidi_output_file
 @cindex --textmidi
 The output file, in textmidi text language.
-@item -g, --gnuplot
+@item @minus{}g, @minus{}@minus{}gnuplot
 @cindex gnuplot
 Output a file of gnuplot data.
-@item -c, --clampscale
+@item @minus{}c, @minus{}@minus{}clampscale
 Trims the scale to remove low notes below the lowest low pitch in the voices,
 and to remove high notes above the highest high pitch in the voices.
 The scale will still cover the union of ranges of all of the voices.
@@ -332,7 +333,7 @@ without moving at all until such time as the pitch curve starts to edge up
 above that low pitch for the voice.  Because it is not a per-voice adjustment
 it is not a complete solution, but is coherent with the original technique.
 This option does not assume an rising-ordered scale.
-@item -z, --arrangements rotateright | rotateleft | reverse | previouspermutation | nextpermutation | swappairs | shuffle | skip | heaps
+@item @minus{}z, @minus{}@minus{}arrangements rotateright | rotateleft | reverse | previouspermutation | nextpermutation | swappairs | shuffle | skip | heaps
 Periodically reorder the voice priority for the purposes of applying the texture curve, which determines how large a portion of the complement (the ensemble) is playing.
 Without this feature, when the texture curve was thin, and a solo instrument played, it would always be the same voice and instrument playing.
 By re-ordering the voices now and then, a different voice can be the soloist at those times.
@@ -540,17 +541,25 @@ Applies Heap's Algorithm to scramble voices in such a way that only 2 voices swa
 @end smallexample
 @end table
 
-@item -y, --arrangementsperiod time_in_seconds
+@item @minus{}y, @minus{}@minus{}arrangementsperiod time_in_seconds
 The time period in seconds at which to apply the track scramble algorithm.
 The default is 1000 minutes.
-@item -v, --verbose
+@item @minus{}e, @minus{}@minus{}rhythmexpression rational|simplecontinuedfraction
+@cindex @minus{}e
+@cindex @minus{}@minus{}rhythmexpression
+Used with @b{--lazy}, selects either a rational or simple continued fraction expression of rhythm.
+The default is a rational-like musical rhythm.
+Note that @command{textmidicgm} uses @minus{}e while both @command{miditext} and @command{smustextmidi} use @minus{}r.
+See textmidi.pdf for details of the syntax of simple continued fractions.
+
+@item @minus{}v, @minus{}@minus{}verbose
 @cindex verbose
 Write some informative messages to the screen.  Errors are printed
 regardless.
-@item -V, --version
+@item @minus{}V, @minus{}@minus{}version
 @cindex version
 Print the version of @command{textmidicgm}.
-@item -h, --help
+@item @minus{}h, @minus{}@minus{}help
 @cindex help
 Print the options summary.
 @end table

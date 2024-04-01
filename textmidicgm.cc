@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.75
+// TextMIDITools Version 1.0.76
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -71,6 +71,7 @@
 #include <boost/archive/xml_archive_exception.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/serialization/version.hpp>
+#include <boost/algorithm/string/case_conv.hpp> // to_upper
 
 #include "MIDIKeyString.h"
 #include "MusicalForm.h"
@@ -81,6 +82,7 @@
 #include "Voice.h"
 #include "Options.h"
 #include "Composer.h"
+#include "RhythmRational.h"
 
 using namespace std;
 using namespace boost;
@@ -147,8 +149,9 @@ int main(int argc, char *argv[])
         ((RandomOpt              + ",r").c_str(), program_options::value<string>(),                            RandomTxt)
         ((InstrumentsOpt         + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
         ((ClampScaleOpt          + ",c").c_str(),                                                          ClampScaleTxt)
-        ((ArrangementsOpt       + ",z").c_str(), program_options::value<string>(),                     ArrangementsTxt)
-        ((ArrangementsPeriodOpt + ",y").c_str(), program_options::value<double>(),               ArrangementsPeriodTxt)
+        ((ArrangementsOpt        + ",z").c_str(), program_options::value<string>(),                     ArrangementsTxt)
+        ((ArrangementsPeriodOpt  + ",y").c_str(), program_options::value<double>(),               ArrangementsPeriodTxt)
+        ((RhythmExpressionOpt    + ",e").c_str(), program_options::value<string>(), RhythmExpressionTxt)
     ;
     program_options::variables_map var_map;
     try
@@ -164,7 +167,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.75\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.76\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -174,7 +177,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.75\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.76\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -395,6 +398,24 @@ int main(int argc, char *argv[])
         if (var_map.count(ArrangementsPeriodOpt))
         {
             track_scramble_period = TicksDuration{static_cast<int64_t>(floor(var_map[ArrangementsPeriodOpt].as<double>())) * TicksPerQuarter};
+        }
+    }
+
+    if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
+    {
+        string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
+        to_upper(rhythm_expression_string);
+        if (midi::rhythm_expression_map.contains(rhythm_expression_string))
+        {
+            const rational::RhythmExpression rhythm_expression{midi::rhythm_expression_map[rhythm_expression_string]};
+            switch (rhythm_expression)
+            {
+                case textmidi::rational::RhythmExpression::Rational:
+                  break;
+              case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
+                  textmidi::rational::print_rhythm.reset(new textmidi::rational::PrintRhythmSimpleContinuedFraction);
+                  break;
+            } 
         }
     }
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.75
+// TextMIDITools Version 1.0.76
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -350,8 +350,8 @@ textmidi::rational::RhythmRational
 
 istream& textmidi::rational::operator>>(istream& is, RhythmRational::SimpleContinuedFraction& scf)
 {
-    const regex continued_fraction_re{R"(\[([[:digit:]]+)(;[1-9][[:digit:]]{0,19})*)"};
-    const regex continued_fraction_re2{R"(,([[:digit:]]+))"};
+    const regex continued_fraction_re{R"(\[([[:digit:]]+)((;[1-9][[:digit:]]*)(,[1-9][[:digit:]]*)*)?\])"};
+    const regex continued_fraction_re2{R"(([,;])([[:digit:]]+))"};
     string s;
     is >> s;
     smatch matches{};
@@ -361,16 +361,19 @@ istream& textmidi::rational::operator>>(istream& is, RhythmRational::SimpleConti
         scf.first = boost::lexical_cast<int64_t>(matches[1]);
         if (matches.length() > 2)
         {
-            scf.second.insert(scf.second.end(), boost::lexical_cast<int64_t>(matches[2].str().substr(1)));
-            auto denom_begin{sregex_iterator(s.begin(), s.end(), continued_fraction_re2)};
-            auto denom_end{sregex_iterator()};
-            for (auto mi{denom_begin}; mi != denom_end; ++mi)
+            if (!matches[2].str().empty())
             {
-                istringstream mi_iss{mi->str()};
-                int64_t denom;
-                char waste{};
-                mi_iss >> waste >> denom;
-                scf.second.insert(scf.second.end(), denom);
+                string first_fraction_str{matches[2].str()};
+                auto denom_begin{sregex_iterator(s.begin(), s.end(), continued_fraction_re2)};
+                auto denom_end{sregex_iterator()};
+                for (auto mi{denom_begin}; mi != denom_end; ++mi)
+                {
+                    istringstream mi_iss{mi->str()};
+                    int64_t denom;
+                    char waste{};
+                    mi_iss >> waste >> denom;
+                    scf.second.push_back(denom);
+                }
             }
         }
     }

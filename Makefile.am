@@ -55,7 +55,7 @@ DynamicsOptions.o: DynamicsOptions.cc DynamicsOptions.h
 
 textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o $(AM_LDFLAGS) 
-textmidicgm.o: textmidicgm.cc MIDIKeyString.h Midi.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h Options.h Composer.h
+textmidicgm.o: textmidicgm.cc MIDIKeyString.h Midi.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h Options.h Composer.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<

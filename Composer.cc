@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.75
+// TextMIDITools Version 1.0.76
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -31,6 +31,7 @@
 #include "Track.h"
 #include "GnuPlot.h"
 #include "Midi.h"
+#include "RhythmRational.h"
 
 using namespace std;
 using namespace boost;
@@ -669,7 +670,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     textmidi_file << textmidi_str;
     for (TicksDuration aTime(0); aTime < maxTime; aTime += TicksDuration(4 * TicksPerQuarter))
     {
-        textmidi_file << "R 1\n";
+        textmidi_file << "R ";
+        textmidi::rational::RhythmRational musical_rhythm{1L};
+        (*textmidi::rational::print_rhythm)(textmidi_file, musical_rhythm);
+        textmidi_file << '\n';
     }
     textmidi_file << "END_LAZY\nticks \"End of Track\"\nEND_OF_TRACK\n";
 

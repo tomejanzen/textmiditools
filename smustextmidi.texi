@@ -135,36 +135,36 @@ he had in SMUS format.
 smustextmidi [@b{@minus{}i}|@b{@minus{}@minus{}smus}] @var{smus_input_file} @b{@minus{}o}|@b{@minus{}@minus{}textmidi} @var{textmidi_output_file}
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}v}|@b{@minus{}@minus{}version}] [@b{@minus{}V}|@b{@minus{}@minus{}verbose}]
 [@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
-[@b{@minus{}r}|@b{@minus{}@minus{}rhythmexpression} @var{rational}|@var{simplecontinuedfraction}
+[@b{@minus{}e}|@b{@minus{}@minus{}rhythmexpression} @var{rational}|@var{simplecontinuedfraction}
 @end smallexample
 
 @table @option
 @cindex @command{smustextmidi} command line options.
-@item -h, --help
+@item @minus{}h, @minus{}@minus{}help
 @cindex @minus{}h
 @cindex @minus{}@minus{}help
 Print the options summary.
-@item -v, --verbose
+@item @minus{}v, @minus{}@minus{}verbose
 @cindex @minus{}v
 @cindex @minus{}@minus{}verbose
 Verbose does not currently add any print-outs.
-@item -V, --version
+@item @minus{}V, @minus{}@minus{}version
 @cindex @minus{}V
 @cindex @minus{}@minus{}version
 Print the version of @command{smustextmidi}.
-@item -i, --smus smus_input_file
+@item @minus{}i, @minus{}@minus{}smus smus_input_file
 @cindex @minus{}i
 @cindex @minus{}@minus{}smus
 The input file: an SMUS file.
-@item -a, --answer
+@item @minus{}a, @minus{}@minus{}answer
 @cindex @minus{}a
 @cindex @minus{}@minus{}answer
 If the output textmidi file already exists, ask before overwriting it.
-@item -o, --textmidi textmidi_output_file
+@item @minus{}o, @minus{}@minus{}textmidi textmidi_output_file
 @cindex @minus{}o
 @cindex @minus{}@minus{}textmidi
 The output file, in textmidi text language, using LAZY dialect.
-@item -y, --dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+@item @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
 @cindex @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
 To set the MIDI velocity values for lazy dynamics expressed with @quotedblleft{}forte@quotedblright{}, @quotedblleft{}mf@quotedblright{}, etc.,
 edit a dynamics configuration file.
@@ -187,10 +187,10 @@ ffff=127
 fffff=127
 @end example
 
-@item -r, --rhythmexpression rational|simplecontinuedfraction
-@cindex @minus{}r
+@item @minus{}e, @minus{}@minus{}rhythmexpression rational|simplecontinuedfraction
+@cindex @minus{}e
 @cindex @minus{}@minus{}rhythmexpression
-In lazy mode, select either a rational or simple continued fraction expression of rhythm.
+Used with @b{--lazy}, selects either a rational or simple continued fraction expression of rhythm.
 The default is a rational-like musical rhythm.
 
 See textmidi.pdf for details.

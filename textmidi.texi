@@ -160,23 +160,23 @@ textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} 
 
 @table @option
 @cindex @command{textmidi} command line options.
-@item -h, --help
+@item @minus{}h, @minus{}@minus{}help
 @cindex @minus{}h, @minus{}@minus{}help
 Print the options summary.
-@item -v, --verbose
+@item @minus{}v, @minus{}@minus{}verbose
 @cindex  @minus{}v, @minus{}@minus{}verbose
 Write some informative messages to the screen.  Errors are printed
 regardless.
-@item -V, --version
+@item @minus{}V, @minus{}@minus{}version
 @cindex  @minus{}V, @minus{}@minus{}version
 Print the version of @command{textmidi}.
-@item -i, --textmidi textmidi_input_file
+@item @minus{}i, @minus{}@minus{}textmidi textmidi_input_file
 @cindex @minus{}i, @minus{}@minus{}textmidi
 The input file: a text representation of a MIDI file in @command{textmidi} language.
-@item -o, --midi standard_midi_output_file
+@item @minus{}o, @minus{}@minus{}midi standard_midi_output_file
 @cindex @minus{}o, @minus{}@minus{}midi
 The output file; a binary standard MIDI file.
-@item -d, --detache num
+@item @minus{}d, @minus{}@minus{}detache num
 @cindex @minus{}d, @minus{}@minus{}detache
 A small number of MIDI ticks to separate consecutive notes.  It always
 is shaved off the end of preceding note events and made into a rest
@@ -185,14 +185,14 @@ Originally, the default was 10 and was based on experience with MIDI synthesizer
 from the 1980's that could behave poorly with high rates of note events
 with no delay between note-off and note-on events.
 The time is stolen from the preceding note's duration, not added.
-@item -l, --lazynoteoff
+@item @minus{}l, @minus{}@minus{}lazynoteoff
 @cindex @minus{}l, @minus{}@minus{}lazynoteoff
 In LAZY mode, for the ends of a note's duration, use a MIDI note-off
 with the global velocity rather than a note-on with a velocity of zero.
-@item -a, --answer
+@item @minus{}a, @minus{}@minus{}answer
 @cindex @minus{}a, @minus{}@minus{}answer
 If the output textmidi file already exists, ask before overwriting it.
-@item -n, --runningstatus @lbracechar{}standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
+@item @minus{}n, @minus{}@minus{}runningstatus @lbracechar{}standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
 @cindex  @minus{}n, @minus{}@minus{}runningstatus @lbracechar{} standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta @rbracechar{}
 For the purpose of testing with old MIDI files,
 specify the policy for running status.  By default, the MIDI SMF standard is followed:
@@ -209,7 +209,7 @@ From the spec:
 @quotedblleft{}Meta events and sysex events cancel any running status that was in effect.@quotedblright{}
 RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
 @b{sysex}, @b{meta} events, and @b{end-of-track}.
-@item -y, --dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
+@item @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
 @cindex @minus{}y, @minus{}@minus{}dynamics_configuration @lbracechar{}dynamics_configuration_file@rbracechar{}
 To set the MIDI velocity values for lazy dynamics expressed with @quotedblleft{}forte@quotedblright{}, @quotedblleft{}mf@quotedblright{}, etc.,
 edit a dynamics configuration file.

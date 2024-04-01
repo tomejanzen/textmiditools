@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.75
+// TextMIDITools Version 1.0.76
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -2686,7 +2686,7 @@ ostream& textmidi::operator<<(ostream& os, PrintLazyTrack& print_lazy_track)
     return os;
 }
 
-constexpr string_view textmidi::PrintLazyTrack::lazy_string(bool lazy)
+string textmidi::PrintLazyTrack::lazy_string(bool lazy)
 {
     if (lazy)
     {

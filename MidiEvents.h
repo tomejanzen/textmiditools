@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.75
+// TextMIDITools Version 1.0.76
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -1030,7 +1030,7 @@ namespace textmidi
         midi::MidiStreamAtom channel_;
         int dynamic_;
         bool lazy_;
-        constexpr std::string_view lazy_string(bool lazy);
+        std::string lazy_string(bool lazy);
         std::list<MidiChannelVoiceNoteOnEvent> tied_list_;
         MidiDelayEventPairs& midi_delay_event_pairs_;
         rational::RhythmRational quantum_;

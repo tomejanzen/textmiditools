@@ -1,0 +1,25 @@
+FILEHEADER 1 240 MULTITRACK
+
+STARTTRACK
+TIME_SIGNATURE 4 4 240
+TEMPO 60
+KEY_SIGNATURE C
+TEXT  test for miditext from TextMIDITools
+TRACK lazytiealso
+LAZY
+forte
+chan 2
+ G4-           4
+-G4-  C4-      4
+-G4- -C4-  E4- 4
+-G4- -C4  -E4- 4
+-G4- -E4       4
+-G4            4
+
+ C4-     4
+-C4   E4 4
+
+END_LAZY
+ticks "End of Track"
+END_OF_TRACK
+

@@ -24,7 +24,7 @@ The smustextmidi program is not tested by textmidiroundtriptest.py.
 
 Run as follows:
 
-./textmidiroundtriptest.py classical_archives0.txt [all 358 match]
+./textmidiroundtriptest.py classical_archives0.txt > classical_archives0log.txt 2>&1 [using bash shell redirection] [all 358 match]
 ./textmidiroundtriptest.py classical_archives1.txt [all 370 match]
 ./textmidiroundtriptest.py classical_archives2.txt [all 359 match]
 ./textmidiroundtriptest.py classical_archives3.txt [all 362 match]
@@ -39,8 +39,6 @@ Run as follows:
 ./textmidiroundtriptest.py classical_archives_never5.txt [all 366 match]
 ./textmidiroundtriptest.py classical_archives_never6.txt [all 363 match]
 
-
-
 ./textmidiroundtriptest.py classical_archives_otherfails.txt [only all 55 MIDI file compares fail]
 
 [bash shell syntax for redirection of logerr].
@@ -48,14 +46,20 @@ Run as follows:
 For tests of miditext --lazy, rigid files are used.
 "Rigid" MIDI files are files that have rhythms that line up to 
 ordinary musical values and should render well as "LAZY" mode textmidi files.
-The following files all compare file pairs exactly and pass with miditext --lazy:
-./textmidiroundtriptest.py classical_archives_rigid0.txt lazy
-./textmidiroundtriptest.py classical_archives_rigid1.txt lazy
-./textmidiroundtriptest.py classical_archives_rigid2.txt lazy
-./textmidiroundtriptest.py classical_archives_rigid3.txt lazy
+The following files all compare file pairs exactly and pass using "miditext --lazy".
+If simplecontinuedfraction is on the command line, then miditest will be run with the option
+--rhythmexpression simplecontinuedfraction; this now seems to pass the same files as just --lazy alone.
+
+./textmidiroundtriptest.py classical_archives_rigid0.txt lazy [simplecontinuedfraction]
+./textmidiroundtriptest.py classical_archives_rigid1.txt lazy [simplecontinuedfraction]
+./textmidiroundtriptest.py classical_archives_rigid2.txt lazy [simplecontinuedfraction]
+./textmidiroundtriptest.py classical_archives_rigid3.txt lazy [simplecontinuedfraction]
+
+The following list of "rigid" files (probably moused into a MIDI system rather than played by a person)
+passes all compares of MIDI and text files that are products of round-trip conversion:
+./textmidiroundtriptest.py rigidretest.txt lazy verbose > rigidretestlog.txt 2>&1  [All 3 files compare exactly.]
 
 The following rigid files have failures in lazy mode:
-./textmidiroundtriptest.py rigidretest.txt lazy verbose > rigidretestlog.txt 2>&1  [All 3 files compare exactly.]
 ./textmidiroundtriptest.py rigidretest_mididiffer.txt lazy verbose  [8 files: 7 just fail MIDI file comparison; 1 fails both text and MIDI file comparison.]
 ./textmidiroundtriptest.py rigidretest_txtdiffer.txt lazy verbose [38 files: All 38 fail MIDI file comparison; 15 textmidi file pairs fail comparisons]
 
@@ -63,7 +67,8 @@ The miditext option "--lazy" is not fully implemented, but does well for many si
 One problem is if a MIDI has non-note events during playing (i.e., not between notes),
 there is no way to represent that in LAZY mode because LAZY mode display full note events from
 start to stop (similarly to SMUS files); there is no "inside the note".
-At a later time this might be addressed by permitting the discarding of non-note events.
+At a later time this might be addressed by permitting the discarding of non-note events
+or by forcing such an event to either before or after a note.
 
 Those that do not match with detailed (non-lazy) conversion are often
 MIDI files that violate the MIDI SMF specification and will

@@ -112,6 +112,7 @@ qualities except for the instrumental attributes of individual
 voices, which is done on the Voices window.
 @menu
 * Name::
+* Copyright::
 * Len::
 * Min/Max Note Len::
 * Pulse/Sec::
@@ -129,6 +130,12 @@ The Musical Form Window has several items.
 @cindex Name
 The name string can be typed in; it is meant to be the title of the musical
 work to be created by textmidicgm.
+@node Copyright
+@section Copyright
+@cindex Copyright
+The copyright string can be typed in.
+It is not copied to the MIDI file that is created from the form file
+by @command{textmidicgm}.
 @node Len
 @section Len
 @cindex Len

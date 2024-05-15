@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.76
+// TextMIDITools Version 1.0.77
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -29,6 +29,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <cmath>
+#include <ctime>
 #include <numeric>
 #include <algorithm>
 #include <iostream>
@@ -224,6 +225,16 @@ void MusicalForm::name(const string_view name) noexcept
     name_ = name;
 }
 
+string MusicalForm::copyright() const noexcept
+{
+    return copyright_;
+}
+
+void MusicalForm::copyright(const string_view copyright) noexcept
+{
+    copyright_ = copyright;
+}
+
 double MusicalForm::len() const noexcept
 {
     return len_;
@@ -407,6 +418,15 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     {
         name_.erase(suffixpos);
     }
+
+    time_t tt{};
+    time_t tt2{}; 
+    tt2 = std::time(&tt);
+    struct std::tm time_fields{};
+    struct std::tm *time_fields_ptr{};
+    time_fields_ptr = gmtime_r(&tt, &time_fields);
+    copyright_ = string("© ") += lexical_cast<string>(time_fields.tm_year + 1900);
+
     len_  = 1800;
     min_note_len_ = 0.0;
     max_note_len_ = 2.0;

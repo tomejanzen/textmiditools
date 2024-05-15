@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.76
+// TextMIDITools Version 1.0.77
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -214,6 +214,7 @@ namespace textmidi
           public:
             MusicalForm()
               : name_{},
+                copyright_{},
                 len_{},
                 min_note_len_{},
                 max_note_len_{},
@@ -233,6 +234,7 @@ namespace textmidi
             // A ctor for converting old files
             MusicalForm(const std::string& name, const cgmlegacy::TextForm& form)
               : name_{name},
+                copyright_{"© "},
                 len_{form.len},
                 min_note_len_{form.min_note_len},
                 max_note_len_{form.max_note_len},
@@ -260,6 +262,8 @@ namespace textmidi
 
             std::string name() const noexcept;
             void name(const std::string_view name) noexcept;
+            std::string copyright() const noexcept;
+            void copyright(const std::string_view copyright) noexcept;
             double len() const noexcept;
             void len(double len) noexcept;
             double min_note_len() const noexcept;
@@ -293,6 +297,7 @@ namespace textmidi
             void clamp_scale_to_instrument_ranges();
           private:
             std::string name_;
+            std::string copyright_;
             double len_;
             double min_note_len_;
             double max_note_len_;
@@ -309,6 +314,10 @@ namespace textmidi
                 void serialize(Archive& arc, const unsigned int version)
             {
                 arc & BOOST_SERIALIZATION_NVP(name_);
+                if (version > 2)
+                {
+                    arc & BOOST_SERIALIZATION_NVP(copyright_);
+                }
                 arc & BOOST_SERIALIZATION_NVP(len_);
                 arc & BOOST_SERIALIZATION_NVP(min_note_len_);
                 arc & BOOST_SERIALIZATION_NVP(max_note_len_);

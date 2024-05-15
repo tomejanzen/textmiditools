@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.76
+// TextMIDITools Version 1.0.77
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -48,6 +48,22 @@ namespace
     {
         ++channel;
         return channel;
+    }
+
+    string dynamic_string(int velocity)
+    {
+        string rtn{};
+        // If it matches the velocity map then use a symbol instead of vel nn
+        if (dynamics_map->contains(velocity))
+        {
+            rtn = dynamics_map->at(velocity);
+        }
+        else
+        {
+            (rtn += "vel ") += boost::lexical_cast<string>(velocity);
+        }
+        rtn += ' ';
+        return rtn;
     }
 }
 //
@@ -1618,6 +1634,12 @@ ostream& textmidi::MidiChannelVoiceNoteEvent::text(ostream& os) const
     return os;
 }
 
+constexpr uint32_t textmidi::MidiChannelVoiceNoteEvent::ticks_per_whole() const
+{
+    return ticks_per_whole_;
+}
+
+
 constexpr bool textmidi::MidiChannelVoiceNoteEvent
     ::operator==(const MidiChannelVoiceNoteEvent& note) const
 {
@@ -1681,11 +1703,6 @@ constexpr RhythmRational textmidi::MidiChannelVoiceNoteOnEvent::wholes_past_note
     return wholes_past_noteoff_;
 }
 
-constexpr uint32_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_per_whole() const
-{
-    return ticks_per_whole_;
-}
-
 ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteOnEvent& msg)
 {
     return msg.text(os);
@@ -1712,7 +1729,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceNoteOnEvent::recognize(MidiStreamIterator&
 const long MidiChannelVoiceNoteOnEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1724,7 +1741,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamIterator
         running_status.running_status(*midiiter);
         ++midiiter;
     }
-    return (recognized ? make_shared<MidiChannelVoiceNoteOffEvent>(running_status, prefer_sharp, midiiter)
+    return (recognized ? make_shared<MidiChannelVoiceNoteOffEvent>(running_status, ticks_per_whole, prefer_sharp, midiiter)
         : shared_ptr<MidiChannelVoiceNoteOffEvent>{});
 }
 
@@ -1987,7 +2004,7 @@ ostream& textmidi::MidiChannelVoicePolyphonicKeyPressureEvent::text(ostream& os)
 
 shared_ptr<MidiEvent> MidiChannelVoicePolyphonicKeyPressureEvent
     ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end,
-    RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp)
+    RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -2000,7 +2017,7 @@ shared_ptr<MidiEvent> MidiChannelVoicePolyphonicKeyPressureEvent
         ++midiiter;
     }
     return (recognized ? make_shared<MidiChannelVoicePolyphonicKeyPressureEvent>
-        (running_status, prefer_sharp, midiiter) : shared_ptr<MidiChannelVoicePolyphonicKeyPressureEvent>{});
+        (running_status, ticks_per_whole, prefer_sharp, midiiter) : shared_ptr<MidiChannelVoicePolyphonicKeyPressureEvent>{});
 }
 
 ostream& textmidi::operator<<(ostream& os,
@@ -2018,7 +2035,7 @@ ostream& textmidi::MidiChannelVoiceNoteRestEvent::text(ostream& os) const
     {
         os << "R ";
     }
-    RhythmRational duration{ticks_to_next_event(), ticks_per_whole_};
+    RhythmRational duration{ticks_to_next_event(), ticks_per_whole()};
     duration.reduce();
     (*print_rhythm)(os, duration);
     os << '\n';
@@ -2187,10 +2204,10 @@ MidiDelayEventPair textmidi::MidiEventFactory::operator()(MidiStreamIterator& mi
                     midi_delay_event_pair.second = make_shared<MidiChannelVoiceNoteOnEvent>(running_status_, ticks_per_whole_, prefer_sharp_, midiiter);
                     break;
                   case NoteOff:
-                    midi_delay_event_pair.second = make_shared<MidiChannelVoiceNoteOffEvent>(running_status_, prefer_sharp_, midiiter);
+                    midi_delay_event_pair.second = make_shared<MidiChannelVoiceNoteOffEvent>(running_status_, ticks_per_whole_, prefer_sharp_, midiiter);
                     break;
                   case PolyphonicKeyPressure:
-                    midi_delay_event_pair.second = make_shared<MidiChannelVoicePolyphonicKeyPressureEvent>(running_status_, prefer_sharp_, midiiter);
+                    midi_delay_event_pair.second = make_shared<MidiChannelVoicePolyphonicKeyPressureEvent>(running_status_, ticks_per_whole_, prefer_sharp_, midiiter);
                     break;
                   case Control:
                     midi_delay_event_pair.second = make_shared<MidiChannelVoiceControlChangeEvent>(running_status_, midiiter);
@@ -2214,9 +2231,9 @@ MidiDelayEventPair textmidi::MidiEventFactory::operator()(MidiStreamIterator& mi
     if (!midi_delay_event_pair.second)
         midi_delay_event_pair.second = MidiChannelVoiceNoteOnEvent::recognize(midiiter, midi_end_, running_status_, prefer_sharp_, ticks_per_whole_);
     if (!midi_delay_event_pair.second)
-        midi_delay_event_pair.second = MidiChannelVoiceNoteOffEvent::recognize(midiiter, midi_end_, running_status_, prefer_sharp_);
+        midi_delay_event_pair.second = MidiChannelVoiceNoteOffEvent::recognize(midiiter, midi_end_, running_status_, prefer_sharp_, ticks_per_whole_);
     if (!midi_delay_event_pair.second)
-        midi_delay_event_pair.second = MidiChannelVoicePolyphonicKeyPressureEvent::recognize(midiiter, midi_end_, running_status_, prefer_sharp_);
+        midi_delay_event_pair.second = MidiChannelVoicePolyphonicKeyPressureEvent::recognize(midiiter, midi_end_, running_status_, prefer_sharp_, ticks_per_whole_);
     if (!midi_delay_event_pair.second)
         midi_delay_event_pair.second = MidiChannelVoiceProgramChangeEvent::recognize(midiiter, midi_end_, running_status_);
     if (!midi_delay_event_pair.second)
@@ -2363,7 +2380,7 @@ void textmidi::PrintLazyTrack::ticks_to_next_note_on()
             {
                 auto next_note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>
                     (offiter->second.get())};
-                if (next_note_on && (next_note_on->velocity() != 0))
+                if (next_note_on && (next_note_on->velocity() > 0))
                 {
                     if (!(*next_note_on == *note_on))
                     {
@@ -2455,219 +2472,169 @@ void textmidi::PrintLazyTrack::wholes_of_note_on()
 void textmidi::PrintLazyTrack::print(ostream& os, MidiDelayEventPair& mdmp)
 {
     MidiEvent* mm{mdmp.second.get()};
+    //
+    // cast to the base and two final classes.
+    // TODO: have NoteOn and NoteOff take care of themselves without
+    // revealing their respective type.
     auto* note{dynamic_cast<MidiChannelVoiceNoteEvent*>(mm)};
-    auto* note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note)};
-    auto* note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(note)};
     // Define a function that determines if wholes_to_noteoff == 0.
-    if (note_on && (note_on->velocity() > 0))
+    // A NoteOn with velocity == 0 is an ersatz note off.
+    // If this is full NoteOn:
+    if (note)
     {
-        // All add non-zero velocity note-ons to tied_list_.
-        tied_list_.push_back(*note_on);
-
-        int64_t next_event_ticks{note_on->ticks_accumulated() + note_on->ticks_to_next_event()};
-        for (auto& tl : tied_list_)
+        auto* note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note)};
+        auto* note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(note)};
+        // Save the ticks of the start time of the new note.
+        const auto now{note->ticks_accumulated()};
+        const RhythmRational wholes_to_event{mm->ticks_to_next_event(), note->ticks_per_whole()};
+        // If this is a new note with a non-zero velocity:
+        if (note_on && (note->velocity() > 0))
         {
-            if ((tl.ticks_accumulated() + tl.ticks_to_next_event()) > note_on->ticks_accumulated())
-            {
-                next_event_ticks = (((tl.ticks_accumulated() + tl.ticks_to_next_event())
-                    < next_event_ticks) ? (tl.ticks_accumulated() + tl.ticks_to_next_event()) : next_event_ticks);
-            }
-        }
-
-        auto minit{min_element(tied_list_.begin(), tied_list_.end(),
-            [](MidiChannelVoiceNoteOnEvent mcvnoe, MidiChannelVoiceNoteOnEvent res)
-            { return mcvnoe.wholes_to_noteoff() < res.wholes_to_noteoff(); } )};
-        RhythmRational min_wholes_to_noteoff{0L};
-        if (minit != tied_list_.end())
-        {
-            min_wholes_to_noteoff = minit->wholes_to_noteoff();
-        }
-        // If the velocity has changed, write out the vel command.
-        if (dynamic_ != note_on->velocity())
-        {
+            // We don't need a tie-in because we have the NoteOn event.
             os << lazy_string(true);
-            // If it matches the velocity map then use a symbol instead of vel nn
-            if (dynamics_map->contains(note_on->velocity()))
-            {
-                const auto dynamic{dynamics_map->at(note_on->velocity())};
-                os << dynamic << '\n';
-            }
-            else
-            {
-                os << "vel " << static_cast<int>(note_on->velocity()) << ' ';
-            }
-            dynamic_ = note_on->velocity();
-        }
+            // Add note to chord_.
+            chord_.push_back(*note_on);
 
-        // If the channel has changed, write out the chan command.
-        if (note_on->channel() != channel_)
-        {
-            os << lazy_string(true);
-            channel_ = note_on->channel();
-            os << "chan " << static_cast<int>(channel_) << '\n';
-        }
+            // Find the minimum accumulated ticks of the next event of any type.
+            // The comparison function compares (stepping iterator, result)
+            // In order to find the next event,
+            // copy the notes that end after now to notes_with_next_event_past_now.
+            std::list<MidiChannelVoiceNoteOnEvent> notes_with_next_event_past_now{};
+            copy_if(chord_.begin(), chord_.end(), back_inserter(notes_with_next_event_past_now),
+                [now](const MidiEvent& eachme)
+                { return ((eachme.ticks_accumulated() + eachme.ticks_to_next_event()) > now); } );
+            // Find the chord note with the smallest ticks_to_next_event.
+            auto min_it{ranges::min_element(notes_with_next_event_past_now,
+                [](const MidiEvent& eachme, const MidiEvent& result)
+                { return (eachme.ticks_accumulated() + eachme.ticks_to_next_event())
+                        < (result.ticks_accumulated() + result.ticks_to_next_event()) ; } ) };
+            const auto ticks_of_earliest_next_event{min_it->ticks_accumulated() + min_it->ticks_to_next_event()};
 
-        // if ticks_to_next_note_on is > 0, then write out the tied_list.
-        bool had_non_tied_in_onlies{true};
-        if (note_on->ticks_to_next_event())
-        {
-            for (auto& tiednote : tied_list_)
+            // Print out the chord_
+
+            list<MidiChannelVoiceNoteOnEvent> not_tied_out_list{};
+            // If it is not the case that the next event is a note_on starting at the same time.
+            // i.e., if the next note starts at the same time and is the next event...
+            if (!((0 == mm->ticks_to_next_note_on()) && (1 == mm->events_to_next_note_on())))
             {
-                // If the tied note started earlier, then tie it in to now.
-                if (tiednote.ticks_accumulated() < note_on->ticks_accumulated())
+                // For tied in chord_
+                for (auto& tied : chord_)
                 {
-                    os << '-';
-                }
-                else
-                {
-                    had_non_tied_in_onlies = false;
-                }
-                os << tiednote.key_string();
-                // If the tied note ends later, then tie it to the future.
-
-                if ((tiednote.ticks_accumulated() + tiednote.ticks_to_noteoff())
-                        > next_event_ticks)
-                {
-                    os << "- ";
-                    had_non_tied_in_onlies = false;
-                }
-                else
-                {
-                    os << ' ';
-                }
-                if (tiednote.wholes_to_noteoff() > min_wholes_to_noteoff)
-                {
-                    tiednote.wholes_to_noteoff(tiednote.wholes_to_noteoff()
-                        - min_wholes_to_noteoff);
-                }
-            }
-            const bool had_notes{!tied_list_.empty()};
-            const auto [erase_iter, new_end] = ranges::remove_if(tied_list_,
-                [next_event_ticks](const MidiChannelVoiceNoteOnEvent& mcvne)
-                { return ((mcvne.ticks_accumulated() + mcvne.ticks_to_noteoff())
-                  <= next_event_ticks); } );
-            tied_list_.erase(erase_iter, new_end);
-
-            RhythmRational wholes_to_event{note_on->ticks_to_next_event(), note_on->ticks_per_whole()};
-            if (had_notes)
-            {
-                if (wholes_to_event)
-                {
-                    (*print_rhythm)(os, wholes_to_event);
-                }
-                else
-                {
-                    if (had_non_tied_in_onlies && had_notes)
+                    // If the velocity changed, write a vel command or dynamic.
+                    if ((dynamic_ != tied.velocity()) && (*note_on == tied))
                     {
-                        (*print_rhythm)(os, this->wholes_to_last_event());
+                        dynamic_ = tied.velocity();
+                        os << dynamic_string(dynamic_);
                     }
-                }
-            }
-            os << '\n';
-        }
-    }
-    else // velocity == 0 or noteoff
-    {
-        // test note_on before note_on->velocity
-        if (note_off || (note_on && (note_on->velocity() == 0)))
-        {
-            auto minits{min_element(tied_list_.begin(), tied_list_.end(),
-                [note](MidiChannelVoiceNoteEvent res, MidiChannelVoiceNoteEvent mcvne)
-                { return (res.ticks_accumulated() + res.ticks_to_next_event())
-                   <     (mcvne.ticks_accumulated() + mcvne.ticks_to_next_event())
-                  && ((mcvne.ticks_accumulated() + mcvne.ticks_to_next_event()) >
-                         note->ticks_accumulated()) ; } )};
-
-            int64_t next_event_ticks{note_on->ticks_accumulated() + note_on->ticks_to_next_event()};
-            for (auto& tl : tied_list_)
-            {
-                if ((tl.ticks_accumulated() + tl.ticks_to_next_event()) > note_on->ticks_accumulated())
-                {
-                    next_event_ticks = (((tl.ticks_accumulated() + tl.ticks_to_next_event())
-                        < next_event_ticks) ? (tl.ticks_accumulated() + tl.ticks_to_next_event()) : next_event_ticks);
-                }
-            }
-
-            auto minit{min_element(tied_list_.begin(), tied_list_.end(),
-                [](MidiChannelVoiceNoteOnEvent mcvnoe, MidiChannelVoiceNoteOnEvent res)
-                { return mcvnoe.wholes_to_noteoff() < res.wholes_to_noteoff(); } )};
-            RhythmRational min_wholes_to_noteoff{0L};
-            if (minit != tied_list_.end())
-            {
-                min_wholes_to_noteoff = minit->wholes_to_noteoff();
-            }
-
-            bool had_non_tied_in_onlies{true};
-            if (note_on->ticks_to_next_event())
-            {
-                for (auto& tiednote : tied_list_)
-                {
-                    if (tiednote.ticks_accumulated() < note_on->ticks_accumulated())
+                    // If the channel has changed, write out the chan command.
+                    if (tied.channel() != channel_)
+                    {
+                        channel_ = tied.channel();
+                        os << "chan " << static_cast<int>(channel_) << ' ';
+                    }
+                    // If the tied note started earlier, then tie it in from the previous chord.
+                    if (tied.ticks_accumulated() < now)
+                    {
+                        os << '-';
+                    }
+                    // Write the note:
+                    os << tied.key_string();
+                    // If the tied note ends later, then tie it to the next chord.
+                    if ((tied.ticks_accumulated() + tied.ticks_to_noteoff()) > ticks_of_earliest_next_event)
                     {
                         os << '-';
                     }
                     else
                     {
-                        had_non_tied_in_onlies = false;
+                        not_tied_out_list.push_back(tied);
                     }
-                    os << tiednote.key_string();
-                    if ((tiednote.ticks_accumulated() + tiednote.ticks_to_noteoff()) > next_event_ticks)
-                    {
-                        os << "- ";
-                        had_non_tied_in_onlies = false;
-                    }
-                    else
-                    {
-                        os << ' ';
-                    }
+                    os << ' ';
                 }
-                const bool had_notes{!tied_list_.empty()};
-                const auto [erase_iter, new_end] = ranges::remove_if(tied_list_,
-                    [next_event_ticks](const MidiChannelVoiceNoteOnEvent& mcvne)
-                    { return ((mcvne.ticks_accumulated() + mcvne.ticks_to_noteoff())
-                      <= next_event_ticks); } );
-                tied_list_.erase(erase_iter, new_end);
-                RhythmRational wholes_to_event{note_on->ticks_to_next_event(), note_on->ticks_per_whole()};
-                if (had_notes)
-                {
-                    if (wholes_to_event)
-                    {
-                        (*print_rhythm)(os, wholes_to_event);
-                    }
-                    else
-                    {
-                        if (had_non_tied_in_onlies && had_notes)
-                        {
-                            (*print_rhythm)(os, this->wholes_to_last_event());
-                        }
-                    }
-                }
-                os << '\n';
             }
-        }
-        else // not a note event
+
+            if (!chord_.empty())
+            {
+                if (wholes_to_event)
+                {
+                    (*print_rhythm)(os, wholes_to_event);
+                }
+                else // rhythm to next event == 0
+                {
+                    //(*print_rhythm)(os, this->wholes_to_last_event());
+                    if (mm->events_to_next_note_on() > 1)
+                    {
+                        (*print_rhythm)(os, mm->wholes_to_next_event());
+                    }
+                }
+            }
+            os << '\n';
+            // Note perenniel MIDI issue that it is essentially impossible to
+            // match up NOTE_ONs and NOTE_OFFs perfectly because
+            // it is possible to have multiple concurrent NOTE_ONs of the
+            // same key number.  Anyway we're removing one of them.
+            // I can't use list::remove() because it would remove all of the
+            // matching notes.
+            for (auto ntol : not_tied_out_list)
+            {
+                auto it{ranges::find(chord_, ntol)};
+                if (it != chord_.end())
+                {
+                    chord_.erase(it);
+                }
+            }
+         }
+        else // velocity == 0 or noteoff
         {
-            const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mm)};
-            if (rest)
+            // Test note_on before note->velocity using short-circuited evaluation.
+            if (note_off || (note_on && (note->velocity() == 0)))
             {
-                RhythmRational duration{rest->wholes_to_next_event()};
-                duration.reduce();
-                if (duration > RhythmRational{})
-                {
-                    os << lazy_string(true);
-                    os << rest->key_string() << ' ';
-                    (*print_rhythm)(os, duration);
-                    os << '\n';
-                }
             }
-            else
+            else // not a note event but could be a rest or poly pressure which are note events.
             {
-                os << lazy_string(false);
-                os << *mm << '\n';
+                const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mm)};
+                if (rest)
+                {
+                    RhythmRational duration{rest->wholes_to_next_event()};
+                    duration.reduce();
+                    if (duration > RhythmRational{})
+                    {
+                        os << lazy_string(true);
+                        os << rest->key_string() << ' ';
+                        (*print_rhythm)(os, duration);
+                        os << '\n';
+                    }
+                }
+                else
+                {
+                    os << lazy_string(false);
+                    os << *mm << '\n';
+                }
             }
         }
     }
-    for (auto& tiednote : tied_list_)
+    else // not a note event
+    {
+        const auto* rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mm)};
+        if (rest)
+        {
+            RhythmRational duration{rest->wholes_to_next_event()};
+            duration.reduce();
+            if (duration > RhythmRational{})
+            {
+                os << lazy_string(true);
+                os << rest->key_string() << ' ';
+                (*print_rhythm)(os, duration);
+                os << '\n';
+            }
+        }
+        else
+        {
+            os << lazy_string(false);
+            os << *mm << '\n';
+        }
+    }
+
+for (auto& tiednote : chord_)
     {
         if (tiednote.wholes_to_noteoff())
         {
@@ -2716,30 +2683,44 @@ void textmidi::PrintLazyTrack::insert_rests()
 
     // Create a separate bit keyboard for each channel.
     using KeyBoard = bitset<MidiPitchQty>;
-    using ChannelKeyBoards = vector<KeyBoard>;
-    ChannelKeyBoards channel_keyboards(MidiChannelQty);
+    using ChannelKeyboards = vector<KeyBoard>;
+    ChannelKeyboards channel_keyboards(MidiChannelQty);
+    // note there is no dimension in ChannelKeyboards for MIDI port.
 
     // This works on building a copy of events plus added rests
     // Because insereting the rests in situ would invalidate the iterators.
     //
     int64_t rest_start_ticks_accumulated{};
-    bool inrest{false};
+    bool inrest{};
     for (auto delaymsgiter{midi_delay_event_pairs_.cbegin()};
               delaymsgiter != midi_delay_event_pairs_.cend();
             ++delaymsgiter)
     {
+        auto note{dynamic_cast<MidiChannelVoiceNoteEvent*>
+            (delaymsgiter->second.get())};
         auto note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>
             (delaymsgiter->second.get())};
-        if (note_on)
+        auto note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>
+            (delaymsgiter->second.get())};
+        // A note-on with zero velocity is a substitute note-off.
+        const auto thisnoteoff{(note && !note->velocity()) || note_off};
+        const auto thisnoteon {note_on  &&  note->velocity()};
+        if (thisnoteon)
         {
-            if (inrest && (0L < note_on->velocity()))
+            inrest = true;
+            for (auto chkb : channel_keyboards)
+            {
+                inrest &= chkb.none();
+            }
+            channel_keyboards[note->channel() - 1][note->key()] = true;
+            if (inrest)
             {
                 // the rest's duration time is the current event's time - rest_start_ticks_accumulated.
                 const auto rest_ticks{
-                    note_on->ticks_accumulated() - rest_start_ticks_accumulated};
+                    note->ticks_accumulated() - rest_start_ticks_accumulated};
                 // the rest's start time is the current event's time + length.
                 rest_start_ticks_accumulated
-                    = note_on->ticks_accumulated() + note_on->ticks_to_next_event();
+                    = note->ticks_accumulated() + note->ticks_to_next_event();
                 if (rest_ticks)
                 {
                     // Construct a rest pseudo-event.
@@ -2754,77 +2735,40 @@ void textmidi::PrintLazyTrack::insert_rests()
                         rest->wholes_to_next_event(wholes);
                         rest->wholes_to_noteoff(wholes);
                         MidiDelayEventPair rest_pair{0, rest};
-                        new_midi_delay_event_pairs.push_back(rest_pair);
-                        rest_start_ticks_accumulated = note_on->ticks_accumulated()
+                        if (inrest)
+                        {
+                            new_midi_delay_event_pairs.push_back(rest_pair);
+                        }
+                        rest_start_ticks_accumulated = note->ticks_accumulated()
                             + note_on->ticks_to_noteoff();
                     }
                 }
             }
-            channel_keyboards[note_on->channel() - 1][note_on->key()] = true;
-            // add the note-on to the new track event sequence.
+            // add the note event to the new track event sequence.
             new_midi_delay_event_pairs.push_back(*delaymsgiter);
-            // A note-on with zero velocity is a substitute note-off.
-            const auto thisnoteoff{(0L == note_on->velocity())};
-
-            if (thisnoteoff)
-            {
-                // Update channel keyboards.
-                channel_keyboards[note_on->channel() - 1][note_on->key()] = false;
-                if (!inrest)
-                {
-                    // This is a state mamidiiterne.
-                    // We came in during a note, but are now going to check if
-                    // all notes are off.
-                    // That transition triggers a start of a rest.
-
-                    // Check if all notes are off.
-                    inrest = true;
-                    for (auto chkb : channel_keyboards)
-                    {
-                        inrest &= chkb.none();
-                    }
-                    // end update inrest
-
-                    // We transitioned from not-in-a-rest to in-a-rest.
-                    if (inrest)
-                    {
-                        rest_start_ticks_accumulated = note_on->ticks_accumulated();
-                    }
-                }
-            }
         }
         else
         {
-            auto note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>
-                (delaymsgiter->second.get())};
-            if (note_off)
+            if (thisnoteoff)
             {
                 // Update channel keyboards.
-                channel_keyboards[note_off->channel() - 1][note_off->key()] = false;
-                if (!inrest)
+                channel_keyboards[note->channel() - 1][note->key()] = false;
+                // update inrest
+                inrest = true;
+                for (auto chkb : channel_keyboards)
                 {
-                    // This is a state mamidiiterne.
-                    // We came in during a note, but are now going to check if
-                    // all notes are off.
-                    // That transition triggers a start of a rest.
+                    inrest &= chkb.none();
+                }
+                // end update inrest
 
-                    // Check if all notes are off.
-                    inrest = true;
-                    for (auto chkb : channel_keyboards)
-                    {
-                        inrest &= chkb.none();
-                    }
-                    // end update inrest
-
-                    // We transitioned from not-in-a-rest to in-a-rest.
-                    if (inrest)
-                    {
-                        rest_start_ticks_accumulated = note_off->ticks_accumulated();
-                    }
+                // We transitioned from not-in-a-rest to in-a-rest.
+                if (inrest)
+                {
+                    rest_start_ticks_accumulated = note->ticks_accumulated();
                 }
                 new_midi_delay_event_pairs.push_back(*delaymsgiter);
             }
-            else
+            else // not a note-on or a note-off event, hence some other MIDI event
             {
                 // Make a rest pseudo-event.
                 auto rest{make_shared<MidiChannelVoiceNoteRestEvent>
@@ -2849,8 +2793,9 @@ void textmidi::PrintLazyTrack::insert_rests()
                     // this rest is needed for when there are no notes, e.g., just meta events.
                     rest_start_ticks_accumulated
                         = rest->ticks_accumulated() + rest->ticks_to_next_event();
+
                     new_midi_delay_event_pairs.push_back(rest_pair);
-                    inrest = true;
+                    // end update inrest
                 }
             }
         }

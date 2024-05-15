@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.76
+// TextMIDITools Version 1.0.77
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -435,7 +435,7 @@ std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& 
     auto flags{os.flags()};
     auto tr_temp{tr};
     tr_temp.reduce();
-    if (tr_temp > RhythmRational{})
+    //if (tr_temp > RhythmRational{})
     {
         // textmidi has a convention for quickness of typing that
         // a 1/4 note is written 4, or 1/4, or 2/8 etc.

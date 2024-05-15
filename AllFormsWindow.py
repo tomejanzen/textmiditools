@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.76
+# TextMIDITools Version 1.0.77
 # textmidiform.py 1.0
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -258,6 +258,11 @@ class AllFormsWindow(tkinter.Toplevel):
         self.name_entry = tkinter.ttk.Entry(self.frame, textvariable=self.name)
         self.name.set(self.xml_form['name'])
 
+        self.copyright_label = tkinter.ttk.Label(self.frame, text='Copyright')
+        self.copyright = StringVar()
+        self.copyright_entry = tkinter.ttk.Entry(self.frame, textvariable=self.copyright)
+        self.copyright.set(self.xml_form['copyright'])
+
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
         self.len_label = tkinter.ttk.Label(self.frame, text='Len')
@@ -321,6 +326,10 @@ class AllFormsWindow(tkinter.Toplevel):
         self.name_entry.grid(row=the_row, column=1, sticky=NSEW)
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
+        self.copyright_label.grid(row=the_row, column=0, sticky=NSEW)
+        self.copyright_entry.grid(row=the_row, column=1, sticky=NSEW)
+        the_row = the_row + 1
+        self.frame.rowconfigure(index=the_row, weight=1)
         self.len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.len_entry.grid(row=the_row, column=1, sticky=NSEW)
         the_row = the_row + 1
@@ -370,6 +379,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.arrangement_period_entry.grid(row=the_row, column=1, sticky=NSEW)
 
         self.name.trace('w', self.name_callback)
+        self.copyright.trace('w', self.copyright_callback)
         self.len.trace('w', self.len_callback)
         self.min_note_len.trace('w', self.min_note_len_callback)
         self.max_note_len.trace('w', self.max_note_len_callback)
@@ -385,6 +395,9 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def name_callback(self, event, *args):
         self.xml_form['name'] = self.name.get()
+
+    def copyright_callback(self, event, *args):
+        self.xml_form['copyright'] = self.copyright.get()
 
     def len_callback(self, event, *args):
         self.xml_form['len'] = self.len.get()

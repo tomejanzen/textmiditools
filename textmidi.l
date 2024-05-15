@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.76
+** TextMIDITools Version 1.0.77
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -137,10 +137,12 @@ namespace
     // and its ties in and out.
     struct KeyTie
     {
-        KeyTie (string& key_name)
+        KeyTie (string& key_name, uint32_t channel, uint32_t velocity)
             : tie_in_{},
               key_{},
-              tie_out_{}
+              tie_out_{},
+              channel_{channel},
+              velocity_{velocity}
         {
             bool is_delta{};
             int signed_key{keyevent_to_keynumber(key_name,
@@ -164,11 +166,27 @@ namespace
                 key_name.erase(key_name.size() - 1);
             }
         }
+        bool operator==(const KeyTie& keytie) const
+        {
+            return (keytie.key_ == key_) && (keytie.channel_ == channel_);
+        }
 
         bool tie_in_;
         uint32_t key_;
         bool tie_out_;
+        uint32_t channel_;
+        uint32_t velocity_;
     };
+
+    ostream& operator<<(ostream& os, const KeyTie& keytie)
+    {
+        os << boolalpha << setw(5) << keytie.tie_in_ << ' '
+            << keytie.key_ << ' '
+            << setw(5) << keytie.tie_out_ << ' '
+            << keytie.channel_ << ' '
+            << keytie.velocity_;
+        return os;
+    }
 
     //
     // int_to_vec
@@ -422,7 +440,7 @@ namespace lazy
 {
     bool note_off_select{}; // set in main.cc as option
     uint32_t dynamic{64};
-    vector<KeyTie> chord{};
+    list<KeyTie> chord{};
 }
 
 %}
@@ -571,7 +589,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 <LAZY_STATE>LAZY|BRIEF {
   }
 
-<LAZY_STATE>END_LAZY|DETAIL|END_BRIEF {
+<LAZY_STATE,LAZY_NOTE_OR_RHYTHM_STATE>END_LAZY|DETAIL|END_BRIEF {
     BEGIN(DETAIL_STATE);
   }
 
@@ -1466,7 +1484,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     lazy::dynamic = dynamic % 128;
   }
 
-<LAZY_STATE>vel{SPACE}{INTEGER} {
+<LAZY_STATE,LAZY_NOTE_OR_RHYTHM_STATE>vel{SPACE}{INTEGER} {
     string velocity_str(yytext), directive;
     string intstr;
     istringstream iss(velocity_str);
@@ -1486,7 +1504,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     lazy::dynamic = static_cast<uint32_t>(temp_dynamic) % 128;
   }
 
-<LAZY_STATE>chan{SPACE}{INTEGER} {
+<LAZY_STATE,LAZY_NOTE_OR_RHYTHM_STATE>chan{SPACE}{INTEGER} {
     string channel_str(yytext),
            discard;
     uint32_t channel{1U}; // text channels are in [1..16]
@@ -1504,18 +1522,41 @@ DEVICE_ID (ALL_CALL|{BYTE})
     string note_name{};
     istringstream iss(yytext);
     iss >> note_name;
-    KeyTie keytie{note_name};
-
-    // write note event
+    KeyTie keytie{note_name, global_channel & channel_mask, lazy::dynamic};
+    // new note event
     if (!keytie.tie_in_)
     {
         write_delay();
-        (*running_status)((global_channel & channel_mask) | note_on[0], trackchunk);
+        (*running_status)(keytie.channel_ | note_on[0], trackchunk);
         trackchunk.push_back(keytie.key_);
         trackchunk.push_back(lazy::dynamic);
-    /* Recognize chan {channel} */
+        if (ranges::find(lazy::chord, keytie) == lazy::chord.end())
+        {
+            lazy::chord.push_back(keytie);    // save key number in lazy::chord;
+        }
     }
-    lazy::chord.push_back(keytie);    // save key number in lazy::chord;
+    else
+    {
+        auto ktiter{ranges::find(lazy::chord, keytie)}; 
+        if (ktiter != lazy::chord.end())
+        {
+            ktiter->tie_in_ = keytie.tie_in_;
+            // copy the tie_out rather than compare it for matching
+            ktiter->tie_out_ = keytie.tie_out_;
+        } 
+        else
+        {
+            const string errstr{((((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
+                += " Chord note with tie in but was not in previous chord with same channel ")
+                += lexical_cast<string>(keytie.key_)) += ' ') 
+                += BOOST_PP_STRINGIZE(__LINE__))
+                += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
+                += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
+                += '\n'};
+            cerr << errstr;
+        }
+    }
     BEGIN(LAZY_NOTE_OR_RHYTHM_STATE);
   }
 
@@ -1639,13 +1680,14 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // write note offs for each note in the chord with 0 delays
     accum_delay += note_duration;
 
+    list<KeyTie> release_list;
     for (const auto& keytie : lazy::chord)
     {
         if (!keytie.tie_out_)
         {
             write_delay(); // wait the duration of the note
 
-            uint32_t channel{global_channel & channel_mask};
+            uint32_t channel{keytie.channel_};
             const MidiStreamAtom note_cmd{TextMidiFeatures::me()->note_off_select() ? note_off[0] : note_on[0]};
             const auto status_byte{channel | note_cmd};
             (*running_status)(status_byte, trackchunk);
@@ -1654,11 +1696,18 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
             // If we are using a note_off, then use the prevailing dynamic; else 0.
             const MidiStreamAtom velocity{TextMidiFeatures::me()->note_off_select()
-                ? static_cast<MidiStreamAtom>(lazy::dynamic) : note_off_velocity};
+                ? static_cast<MidiStreamAtom>(keytie.velocity_) : note_off_velocity};
             trackchunk.push_back(velocity);
+            release_list.push_back(keytie);
         }
     }
-    lazy::chord.clear();
+    for (auto& keytie : release_list)
+    {
+        const auto kt{keytie};
+        lazy::chord.remove(kt);
+    }
+    release_list.clear();
+
     if (static_cast<double>(TextMidiFeatures::me()->detache()) < total_duration)
     {
         accum_delay += TextMidiFeatures::me()->detache();

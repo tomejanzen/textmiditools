@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.76
+# TextMIDITools Version 1.0.77
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -209,6 +209,7 @@ class XmlForm(tkinter.Tk):
             self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=2, activewidth=2, disabledwidth=2)
 
         self.canvas.create_text(self.win_width / 2, 20, text=self.xml_form_dict['name'], fill=axis_color)
+        self.canvas.create_text(self.win_width / 2, 28, text=self.xml_form_dict['copyright'], fill=axis_color)
 
     def default_melody_probabilities(self):
         # These probabilities are cumulative.
@@ -290,6 +291,7 @@ class XmlForm(tkinter.Tk):
 
     def default_xml_form(self):
         self.xml_form_dict['name'] = 'defaults'
+        self.xml_form_dict['copyright'] = '© '
         self.xml_form_dict['len'] = 600.0
         self.xml_form_dict['min_note_len'] = 0.0
         self.xml_form_dict['max_note_len'] = 2.0
@@ -503,6 +505,7 @@ class XmlForm(tkinter.Tk):
 
     def traverse_xml_form(self):
         self.xml_form_dict['name'] = self.dom.getElementsByTagName('name_')[0].firstChild.data
+        self.xml_form_dict['copyright'] = self.dom.getElementsByTagName('copyright_')[0].firstChild.data
         self.xml_form_dict['len'] = float(self.dom.getElementsByTagName('len_')[0].firstChild.data)
         self.xml_form_dict['min_note_len'] = self.dom.getElementsByTagName('min_note_len_')[0].firstChild.data
         self.xml_form_dict['max_note_len'] = self.dom.getElementsByTagName('max_note_len_')[0].firstChild.data
@@ -556,6 +559,7 @@ class XmlForm(tkinter.Tk):
         # copy voice parts from Voice
 
         self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['copyright'] = self.all_forms_window.xml_form['copyright']
         self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
@@ -609,10 +613,11 @@ class XmlForm(tkinter.Tk):
         xml_form_element = form_document.createElement('xml_form')
         xml_form_element.setAttribute('class_id', '0')
         xml_form_element.setAttribute('tracking_level', '0')
-        xml_form_element.setAttribute('version', '2')
+        xml_form_element.setAttribute('version', '3')
         top.appendChild(xml_form_element)
 
         self.add_text_element(form_document, xml_form_element, 'name')
+        self.add_text_element(form_document, xml_form_element, 'copyright')
         self.add_text_element(form_document, xml_form_element, 'len')
         self.add_text_element(form_document, xml_form_element, 'min_note_len')
         self.add_text_element(form_document, xml_form_element, 'max_note_len')
@@ -764,6 +769,7 @@ class XmlForm(tkinter.Tk):
 
     def redraw_callback(self):
         self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['copyright'] = self.all_forms_window.xml_form['copyright']
         self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']

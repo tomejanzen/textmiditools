@@ -1,3 +1,20 @@
+2024-05-13     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, MusicalForm.{h,cc}, textmidiformedit.py:
+        Add copyright field to xml form file for textmidicgm.
+
+2024-05-13     Thomas E. Janzen <janzentome@gmail.com>
+        * ChangeLog, MidiEvents.cc, MidiEvents.h,
+        RhythmRational.cc, miditext.cc, miditext.gdb, test/chorded.txt,
+        textmidi.l: overhaul miditext --lazy option.  Fix
+        unset pointer usage in that code in MidiEvents ::print.
+
+2024-04-05     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvent.{h,cc}: move ticks_per_whole down into 
+        MidiChannelVoiceNoteEvent; update NoteOffEvent, NoteOnEvent,
+        PressureEvent to refer to the base class.
+        Had been crashing when using note_on for ticks_per_whole
+        when note_on did not exist.
+
 2024-03-31     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{h,cc}, RhythmRational.cc, miditext.{cc,gdb},
         * od.bash, test/README, textmidi.gdb:

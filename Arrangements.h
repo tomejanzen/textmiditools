@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -196,7 +196,7 @@ namespace arrangements
     class ArrangementsShuffle : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsShuffle(int length) 
+        explicit ArrangementsShuffle(int length)
           : ArrangementsInSitu(length), random_dev_(), generator_(random_dev_())
         {
         }

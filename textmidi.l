@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.77
+** TextMIDITools Version 1.0.78
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -180,9 +180,9 @@ namespace
 
     ostream& operator<<(ostream& os, const KeyTie& keytie)
     {
-        os << boolalpha << setw(5) << keytie.tie_in_ << ' '
+        os << boolalpha << (keytie.tie_in_ ? '-' : ' ')  << ' '
             << keytie.key_ << ' '
-            << setw(5) << keytie.tie_out_ << ' '
+            << (keytie.tie_out_ ? '-' : ' ') << ' '
             << keytie.channel_ << ' '
             << keytie.velocity_;
         return os;
@@ -1473,9 +1473,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
     (*running_status)(start_of_sysex[0], trackchunk);
   }
 
-<LAZY_STATE>{DYNAMIC} {
+<LAZY_STATE,LAZY_NOTE_OR_RHYTHM_STATE>{DYNAMIC} {
     string dynamic_str{yytext};
-
     to_lower(dynamic_str);
     // This use of the map must work because we can only
     // be in here if the dynamic marking is one of the ones
@@ -1537,19 +1536,19 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-        auto ktiter{ranges::find(lazy::chord, keytie)}; 
+        auto ktiter{ranges::find(lazy::chord, keytie)};
         if (ktiter != lazy::chord.end())
         {
             ktiter->tie_in_ = keytie.tie_in_;
             // copy the tie_out rather than compare it for matching
             ktiter->tie_out_ = keytie.tie_out_;
-        } 
+        }
         else
         {
             const string errstr{((((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
                 += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Chord note with tie in but was not in previous chord with same channel ")
-                += lexical_cast<string>(keytie.key_)) += ' ') 
+                += lexical_cast<string>(keytie)) += ' ')
                 += BOOST_PP_STRINGIZE(__LINE__))
                 += ' ') += yytext) += " in track ") += lexical_cast<string>(track_counter))
                 += " at beat ") += lexical_cast<string>(total_beats + (accum_delay / global_ticks_per_quarter)))
@@ -1642,7 +1641,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         double num1{1.0},
                num2{1.0};
         iss >> num1;
-    
+
         // a quarter note is "4" or "1/4".  A double whole note must be "2/1".
         const size_t slashi{rhythmsubstr.find('/')};
         if (slashi != rhythmsubstr.npos)
@@ -1695,8 +1694,12 @@ DEVICE_ID (ALL_CALL|{BYTE})
             trackchunk.push_back(keytie.key_ & byte7_mask);
 
             // If we are using a note_off, then use the prevailing dynamic; else 0.
+#if 0
             const MidiStreamAtom velocity{TextMidiFeatures::me()->note_off_select()
                 ? static_cast<MidiStreamAtom>(keytie.velocity_) : note_off_velocity};
+#else
+            const MidiStreamAtom velocity{0};
+#endif
             trackchunk.push_back(velocity);
             release_list.push_back(keytie);
         }
@@ -1704,7 +1707,14 @@ DEVICE_ID (ALL_CALL|{BYTE})
     for (auto& keytie : release_list)
     {
         const auto kt{keytie};
+        const auto ktit{ranges::find(lazy::chord, kt)};
+        if (ktit != lazy::chord.end())
+        {
+            lazy::chord.erase(ktit);
+        }
+#if 0
         lazy::chord.remove(kt);
+#endif
     }
     release_list.clear();
 

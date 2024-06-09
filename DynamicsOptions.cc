@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen
@@ -44,7 +44,7 @@ midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dyna
     if (!dynamics_configuration_file.empty())
     {
         program_options::options_description desc("Allowed dynamics configuration options");
-    
+
         desc.add_options()
          (pppppOpt.c_str(), program_options::value<int>(), pppppTxt)
          ( ppppOpt.c_str(), program_options::value<int>(), ppppTxt)
@@ -64,56 +64,56 @@ midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dyna
         program_options::store(
             program_options::parse_config_file(dynamics_configuration_file.c_str(), desc), var_map);
         program_options::notify(var_map);
-    
+
         string input_filename;
-    
+
         if (var_map.count(pppppOpt))
         {
-            option_map.insert(pair<string_view, int>{pppppOpt, var_map[pppppOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{pppppOpt, var_map[pppppOpt].as<int>()});
         }
         if (var_map.count(ppppOpt))
         {
-            option_map.insert(pair<string_view, int>{ppppOpt, var_map[ppppOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{ppppOpt, var_map[ppppOpt].as<int>()});
         }
         if (var_map.count(pppOpt))
         {
-            option_map.insert(pair<string_view, int>{pppOpt, var_map[pppOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{pppOpt, var_map[pppOpt].as<int>()});
         }
         if (var_map.count(ppOpt))
         {
-            option_map.insert(pair<string_view, int>{ppOpt, var_map[ppOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{ppOpt, var_map[ppOpt].as<int>()});
         }
         if (var_map.count(pOpt))
         {
-            option_map.insert(pair<string_view, int>{pOpt, var_map[pOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{pOpt, var_map[pOpt].as<int>()});
         }
         if (var_map.count(mpOpt))
         {
-            option_map.insert(pair<string_view, int>{mpOpt, var_map[mpOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{mpOpt, var_map[mpOpt].as<int>()});
         }
         if (var_map.count(mfOpt))
         {
-            option_map.insert(pair<string_view, int>{mfOpt, var_map[mfOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{mfOpt, var_map[mfOpt].as<int>()});
         }
         if (var_map.count(forteOpt))
         {
-            option_map.insert(pair<string_view, int>{forteOpt, var_map[forteOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{forteOpt, var_map[forteOpt].as<int>()});
         }
         if (var_map.count(ffOpt))
         {
-            option_map.insert(pair<string_view, int>{ffOpt, var_map[ffOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{ffOpt, var_map[ffOpt].as<int>()});
         }
         if (var_map.count(fffOpt))
         {
-            option_map.insert(pair<string_view, int>{fffOpt, var_map[fffOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{fffOpt, var_map[fffOpt].as<int>()});
         }
         if (var_map.count(ffffOpt))
         {
-            option_map.insert(pair<string_view, int>{ffffOpt, var_map[ffffOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{ffffOpt, var_map[ffffOpt].as<int>()});
         }
         if (var_map.count(fffffOpt))
         {
-            option_map.insert(pair<string_view, int>{fffffOpt, var_map[fffffOpt].as<int>()}); 
+            option_map.insert(pair<string_view, int>{fffffOpt, var_map[fffffOpt].as<int>()});
         }
     }
     return option_map;

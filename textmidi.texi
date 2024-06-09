@@ -1243,6 +1243,41 @@ To make chords, merely add the chord notes before specifying the duration:
 c4 e4 4. d4 f4 8 e4 g4 4. f4 a4 8 g4 b4 4. a4 c5 8 b4 d5 4. c5 e5 8
 @end smallexample
 
+Note that @command{vel} and symbolic dynamics (forte, pp, etc.) are allowed
+between key names in a chord.  In addition, @command{chan} commands
+are allowed between key names in a chord.
+
+Note that if it is desired to apply a different MIDI event, such as a pedal,
+in mid-note in lazy mode, you would tie the notes over the control event,
+which would be given in DETAIL mode:
+@smallexample
+FILEHEADER 1 120 MULTITRACK
+
+STARTTRACK
+TIME_SIGNATURE 4 4 240
+TEMPO 60
+LAZY vel 102 chan 1 G5- G6- 8 
+END_LAZY CONTROL 1 DAMPER 0x00 
+LAZY -G5 -G6 8 
+END_LAZY 
+END_OF_TRACK
+@end smallexample
+
+A rhythm of 0 can be used to permit a control or sysex event, for example,
+to occur immediately after the note-on has been sent.
+@smallexample
+FILEHEADER 1 120 MULTITRACK
+
+STARTTRACK
+TIME_SIGNATURE 4 4 240
+TEMPO 60
+LAZY vel 102 chan 1 G5- G6- 0/1
+END_LAZY CONTROL 1 DAMPER 0x00 
+LAZY -G5 -G6 4 
+END_LAZY 
+END_OF_TRACK
+@end smallexample
+
 @node Rhythm
 @subsubsection Rhythm
 @cindex Rhythm

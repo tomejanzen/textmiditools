@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -39,7 +39,6 @@
 
 namespace textmidi
 {
-
     using KeySignatureMap = std::map<std::pair<std::int32_t, bool>, std::string_view>;
     extern KeySignatureMap key_signature_map;
 
@@ -77,7 +76,7 @@ namespace textmidi
         MidiEventImpl()
           : ticks_accumulated_{},
             ticks_to_next_event_{},
-            ticks_to_next_note_on_{},
+            ticks_to_a_note_start_{},
             wholes_to_next_event_{},
             events_to_next_note_on_{},
             events_to_next_note_stop_{}
@@ -92,8 +91,8 @@ namespace textmidi
         constexpr std::int64_t ticks_to_next_event() const;
         void ticks_to_next_event(std::int64_t );
         // Report the number of ticks before the next note-on.
-        constexpr std::int64_t ticks_to_next_note_on() const;
-        void ticks_to_next_note_on(std::int64_t );
+        constexpr std::int64_t ticks_to_a_note_start() const;
+        void ticks_to_a_note_start(std::int64_t );
         // Report the number of whole notes before the next event.
         constexpr rational::RhythmRational wholes_to_next_event() const;
         void wholes_to_next_event(const rational::RhythmRational& );
@@ -120,7 +119,7 @@ namespace textmidi
         // the data in the class.
         std::int64_t ticks_accumulated_;
         std::int64_t ticks_to_next_event_;
-        std::int64_t ticks_to_next_note_on_;
+        std::int64_t ticks_to_a_note_start_;
         rational::RhythmRational wholes_to_next_event_;
         int events_to_next_note_on_;
         int events_to_next_note_stop_;
@@ -152,8 +151,8 @@ namespace textmidi
         constexpr std::int64_t ticks_to_next_event() const;
         void ticks_to_next_event(std::int64_t );
         // Report the number of ticks before the next note-on.
-        constexpr std::int64_t ticks_to_next_note_on() const;
-        void ticks_to_next_note_on(std::int64_t );
+        constexpr std::int64_t ticks_to_a_note_start() const;
+        void ticks_to_a_note_start(std::int64_t );
         // Report the number of whole notes before the next event.
         constexpr rational::RhythmRational wholes_to_next_event() const;
         void wholes_to_next_event(const rational::RhythmRational& );
@@ -171,10 +170,10 @@ namespace textmidi
 
     std::ostream& operator<<(std::ostream& , const MidiEvent& );
 
-    using MidiDelayEventPair = std::pair<std::int64_t, std::shared_ptr<MidiEvent> >;
-    std::ostream& operator<<(std::ostream& , const MidiDelayEventPair& );
+    using DelayEvent = std::pair<std::int64_t, std::shared_ptr<MidiEvent> >;
+    std::ostream& operator<<(std::ostream& , const DelayEvent& );
 
-    using MidiDelayEventPairs = std::vector<MidiDelayEventPair>;
+    using DelayEvents = std::list<DelayEvent>;
 
     class MidiSysExEvent final : public MidiEvent
     {
@@ -733,9 +732,9 @@ namespace textmidi
         midi::RunningStatusStandard running_status_;
         midi::RunningStatusStandard local_status_;
         midi::MidiStreamAtom channel_;
-        bool operator==(MidiChannelVoiceModeEvent& mcvme) const 
+        bool operator==(MidiChannelVoiceModeEvent& mcvme) const
         {
-            return mcvme.local_status().running_status_value() 
+            return mcvme.local_status().running_status_value()
                 == this->local_status().running_status_value();
         }
     };
@@ -754,7 +753,8 @@ namespace textmidi
             velocity_{},
             key_string_{},
             wholes_to_noteoff_{},
-            prefer_sharp_{prefer_sharp}
+            prefer_sharp_{prefer_sharp},
+            matched_{}
         {
             consume_stream(midiiter);
         }
@@ -766,7 +766,8 @@ namespace textmidi
             velocity_{},
             key_string_{},
             wholes_to_noteoff_{},
-            prefer_sharp_{prefer_sharp}
+            prefer_sharp_{prefer_sharp},
+            matched_{}
         {
         }
         MidiChannelVoiceNoteEvent(const MidiChannelVoiceNoteEvent& ) = default;
@@ -782,6 +783,14 @@ namespace textmidi
         void wholes_to_noteoff(const rational::RhythmRational& );
         rational::RhythmRational wholes_to_noteoff() const;
         constexpr std::uint32_t ticks_per_whole() const;
+        constexpr bool matched() const
+        {
+            return matched_;
+        }
+        void set_matched()
+        {
+            matched_ = true;
+        }
       private:
         void consume_stream(midi::MidiStreamIterator& ) override;
         std::uint32_t ticks_per_whole_;
@@ -790,9 +799,12 @@ namespace textmidi
         std::string key_string_;
         rational::RhythmRational wholes_to_noteoff_;
         std::shared_ptr<bool> prefer_sharp_;
+        bool matched_;
     };
 
     std::ostream& operator<<(std::ostream& , const MidiChannelVoiceNoteEvent& );
+
+    class MidiChannelVoiceNoteOffEvent;
 
     class MidiChannelVoiceNoteOnEvent final : public MidiChannelVoiceNoteEvent
     {
@@ -800,8 +812,7 @@ namespace textmidi
         MidiChannelVoiceNoteOnEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent(running_status, ticks_per_whole, prefer_sharp, midiiter),
             ticks_to_noteoff_{},
-            ticks_past_noteoff_{},
-            wholes_past_noteoff_{}
+            note_off_{}
         {
         }
         MidiChannelVoiceNoteOnEvent(const MidiChannelVoiceNoteOnEvent& ) = default;
@@ -809,17 +820,20 @@ namespace textmidi
         std::ostream& text(std::ostream& ) const;
         void ticks_to_noteoff(std::int64_t );
         constexpr std::int64_t ticks_to_noteoff() const;
-        void ticks_past_noteoff(std::int64_t );
-        constexpr std::int64_t ticks_past_noteoff() const;
-        void wholes_past_noteoff(const rational::RhythmRational& );
-        constexpr rational::RhythmRational wholes_past_noteoff() const;
         static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter,
             midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp, std::uint32_t ticks_per_whole);
+        void note_off(MidiChannelVoiceNoteEvent* note_off)
+        {
+            note_off_ = note_off;
+        }
+        MidiChannelVoiceNoteEvent* note_off()
+        {
+            return note_off_;
+        }
       private:
         std::int64_t ticks_to_noteoff_;
-        std::int64_t ticks_past_noteoff_;
-        rational::RhythmRational wholes_past_noteoff_;
+        MidiChannelVoiceNoteEvent* note_off_; // call use_count() > 0 for validity
     };
 
     std::ostream& operator<<(std::ostream& , const MidiChannelVoiceNoteOnEvent& );
@@ -827,7 +841,7 @@ namespace textmidi
     class MidiChannelVoiceNoteOffEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        MidiChannelVoiceNoteOffEvent(midi::RunningStatusStandard& running_status, 
+        MidiChannelVoiceNoteOffEvent(midi::RunningStatusStandard& running_status,
             std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent{running_status, ticks_per_whole, prefer_sharp, midiiter}
         {
@@ -932,7 +946,7 @@ namespace textmidi
     class MidiChannelVoicePolyphonicKeyPressureEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        MidiChannelVoicePolyphonicKeyPressureEvent(const midi::RunningStatusStandard& running_status, 
+        MidiChannelVoicePolyphonicKeyPressureEvent(const midi::RunningStatusStandard& running_status,
             std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent{running_status, ticks_per_whole, prefer_sharp, midiiter}
         {
@@ -973,7 +987,7 @@ namespace textmidi
             prefer_sharp_{std::make_shared<bool>()}
         {
         }
-        MidiDelayEventPair operator()(midi::MidiStreamIterator& midiiter, std::int64_t& ticks_accumulated_);
+        DelayEvent operator()(midi::MidiStreamIterator& midiiter, std::int64_t& ticks_accumulated_);
       private:
         const std::uint32_t ticks_per_whole_;
         midi::MidiStreamIterator midi_end_;
@@ -986,38 +1000,35 @@ namespace textmidi
     {
       public:
         PrintLazyTrack(
-            MidiDelayEventPairs& midi_delay_event_pairs,
+            DelayEvents& delay_events,
             const rational::RhythmRational quantum,
             std::uint32_t ticksperquarter)
           : channel_{},
-            dynamic_{64},
+            dynamic_{128},
             lazy_{},
             chord_{},
-            midi_delay_event_pairs_{midi_delay_event_pairs},
+            delay_events_{delay_events},
             quantum_{quantum},
             ticksperquarter_{ticksperquarter},
             prefer_sharp_{std::make_shared<bool>()},
             running_status_{},
-            wholes_to_last_event_{}
+            wholes_to_last_event_{},
+            channel_keyboards_(midi::MidiChannelQty, KeyBoard(midi::MidiPitchQty, 0))
         {
-            ticks_of_note_on();
+            ticks_to_note_stop();
             ticks_to_next_event();
-            ticks_to_next_note_on();
+            ticks_to_a_note_start();
             insert_rests();
-            wholes_of_note_on();
-            wholes_to_next_event();
         }
       private:
-        void print(std::ostream& , MidiDelayEventPair& );
-        void ticks_of_note_on();
+        void print(std::ostream& , DelayEvent& );
+        void ticks_to_note_stop();
         void ticks_to_next_event();
-        void ticks_to_next_note_on();
+        void ticks_to_a_note_start();
         //
         // traverse the list of MIDI events and insert rest events
         // representing the delay after each event when there is no sounding note.
         void insert_rests();
-        void wholes_of_note_on();
-        void wholes_to_next_event();
         rational::RhythmRational wholes_to_last_event() const
         {
             return wholes_to_last_event_;
@@ -1026,18 +1037,23 @@ namespace textmidi
         {
             wholes_to_last_event_ = rr;
         }
+        using KeyBoard = std::vector<int>;
+        using ChannelKeyboards = std::vector<KeyBoard>;
+
+        bool is_in_rest() const;
 
         midi::MidiStreamAtom channel_;
         int dynamic_;
         bool lazy_;
         std::string lazy_string(bool lazy);
         std::list<MidiChannelVoiceNoteOnEvent> chord_;
-        MidiDelayEventPairs& midi_delay_event_pairs_;
+        DelayEvents& delay_events_;
         rational::RhythmRational quantum_;
         std::uint32_t ticksperquarter_;
         std::shared_ptr<bool> prefer_sharp_;
         midi::RunningStatusStandard running_status_;
         rational::RhythmRational wholes_to_last_event_;
+        ChannelKeyboards channel_keyboards_;
 
         friend std::ostream& operator<<(std::ostream&, PrintLazyTrack& );
     };

@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
-// miditext Version 1.0.77
+// miditext Version 1.0.78
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -109,15 +109,13 @@ namespace
     {
       public:
         ConvertTrack(StreamLengthPair stream_length_pair,
-            MidiDelayEventPairs& message_pairs,
+            DelayEvents& message_pairs,
             uint32_t ticks_per_whole, RhythmRational quantum)
           : stream_length_pair_{stream_length_pair},
             message_pairs_{message_pairs},
             ticks_per_whole_{ticks_per_whole},
             quantum_{quantum}
         {
-            const auto bytes_per_event{3}; // observed is around 3.3 bytes/event
-            message_pairs_.reserve(stream_length_pair.second / bytes_per_event);
         }
         void operator()()
         {
@@ -125,7 +123,7 @@ namespace
             const auto midiend{stream_length_pair_.first + stream_length_pair_.second};
 
             MidiEventFactory midi_event_factory{midiend, ticks_per_whole_};
-            MidiDelayEventPair midi_delay_msg_pair;
+            DelayEvent midi_delay_msg_pair;
             int64_t ticks_accumulated{};
 
             do
@@ -138,9 +136,9 @@ namespace
         }
      private:
         const StreamLengthPair stream_length_pair_;
-        MidiDelayEventPairs& message_pairs_;
+        DelayEvents& message_pairs_;
         const uint32_t ticks_per_whole_;
-        const RhythmRational& quantum_;
+        const RhythmRational quantum_;
     };
  }
 
@@ -179,7 +177,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.77\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.78\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
         cout << logstr;
@@ -188,7 +186,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.77\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.78\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -256,7 +254,7 @@ int main(int argc, char *argv[])
         if (var_map.count(DynamicsConfigurationOpt)) [[unlikely]]
         {
             dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
-        } 
+        }
         midi::dynamics_map.reset(new midi::NumStringMap<int>{textmidi::read_dynamics_configuration(dynamics_configuration_file)});
     }
 
@@ -274,7 +272,7 @@ int main(int argc, char *argv[])
               case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
                   textmidi::rational::print_rhythm.reset(new PrintRhythmSimpleContinuedFraction);
                   break;
-            } 
+            }
         }
     }
 
@@ -359,7 +357,7 @@ int main(int argc, char *argv[])
 
     vector<StreamLengthPair> stream_length_pairs{};
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
-    vector<MidiDelayEventPairs> midi_delay_event_tracks(stream_length_pairs.size());
+    vector<DelayEvents> midi_delay_event_tracks(stream_length_pairs.size());
 
 #undef DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
@@ -413,13 +411,13 @@ int main(int argc, char *argv[])
             // whole notes and their musical ratios will have low divisors.
             const set<int64_t> musical_divisors{1, 2, 4, 6, 8, 12, 16};
             const auto ticks_per_whole{QuartersPerWhole * ticksperquarter};
-            zero_rhythms_count += ranges::count_if(mdet, [](MidiDelayEventPair mde) { return !mde.first; } );
+            zero_rhythms_count += ranges::count_if(mdet, [](DelayEvent mde) { return !mde.first; } );
             rigid_rhythms_count += ranges::count_if(mdet,
-                [ticks_per_whole, musical_divisors](MidiDelayEventPair mde) {
+                [ticks_per_whole, musical_divisors](DelayEvent mde) {
                 const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole)};
                 return musical_divisors.contains(rr.denominator()); } );
             non_rigid_rhythms_count += ranges::count_if(mdet,
-                [ticks_per_whole, musical_divisors](MidiDelayEventPair mde) {
+                [ticks_per_whole, musical_divisors](DelayEvent mde) {
                 const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole)};
                 return !musical_divisors.contains(rr.denominator()); } );
         }
@@ -430,7 +428,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            ranges::copy(mdet, ostream_iterator<MidiDelayEventPair>(text_filestr, "\n"));
+            ranges::copy(mdet, ostream_iterator<DelayEvent>(text_filestr, "\n"));
         }
         ++i;
     }

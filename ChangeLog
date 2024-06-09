@@ -1,3 +1,11 @@
+2024-06-08     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{cc,h}, miditext.cc, textmidi.l etc:
+        make miditext --lazy work better when there are 
+        non-note events in the middle of note lifetimes.
+        Reordering of events at the same tick time is allowed.
+        This means that roundtrip tests might fail.
+        Enlarge tokensizer to permit mid-chord dynamics and chan.
+
 2024-05-13     Thomas E. Janzen <janzentome@gmail.com>
         * AllFormsWindow.py, MusicalForm.{h,cc}, textmidiformedit.py:
         Add copyright field to xml form file for textmidicgm.

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -72,7 +72,7 @@ namespace smus
         static void flush();
         virtual std::string textmidi() = 0;
         virtual std::string textmidi_tempo() = 0;
-        // Rule of 5: Abstract base classes with virtual d-tor should get 
+        // Rule of 5: Abstract base classes with virtual d-tor should get
         // defaults.
         SmusTrackEventBase(const SmusTrackEventBase& ) = default;
         SmusTrackEventBase(SmusTrackEventBase&& ) = default;

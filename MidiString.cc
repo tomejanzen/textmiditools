@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -135,7 +135,7 @@ void strip_quotes(string& str)
             {
                 str.erase(0, 1);
             }
-    
+
             if (str.size() >= 2)
             {
                 // if a non-escape double quote at end

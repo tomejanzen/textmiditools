@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -420,7 +420,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     }
 
     time_t tt{};
-    time_t tt2{}; 
+    time_t tt2{};
     tt2 = std::time(&tt);
     struct std::tm time_fields{};
     struct std::tm *time_fields_ptr{};
@@ -492,7 +492,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     voices_.resize(ri() % MaxRandomVoiceQty + 1);
 
     scale_.clear();
-    ranges::transform(scale_strs[ri() % scale_strs.size()], back_inserter(scale_), 
+    ranges::transform(scale_strs[ri() % scale_strs.size()], back_inserter(scale_),
         [](const string_view& strv) { return string{strv.data(), strv.length()}; } );
     vector<int> programs{};
     if (GeneralMIDIGroup::All == static_cast<GeneralMIDIGroup>(instrument_flags))

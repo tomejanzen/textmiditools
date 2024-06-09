@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.77
+// TextMIDITools Version 1.0.78
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -89,7 +89,7 @@ namespace textmidi
             return this->note_off_select_;
         }
 
-        bool verbose() const 
+        bool verbose() const
         {
             return this->verbose_;
         }

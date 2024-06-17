@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.78
+// TextMIDITools Version 1.0.79
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -175,17 +175,10 @@ int textmidi::MidiEvent::events_to_next_note_on() const
 {
     return midi_event_impl_.events_to_next_note_on();
 }
-int textmidi::MidiEvent::events_to_next_note_stop() const
-{
-    return midi_event_impl_.events_to_next_note_stop();
-}
+
 void textmidi::MidiEvent::events_to_next_note_on(int events_to_next_note_on)
 {
     midi_event_impl_.events_to_next_note_on(events_to_next_note_on);
-}
-void textmidi::MidiEvent::events_to_next_note_stop(int events_to_next_note_stop)
-{
-    midi_event_impl_.events_to_next_note_stop(events_to_next_note_stop);
 }
 
 void textmidi::MidiEvent::wholes_to_next_event(
@@ -2293,6 +2286,7 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
             // corresponding note-off or note-on with velocity 0
             // that matches the current note-on.
             auto delay_event_iter2{delay_event_iter};
+            // go to next event
             ++delay_event_iter2;
             // Look from the next event to the end-of-track.
             for ( ; (delay_event_iter2 != delay_events_.end())
@@ -2302,10 +2296,12 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
                 // If the delay is finite then this is not at the current chord.
                 auto me2{delay_event_iter2->second.get()};
                 auto note2{dynamic_cast<MidiChannelVoiceNoteEvent*>(me2)};
-                auto note_on_zero{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note2)};
-                if (note_on_zero)
+                auto note_on2{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note2)};
+                auto note_off2{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(note2)};
+                auto note_poly_key_pressure2{dynamic_cast<MidiChannelVoicePolyphonicKeyPressureEvent*>(note2)};
+                if (note_on2)
                 {
-                    if (!note_on_zero->velocity() && (*note == *note2))
+                    if (!note_on2->velocity() && (*note == *note2) && !note_poly_key_pressure2)
                     {
                         // We have a note-on of velocity zero that is an ersatz note-off
                         // that has not been matched yet but has the same key and channel.
@@ -2324,8 +2320,7 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
                 }
                 else // handle a note-off
                 {
-                    auto note_off{note2};
-                    if (note_off)
+                    if (note_off2 && !note_poly_key_pressure2)
                     {
                         if ((*note2 == *note) && !note2->matched())
                         {
@@ -2336,7 +2331,7 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
                             note_on->wholes_to_noteoff(
                                 rational::snap(ratio_to_note_off, quantum_));
                             note->set_matched();
-                            note_off->set_matched();
+                            note_off2->set_matched();
                             break;
                         }
                     }
@@ -2353,6 +2348,12 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
                         }
                     }
                 }
+            }
+            if (note_on->ticks_to_noteoff() == std::numeric_limits<std::int64_t>().max())
+            {
+                cerr << "no noteoff found, channel: "
+                     << static_cast<int>(note->channel()) << " key number: "
+                     << static_cast<int>(note->key()) << '\n';
             }
         }
     }
@@ -2434,6 +2435,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
     int64_t rest_ticks{};
     auto me{mdep.second.get()};
     auto note{dynamic_cast<MidiChannelVoiceNoteEvent*>(me)};
+    auto note_poly_key_pressure{dynamic_cast<MidiChannelVoicePolyphonicKeyPressureEvent*>(note)};
     // Define a function that determines if wholes_to_noteoff == 0.
     // A NoteOn with velocity == 0 is an ersatz note off.
     // If this is full NoteOn:
@@ -2441,6 +2443,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
     {
         auto note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(mdep.second.get())};
         auto note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(mdep.second.get())};
+        auto note_poly_key_pressure{dynamic_cast<MidiChannelVoicePolyphonicKeyPressureEvent*>(note)};
         // Save the ticks of the start time of the new note.
         const RhythmRational wholes_to_event{mdep.second->ticks_to_next_event(), note->ticks_per_whole()};
         // If this is a new note with a non-zero velocity:
@@ -2453,34 +2456,38 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
         {
             // Test note_on before note->velocity using short-circuited evaluation.
             // not a note event but could be a rest or poly pressure which are note events.
-            if (!(note_off || (note_on && (note->velocity() == 0))))
+            if (!note_poly_key_pressure)
             {
-                const auto rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mdep.second.get())};
-                if (rest)
+                if (!(note_off || (note_on && (note->velocity() == 0))))
                 {
-                    RhythmRational duration{rest->wholes_to_next_event()};
-                    duration.reduce();
-                    if (duration > RhythmRational{})
+                    const auto rest{dynamic_cast<MidiChannelVoiceNoteRestEvent*>(mdep.second.get())};
+                    if (rest)
                     {
-                        os << lazy_string(true);
-                        os << rest->key_string() << ' ';
-                        (*print_rhythm)(os, duration);
-                        os << '\n';
+                        RhythmRational duration{rest->wholes_to_next_event()};
+                        duration.reduce();
+                        if (duration > RhythmRational{})
+                        {
+                            os << lazy_string(true);
+                            os << rest->key_string() << ' ';
+                            (*print_rhythm)(os, duration);
+                            os << '\n';
+                        }
+                        rest_ticks = rest->ticks_to_next_event();
                     }
-                    rest_ticks = rest->ticks_to_next_event();
+                    else // poly key pressure (derived from NoteEvent) should land here
+                         // along with all non-note events.
+                    {
+                        os << lazy_string(false);
+                        os << *mdep.second << '\n';
+                    }
                 }
                 else
                 {
-                    os << lazy_string(false);
-                    os << *mdep.second << '\n';
-                }
-            }
-            else
-            {
-                auto it{ranges::find(chord_, *note)};
-                if (it != chord_.end())
-                {
-                    chord_.erase(it);
+                    auto it{ranges::find(chord_, *note)};
+                    if (it != chord_.end())
+                    {
+                        chord_.erase(it);
+                    }
                 }
             }
         }
@@ -2512,7 +2519,6 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
     {
         auto chord_iter{chord_.begin()};
         {
-
             const auto now{me->ticks_accumulated() + rest_ticks}; // timestamp of the current event.
 
             // Copy the MIDI events that that have ticks_to_next_event after now.
@@ -2522,14 +2528,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
                 { return ((eachme.ticks_accumulated() + eachme.ticks_to_next_event()) > now); } );
             // From events with ticks_to_next event that is after now,
             // Find the chord note with the smallest ticks_to_next_event.
-            auto min_it{ranges::min_element(notes_with_next_event_past_now,
-                [](const MidiEvent& eachme, const MidiEvent& result)
-                { return (eachme.ticks_accumulated() + eachme.ticks_to_next_event())
-                       < (result.ticks_accumulated() + result.ticks_to_next_event()) ; } ) };
 
-            auto min_no{ranges::min_element(chord_, [](const MidiChannelVoiceNoteOnEvent& eachme, const MidiChannelVoiceNoteOnEvent& result)
-                { return (eachme.ticks_accumulated() + eachme.ticks_to_noteoff())
-                       < (result.ticks_accumulated() + result.ticks_to_noteoff()) ; } ) };
             // Print out the chord_
             // if it is not the case that the next event is a note_on starting at the same time.
             // i.e., if the next note starts at the same time and is the next event...
@@ -2553,7 +2552,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
                         os << "chan " << static_cast<int>(channel_) << ' ';
                     }
                     // If the tied note started earlier, then tie it in from the previous chord.
-                    if ((tied.ticks_accumulated() < now) || !note)
+                    if ((tied.ticks_accumulated() < now) || (!note && !note_poly_key_pressure))
                     {
                         os << '-';
                     }
@@ -2609,8 +2608,6 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
             }
         }
     }
-
-
 
     for (auto& tiednote : chord_)
     {
@@ -2670,9 +2667,10 @@ void textmidi::PrintLazyTrack::insert_rests()
         auto note{dynamic_cast<MidiChannelVoiceNoteEvent*>(me)};
         auto note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note)};
         auto note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(note)};
+        auto note_poly_key_pressure{dynamic_cast<MidiChannelVoicePolyphonicKeyPressureEvent*>(note)};
         // A note-on with zero velocity is a substitute note-off.
-        const auto is_noteoff{(note && !note->velocity()) || note_off};
-        const auto is_noteon {note_on  &&  note->velocity()};
+        const auto is_noteoff{(note_on && !note->velocity()) || note_off};
+        const auto is_noteon { note_on &&  note->velocity()};
 
         if (is_in_rest())
         {

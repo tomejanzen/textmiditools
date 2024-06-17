@@ -1,3 +1,12 @@
+2024-06-016     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{cc,h}: fix bug in PrintLazyTrack::ticks_to_note_stop()
+        that did not sufficiently distinguish an actuall NoteOff.
+        This caused a PolyphonePressure event, which is derived from NoteEvent,
+        to be mistaken for a NoteOff event.
+        Fix other mistakes of identification that are due to use of
+        dynamic_cast to reveal whether an event is a note_on/off/poly_pressure.
+        * textmidi.l: Handle global_channel to only be set from LAZY notes.
+
 2024-06-08     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{cc,h}, miditext.cc, textmidi.l etc:
         make miditext --lazy work better when there are 

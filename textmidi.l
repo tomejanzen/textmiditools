@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.78
+** TextMIDITools Version 1.0.79
 ** Copyright © 2023 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -284,7 +284,7 @@ namespace
     // channel_1_to_0
     // transforms a textmidi value (usu. channel or program) in (1..16)
     // to a MIDI binary channel in (0..15).
-    void channel_1_to_0(uint32_t& channel)
+    void channel_1_to_0(uint32_t& channel, bool lazy = false)
     {
         if (0 == channel)
         {
@@ -297,7 +297,10 @@ namespace
         {
             channel = (((channel > 0) ? (channel - 1) : channel) & channel_mask);
         }
-        global_channel = channel;
+        if (lazy)
+        {
+            global_channel = channel;
+        }
     }
 
     uint32_t delay_and_update_total_ticks(double thenumerator,
@@ -1509,7 +1512,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     uint32_t channel{1U}; // text channels are in [1..16]
     istringstream iss(channel_str);
     iss >> discard >> channel;
-    channel_1_to_0(channel);
+    channel_1_to_0(channel, true);
 
     if (running_status->channel() != global_channel)
     {

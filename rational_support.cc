@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.78
+// TextMIDITools Version 1.0.79
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>

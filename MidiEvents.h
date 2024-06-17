@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.78
+// TextMIDITools Version 1.0.79
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -78,8 +78,7 @@ namespace textmidi
             ticks_to_next_event_{},
             ticks_to_a_note_start_{},
             wholes_to_next_event_{},
-            events_to_next_note_on_{},
-            events_to_next_note_stop_{}
+            events_to_next_note_on_{}
         {
         }
 
@@ -101,17 +100,9 @@ namespace textmidi
         {
             return events_to_next_note_on_;
         }
-        int events_to_next_note_stop() const
-        {
-            return events_to_next_note_stop_;
-        }
         void events_to_next_note_on(int events_to_next_note_on)
         {
             events_to_next_note_on_ = events_to_next_note_on;
-        }
-        void events_to_next_note_stop(int events_to_next_note_stop)
-        {
-            events_to_next_note_stop_ = events_to_next_note_stop;
         }
       private:
         //
@@ -122,7 +113,6 @@ namespace textmidi
         std::int64_t ticks_to_a_note_start_;
         rational::RhythmRational wholes_to_next_event_;
         int events_to_next_note_on_;
-        int events_to_next_note_stop_;
     };
 
     class MidiEvent : MidiEventABC
@@ -157,9 +147,7 @@ namespace textmidi
         constexpr rational::RhythmRational wholes_to_next_event() const;
         void wholes_to_next_event(const rational::RhythmRational& );
         int events_to_next_note_on() const;
-        int events_to_next_note_stop() const;
         void events_to_next_note_on(int events_to_next_note_on);
-        void events_to_next_note_stop(int events_to_next_note_stop);
       private:
         MidiEventImpl midi_event_impl_;
         //
@@ -811,7 +799,7 @@ namespace textmidi
       public:
         MidiChannelVoiceNoteOnEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
           : MidiChannelVoiceNoteEvent(running_status, ticks_per_whole, prefer_sharp, midiiter),
-            ticks_to_noteoff_{},
+            ticks_to_noteoff_{std::numeric_limits<std::int64_t>().max()},
             note_off_{}
         {
         }

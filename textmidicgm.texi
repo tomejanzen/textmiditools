@@ -199,7 +199,7 @@ graphical program as AlgoRhythms was.
 textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
  @var{text_form_file}|
 @b{@minus{}x}|@b{@minus{}@minus{}xmlform} @var{xml_form_file}
-[@b{@minus{}r}|@b{@minus{}@minus{}update}]
+[@b{@minus{}u}|@b{@minus{}@minus{}update}]
 [@b{@minus{}r}|@b{@minus{}@minus{}random}]
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}]
 [@b{@minus{}i}|@b{@minus{}@minus{}instruments} @lbracechar{}piano | chromaticpercussion | organ | guitar | bass | strings | ensemble | brass
@@ -603,6 +603,10 @@ a traditionally-composed work in 1976/1977, and again in 1982.
 It was automated by the AlgoRhythms program distributed as open-source
 software for the Commodore  Amiga , which was described in a paper
 listed in the Bibliography.
+
+Note that a hard limit of 100,000 note events has been added to avoid
+filling a disk because selections produce notes of short length with
+a static rhythm mean.
 
 @command{textmidicgm} does not model musical melody, meter, harmony, or
 traditional forms such as sonata form.

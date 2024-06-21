@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.79
+// TextMIDITools Version 1.0.80
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -317,7 +317,6 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 
     vector<vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
-
     for (auto& lts : leaders_topo_sort)
     {
         // loop over the list of voice indices
@@ -329,7 +328,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow_) [[likely]]
             {
-                while (track.the_next_time() < total_duration)
+                while ((track.the_next_time() < total_duration) && (track_note_events.size() < 100000))
                 {
                     auto scramble_index{track.the_next_time() / track_scramble_.period_};
                     scramble_index = ((scramble_index < static_cast<long int>(track_scramble_sequences.size()))
@@ -665,7 +664,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     textmidi_str.clear();
     ((((((textmidi_str += "STARTTRACK\nTIME_SIGNATURE 4 4 ") += lexical_cast<string>(TicksPerQuarter))
         += "\nTEMPO ") += lexical_cast<string>(TempoBeatsPerMinute))
-        += "\nKEY_SIGNATURE C\nTEXT CREATED BY TEXTMIDICGM BY THOMAS E. JANZEN\nTRACK ")
+        += "\nKEY_SIGNATURE C\nTEXT Computer-generated music from the textmidicgm software\nTRACK ")
         += xml_form.name()) += "\nLAZY\n";
     textmidi_file << textmidi_str;
     for (TicksDuration aTime(0); aTime < maxTime; aTime += TicksDuration(4 * TicksPerQuarter))

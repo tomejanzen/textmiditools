@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.79
+# TextMIDITools Version 1.0.80
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -26,7 +26,7 @@ class XmlForm(tkinter.Tk):
     xml_form_dict = {}
     twopi = 2.0 * math.pi
     the_filename = 'Untitled'
-    def __init__(self):
+    def __init__(self, filename):
         super().__init__()
         self.default_xml_form()
         self.all_forms_window = AllFormsWindow(self.xml_form_dict)
@@ -55,6 +55,11 @@ class XmlForm(tkinter.Tk):
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=2, weight=1)
         self.geometry('1000x600+435+50')
+
+        if (filename != ''):
+            self.install_file(filename)
+            self.voice_window.install_xml_form(self.xml_form_dict)
+            self.all_forms_window.install_xml_form(self.xml_form_dict)
 
     def install_file(self, afilename):
         self.the_filename = afilename
@@ -209,7 +214,7 @@ class XmlForm(tkinter.Tk):
             self.canvas.create_line(0, y_midline - 0.5 * y_real_estate, self.win_width, y_midline - 0.5 * y_real_estate, fill=axis_color, dash='.', width=2, activewidth=2, disabledwidth=2)
 
         self.canvas.create_text(self.win_width / 2, 20, text=self.xml_form_dict['name'], fill=axis_color)
-        self.canvas.create_text(self.win_width / 2, 28, text=self.xml_form_dict['copyright'], fill=axis_color)
+        self.canvas.create_text(self.win_width / 2, 32, text=self.xml_form_dict['copyright'], fill=axis_color)
 
     def default_melody_probabilities(self):
         # These probabilities are cumulative.
@@ -291,7 +296,7 @@ class XmlForm(tkinter.Tk):
 
     def default_xml_form(self):
         self.xml_form_dict['name'] = 'defaults'
-        self.xml_form_dict['copyright'] = '© '
+        self.xml_form_dict['copyright'] = 'copyright unspecified'
         self.xml_form_dict['len'] = 600.0
         self.xml_form_dict['min_note_len'] = 0.0
         self.xml_form_dict['max_note_len'] = 2.0
@@ -479,17 +484,24 @@ class XmlForm(tkinter.Tk):
             interval_node = follower_node.getElementsByTagName('interval_')[0]
             interval = interval_node.firstChild.data
             follower_dict['interval'] = int(interval)
-            delay_node = follower_node.getElementsByTagName('delay_')[0]
-            numerator_node = delay_node.getElementsByTagName('numerator_')[0]
-            numerator = numerator_node.firstChild.data
-            denominator_node = delay_node.getElementsByTagName('denominator_')[0]
-            denominator = denominator_node.firstChild.data
+
             delay_dict = {}
-            delay_dict['numerator'] = numerator
-            delay_dict['denominator'] = denominator
+            if (int(self.dom.getElementsByTagName('follower_')[0].getAttribute('version')) >= 2):
+                delay_node = follower_node.getElementsByTagName('delay_')[0]
+                numerator_node = delay_node.getElementsByTagName('numerator_')[0]
+                numerator = numerator_node.firstChild.data
+                denominator_node = delay_node.getElementsByTagName('denominator_')[0]
+                denominator = denominator_node.firstChild.data
+                delay_dict['numerator'] = numerator
+                delay_dict['denominator'] = denominator
+                follower_dict['inversion'] = follower_node.getElementsByTagName('inversion_')[0].firstChild.data
+                follower_dict['retrograde'] = follower_node.getElementsByTagName('retrograde_')[0].firstChild.data
+            else:
+                delay_dict['numerator'] = '0'
+                delay_dict['denominator'] = '1'
+                follower_dict['inversion'] = '0'
+                follower_dict['retrograde'] = '0'
             follower_dict['delay'] = delay_dict
-            follower_dict['inversion'] = follower_node.getElementsByTagName('inversion_')[0].firstChild.data
-            follower_dict['retrograde'] = follower_node.getElementsByTagName('retrograde_')[0].firstChild.data
             voice_dict['follower'] = follower_dict
             voice_list.append(voice_dict)
 
@@ -504,9 +516,12 @@ class XmlForm(tkinter.Tk):
         return arrangement_definition_dict
 
     def traverse_xml_form(self):
-        self.xml_form_dict['name'] = self.dom.getElementsByTagName('name_')[0].firstChild.data
-        self.xml_form_dict['copyright'] = self.dom.getElementsByTagName('copyright_')[0].firstChild.data
-        self.xml_form_dict['len'] = float(self.dom.getElementsByTagName('len_')[0].firstChild.data)
+        self.xml_form_dict['name']         = self.dom.getElementsByTagName('name_')[0].firstChild.data
+        if (int(self.dom.getElementsByTagName('xml_form')[0].getAttribute('version')) >= 3):
+            self.xml_form_dict['copyright']    = self.dom.getElementsByTagName('copyright_')[0].firstChild.data
+        else:
+            self.xml_form_dict['copyright']    = 'copyright unspecified'
+        self.xml_form_dict['len']    = float(self.dom.getElementsByTagName('len_')[0].firstChild.data)
         self.xml_form_dict['min_note_len'] = self.dom.getElementsByTagName('min_note_len_')[0].firstChild.data
         self.xml_form_dict['max_note_len'] = self.dom.getElementsByTagName('max_note_len_')[0].firstChild.data
 
@@ -519,7 +534,10 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['dynamic_form'] = self.traverse_dynamic_form(self.dom.getElementsByTagName('dynamic_form_')[0])
         self.xml_form_dict['texture_form'] = self.traverse_texture_form(self.dom.getElementsByTagName('texture_form_')[0])
         self.xml_form_dict['voices'] = self.traverse_voices(self.dom.getElementsByTagName('voices_')[0])
-        self.xml_form_dict['arrangement_definition'] = self.traverse_arrangement_definition(self.dom.getElementsByTagName('arrangement_definition_')[0])
+        if (int(self.dom.getElementsByTagName('xml_form')[0].getAttribute('version')) >= 2):
+            self.xml_form_dict['arrangement_definition'] = self.traverse_arrangement_definition(self.dom.getElementsByTagName('arrangement_definition_')[0])
+        else:
+            self.xml_form_dict['arrangement_definition'] = self.default_arrangement_definition()
 
     def postscript_callback(self):
         afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.ps', initialfile = self.all_forms_window.xml_form['name'], initialdir = '.',title = 'Save Postscript File', filetypes=(('ps files','*.ps'),('all files','*.*')))
@@ -553,14 +571,14 @@ class XmlForm(tkinter.Tk):
         self.title('Form Plot')
 
     def save_callback(self):
-        afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.form.xml', initialfile = self.all_forms_window.xml_form['name'], initialdir = '.', title = 'Select XML Form File', filetypes=(('xml files','*.xml'),('all files','*.*')))
+        afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.xml', initialfile = self.all_forms_window.xml_form['name'], initialdir = '.', title = 'Select XML Form File', filetypes=(('xml files','*.xml'),('all files','*.*')))
         dom_impl = getDOMImplementation()
         # copy form parts of xml_form_dict from AllForms
         # copy voice parts from Voice
 
-        self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['name']      = self.all_forms_window.xml_form['name']
         self.xml_form_dict['copyright'] = self.all_forms_window.xml_form['copyright']
-        self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
+        self.xml_form_dict['len']       = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
         # scale
@@ -768,8 +786,8 @@ class XmlForm(tkinter.Tk):
         parent.appendChild(any_element)
 
     def redraw_callback(self):
-        self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
-        self.xml_form_dict['copyright'] = self.all_forms_window.xml_form['copyright']
+        self.xml_form_dict['name']         = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['copyright']    = self.all_forms_window.xml_form['copyright']
         self.xml_form_dict['len'] = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
@@ -820,12 +838,12 @@ class XmlForm(tkinter.Tk):
         about_window = tkinter.Text(about_top)
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
-        about_window.insert('1.0', 'textmidiformedit musical form editor by Thomas E. Janzen\n2021\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
+        about_window.insert('1.0', 'TextMIDITools Version 1.0.80\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
         about_window['state'] = 'disabled'
         about_window.focus()
 
-def textmidiformedit():
-    xmlform_window = XmlForm()
+def textmidiformedit(filename):
+    xmlform_window = XmlForm(filename)
     xmlform_window.frame.grid(sticky='we', row=0, column=0)
     xmlform_window.frame.rowconfigure(index=0, weight=1)
     xmlform_window.frame.columnconfigure(index=0, weight=1)
@@ -833,5 +851,9 @@ def textmidiformedit():
     xmlform_window.mainloop()
 
 if __name__ == '__main__':
-    textmidiformedit()
+    if (len(sys.argv) > 1):
+        filename = sys.argv[1]
+    else:
+        filename = ''
+    textmidiformedit(filename)
 

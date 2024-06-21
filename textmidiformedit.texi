@@ -92,6 +92,12 @@ where it is found (after unpacking the archive for TextMIDITools) and invoke it:
 @smallexample
 ./textmidiformedit.py
 @end smallexample
+You may specify a form file to be edited on the command line:
+@smallexample
+./textmidiformedit.py symphony.xml
+@end smallexample
+or open a form file using the menus.
+
 If you downloaded textmidiformedit from pypi.org, or installed it in an equivalent way,
 you can use it as a python package:
 @smallexample

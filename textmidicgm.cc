@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.79
+// TextMIDITools Version 1.0.80
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
         ((VersionOpt             + ",V").c_str(),                                                             VersionTxt)
         ((FormOpt                + ",f").c_str(), program_options::value<string>(),                              FormTxt)
         ((XML_FormOpt            + ",x").c_str(), program_options::value<string>(),                          XML_FormTxt)
-        ((XML_UpdateOpt          + ",x").c_str(),                                                          XML_UpdateTxt)
+        ((XML_UpdateOpt          + ",u").c_str(),                                                          XML_UpdateTxt)
         ((AnswerOpt              + ",a").c_str(),                                                              AnswerTxt)
         ((TextmidiOpt            + ",o").c_str(), program_options::value<string>(),                          TextmidiTxt)
         ((GnuplotOpt             + ",g").c_str(),                                                             GnuplotTxt)
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.79\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.80\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.79\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.80\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";

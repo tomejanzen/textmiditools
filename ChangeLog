@@ -1,10 +1,41 @@
-2024-06-016     Thomas E. Janzen <janzentome@gmail.com>
+2024-06-20     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py, AllFormsWindow.py: Fix addition of copyright.
+        Update About window.  Handle different versions of XML form files
+        i.e. boost::serialization XML archive versions.
+        * examples/textmidicgm/Demo1992/: apply pan values.
+        * Composer.cc: Change blurb text written into the output textmidi file.
+        Limit to 100,000 events to avoid filling disks.  This is around 800k bytes.
+        * MusicalForm.h: handle form file versions per boost::serialization XML
+        archives practice.
+        * textmidicgm.cc: change "x" for update option to "u".
+        * textmidiformedit.py, textmidiformedit.exi: Permit an on-command-line 
+        form file argument.
+
+
+2024-06-18     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py, textmidicgm.cc, MusicalForm.h, Voice.h:
+        Clean up boost::serialization versioning.
+        v0 : 1989 version 0 has no copyright, no arrangement, no counterpuntal followers.
+        v2 : 2023-04-08 version >1 has arrangement (i.e., version=2)
+        v2_v2 : 2023-05-04 Follower version >= 2 has options for 
+        delay/inversion/retrograde, that is, Follower version=2
+        v3_v2 : 2024-05-13     version >= 3 has copyright_ (i.e., version=3)
+        * examples/textmidicgm/Demo93: Add program selections to forms.
+        Create different XML versions of Animations for testing.
+
+2024-06-17     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: Recompose the text comment in the first track.
+        * textmidiformedit.py: fix handling of copyright line.
+        * examples/textmidicgm/Demo93/*: add demo from 1993, updated.
+
+2024-06-16     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{cc,h}: fix bug in PrintLazyTrack::ticks_to_note_stop()
         that did not sufficiently distinguish an actuall NoteOff.
         This caused a PolyphonePressure event, which is derived from NoteEvent,
         to be mistaken for a NoteOff event.
         Fix other mistakes of identification that are due to use of
         dynamic_cast to reveal whether an event is a note_on/off/poly_pressure.
+        Remove unused functions.
         * textmidi.l: Handle global_channel to only be set from LAZY notes.
 
 2024-06-08     Thomas E. Janzen <janzentome@gmail.com>

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.79
+// TextMIDITools Version 1.0.80
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -62,7 +62,7 @@ namespace textmidi
                   arc & BOOST_SERIALIZATION_NVP(leader_);
                   arc & BOOST_SERIALIZATION_NVP(interval_type_);
                   arc & BOOST_SERIALIZATION_NVP(interval_);
-                  if (version > 1)
+                  if (version >= 2)
                   {
                       arc & BOOST_SERIALIZATION_NVP(delay_);
                       arc & BOOST_SERIALIZATION_NVP(inversion_);

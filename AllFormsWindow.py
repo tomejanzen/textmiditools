@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.79
+# TextMIDITools Version 1.0.80
 # textmidiform.py 1.0
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -231,6 +231,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.xml_form = xml_form
 
         self.name = StringVar()
+        self.copyright = StringVar()
 
         self.len  = StringVar()
         self.min_note_len = StringVar()
@@ -936,14 +937,15 @@ class AllFormsWindow(tkinter.Toplevel):
     def install_xml_form(self, xml_form):
         self.xml_form = xml_form
         self.name.set(self.xml_form['name'])
+        self.copyright.set(self.xml_form['copyright'])
         self.len.set(self.xml_form['len'])
-        self.min_note_len.set(self.xml_form['min_note_len'])
-        self.max_note_len.set(self.xml_form['max_note_len'])
-        self.pulse.set(self.xml_form['pulse'])
+        self.min_note_len.set(float(self.xml_form['min_note_len']))
+        self.max_note_len.set(float(self.xml_form['max_note_len']))
+        self.pulse.set(float(self.xml_form['pulse']))
 
-        self.down.set(self.xml_form['melody_probabilities']['down'])
-        self.same.set(self.xml_form['melody_probabilities']['same'])
-        self.up.set(self.xml_form['melody_probabilities']['up'])
+        self.down.set(float(self.xml_form['melody_probabilities']['down']))
+        self.same.set(float(self.xml_form['melody_probabilities']['same']))
+        self.up.set(float(self.xml_form['melody_probabilities']['up']))
 
         self.pitch_form.install_xml_subform(self.xml_form['pitch_form'])
         self.rhythm_form.install_xml_subform(self.xml_form['rhythm_form'])

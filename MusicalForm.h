@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.79
+// TextMIDITools Version 1.0.80
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -314,7 +314,7 @@ namespace textmidi
                 void serialize(Archive& arc, const unsigned int version)
             {
                 arc & BOOST_SERIALIZATION_NVP(name_);
-                if (version > 2)
+                if (version >= 3)
                 {
                     arc & BOOST_SERIALIZATION_NVP(copyright_);
                 }
@@ -342,6 +342,6 @@ namespace textmidi
 
     }
 }
-BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 2)
+BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 3)
 
 #endif

@@ -2,7 +2,7 @@
 <!DOCTYPE boost_serialization>
 <boost_serialization signature="serialization::archive" version="18">
 	<xml_form class_id="0" tracking_level="0" version="3">
-		<name_>20fastwalk2</name_>
+		<name_>20fastwalk</name_>
 		<copyright_>20fastwalk form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
 		<len_>60.0</len_>
 		<min_note_len_>0.03</min_note_len_>

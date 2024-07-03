@@ -182,7 +182,7 @@
 				<high_pitch_>C4</high_pitch_>
 				<channel_>4</channel_>
 				<walking_>1</walking_>
-				<program_>69</program_>
+				<program_>71</program_>
 				<pan_>-8</pan_>
 				<follower_>
 					<follow_>0</follow_>
@@ -222,7 +222,7 @@
 				<high_pitch_>C6</high_pitch_>
 				<channel_>6</channel_>
 				<walking_>1</walking_>
-				<program_>74</program_>
+				<program_>69</program_>
 				<pan_>24</pan_>
 				<follower_>
 					<follow_>0</follow_>
@@ -262,7 +262,7 @@
 				<high_pitch_>C4</high_pitch_>
 				<channel_>8</channel_>
 				<walking_>1</walking_>
-				<program_>69</program_>
+				<program_>71</program_>
 				<pan_>56</pan_>
 				<follower_>
 					<follow_>0</follow_>

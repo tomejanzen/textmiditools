@@ -163,9 +163,9 @@
 				</follower_>
 			</item>
 			<item>
-				<low_pitch_>C1</low_pitch_>
-				<high_pitch_>C9</high_pitch_>
-				<channel_>3</channel_>
+				<low_pitch_>C4</low_pitch_>
+				<high_pitch_>C7</high_pitch_>
+				<channel_>10</channel_>
 				<walking_>0</walking_>
 				<program_>74</program_>
 				<pan_>20</pan_>

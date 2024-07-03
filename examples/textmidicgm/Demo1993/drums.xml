@@ -122,7 +122,7 @@
 				<high_pitch_>C5</high_pitch_>
 				<channel_>1</channel_>
 				<walking_>1</walking_>
-				<program_>1</program_>
+				<program_>15</program_>
 				<pan_>0</pan_>
 				<follower_ class_id="7" tracking_level="0" version="2">
 					<follow_>0</follow_>

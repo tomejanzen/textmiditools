@@ -83,7 +83,7 @@
 			<item class_id="6" tracking_level="0" version="0">
 				<low_pitch_>C2</low_pitch_>
 				<high_pitch_>C6</high_pitch_>
-				<channel_>1</channel_>
+				<channel_>12</channel_>
 				<walking_>1</walking_>
 				<program_>108</program_>
 				<pan_>0</pan_>
@@ -103,7 +103,7 @@
 			<item>
 				<low_pitch_>C2</low_pitch_>
 				<high_pitch_>C6</high_pitch_>
-				<channel_>1</channel_>
+				<channel_>12</channel_>
 				<walking_>1</walking_>
 				<program_>108</program_>
 				<pan_>0</pan_>

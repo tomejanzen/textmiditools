@@ -108,7 +108,7 @@
 				<high_pitch_>C7</high_pitch_>
 				<channel_>1</channel_>
 				<walking_>1</walking_>
-				<program_>21</program_>
+				<program_>82</program_>
 				<pan_>0</pan_>
 				<follower_ class_id="7" tracking_level="0" version="2">
 					<follow_>0</follow_>
@@ -128,7 +128,7 @@
 				<high_pitch_>C7</high_pitch_>
 				<channel_>1</channel_>
 				<walking_>1</walking_>
-				<program_>21</program_>
+				<program_>82</program_>
 				<pan_>0</pan_>
 				<follower_>
 					<follow_>0</follow_>
@@ -148,7 +148,7 @@
 				<high_pitch_>C6</high_pitch_>
 				<channel_>2</channel_>
 				<walking_>1</walking_>
-				<program_>21</program_>
+				<program_>82</program_>
 				<pan_>0</pan_>
 				<follower_>
 					<follow_>0</follow_>
@@ -168,7 +168,7 @@
 				<high_pitch_>C6</high_pitch_>
 				<channel_>3</channel_>
 				<walking_>1</walking_>
-				<program_>21</program_>
+				<program_>33</program_>
 				<pan_>0</pan_>
 				<follower_>
 					<follow_>0</follow_>
@@ -184,11 +184,11 @@
 				</follower_>
 			</item>
 			<item>
-				<low_pitch_>C3</low_pitch_>
-				<high_pitch_>C5</high_pitch_>
+				<low_pitch_>D2</low_pitch_>
+				<high_pitch_>D2</high_pitch_>
 				<channel_>2</channel_>
 				<walking_>1</walking_>
-				<program_>21</program_>
+				<program_>10</program_>
 				<pan_>0</pan_>
 				<follower_>
 					<follow_>0</follow_>
@@ -208,7 +208,7 @@
 				<high_pitch_>C5</high_pitch_>
 				<channel_>3</channel_>
 				<walking_>1</walking_>
-				<program_>21</program_>
+				<program_>74</program_>
 				<pan_>0</pan_>
 				<follower_>
 					<follow_>0</follow_>

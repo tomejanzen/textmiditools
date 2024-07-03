@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.80
+// TextMIDITools Version 1.0.81
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -16,10 +16,13 @@
 #include <cstdlib>
 #include <iterator>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <filesystem>
 #include <algorithm>
 #include <list>
 #include <ranges>
+#include <chrono>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -34,6 +37,7 @@
 #include "RhythmRational.h"
 
 using namespace std;
+using namespace std::chrono;
 using namespace boost;
 using namespace textmidi;
 using namespace midi;
@@ -278,7 +282,7 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
 // It implements the composing engine from AlgoRhythms 3.0 for the Commodore Amiga
 // with minor enhancements.
 //
-void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalForm& xml_form)
+void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalForm& xml_form, bool write_header)
 {
     // If the command line did not set arrangements, then set them from the XML file.
     track_scramble_.period_ = ((PermutationEnum::Undefined == track_scramble_.scramble_)
@@ -328,7 +332,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow_) [[likely]]
             {
-                while ((track.the_next_time() < total_duration) && (track_note_events.size() < 100000))
+                while ((track.the_next_time() < total_duration) && (track_note_events.size() < max_events_per_track_))
                 {
                     auto scramble_index{track.the_next_time() / track_scramble_.period_};
                     scramble_index = ((scramble_index < static_cast<long int>(track_scramble_sequences.size()))
@@ -655,14 +659,20 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     // feel free to make it higher.
     string textmidi_str{};
     textmidi_str.reserve(256);
-    ((((((textmidi_str += "FILEHEADER ") += lexical_cast<string>(xml_form.voices().size() + 1))
-        += ' ') += lexical_cast<string>(TicksPerQuarter)) += ' ')
-        += lexical_cast<string>(MIDI_Format::MultiTrack)) += "\n\n";
-    textmidi_file << textmidi_str;
-
+    if (write_header)
+    {
+        ((((((textmidi_str += "FILEHEADER ") += lexical_cast<string>(xml_form.voices().size() + 1))
+            += ' ') += lexical_cast<string>(TicksPerQuarter)) += ' ')
+            += lexical_cast<string>(MIDI_Format::MultiTrack)) += "\n\n";
+        textmidi_file << textmidi_str;
+    }
+    time_point<chrono::system_clock> now{chrono::system_clock::now()};
+    time_t t{chrono::system_clock::to_time_t(now)};
+    ostringstream timeoss;
+    timeoss << put_time(localtime(&t), "%FT%T%Z");
     TicksDuration maxTime(total_duration);
     textmidi_str.clear();
-    ((((((textmidi_str += "STARTTRACK\nTIME_SIGNATURE 4 4 ") += lexical_cast<string>(TicksPerQuarter))
+    ((((((((textmidi_str += "STARTTRACK\nTEXT Generated ") += timeoss.str()) += "\nTIME_SIGNATURE 4 4 ") += lexical_cast<string>(TicksPerQuarter))
         += "\nTEMPO ") += lexical_cast<string>(TempoBeatsPerMinute))
         += "\nKEY_SIGNATURE C\nTEXT Computer-generated music from the textmidicgm software\nTRACK ")
         += xml_form.name()) += "\nLAZY\n";

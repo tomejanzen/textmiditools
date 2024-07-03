@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.80
+// TextMIDITools Version 1.0.81
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -42,10 +42,12 @@ namespace textmidi
                 std::shared_ptr<arrangements::Arrangements> arrangements_;
             };
 
-            Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble, TicksDuration track_scramble_period)
+            Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble, 
+                TicksDuration track_scramble_period, int max_events_per_track = 100000)
               : gnuplot_(gnuplot),
                 answer_(answer),
                 track_scramble_(track_scramble, track_scramble_period),
+                max_events_per_track_{max_events_per_track},
                 random_dev_(),
                 generator_{random_dev_()}
             {
@@ -58,7 +60,7 @@ namespace textmidi
             Composer& operator=(const Composer& ) = delete;
             Composer& operator=(Composer&& ) = delete;
 
-            void operator()(std::ofstream& textmidi_file, const MusicalForm& xml_form);
+            void operator()(std::ofstream& textmidi_file, const MusicalForm& xml_form, bool write_header = true);
 
           private:
             rational::RhythmRational duration_to_rhythm(double duration) const;
@@ -70,6 +72,7 @@ namespace textmidi
             bool gnuplot_;
             bool answer_;
             TrackScramble track_scramble_;
+            int max_events_per_track_;
             std::random_device random_dev_;
             std::mt19937 generator_;
         };

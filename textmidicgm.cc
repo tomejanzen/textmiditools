@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.80
+// TextMIDITools Version 1.0.81
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -49,6 +49,7 @@
 
 #include <unistd.h>
 #include <glob.h>
+#include <libgen.h>
 
 #include <cmath>
 #include <cstdlib>
@@ -131,6 +132,10 @@ namespace {
         "nextpermutation swappairs shuffle skip heaps identity"};
     const string ArrangementsPeriodOpt{"arrangementsperiod"};
     constexpr char ArrangementsPeriodTxt[]{"floating seconds"};
+    const string MaxEventsPerTrackOpt{"maxeventspertrack"};
+    constexpr char MaxEventsPerTrackTxt[]{"integer"};
+    const string StackTracksOpt{"stacktracks"};
+    constexpr char StackTracksTxt[]{"process each form file and add its tracks to the same output textmidi score"};
 }
 
 int main(int argc, char *argv[])
@@ -139,9 +144,10 @@ int main(int argc, char *argv[])
     desc.add_options()
         ((HelpOpt                + ",h").c_str(),                                                                HelpTxt)
         ((VerboseOpt             + ",v").c_str(),                                                             VerboseTxt)
+        ((StackTracksOpt         + ",k").c_str(),                                                         StackTracksTxt)
         ((VersionOpt             + ",V").c_str(),                                                             VersionTxt)
         ((FormOpt                + ",f").c_str(), program_options::value<string>(),                              FormTxt)
-        ((XML_FormOpt            + ",x").c_str(), program_options::value<string>(),                          XML_FormTxt)
+        ((XML_FormOpt            + ",x").c_str(), program_options::value<vector<string>>()->multitoken(),    XML_FormTxt)
         ((XML_UpdateOpt          + ",u").c_str(),                                                          XML_UpdateTxt)
         ((AnswerOpt              + ",a").c_str(),                                                              AnswerTxt)
         ((TextmidiOpt            + ",o").c_str(), program_options::value<string>(),                          TextmidiTxt)
@@ -149,9 +155,10 @@ int main(int argc, char *argv[])
         ((RandomOpt              + ",r").c_str(), program_options::value<string>(),                            RandomTxt)
         ((InstrumentsOpt         + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
         ((ClampScaleOpt          + ",c").c_str(),                                                          ClampScaleTxt)
-        ((ArrangementsOpt        + ",z").c_str(), program_options::value<string>(),                     ArrangementsTxt)
-        ((ArrangementsPeriodOpt  + ",y").c_str(), program_options::value<double>(),               ArrangementsPeriodTxt)
-        ((RhythmExpressionOpt    + ",e").c_str(), program_options::value<string>(), RhythmExpressionTxt)
+        ((ArrangementsOpt        + ",z").c_str(), program_options::value<string>(),                      ArrangementsTxt)
+        ((MaxEventsPerTrackOpt   + ",t").c_str(), program_options::value<int>(),                    MaxEventsPerTrackTxt)
+        ((ArrangementsPeriodOpt  + ",y").c_str(), program_options::value<double>(),                ArrangementsPeriodTxt)
+        ((RhythmExpressionOpt    + ",e").c_str(), program_options::value<string>(),                  RhythmExpressionTxt)
     ;
     program_options::variables_map var_map;
     try
@@ -167,7 +174,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.80\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.81\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -177,7 +184,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.80\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.81\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -190,17 +197,22 @@ int main(int argc, char *argv[])
         verbose = true;
     }
 
+    bool stacktracks{};
+    if (var_map.count(StackTracksOpt)) [[unlikely]]
+    {
+        stacktracks = true;
+    }
 
-    string form_filename_glob;
+    vector<string> form_filename_globs;
     if (var_map.count(FormOpt))
     {
-        form_filename_glob = var_map[FormOpt].as<string>();
+        form_filename_globs = var_map[FormOpt].as<vector<string>>();
     }
     else
     {
         if (var_map.count(XML_FormOpt))
         {
-            form_filename_glob = var_map[XML_FormOpt].as<string>();
+            form_filename_globs = var_map[XML_FormOpt].as<vector<string>>();
         }
         else
         {
@@ -234,7 +246,7 @@ int main(int argc, char *argv[])
                 xml_form.random(random_filename, instrument_flags);
                 {
                     ofstream xml_form_stream{(random_filename
-                            + string(".form.xml")).c_str()};
+                            + string(".xml")).c_str()};
                     {
                         archive::xml_oarchive oarc(xml_form_stream);
                         oarc << BOOST_SERIALIZATION_NVP(xml_form);
@@ -270,15 +282,32 @@ int main(int argc, char *argv[])
         };
         ::glob_t glob_data;
         int globsts{};
-        if (0 != (globsts = ::glob(form_filename_glob.c_str(),
-            GLOB_TILDE_CHECK, glob_error, &glob_data)))
+        long unsigned int pat{};
+        for ( ; pat < 1; pat++)
         {
-            string str{};
-            str.reserve(128);
-            ((str += "glob failed: ")
-                += globStatusMap[globsts]) += " Exiting\n";
-            cerr << str;
-            exit(0);
+            if (0 != (globsts = ::glob(form_filename_globs[pat].c_str(),
+                GLOB_TILDE_CHECK, glob_error, &glob_data)))
+            {
+                string str{};
+                str.reserve(128);
+                ((str += "glob failed: ")
+                    += globStatusMap[globsts]) += " Exiting\n";
+                cerr << str;
+                exit(0);
+            }
+        }
+        for ( ; pat < form_filename_globs.size(); pat++)
+        {
+            if (0 != (globsts = ::glob(form_filename_globs[pat].c_str(),
+                GLOB_APPEND | GLOB_TILDE_CHECK, glob_error, &glob_data)))
+            {
+                string str{};
+                str.reserve(128);
+                ((str += "glob failed: ")
+                    += globStatusMap[globsts]) += " Exiting\n";
+                cerr << str;
+                exit(0);
+            }
         }
         for (unsigned filectr{}; filectr < glob_data.gl_pathc; ++filectr)
         {
@@ -291,7 +320,7 @@ int main(int argc, char *argv[])
         cerr << "Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\n";
         string str{};
         str.reserve(128);
-        ((str += "you must have either a form file or an XML form file\n")
+        ((str += "you must have either old form files or XML form files\n")
               += lexical_cast<string>(desc)) += '\n';
         cerr << str;
         exit(0);
@@ -319,21 +348,33 @@ int main(int argc, char *argv[])
                     try
                     {
                         archive::xml_iarchive iarc(xml_form_file);
-                        MusicalForm temp_form;
-                        iarc >> BOOST_SERIALIZATION_NVP(temp_form);
-                        if (!temp_form.valid())
+                        MusicalForm xml_form;
+                        iarc >> BOOST_SERIALIZATION_NVP(xml_form);
+                        if (!xml_form.valid())
                         {
                             const string errstr{((string{__FILE__} += ':') += BOOST_PP_STRINGIZE(__LINE__)) += " Invalid Form.\n"};
                             cerr << errstr;
                         }
-                        xml_forms.push_back(temp_form);
-                        if (var_map.count(XML_UpdateOpt) && temp_form.valid())
+                        xml_forms.push_back(xml_form);
+                        if (var_map.count(XML_UpdateOpt) && xml_form.valid())
                         {
-                            auto update_name{string{"update_"} + form_filename};
+                            string update_name{};
+                            {
+                                string pathstr{form_filename}; 
+                                char tempthepath[FILENAME_MAX];
+                                tempthepath[pathstr.copy(tempthepath, pathstr.size(), 0)] = '\0';
+
+                                string thedir{::dirname(tempthepath)};
+                                tempthepath[pathstr.copy(tempthepath, pathstr.size(), 0)] = '\0';
+                                string thefilename{::basename(tempthepath)};
+                                auto newfilename{string{"update_"} + thefilename};
+                                (update_name += (thedir += '/')) += newfilename;
+                            }
                             ofstream xml_form_stream{update_name.c_str()};
+                            if (xml_form_stream)
                             {
                                 archive::xml_oarchive oarc(xml_form_stream);
-                                oarc << BOOST_SERIALIZATION_NVP(temp_form);
+                                oarc << BOOST_SERIALIZATION_NVP(xml_form);
                             }
                         }
                     }
@@ -397,9 +438,11 @@ int main(int argc, char *argv[])
         }
         if (var_map.count(ArrangementsPeriodOpt))
         {
-            track_scramble_period = TicksDuration{static_cast<int64_t>(floor(var_map[ArrangementsPeriodOpt].as<double>())) * TicksPerQuarter};
+            track_scramble_period = TicksDuration{
+                static_cast<int64_t>(floor(var_map[ArrangementsPeriodOpt].as<double>())) * TicksPerQuarter};
         }
     }
+    const int max_events_per_track{var_map.count(MaxEventsPerTrackOpt) ? var_map[MaxEventsPerTrackOpt].as<int>() : 100000};
 
     if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
     {
@@ -415,7 +458,7 @@ int main(int argc, char *argv[])
               case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
                   textmidi::rational::print_rhythm.reset(new textmidi::rational::PrintRhythmSimpleContinuedFraction);
                   break;
-            } 
+            }
         }
     }
 
@@ -467,29 +510,56 @@ int main(int argc, char *argv[])
         }
     }
 
-    Composer composer{gnuplot, answer, track_scramble_type, track_scramble_period};
-    for (auto& xml_form : xml_forms)
+    if (var_map.count(ClampScaleOpt))
     {
-        if (var_map.count(ClampScaleOpt))
+        for (auto& xml_form : xml_forms)
         {
             xml_form.clamp_scale_to_instrument_ranges();
         }
-        //
-        // write the textmidi file, which can be translated by textmidi.
-        //
-        ofstream textmidi_file;
-
-        if (var_map.count(TextmidiOpt))
-        {
-            textmidi_file.open(textmidi_filename.c_str());
-        }
-        else
-        {
-            textmidi_file.open((xml_form.name() + ".txt").c_str());
-        }
-
-        composer(textmidi_file, xml_form);
-
-        textmidi_file.close();
     }
+
+    Composer composer{gnuplot, answer, track_scramble_type, track_scramble_period, max_events_per_track};
+
+    {
+        ofstream textmidi_file;
+        unsigned long int x{};
+        if (stacktracks)
+        {
+            auto& xml_form{xml_forms[x]};
+    
+            if (var_map.count(TextmidiOpt))
+            {
+                textmidi_file.open(textmidi_filename.c_str());
+            }
+            else
+            {
+                textmidi_file.open((xml_form.name() + ".txt").c_str());
+            }
+    
+            composer(textmidi_file, xml_form);
+            ++x;
+        }
+    
+        for ( ; x < xml_forms.size(); ++x)
+        {
+            if (stacktracks)
+            {
+                composer(textmidi_file, xml_forms[x], false);
+            }
+            else
+            {
+                if (var_map.count(TextmidiOpt))
+                {
+                    textmidi_file.open(textmidi_filename.c_str());
+                }
+                else
+                {
+                    textmidi_file.open((xml_forms[x].name() + ".txt").c_str());
+                }
+                composer(textmidi_file, xml_forms[x]);
+                textmidi_file.close();
+            }
+        }
+    }
+
 }

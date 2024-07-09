@@ -1,1 +1,83 @@
-placeholder
+======================================================================
+    TextMIDITools/examples/textmidicgm/misc
+
+                    Thomas E. Janzen
+                    <janzentome@gmail.com>
+
+======================================================================
+What is this?
+======================================================================
+
+General Information
+
+The files herein are (C++ library) boost::serialization XML archive files
+of the demo pieces for the original version of the textmidicgm program,
+written for the Commodore Amiga computer running AmigaDOS.
+They have been hand-tooled to sound close to the way they sounded
+in 1993, more or less.
+
+The original program from 1990 for the Commodore Amiga, "AlgoRhythms",
+played in real-time to MIDI instruments and Amiga audio channels.
+The MIDI connection acted as a throttle on the event rates.
+Therefore many of the form files had "0" for the min_note_len.
+It could play at the maximum rate MIDI offered (ca. 400 notes/sec),
+and cause at least one piano synthesizer to lock up.
+You can prevent this in you form files by using a non-zero
+min_note_len, or by offsetting the rhythm curve a bit high.
+In a static condition (a very long rhythm mean period),
+you may set the rhythm mean phase away from -pi/2.
+
+These files are compatible with the form editor textmidiformedit.py.
+
+Makefile will build the textmidi files and then the MIDI files if
+the utilities textmidicgm and textmidi have been installed.
+
+======================================================================
+Features
+======================================================================
+The files serve as demonstrations of the textmidicgm program.
+They demonstrate use of various keyboard-based scales and textmidicgm
+features.  None of them demonstrate follower voices because followers
+were not part of the Amiga version of the software.
+
+pure8:
+  pure8 is an example of a meditative piece that makes use of long tones
+  (as wind players have it) or in MIDI, breath control (or pressure
+  or after touch).  Since textmidicgm does not produce the necessary
+  pressure commands, they have to be added by editing the textmidi language
+  output of textmidicgm.
+  Files: 
+    pure8.bash : script to produce pure8.mid.
+    pure8.xml : The form file for pure8
+    addincludes.sed : Defines a macro named polypressure (just to be "true"); 
+      adds an m4 macro processor include directive to read in longtonechan.m4.
+    longtone_and_channel.sed : a sed file that replaces each appearance of a 
+      velocity and note or just a note into a call to longtone().  This m4 file
+      does not work for all textmidi files because it must have lines that contain 
+      either a note and rhythm, or a vel command, a velocity, and a note and rhythm.  
+      Also it will not handle dynamic symbols such as forte and pp correctly, but 
+      textmidicgm does not produce dynamic symbols.  It also defines "thechannel"
+      as -1, and adds an increment of it at the beginning of each track.  The 
+      channel numbers of the tracks should match those channels by setting the 
+      channel in the form file to 1 in the first track, 2 in the next, 3 in the 
+      next, and so on.  The channels for each track must differ because this 
+      macro uses the CHANNEL_PRESSURE command and not POLY_KEY_PRESSURE, which 
+      is particular to a key name (such as C#4).  Various MIDI hardware and 
+      software differs in whether it supports CHANNEL_PRESSURE or POLY_KEY_PRESSURE.
+      Support of POLY_KEY_PRESSURE appears to be less common than that for CHANNEL_PRESSURE.
+      
+    longtonechan.m4 : an m4 include file that defines a macro named longtone
+      which expands a note name and rhythm into a series of textmidi
+      CHANNEL_PRESSURE commands.
+
+======================================================================
+Where to get a copy
+======================================================================
+The latest release of TextMIDITools are available at:
+https://github.com/tomejanzen/TetMIDITools
+
+======================================================================
+How to install
+======================================================================
+The example is in the de-archived kit for TextMIDITools created by
+github when a new release of TextMIDITools is created.

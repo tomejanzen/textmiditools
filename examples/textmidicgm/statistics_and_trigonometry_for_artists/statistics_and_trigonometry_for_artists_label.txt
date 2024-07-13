@@ -1,0 +1,34 @@
+THOMAS E. JANZEN
+
+Statistics and Trigonometry for Artists
+
+Side One
+Range
+Mean
+Tests of Significance
+Variance
+Standard Deviation
+The Normal Distribution
+
+Side Two
+The Unit Circle
+Sine
+Cosine
+Tangent
+ArcTangent
+
+All selections are 7:00
+
+These works were improvised by computer using a technique known as algorithm
+composition.  The general character and progress of the works were specified by
+the composer, but the exact pitches, durations, and dynamics were selected
+moment-to-moent by the computer software in real time while it played the music
+through a computer-controlled synthesizer.  Janzen wrote the algorithmic
+composition software in the C computer language.
+
+[bio]
+
+Copyright (C) 1990 Thomas E. Janzen
+The spare Bedroom [address]  Not for sale.
+SP-7
+

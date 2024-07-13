@@ -1,1 +1,69 @@
-placeholder
+======================================================================
+    TextMIDITools/examples/textmidicgm/statistics_and_trigonometry_for_artists/
+
+                    Thomas E. Janzen
+                    <janzentome@gmail.com>
+
+======================================================================
+What is this?
+======================================================================
+
+General Information
+
+The files herein are (C++ library) boost::serialization XML archive files
+of the demo pieces for the original version of the textmidicgm program,
+written for the Commodore Amiga computer running AmigaDOS.
+They were all part of a cassette album passed around to a few associates,
+entitled "Statistics and Trigonometry for Artists".
+They have been hand-tooled in 2024 to sound close to the way they sounded
+in 1990, more or less.
+
+The original program from 1990 for the Commodore Amiga, "AlgoRhythms",
+played in real-time to MIDI instruments and Amiga audio channels.
+The MIDI connection acted as a throttle on the event rates.
+Therefore many of the form files had "0" for the min_note_len.
+It could play at the maximum rate MIDI offered (ca. 400 notes/sec),
+and cause at least one piano synthesizer to lock up.
+You can prevent this in you form files by using a non-zero
+min_note_len, or by offsetting the rhythm curve a bit high.
+In a static condition (a very long rhythm mean period),
+you may set the rhythm mean phase away from -pi/2.
+
+These files are compatible with the form editor textmidiformedit.py.
+
+The file Makefile will build the textmidi files and then the MIDI files if
+the utilities textmidicgm and textmidi have been installed: 
+
+    make
+
+======================================================================
+Features
+======================================================================
+The files serve as demonstrations of the textmidicgm program.
+They demonstrate use of various keyboard-based scales and textmidicgm
+features.  None of them demonstrate follower voices because followers
+were not part of the Amiga version of the software.
+
+    arctan.xml
+    cosine.xml
+    mean.xml
+    normdist.xml
+    range.xml
+    sine.xml
+    stddev.xml
+    tan.xml
+    testssig.xml
+    unitcircle.xml
+    variance.xml
+
+======================================================================
+Where to get a copy
+======================================================================
+The latest release of TextMIDITools are available at:
+https://github.com/tomejanzen/TetMIDITools
+
+======================================================================
+How to install
+======================================================================
+The example is in the de-archived kit for TextMIDITools created by
+github when a new release of TextMIDITools is created.

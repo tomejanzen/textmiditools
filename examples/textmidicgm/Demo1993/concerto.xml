@@ -5,7 +5,7 @@
 		<name_>concerto</name_>
 		<copyright_>concerto form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
 		<len_>1200.0</len_>
-		<min_note_len_>0.05</min_note_len_>
+		<min_note_len_>.046875</min_note_len_>
 		<max_note_len_>1.0</max_note_len_>
 		<scale_ class_id="1" tracking_level="0" version="0">
 			<count>35</count>

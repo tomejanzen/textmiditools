@@ -5,7 +5,7 @@
 		<name_>Animations_v2</name_>
 		<copyright_>copyright unspecified</copyright_>
 		<len_>600.0</len_>
-		<min_note_len_>0.03</min_note_len_>
+		<min_note_len_>0.03125</min_note_len_>
 		<max_note_len_>2.0</max_note_len_>
 		<scale_ class_id="1" tracking_level="0" version="0">
 			<count>90</count>

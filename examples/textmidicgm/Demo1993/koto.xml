@@ -5,7 +5,7 @@
 		<name_>koto</name_>
 		<copyright_>koto form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
 		<len_>300.0</len_>
-		<min_note_len_>0.15</min_note_len_>
+		<min_note_len_>0.15625</min_note_len_>
 		<max_note_len_>0.75</max_note_len_>
 		<scale_ class_id="1" tracking_level="0" version="0">
 			<count>12</count>

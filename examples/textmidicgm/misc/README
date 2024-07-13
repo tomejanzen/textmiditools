@@ -70,6 +70,32 @@ pure8:
       which expands a note name and rhythm into a series of textmidi
       CHANNEL_PRESSURE commands.
 
+pure.xml:
+  A 4-voice version of "pure", a meditative piece, originally done with 
+  a sine tone.  Build with pure.bash.
+
+pianoduo.xml:
+  Two piano sounds, on separate channels with separate pans, in a duet.
+
+commu9.xml:
+  A demo submitted to "Commusic Volume 9", a circulated demo tape for an
+  internal corporate group interested in computer music, probably 1992.
+
+scales.xml:
+  Four voices of pianos walking on a chromatic scale.
+
+xmas92.xml:
+  A Christmas piece sent to friends and family.  
+
+loud.xml:
+  20 piano voices on the white keys.
+
+tritone.xml:
+  A tritone scale from Olivier Messiaen, on 5 piano voices.
+
+terrharp.xml:
+  A quiet harp piece.
+
 ======================================================================
 Where to get a copy
 ======================================================================

@@ -2,11 +2,11 @@
 <!DOCTYPE boost_serialization>
 <boost_serialization signature="serialization::archive" version="18">
 <temp_form class_id="0" tracking_level="0" version="3">
-	<name_>pure8</name_>
-	<copyright_>pure8 form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
-	<len_>420</len_>
-	<min_note_len_>5.00000000000000000e+00</min_note_len_>
-	<max_note_len_>6.00000000000000000e+00</max_note_len_>
+	<name_>pure</name_>
+	<copyright_>pure form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
+	<len_>4.20000000000000000e+02</len_>
+	<min_note_len_>3.00000000000000000e+00</min_note_len_>
+	<max_note_len_>4.00000000000000000e+00</max_note_len_>
 	<scale_ class_id="1" tracking_level="0" version="0">
 		<count>49</count>
 		<item_version>0</item_version>
@@ -60,7 +60,7 @@
 		<item>A7</item>
 		<item>B7</item>
 	</scale_>
-	<pulse_>4.00000000000000000e+00</pulse_>
+	<pulse_>2.00000000000000000e+00</pulse_>
 	<melody_probabilities_ class_id="2" tracking_level="0" version="0">
 		<down_>0.00000000000000000e+00</down_>
 		<same_>3.30000000000000016e-01</same_>
@@ -83,13 +83,13 @@
 	<rhythm_form_>
 		<mean_sine_>
 			<period_>1.00000000000000000e+05</period_>
-			<phase_>7.00000000000000067e-02</phase_>
+			<phase_>1.38999999999999990e+00</phase_>
 			<amplitude_>5.00000000000000000e-01</amplitude_>
 			<offset_>5.00000000000000000e-01</offset_>
 		</mean_sine_>
 		<range_sine_>
 			<period_>1.00000000000000000e+05</period_>
-			<phase_>1.53000000000000003e+00</phase_>
+			<phase_>-1.08000000000000007e+00</phase_>
 			<amplitude_>5.00000000000000000e-01</amplitude_>
 			<offset_>5.00000000000000000e-01</offset_>
 		</range_sine_>
@@ -115,15 +115,15 @@
 		<offset_>5.00000000000000000e-01</offset_>
 	</texture_form_>
 	<voices_ class_id="5" tracking_level="0" version="0">
-		<count>8</count>
+		<count>4</count>
 		<item_version>0</item_version>
 		<item class_id="6" tracking_level="0" version="0">
 			<low_pitch_>C1</low_pitch_>
 			<high_pitch_>C8</high_pitch_>
 			<channel_>1</channel_>
 			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>-56</pan_>
+			<program_>1</program_>
+			<pan_>-48</pan_>
 			<follower_ class_id="7" tracking_level="0" version="2">
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
@@ -140,10 +140,10 @@
 		<item>
 			<low_pitch_>C1</low_pitch_>
 			<high_pitch_>C8</high_pitch_>
-			<channel_>2</channel_>
+			<channel_>1</channel_>
 			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>-40</pan_>
+			<program_>1</program_>
+			<pan_>-16</pan_>
 			<follower_>
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
@@ -160,10 +160,10 @@
 		<item>
 			<low_pitch_>C1</low_pitch_>
 			<high_pitch_>C8</high_pitch_>
-			<channel_>3</channel_>
+			<channel_>1</channel_>
 			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>-24</pan_>
+			<program_>1</program_>
+			<pan_>16</pan_>
 			<follower_>
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
@@ -180,90 +180,10 @@
 		<item>
 			<low_pitch_>C1</low_pitch_>
 			<high_pitch_>C8</high_pitch_>
-			<channel_>4</channel_>
+			<channel_>1</channel_>
 			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>-8</pan_>
-			<follower_>
-				<follow_>0</follow_>
-				<leader_>2147483647</leader_>
-				<interval_type_>0</interval_type_>
-				<interval_>0</interval_>
-				<delay_>
-					<numerator_>0</numerator_>
-					<denominator_>1</denominator_>
-				</delay_>
-				<inversion_>0</inversion_>
-				<retrograde_>0</retrograde_>
-			</follower_>
-		</item>
-		<item>
-			<low_pitch_>C1</low_pitch_>
-			<high_pitch_>C8</high_pitch_>
-			<channel_>5</channel_>
-			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>8</pan_>
-			<follower_>
-				<follow_>0</follow_>
-				<leader_>2147483647</leader_>
-				<interval_type_>0</interval_type_>
-				<interval_>0</interval_>
-				<delay_>
-					<numerator_>0</numerator_>
-					<denominator_>1</denominator_>
-				</delay_>
-				<inversion_>0</inversion_>
-				<retrograde_>0</retrograde_>
-			</follower_>
-		</item>
-		<item>
-			<low_pitch_>C1</low_pitch_>
-			<high_pitch_>C8</high_pitch_>
-			<channel_>6</channel_>
-			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>24</pan_>
-			<follower_>
-				<follow_>0</follow_>
-				<leader_>2147483647</leader_>
-				<interval_type_>0</interval_type_>
-				<interval_>0</interval_>
-				<delay_>
-					<numerator_>0</numerator_>
-					<denominator_>1</denominator_>
-				</delay_>
-				<inversion_>0</inversion_>
-				<retrograde_>0</retrograde_>
-			</follower_>
-		</item>
-		<item>
-			<low_pitch_>C1</low_pitch_>
-			<high_pitch_>C8</high_pitch_>
-			<channel_>7</channel_>
-			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>40</pan_>
-			<follower_>
-				<follow_>0</follow_>
-				<leader_>2147483647</leader_>
-				<interval_type_>0</interval_type_>
-				<interval_>0</interval_>
-				<delay_>
-					<numerator_>0</numerator_>
-					<denominator_>1</denominator_>
-				</delay_>
-				<inversion_>0</inversion_>
-				<retrograde_>0</retrograde_>
-			</follower_>
-		</item>
-		<item>
-			<low_pitch_>C1</low_pitch_>
-			<high_pitch_>C8</high_pitch_>
-			<channel_>8</channel_>
-			<walking_>0.00000000000000000e+00</walking_>
-			<program_>80</program_>
-			<pan_>56</pan_>
+			<program_>1</program_>
+			<pan_>48</pan_>
 			<follower_>
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>

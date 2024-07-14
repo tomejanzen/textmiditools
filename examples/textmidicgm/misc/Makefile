@@ -2,13 +2,13 @@
 	textmidicgm --xmlform $< --textmidi $@
 
 midis = \
-commu9
-loud
-pianoduo
-scales
-terrharp
-tritone
-xmas92
+commu9.mid \
+loud.mid \
+pianoduo.mid \
+scales.mid \
+terrharp.mid \
+tritone.mid \
+xmas92.mid
 
 txts := $(midis:%.mid=%.txt)
 

@@ -1,3 +1,22 @@
+2024-07-14     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.{cc,h}: for textmidi --random, replace copyright notice
+        with notice that the form was machine-generated.
+        Randomize (min,max)_note_len, follower.  Encapsulate ArrangementDefinition
+        and randomize for textmidicgm --random.
+        * Voice.{h,cc}, Composer.cc: encapsulate Follower.
+
+2024-07-12     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidicgm/statistics_and_trigonometry_for_artists/*.xml,
+        examples/textmidicgm/misc/*.xml: Cleanup mostly misc for instrument
+        programs and min_note_len_.   Also prep statistics_... for upload.
+
+2024-07-11     Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidicgm/statistics_and_trigonometry_for_artists/*.xml,
+        examples/textmidicgm/misc/*.xml: add pan positions.
+
+2024-07-06     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidicgm.texi: add disclaimer re: AI.
+
 2024-07-02     Thomas E. Janzen <janzentome@gmail.com>
         * textmidicgm.{cc, texi}, Composer.{cc,h}: clean up logic for stacktracking; 
         factor out common code.

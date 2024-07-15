@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.81
+// TextMIDITools Version 1.0.82
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen

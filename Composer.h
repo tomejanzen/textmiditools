@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.81
+// TextMIDITools Version 1.0.82
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -42,7 +42,7 @@ namespace textmidi
                 std::shared_ptr<arrangements::Arrangements> arrangements_;
             };
 
-            Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble, 
+            Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble,
                 TicksDuration track_scramble_period, int max_events_per_track = 100000)
               : gnuplot_(gnuplot),
                 answer_(answer),

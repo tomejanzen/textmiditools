@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.81
+// TextMIDITools Version 1.0.82
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -86,8 +86,83 @@ const VoiceXml::Follower& VoiceXml::follower() const noexcept
     return follower_;
 }
 
+VoiceXml::Follower& VoiceXml::follower() noexcept
+{
+    return follower_;
+}
+
 void VoiceXml::follower(const Follower& follower) noexcept
 {
     follower_ = follower;
+}
+
+bool VoiceXml::Follower::follow() const
+{
+    return follow_;
+}
+
+int VoiceXml::Follower::leader() const
+{
+    return leader_;
+}
+
+VoiceXml::Follower::IntervalType VoiceXml::Follower::interval_type() const
+{
+    return interval_type_;
+}
+
+int VoiceXml::Follower::interval() const
+{
+    return interval_;
+}
+
+rational::RhythmRational& VoiceXml::Follower::delay()
+{
+    return delay_;
+}
+
+bool VoiceXml::Follower::inversion() const
+{
+    return inversion_;
+}
+
+bool VoiceXml::Follower::retrograde() const
+{
+    return retrograde_;
+}
+
+void VoiceXml::Follower::follow(bool follow)
+{
+    follow_ = follow;
+}
+
+void VoiceXml::Follower::leader(int leader)
+{
+    leader_ = leader;
+}
+
+void VoiceXml::Follower::interval_type(IntervalType interval_type)
+{
+    interval_type_ = interval_type;
+}
+
+void VoiceXml::Follower::interval(int interval)
+{
+    interval_ = interval;
+}
+
+void VoiceXml::Follower::delay(rational::RhythmRational delay)
+{
+    delay_ = delay;
+}
+
+void VoiceXml::Follower::inversion(bool inversion)
+{
+    inversion_ = inversion;
+}
+
+void VoiceXml::Follower::retrograde(bool retrograde)
+{
+    retrograde_ = retrograde;
 }
 

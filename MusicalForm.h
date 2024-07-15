@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.81
+// TextMIDITools Version 1.0.82
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -174,14 +174,33 @@ namespace textmidi
                 period_{period}
             {
             }
-            arrangements::PermutationEnum algorithm_;
-            double period_;
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
             {
                 arc & BOOST_SERIALIZATION_NVP(algorithm_);
                 arc & BOOST_SERIALIZATION_NVP(period_);
             }
+            arrangements::PermutationEnum algorithm() const
+            {
+                return algorithm_;
+            }
+            double period() const
+            {
+                return period_;
+            }
+
+            void algorithm(arrangements::PermutationEnum algorithm)
+            {
+                algorithm_ = algorithm;
+            }
+
+            void period(double period)
+            {
+                period_ = period;
+            }
+          private:
+            arrangements::PermutationEnum algorithm_;
+            double period_;
         };
 
         struct MusicalCharacter
@@ -287,7 +306,8 @@ namespace textmidi
             void texture_form(const Sine& s) noexcept;
             std::vector<VoiceXml> voices() const noexcept;
             std::vector<VoiceXml>& voices() noexcept;
-            ArrangementDefinition arrangement_definition() const noexcept;
+            ArrangementDefinition& arrangement_definition() noexcept;
+            const ArrangementDefinition& arrangement_definition() const noexcept;
             void arrangement_definition(ArrangementDefinition arrangement_definition) noexcept;
             void string_scale_to_int_scale(std::vector<int>& key_scale) const;
             void character_now(TicksDuration theTime,

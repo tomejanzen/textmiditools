@@ -100,6 +100,21 @@ and distributed at least on "Fred Fish" disks starting in 1990.
 AlgoRhythms 3.0 was probably not released; it combined MIDI and
 Amiga Audio voices.
 
+@command{textmidicgm} writes computer-generated music using evenly-distributed 
+random numbers controlled 
+by sinusoidal waveforms that (usually slowly) change the character of the music. @command{textmidicgm} 
+does not make use of AI (Artificial Intelligence). It does not train on other pre-existing 
+music or other material. The mathematics it references is limited to simple population 
+statistics (although the mean is imprecisely used) and trigonometric functions, because 
+that's all the math I knew in 1976, when I conceived this approach to form (and prior 
+to my engineering education). The specific key (note) numbers, durations and velocities 
+(loudnesses) are derived from flat, evenly-distributed random numbers, because that 
+is what I explored in about 1980 on a Radio Shack TRS80. Any resemblance to previously-existing 
+music is purely coincidental. @command{textmidicgm} writes multiple monophonic lines (one line 
+per track) and does not model themes, motifs, melodies, harmony or harmonic movement (with the 
+exception of allowing parallel follower voices), 
+nor a grammar of note movement or harmonic movement.
+
 @command{textmidicgm} always generates one voice per track,
 in textmidi LAZY mode.
 
@@ -246,9 +261,10 @@ produces an updated version of symphony.xml called update_symphony.xml that is i
 @cindex random xml_form_file_base
 Make a random form, write it to the base filename given, adding @quotedblleft{}.xml@quotedblright{} and exit.
 @itemize
-@cindex random length
-@item The duration is 30 minutes.  The min and max note lengths
-are (0.0@dots{}2.0) seconds.
+@item The name is taken from the argument provided to the @minus{}@minus{}random argument.
+@item The duration is 30 minutes.
+@item min_note_len to [0.03125@dots{}0.03125 + random[0@dots{}1.0)]
+@item max_note_len_ = min_note_len_ + random[0@dots{}1.0) * 2
 @cindex random pulse
 @item The pulse is random in (0.0@dots{}16.0).
 @cindex random walk
@@ -316,7 +332,25 @@ L---------C---------R
 @end smallexample
 
 @cindex random follow
-@item No voice is set to follow another voice.
+@item Set each voice's follower status:
+@item Random follow flag and leader voice.
+@item If the leader is a follower, then set the voice to lead.
+If the leader voice is a leader, then set this voice
+@itemize
+@item Random interval type
+@item random delay to something less than a whole note.
+@item randomly set whether to invert the voice
+@item randomly set whether to make the voice retrograde
+@end itemize
+@item Set high and low pitches to match plausible values for the General MIDI instruments
+@item Clamp the scale to not exceed the instruments as a whole ensemble.
+@item Set the arrangement definition to have
+@itemize
+@item a randomly selected permutation algorithm and
+@item    a random period in [0.0..30].
+@end itemize
+
+
 @end itemize
 After the random form file has been written it may be edited, then used
 as an input to the @minus{}@minus{}xmlform option.

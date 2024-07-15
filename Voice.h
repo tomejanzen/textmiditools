@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.81
+// TextMIDITools Version 1.0.82
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -36,40 +36,57 @@ namespace textmidi
         {
             friend class boost::serialization::access;
           public:
-            struct Follower
+            class Follower
             {
-              enum class IntervalType : std::int32_t
-              {
-                  Neither,
-                  Scalar,
-                  Chromatic
-              };
-
-              Follower()
-               : follow_{false},
-                 leader_{std::numeric_limits<int>().max()},
-                 interval_type_{IntervalType::Neither},
-                 interval_{},
-                 delay_{rational::RhythmRational{0L}},
-                 inversion_{},
-                 retrograde_{}
-              {
-              }
-              template<class Archive>
-                  void serialize(Archive& arc, const unsigned int version)
-              {
-                  arc & BOOST_SERIALIZATION_NVP(follow_);
-                  arc & BOOST_SERIALIZATION_NVP(leader_);
-                  arc & BOOST_SERIALIZATION_NVP(interval_type_);
-                  arc & BOOST_SERIALIZATION_NVP(interval_);
-                  if (version >= 2)
-                  {
-                      arc & BOOST_SERIALIZATION_NVP(delay_);
-                      arc & BOOST_SERIALIZATION_NVP(inversion_);
-                      arc & BOOST_SERIALIZATION_NVP(retrograde_);
-                  }
-              }
               public:
+                enum class IntervalType : std::int32_t
+                {
+                    Neither,
+                    Scalar,
+                    Chromatic
+                };
+
+                Follower()
+                 : follow_{false},
+                   leader_{std::numeric_limits<int>().max()},
+                   interval_type_{IntervalType::Neither},
+                   interval_{},
+                   delay_{rational::RhythmRational{0L}},
+                   inversion_{},
+                   retrograde_{}
+                {
+                }
+              public:
+                bool follow() const;
+                int leader() const;
+                IntervalType interval_type() const;
+                int interval() const;
+                rational::RhythmRational& delay() ;
+                bool inversion() const;
+                bool retrograde() const;
+                void follow(bool follow);
+                void leader(int leader);
+                void interval_type(IntervalType interval_type);
+                void interval(int interval);
+                void delay(rational::RhythmRational delay);
+                void inversion(bool inversion);
+                void retrograde(bool retrograde);
+
+                template<class Archive>
+                    void serialize(Archive& arc, const unsigned int version)
+                {
+                    arc & BOOST_SERIALIZATION_NVP(follow_);
+                    arc & BOOST_SERIALIZATION_NVP(leader_);
+                    arc & BOOST_SERIALIZATION_NVP(interval_type_);
+                    arc & BOOST_SERIALIZATION_NVP(interval_);
+                    if (version >= 2)
+                    {
+                        arc & BOOST_SERIALIZATION_NVP(delay_);
+                        arc & BOOST_SERIALIZATION_NVP(inversion_);
+                        arc & BOOST_SERIALIZATION_NVP(retrograde_);
+                    }
+                }
+              private:
                 bool follow_;
                 int leader_;
                 IntervalType interval_type_;
@@ -121,6 +138,7 @@ namespace textmidi
             std::int32_t pan() const noexcept;
             void pan(std::int32_t pan) noexcept;
             const Follower& follower() const noexcept;
+            Follower& follower() noexcept;
             void follower(const Follower& follower) noexcept;
           private:
             std::string low_pitch_;

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.81
+// TextMIDITools Version 1.0.82
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -177,12 +177,12 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 
     for (int tr{}; tr < static_cast<int>(xml_form.voices().size()); ++tr)
     {
-        if (xml_form.voices()[tr].follower().follow_) [[unlikely]]
+        if (xml_form.voices()[tr].follower().follow()) [[unlikely]]
         {
-            if (xml_form.voices()[tr].follower().leader_ < static_cast<int>(followers_graph.size()))
+            if (xml_form.voices()[tr].follower().leader() < static_cast<int>(followers_graph.size()))
             {
-                followers_graph[xml_form.voices()[tr].follower().leader_][tr] = true;
-                if (xml_form.voices()[tr].follower().leader_ == tr)
+                followers_graph[xml_form.voices()[tr].follower().leader()][tr] = true;
+                if (xml_form.voices()[tr].follower().leader() == tr)
                 {
                     const string errstr{((((string{__FILE__ } += ':')
                         += BOOST_PP_STRINGIZE(__LINE__)) += " voice ")
@@ -286,12 +286,12 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 {
     // If the command line did not set arrangements, then set them from the XML file.
     track_scramble_.period_ = ((PermutationEnum::Undefined == track_scramble_.scramble_)
-        ? (static_cast<TicksDuration>(static_cast<int>(round(xml_form.arrangement_definition().period_))) * TicksPerQuarter)
+        ? (static_cast<TicksDuration>(static_cast<int>(round(xml_form.arrangement_definition().period()))) * TicksPerQuarter)
         : track_scramble_.period_);
 
     track_scramble_.scramble_
         = (track_scramble_.scramble_ == arrangements::PermutationEnum::Undefined)
-        ? xml_form.arrangement_definition().algorithm_ : track_scramble_.scramble_;
+        ? xml_form.arrangement_definition().algorithm() : track_scramble_.scramble_;
     RandomDouble random_double{};
     vector<Track> tracks(xml_form.voices().size()/*, Track{ xml_form.scale().size() / 2 }*/);
     vector<pair<int, int>> tessitura;
@@ -330,7 +330,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             cout << "tr: " << tr << '\n';
 #endif
             auto& track{tracks[tr]};
-            if (!xml_form.voices()[tr].follower().follow_) [[likely]]
+            if (!xml_form.voices()[tr].follower().follow()) [[likely]]
             {
                 while ((track.the_next_time() < total_duration) && (track_note_events.size() < max_events_per_track_))
                 {
@@ -510,7 +510,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             {
                 try
                 {
-                    track_note_events[tr] = track_note_events.at(xml_form.voices()[tr].follower().leader_);
+                    track_note_events[tr] = track_note_events.at(xml_form.voices()[tr].follower().leader());
                 }
                 catch (out_of_range& exc)
                 {
@@ -522,7 +522,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                 int pivot_key_index{static_cast<int>(key_scale.size())};
                 for (auto& ne : track_note_events[tr])
                 {
-                    switch (xml_form.voices()[tr].follower().interval_type_)
+                    switch (xml_form.voices()[tr].follower().interval_type())
                     {
                       [[likely]] case VoiceXml::Follower::IntervalType::Scalar:
                         {
@@ -532,13 +532,13 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                             if (key_iter != key_scale.cend())
                             {
                                 key_index = std::distance(key_scale.cbegin(), key_iter);
-                                if (xml_form.voices()[tr].follower().interval_ < 0)
+                                if (xml_form.voices()[tr].follower().interval() < 0)
                                 {
                                     // Check there's room down the scale
                                     if (abs(xml_form.voices()[tr]
-                                        .follower().interval_) < key_index)
+                                        .follower().interval()) < key_index)
                                     {
-                                        key_index += xml_form.voices()[tr].follower().interval_;
+                                        key_index += xml_form.voices()[tr].follower().interval();
                                     }
                                     if (key_scale.size() == static_cast<long unsigned>(pivot_key_index))
                                     {
@@ -549,11 +549,11 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                                 {
                                     // Check there's room up the scale
                                     if ((xml_form.voices()[tr]
-                                        .follower().interval_ + key_index)
+                                        .follower().interval() + key_index)
                                            < static_cast<int>(key_scale.size()))
                                     {
                                         key_index += xml_form.voices()[tr]
-                                            .follower().interval_;
+                                            .follower().interval();
                                         if (key_scale.size() == static_cast<long unsigned>(pivot_key_index))
                                         {
                                             pivot_key_index = key_index;
@@ -564,7 +564,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                                         }
                                     }
                                 }
-                                if (xml_form.voices()[tr].follower().inversion_)
+                                if (xml_form.voices()[tr].follower().inversion())
                                 {
                                     const int shift{2 * (key_index - pivot_key_index)};
                                     if ((  (shift > 0) && (key_index >= shift))
@@ -582,13 +582,13 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         {
                           int key{ne.pitch()};
 
-                          if (xml_form.voices()[tr].follower().interval_ < 0)
+                          if (xml_form.voices()[tr].follower().interval() < 0)
                           {
                               if (abs(xml_form.voices()[tr]
-                                 .follower().interval_) < key)
+                                 .follower().interval()) < key)
                               {
                                   ne.pitch(key + xml_form.voices()[tr]
-                                      .follower().interval_);
+                                      .follower().interval());
                                   if (RestPitch == pivot_key)
                                   {
                                       pivot_key = ne.pitch();
@@ -598,17 +598,17 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                           else
                           {
                               if (key + xml_form.voices()[tr]
-                                  .follower().interval_ < midi::MidiPitchQty)
+                                  .follower().interval() < midi::MidiPitchQty)
                               {
                                   ne.pitch(key + xml_form.voices()[tr]
-                                      .follower().interval_);
+                                      .follower().interval());
                                   if (RestPitch == pivot_key)
                                   {
                                       pivot_key = ne.pitch();
                                   }
                               }
                           }
-                          if (xml_form.voices()[tr].follower().inversion_)
+                          if (xml_form.voices()[tr].follower().inversion())
                           {
                               ne.pitch(ne.pitch() - 2 * (ne.pitch() - pivot_key));
                           }
@@ -619,14 +619,14 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     }
                 }
             }
-            if (xml_form.voices()[tr].follower().retrograde_)
+            if (xml_form.voices()[tr].follower().retrograde())
             {
                 ranges::reverse(track_note_events[tr]);
             }
-            if (xml_form.voices()[tr].follower().delay_)
+            if (xml_form.voices()[tr].follower().delay())
             {
                 // Insert a rest for delay for canon effects.
-                const auto start_delay = cgm::NoteEvent{RestPitch, 0, xml_form.voices()[tr].follower().delay_};
+                const auto start_delay = cgm::NoteEvent{RestPitch, 0, xml_form.voices()[tr].follower().delay()};
                 track_note_events[tr].insert(track_note_events[tr].cbegin(), start_delay);
             }
         }

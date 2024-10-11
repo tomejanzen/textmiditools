@@ -20,7 +20,7 @@ syntax keyword SysexRtSubid1 RT_TIMECODE RT_SHOW_CONTROL RT_NOTATION_INFORMATION
 
 syntax keyword lazyEvent vel chan
 syntax keyword lazyRest r R
-syntax keyword lazycmd LAZY END_LAZY
+syntax keyword lazycmd LAZY END_LAZY DETAIL BRIEF END_BRIEF
 syntax match NOTE_LETTER "[A-G]\|[a-g]"
 syntax match anote "[ABCDEFGabcdefg]\([b#]\)\?[0123456789]"
 syntax match DYNAMIC "\(^\|[^[:alnum:]]\)\(pppp\|ppp\|pp\|p\|mp\|mf\|forte\|ff\|fff\|ffff\|PPPP\|PPP\|PP\|P\|MP\|MF\|FORTE\|FF\|FFF\|FFFF\)\(+\?\)\([^[:alnum:]]\|$\)"

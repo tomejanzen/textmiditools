@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -215,7 +215,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
         }
         if (leader_only)
         {
-            leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
+            leaders_topo_sort[0].emplace_back(follower_index); // if not a follower save it.
         }
     }
 #if defined(TEXTMIDICGM_PRINT)
@@ -237,7 +237,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
                     const auto it{ranges::find(leaders_topo_sort[g - 1], leader_index)};
                     if (it != leaders_topo_sort[g - 1].end())
                     {
-                        leaders_topo_sort[g].push_back(follower_index);
+                        leaders_topo_sort[g].emplace_back(follower_index);
                     }
                 }
             }
@@ -262,7 +262,7 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
     for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
     {
-        track_scramble_sequences.push_back(track_scramble_.arrangements_->arrangement());
+        track_scramble_sequences.emplace_back(track_scramble_.arrangements_->arrangement());
         track_scramble_.arrangements_->next();
     }
 #undef TEXTMIDICGM_PRINT
@@ -301,7 +301,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 
     for (auto v : xml_form.voices())
     {
-        tessitura.push_back(make_pair
+        tessitura.emplace_back(make_pair
             (textmidi::pitchname_to_keynumber(v.low_pitch()).first,
              textmidi::pitchname_to_keynumber(v.high_pitch()).first));
     }
@@ -499,10 +499,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         }
                         NoteEvent temp_note_event{key_number,
                             dynamic, rhythm};
-                        track_note_events[tr].push_back(temp_note_event);
+                        track_note_events[tr].emplace_back(temp_note_event);
                     } else {
                         NoteEvent temp_note_event{RestPitch, 0, rhythm};
-                        track_note_events[tr].push_back(temp_note_event);
+                        track_note_events[tr].emplace_back(temp_note_event);
                     }
                 }
             }

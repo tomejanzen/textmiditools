@@ -1,3 +1,25 @@
+2025-01-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, DynamicsOptions.cc, Midi.cc, MidiEvents.cc, MidiMaps.h,
+        MusicalForm.cc, RhythmRational.cc, RhythmRational.h, cgmlegacy.cc, 
+        miditext.cc, textmidi.l, textmidicgm.cc: Use emplace, emplace_back,
+        make_pair rather than insert.
+        * Options.h, RhythmRational.cc, RhythmRational.h, miditext.cc, miditext.texi,
+        smustextmidi.cc, smustextmidi.texi, textmidicgm.cc, textmidicgm.texi:
+        add "dotted_rhythms" options for LAZY mode output.
+
+2025-01-13     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l: crash on check for dotted rhythm out of range for a rhythm of "1".
+        * dynamicsquiet.cfg test/dynamicstest.txt: improve dynamics tests to make it easier
+        to audit results.
+
+2025-01-12     Thomas E. Janzen <janzentome@gmail.com>
+        * DynamicsOptions.cc, Makefile, Makefile.am, Makefile.debug, Makefile.in,
+        * Midi.cc, Midi.h, MidiEvents.cc, MidiMaps.cc, MidiMaps.h, RhythmRational.cc,
+        * SmusTrackEvent.cc, Voice.h, autom4te.cache/requests, main.cc, miditext.cc,
+        * smustextmidi.cc, textmidi.h, textmidi.l, textmidicgm.cc:
+        Remove explicit "new" operators.  Add -D_GLIBCXX_ASSERTIONS to make file.
+        Regen debug make files.
+
 2024-07-14     Thomas E. Janzen <janzentome@gmail.com>
         * MusicalForm.{cc,h}: for textmidi --random, replace copyright notice
         with notice that the form was machine-generated.
@@ -77,8 +99,8 @@
 
 2024-06-16     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{cc,h}: fix bug in PrintLazyTrack::ticks_to_note_stop()
-        that did not sufficiently distinguish an actuall NoteOff.
-        This caused a PolyphonePressure event, which is derived from NoteEvent,
+        that did not sufficiently distinguish an actual NoteOff.
+        This caused a PolyphonicPressure event, which is derived from NoteEvent,
         to be mistaken for a NoteOff event.
         Fix other mistakes of identification that are due to use of
         dynamic_cast to reveal whether an event is a note_on/off/poly_pressure.
@@ -91,7 +113,7 @@
         non-note events in the middle of note lifetimes.
         Reordering of events at the same tick time is allowed.
         This means that roundtrip tests might fail.
-        Enlarge tokensizer to permit mid-chord dynamics and chan.
+        Enlarge tokenizer to permit mid-chord dynamics and chan.
 
 2024-05-13     Thomas E. Janzen <janzentome@gmail.com>
         * AllFormsWindow.py, MusicalForm.{h,cc}, textmidiformedit.py:

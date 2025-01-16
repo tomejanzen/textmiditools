@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -84,7 +84,7 @@ void cgmlegacy::TextForm::read_from_file(const string& form_filename)
             istringstream iss(form_string);
             uint32_t key{};
             iss >> key;        // a MIDI key number in the scale
-            scale.push_back(key);
+            scale.emplace_back(key);
         }
     }
 
@@ -228,7 +228,7 @@ void cgmlegacy::TextForm::read_from_file(const string& form_filename)
 
         VoiceOld vo;
         iss >> vo;
-        voices.push_back(vo);
+        voices.emplace_back(vo);
     }
     // Ignore channel, string of audio instrument until end of file
     form_stream.close();

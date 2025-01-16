@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <ranges>
+#include <memory>
 
 #include <boost/lexical_cast.hpp>
 
@@ -411,9 +412,9 @@ string SmusTrackEventVolume::textmidi()
     str += pre_rest();
     if (current_dynamic() != data())
     {
-        if (midi::dynamics_map->contains(data()))
+        if (midi::dynamics_map.contains(data()))
         {
-            const auto dynamic{midi::dynamics_map->at(data())};
+            const auto dynamic{midi::dynamics_map.at(data())};
             (str += dynamic) += '\n';
         }
         else
@@ -517,37 +518,37 @@ std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const Smus
     switch (te.decision)
     {
       case Rest:
-        teb.reset(new SmusTrackEventRest{te});
+        teb = std::make_unique<SmusTrackEventRest>(te);
         break;
       case InstrumentNumber:
-        teb.reset(new SmusTrackEventInstrument{te});
+        teb = make_unique<SmusTrackEventInstrument>(te);
         break;
       case TimeSignature:
-        teb.reset(new SmusTrackEventTimeSignature{te});
+        teb = make_unique<SmusTrackEventTimeSignature>(te);
         break;
       case KeySignature: // trackEventIt->data is key
-        teb.reset(new SmusTrackEventKeySignature{te});
+        teb = make_unique<SmusTrackEventKeySignature>(te);
         break;
       case Volume: // Set Volume
-        teb.reset(new SmusTrackEventVolume{te});
+        teb = make_unique<SmusTrackEventVolume>(te);
         break;
       case Channel:
-        teb.reset(new SmusTrackEventChannel{te});
+        teb = make_unique<SmusTrackEventChannel>(te);
         break;
       case Preset:
-        teb.reset(new SmusTrackEventPreset{te});
+        teb = make_unique<SmusTrackEventPreset>(te);
         break;
       [[unlikely]] case Clef:
-        teb.reset(new SmusTrackEventClef{te});
+        teb = make_unique<SmusTrackEventClef>(te);
         break;
       case Tempo:
-        teb.reset(new SmusTrackEventTempo{te});
+        teb = make_unique<SmusTrackEventTempo>(te);
         break;
       case EndOfTrack:
-        teb.reset(new SmusTrackEventEnd{te});
+        teb = make_unique<SmusTrackEventEnd>(te);
         break;
       default: // these are pitches
-        teb.reset(new SmusTrackEventPitch{te});
+        teb = make_unique<SmusTrackEventPitch>(te);
         break;
     }
     return teb;

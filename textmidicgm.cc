@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -65,6 +65,7 @@
 #include <limits>
 #include <unordered_map>
 #include <filesystem>
+#include <memory>
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
@@ -158,6 +159,7 @@ int main(int argc, char *argv[])
         ((ArrangementsOpt        + ",z").c_str(), program_options::value<string>(),                      ArrangementsTxt)
         ((MaxEventsPerTrackOpt   + ",t").c_str(), program_options::value<int>(),                    MaxEventsPerTrackTxt)
         ((ArrangementsPeriodOpt  + ",y").c_str(), program_options::value<double>(),                ArrangementsPeriodTxt)
+        ((DottedRhythmsOpt       + ",w").c_str(), program_options::value<string>(),                     DottedRhythmsTxt)
         ((RhythmExpressionOpt    + ",e").c_str(), program_options::value<string>(),                  RhythmExpressionTxt)
     ;
     program_options::variables_map var_map;
@@ -174,7 +176,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.82\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.83\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -184,7 +186,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.82\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.83\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -311,7 +313,7 @@ int main(int argc, char *argv[])
         }
         for (unsigned filectr{}; filectr < glob_data.gl_pathc; ++filectr)
         {
-            form_filenames.push_back(string(glob_data.gl_pathv[filectr]));
+            form_filenames.emplace_back(string(glob_data.gl_pathv[filectr]));
         }
         globfree(&glob_data);
     }
@@ -333,7 +335,7 @@ int main(int argc, char *argv[])
         {
             TextForm form;
             form.read_from_file(form_filename_temp);
-            xml_forms.push_back(MusicalForm(form_filename_temp, form));
+            xml_forms.emplace_back(MusicalForm(form_filename_temp, form));
         }
     }
     else
@@ -355,7 +357,7 @@ int main(int argc, char *argv[])
                             const string errstr{((string{__FILE__} += ':') += BOOST_PP_STRINGIZE(__LINE__)) += " Invalid Form.\n"};
                             cerr << errstr;
                         }
-                        xml_forms.push_back(xml_form);
+                        xml_forms.emplace_back(xml_form);
                         if (var_map.count(XML_UpdateOpt) && xml_form.valid())
                         {
                             string update_name{};
@@ -444,6 +446,14 @@ int main(int argc, char *argv[])
     }
     const int max_events_per_track{var_map.count(MaxEventsPerTrackOpt) ? var_map[MaxEventsPerTrackOpt].as<int>() : 100000};
 
+    bool dotted_rhythms{true};
+    if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+    {
+        string dotted_rhythms_string{var_map[DottedRhythmsOpt].as<string>()};
+        to_upper(dotted_rhythms_string);
+        dotted_rhythms = ("TRUE" == dotted_rhythms_string);
+    }
+
     if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
     {
         string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
@@ -453,12 +463,20 @@ int main(int argc, char *argv[])
             const rational::RhythmExpression rhythm_expression{midi::rhythm_expression_map[rhythm_expression_string]};
             switch (rhythm_expression)
             {
-                case textmidi::rational::RhythmExpression::Rational:
-                  break;
+              case textmidi::rational::RhythmExpression::Rational:
+                textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmRational>(dotted_rhythms);
+                break;
               case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
-                  textmidi::rational::print_rhythm.reset(new textmidi::rational::PrintRhythmSimpleContinuedFraction);
-                  break;
+                textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmSimpleContinuedFraction>();
+                break;
             }
+        }
+    }
+    else
+    {
+        if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+        {
+            textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmRational>(dotted_rhythms);
         }
     }
 

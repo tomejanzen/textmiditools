@@ -21,7 +21,7 @@
     * Version 1.0.5
       Fix bug of random forms getting different program
       assignments on different voices that have the same
-      MIDI channel.   There must be a (single-valued relation) 
+      MIDI channel.   There must be a (single-valued relation)
       function from MIDI channel to program.
     * Version 1.0.6
       Add textmidiformedit.py and its associated python files,
@@ -30,9 +30,9 @@
       Also added previously omitted B's from the chromatic
       scale in textmidicgm for making random forms.
     * Version 1.0.7
-      Fix form plot's unside-down mean curves, and add a 
+      Fix form plot's unside-down mean curves, and add a
       Postscript menu item.
-      Fix textmidiformedit.py form plots which had upsidedown 
+      Fix textmidiformedit.py form plots which had upsidedown
       mean curves; add a save-postscript menu item.
     * Version 1.0.8
 
@@ -44,38 +44,38 @@
       2022-01-17
       Fix TextMIDITools version in sources. Fix spelling of Association.
     * Version 1.0.11
-      textmidiformedit.py has been made more like a package 
+      textmidiformedit.py has been made more like a package
       that can be installed from github or pypi.org, and run:
       python3
             from textmidiformedit import *
             textmidiformedit()
             etc.
     * Version 1.0.12
-      Fixes bugs in reading/writing form files in textmidiformedit.py, 
-      including for scale, length, min/max note length, pulse, 
+      Fixes bugs in reading/writing form files in textmidiformedit.py,
+      including for scale, length, min/max note length, pulse,
       melody probabilities and form name.
-      Add trackscramble feature to textmidicgm with trackscrambleperiod, 
+      Add trackscramble feature to textmidicgm with trackscrambleperiod,
       so change-up the voice priority periodically under the texture curve.
     * Version 1.0.13
-      Fixes more bugs in reading/writing form files in textmidiformedit.py, 
-      including for scale, length, min/max note length, pulse, 
-      melody probabilities and form name. Fixed bad assignment of 
-      values to widget variables, which is wrong. Used get/set 
+      Fixes more bugs in reading/writing form files in textmidiformedit.py,
+      including for scale, length, min/max note length, pulse,
+      melody probabilities and form name. Fixed bad assignment of
+      values to widget variables, which is wrong. Used get/set
       on widget variables. Fixed behaviour of
-      voice->follow radio buttons. textmidiformedit is in much 
+      voice->follow radio buttons. textmidiformedit is in much
       better condition. The number of remaining bugs est. to be < 1,000,000.
     * Version 1.0.14
-      Fixes more bugs in reading/writing form files in textmidiformedit.py; 
+      Fixes more bugs in reading/writing form files in textmidiformedit.py;
       added resize to form plot window.  Use GeneralMIDI names in program entry.
     * Version 1.0.15
       2022-02-07
-      Fixes more bugs in reading/writing form files in textmidiformedit.py.  
-      Also improved reliability of VoiceWIndow by removing most 
-      widget variables (e.g., StringVar and IntVar) for Spinbox 
-      and Entry as theydid not behave well and copoied data  
-      into the wrong voice.  
-      Added an update_idletasks)( to VoiceWIndow that seems to 
-      help so that data in entries and spinboes are not copied 
+      Fixes more bugs in reading/writing form files in textmidiformedit.py.
+      Also improved reliability of VoiceWIndow by removing most
+      widget variables (e.g., StringVar and IntVar) for Spinbox
+      and Entry as theydid not behave well and copoied data
+      into the wrong voice.
+      Added an update_idletasks)( to VoiceWIndow that seems to
+      help so that data in entries and spinboes are not copied
       to other voices.
     * Version 1.0.16
       2022-02-10
@@ -84,26 +84,26 @@
       2022-02-10
     * Version 1.0.18
       2022-02-11
-      Update copyright to 2022. Update to version 1.0.18. Reflect 
-      changes to textmidiformedit in textmidiformedit.texi. 
+      Update copyright to 2022. Update to version 1.0.18. Reflect
+      changes to textmidiformedit in textmidiformedit.texi.
       Fix ambiguity about quotes in text events in textmidi.texi.
     * Version 1.0.19
       2022-02-14
-      No longer crashes due to third-party class library when 
+      No longer crashes due to third-party class library when
       compiled with C++20.
     * Version 1.0.20
       2022-02-18
-      Fixed RhythmRational print_rhythm to print 4 whole notes 
-      as 4/1, because 4 is a quarter note in textmidi language's 
+      Fixed RhythmRational print_rhythm to print 4 whole notes
+      as 4/1, because 4 is a quarter note in textmidi language's
       lazy mode.  Fixed SmusTrackEvent.cc mishandling of whole notes.
     * Version 1.0.21
       2022-02-21
-      Fix smustextmidi's mishandling of dynamics in which a 
-      velocity of 64 would be used instead of the volume in 
+      Fix smustextmidi's mishandling of dynamics in which a
+      velocity of 64 would be used instead of the volume in
       an SMUS volume event;
-      also ignore volume events that repeat the same dynamic 
-      as is current. Since MIDI has no volume events but puts 
-      velocity in every note event, this does not affect the 
+      also ignore volume events that repeat the same dynamic
+      as is current. Since MIDI has no volume events but puts
+      velocity in every note event, this does not affect the
       ultimate MIDI file version.
       Removed a duplicate typedef of MidiStreamVector from Midi.h
     * Version 1.0.22
@@ -118,19 +118,19 @@
       clean up dependencies of includes and on classes.
     * Version 1.0.23
       2022-03-06
-      Fixed smustextmidi bug. It produced a tied-in-and-out 
-      note as in -C4- if there had been a previous tied note 
-      of the same pitch tied-over multiple times because it 
-      would add each new occurance in the tied note to tied_vec_ 
+      Fixed smustextmidi bug. It produced a tied-in-and-out
+      note as in -C4- if there had been a previous tied note
+      of the same pitch tied-over multiple times because it
+      would add each new occurance in the tied note to tied_vec_
       in SmusTrackEvents.cc.
-      Removed a couple unused things. textmidi would convert 
+      Removed a couple unused things. textmidi would convert
       this into excess numbers of note-offs. Detected using MuseScore.
     * Version 1.0.24
       2022-03-17
-      Always write the MIDI file format (e.g., MULTITRACK) 
-      when writing textmidi text files.  The programs that 
+      Always write the MIDI file format (e.g., MULTITRACK)
+      when writing textmidi text files.  The programs that
       write textmidi text files write more uniform code.
-      Smustextmidi puts the text meta events into the first 
+      Smustextmidi puts the text meta events into the first
       MIDI (tempo) track, although SMUS puts them before the track.
       Improve behavior of miditext --lazy overall and re-enable.
       Extra delays are gone in miditext --lazy.
@@ -156,8 +156,8 @@
     * Version 1.0.28
       2022-01-18
       Stream output now saves/restores stream format flags.
-      Fixed defect in stream output in MidiMessages.cc for 
-      CHANNEL_POLYPRESSURE.  Added some "missing" files to 
+      Fixed defect in stream output in MidiMessages.cc for
+      CHANNEL_POLYPRESSURE.  Added some "missing" files to
       make a build more convenient.
     * Version 1.0.29
       2023-02-01
@@ -180,15 +180,15 @@
       Rationalize UNKNOWN_META to not require the length
       in the text version in textmidi language.
     * 2023-02-12
-      Update C++ usage; reduce compiler warnings; 
+      Update C++ usage; reduce compiler warnings;
       miditext now reads the entire file at once;
       use C++ 20 ranges; replace thread with jthread;
       remove last endl's; print more error messages.
     * 2023-02-15
-      Partial low-level redesign and text re-arrangement 
-      of MidiEvents; complete support for TEXT_0[8-F].  
+      Partial low-level redesign and text re-arrangement
+      of MidiEvents; complete support for TEXT_0[8-F].
     * 2023-02-21
-      Modernizing code to C++-20.  
+      Modernizing code to C++-20.
       Replace typedefs with "using".
       Apply ranges algorithms as much as possible,
       as well as back_inserter.
@@ -212,7 +212,7 @@
       to make bidirectional maps for strings and codes.
       Add support for XMF patch Type, device name, and program name.
       Restore behavior of resetting running status for meta and sysex events.
-    * 2023-03-12: Add names for sysex subids and subid1s.  Fix 
+    * 2023-03-12: Add names for sysex subids and subid1s.  Fix
       conversion of byte numeric values whether hex or decimal.
       Add ALL_CALL to systex.  Add names for modes (OMNI/MONO/POLY).
       Change MidiMaps bidirectional maps to use std::optional<>
@@ -237,11 +237,11 @@
       Use cbegin() and cend() when applicable.  Replace
       use of distance() to make a loop counter with for-inited variables.
 
-    * 2023-03-21: 
+    * 2023-03-21:
       Add script to compute MIDI 3D values.
 
     * 2023-03-31:
-      Fix ticks command to reset running status.    
+      Fix ticks command to reset running status.
 
     * 2023-04-07:
       Adjust string handling in textmidi.
@@ -257,7 +257,7 @@
     * 2023-05-04:
       Add support for follower voice inversion and retrograde.
 
-    * Version 1.0.56: 
+    * Version 1.0.56:
       Add to textmidicgm and textmidiformedit:
           Support for follower voice retrograde and inversion.
           Support for follow delay.
@@ -269,4 +269,213 @@
     * Version
       Overhaul textmidiformedit.py and *.py to use widget variables
       more effectively.
+
+    * Version 1.0.57:
+      AllFormsWindow.py, GeneralMIDI.py, VoiceWindow.py, textmidiformedit.py:
+      Fix issue with file load setting program low/high_pitch by adding buttons
+      to the Voice Window marked "From Program", meaning, if the program is
+      a clarinet, then pushing "From Program" will set a low pitch or high pitch
+      suitable for a clarinet patch.  Add "Defaults" menu item to the plot window.
+      Repair defects that were revealed by a load file test.
+      AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
+      Continue applying Python TCL/Tk widget variables (StringVar and IntVar),
+      and applying the callbacks to those and not the widgets.
+      AllFormsWindow.py, FormFrame.py, VoiceWindow.py, textmidiformedit.py:
+      Modernize and correct and rewrite usage of Python TCL/Tk, esp. wrt
+      use of widget variables correctly.
+
+    * Version 1.0.58:
+      Build with compiler option -pedantic and fix warnings, genearally
+      type mismatches requiring casts.
+      Also change a char buffer to a C++ string.
+
+    * Version 1.0.59:
+      Improve C++ usage in Arrangements.
+      Apply rule of 5 for special functions defaulted.
+      Create separate implementation class for MidiEvent (Bridge Pattern).
+      Handle improper key signatures.
+
+    * Version 1.0.60:
+      MidiEvents.h: fix compiler error "used but not defined" on ticks
+      functions by removing the base class's declarations of them.
+
+    * Version 1.0.61:
+      Arrangements.cc: Fix unbounded recursion.
+
+    * Version 1.0.62:
+      textmidi.h, MidiMaps.{h,cc}, textmidi.cc, MidiMaps.cc,
+      MidiEvents.{h,cc}, Midi.{h,cc}, main.cc:
+      Add support to textmidi for a variety of misuse of MIDI running status
+      in order to support testing with input files that had been created
+      by incorrectly written MIDI file software.
+      Changed the runningstatus option in textmidi.
+
+    * Version 1.0.63:
+      Fix mishandling of runningstatus="STANDARD, not "standard".
+      Edit textmidi.texi.
+
+    * Version 1.0.64:
+      GeneralMIDI.h, MIDIKeyString.h, Makefile, Makefile.am, Makefile.in,
+      Midi.cc, Midi.h, NoteEvent.h, Options.h, SmusTrackEvent.h, Track.h,
+      cgmlegacy.h, config.h, config.h.in, config.status, configure:
+      make constexpr that are inside namespaces as inline.
+      textmidi.h: delete obsolete unused externs.
+      Midi.h, main.cc, textmidi.{l,h}:
+      use a Singleton Pattern for the global values.  eww.
+      Midi.{h,cc}, main.cc, textmidi.{l,h}:
+      make running_status a unique_ptr.
+
+    * Version 1.0.65:
+      Composer.cc had index confusion in keeping track of which track
+      to push note events on to.
+      The guitar range was an octave high.
+      The transpose spinbox in textmidiformedit.py did not update from a file.
+      Compile with C++ 23.
+
+    * Version 1.0.66:
+      Support a dynamics configuration text, allowing assigning ff=90, etc.,
+      so each program for which it is meaningful.
+
+    * Version 1.0.67:
+      * Composer.cc, textmidicgm.texi, textmidiformedit.texi, VoiceWindow.py,
+      Voice.{h,cc}, VoiceWindow.png: Make the walking flag into a probability
+      that a voice will be in walking mode from note to note, but be backwards-
+      compatible with old XML form files.
+      * dynamics.cfg, main.cc, Makefile.am, Makefile.in, MidiEvents.cc,
+      MidiMaps.h, miditext.cc, Options.h, smustextmidi.cc, SmusTrackEvent.cc,
+      textmidicgm.cc, textmidi.l: Make settable values for dynamics symbols.
+
+    * Version 1.0.68:
+      Fix textmidiformedit.py setting of walking scrollbar from file.
+
+    * Version 1.0.69:
+      Make MusicalForm.cc random() forms make a random walking value
+      that is in [0.0..1.0).
+
+    * Version 1.0.70:
+      Minor changes to textmidi handling of pan_map.
+      Remove the textmidi-written comment of a track's byte count.
+      Rewrite text scripts and create test directory.
+      Textmidicgm now writes CHANNEL_VOLUME 100 to beginning of tracks.
+      Add more examples for textmidi.
+      Any LAZY mode directives must be after a duration and before a notename or rest.
+
+    * Version 1.0.71:
+
+      examples/textmidi: Format the README files. Change the name of
+      bach_wtc_i_prelude_vii.  Fix a mistake in tenor m. 62 of missing rest,
+      found by the new textmidi feature on stray rhythms.
+      test/powersettests?.txt: add.
+      test/README: update
+      examples/*/README: update
+
+    * Version 1.0.72:
+      Improve textmidi handling of LAZY rhythms with chords, esp.
+      error grammar.  Fix textmidi line counter so that it reports
+      correct line numbers.
+
+    * Version 1.0.73:
+      Support simple continued fractions as rhythms.
+
+    * Version 1.0.74:
+      test/classical_archives_rigid[0123].txt: lists of MIDI files
+      that pass a round-trip test in lazy mode.
+      test/textmidiroundtriptest.py: add options for verbose,
+      lazy, and simplecontinuedfraction.
+      RhythmRational.cc: print_rhythm should never print a zero
+      rhythm; the implied effect is to make a chord.
+      MidiEvents.cc, MidiMaps.{cc,h}, NoteEvent.cc, Optionsh,
+      RhythmsRational.{cc,h}, SmusTrackEvent.cc, miditext.cc,
+      smustextmidi.cc, test/testRhythmRational.cc,
+      textmidi.h, textmidi.texi, smustextmidi.texi, miditext.texi:
+      Distribute capability to use finite continued fractions in LAZY mode in
+      utilities textmidi or miditext or smustextmidi.  Add option
+      rhythmexpression for use by all 3 programs.  Replace calls to
+      print_rhythm() with (*print_rhythm)() and to RhythmRational add the
+      function struct and unique_ptr to it so that utilities can select the
+      lazy-mode rhythm expression as either musical ratios or simple
+      continued fractions.
+
+    * Version 1.0.75:
+      Improve miditext --lazy.
+      Prohibit negative rational numbers in printing rhythms.
+      Improve formatting of output in textmidiroundtriptest.py.
+
+    * Version 1.0.76:
+      Make [finite] continued fractions work as rhythms.
+
+    * Version 1.0.77:
+      AllFormsWindow.py, MusicalForm.{h,cc}, textmidiformedit.py:
+      Add copyright field to xml form file for textmidicgm.
+      MidiEvents.cc, MidiEvents.h,
+      RhythmRational.cc, miditext.cc, test/chorded.txt,
+      textmidi.l: overhaul miditext --lazy option.  Fix
+      unset pointer usage in that code in MidiEvents ::print.
+      MidiEvent.{h,cc}: move ticks_per_whole down into
+      MidiChannelVoiceNoteEvent; update NoteOffEvent, NoteOnEvent,
+      PressureEvent to refer to the base class.
+      Had been crashing when using note_on for ticks_per_whole
+      when note_on did not exist.
+
+    * Version 1.0.78:
+      MidiEvents.{cc,h}, miditext.cc, textmidi.l etc:
+      make miditext --lazy work better when there are
+      non-note events in the middle of note lifetimes.
+      Reordering of events at the same tick time is allowed.
+      This means that roundtrip tests might fail.
+      Enlarge tokenizer to permit mid-chord dynamics and chan.
+
+    * Version 1.0.79:
+      PolyphonicPressure events could be mistaken for a NoteOff.
+      Fix other similar misidentifications.
+      textmidi: handle global_channel t- only be set from LAZY notes.
+      channel_1_to_0() had to act differently for lazy mode.
+
+    * Version 1.0.80:
+      Fix handling of copyright line in textmidiformedit.py.
+      Change the comment that is written into the textmidi language file
+      by textmidicgm.
+      Allow a form file on the command line invoking textmidiformedit.py.
+      textmidicgm has a limit on the number of events in a track at 100,000.
+      Form files can have a copyright notice, but textmidicgm does not
+      copy them into the textmidi composition and this is what is intended.
+      Improve handling of boost::serialization version handling.
+         v0 : 1989 version 0 has no copyright, no arrangement, no counterpuntal followers.
+         v2 : 2023-04-08 version >1 has arrangement (i.e., version=2)
+         v2_v2 : 2023-05-04 Follower version >= 2 has options for
+         delay/inversion/retrograde, that is, Follower version=2
+         v3_v2 : 2024-05-13     version >= 3 has copyright_ (i.e., version=3)
+
+
+    * Version 1.0.81:
+      textmidicgm.{cc, texi}, Composer.{cc,h}: clean up logic for stacktracking;
+      factor out common code.
+      Fix unnecessary escaping of a slash.  Fix attempt to use variable-sized
+      C strings for the unix file name routines. (The C++ filesystem calls return
+      strings with double quotes in the string, so, no.)
+      Add command line option for limiting the maximum number of events in a track.
+      *.xml: found original notes on instruments for these form files and applied.
+      textmidicgm.cc: fix bug.  textmidicgm --update was putting "update_"
+      as a prefix to the entire path rather than only the filename at the end.
+      Composer.{cc,h}, textmidicgm.{texi,cc}: Input form files may now be a list
+      of names or globbed names or both, but must be either all XML forms or
+      the old forms, which are deprecated.  The option --stacktracks is added
+      to make all of the output from multiple files to be put into a single
+      textmidi file.
+      Composer.cc, textmidicgm.texi: add a TEXT timestamp of the local time
+      to the first track.
+      MusicalForm.cc, textmidicgm.cc, textmidicgm.texi: remove the ".form" infix from
+      examples of form files and from random form files generated by textmidicgm.
+      examples/textmidicgm/Demo1993/20fastwalk.xml: remove 2 suffix in name field.
+
+    * Version 1.0.82:
+      MusicalForm.{cc,h}: for textmidi --random, replace copyright notice
+      with notice that the form was machine-generated.
+      Randomize (min,max)_note_len, follower.  Encapsulate ArrangementDefinition
+      and randomize for textmidicgm --random.
+      Voice.{h,cc}, Composer.cc: encapsulate Follower.
+      Cleanup examples/textmidicgm/statistics_and_trigonometry_for_artists/*.xml,
+      examples/textmidicgm/misc/*.xml: Cleanup mostly misc for instrument
+      programs and min_note_len_.  Add positions also.
+      Add disclaimer re: AI.
 

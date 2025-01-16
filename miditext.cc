@@ -1,11 +1,11 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-// Write as mididisasm in 2003 as a companion to textmidi.
+// Written as mididisasm in 2003 as a companion to textmidi.
 //
 // miditext is the main driver for miditext, which converts a binary MIDI standard file
 // into a textmidi text file.
@@ -35,6 +35,7 @@
 #include <map>
 #include <filesystem>
 #include <ranges>
+#include <memory>
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
@@ -98,7 +99,7 @@ namespace
                 cerr << errstr;
                 return;
             }
-            track_iters.push_back(StreamLengthPair(midiiter, num));
+            track_iters.emplace_back(StreamLengthPair(midiiter, num));
             midiiter += num;
         }
     }
@@ -127,7 +128,7 @@ namespace
             do
             {
                 midi_delay_msg_pair = midi_event_factory(midiiter, ticks_accumulated);
-                message_pairs_.push_back(midi_delay_msg_pair);
+                message_pairs_.emplace_back(midi_delay_msg_pair);
             }
             while ((midiiter < midiend)
                 && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>(midi_delay_msg_pair.second.get()));
@@ -153,6 +154,7 @@ int main(int argc, char *argv[])
         ((QuantizeOpt + ",q").c_str(), program_options::value<string>(), QuantizeTxt)
         ((LazyOpt     + ",l").c_str(),                                       LazyTxt)
         ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
+        ((DottedRhythmsOpt + ",w").c_str(),    program_options::value<string>(), DottedRhythmsTxt)
         ((RhythmExpressionOpt + ",e").c_str(), program_options::value<string>(), RhythmExpressionTxt)
     ;
     program_options::positional_options_description pos_opts_desc;
@@ -175,7 +177,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.82\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.83\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
         cout << logstr;
@@ -184,7 +186,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.82\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.83\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -253,7 +255,15 @@ int main(int argc, char *argv[])
         {
             dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
         }
-        midi::dynamics_map.reset(new midi::NumStringMap<int>{textmidi::read_dynamics_configuration(dynamics_configuration_file)});
+        midi::dynamics_map = textmidi::read_dynamics_configuration(dynamics_configuration_file);
+    }
+
+    bool dotted_rhythms{true};
+    if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+    {
+        string dotted_rhythms_string{var_map[DottedRhythmsOpt].as<string>()};
+        to_upper(dotted_rhythms_string);
+        dotted_rhythms = ("TRUE" == dotted_rhythms_string);
     }
 
     if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
@@ -265,14 +275,23 @@ int main(int argc, char *argv[])
             const rational::RhythmExpression rhythm_expression{rhythm_expression_map[rhythm_expression_string]};
             switch (rhythm_expression)
             {
-                case textmidi::rational::RhythmExpression::Rational:
-                  break;
+              case textmidi::rational::RhythmExpression::Rational:
+                textmidi::rational::print_rhythm = make_unique<PrintRhythmRational>(dotted_rhythms);
+                break;
               case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
-                  textmidi::rational::print_rhythm.reset(new PrintRhythmSimpleContinuedFraction);
-                  break;
+                textmidi::rational::print_rhythm = make_unique<PrintRhythmSimpleContinuedFraction>();
+                break;
             }
         }
     }
+    else
+    {
+        if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+        {
+            textmidi::rational::print_rhythm = make_unique<PrintRhythmRational>(dotted_rhythms);
+        }
+    }
+
 
     if (answer && filesystem::exists(midi_filename))
     {

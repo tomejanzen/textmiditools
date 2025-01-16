@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -11,6 +11,7 @@
 #    define  MIDIMAPS_H
 
 #include <ostream>
+#include <utility>
 #include <optional>
 
 #include "Midi.h"
@@ -121,8 +122,8 @@ namespace midi
 
         void insert(std::map<std::string_view, NumType>::value_type insert_value)
         {
-            string_num_map_[insert_value.first]  = insert_value.second;
-            num_string_map_[insert_value.second] = insert_value.first;
+            string_num_map_.emplace(insert_value);
+            num_string_map_.emplace(std::make_pair(insert_value.second, insert_value.first));
         }
 
       private:
@@ -131,7 +132,7 @@ namespace midi
     };
 
     extern const NumStringMap<int> smpte_fps_map;
-    extern std::unique_ptr<const NumStringMap<int>> dynamics_map;
+    extern NumStringMap<int> dynamics_map;
     extern const NumStringMap<int> pan_map;
     extern const NumStringMap<midi::MIDI_Format> format_map;
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;

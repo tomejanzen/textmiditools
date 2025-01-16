@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -86,7 +86,7 @@ void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVec
     // but META messages are appended to the 0xFF.
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.push_back(status_byte);
+        track.emplace_back(status_byte);
     }
     if (!is_sysex || !is_meta)
     {
@@ -102,7 +102,7 @@ void RunningStatusNever::operator()(MidiStreamAtom status_byte, MidiStreamVector
     this->clear();
     if (!is_sysex)
     {
-        track.push_back(status_byte);
+        track.emplace_back(status_byte);
     }
 }
 
@@ -122,7 +122,7 @@ void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, M
     // but META messages are appended to the 0xFF.
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.push_back(status_byte);
+        track.emplace_back(status_byte);
     }
     // Never save sysex or meta as running status
     if (!is_sysex || !is_meta)
@@ -145,7 +145,7 @@ void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, Mi
     }
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.push_back(status_byte);
+        track.emplace_back(status_byte);
     }
     // Never save sysex or meta as running status
     if (!is_sysex || !is_meta)
@@ -168,7 +168,7 @@ void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_b
     }
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.push_back(status_byte);
+        track.emplace_back(status_byte);
     }
     // Never save sysex or meta as running status
     if (!is_sysex || !is_meta)
@@ -177,29 +177,29 @@ void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_b
     }
 }
 
-RunningStatusBase* RunningStatusFactory::operator()(RunningStatusPolicy policy)
+std::unique_ptr<RunningStatusBase> RunningStatusFactory::operator()(RunningStatusPolicy policy)
 {
+    std::unique_ptr<RunningStatusBase> rsp = make_unique<RunningStatusStandard>();
     switch (policy)
     {
       case RunningStatusPolicy::Standard:
-        return new RunningStatusStandard();
+        rsp = make_unique<RunningStatusStandard>();
         break;
       case RunningStatusPolicy::Never:
-        return new RunningStatusNever();
+        rsp = make_unique<RunningStatusNever>();
         break;
       case RunningStatusPolicy::PersistentAfterMeta:
-        return new RunningStatusPersistentAfterMeta();
+        rsp = make_unique<RunningStatusPersistentAfterMeta>();
         break;
       case RunningStatusPolicy::PersistentAfterSysex:
-        return new RunningStatusPersistentAfterSysex();
+        rsp = make_unique<RunningStatusPersistentAfterSysex>();
         break;
       case RunningStatusPolicy::PersistentAfterSysexOrMeta:
-        return new RunningStatusPersistentAfterSysexOrMeta();
+        rsp = make_unique<RunningStatusPersistentAfterSysexOrMeta>();
         break;
       default:
-        return new RunningStatusStandard();
         break;
     }
+    return rsp;
 }
-
 

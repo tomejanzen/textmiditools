@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <limits>
+#include <memory>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -114,7 +115,7 @@ namespace textmidi
             {
             }
 
-            std::shared_ptr<bool> prefer_sharp{new bool};
+            std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
             VoiceXml(const cgmlegacy::VoiceOld& v)
               : low_pitch_{textmidi::num_to_note(v.low_pitch_, prefer_sharp)},
                 high_pitch_{textmidi::num_to_note(v.high_pitch_, prefer_sharp)},

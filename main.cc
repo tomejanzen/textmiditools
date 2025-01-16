@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt)) [[unlikely]]
     {
-        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.82\n"}
+        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.83\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: <https://www\n"};
         cout << logstr;
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.82\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.83\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
         {
             dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
         }
-        midi::dynamics_map.reset(new midi::NumStringMap<int>{textmidi::read_dynamics_configuration(dynamics_configuration_file)});
+        midi::dynamics_map = textmidi::read_dynamics_configuration(dynamics_configuration_file);
     }
 
     if (var_map.count(RunningStatusOpt)) [[unlikely]]
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
         to_upper(running_status_str);
         if (midi::running_status_policy_map.contains(running_status_str))
         {
-            running_status.reset(midi::RunningStatusFactory()(midi::running_status_policy_map[running_status_str]));
+            running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[running_status_str]);
         }
         else
         {
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        running_status.reset(midi::RunningStatusFactory()(midi::running_status_policy_map[string{"STANDARD"}]));
+        running_status = midi::RunningStatusFactory()(midi::running_status_policy_map[string{"STANDARD"}]);
     }
 
     if (midi_filename.empty()) [[unlikely]]

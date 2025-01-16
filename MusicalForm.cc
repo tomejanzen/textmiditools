@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -371,7 +371,7 @@ void MusicalForm::string_scale_to_int_scale (vector<int>& key_scale) const
     key_scale.clear();
     for (auto str : scale_)
     {
-        key_scale.push_back(textmidi::pitchname_to_keynumber(str).first);
+        key_scale.emplace_back(textmidi::pitchname_to_keynumber(str).first);
     }
 }
 
@@ -517,7 +517,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
                     {
                         for (int n{}; n < MIDIInstrumentsPerGroup; ++n)
                         {
-                            programs.push_back(IdiophoneMarker);
+                            programs.emplace_back(IdiophoneMarker);
                         }
                     }
                     else
@@ -525,7 +525,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
                         for (int n{flag * MIDIInstrumentsPerGroup};
                              n < ((flag + 1) * MIDIInstrumentsPerGroup); ++n)
                         {
-                            programs.push_back(n + 1);
+                            programs.emplace_back(n + 1);
                         }
                     }
                 }

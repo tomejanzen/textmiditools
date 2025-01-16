@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -23,7 +23,19 @@ const midi::NumStringMap<int> midi::smpte_fps_map
     {3, "SMPTE_30FPSNONDROPFRAME"}
 };
 
-unique_ptr<const midi::NumStringMap<int>> midi::dynamics_map{};
+midi::NumStringMap<int> midi::dynamics_map
+   {{{  5, "ppppp"},
+        { 10, "pppp"},
+        { 25, "ppp"},
+        { 40, "pp"},
+        { 50, "p"},
+        { 62, "mp"},
+        { 75, "mf"},
+        { 90, "forte"},
+        {110, "ff"},
+        {120, "fff"},
+        {127, "ffff"},
+        {127, "fffff"}}};
 
 const midi::NumStringMap<midi::MIDI_Format> midi::format_map
 {

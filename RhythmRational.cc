@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -17,9 +17,11 @@
 #include <iostream>
 #include <numeric>
 #include <regex>
+#include <memory>
 #include <sstream>
+#include <algorithm>
 #include <string>
-#include <type_traits> // swap()
+#include <type_traits>
 
 #include <boost/lexical_cast.hpp>
 
@@ -235,7 +237,7 @@ RhythmRational textmidi::rational::operator/(RhythmRational dividend, RhythmRati
 istream& textmidi::rational::operator>>(istream& is, RhythmRational& tr)
 {
     auto cnt{is.rdbuf()->in_avail()};
-    const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[1-9][[:digit:]]{0,19}))?)(.*))"};
+    const regex rhythm_rational_re{R"(([[:space:]]*)(([-+]?[[:digit:]]{1,19})(([/])([-+]?[1-9][[:digit:]]{0,19}))?)([.]*)(.*))"};
 
     enum MatchEnum
     {
@@ -244,7 +246,8 @@ istream& textmidi::rational::operator>>(istream& is, RhythmRational& tr)
         numerator_match         = 3,
         slash_denominator_match = 4,
         denominator_match       = 6,
-        remainder_match         = 7,
+        dots_match              = 7,
+        remainder_match         = 8,
     };
     string buf_string(cnt + 1, '\0');
     // not expected to be null-terminated
@@ -291,6 +294,11 @@ istream& textmidi::rational::operator>>(istream& is, RhythmRational& tr)
             is.seekg(offs, ios_base::cur);
         }
         RhythmRational rtn{numer, denom};
+        const RhythmRational rtn_save{numer, denom};
+        for (int64_t dot{1}; dot <= matches[dots_match].str().size(); ++dot)
+        {
+            rtn += rtn_save / RhythmRational{1L << dot};
+        }
         tr = rtn;
     }
     return is;
@@ -324,6 +332,11 @@ textmidi::rational::RhythmRational::operator bool() const
 {
     return numerator_ != 0;
 }
+
+void textmidi::rational::RhythmRational::invert()
+{
+    std::swap(numerator_, denominator_);
+} 
 
 void textmidi::rational::RhythmRational::make_denominators_coherent(RhythmRational& a, RhythmRational& b) const
 {
@@ -428,7 +441,89 @@ textmidi::rational::RhythmRational::operator double() const
         / static_cast<double>(denominator_);
 }
 
-std::unique_ptr<PrintRhythmBase> textmidi::rational::print_rhythm{new PrintRhythmRational};
+std::istream& textmidi::rational::ReadMusicRational::operator()(std::istream& is, RhythmRational& tr)
+{
+    // Check for a single integer, because in textmidi lazy mode this is a short hand for a numerator of 1.
+    auto flags{is.flags()};
+    string str;
+    is >> str;
+    // +1234... 1234  +1234  but not 1234/ 
+#if 1
+    const regex int_re{R"(([[:space:]]*)([-+]?[[:digit:]]{1,19})(([/])|([.]+))?.*)"};
+#else
+    const regex int_re{R"(4)"};
+#endif
+    enum MatchEnum
+    {
+        leading_space_match     = 1,
+        denominator_match       = 2,
+        slash_or_dots_match     = 3,
+        slash_match             = 4,
+        dots_match              = 5,
+    };
+    auto cnt{is.rdbuf()->in_avail()};
+    smatch matches{};
+    auto strcopy{str};
+    const auto mat{regex_match(strcopy, matches, int_re)};
+
+#if 1
+    cout << "print matches:\n";
+    for (auto& it : matches)
+    {
+        cout << it.str() << '\n';
+    }
+#endif
+    if (mat) // if it's just an int
+    {
+        int64_t denom{};
+        // If there is no slash but there is a denominator:
+        if (matches[slash_match].str().empty() && !matches[denominator_match].str().empty())
+        {
+            denom = std::atol(matches[denominator_match].str().c_str());
+            tr = RhythmRational{1L, denom};
+            const auto rtn_save{tr};
+            for (int64_t dot{1}; dot <= matches[dots_match].str().size(); ++dot)
+            {
+                tr += rtn_save / RhythmRational{1L << dot};
+            }
+        }
+        else
+        {
+            istringstream iss(str);
+            iss >> tr; 
+        }
+    }
+    else
+    {
+        istringstream iss(str);
+        iss >> tr;
+    }
+    static_cast<void>(is.flags(flags));
+    return is;
+}
+
+long int textmidi::rational::PrintRhythmRational::convert_to_dotted_rhythm(RhythmRational& q)
+{
+
+    auto numerator{q.numerator()};
+    RhythmRational denominator_q{q.denominator()};
+
+    auto numerator_inc{numerator + 1};
+    bitset<64> bs{numerator_inc};
+    int dots{};
+    if ((bs.count() == 1) && dotted_rhythm_) // then the numerator is 2^n - 1
+    {
+        while (numerator > 1)
+        {
+            numerator     /= 2;
+            denominator_q /= RhythmRational{2};
+            ++dots;
+        }
+        denominator_q.invert();
+        q = RhythmRational{numerator} * denominator_q;
+    }
+    return dots;
+}
 
 std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& os, const RhythmRational& tr)
 {
@@ -440,41 +535,25 @@ std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& 
         // textmidi has a convention for quickness of typing that
         // a 1/4 note is written 4, or 1/4, or 2/8 etc.
         // So a 4-wholenote long rhythm must be written 4/1.
+        int dotcount{convert_to_dotted_rhythm(tr_temp)};
         if ((tr_temp.denominator() == 1L) && (tr_temp.numerator() != 1L))
         {
             os << dec << tr_temp.numerator() << '/' << tr_temp.denominator();
         }
         else
         {
-            switch (tr_temp.numerator())
+            if (tr_temp.numerator() == 1L)
             {
-              case 1L:
-                os << tr_temp.denominator() << ' ';
-                break;
-              case 3L: // single dot possible
-                if ((tr_temp.denominator() % 2L) == 0L)
-                {
-                    os << (tr_temp.denominator() / 2L) << ".";
-                }
-                else
-                {
-                    os << tr_temp;
-                }
-                break;
-              case 7L: // double dot possible
-                if ((tr_temp.denominator() % 4L) == 0L)
-                {
-                    os << (tr_temp.denominator() / 4L) << "..";
-                }
-                else
-                {
-                    os << tr_temp;
-                }
-                break;
-              default:
-                os << tr_temp;
-              break;
+                os << tr_temp.denominator();
             }
+            else
+            {
+                os << tr_temp;
+            }
+        }
+        for ( ; dotcount; --dotcount)
+        {
+            os << '.';
         }
     }
     static_cast<void>(os.flags(flags));
@@ -492,4 +571,6 @@ std::ostream& textmidi::rational::PrintRhythmSimpleContinuedFraction::operator()
     static_cast<void>(os.flags(flags));
     return os;
 }
+std::unique_ptr<PrintRhythmBase> textmidi::rational::print_rhythm = make_unique<PrintRhythmRational>();
+
 

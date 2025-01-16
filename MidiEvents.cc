@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -54,9 +54,9 @@ namespace
     {
         string rtn{};
         // If it matches the velocity map then use a symbol instead of vel nn
-        if (dynamics_map->contains(velocity))
+        if (dynamics_map.contains(velocity))
         {
-            rtn = dynamics_map->at(velocity);
+            rtn = dynamics_map.at(velocity);
         }
         else
         {
@@ -269,7 +269,7 @@ void textmidi::MidiSysExEvent::consume_stream(MidiStreamIterator& midiiter)
     int64_t count{};
     do
     {
-        data_.push_back(*midiiter);
+        data_.emplace_back(*midiiter);
     } while ((*(++midiiter) != end_of_sysex[0]) && (++count < len));
     if (*midiiter == end_of_sysex[0])
     {
@@ -935,7 +935,7 @@ void textmidi::MidiFileMetaSequencerSpecificEvent::consume_stream(MidiStreamIter
     int64_t count{};
     do
     {
-        data_.push_back(*midiiter++);
+        data_.emplace_back(*midiiter++);
     } while (++count < len);
 }
 
@@ -2450,7 +2450,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
         if (note_on && note->velocity())
         {
             // Add note to chord_.
-            chord_.push_back(*note_on);
+            chord_.emplace_back(*note_on);
         }
         else // velocity == 0 or noteoff
         {
@@ -2567,7 +2567,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
                     }
                     else
                     {
-                        not_tied_out_list.push_back(tied);
+                        not_tied_out_list.emplace_back(tied);
                     }
                     os << ' ';
                 }
@@ -2688,7 +2688,7 @@ void textmidi::PrintLazyTrack::insert_rests()
                 wholes.reduce();
                 rest->wholes_to_next_event(wholes);
                 DelayEvent rest_pair{rest_start_ticks_accumulated, rest};
-                delay_events_.insert(delay_event_iter, rest_pair);
+                delay_events_.emplace(delay_event_iter, rest_pair);
                 rest_start_ticks_accumulated = me->ticks_accumulated()
                     + me->ticks_to_next_event();
                 // advance rest_start_ticks_accumulated

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -23,11 +23,19 @@ namespace textmidi
     struct TextMidiFeatures
     {
       public:
+        TextMidiFeatures()
+          : text_filename_{"unknown.txt"},
+            midi_filestr_{},
+            line_ctr_{1},
+            detache_{0},
+            note_off_select_{},
+            verbose_{}
+        {}
         static std::unique_ptr<TextMidiFeatures>& me()
         {
             if (!me_)
             {
-                me_.reset(new TextMidiFeatures);
+                me_ = std::make_unique<TextMidiFeatures>();
             }
             return me_;
         }
@@ -96,14 +104,6 @@ namespace textmidi
       private:
         static std::unique_ptr<TextMidiFeatures> me_;
 
-        TextMidiFeatures()
-          : text_filename_{"prelude.txt"},
-            midi_filestr_{},
-            line_ctr_{1},
-            detache_{0},
-            note_off_select_{},
-            verbose_{}
-        {}
         // The input file name, selected by command-line options, is used in error
         // messages.
         std::string text_filename_;

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.82
+// TextMIDITools Version 1.0.83
 //
 // RhythmRational 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -21,6 +21,8 @@
 #include <list>
 #include <stdexcept>
 #include <memory>
+#include <limits>
+#include <bitset>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -74,6 +76,7 @@ namespace textmidi
                 void numerator(std::int64_t numerator) noexcept;
                 void denominator(std::int64_t denominator) noexcept;
                 operator bool() const;
+                void invert();
                 RhythmRational(const RhythmRational& ) = default;
                 bool operator==(const RhythmRational& comparand) const;
                 bool operator!=(const RhythmRational& comparand) const;
@@ -112,9 +115,12 @@ namespace textmidi
         std::ostream& operator<<(std::ostream& os, RhythmRational tr);
         std::istream& operator>>(std::istream& is, RhythmRational::SimpleContinuedFraction& scf);
         std::ostream& operator<<(std::ostream& os, RhythmRational::SimpleContinuedFraction scf);
-#if 0
-        std::ostream& print_rhythm(std::ostream& os, const RhythmRational& ratio64);
-#endif
+
+        struct ReadMusicRational
+        {
+            std::istream& operator()(std::istream& , RhythmRational& );
+        };
+
         struct PrintRhythmBase
         {
             virtual std::ostream& operator()(std::ostream& , const RhythmRational& ) = 0;
@@ -123,12 +129,20 @@ namespace textmidi
 
         struct PrintRhythmRational : public PrintRhythmBase
         {
-            std::ostream& operator()(std::ostream& os, const RhythmRational& tr);
+            PrintRhythmRational(bool dotted_rhythm = true)
+                : dotted_rhythm_{dotted_rhythm}
+            {
+            }
+            std::ostream& operator()(std::ostream& , const RhythmRational& tr);
+          private:
+            long int convert_to_dotted_rhythm(RhythmRational& q);
+            bool dotted_rhythm_;
+
         };
 
         struct PrintRhythmSimpleContinuedFraction : public PrintRhythmBase
         {
-            std::ostream& operator()(std::ostream& os, const RhythmRational& tr);
+            std::ostream& operator()(std::ostream& , const RhythmRational& tr);
         };
         extern std::unique_ptr<PrintRhythmBase> print_rhythm;
 

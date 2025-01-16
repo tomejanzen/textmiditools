@@ -226,6 +226,7 @@ textmidicgm @b{@minus{}f}|@b{@minus{}@minus{}form}
 | previouspermutation | nextpermutation | swappairs | shuffle | skip | heaps @rbracechar{}
 [@b{@minus{}t}|@b{@minus{}@minus{}maxeventspertrack} @lbracechar{}integer@rbracechar{}
 [@b{@minus{}y}|@b{@minus{}@minus{}arrangementsperiod} @lbracechar{}time in seconds@rbracechar{}
+[@b{@minus{}w}|@b{@minus{}@minus{}dotted_rhythms} @var{true}|@var{false}
 [@b{@minus{}e}|@b{@minus{}@minus{}rhythmexpression} @var{rational}|@var{simplecontinuedfraction}
 [@b{@minus{}h}|@b{@minus{}@minus{}help}] [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose}]
 [@b{@minus{}k}|@b{@minus{}@minus{}stacktracks}]
@@ -593,6 +594,16 @@ The default is 1000 minutes.
 @cindex @minus{}@minus{}maxeventspertrack
 Puts a limit on the number of MIDI events generated for a single track, in order to
 avoid generating over-large files.  The default is 100,000 events.
+
+@item @minus{}w, @minus{}@minus{}dotted_rhythms true|false
+@cindex @minus{}w
+@cindex @minus{}@minus{}dotted_rhythms
+Used with @b{--lazy}, selects dotted rhythms or only rational numbers (including an integer with an implied @quotedblleft{}1/@quotedblright{}).
+The default is to use dotted rhythms.  If true, any rhythm with a numerator that is a power of 2 minus 1 (n^2-1), e.g.: 3, 7, 15, 31, 63, will be
+written as a dotted rhythm.
+
+If @quotedblleft{}true@quotedblright{}, then @quotedblleft{}3/8@quotedblright{} will appear as @quotedblleft{}4.@quotedblright{}, 
+else as @quotedblleft{}3/8@quotedblright{}.
 
 @item @minus{}e, @minus{}@minus{}rhythmexpression rational|simplecontinuedfraction
 @cindex @minus{}e

@@ -203,7 +203,7 @@ fffff=127
 @cindex @minus{}@minus{}dotted_rhythms
 Used with @b{--lazy}, selects dotted rhythms or only rational numbers (including an integer with an implied @quotedblleft{}1/@quotedblright{}).
 The default is to use dotted rhythms.  If true, any rhythm with a numerator that is a power of 2 minus 1 (n^2-1), e.g.: 3, 7, 15, 31, 63, will be
-written as a dotted rhythm.
+written as a dotted rhythm, to large numbers of dots (periods).
 If @quotedblleft{}true@quotedblright{}, then @quotedblleft{}3/8@quotedblright{} will appear as @quotedblleft{}4.@quotedblright{}, 
 else as @quotedblleft{}3/8@quotedblright{}.
 

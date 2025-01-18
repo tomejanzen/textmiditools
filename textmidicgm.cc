@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.83
+// TextMIDITools Version 1.0.84
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.83\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.84\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.83\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.84\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -444,7 +444,7 @@ int main(int argc, char *argv[])
                 static_cast<int64_t>(floor(var_map[ArrangementsPeriodOpt].as<double>())) * TicksPerQuarter};
         }
     }
-    const int max_events_per_track{var_map.count(MaxEventsPerTrackOpt) ? var_map[MaxEventsPerTrackOpt].as<int>() : 100000};
+    const size_t max_events_per_track{var_map.count(MaxEventsPerTrackOpt) ? var_map[MaxEventsPerTrackOpt].as<size_t>() : 100000};
 
     bool dotted_rhythms{true};
     if (var_map.count(DottedRhythmsOpt)) [[unlikely]]

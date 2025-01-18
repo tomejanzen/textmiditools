@@ -1298,12 +1298,14 @@ denominator alone may be given instead.
 Note that to get 4 whole notes you must write 4/1 (or 8/2), but not a 4 by itself.
 
 To use dotted quarters, add a period to the duration
-(double dots are also supported):
+(up to around two billion dots are also supported):
 
 @smallexample
 C4 4. D4 8 E4 4. F4 8 G4 4. A4 8 B4 4. C5 8
 C4 4.. D4 16 E4 4.. F4 16 G4 4.. A4 16 B4 4.. C5 16
-@end smallexample
+@end smallexample 
+You may put large numbers of dots (periods) after any rational rhythm (not simple continued fractions).  However @command{miditext} will produce dots only for rhythms that have
+numerators that are equal to one less than an integer power of two (2^n - 1).
 
 Durations are fractions of a whole notes,
 but if the numerator is 1, as for 1/4 (a quarter note) then just write

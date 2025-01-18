@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.83
+** TextMIDITools Version 1.0.84
 ** Copyright © 2024 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -1752,7 +1752,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
            thenumerator{1.0};
     uint32_t total_duration{240};
     int bracket{};
-    if ((bracket = rhythmsubstr.find('[')) != rhythmsubstr.npos)
+    if (static_cast<size_t>(bracket = static_cast<size_t>(rhythmsubstr.find('['))) != rhythmsubstr.npos)
     {
         string fractionstr{rhythmsubstr.substr(bracket)};
         RhythmRational::SimpleContinuedFraction scf{};

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.83
+// TextMIDITools Version 1.0.84
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -2667,7 +2667,6 @@ void textmidi::PrintLazyTrack::insert_rests()
         auto note{dynamic_cast<MidiChannelVoiceNoteEvent*>(me)};
         auto note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(note)};
         auto note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(note)};
-        auto note_poly_key_pressure{dynamic_cast<MidiChannelVoicePolyphonicKeyPressureEvent*>(note)};
         // A note-on with zero velocity is a substitute note-off.
         const auto is_noteoff{(note_on && !note->velocity()) || note_off};
         const auto is_noteon { note_on &&  note->velocity()};

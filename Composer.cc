@@ -469,6 +469,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         // Alternatively it could be changed to a rest.
                         pitch_index = xml_form.scale().size() - 1;
                     }
+                    if (pitch_index < 0)
+                    {
+                        pitch_index = 0;
+                    }
                     // Same pitch index as the last pitch index
                     if (pitch_index != RestPitchIndex)
                     {

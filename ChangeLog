@@ -1,3 +1,8 @@
+2025-02-02     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, textmidiformedit.py:  Fix out of range (negative)
+        pitch index in textmidicgm, and get textmidiformedit.py to 
+        write duration_factor.
+
 2025-02-01     Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.h, Midi.h, MidiEvents.h, RhythmRational.h:
         Reading Grimm: "C++ Core Guidelines Explained"

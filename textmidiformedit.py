@@ -737,7 +737,7 @@ class XmlForm(tkinter.Tk):
         if (write_version):
             follower_element.setAttribute('class_id', '7')
             follower_element.setAttribute('tracking_level', '0')
-            follower_element.setAttribute('version', '2')
+            follower_element.setAttribute('version', '3')
 
         self.add_text_element(doc, follower_element, 'follow', 'follow_', str(int(voice_dict['follower']['follow'])))
         self.add_text_element(doc, follower_element, 'leader', 'leader_', str(int(voice_dict['follower']['leader'])))
@@ -753,6 +753,11 @@ class XmlForm(tkinter.Tk):
         self.add_text_element(doc, delay_element, 'numerator', 'numerator_', str(voice_dict['follower']['delay']['numerator']))
         self.add_text_element(doc, delay_element, 'denominator', 'denominator_', str(voice_dict['follower']['delay']['denominator']))
         follower_element.appendChild(delay_element)
+
+        duration_factor_element = doc.createElement('duration_factor_')
+        self.add_text_element(doc, duration_factor_element, 'numerator', 'numerator_', str(voice_dict['follower']['duration_factor']['numerator']))
+        self.add_text_element(doc, duration_factor_element, 'denominator', 'denominator_', str(voice_dict['follower']['duration_factor']['denominator']))
+        follower_element.appendChild(duration_factor_element)
         self.add_text_element(doc, follower_element, 'inversion', 'inversion_', str(int(voice_dict['follower']['inversion'])))
         self.add_text_element(doc, follower_element, 'retrograde', 'retrograde_', str(int(voice_dict['follower']['retrograde'])))
         item_element.appendChild(follower_element)

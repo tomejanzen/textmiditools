@@ -1,4 +1,13 @@
 2025-02-02     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.cc, textmidiformedit.py: wasn't creating and writing
+        the voice follower duration_factor XML element.
+        Also random musical forms could have self-followers, so just
+        disable a self-following voice's following.
+        * MusicalForm.cc, Scales.cc: fix missing comma after a "C0" that
+        caused the non-note "C0D0" to appear.  Changed MusicalForm.cc
+        to pull out the random scales index.
+
+2025-02-02     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, textmidiformedit.py:  Fix out of range (negative)
         pitch index in textmidicgm, and get textmidiformedit.py to 
         write duration_factor.

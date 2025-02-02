@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.85
+# TextMIDITools Version 1.0.86
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -520,6 +520,7 @@ class XmlForm(tkinter.Tk):
                 follower_dict['inversion'] = '0'
                 follower_dict['retrograde'] = '0'
             follower_dict['delay'] = delay_dict
+            follower_dict['duration_factor'] = duration_factor_dict
             voice_dict['follower'] = follower_dict
             voice_list.append(voice_dict)
 
@@ -861,7 +862,7 @@ class XmlForm(tkinter.Tk):
         about_window = tkinter.Text(about_top)
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
-        about_window.insert('1.0', 'TextMIDITools Version 1.0.85\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
+        about_window.insert('1.0', 'TextMIDITools Version 1.0.86\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
         about_window['state'] = 'disabled'
         about_window.focus()
 

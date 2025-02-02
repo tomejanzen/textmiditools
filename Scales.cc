@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.85
+// TextMIDITools Version 1.0.86
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -420,7 +420,7 @@ vector<vector<string_view>> cgm::scale_strs{
       "C#9", "D#9", "F#9"},
      // 32: Pentatonic on D
      {"C-1",
-      "D-1", "E-1", "G-1", "A-1", "C0"
+      "D-1", "E-1", "G-1", "A-1", "C0",
       "D0", "E0", "G0", "A0", "C1",
       "D1", "E1", "G1", "A1", "C2",
       "D2", "E2", "G2", "A2", "C3",

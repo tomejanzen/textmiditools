@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.85
+// TextMIDITools Version 1.0.86
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -492,7 +492,8 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     voices_.resize(ri() % MaxRandomVoiceQty + 1);
 
     scale_.clear();
-    ranges::transform(scale_strs[ri() % scale_strs.size()], back_inserter(scale_),
+    const auto scale_index{ri() % scale_strs.size()};
+    ranges::transform(scale_strs[scale_index], back_inserter(scale_),
         [](const string_view& strv) { return string{strv.data(), strv.length()}; } );
     vector<int> programs{};
     if (GeneralMIDIGroup::All == static_cast<GeneralMIDIGroup>(instrument_flags))
@@ -545,14 +546,18 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
         melodic_channels.erase(mc_it);
     }
 
-    for (auto& v : voices_)
+    for (int vctr{}; auto& v : voices_)
     {
         v.channel(melodic_channels[ri() % melodic_channels.size()]);
         v.walking(rd());
-        // No Followers in a random form.
         v.follower(VoiceXml::Follower{});
         auto follower{(ri() % 3) == 0}; // don't have more than 1/3 of voices be followers
         auto leader{ri() % voices_.size()};
+        // if this is a self-follower, then don't be a follower.
+        if (vctr == leader)
+        {
+            follower = false;
+        }
         if (follower && !voices_[leader].follower().follow())
         {
             v.follower().follow(true);
@@ -562,6 +567,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
             v.follower().inversion((ri() % 2) == 1);
             v.follower().retrograde((ri() % 2) == 1);
         }
+        ++vctr;
     }
     vector<int> channels(voices_.size());
     ranges::transform(voices_, channels.begin(),

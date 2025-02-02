@@ -422,7 +422,7 @@ textmidi_LDADD = @LEXLIB@
 info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
 AM_CXXFLAGS = -D_GLIBCXX_ASSERTIONS -std=c++23 -Wall -Wpedantic \
-	-Wextra -Weffc++ -O2
+	-Wextra -Weffc++ -Wshadow -O2
 AM_LFLAGS = -i
 LEXFLAGS = -i
 LEX = /usr/bin/env lex

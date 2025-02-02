@@ -1,3 +1,70 @@
+2025-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, Midi.h, MidiEvents.h, RhythmRational.h:
+        Reading Grimm: "C++ Core Guidelines Explained"
+        and Meyers "Effective Modern C++".
+        Mark override on overriding virtual member functions.
+        * MusicalForm.cc, Voice.cc, Voice.h:  Fix const-correctness
+        in Voice Follower class.
+        * Makefile, Makefile.am, Makefile.in, MidiEvents.cc, autom4te.cache/requests,
+        main.cc, miditext.cc, smustextmidi.cc, textmidi.l, textmidicgm.cc:
+        Louis Brandy on youtube talk "use -Wshadow".  Fix shadowing variables.
+        * textmidicgm.cc: fix prompt for --update.  There is no argument.
+        The new file is called "update_"file.xml, where file.xml is the name
+        given to --xmlform.
+
+2025-02-01     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, NoteEvent.cc, NoteEvent.h, Voice.cc, Voice.h:
+        Add duration_factor to version 3 of Follower under MusicalForm.
+        * VoiceWindow.py, textmidiformedit.py: Add duration_factor to the python code.
+
+2025-01-31     Thomas E. Janzen <janzentome@gmail.com>
+        * SmusTrackEvent.h, textmidi.h: 
+        Reading Grimm: "C++ Core Guidelines Explained".
+        Add constexpr specifiers on class member functions.
+
+2025-01-30     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, Arrangements.{h,cc}, cgmlegacy.{h,cc}, Composer.{h,cc}, HeapsAlgorithmTemplate.h, 
+        MidiEvents.{h,cc}, Midi.{h,cc}, MIDIKeyString.{h,cc}, MidiMaps.{h,cc}, MakeString.{h,cc},
+        MusicalForm.{h,cc}, NoteEvent.h, RandomDouble.h, RandomInt.h, rational_support.{h,cc},
+        SmusTrackEvent.{h,cc}, Track.{h,cc}: 
+        Reading Grimm: "C++ Core Guidelines Explained": specify functions as noexcept.
+        * RhythmRational.{h,cc}: change some simple accessors to constexpr definitions.
+        * Arrangements.h, MidiEvents.cc, MidiEvents.h, MusicalForm.h, RandomInt.h,
+        SmusTrackEvent.h, Voice.h, cgmlegacy.h, textmidi.l: remove dumb default c-tors
+        and some trailing spaces.
+
+2025-01-29     Thomas E. Janzen <janzentome@gmail.com>
+	* test/chorded.com, MidiEvents.cc, miditext.gdb, test/chorded.txt:
+        Study failures of chorded tests (repeats of tied notes after a zero rest).
+        Apparently fixed.
+	* RhythmRational.cc, textmidi.l: remove trailing spaces.
+        * textmidi.l: fix usage of C++ lib algorithms to replace
+        for-loops.  (Don't use emplace if you're adding a matching type.)
+        * Composer.cc, MusicalForm.cc: fix crash of pitch_index being negative.
+
+2025-01-28     Thomas E. Janzen <janzentome@gmail.com>
+        * test/roundtriptests.bash: run all roundtrip tests.
+        * writesmus.cc: fix compilation issues. Replace for-loops.
+        * miditext.cc, MidiEvents.cc: fix missing first rest due to bug in in_rest.
+        * textmidi.l: fix removing members of release_list from chord.  Broke trying
+        to remove bare loops.
+
+2025-01-27     Thomas E. Janzen <janzentome@gmail.com>
+        * MusicalForm.cc, smustextmidi.cc, Arrangements.cc, MidiMaps.h, MidiEvents.cc, textmidi.l: remove for loops.
+
+2025-01-26     Thomas E. Janzen <janzentome@gmail.com>
+        * HeapsAlgorithmTemplate.h, RhythmRational.h, Track.h, writesmus.cc:
+        use alias which is using, rather than typedef, so that alias (using)
+        applies when the using namespace directives are used.
+
+2025-01-25     Thomas E. Janzen <janzentome@gmail.com>
+        * DynamicsOptions.cc MidiMaps.h: Refine use of and apply emplace.
+
+2025-01-24     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, Midi.cc, MidiEvents.cc, MusicalForm.cc, cgmlegacy.cc,
+        miditext.cc, textmidi.l, MidiMaps.h, textmidicgm.cc: Refine use of C++
+        emplace*.  Use when there is a type conversion or construction.
+
 2025-01-17     Thomas E. Janzen <janzentome@gmail.com>
 	* Composer.h, MidiEvents.cc, RhythmRational.cc, textmidi.l, textmidicgm.cc:
         clean up compiler warnings, remove debug code.
@@ -3724,6 +3791,10 @@
         on the right.  Now a single channel score should put them in the center
         although the percussion instruments in TiMidity++ seem to be panned
         stereo samples, so channel 10 is always centered.
+
+
+
+
 
 2021-08-31    Thomas E. Janzen <janzentome@gmail.com>
 

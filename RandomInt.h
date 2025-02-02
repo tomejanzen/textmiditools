@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -24,7 +24,7 @@ namespace textmidi
           public:
             using result_type = std::uint64_t;
             RandomInt(std::uint64_t low = 0LU,
-                      std::uint64_t high = std::numeric_limits<std::uint64_t>().max())
+                      std::uint64_t high = std::numeric_limits<std::uint64_t>().max()) noexcept
               : re_{},
                 dist_{low, high},
                 low_{low},
@@ -36,18 +36,22 @@ namespace textmidi
                 const std::int32_t seed((count & 0x00000000FFFFFFFF) ^ (count >> 32));
                 re_.seed(static_cast<double>(seed));
             }
-            std::uint64_t operator()()
+
+            std::uint64_t operator()() noexcept
             {
                 return dist_(re_);
             }
-            std::uint64_t min() const
+
+            std::uint64_t min() const noexcept
             {
                 return low_;
             }
-            std::uint64_t max() const
+
+            std::uint64_t max() const noexcept
             {
                 return high_ + 1;
             }
+
           private:
             std::default_random_engine re_;
             std::uniform_int_distribution<std::uint64_t> dist_;

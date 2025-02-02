@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -102,15 +102,7 @@ namespace
 
     bool compare_id(IdType id, uint8_t rhs[4])
     {
-        auto rtn{true};
-        for (auto i{0}; i < 4; ++i)
-        {
-            if (id[i] != rhs[i])
-            {
-                rtn = false;
-            }
-        }
-        return rtn;
+        return std::equal(id.begin(), id.end(), &rhs[0]);
     }
 
     const string SMUSOpt{"smus"};
@@ -152,7 +144,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.84\n"}
+        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.85\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: <https://www\n"};
         cout << logstr;
@@ -161,7 +153,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.84\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.85\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -252,9 +244,9 @@ int main(int argc, char *argv[])
     if (answer && filesystem::exists(textmidi_filename)) [[unlikely]]
     {
         cout << "Overwrite " << textmidi_filename << "?" << '\n';
-        string answer{};
-        cin >> answer;
-        if (!((answer[0] == 'y') || (answer[0] == 'Y')))
+        string answerstr{};
+        cin >> answerstr;
+        if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
         {
             exit(0);
         }
@@ -411,10 +403,7 @@ int main(int argc, char *argv[])
     SmusTrackEventFactory track_event_factory{};
     vector<unique_ptr<SmusTrackEventBase>> track_events(notes_per_track);
     transform(&trackEventPtr[0], &trackEventPtr[notes_per_track], track_events.begin(), track_event_factory);
-    for (const auto& te : track_events)
-    {
-        textmidi_file << te->textmidi_tempo();
-    }
+    ranges::for_each(track_events, [&](unique_ptr<SmusTrackEventBase>& te){ textmidi_file << te->textmidi_tempo(); });
     if (SmusTrackEventBase::delay_accum_)
     {
         textmidi_file << SmusTrackEventBase::i_am_lazy_string(true) << " R ";
@@ -463,10 +452,7 @@ int main(int argc, char *argv[])
         // default to medium dynamic of 64 unless a Volume event sets it.
         SmusTrackEventBase::channel(0);
         SmusTrackEventBase::current_dynamic(64);
-        for (const auto& te : track_events)
-        {
-            textmidi_file << te->textmidi();
-        }
+        ranges::for_each(track_events, [&](unique_ptr<SmusTrackEventBase>& te) { textmidi_file << te->textmidi(); });
         if (SmusTrackEventBase::delay_accum_)
         {
             if (!SmusTrackEventBase::i_am_lazy())

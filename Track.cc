@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0.16
 // Copyright © 2024 Thomas E. Janzen
@@ -15,25 +15,25 @@ using namespace std;
 using namespace textmidi;
 using namespace textmidi::cgm;
 
-TicksDuration cgm::Track::the_next_time() const
+TicksDuration cgm::Track::the_next_time() const noexcept
 {
     return the_next_time_;
 }
-int cgm::Track::last_pitch_index() const
+int cgm::Track::last_pitch_index() const noexcept
 {
     return last_pitch_index_;
 }
 
-void cgm::Track::the_last_time(const TicksDuration the_last_time)
+void cgm::Track::the_last_time(const TicksDuration the_last_time) noexcept
 {
     the_last_time_ = the_last_time;
 }
-void cgm::Track::the_next_time(const TicksDuration the_next_time)
+void cgm::Track::the_next_time(const TicksDuration the_next_time) noexcept
 {
     the_next_time_ = the_next_time;
 }
 
-void cgm::Track::last_pitch_index(const int last_pitch_index)
+void cgm::Track::last_pitch_index(const int last_pitch_index) noexcept
 {
     last_pitch_index_ = last_pitch_index;
 }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <memory>
 #include <iomanip>
+#include <iostream>
 #include <ostream>
 #include <utility>
 
@@ -44,13 +45,13 @@ namespace
     // channel_0_to_1
     // transforms a MIDI binary channel in (0..15).
     // to a textmidi value (usu. channel or program) in (1..16)
-    MidiStreamAtom channel_0_to_1(MidiStreamAtom channel)
+    MidiStreamAtom channel_0_to_1(MidiStreamAtom channel) noexcept
     {
         ++channel;
         return channel;
     }
 
-    string dynamic_string(int velocity)
+    string dynamic_string(int velocity) noexcept
     {
         string rtn{};
         // If it matches the velocity map then use a symbol instead of vel nn
@@ -104,7 +105,7 @@ textmidi::KeySignatureMap textmidi::key_signature_map{
 
 //
 // Create a variable-length value.
-constexpr int64_t textmidi::variable_len_value(MidiStreamIterator& midiiter)
+constexpr int64_t textmidi::variable_len_value(MidiStreamIterator& midiiter) noexcept
 {
     uint64_t len{};
     while (*midiiter & variable_len_flag)
@@ -130,114 +131,113 @@ ostream& textmidi::operator<<(ostream& os, const DelayEvent& msg_pair)
 
 //
 // return the accumulated MIDI ticks.
-constexpr int64_t textmidi::MidiEvent::ticks_accumulated() const
+constexpr int64_t textmidi::MidiEvent::ticks_accumulated() const noexcept
 {
     return midi_event_impl_.ticks_accumulated();
 }
 
 //
 // set the accumulated MIDI ticks.
-void textmidi::MidiEvent::ticks_accumulated(int64_t ticks_accumulated)
+void textmidi::MidiEvent::ticks_accumulated(int64_t ticks_accumulated) noexcept
 {
     midi_event_impl_.ticks_accumulated(ticks_accumulated);
 }
 
 //
 // return the MIDI ticks to the next event.
-constexpr int64_t textmidi::MidiEvent::ticks_to_next_event() const
+constexpr int64_t textmidi::MidiEvent::ticks_to_next_event() const noexcept
 {
     return midi_event_impl_.ticks_to_next_event();
 }
 
 //
 // set the MIDI ticks to the next event.
-void textmidi::MidiEvent::ticks_to_next_event(int64_t ticks_to_next_event)
+void textmidi::MidiEvent::ticks_to_next_event(int64_t ticks_to_next_event) noexcept
 {
     midi_event_impl_.ticks_to_next_event(ticks_to_next_event);
 }
 
-constexpr int64_t textmidi::MidiEvent::ticks_to_a_note_start() const
+constexpr int64_t textmidi::MidiEvent::ticks_to_a_note_start() const noexcept
 {
     return midi_event_impl_.ticks_to_a_note_start();
 }
 
-void textmidi::MidiEvent::ticks_to_a_note_start(int64_t ticks_to_a_note_start)
+void textmidi::MidiEvent::ticks_to_a_note_start(int64_t ticks_to_a_note_start) noexcept
 {
     midi_event_impl_.ticks_to_a_note_start(ticks_to_a_note_start);
 }
 
-constexpr RhythmRational textmidi::MidiEvent::wholes_to_next_event() const
+constexpr RhythmRational textmidi::MidiEvent::wholes_to_next_event() const noexcept
 {
     return midi_event_impl_.wholes_to_next_event();
 }
 
-int textmidi::MidiEvent::events_to_next_note_on() const
+int textmidi::MidiEvent::events_to_next_note_on() const noexcept
 {
     return midi_event_impl_.events_to_next_note_on();
 }
 
-void textmidi::MidiEvent::events_to_next_note_on(int events_to_next_note_on)
+void textmidi::MidiEvent::events_to_next_note_on(int events_to_next_note_on) noexcept
 {
     midi_event_impl_.events_to_next_note_on(events_to_next_note_on);
 }
 
-void textmidi::MidiEvent::wholes_to_next_event(
-        const RhythmRational& wholes_to_next_event)
+void textmidi::MidiEvent::wholes_to_next_event(const RhythmRational& wholes_to_next_event) noexcept
 {
     midi_event_impl_.wholes_to_next_event(wholes_to_next_event);
     midi_event_impl_.reduce();
 }
 
-void textmidi::MidiEventImpl::reduce()
+void textmidi::MidiEventImpl::reduce() noexcept
 {
     wholes_to_next_event_.reduce();
 }
 
 //
 // return the accumulated MIDI ticks.
-constexpr int64_t textmidi::MidiEventImpl::ticks_accumulated() const
+constexpr int64_t textmidi::MidiEventImpl::ticks_accumulated() const noexcept
 {
     return ticks_accumulated_;
 }
 
 //
 // set the accumulated MIDI ticks.
-void textmidi::MidiEventImpl::ticks_accumulated(int64_t ticks_accumulated)
+void textmidi::MidiEventImpl::ticks_accumulated(int64_t ticks_accumulated) noexcept
 {
     ticks_accumulated_ = ticks_accumulated;
 }
 
 //
 // return the MIDI ticks to the next event.
-constexpr int64_t textmidi::MidiEventImpl::ticks_to_next_event() const
+constexpr int64_t textmidi::MidiEventImpl::ticks_to_next_event() const noexcept
 {
     return ticks_to_next_event_;
 }
 
 //
 // set the MIDI ticks to the next event.
-void textmidi::MidiEventImpl::ticks_to_next_event(int64_t ticks_to_next_event)
+void textmidi::MidiEventImpl::ticks_to_next_event(int64_t ticks_to_next_event) noexcept
 {
     ticks_to_next_event_ = ticks_to_next_event;
 }
 
-constexpr int64_t textmidi::MidiEventImpl::ticks_to_a_note_start() const
+constexpr int64_t textmidi::MidiEventImpl::ticks_to_a_note_start() const noexcept
 {
     return ticks_to_a_note_start_;
 }
 
-void textmidi::MidiEventImpl::ticks_to_a_note_start(int64_t ticks_to_a_note_start)
+void textmidi::MidiEventImpl::ticks_to_a_note_start(int64_t ticks_to_a_note_start) noexcept
 {
     ticks_to_a_note_start_ = ticks_to_a_note_start;
 }
 
-constexpr RhythmRational textmidi::MidiEventImpl::wholes_to_next_event() const
+constexpr RhythmRational textmidi::MidiEventImpl::wholes_to_next_event() const noexcept
 {
     return wholes_to_next_event_;
 }
 
 void textmidi::MidiEventImpl::wholes_to_next_event(
-        const RhythmRational& wholes_to_next_event)
+        const RhythmRational& wholes_to_next_event) noexcept
 {
     wholes_to_next_event_ = wholes_to_next_event;
     wholes_to_next_event_.reduce();
@@ -249,7 +249,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiEvent& msg)
 }
 
 shared_ptr<MidiEvent> MidiSysExEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -263,13 +263,13 @@ shared_ptr<MidiEvent> MidiSysExEvent::recognize(MidiStreamIterator& midiiter,
     return (recognized ? make_shared<MidiSysExEvent>(midiiter) : shared_ptr<MidiSysExEvent>{});
 }
 
-void textmidi::MidiSysExEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiSysExEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     int64_t len{variable_len_value(midiiter)};
     int64_t count{};
     do
     {
-        data_.emplace_back(*midiiter);
+        data_.push_back(*midiiter);
     } while ((*(++midiiter) != end_of_sysex[0]) && (++count < len));
     if (*midiiter == end_of_sysex[0])
     {
@@ -349,7 +349,7 @@ ostream& textmidi::MidiSysExEvent::text(ostream& os) const
 const long MidiSysExEvent::prefix_len{static_cast<long>(start_of_sysex.size())};
 
 shared_ptr<MidiEvent> MidiSysExRawEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -363,7 +363,7 @@ shared_ptr<MidiEvent> MidiSysExRawEvent::recognize(MidiStreamIterator& midiiter,
     return (recognized ? make_shared<MidiSysExRawEvent>(midiiter) : shared_ptr<MidiSysExRawEvent>{});
 }
 
-void textmidi::MidiSysExRawEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiSysExRawEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     const int64_t len{variable_len_value(midiiter)};
     ranges::copy_n(midiiter, len, back_inserter(data_));
@@ -393,7 +393,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiSysExRawEvent& msg)
 
 const long MidiSysExRawEvent::prefix_len{static_cast<long>(end_of_sysex.size())};
 
-bool MidiFileMetaEvent::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end)
+bool MidiFileMetaEvent::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -406,7 +406,7 @@ bool MidiFileMetaEvent::recognize(MidiStreamIterator& midiiter, MidiStreamIterat
 const long MidiFileMetaEvent::prefix_len{static_cast<long>(meta_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaSequenceEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -425,7 +425,7 @@ shared_ptr<MidiEvent> MidiFileMetaSequenceEvent::recognize(MidiStreamIterator& m
         : shared_ptr<MidiFileMetaSequenceEvent>{});
 }
 
-void textmidi::MidiFileMetaSequenceEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaSequenceEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     auto msb{*midiiter++};
     auto lsb{*midiiter++};
@@ -440,12 +440,12 @@ ostream& textmidi::MidiFileMetaSequenceEvent::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiFileMetaSequenceEvent::sequence_number(uint16_t sequence_number)
+void textmidi::MidiFileMetaSequenceEvent::sequence_number(uint16_t sequence_number) noexcept
 {
     sequence_number_ = sequence_number;
 }
 
-uint16_t textmidi::MidiFileMetaSequenceEvent::sequence_number() const
+uint16_t textmidi::MidiFileMetaSequenceEvent::sequence_number() const noexcept
 {
     return sequence_number_;
 }
@@ -459,7 +459,7 @@ const long MidiFileMetaSequenceEvent::prefix_len{static_cast<long>(meta_prefix.s
     + static_cast<long>(sequence_number_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaUnknownEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -477,7 +477,7 @@ shared_ptr<MidiEvent> MidiFileMetaUnknownEvent::recognize(MidiStreamIterator& mi
         : shared_ptr<MidiFileMetaUnknownEvent>{});
 }
 
-void textmidi::MidiFileMetaUnknownEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaUnknownEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     meta_code_ = *midiiter++;
     int64_t len{variable_len_value(midiiter)};
@@ -489,10 +489,8 @@ ostream& textmidi::MidiFileMetaUnknownEvent::text(ostream& os) const
 {
     auto flags{os.flags()};
     os << "UNKNOWN_META " << hex << setw(2) << setfill('0') << "0x" << static_cast<int>(meta_code_);
-    for (const auto it : data_)
-    {
-        os << ' ' << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(it);
-    }
+    ranges::for_each(data_, [&](MidiStreamAtom msa) {
+        os << " " << hex << "0x" << setw(2) << setfill('0') << static_cast<unsigned>(msa);});
     os << dec;
     static_cast<void>(os.flags(flags));
     return os;
@@ -502,7 +500,7 @@ const long MidiFileMetaUnknownEvent::prefix_len{static_cast<long>(meta_prefix.si
     + static_cast<long>(unknown_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaMidiChannelEvent::recognize(
-    MidiStreamIterator& midiiter, MidiStreamIterator the_end)
+    MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -523,7 +521,7 @@ shared_ptr<MidiEvent> MidiFileMetaMidiChannelEvent::recognize(
         : shared_ptr<MidiFileMetaMidiChannelEvent>{});
 }
 
-void textmidi::MidiFileMetaMidiChannelEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaMidiChannelEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     channel_ = *midiiter++;
     channel_ = channel_0_to_1(channel_);
@@ -545,12 +543,12 @@ ostream& textmidi::MidiFileMetaMidiChannelEvent::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiFileMetaMidiChannelEvent::channel(uint16_t channel)
+void textmidi::MidiFileMetaMidiChannelEvent::channel(uint16_t channel) noexcept
 {
     channel_ = channel;
 }
 
-constexpr uint16_t textmidi::MidiFileMetaMidiChannelEvent::channel()
+constexpr uint16_t textmidi::MidiFileMetaMidiChannelEvent::channel() noexcept
 {
     return channel_;
 }
@@ -564,7 +562,7 @@ const long MidiFileMetaMidiChannelEvent::prefix_len{static_cast<long>(meta_prefi
     + static_cast<long>(midi_channel_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaSetTempoEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -585,7 +583,7 @@ shared_ptr<MidiEvent> MidiFileMetaSetTempoEvent::recognize(MidiStreamIterator& m
         : shared_ptr<MidiFileMetaSetTempoEvent>{});
 }
 
-void textmidi::MidiFileMetaSetTempoEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaSetTempoEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     tempo_ = *midiiter++;
     tempo_ <<= 8;
@@ -610,12 +608,12 @@ ostream& textmidi::MidiFileMetaSetTempoEvent::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiFileMetaSetTempoEvent::tempo(uint32_t tempo)
+void textmidi::MidiFileMetaSetTempoEvent::tempo(uint32_t tempo) noexcept
 {
     tempo_ = tempo;
 }
 
-uint32_t textmidi::MidiFileMetaSetTempoEvent::tempo() const
+uint32_t textmidi::MidiFileMetaSetTempoEvent::tempo() const noexcept
 {
     return tempo_;
 }
@@ -629,7 +627,7 @@ const long MidiFileMetaSetTempoEvent::prefix_len{static_cast<long>(meta_prefix.s
     + static_cast<long>(tempo_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaSMPTEOffsetEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -650,7 +648,7 @@ shared_ptr<MidiEvent> MidiFileMetaSMPTEOffsetEvent::recognize(MidiStreamIterator
         : shared_ptr<MidiFileMetaSMPTEOffsetEvent>{});
 }
 
-void textmidi::MidiFileMetaSMPTEOffsetEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaSMPTEOffsetEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     hours_ = *midiiter++;
     fps_ = (hours_ >> smpte_fps_shift) & smpte_fps_mask;
@@ -698,7 +696,7 @@ const long MidiFileMetaSMPTEOffsetEvent::prefix_len{static_cast<long>(meta_prefi
     + static_cast<long>(smpte_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaMidiPortEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -719,7 +717,7 @@ shared_ptr<MidiEvent> MidiFileMetaMidiPortEvent::recognize(MidiStreamIterator& m
         : shared_ptr<MidiFileMetaMidiPortEvent>{});
 }
 
-void textmidi::MidiFileMetaMidiPortEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaMidiPortEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     midiport_ = *midiiter++;
 }
@@ -741,7 +739,7 @@ const long MidiFileMetaMidiPortEvent::prefix_len{static_cast<long>(meta_prefix.s
     + static_cast<long>(midi_port_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaTimeSignatureEvent::recognize(
-    MidiStreamIterator& midiiter, MidiStreamIterator the_end)
+    MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -763,7 +761,7 @@ shared_ptr<MidiEvent> MidiFileMetaTimeSignatureEvent::recognize(
         : shared_ptr<MidiFileMetaTimeSignatureEvent>{});
 }
 
-void textmidi::MidiFileMetaTimeSignatureEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaTimeSignatureEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     numerator_ = *midiiter++;
     denominator_ = *midiiter++;
@@ -792,7 +790,7 @@ const long MidiFileMetaTimeSignatureEvent::prefix_len{static_cast<long>(meta_pre
     + static_cast<long>(time_signature_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaKeySignatureEvent::recognize(
-    MidiStreamIterator& midiiter, MidiStreamIterator the_end)
+    MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -821,7 +819,7 @@ shared_ptr<MidiEvent> MidiFileMetaKeySignatureEvent::recognize(
         : shared_ptr<MidiFileMetaKeySignatureEvent>{});
 }
 
-void textmidi::MidiFileMetaKeySignatureEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaKeySignatureEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     // Some programs that were obsolete when they were written left off the mode byte,
     // so this consume_stream function has to see the length byte to know that.
@@ -862,7 +860,7 @@ const long MidiFileMetaKeySignatureEvent::prefix_len{static_cast<long>(meta_pref
     + static_cast<long>(key_signature_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaXmfPatchTypeEvent::recognize(
-    MidiStreamIterator& midiiter, MidiStreamIterator the_end)
+    MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -880,7 +878,7 @@ shared_ptr<MidiEvent> MidiFileMetaXmfPatchTypeEvent::recognize(
         : shared_ptr<MidiFileMetaXmfPatchTypeEvent>{});
 }
 
-void textmidi::MidiFileMetaXmfPatchTypeEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaXmfPatchTypeEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     // Some programs that were obsolete when they were written left off the mode byte,
     // so this consume_stream function has to see the length byte to know that.
@@ -909,7 +907,7 @@ const long MidiFileMetaXmfPatchTypeEvent::prefix_len{static_cast<long>(meta_pref
     + static_cast<long>(xmf_patch_type_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaSequencerSpecificEvent::recognize(MidiStreamIterator& midiiter,
-        MidiStreamIterator the_end)
+        MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     // page 10 of file format chapter.
@@ -929,13 +927,13 @@ shared_ptr<MidiEvent> MidiFileMetaSequencerSpecificEvent::recognize(MidiStreamIt
         : shared_ptr<MidiFileMetaSequencerSpecificEvent>{});
 }
 
-void textmidi::MidiFileMetaSequencerSpecificEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaSequencerSpecificEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     int64_t len{variable_len_value(midiiter)};
     int64_t count{};
     do
     {
-        data_.emplace_back(*midiiter++);
+        data_.push_back(*midiiter++);
     } while (++count < len);
 }
 
@@ -963,7 +961,7 @@ const long MidiFileMetaSequencerSpecificEvent::prefix_len{static_cast<long>(meta
     + static_cast<long>(sequencer_specific_prefix.size())};
 
 shared_ptr<MidiEvent> MidiFileMetaEndOfTrackEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -984,7 +982,7 @@ shared_ptr<MidiEvent> MidiFileMetaEndOfTrackEvent::recognize(MidiStreamIterator&
         : shared_ptr<MidiFileMetaEndOfTrackEvent>{});
 }
 
-void textmidi::MidiFileMetaEndOfTrackEvent::consume_stream(MidiStreamIterator& )
+void textmidi::MidiFileMetaEndOfTrackEvent::consume_stream(MidiStreamIterator& ) noexcept
 {
 }
 
@@ -1002,7 +1000,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiFileMetaEndOfTrackEvent& ms
 const long MidiFileMetaEndOfTrackEvent::prefix_len{static_cast<long>(meta_prefix.size())
     + static_cast<long>(end_of_track_prefix.size())};
 
-void textmidi::MidiFileMetaStringEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiFileMetaStringEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     int64_t len{variable_len_value(midiiter)};
     str_.insert(str_.begin(), midiiter, midiiter + len);
@@ -1025,7 +1023,7 @@ ostream& textmidi::MidiFileMetaTextEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaTextEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1058,7 +1056,7 @@ ostream& textmidi::MidiFileMetaProgramNameEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaProgramNameEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1087,7 +1085,7 @@ ostream& textmidi::MidiFileMetaDeviceNameEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaDeviceNameEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1116,7 +1114,7 @@ ostream& textmidi::MidiFileMetaText0AEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaText0AEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1144,7 +1142,7 @@ ostream& textmidi::MidiFileMetaText0BEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaText0BEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1172,7 +1170,7 @@ ostream& textmidi::MidiFileMetaText0CEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaText0CEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1200,7 +1198,7 @@ ostream& textmidi::MidiFileMetaText0DEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaText0DEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1228,7 +1226,7 @@ ostream& textmidi::MidiFileMetaText0EEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaText0EEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1256,7 +1254,7 @@ ostream& textmidi::MidiFileMetaText0FEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaText0FEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1284,7 +1282,7 @@ ostream& textmidi::MidiFileMetaCopyrightEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaCopyrightEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1317,7 +1315,7 @@ ostream& textmidi::MidiFileMetaTrackNameEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaTrackNameEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1351,7 +1349,7 @@ ostream& textmidi::MidiFileMetaInstrumentEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaInstrumentEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1384,7 +1382,7 @@ ostream& textmidi::MidiFileMetaLyricEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaLyricEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1417,7 +1415,7 @@ ostream& textmidi::MidiFileMetaMarkerEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaMarkerEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1450,7 +1448,7 @@ ostream& textmidi::MidiFileMetaCuePointEvent::text(ostream& os) const
 }
 
 shared_ptr<MidiEvent> MidiFileMetaCuePointEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end)
+    MidiStreamIterator the_end) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1477,7 +1475,7 @@ const long MidiFileMetaCuePointEvent::prefix_len{static_cast<long>(meta_prefix.s
     + static_cast<long>(cue_point_prefix.size()) + variable_length_quantity_min_len};
 
 bool MidiChannelVoiceModeEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatusStandard& running_status)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status) noexcept
 {
     bool recognized{};
     // Recognize an event with running status.
@@ -1518,35 +1516,35 @@ bool MidiChannelVoiceModeEvent::recognize(MidiStreamIterator& midiiter,
 const long MidiChannelVoiceModeEvent::prefix_len{
     full_note_length - static_cast<long>(sizeof(note_on[0]))};
 
-MidiStreamAtom textmidi::MidiChannelVoiceModeEvent::channel() const
+MidiStreamAtom textmidi::MidiChannelVoiceModeEvent::channel() const noexcept
 {
     return channel_;
 }
 
-void textmidi::MidiChannelVoiceModeEvent::channel(MidiStreamAtom channel)
+void textmidi::MidiChannelVoiceModeEvent::channel(MidiStreamAtom channel) noexcept
 {
     channel_ = channel;
 }
 
-constexpr RunningStatusStandard& MidiChannelVoiceModeEvent::running_status()
+constexpr RunningStatusStandard& MidiChannelVoiceModeEvent::running_status() noexcept
 {
     return running_status_;
 }
 
-const RunningStatusStandard& MidiChannelVoiceModeEvent::running_status() const
+const RunningStatusStandard& MidiChannelVoiceModeEvent::running_status() const noexcept
 {
     return running_status_;
 }
 
-const RunningStatusStandard& MidiChannelVoiceModeEvent::local_status() const
+const RunningStatusStandard& MidiChannelVoiceModeEvent::local_status() const noexcept
 {
     return local_status_;
 }
-void MidiChannelVoiceModeEvent::local_status(const RunningStatusStandard& rs)
+void MidiChannelVoiceModeEvent::local_status(const RunningStatusStandard& rs) noexcept
 {
     local_status_ = rs;
 }
-RunningStatusStandard& MidiChannelVoiceModeEvent::local_status()
+RunningStatusStandard& MidiChannelVoiceModeEvent::local_status() noexcept
 {
     return local_status_;
 }
@@ -1556,7 +1554,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceModeEvent& msg)
     return msg.text(os);
 }
 
-void textmidi::MidiChannelVoiceNoteEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiChannelVoiceNoteEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     // Skip a beginning byte that is an event type byte.
     if (event_flag & *midiiter)
@@ -1588,32 +1586,32 @@ void textmidi::MidiChannelVoiceNoteEvent::consume_stream(MidiStreamIterator& mid
     }
 }
 
-constexpr MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::key() const
+constexpr MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::key() const noexcept
 {
     return key_;
 }
 
-void textmidi::MidiChannelVoiceNoteEvent::key(MidiStreamAtom key)
+void textmidi::MidiChannelVoiceNoteEvent::key(MidiStreamAtom key) noexcept
 {
     key_ = key;
 }
 
-void textmidi::MidiChannelVoiceNoteEvent::key_string(string_view key_string)
+void textmidi::MidiChannelVoiceNoteEvent::key_string(string_view key_string) noexcept
 {
     key_string_ = key_string;
 }
 
-string textmidi::MidiChannelVoiceNoteEvent::key_string() const
+string textmidi::MidiChannelVoiceNoteEvent::key_string() const noexcept
 {
     return key_string_;
 }
 
-void textmidi::MidiChannelVoiceNoteEvent::velocity(MidiStreamAtom velocity)
+void textmidi::MidiChannelVoiceNoteEvent::velocity(MidiStreamAtom velocity) noexcept
 {
     velocity_ = velocity;
 }
 
-constexpr MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::velocity() const
+constexpr MidiStreamAtom textmidi::MidiChannelVoiceNoteEvent::velocity() const noexcept
 {
     return velocity_;
 }
@@ -1627,25 +1625,25 @@ ostream& textmidi::MidiChannelVoiceNoteEvent::text(ostream& os) const
     return os;
 }
 
-constexpr uint32_t textmidi::MidiChannelVoiceNoteEvent::ticks_per_whole() const
+constexpr uint32_t textmidi::MidiChannelVoiceNoteEvent::ticks_per_whole() const noexcept
 {
     return ticks_per_whole_;
 }
 
 constexpr bool textmidi::MidiChannelVoiceNoteEvent
-    ::operator==(const MidiChannelVoiceNoteEvent& note) const
+    ::operator==(const MidiChannelVoiceNoteEvent& note) const noexcept
 {
     return (key_ == note.key() && channel() == note.channel());
 }
 
 void textmidi::MidiChannelVoiceNoteEvent
-    ::wholes_to_noteoff(const RhythmRational& wholes_to_noteoff)
+    ::wholes_to_noteoff(const RhythmRational& wholes_to_noteoff) noexcept
 {
     wholes_to_noteoff_ = wholes_to_noteoff;
     wholes_to_noteoff_.reduce();
 }
 
-RhythmRational textmidi::MidiChannelVoiceNoteEvent::wholes_to_noteoff() const
+RhythmRational textmidi::MidiChannelVoiceNoteEvent::wholes_to_noteoff() const noexcept
 {
     return wholes_to_noteoff_;
 }
@@ -1662,12 +1660,12 @@ ostream& textmidi::MidiChannelVoiceNoteOnEvent::text(ostream& os) const
 }
 
 void textmidi::MidiChannelVoiceNoteOnEvent
-    ::ticks_to_noteoff(int64_t ticks_to_noteoff)
+    ::ticks_to_noteoff(int64_t ticks_to_noteoff) noexcept
 {
     ticks_to_noteoff_ = ticks_to_noteoff;
 }
 
-constexpr int64_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_to_noteoff() const
+constexpr int64_t textmidi::MidiChannelVoiceNoteOnEvent::ticks_to_noteoff() const noexcept
 {
     return ticks_to_noteoff_;
 }
@@ -1678,7 +1676,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteOnEvent& ms
 }
 
 shared_ptr<MidiEvent> MidiChannelVoiceNoteOnEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1698,7 +1696,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceNoteOnEvent::recognize(MidiStreamIterator&
 const long MidiChannelVoiceNoteOnEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1717,7 +1715,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamIterator
 const long MidiChannelVoiceNoteOffEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoicePitchBendEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatusStandard& running_status)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1733,7 +1731,7 @@ shared_ptr<MidiEvent> MidiChannelVoicePitchBendEvent::recognize(MidiStreamIterat
         : shared_ptr<MidiChannelVoicePitchBendEvent>{});
 }
 
-void textmidi::MidiChannelVoicePitchBendEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiChannelVoicePitchBendEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     local_status(running_status());
     MidiStreamAtom pitch_wheel_lsb{*midiiter++};
@@ -1767,12 +1765,12 @@ ostream& textmidi::MidiChannelVoicePitchBendEvent::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiChannelVoicePitchBendEvent::pitch_wheel(MidiStreamAtom pitch_wheel)
+void textmidi::MidiChannelVoicePitchBendEvent::pitch_wheel(MidiStreamAtom pitch_wheel) noexcept
 {
     pitch_wheel_ = pitch_wheel;
 }
 
-MidiStreamAtom textmidi::MidiChannelVoicePitchBendEvent::pitch_wheel() const
+MidiStreamAtom textmidi::MidiChannelVoicePitchBendEvent::pitch_wheel() const noexcept
 {
     return pitch_wheel_;
 }
@@ -1785,7 +1783,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoicePitchBendEvent&
 const long MidiChannelVoicePitchBendEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceControlChangeEvent::recognize(MidiStreamIterator& midiiter,
-    MidiStreamIterator the_end, RunningStatusStandard& running_status)
+    MidiStreamIterator the_end, RunningStatusStandard& running_status) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1801,7 +1799,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceControlChangeEvent::recognize(MidiStreamIt
         : shared_ptr<MidiChannelVoiceControlChangeEvent>{});
 }
 
-void textmidi::MidiChannelVoiceControlChangeEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiChannelVoiceControlChangeEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     local_status(running_status());
     channel(local_status().channel() + 1);
@@ -1879,22 +1877,22 @@ ostream& textmidi::MidiChannelVoiceControlChangeEvent::text(ostream& os) const
     return os;
 }
 
-MidiStreamAtom textmidi::MidiChannelVoiceControlChangeEvent::id() const
+MidiStreamAtom textmidi::MidiChannelVoiceControlChangeEvent::id() const noexcept
 {
     return id_;
 }
 
-void textmidi::MidiChannelVoiceControlChangeEvent::id(MidiStreamAtom id)
+void textmidi::MidiChannelVoiceControlChangeEvent::id(MidiStreamAtom id) noexcept
 {
     id_ = id;
 }
 
-MidiStreamAtom textmidi::MidiChannelVoiceControlChangeEvent::value() const
+MidiStreamAtom textmidi::MidiChannelVoiceControlChangeEvent::value() const noexcept
 {
     return value_;
 }
 
-void textmidi::MidiChannelVoiceControlChangeEvent::value(MidiStreamAtom value)
+void textmidi::MidiChannelVoiceControlChangeEvent::value(MidiStreamAtom value) noexcept
 {
     value_ = value;
 }
@@ -1907,7 +1905,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceControlChangeEv
 const long MidiChannelVoiceControlChangeEvent::prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceChannelPressureEvent::recognize(
-    MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatusStandard& running_status)
+    MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatusStandard& running_status) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -1923,7 +1921,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceChannelPressureEvent::recognize(
         (running_status, midiiter) : shared_ptr<MidiChannelVoiceChannelPressureEvent>{});
 }
 
-void textmidi::MidiChannelVoiceChannelPressureEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiChannelVoiceChannelPressureEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     local_status(running_status());
     channel(local_status().channel() + 1);
@@ -1947,12 +1945,12 @@ ostream& textmidi::MidiChannelVoiceChannelPressureEvent::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiChannelVoiceChannelPressureEvent::pressure(MidiStreamAtom pressure)
+void textmidi::MidiChannelVoiceChannelPressureEvent::pressure(MidiStreamAtom pressure) noexcept
 {
     pressure_ = pressure;
 }
 
-MidiStreamAtom textmidi::MidiChannelVoiceChannelPressureEvent::pressure() const
+MidiStreamAtom textmidi::MidiChannelVoiceChannelPressureEvent::pressure() const noexcept
 {
     return pressure_;
 }
@@ -1973,7 +1971,7 @@ ostream& textmidi::MidiChannelVoicePolyphonicKeyPressureEvent::text(ostream& os)
 
 shared_ptr<MidiEvent> MidiChannelVoicePolyphonicKeyPressureEvent
     ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end,
-    RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole)
+    RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -2026,7 +2024,7 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteOffEvent& m
 const size_t prefix_len{full_note_length};
 
 shared_ptr<MidiEvent> MidiChannelVoiceProgramChangeEvent
-   ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatusStandard& running_status)
+   ::recognize(MidiStreamIterator& midiiter, MidiStreamIterator the_end, RunningStatusStandard& running_status) noexcept
 {
     bool recognized{};
     if (distance(midiiter, the_end) >= prefix_len)
@@ -2042,7 +2040,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceProgramChangeEvent
         : shared_ptr<MidiChannelVoiceProgramChangeEvent>{});
 }
 
-void textmidi::MidiChannelVoiceProgramChangeEvent::consume_stream(MidiStreamIterator& midiiter)
+void textmidi::MidiChannelVoiceProgramChangeEvent::consume_stream(MidiStreamIterator& midiiter) noexcept
 {
     local_status(running_status());
     channel(local_status().channel() + 1);
@@ -2063,12 +2061,12 @@ ostream& textmidi::MidiChannelVoiceProgramChangeEvent::text(ostream& os) const
     return os;
 }
 
-void textmidi::MidiChannelVoiceProgramChangeEvent::program(MidiStreamAtom program)
+void textmidi::MidiChannelVoiceProgramChangeEvent::program(MidiStreamAtom program) noexcept
 {
     program_ = program;
 }
 
-constexpr MidiStreamAtom textmidi::MidiChannelVoiceProgramChangeEvent::program() const
+constexpr MidiStreamAtom textmidi::MidiChannelVoiceProgramChangeEvent::program() const noexcept
 {
     return program_;
 }
@@ -2252,23 +2250,16 @@ DelayEvent textmidi::MidiEventFactory::operator()(MidiStreamIterator& midiiter, 
     return midi_delay_event_pair;
 }
 
-bool textmidi::PrintLazyTrack::is_in_rest() const
+bool textmidi::PrintLazyTrack::is_in_rest() const noexcept
 {
     auto inrest{true};
-    for (auto chkb : channel_keyboards_)
-    {
-        for (auto k : chkb)
-        {
-            if (k)
-            {
-                inrest = false;
-            }
-        }
-    }
+    ranges::for_each(channel_keyboards_,
+        [&](const KeyBoard& chkb) { inrest = inrest
+        && ranges::find_if(chkb, [](int k) { return k > 0; } ) == chkb.end(); });
     return inrest;
 }
 
-void textmidi::PrintLazyTrack::ticks_to_note_stop()
+void textmidi::PrintLazyTrack::ticks_to_note_stop() noexcept
 {
     for (auto delay_event_iter   {delay_events_.begin()};
              (delay_event_iter != delay_events_.end())
@@ -2349,7 +2340,7 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
                     }
                 }
             }
-            if (note_on->ticks_to_noteoff() == std::numeric_limits<std::int64_t>().max())
+            if (note_on->ticks_to_noteoff() == numeric_limits<int64_t>().max())
             {
                 cerr << "no noteoff found, channel: "
                      << static_cast<int>(note->channel()) << " key number: "
@@ -2368,7 +2359,7 @@ void textmidi::PrintLazyTrack::ticks_to_note_stop()
 // then we have to write a 0/1 rhythm anyway in order to insert the other
 // type of event.  This is what it takes to make LAZY mode equivalent to
 // DETAIL mode of the textmidi language.
-void textmidi::PrintLazyTrack::ticks_to_a_note_start()
+void textmidi::PrintLazyTrack::ticks_to_a_note_start() noexcept
 {
     for (auto delay_event_iter{delay_events_.begin()};
         (delay_event_iter != delay_events_.end())
@@ -2404,7 +2395,7 @@ void textmidi::PrintLazyTrack::ticks_to_a_note_start()
     }
 }
 
-void textmidi::PrintLazyTrack::ticks_to_next_event()
+void textmidi::PrintLazyTrack::ticks_to_next_event() noexcept
 {
     const auto len(delay_events_.size());
     auto lopped_end   = ranges::take_view(delay_events_, len - 1);
@@ -2426,7 +2417,7 @@ void textmidi::PrintLazyTrack::ticks_to_next_event()
     }
 }
 
-void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
+void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep) noexcept
 {
     //
     // cast to the base and two final classes.
@@ -2443,14 +2434,13 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
     {
         auto note_on{dynamic_cast<MidiChannelVoiceNoteOnEvent*>(mdep.second.get())};
         auto note_off{dynamic_cast<MidiChannelVoiceNoteOffEvent*>(mdep.second.get())};
-        auto note_poly_key_pressure{dynamic_cast<MidiChannelVoicePolyphonicKeyPressureEvent*>(note)};
         // Save the ticks of the start time of the new note.
         const RhythmRational wholes_to_event{mdep.second->ticks_to_next_event(), note->ticks_per_whole()};
         // If this is a new note with a non-zero velocity:
         if (note_on && note->velocity())
         {
             // Add note to chord_.
-            chord_.emplace_back(*note_on);
+            chord_.push_back(*note_on);
         }
         else // velocity == 0 or noteoff
         {
@@ -2514,6 +2504,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
         }
     }
 
+    auto zero_rhythm_to_next_event{0 == me->ticks_to_next_event()};
     // Print out the chord.
     if (!chord_.empty())
     {
@@ -2522,7 +2513,7 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
             const auto now{me->ticks_accumulated() + rest_ticks}; // timestamp of the current event.
 
             // Copy the MIDI events that that have ticks_to_next_event after now.
-            std::list<MidiChannelVoiceNoteOnEvent> notes_with_next_event_past_now{};
+            list<MidiChannelVoiceNoteOnEvent> notes_with_next_event_past_now{};
             copy_if(chord_.begin(), chord_.end(), back_inserter(notes_with_next_event_past_now),
                 [now](const MidiEvent& eachme)
                 { return ((eachme.ticks_accumulated() + eachme.ticks_to_next_event()) > now); } );
@@ -2551,42 +2542,44 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
                         channel_ = tied.channel();
                         os << "chan " << static_cast<int>(channel_) << ' ';
                     }
+                    ostringstream oss;
                     // If the tied note started earlier, then tie it in from the previous chord.
                     if ((tied.ticks_accumulated() < now) || (!note && !note_poly_key_pressure))
                     {
-                        os << '-';
+                        oss << '-';
                     }
                     // Write the note:
-                    os << tied.key_string();
+                    oss << tied.key_string();
                     // If this tied note has a tied.ticks_accumulated() + ticks_to_noteoff()
                     // is past the next event then tie out.
                     if ((tied.ticks_accumulated() + tied.ticks_to_noteoff())
                       > (me->ticks_accumulated() + me->ticks_to_next_event()))
                     {
-                        os << '-';
+                        oss << '-';
                     }
                     else
                     {
-                        not_tied_out_list.emplace_back(tied);
+                        not_tied_out_list.push_back(tied);
                     }
-                    os << ' ';
+                    oss << ' ';
+                    if (!zero_rhythm_to_next_event)
+                    {
+                        os << oss.str();
+                    }
                 }
-                if (!chord_.empty())
+                if (me->ticks_to_next_event())
                 {
-                    if (me->ticks_to_next_event())
+                    (*print_rhythm)(os, RhythmRational{me->ticks_to_next_event()
+                        - rest_ticks, chord_iter->ticks_per_whole()});
+                    os << '\n';
+                }
+                else // rhythm to next event == 0
+                {
+                    // If a note_on is more than one event away then print a zero rhythm.
+                    if (mdep.second->events_to_next_note_on() > 1)
                     {
-                        (*print_rhythm)(os, RhythmRational{me->ticks_to_next_event()
-                            - rest_ticks, chord_iter->ticks_per_whole()});
+                        (*print_rhythm)(os, mdep.second->wholes_to_next_event());
                         os << '\n';
-                    }
-                    else // rhythm to next event == 0
-                    {
-                        // If a note_on is more than one event away then print a zero rhythm.
-                    //    if (mdep.second->events_to_next_note_on() > 1)
-                        {
-                            (*print_rhythm)(os, mdep.second->wholes_to_next_event());
-                            os << '\n';
-                        }
                     }
                 }
             }
@@ -2598,14 +2591,9 @@ void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep)
             // I can't use list::remove() because it would remove all of the
             // matching notes.
             // Throw out the notes that were in the chord but are not tied out.
-            for (auto ntol : not_tied_out_list)
-            {
-                auto it{ranges::find(chord_, ntol)};
-                if (it != chord_.end())
-                {
-                    chord_.erase(it);
-                }
-            }
+            ranges::for_each(not_tied_out_list,
+                [&](MidiChannelVoiceNoteOnEvent ntol) { auto ntol_it{ranges::find(chord_, ntol)};
+                    if (ntol_it != chord_.end()) { chord_.erase(ntol_it); } } );
         }
     }
 
@@ -2629,7 +2617,7 @@ ostream& textmidi::operator<<(ostream& os, PrintLazyTrack& print_lazy_track)
     return os;
 }
 
-string textmidi::PrintLazyTrack::lazy_string(bool lazy)
+string textmidi::PrintLazyTrack::lazy_string(bool lazy) noexcept
 {
     if (lazy)
     {
@@ -2650,7 +2638,7 @@ string textmidi::PrintLazyTrack::lazy_string(bool lazy)
     return "";
 }
 
-void textmidi::PrintLazyTrack::insert_rests()
+void textmidi::PrintLazyTrack::insert_rests() noexcept
 {
     // note there is no dimension in ChannelKeyboards for MIDI port.
     // But note-on/note-off pairs still have to pair, except when they don't.

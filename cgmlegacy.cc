@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -27,22 +27,22 @@ istream& cgmlegacy::operator>>(istream& is, cgmlegacy::VoiceOld& v)
     return is;
 }
 
-double cgmlegacy::OldFormElement::mean_period() const
+double cgmlegacy::OldFormElement::mean_period() const noexcept
 {
     return mean_period_;
 }
 
-double cgmlegacy::OldFormElement::mean_phase() const
+double cgmlegacy::OldFormElement::mean_phase() const noexcept
 {
     return mean_phase_;
 }
 
-double cgmlegacy::OldFormElement::range_period() const
+double cgmlegacy::OldFormElement::range_period() const noexcept
 {
     return range_period_;
 }
 
-double cgmlegacy::OldFormElement::range_phase() const
+double cgmlegacy::OldFormElement::range_phase() const noexcept
 {
     return range_phase_;
 }
@@ -84,7 +84,7 @@ void cgmlegacy::TextForm::read_from_file(const string& form_filename)
             istringstream iss(form_string);
             uint32_t key{};
             iss >> key;        // a MIDI key number in the scale
-            scale.emplace_back(key);
+            scale.push_back(key);
         }
     }
 
@@ -228,7 +228,7 @@ void cgmlegacy::TextForm::read_from_file(const string& form_filename)
 
         VoiceOld vo;
         iss >> vo;
-        voices.emplace_back(vo);
+        voices.push_back(vo);
     }
     // Ignore channel, string of audio instrument until end of file
     form_stream.close();

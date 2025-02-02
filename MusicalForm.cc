@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -86,7 +86,7 @@ void Sine::offset(double offset) noexcept
     offset_ = offset;
 }
 
-double Sine::value_now(double the_time) const
+double Sine::value_now(double the_time) const noexcept
 {
     const auto the_sine{
         std::sin(2.0 * M_PI * the_time / period_ + phase_)};
@@ -149,7 +149,7 @@ bool MeanRangeSines::valid() const
 }
 
 MelodyProbabilities::MelodyDirection
-    MelodyProbabilities::operator()(double random_variable) const
+    MelodyProbabilities::operator()(double random_variable) const noexcept
 {
     // The probabilities are cumulative probabilities
     // and like thresholds.
@@ -204,15 +204,18 @@ void MelodyProbabilities::up(double up) noexcept
     up_ = up;
 }
 
-double MusicalCharacter::duration(double rf)
+double MusicalCharacter::duration(double rf) noexcept
 {
     return (rhythm_range * rf) - (rhythm_range / 2.0) + rhythm_mean;
 }
 
-int MusicalCharacter::pitch_index(double rf)
+int MusicalCharacter::pitch_index(double rf) noexcept
 {
-    return static_cast<int>(
-        round((pitch_range * rf) - (pitch_range / 2.0) + pitch_mean));
+    auto temp{static_cast<int>(
+        round((pitch_range * rf) - (pitch_range / 2.0) + pitch_mean))};
+    temp = (temp < 0) ? 0 : temp;
+    temp = (temp >= pitch_range) ? pitch_range - 1 : temp;
+    return temp;
 }
 
 string MusicalForm::name() const noexcept
@@ -366,13 +369,11 @@ void MusicalForm::arrangement_definition(ArrangementDefinition arrangement_defin
     arrangement_definition_ = arrangement_definition;
 }
 
-void MusicalForm::string_scale_to_int_scale (vector<int>& key_scale) const
+void MusicalForm::string_scale_to_int_scale (vector<int>& key_scale) const noexcept
 {
     key_scale.clear();
-    for (auto str : scale_)
-    {
-        key_scale.emplace_back(textmidi::pitchname_to_keynumber(str).first);
-    }
+    ranges::for_each(scale_, [&](const string& str) {
+        key_scale.push_back(textmidi::pitchname_to_keynumber(str).first);});
 }
 
 //
@@ -380,7 +381,7 @@ void MusicalForm::string_scale_to_int_scale (vector<int>& key_scale) const
 // the current means and ranges of pitch, duration, dynamic
 // and the number of voices playing.
 void MusicalForm::character_now(TicksDuration theTime,
-        MusicalCharacter& musical_character) const
+        MusicalCharacter& musical_character) const noexcept
 {
     const double dblTime(
         static_cast<double>(theTime.count() / TicksPerQuarter)
@@ -517,7 +518,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
                     {
                         for (int n{}; n < MIDIInstrumentsPerGroup; ++n)
                         {
-                            programs.emplace_back(IdiophoneMarker);
+                            programs.push_back(IdiophoneMarker);
                         }
                     }
                     else
@@ -525,7 +526,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
                         for (int n{flag * MIDIInstrumentsPerGroup};
                              n < ((flag + 1) * MIDIInstrumentsPerGroup); ++n)
                         {
-                            programs.emplace_back(n + 1);
+                            programs.push_back(n + 1);
                         }
                     }
                 }
@@ -557,8 +558,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
             v.follower().follow(true);
             v.follower().leader(leader);
             v.follower().interval_type(static_cast<VoiceXml::Follower::IntervalType>(ri() % 2 + 1));
-            v.follower().delay().numerator(ri() % (TicksPerQuarter * 4));
-            v.follower().delay().denominator(TicksPerQuarter * 4);
+            v.follower().delay(rational::RhythmRational{ri() % (TicksPerQuarter * 4), TicksPerQuarter * 4});
             v.follower().inversion((ri() % 2) == 1);
             v.follower().retrograde((ri() % 2) == 1);
         }
@@ -589,22 +589,13 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     const auto first_pan{pan_step - midi::PanExcess64};
     map<int, int> channel_to_pan;
     int pan(first_pan);
-    for (auto ch : channels)
-    {
-        channel_to_pan[ch] = pan;
-        pan += pan_step;
+    ranges::for_each(channels, [&](int ch) { channel_to_pan[ch] = pan; pan += pan_step; } );
 
-    }
-    for (auto& v : voices_)
-    {
-        v.pan(channel_to_pan[v.channel()]);
-    }
+    ranges::for_each(voices_, [&](VoiceXml& v) { v.pan(channel_to_pan[v.channel()]); });
 
     map<int, int> channel_to_program;
-    for (auto ch : channels)
-    {
-        channel_to_program[ch] = programs[ri() % programs.size()];
-    }
+    ranges::for_each(channels, [&](int ch) {
+        channel_to_program[ch] = programs[ri() % programs.size()];} );
     for (auto& v : voices_)
     {
         const auto program{channel_to_program[v.channel()]};
@@ -695,7 +686,7 @@ bool MusicalForm::valid() const
     return rtn;
 }
 
-void MusicalForm::clamp_scale_to_instrument_ranges()
+void MusicalForm::clamp_scale_to_instrument_ranges() noexcept
 {
     if (!voices_.empty())
     {

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -116,9 +116,14 @@ int VoiceXml::Follower::interval() const
     return interval_;
 }
 
-rational::RhythmRational& VoiceXml::Follower::delay()
+const rational::RhythmRational& VoiceXml::Follower::delay() const
 {
     return delay_;
+}
+
+const rational::RhythmRational& VoiceXml::Follower::duration_factor() const
+{
+    return duration_factor_;
 }
 
 bool VoiceXml::Follower::inversion() const
@@ -151,9 +156,14 @@ void VoiceXml::Follower::interval(int interval)
     interval_ = interval;
 }
 
-void VoiceXml::Follower::delay(rational::RhythmRational delay)
+void VoiceXml::Follower::delay(const rational::RhythmRational& delay)
 {
     delay_ = delay;
+}
+
+void VoiceXml::Follower::duration_factor(const rational::RhythmRational& duration_factor)
+{
+    duration_factor_ = duration_factor;
 }
 
 void VoiceXml::Follower::inversion(bool inversion)

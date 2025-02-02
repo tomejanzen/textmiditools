@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen
@@ -28,7 +28,7 @@ using namespace textmidi;
 midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dynamics_configuration_file)
 {
     midi::NumStringMap<int> option_map
-    {{{  5, "ppppp"},
+      {{{  5, "ppppp"},
         { 10, "pppp"},
         { 25, "ppp"},
         { 40, "pp"},
@@ -68,51 +68,51 @@ midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dyna
 
         if (var_map.count(pppppOpt))
         {
-            option_map.insert(make_pair(pppppOpt, var_map[pppppOpt].as<int>()));
+            option_map.emplace(pppppOpt, var_map[pppppOpt].as<int>());
         }
         if (var_map.count(ppppOpt))
         {
-            option_map.insert(make_pair(ppppOpt, var_map[ppppOpt].as<int>()));
+            option_map.emplace(ppppOpt, var_map[ppppOpt].as<int>());
         }
         if (var_map.count(pppOpt))
         {
-            option_map.insert(make_pair(pppOpt, var_map[pppOpt].as<int>()));
+            option_map.emplace(pppOpt, var_map[pppOpt].as<int>());
         }
         if (var_map.count(ppOpt))
         {
-            option_map.insert(make_pair(ppOpt, var_map[ppOpt].as<int>()));
+            option_map.emplace(ppOpt, var_map[ppOpt].as<int>());
         }
         if (var_map.count(pOpt))
         {
-            option_map.insert(make_pair(pOpt, var_map[pOpt].as<int>()));
+            option_map.emplace(pOpt, var_map[pOpt].as<int>());
         }
         if (var_map.count(mpOpt))
         {
-            option_map.insert(make_pair(mpOpt, var_map[mpOpt].as<int>()));
+            option_map.emplace(mpOpt, var_map[mpOpt].as<int>());
         }
         if (var_map.count(mfOpt))
         {
-            option_map.insert(make_pair(mfOpt, var_map[mfOpt].as<int>()));
+            option_map.emplace(mfOpt, var_map[mfOpt].as<int>());
         }
         if (var_map.count(forteOpt))
         {
-            option_map.insert(make_pair(forteOpt, var_map[forteOpt].as<int>()));
+            option_map.emplace(forteOpt, var_map[forteOpt].as<int>());
         }
         if (var_map.count(ffOpt))
         {
-            option_map.insert(make_pair(ffOpt, var_map[ffOpt].as<int>()));
+            option_map.emplace(ffOpt, var_map[ffOpt].as<int>());
         }
         if (var_map.count(fffOpt))
         {
-            option_map.insert(make_pair(fffOpt, var_map[fffOpt].as<int>()));
+            option_map.emplace(fffOpt, var_map[fffOpt].as<int>());
         }
         if (var_map.count(ffffOpt))
         {
-            option_map.insert(make_pair(ffffOpt, var_map[ffffOpt].as<int>()));
+            option_map.emplace(ffffOpt, var_map[ffffOpt].as<int>());
         }
         if (var_map.count(fffffOpt))
         {
-            option_map.insert(make_pair(fffffOpt, var_map[fffffOpt].as<int>()));
+            option_map.emplace(fffffOpt, var_map[fffffOpt].as<int>());
         }
     }
     return option_map;

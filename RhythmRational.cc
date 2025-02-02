@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -30,17 +30,6 @@
 using namespace std;
 using namespace textmidi;
 using namespace textmidi::rational;
-
-
-int64_t textmidi::rational::RhythmRational::numerator() const noexcept
-{
-    return numerator_;
-}
-
-int64_t textmidi::rational::RhythmRational::denominator() const noexcept
-{
-    return denominator_;
-}
 
 void textmidi::rational::RhythmRational::numerator(int64_t numerator) noexcept
 {
@@ -328,15 +317,10 @@ ostream& textmidi::rational::operator<<(ostream& os, RhythmRational tr)
     return os;
 }
 
-textmidi::rational::RhythmRational::operator bool() const
-{
-    return numerator_ != 0;
-}
-
 void textmidi::rational::RhythmRational::invert()
 {
     std::swap(numerator_, denominator_);
-} 
+}
 
 void textmidi::rational::RhythmRational::make_denominators_coherent(RhythmRational& a, RhythmRational& b) const
 {
@@ -434,20 +418,13 @@ textmidi::rational::RhythmRational textmidi::rational::RhythmRational::reciproca
     return RhythmRational(denominator_, numerator_);
 }
 
-textmidi::rational::RhythmRational::operator double() const
-{
-    return static_cast<double>(numerator_ / denominator_)
-        + static_cast<double>(numerator_ % denominator_)
-        / static_cast<double>(denominator_);
-}
-
 std::istream& textmidi::rational::ReadMusicRational::operator()(std::istream& is, RhythmRational& tr)
 {
     // Check for a single integer, because in textmidi lazy mode this is a short hand for a numerator of 1.
     auto flags{is.flags()};
     string str;
     is >> str;
-    // +1234... 1234  +1234  but not 1234/ 
+    // +1234... 1234  +1234  but not 1234/
     const regex int_re{R"(([[:space:]]*)([-+]?[[:digit:]]{1,19})(([/])|([.]+))?.*)"};
     enum MatchEnum
     {
@@ -478,7 +455,7 @@ std::istream& textmidi::rational::ReadMusicRational::operator()(std::istream& is
         else
         {
             istringstream iss(str);
-            iss >> tr; 
+            iss >> tr;
         }
     }
     else

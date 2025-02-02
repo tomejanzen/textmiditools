@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -32,7 +32,7 @@ int NoteEvent::vel() const noexcept
     return vel_;
 }
 
-constexpr textmidi::rational::RhythmRational NoteEvent::musical_rhythm() const noexcept
+textmidi::rational::RhythmRational NoteEvent::musical_rhythm() const noexcept
 {
     return musical_rhythm_;
 }

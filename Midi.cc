@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -21,14 +21,14 @@
 using namespace std;
 using namespace midi;
 
-void midi::MidiHeader::to_bytes(MidiStreamAtom* bytes)
+void midi::MidiHeader::to_bytes(MidiStreamAtom* bytes) noexcept
 {
     MidiHeader* header_bytes{reinterpret_cast<MidiHeader*>(bytes)};
     *header_bytes = *this;
     header_bytes->swapbytes();
 }
 
-void midi::MidiHeader::swapbytes()
+void midi::MidiHeader::swapbytes() noexcept
 {
     chunk_len_ = htobe32(chunk_len_);
     format_    = static_cast<MIDI_Format>(htobe16(static_cast<uint16_t>
@@ -37,39 +37,39 @@ void midi::MidiHeader::swapbytes()
     division_  = htobe16(division_);
 }
 
-void RunningStatusImpl::running_status(MidiStreamAtom running_status_value)
+void RunningStatusImpl::running_status(MidiStreamAtom running_status_value) noexcept
 {
     running_status_valid_ = true;
     running_status_value_ = running_status_value;
 }
 
-void RunningStatusImpl::clear()
+void RunningStatusImpl::clear() noexcept
 {
     running_status_valid_ = false;
     running_status_value_ = 0u;
 }
 
-bool RunningStatusImpl::running_status_valid() const
+bool RunningStatusImpl::running_status_valid() const noexcept
 {
     return running_status_valid_;
 }
 
-midi::MidiStreamAtom RunningStatusImpl::running_status_value() const
+midi::MidiStreamAtom RunningStatusImpl::running_status_value() const noexcept
 {
     return running_status_value_;
 }
 
-MidiStreamAtom RunningStatusImpl::command() const
+MidiStreamAtom RunningStatusImpl::command() const noexcept
 {
     return running_status_value_ & ~midi::channel_mask;
 }
 
-MidiStreamAtom RunningStatusImpl::channel() const
+MidiStreamAtom RunningStatusImpl::channel() const noexcept
 {
     return running_status_value_ & midi::channel_mask;
 }
 
-void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept
 {
     // "Meta events and sysex events cancel any running status that was in effect."
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
@@ -86,7 +86,7 @@ void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVec
     // but META messages are appended to the 0xFF.
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.emplace_back(status_byte);
+        track.push_back(status_byte);
     }
     if (!is_sysex || !is_meta)
     {
@@ -94,7 +94,7 @@ void RunningStatusStandard::operator()(MidiStreamAtom status_byte, MidiStreamVec
     }
 }
 
-void RunningStatusNever::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+void RunningStatusNever::operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept
 {
     // Used for testing using old MIDI SMF files that are mal-formed.
     const bool is_sysex{start_of_sysex[0]    == status_byte};
@@ -102,11 +102,11 @@ void RunningStatusNever::operator()(MidiStreamAtom status_byte, MidiStreamVector
     this->clear();
     if (!is_sysex)
     {
-        track.emplace_back(status_byte);
+        track.push_back(status_byte);
     }
 }
 
-void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept
 {
     // Supporting broken old MIDI files for testing purposes.
     const bool is_same{this->running_status_value() == status_byte};
@@ -122,7 +122,7 @@ void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, M
     // but META messages are appended to the 0xFF.
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.emplace_back(status_byte);
+        track.push_back(status_byte);
     }
     // Never save sysex or meta as running status
     if (!is_sysex || !is_meta)
@@ -131,7 +131,7 @@ void RunningStatusPersistentAfterSysex::operator()(MidiStreamAtom status_byte, M
     }
 }
 
-void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept
 {
     // Supporting broken old MIDI files for testing purposes.
     const bool is_same{this->running_status_value() == status_byte};
@@ -145,7 +145,7 @@ void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, Mi
     }
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.emplace_back(status_byte);
+        track.push_back(status_byte);
     }
     // Never save sysex or meta as running status
     if (!is_sysex || !is_meta)
@@ -154,7 +154,7 @@ void RunningStatusPersistentAfterMeta::operator()(MidiStreamAtom status_byte, Mi
     }
 }
 
-void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept
 {
     // Supporting broken old MIDI files for testing purposes.
     const bool is_same{this->running_status_value() == status_byte};
@@ -168,7 +168,7 @@ void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_b
     }
     if ((!is_same && !is_sysex) || is_meta)
     {
-        track.emplace_back(status_byte);
+        track.push_back(status_byte);
     }
     // Never save sysex or meta as running status
     if (!is_sysex || !is_meta)
@@ -177,7 +177,7 @@ void RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom status_b
     }
 }
 
-std::unique_ptr<RunningStatusBase> RunningStatusFactory::operator()(RunningStatusPolicy policy)
+std::unique_ptr<RunningStatusBase> RunningStatusFactory::operator()(RunningStatusPolicy policy) noexcept
 {
     std::unique_ptr<RunningStatusBase> rsp = make_unique<RunningStatusStandard>();
     switch (policy)

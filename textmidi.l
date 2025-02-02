@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.84
+** TextMIDITools Version 1.0.85
 ** Copyright © 2024 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <array> // scale step constant
+#include <bitset>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -100,7 +101,7 @@ namespace
     // may be a note name such as "C4" or may be a key number as in "K60"
     // or may be a delta key as in "K+2".
     int keyevent_to_keynumber(const string& keyevent,
-                              bool& tie_in, bool& tie_out, bool& is_delta)
+                              bool& tie_in, bool& tie_out, bool& is_delta) noexcept
     {
         int keynumber{MiddleC};
         smatch matches{};
@@ -135,7 +136,7 @@ namespace
     // and its ties in and out.
     struct KeyTie
     {
-        KeyTie (string& key_name, uint32_t channel, uint32_t velocity)
+        KeyTie (string& key_name, uint32_t channel, uint32_t velocity) noexcept
             : tie_in_{},
               key_{},
               tie_out_{},
@@ -193,64 +194,61 @@ namespace
     // The first byte is the most-significant and has the 2^7 bit set.
     // Note that MIDI does not specify variable length numbers of more than 28 bits.
     template <integral IntType>
-    MidiStreamVector int_to_vec(IntType i)
+    MidiStreamVector int_to_vec(IntType val) noexcept
     {
         MidiStreamVector numvec{};
-        if (i)
+        if (val)
         {
-            auto j{i};
-            int lg2{};
-            while (j != 0)
+            int log_base_2{};
             {
-                j >>= 1;
-                ++lg2;
+                bitset<64> bs{val};
+                while (bs.any())
+                {
+                    bs >>= 1;
+                    ++log_base_2;
+                }
             }
-            constexpr int bits_per_bite{7};
+            constexpr int seven_bits{7};
             int byte_qty{1};
-            if (lg2 % bits_per_bite)
+            if (log_base_2 % seven_bits)
             {
-                byte_qty = (lg2 + bits_per_bite) / bits_per_bite;
+                byte_qty = (log_base_2 + seven_bits) / seven_bits;
             }
             else
             {
-                byte_qty = lg2 / bits_per_bite;
+                byte_qty = log_base_2 / seven_bits;
             }
-            for (int groupof7{}; groupof7 < byte_qty; ++groupof7)
+            for (int group_of_7{}; group_of_7 < byte_qty; ++group_of_7)
             {
-                unsigned char temp{};
-                temp = i >> ((byte_qty - groupof7 - 1) * bits_per_bite) & 0x7F;
-                if (groupof7 != (byte_qty - 1))
-                {
-                    temp |= 0x80;
-                }
-                numvec.emplace_back(temp);
+                numvec.push_back(val >> ((byte_qty - group_of_7 - 1) * seven_bits) & 0x7F);
+            }
+            if (byte_qty)
+            {
+                for_each(numvec.begin(), numvec.begin() + (byte_qty - 1), [](MidiStreamAtom& msa) { msa |= 0x80; });
             }
         }
         else
         {
-            numvec.emplace_back(static_cast<MidiStreamAtom>(0));
+            numvec.push_back(static_cast<MidiStreamAtom>(0));
         }
         return numvec;
     }
 
     //
     // int24_to_vec converts 24-bit numbers to MIDI extended values.
-    MidiStreamVector int24_to_vec(int i)
+    MidiStreamVector int24_to_vec(int i) noexcept
     {
         MidiStreamVector numvec;
-        MidiStreamAtom tempbyte{};
-        constexpr MidiStreamAtom byte_mask{0xFF};
         for (int ctr{2}; ctr >= 0; --ctr)
         {
-            tempbyte = (i >> (bits_per_byte * ctr) ) & byte_mask;
-            numvec.emplace_back(tempbyte);
+            numvec.push_back((i >> (bits_per_byte * ctr) ) & octet_mask);
         }
         return numvec;
     }
 
     //
     // write_delay writes the time delay in MIDI ticks.
-    void write_delay()
+    void write_delay() noexcept
     {
         // Delays must occur between events even if delay is zero.
         const MidiStreamVector delayvec = int_to_vec(accum_delay);
@@ -263,7 +261,7 @@ namespace
     // program_1_to_0
     // transforms a textmidi value (usu. program or program) in (1..16)
     // to a MIDI binary program in (0..15).
-    void program_1_to_0(uint32_t& program)
+    void program_1_to_0(uint32_t& program) noexcept
     {
         if (0 == program)
         {
@@ -282,7 +280,7 @@ namespace
     // channel_1_to_0
     // transforms a textmidi value (usu. channel or program) in (1..16)
     // to a MIDI binary channel in (0..15).
-    void channel_1_to_0(uint32_t& channel, bool lazy = false)
+    void channel_1_to_0(uint32_t& channel, bool lazy = false) noexcept
     {
         if (0 == channel)
         {
@@ -301,7 +299,7 @@ namespace
         }
     }
 
-    uint32_t delay_and_update_total_ticks(double thenumerator, double thedivisor, int dots)
+    uint32_t delay_and_update_total_ticks(double thenumerator, double thedivisor, int dots) noexcept
     {
         // This routine handles full note rhythm value.
         // detache adjustments are done in the client
@@ -317,7 +315,7 @@ namespace
         auto save_ticks{ticks};
         for (int dot{}; dot < dots; ++dot)
         {
-            save_ticks /= 2;
+            save_ticks /= 2.0;
             ticks += save_ticks;
         }
         // We update total ticks with the full duration
@@ -333,21 +331,15 @@ namespace
         // Now it's OK to use round().
         ticks = round(ticks);
         global_total_track_ticks += ticks;
-        return ticks;
+        return static_cast<uint32_t>(ticks);
     }
 
     class SysExEventSequence
     {
       public:
-        SysExEventSequence()
-          : sysex_seq_{},
-            subid_{},
-            device_id_{},
-            subid1_{},
-            remaining_{}
-        {
-        }
-        void clear()
+        SysExEventSequence() = default;
+
+        void clear() noexcept
         {
             sysex_seq_.clear();
             subid_.clear();
@@ -355,30 +347,30 @@ namespace
             subid1_.clear();
             remaining_.clear();
         }
-        void write_length()
+        void write_length() noexcept
         {
         }
-        const MidiStreamVector& sysex_seq() const
+        const MidiStreamVector& sysex_seq() const noexcept
         {
             return sysex_seq_;
         }
-        void subid(MidiStreamVector subid)
+        void subid(MidiStreamVector subid) noexcept
         {
             subid_ = subid;
         }
-        void device_id(const MidiStreamVector& device_id)
+        void device_id(const MidiStreamVector& device_id) noexcept
         {
             device_id_ = device_id;
         }
-        void subid1(const MidiStreamVector& subid1)
+        void subid1(const MidiStreamVector& subid1) noexcept
         {
             subid1_ = subid1;
         }
-        void remaining(const MidiStreamVector& remaining)
+        void remaining(const MidiStreamVector& remaining) noexcept
         {
             remaining_ = remaining;
         }
-        void build_msg()
+        void build_msg() noexcept
         {
             // sysex=subid.size() + device_id.size() + subid1=1 + subid2=1 + remaining.size() + end_of_sysex=1
             const size_t data_length{subid_.size() + device_id_.size() + subid1_.size() + remaining_.size() + 1};
@@ -386,30 +378,30 @@ namespace
 
             sysex_seq_.reserve(data_length + length_seq.size());
 
-            sysex_seq_.emplace_back(start_of_sysex[0]);
+            sysex_seq_.push_back(start_of_sysex[0]);
             ranges::copy(length_seq, back_inserter(sysex_seq_));
             ranges::copy(subid_, back_inserter(sysex_seq_));
             ranges::copy(device_id_, back_inserter(sysex_seq_));
             ranges::copy(subid1_, back_inserter(sysex_seq_));
             ranges::copy(remaining_, back_inserter(sysex_seq_));
-            sysex_seq_.emplace_back(end_of_sysex[0]);
+            sysex_seq_.push_back(end_of_sysex[0]);
         }
-        void append(MidiStreamVector& track)
+        void append(MidiStreamVector& track) noexcept
         {
             ranges::copy(sysex_seq_, back_inserter(track));
             this->clear();
         }
       private:
-        MidiStreamVector sysex_seq_;
-        MidiStreamVector subid_;
-        MidiStreamVector device_id_;
-        MidiStreamVector subid1_;
-        MidiStreamVector remaining_;
+        MidiStreamVector sysex_seq_{};
+        MidiStreamVector subid_{};
+        MidiStreamVector device_id_{};
+        MidiStreamVector subid1_{};
+        MidiStreamVector remaining_{};
     };
 
     struct HexOrDec
     {
-        int operator()(const std::string& str) const
+        int operator()(const std::string& str) const noexcept
         {
             int i{};
             // if a hexadecimal byte
@@ -428,7 +420,6 @@ namespace
 
     SysExEventSequence sysex_event_sequence{};
 
-
 }
 
 namespace lazy
@@ -437,7 +428,7 @@ namespace lazy
     uint32_t dynamic{64};
     list<KeyTie> chord{};
 
-    int count_dots(const string& rhythmsubstr)
+    int count_dots(const string& rhythmsubstr) noexcept
     {
         int dotqty{};
         size_t dotpos{};
@@ -615,14 +606,14 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     trackchunk.clear();
     trackchunk.reserve(33000); // about the longest track I've seen
-    trackchunk.emplace_back('M');
-    trackchunk.emplace_back('T');
-    trackchunk.emplace_back('r');
-    trackchunk.emplace_back('k');
-    trackchunk.emplace_back(0);
-    trackchunk.emplace_back(0);
-    trackchunk.emplace_back(0);
-    trackchunk.emplace_back(0);
+    trackchunk.push_back('M');
+    trackchunk.push_back('T');
+    trackchunk.push_back('r');
+    trackchunk.push_back('k');
+    trackchunk.push_back(0);
+    trackchunk.push_back(0);
+    trackchunk.push_back(0);
+    trackchunk.push_back(0);
     total_beats = 0;
     global_total_track_ticks = 0.0;
     // Invalidate running_status at the start of a track.
@@ -640,7 +631,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         iss >> next_word;
         if (iss && !next_word.empty())
         {
-            byte_strings.emplace_back(next_word);
+            byte_strings.push_back(next_word);
         }
     }
     vector<unsigned> bytes{};
@@ -648,7 +639,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
 
     (*running_status)(meta_prefix[0], trackchunk);
-    trackchunk.emplace_back(sequencer_specific_prefix[0]);
+    trackchunk.push_back(sequencer_specific_prefix[0]);
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
     ranges::copy(bytes, back_inserter(trackchunk));
@@ -661,12 +652,12 @@ DEVICE_ID (ALL_CALL|{BYTE})
     int sequence_number{};
     iss >> meta_name >> sequence_number;
     (*running_status)(meta_prefix[0], trackchunk);
-    trackchunk.emplace_back(sequence_number_prefix[0]);
-    trackchunk.emplace_back(sequence_number_prefix[1]);
+    trackchunk.push_back(sequence_number_prefix[0]);
+    trackchunk.push_back(sequence_number_prefix[1]);
     MidiStreamAtom msb{static_cast<MidiStreamAtom>((sequence_number >> 8) & octet_mask)};
     MidiStreamAtom lsb{static_cast<MidiStreamAtom> (sequence_number       & octet_mask)};
-    trackchunk.emplace_back(msb);
-    trackchunk.emplace_back(lsb);
+    trackchunk.push_back(msb);
+    trackchunk.push_back(lsb);
   }
 
 <DETAIL_STATE>UNKNOWN_META{SOMESPACE}{BYTE_SEQ} {
@@ -686,7 +677,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         iss >> next_word;
         if (iss && !next_word.empty())
         {
-            byte_strings.emplace_back(next_word);
+            byte_strings.push_back(next_word);
         }
     }
 
@@ -697,7 +688,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     ranges::transform(byte_strings, back_inserter(bytes), HexOrDec());
     // push the data byters onto the MIDI stream.
     (*running_status)(meta_prefix[0], trackchunk);
-    trackchunk.emplace_back(meta_code);
+    trackchunk.push_back(meta_code);
     ranges::copy(len_vec, back_inserter(trackchunk));
 
     ranges::copy(bytes, back_inserter(trackchunk));
@@ -714,14 +705,14 @@ DEVICE_ID (ALL_CALL|{BYTE})
     (*running_status)(meta_prefix[0], trackchunk);
     if (code)
     {
-        trackchunk.emplace_back(*code);
+        trackchunk.push_back(*code);
         BEGIN(TEXT_META_STATE);
     }
     else
     {
         if (string_view("TICKS") == meta_name)
         {
-            trackchunk.emplace_back(text_0F_prefix[0]);
+            trackchunk.push_back(text_0F_prefix[0]);
             BEGIN(TICKS_STATE);
         }
         else
@@ -763,9 +754,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <DETAIL_STATE,LAZY_STATE>{END_OF_TRACKTOKEN} {
     write_delay();
-    trackchunk.emplace_back(meta_prefix[0]);
-    trackchunk.emplace_back(end_of_track_prefix[0]);
-    trackchunk.emplace_back(end_of_track_prefix[1]);
+    trackchunk.push_back(meta_prefix[0]);
+    trackchunk.push_back(end_of_track_prefix[0]);
+    trackchunk.push_back(end_of_track_prefix[1]);
     const auto sizetemp{trackchunk.size() - 8};
     trackchunk[4] = (sizetemp >> 24) & 0xFF;
     trackchunk[5] = (sizetemp >> 16) & 0xFF;
@@ -835,8 +826,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     key      &= byte7_mask;
     velocity &= byte7_mask;
-    trackchunk.emplace_back(key);
-    trackchunk.emplace_back(velocity);
+    trackchunk.push_back(key);
+    trackchunk.push_back(velocity);
   }
 
 <DETAIL_STATE>NOTE_OFF{SPACE}{INTEGER}{SPACE}{PITCH_NAME}{SPACE}{INTEGER} {
@@ -868,8 +859,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     key &= byte7_mask;
     velocity &= byte7_mask;
-    trackchunk.emplace_back(key);
-    trackchunk.emplace_back(velocity);
+    trackchunk.push_back(key);
+    trackchunk.push_back(velocity);
   }
 
 
@@ -902,8 +893,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     key &= byte7_mask;
     pressure &= byte7_mask;
-    trackchunk.emplace_back(key);
-    trackchunk.emplace_back(pressure);
+    trackchunk.push_back(key);
+    trackchunk.push_back(pressure);
   }
 
 <DETAIL_STATE>CONTROL{SPACE}{BYTE}{SPACE}({BYTE}|{CONTROL_FUNCTION}){SPACE}({CONTROL_VALUE}|{BYTE}|{ONOFF}) {
@@ -933,7 +924,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         control_id = HexOrDec()(control_id_str);
     }
     control_id &= byte7_mask;
-    trackchunk.emplace_back(control_id);
+    trackchunk.push_back(control_id);
 
     bool was_mapped{};
     auto upper_control_value_str{control_value_str};
@@ -956,9 +947,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
             }
             else
             {
-                if (const auto control_value_code = parm_00_map(upper_control_value_str))
+                if (const auto control_value_code_2 = parm_00_map(upper_control_value_str))
                 {
-                    control_value = static_cast<int>(*control_value_code);
+                    control_value = static_cast<int>(*control_value_code_2);
                     was_mapped = true;
                 }
             }
@@ -975,7 +966,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         control_value += PanExcess64;
     }
     control_value &= byte7_mask;
-    trackchunk.emplace_back(control_value);
+    trackchunk.push_back(control_value);
   }
 
 <DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}PAN{SPACE}({INTEGER}|{PANVALUE}) {
@@ -992,7 +983,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel >> discard_control_id_str >> control_value_str;
     channel_1_to_0(channel);
     (*running_status)(channel | control[0], trackchunk);
-    trackchunk.emplace_back(control_id);
+    trackchunk.push_back(control_id);
 
     to_upper(control_value_str);
     const auto map_iter{pan_map(control_value_str)};
@@ -1006,7 +997,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     control_value += PanExcess64;
     control_value &= byte7_mask;
-    trackchunk.emplace_back(control_value);
+    trackchunk.push_back(control_value);
   }
 
 <DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL}{SPACE}{INTEGER} {
@@ -1026,8 +1017,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         control_id = *id;
     }
-    trackchunk.emplace_back(control_id);
-    trackchunk.emplace_back(0);
+    trackchunk.push_back(control_id);
+    trackchunk.push_back(0);
   }
 
 <DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{UXINTEGER} {
@@ -1048,12 +1039,12 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         control_id = *id;
     }
-    trackchunk.emplace_back(control_id);
+    trackchunk.push_back(control_id);
 
     int32_t control_value{};
     control_value = HexOrDec()(control_value_str);
     control_value &= byte7_mask;
-    trackchunk.emplace_back(control_value);
+    trackchunk.push_back(control_value);
   }
 
 <DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}({UXINTEGER}|{ONOFF}) {
@@ -1073,7 +1064,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     // Can't fail; the grammar would not have qualified an invalid name.
     const auto id = control_function_map(control_id_str);
-    trackchunk.emplace_back(*id);
+    trackchunk.push_back(*id);
 
     int control_value{};
     const auto val = control_on_off_map(upper_control_value_str);
@@ -1085,7 +1076,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         control_value = HexOrDec()(control_value_str);
     }
-    trackchunk.emplace_back(control_value);
+    trackchunk.push_back(control_value);
   }
 
 <DETAIL_STATE>PAN{SPACE}{INTEGER}{SPACE}{PANVALUE} {
@@ -1098,7 +1089,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> channel >> panstring;
     channel_1_to_0(channel);
     (*running_status)(channel | control[0], trackchunk);
-    trackchunk.emplace_back(control_pan[0]);
+    trackchunk.push_back(control_pan[0]);
 
     to_upper(panstring);
     const auto map_iter{pan_map(panstring)};
@@ -1113,7 +1104,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     pancode += PanExcess64;
     pancode &= byte7_mask;
-    trackchunk.emplace_back(pancode);
+    trackchunk.push_back(pancode);
   }
 
 <DETAIL_STATE>PROGRAM{SPACE}{INTEGER}{SPACE}{INTEGER} {
@@ -1129,7 +1120,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     program_1_to_0(theprogram);
     theprogram &= byte7_mask;
-    trackchunk.emplace_back(theprogram);
+    trackchunk.push_back(theprogram);
   }
 
 <DETAIL_STATE>CHANNEL_PRESSURE{SPACE}{INTEGER}{SPACE}{INTEGER} {
@@ -1143,7 +1134,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     (*running_status)(channel | channel_pressure[0], trackchunk);
 
     pressure &= byte7_mask;
-    trackchunk.emplace_back(pressure);
+    trackchunk.push_back(pressure);
   }
 
 <DETAIL_STATE>PITCH_WHEEL{SPACE}{INTEGER}{SPACE}{INTEGER} {
@@ -1161,9 +1152,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
     uint32_t bendlsb{},
              bendmsb{};
     bendlsb = bend & byte7_mask;
-    trackchunk.emplace_back(bendlsb);
+    trackchunk.push_back(bendlsb);
     bendmsb = (bend >> byte7_shift) & byte7_mask;
-    trackchunk.emplace_back(bendmsb);
+    trackchunk.push_back(bendmsb);
   }
 
 <DETAIL_STATE>TIME_SIGNATURE{SPACE}{INTEGER}{SPACE}{INTEGER}{SPACE}{INTEGER} {
@@ -1186,15 +1177,15 @@ DEVICE_ID (ALL_CALL|{BYTE})
     (*running_status)(meta_prefix[0], trackchunk);
 
     ranges::copy(time_signature_prefix, back_inserter(trackchunk));
-    trackchunk.emplace_back(numer);
-    trackchunk.emplace_back(denom_pwr);
+    trackchunk.push_back(numer);
+    trackchunk.push_back(denom_pwr);
     auto tempticksperbeat{ticksperbeat};
     while (tempticksperbeat > numeric_limits<MidiStreamAtom>().max())
     {
         tempticksperbeat /= 2;
     }
-    trackchunk.emplace_back(tempticksperbeat);
-    trackchunk.emplace_back(thirtysecsperqtr);
+    trackchunk.push_back(tempticksperbeat);
+    trackchunk.push_back(thirtysecsperqtr);
   }
 
 <DETAIL_STATE>KEY_SIGNATURE{SPACE}{NOTE_NAME} {
@@ -1210,10 +1201,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
     tie(accidentals, themode) = key_sig_name_to_accidentals(key_sig_name);
 
     (*running_status)(meta_prefix[0], trackchunk);
-    trackchunk.emplace_back(key_signature_prefix[0]);
-    trackchunk.emplace_back(key_signature_prefix[1]);
-    trackchunk.emplace_back(static_cast<signed char>(accidentals));
-    trackchunk.emplace_back(themode);
+    trackchunk.push_back(key_signature_prefix[0]);
+    trackchunk.push_back(key_signature_prefix[1]);
+    trackchunk.push_back(static_cast<signed char>(accidentals));
+    trackchunk.push_back(themode);
   }
 
 <DETAIL_STATE>XMF_PATCH_TYPE{SPACE}{PATCH_TYPE} {
@@ -1231,7 +1222,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     (*running_status)(meta_prefix[0], trackchunk);
     ranges::copy(xmf_patch_type_prefix, back_inserter(trackchunk));
-    trackchunk.emplace_back(xmf_patch_type);
+    trackchunk.push_back(xmf_patch_type);
   }
 
 <DETAIL_STATE>SMPTE_OFFSET{SPACE}{SMPTE_CODE} {
@@ -1266,18 +1257,15 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
         int hours{lexical_cast<int>(matches[hours_match])};
         hours |= (fps << smpte_fps_shift);
-        offsetvalues.emplace_back(hours);
+        offsetvalues.push_back(static_cast<MidiStreamAtom>(hours));
         for (auto i{minutes_match}; i < (ff_match + 1); ++i)
         {
-            offsetvalues.emplace_back(lexical_cast<int>(matches[i]));
+            offsetvalues.push_back(static_cast<MidiStreamAtom>(lexical_cast<int>(matches[i])));
         }
         (*running_status)(meta_prefix[0], trackchunk);
-        trackchunk.emplace_back(smpte_prefix[0]);
-        trackchunk.emplace_back(smpte_prefix[1]);
-        for (auto offsetval : offsetvalues)
-        {
-            trackchunk.emplace_back(offsetval);
-        }
+        trackchunk.push_back(smpte_prefix[0]);
+        trackchunk.push_back(smpte_prefix[1]);
+        ranges::for_each(offsetvalues, [](MidiStreamAtom msa) { trackchunk.push_back(msa); });
     }
   }
 
@@ -1291,9 +1279,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
     channel_1_to_0(channel);
 
     (*running_status)(meta_prefix[0], trackchunk);
-    trackchunk.emplace_back(midi_channel_prefix[0]);
-    trackchunk.emplace_back(midi_channel_prefix[1]);
-    trackchunk.emplace_back(channel);
+    trackchunk.push_back(midi_channel_prefix[0]);
+    trackchunk.push_back(midi_channel_prefix[1]);
+    trackchunk.push_back(channel);
   }
 
 <DETAIL_STATE>MIDI_PORT{SPACE}{UINTEGER} {
@@ -1305,9 +1293,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
     iss >> discard >> port;
 
     (*running_status)(meta_prefix[0], trackchunk);
-    trackchunk.emplace_back(midi_port_prefix[0]);
-    trackchunk.emplace_back(midi_port_prefix[1]);
-    trackchunk.emplace_back(port);
+    trackchunk.push_back(midi_port_prefix[0]);
+    trackchunk.push_back(midi_port_prefix[1]);
+    trackchunk.push_back(port);
   }
 
 <DETAIL_STATE>SYSEX{SOMESPACE}{BYTE_SEQ} {
@@ -1322,7 +1310,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         iss >> next_word;
         if (iss && !next_word.empty())
         {
-            byte_strings.emplace_back(next_word);
+            byte_strings.push_back(next_word);
         }
     }
     vector<unsigned> byte_ints{};
@@ -1351,7 +1339,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     MidiStreamVector vec;
     // this can't fail because flex's analyzer
     // has already identified this as a subid.
-    vec.emplace_back(sysex_subid_map.at(str));
+    vec.push_back(static_cast<MidiStreamAtom>(sysex_subid_map.at(str)));
     sysex_event_sequence.subid(vec);
     BEGIN(SYSEX_DEVICE_ID_STATE);
   }
@@ -1366,7 +1354,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         iss >> next_word;
         if (iss && !next_word.empty())
         {
-            byte_strings.emplace_back(next_word);
+            byte_strings.push_back(next_word);
         }
     }
     MidiStreamVector bytes{};
@@ -1438,7 +1426,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         iss >> next_word;
         if (iss && !next_word.empty())
         {
-            byte_strings.emplace_back(next_word);
+            byte_strings.push_back(next_word);
         }
     }
     MidiStreamVector bytes{};
@@ -1466,7 +1454,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         iss >> next_word;
         if (iss && !next_word.empty())
         {
-            byte_strings.emplace_back(next_word);
+            byte_strings.push_back(next_word);
         }
     }
 
@@ -1476,7 +1464,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
     // pushd the length of data plus the F7 at end
     // of the MIDI file stream.
-    trackchunk.emplace_back(end_of_sysex[0]); // Raw SYSEX *starts* with F7
+    trackchunk.push_back(end_of_sysex[0]); // Raw SYSEX *starts* with F7
     // length of data; no implied terminating F0
     const MidiStreamVector length_seq = int_to_vec(bytes.size());
     ranges::copy(length_seq, back_inserter(trackchunk));
@@ -1538,11 +1526,11 @@ DEVICE_ID (ALL_CALL|{BYTE})
     {
         write_delay();
         (*running_status)(keytie.channel_ | note_on[0], trackchunk);
-        trackchunk.emplace_back(keytie.key_);
-        trackchunk.emplace_back(lazy::dynamic);
+        trackchunk.push_back(static_cast<MidiStreamAtom>(keytie.key_));
+        trackchunk.push_back(static_cast<MidiStreamAtom>(lazy::dynamic));
         if (ranges::find(lazy::chord, keytie) == lazy::chord.end())
         {
-            lazy::chord.emplace_back(keytie);    // save key number in lazy::chord;
+            lazy::chord.push_back(keytie);    // save key number in lazy::chord;
         }
     }
     else
@@ -1681,7 +1669,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
             }
         }
     }
-    
+
     int dotqty{lazy::count_dots(rhythmsubstr)};
     total_duration = delay_and_update_total_ticks(thenumerator, thedivisor, dotqty);
 
@@ -1704,7 +1692,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
             const auto status_byte{channel | note_cmd};
             (*running_status)(status_byte, trackchunk);
 
-            trackchunk.emplace_back(keytie.key_ & byte7_mask);
+            trackchunk.push_back(static_cast<MidiStreamAtom>(keytie.key_ & byte7_mask));
 
             // If we are using a note_off, then use the prevailing dynamic; else 0.
 #if 0
@@ -1713,10 +1701,15 @@ DEVICE_ID (ALL_CALL|{BYTE})
 #else
             const MidiStreamAtom velocity{0};
 #endif
-            trackchunk.emplace_back(velocity);
-            release_list.emplace_back(keytie);
+            trackchunk.push_back(velocity);
+            release_list.push_back(keytie);
         }
     }
+#if 1
+    ranges::for_each(release_list,
+        [&](KeyTie kt) { auto ktit{ranges::find(lazy::chord, kt)};
+                         if (ktit != lazy::chord.end()) { lazy::chord.erase(ktit); } } );
+#else
     for (auto& keytie : release_list)
     {
         const auto kt{keytie};
@@ -1729,6 +1722,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         lazy::chord.remove(kt);
 #endif
     }
+#endif
     release_list.clear();
 
     if (static_cast<double>(TextMidiFeatures::me()->detache()) < total_duration)

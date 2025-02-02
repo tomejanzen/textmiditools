@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -10,6 +10,9 @@
 
 using namespace std;
 using namespace textmidi;
+
+namespace
+{
 
 void escape(string& str)
 {
@@ -120,7 +123,6 @@ void de_escape(string& str)
     }
 }
 
-
 void strip_quotes(string& str)
 {
     if (!str.empty())
@@ -156,7 +158,6 @@ void strip_quotes(string& str)
     }
 }
 
-
 void add_quotes(string& str)
 {
     string quoted("\"");
@@ -179,13 +180,15 @@ void strip_space(string& str)
     }
 }
 
-void textmidi::make_raw_string(string& str)
+}
+
+void textmidi::make_raw_string(string& str) noexcept
 {
     strip_quotes(str);
     de_escape(str);
 }
 
-void textmidi::make_human_string(string& str)
+void textmidi::make_human_string(string& str) noexcept
 {
     escape(str);
     add_quotes(str);

@@ -1,99 +1,100 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
+#include <ranges>
 #undef TEXTMIDICGM_PRINT
 #if defined(TEXTMIDICGM_PRINT)
-#include <ranges>
 #include <iostream>
 #include <iterator>
+#endif
 
 using namespace std;
-#endif
 
 #include "Arrangements.h"
 
 using namespace arrangements;
 
-int ArrangementsImpl::counter() const
+int ArrangementsImpl::counter() const noexcept
 {
     return counter_;
 }
-void ArrangementsImpl::counter(int counter)
+void ArrangementsImpl::counter(int counter) noexcept
 {
     counter_ = counter;
 }
-void ArrangementsImpl::inc()
+void ArrangementsImpl::inc() noexcept
 {
     ++counter_;
 }
-bool ArrangementsImpl::counter_finite() const
+bool ArrangementsImpl::counter_finite() const noexcept
 {
     return counter_ != 0;
 }
 
-int Arrangements::counter() const
+int Arrangements::counter() const noexcept
 {
     return arrangements_impl_.counter();
 }
-void Arrangements::counter(int counter)
+void Arrangements::counter(int counter) noexcept
 {
     arrangements_impl_.counter(counter);
 }
-void Arrangements::inc()
+void Arrangements::inc() noexcept
 {
     arrangements_impl_.inc();
 }
-bool Arrangements::counter_finite() const
+bool Arrangements::counter_finite() const noexcept
 {
     return arrangements_impl_.counter_finite();
 }
 
-const Arrangement& ArrangementsInSitu::arrangement() const
-{
-    return arrangement_;
-}
-Arrangement& ArrangementsInSitu::arrangement()
+const Arrangement& ArrangementsInSitu::arrangement() const noexcept
 {
     return arrangement_;
 }
 
-const ArrangementVec& ArrangementsSequence::arrangements() const
+Arrangement& ArrangementsInSitu::arrangement() noexcept
+{
+    return arrangement_;
+}
+
+const ArrangementVec& ArrangementsSequence::arrangements() const noexcept
 {
     return arrangements_;
 }
-ArrangementVec& ArrangementsSequence::arrangements()
+ArrangementVec& ArrangementsSequence::arrangements() noexcept
 {
     return arrangements_;
 }
-int ArrangementsSequence::length() const
+int ArrangementsSequence::length() const noexcept
 {
     return length_;
 }
 
-const Arrangement& ArrangementsIdentity::arrangement() const
+const Arrangement& ArrangementsIdentity::arrangement() const noexcept
 {
     return ArrangementsInSitu::arrangement();
 }
 
-void ArrangementsLexicographicForward::next()
+void ArrangementsLexicographicForward::next() noexcept
 {
-    std::ranges::next_permutation(arrangement());
+    ranges::next_permutation(arrangement());
     inc();
 }
 
-void ArrangementsLexicographicBackward::next()
+void ArrangementsLexicographicBackward::next() noexcept
 {
-    std::ranges::prev_permutation(arrangement());
+    ranges::prev_permutation(arrangement());
 }
 
-void ArrangementsRotateRight::next()
+void ArrangementsRotateRight::next() noexcept
 {
-    std::ranges::rotate(arrangement(),
+    ranges::rotate(arrangement(),
         arrangement().begin() + (arrangement().size() - 1));
 #if defined(TEXTMIDICGM_PRINT)
     ranges::copy(arrangement(), ostream_iterator<int>(cout, " ")); cout << '\n';
@@ -101,89 +102,90 @@ void ArrangementsRotateRight::next()
     inc();
 }
 
-void ArrangementsRotateLeft::next()
+void ArrangementsRotateLeft::next() noexcept
 {
-    std::ranges::rotate(arrangement(), arrangement().begin() + 1);
+    ranges::rotate(arrangement(), arrangement().begin() + 1);
     inc();
 }
 
-void ArrangementsReverse::next()
+void ArrangementsReverse::next() noexcept
 {
-    std::ranges::reverse(arrangement());
+    ranges::reverse(arrangement());
     inc();
 }
 
-void ArrangementsSwapPairs::next()
+void ArrangementsSwapPairs::next() noexcept
 {
-    for (int i{}; i < static_cast<int>(arrangement().size()
-        - (arrangement().size() % 2LU)); i += 2)
+    for (auto it{arrangement().begin()};
+              it < (arrangement().end() - (arrangement().size() % 2LU));
+              it += 2)
     {
-        std::swap(arrangement()[i], arrangement()[i + 1]);
+        iter_swap(it, it + 1);
     }
     inc();
 }
 
-void ArrangementsSkip::next()
+void ArrangementsSkip::next() noexcept
 {
     const int anchor{counter() & 1};
     for (int i{anchor}; i < static_cast<int>(arrangement().size()
         - (arrangement().size() % 2LU)); i += 2)
     {
-        std::swap(arrangement()[i],
+        swap(arrangement()[i],
             arrangement()[(i + 1) % arrangement().size()]);
     }
     inc();
 }
 
-void ArrangementsShuffle::next()
+void ArrangementsShuffle::next() noexcept
 {
-    std::ranges::shuffle(arrangement(), generator_);
+    ranges::shuffle(arrangement(), generator_);
     inc();
 }
 
-void ArrangementsHeaps::next()
+void ArrangementsHeaps::next() noexcept
 {
     inc();
     while (!heaps_algorithm_template_.next()) {};
 }
 
-std::shared_ptr<Arrangements> arrangements::ArrangementsFactory(PermutationEnum permutation_type, int length)
+shared_ptr<Arrangements> arrangements::ArrangementsFactory(PermutationEnum permutation_type, int length) noexcept
 {
     switch (permutation_type)
     {
       case PermutationEnum::Identity:
-        return std::make_shared<ArrangementsIdentity>(length);
+        return make_shared<ArrangementsIdentity>(length);
         break;
       case PermutationEnum::LexicographicForward:
-        return std::make_shared<ArrangementsLexicographicForward>(length);
+        return make_shared<ArrangementsLexicographicForward>(length);
         break;
       case PermutationEnum::LexicographicBackward:
-        return std::make_shared<ArrangementsLexicographicBackward>(length);
+        return make_shared<ArrangementsLexicographicBackward>(length);
         break;
       case PermutationEnum::RotateRight:
-        return std::make_shared<ArrangementsRotateRight>(length);
+        return make_shared<ArrangementsRotateRight>(length);
         break;
       case PermutationEnum::RotateLeft:
-        return std::make_shared<ArrangementsRotateLeft>(length);
+        return make_shared<ArrangementsRotateLeft>(length);
         break;
       case PermutationEnum::Reverse:
-        return std::make_shared<ArrangementsReverse>(length);
+        return make_shared<ArrangementsReverse>(length);
         break;
       case PermutationEnum::SwapPairs:
-        return std::make_shared<ArrangementsSwapPairs>(length);
+        return make_shared<ArrangementsSwapPairs>(length);
         break;
       case PermutationEnum::Skip:
-        return std::make_shared<ArrangementsSkip>(length);
+        return make_shared<ArrangementsSkip>(length);
         break;
       case PermutationEnum::Shuffle:
-        return std::make_shared<ArrangementsShuffle>(length);
+        return make_shared<ArrangementsShuffle>(length);
         break;
       case PermutationEnum::Heaps:
-        return std::make_shared<ArrangementsHeaps>(length);
+        return make_shared<ArrangementsHeaps>(length);
         break;
       default:
         break;
     }
-    return std::make_shared<ArrangementsIdentity>(length);
+    return make_shared<ArrangementsIdentity>(length);
 }
 

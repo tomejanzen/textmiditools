@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.84
+# TextMIDITools Version 1.0.85
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -281,6 +281,10 @@ class XmlForm(tkinter.Tk):
             delay_dict['numerator'] = '0'
             delay_dict['denominator'] = '1'
             follower_dict['delay'] = delay_dict
+            duration_factor_dict = {}
+            duration_factor_dict['numerator'] = '1'
+            duration_factor_dict['denominator'] = '1'
+            follower_dict['duration_factor'] = duration_factor_dict
             follower_dict['inversion'] = '0'
             follower_dict['retrograde'] = '0'
             voice_dict['follower'] = follower_dict
@@ -486,6 +490,7 @@ class XmlForm(tkinter.Tk):
             follower_dict['interval'] = int(interval)
 
             delay_dict = {}
+            duration_factor_dict = {}
             if (int(self.dom.getElementsByTagName('follower_')[0].getAttribute('version')) >= 2):
                 delay_node = follower_node.getElementsByTagName('delay_')[0]
                 numerator_node = delay_node.getElementsByTagName('numerator_')[0]
@@ -494,11 +499,24 @@ class XmlForm(tkinter.Tk):
                 denominator = denominator_node.firstChild.data
                 delay_dict['numerator'] = numerator
                 delay_dict['denominator'] = denominator
+
+                duration_factor_dict = {}
+                if (int(self.dom.getElementsByTagName('follower_')[0].getAttribute('version')) >= 3):
+                    duration_factor_node = follower_node.getElementsByTagName('duration_factor_')[0]
+                    numerator_node = duration_factor_node.getElementsByTagName('numerator_')[0]
+                    numerator = numerator_node.firstChild.data
+                    denominator_node = duration_factor_node.getElementsByTagName('denominator_')[0]
+                    denominator = denominator_node.firstChild.data
+                    duration_factor_dict['numerator'] = numerator
+                    duration_factor_dict['denominator'] = denominator
+
                 follower_dict['inversion'] = follower_node.getElementsByTagName('inversion_')[0].firstChild.data
                 follower_dict['retrograde'] = follower_node.getElementsByTagName('retrograde_')[0].firstChild.data
             else:
                 delay_dict['numerator'] = '0'
                 delay_dict['denominator'] = '1'
+                duration_factor_dict['numerator'] = '1'
+                duration_factor_dict['denominator'] = '1'
                 follower_dict['inversion'] = '0'
                 follower_dict['retrograde'] = '0'
             follower_dict['delay'] = delay_dict
@@ -838,7 +856,7 @@ class XmlForm(tkinter.Tk):
         about_window = tkinter.Text(about_top)
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
-        about_window.insert('1.0', 'TextMIDITools Version 1.0.84\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
+        about_window.insert('1.0', 'TextMIDITools Version 1.0.85\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
         about_window['state'] = 'disabled'
         about_window.focus()
 

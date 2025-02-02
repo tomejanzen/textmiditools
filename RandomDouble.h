@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -23,7 +23,7 @@ namespace textmidi
         {
           public:
             using result_type = double;
-            explicit RandomDouble(double low = 0.0, double high = 1.0)
+            explicit RandomDouble(double low = 0.0, double high = 1.0) noexcept
               : re_{},
                 dist_{low, high}
             {
@@ -34,7 +34,7 @@ namespace textmidi
 
                 re_.seed(static_cast<double>(seed));
             }
-            double operator()()
+            double operator()() noexcept
             {
                 return dist_(re_);
             }

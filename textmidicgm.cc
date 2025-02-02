@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -116,7 +116,7 @@ namespace {
     const string XML_FormOpt{"xmlform"};
     constexpr char XML_FormTxt[]{"alternate input XML Form file"};
     const string XML_UpdateOpt{"update"};
-    constexpr char XML_UpdateTxt[]{"new file name for updated XML form file"};
+    constexpr char XML_UpdateTxt[]{"update XML file with update_ prefix on the name given to --xmlform."};
     const string GnuplotOpt{"gnuplot"};
     constexpr char GnuplotTxt[]{"gnuplot data output file"};
     const string RandomOpt{"random"};
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.84\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.85\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
         cout << logstr;
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.84\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.85\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
         }
         for (unsigned filectr{}; filectr < glob_data.gl_pathc; ++filectr)
         {
-            form_filenames.emplace_back(string(glob_data.gl_pathv[filectr]));
+            form_filenames.emplace_back(glob_data.gl_pathv[filectr]);
         }
         globfree(&glob_data);
     }
@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
         {
             TextForm form;
             form.read_from_file(form_filename_temp);
-            xml_forms.emplace_back(MusicalForm(form_filename_temp, form));
+            xml_forms.emplace_back(form_filename_temp, form);
         }
     }
     else
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
                             const string errstr{((string{__FILE__} += ':') += BOOST_PP_STRINGIZE(__LINE__)) += " Invalid Form.\n"};
                             cerr << errstr;
                         }
-                        xml_forms.emplace_back(xml_form);
+                        xml_forms.push_back(xml_form);
                         if (var_map.count(XML_UpdateOpt) && xml_form.valid())
                         {
                             string update_name{};
@@ -488,9 +488,9 @@ int main(int argc, char *argv[])
     if (answer && filesystem::exists(textmidi_filename))
     {
         cout << "Overwrite " << textmidi_filename << "?\n";
-        string answer{};
-        cin >> answer;
-        if (!((answer[0] == 'y') || (answer[0] == 'Y')))
+        string answerstr{};
+        cin >> answerstr;
+        if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
         {
             exit(0);
         }
@@ -511,9 +511,9 @@ int main(int argc, char *argv[])
             if (answer && filesystem::exists(form_filename_local))
             {
                 cout << "Overwrite " << form_filename_local << "?\n";
-                string answer{};
-                cin >> answer;
-                if (!((answer[0] == 'y') || (answer[0] == 'Y')))
+                string answerstr{};
+                cin >> answerstr;
+                if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
                 {
                     exit(0);
                 }

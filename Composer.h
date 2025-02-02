@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -31,7 +31,7 @@ namespace textmidi
             struct TrackScramble
             {
                 explicit constexpr TrackScramble(arrangements::PermutationEnum scramble = arrangements::PermutationEnum::Identity,
-                    TicksDuration period = TicksDuration{120LU * TicksPerQuarter})
+                    TicksDuration period = TicksDuration{120LU * TicksPerQuarter}) noexcept
                   : scramble_(scramble),
                     period_(period),
                     arrangements_{}
@@ -43,7 +43,7 @@ namespace textmidi
             };
 
             Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble,
-                TicksDuration track_scramble_period, size_t max_events_per_track = 100000)
+                TicksDuration track_scramble_period, size_t max_events_per_track = 100000) noexcept
               : gnuplot_(gnuplot),
                 answer_(answer),
                 track_scramble_(track_scramble, track_scramble_period),
@@ -63,12 +63,12 @@ namespace textmidi
             void operator()(std::ofstream& textmidi_file, const MusicalForm& xml_form, bool write_header = true);
 
           private:
-            rational::RhythmRational duration_to_rhythm(double duration) const;
-            rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse_per_second) const;
+            rational::RhythmRational duration_to_rhythm(double duration) const noexcept;
+            rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse_per_second) const noexcept;
             void build_track_scramble_sequences(std::vector<std::vector<int>>& track_scramble_sequences,
-                TicksDuration total_duration);
+                TicksDuration total_duration) noexcept;
             void build_composition_priority_graph(const MusicalForm& xml_form,
-                std::vector<std::list<int>>& leaders_topo_sort);
+                std::vector<std::list<int>>& leaders_topo_sort) noexcept;
             bool gnuplot_;
             bool answer_;
             TrackScramble track_scramble_;

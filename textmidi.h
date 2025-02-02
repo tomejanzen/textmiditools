@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -23,7 +23,7 @@ namespace textmidi
     struct TextMidiFeatures
     {
       public:
-        TextMidiFeatures()
+        TextMidiFeatures() noexcept
           : text_filename_{"unknown.txt"},
             midi_filestr_{},
             line_ctr_{1},
@@ -77,7 +77,7 @@ namespace textmidi
             return this->midi_filestr_;
         }
 
-        int line_ctr() const
+        constexpr int line_ctr() const
         {
             return this->line_ctr_;
         }
@@ -87,17 +87,17 @@ namespace textmidi
             ++(this->line_ctr_);
         }
 
-        std::uint32_t detache() const
+        constexpr std::uint32_t detache() const
         {
             return this->detache_;
         }
 
-        bool note_off_select() const
+        constexpr bool note_off_select() const
         {
             return this->note_off_select_;
         }
 
-        bool verbose() const
+        constexpr bool verbose() const
         {
             return this->verbose_;
         }

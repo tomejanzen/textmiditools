@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -38,11 +38,12 @@ namespace textmidi
         class MusicalFormException
         {
           public:
-            explicit MusicalFormException(const std::string& exception_msg)
+            explicit MusicalFormException(const std::string& exception_msg) noexcept
               : exception_msg_(exception_msg)
             {
             }
-            const std::string& what() const
+
+            const std::string& what() const noexcept
             {
                 return exception_msg_;
             }
@@ -54,15 +55,9 @@ namespace textmidi
         {
             friend class boost::serialization::access;
           public:
-            Sine()
-              : period_{60.0},
-                phase_{0.0},
-                amplitude_{0.5},
-                offset_{0.5}
-            {
-            }
+            Sine() = default;
             explicit Sine(double period, double phase = 0.0,
-                          double amplitude = 0.5, double offset = 0.5)
+                          double amplitude = 0.5, double offset = 0.5) noexcept
               : period_{period},
                 phase_{phase},
                 amplitude_{amplitude},
@@ -78,13 +73,13 @@ namespace textmidi
             void amplitude(double amplitude) noexcept;
             double offset() const noexcept;
             void offset(double offset) noexcept;
-            double value_now(double the_time) const;
+            double value_now(double the_time) const noexcept;
             bool valid() const;
           private:
-            double period_;
-            double phase_;
-            double amplitude_;
-            double offset_;
+            double period_{60.0};
+            double phase_{0.0};
+            double amplitude_{0.5};
+            double offset_{0.5};
 
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
@@ -100,13 +95,9 @@ namespace textmidi
         {
             friend class boost::serialization::access;
           public:
-            MeanRangeSines()
-              : mean_sine_{},
-                range_sine_{}
-            {
-            }
+            MeanRangeSines() = default;
 
-            explicit MeanRangeSines(const cgmlegacy::OldFormElement& form_element)
+            explicit MeanRangeSines(const cgmlegacy::OldFormElement& form_element) noexcept
               : mean_sine_ {form_element.mean_period(),
                             form_element.mean_phase()},
                 range_sine_{form_element.range_period(),
@@ -119,8 +110,8 @@ namespace textmidi
             Sine& range_sine() noexcept;
             bool valid() const;
           private:
-            Sine mean_sine_;
-            Sine range_sine_;
+            Sine mean_sine_{};
+            Sine range_sine_{};
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
             {
@@ -140,14 +131,10 @@ namespace textmidi
                 Up   = 3
             };
 
-            MelodyProbabilities() :
-                down_(0.0),
-                same_(0.33),
-                up_(0.67)
-            {
-            }
+            MelodyProbabilities() = default;
 
-            MelodyDirection operator()(double random_variable) const;
+            MelodyDirection operator()(double random_variable) const noexcept;
+
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
             {
@@ -160,16 +147,16 @@ namespace textmidi
             void same(double same) noexcept;
             void up(double up) noexcept;
           private:
-            double down_;
-            double same_;
-            double up_;
+            double down_{0.0};
+            double same_{0.3333};
+            double up_{0.6667};
         };
 
         struct ArrangementDefinition
         {
             explicit ArrangementDefinition(arrangements::PermutationEnum
                 algorithm = arrangements::PermutationEnum::Identity,
-                double period = 100000.0)
+                double period = 100000.0) noexcept
               : algorithm_{algorithm},
                 period_{period}
             {
@@ -180,21 +167,23 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(algorithm_);
                 arc & BOOST_SERIALIZATION_NVP(period_);
             }
-            arrangements::PermutationEnum algorithm() const
+
+            arrangements::PermutationEnum algorithm() const noexcept
             {
                 return algorithm_;
             }
-            double period() const
+
+            double period() const noexcept
             {
                 return period_;
             }
 
-            void algorithm(arrangements::PermutationEnum algorithm)
+            void algorithm(arrangements::PermutationEnum algorithm) noexcept
             {
                 algorithm_ = algorithm;
             }
 
-            void period(double period)
+            void period(double period) noexcept
             {
                 period_ = period;
             }
@@ -205,53 +194,28 @@ namespace textmidi
 
         struct MusicalCharacter
         {
-            MusicalCharacter()
-              : pitch_mean(),
-                pitch_range(),
-                rhythm_mean(),
-                rhythm_range(),
-                dynamic_mean(),
-                dynamic_range(),
-                texture_range()
-            {
-            }
-
-            double pitch_mean;
-            double pitch_range;
-            double rhythm_mean;
-            double rhythm_range;
-            double dynamic_mean;
-            double dynamic_range;
-            double texture_range;
-            double duration(double rf);
-            int pitch_index(double rf);
+            MusicalCharacter() = default;
+            double pitch_mean{};
+            double pitch_range{};
+            double rhythm_mean{};
+            double rhythm_range{};
+            double dynamic_mean{};
+            double dynamic_range{};
+            double texture_range{};
+            double duration(double rf) noexcept;
+            int pitch_index(double rf) noexcept;
         };
 
         class MusicalForm
         {
             friend class boost::serialization::access;
           public:
-            MusicalForm()
-              : name_{},
-                copyright_{},
-                len_{},
-                min_note_len_{},
-                max_note_len_{},
-                scale_{},
-                pulse_{},
-                melody_probabilities_{},
-                pitch_form_{},
-                rhythm_form_{},
-                dynamic_form_{},
-                texture_form_{},
-                voices_{},
-                arrangement_definition_{}
-            {
-            }
+            MusicalForm() = default;
+
             std::shared_ptr<bool> prefer_sharp_{std::make_shared<bool>()};
 
             // A ctor for converting old files
-            MusicalForm(const std::string& name, const cgmlegacy::TextForm& form)
+            MusicalForm(const std::string& name, const cgmlegacy::TextForm& form) noexcept
               : name_{name},
                 copyright_{"© "},
                 len_{form.len},
@@ -309,27 +273,27 @@ namespace textmidi
             ArrangementDefinition& arrangement_definition() noexcept;
             const ArrangementDefinition& arrangement_definition() const noexcept;
             void arrangement_definition(ArrangementDefinition arrangement_definition) noexcept;
-            void string_scale_to_int_scale(std::vector<int>& key_scale) const;
+            void string_scale_to_int_scale(std::vector<int>& key_scale) const noexcept;
             void character_now(TicksDuration theTime,
-                    MusicalCharacter& musical_character) const;
+                    MusicalCharacter& musical_character) const noexcept;
             void random(std::string formname = "random", std::int32_t instrument_flags = static_cast<std::int32_t>(GeneralMIDIGroup::Melodic));
             bool valid() const;
-            void clamp_scale_to_instrument_ranges();
+            void clamp_scale_to_instrument_ranges() noexcept;
           private:
-            std::string name_;
-            std::string copyright_;
-            double len_;
-            double min_note_len_;
-            double max_note_len_;
-            std::vector<std::string> scale_;
-            double pulse_;
-            MelodyProbabilities melody_probabilities_;
-            MeanRangeSines pitch_form_;
-            MeanRangeSines rhythm_form_;
-            MeanRangeSines dynamic_form_;
-            Sine                 texture_form_;
-            std::vector<VoiceXml>    voices_;
-            ArrangementDefinition arrangement_definition_;
+            std::string name_{};
+            std::string copyright_{};
+            double len_{};
+            double min_note_len_{};
+            double max_note_len_{};
+            std::vector<std::string> scale_{};
+            double pulse_{};
+            MelodyProbabilities melody_probabilities_{};
+            MeanRangeSines pitch_form_{};
+            MeanRangeSines rhythm_form_{};
+            MeanRangeSines dynamic_form_{};
+            Sine                 texture_form_{};
+            std::vector<VoiceXml>    voices_{};
+            ArrangementDefinition arrangement_definition_{};
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int version)
             {

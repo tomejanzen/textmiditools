@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -395,7 +395,7 @@ namespace midi
 #pragma pack(1)
     struct MidiHeader
     {
-        MidiHeader()
+        MidiHeader() noexcept
           : chunk_name_{},
             chunk_len_{HeaderChunkLen},
             format_{},
@@ -408,7 +408,7 @@ namespace midi
             }
 
         MidiHeader(std::uint32_t chunk_len, MIDI_Format format, std::uint16_t ntrks,
-                   std::uint16_t division)
+                   std::uint16_t division) noexcept
           : chunk_name_{'M', 'T', 'h', 'd'},
             chunk_len_{chunk_len},
             format_{format},
@@ -416,7 +416,7 @@ namespace midi
             division_{division}
             {}
 
-        MidiHeader(MidiStreamAtom* bytes)
+        MidiHeader(MidiStreamAtom* bytes) noexcept
           : chunk_name_{},
             chunk_len_{},
             format_{},
@@ -427,7 +427,7 @@ namespace midi
             swapbytes();
         }
 
-        void to_bytes(MidiStreamAtom* bytes);
+        void to_bytes(MidiStreamAtom* bytes) noexcept;
 #pragma pack(push)
 #pragma pack(1)
         MidiStreamAtom chunk_name_[ChunkNameLen];
@@ -439,7 +439,7 @@ namespace midi
         std::uint16_t ntrks_;     // number of tracks
         std::uint16_t division_;  // ticks/quarter (unless SMPTE, check spec)
 #pragma pack(pop)
-        void swapbytes();
+        void swapbytes() noexcept;
     };
 
 #pragma pack()
@@ -468,19 +468,19 @@ namespace midi
     class RunningStatusImpl : public RunningStatusImplBase
     {
       public:
-        RunningStatusImpl()
+        RunningStatusImpl() noexcept
           : running_status_valid_(),
             running_status_value_{},
             policy_{RunningStatusPolicy::Standard}
         {
         }
-        virtual void running_status(MidiStreamAtom running_status_value);
-        bool running_status_valid() const;
-        MidiStreamAtom running_status_value() const;
-        void clear();
+        virtual void running_status(MidiStreamAtom running_status_value) noexcept override;
+        bool running_status_valid() const noexcept override;
+        MidiStreamAtom running_status_value() const noexcept override;
+        void clear() noexcept override;
         // returns a zero-based channel
-        MidiStreamAtom channel() const;
-        MidiStreamAtom command() const;
+        MidiStreamAtom channel() const noexcept override;
+        MidiStreamAtom command() const noexcept override;
       private:
         bool running_status_valid_;
         MidiStreamAtom running_status_value_;
@@ -490,35 +490,41 @@ namespace midi
     class RunningStatusBase
     {
       public:
-        RunningStatusBase()
+        RunningStatusBase() noexcept
           : running_status_impl_{std::make_shared<RunningStatusImpl>()}
         {
         }
         // Rule of zero: if no custom D-tor, copy, assign, move, move copy,
         // then define none of them.
-        virtual void running_status(midi::MidiStreamAtom running_status_value)
+        virtual void running_status(midi::MidiStreamAtom running_status_value) noexcept
         {
             running_status_impl_->running_status(running_status_value);
         }
-        void clear()
+
+        void clear() noexcept
         {
             running_status_impl_->clear();
         }
+
         virtual void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) = 0;
-        virtual bool running_status_valid() const
+
+        virtual bool running_status_valid() const noexcept
         {
             return running_status_impl_->running_status_valid();
         }
-        virtual MidiStreamAtom running_status_value() const
+
+        virtual MidiStreamAtom running_status_value() const noexcept
         {
             return running_status_impl_->running_status_value();
         }
+
         // returns a zero-based channel
-        virtual MidiStreamAtom channel() const
+        virtual MidiStreamAtom channel() const noexcept
         {
             return running_status_impl_->channel();
         }
-        virtual MidiStreamAtom command() const
+
+        virtual MidiStreamAtom command() const noexcept
         {
             return running_status_impl_->command();
         }
@@ -531,37 +537,37 @@ namespace midi
     class RunningStatusStandard : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
     };
 
     class RunningStatusNever : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
     };
 
     class RunningStatusPersistentAfterMeta : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
     };
 
     class RunningStatusPersistentAfterSysex : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
     };
 
     class RunningStatusPersistentAfterSysexOrMeta : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track);
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
     };
 
     class RunningStatusFactory
     {
       public:
-          std::unique_ptr<RunningStatusBase> operator()(RunningStatusPolicy policy);
+          std::unique_ptr<RunningStatusBase> operator()(RunningStatusPolicy policy) noexcept;
     };
 }
 #endif // MIDI_H

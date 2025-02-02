@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -42,7 +42,7 @@ namespace arrangements
     class ArrangementsABC
     {
       public:
-        ArrangementsABC()
+        ArrangementsABC() noexcept
         {
         }
         virtual int counter() const = 0;
@@ -61,16 +61,13 @@ namespace arrangements
     class ArrangementsImpl
     {
       public:
-        ArrangementsImpl() :
-            counter_{}
-        {
-        }
-        int counter() const;
-        void counter(int counter);
-        void inc();
-        bool counter_finite() const;
+        ArrangementsImpl() = default;
+        int counter() const noexcept;
+        void counter(int counter) noexcept;
+        void inc() noexcept;
+        bool counter_finite() const noexcept;
       private:
-        int counter_;
+        int counter_{};
     };
 
     class Arrangements : public ArrangementsABC
@@ -80,12 +77,12 @@ namespace arrangements
             ArrangementsABC(), arrangements_impl_{}
         {
         }
-        int counter() const;
-        void counter(int counter);
-        void inc();
-        bool counter_finite() const;
+        int counter() const noexcept override;
+        void counter(int counter) noexcept override;
+        void inc() noexcept;
+        bool counter_finite() const noexcept;
         virtual void next() = 0;
-        virtual const Arrangement& arrangement() = 0;
+        virtual const Arrangement& arrangement() const = 0;
       private:
         ArrangementsImpl arrangements_impl_;
     };
@@ -93,14 +90,14 @@ namespace arrangements
     class ArrangementsInSitu : public Arrangements
     {
         public:
-            explicit ArrangementsInSitu(int length)
+            explicit ArrangementsInSitu(int length) noexcept
               : Arrangements(), arrangement_()
             {
                 auto counting = std::views::iota(0, length);
                 std::ranges::copy(counting, std::back_inserter(arrangement_));
             }
-            const Arrangement& arrangement() const;
-            Arrangement& arrangement();
+            const Arrangement& arrangement() const noexcept override;
+            Arrangement& arrangement() noexcept override;
         private:
            Arrangement arrangement_;
     };
@@ -108,13 +105,13 @@ namespace arrangements
     class ArrangementsSequence : public Arrangements
     {
         public:
-            explicit ArrangementsSequence(int length)
-                : Arrangements(), arrangements_(), length_(length)
+            explicit ArrangementsSequence(int length) noexcept
+              : Arrangements(), arrangements_(), length_(length)
             {
             }
-            const ArrangementVec& arrangements() const;
-            ArrangementVec& arrangements();
-            int length() const;
+            const ArrangementVec& arrangements() const noexcept;
+            ArrangementVec& arrangements() noexcept;
+            int length() const noexcept;
         private:
             ArrangementVec arrangements_;
             int length_;
@@ -123,84 +120,92 @@ namespace arrangements
     class ArrangementsIdentity : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsIdentity(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsIdentity(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        const Arrangement& arrangement() const;
-        void next()
+        const Arrangement& arrangement() const noexcept override;
+        void next() noexcept override
         { }
     };
     class ArrangementsLexicographicForward : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsLexicographicForward(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsLexicographicForward(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsLexicographicBackward : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsLexicographicBackward(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsLexicographicBackward(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsRotateRight : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsRotateRight(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsRotateRight(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsRotateLeft : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsRotateLeft(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsRotateLeft(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsReverse : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsReverse(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsReverse(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsSwapPairs : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsSwapPairs(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsSwapPairs(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsSkip : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsSkip(int length) : ArrangementsInSitu(length)
+        explicit ArrangementsSkip(int length) noexcept
+          : ArrangementsInSitu(length)
         {
         }
-        void next();
+        void next() noexcept override;
     };
 
     class ArrangementsShuffle : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsShuffle(int length)
+        explicit ArrangementsShuffle(int length) noexcept
           : ArrangementsInSitu(length), random_dev_(), generator_(random_dev_())
         {
         }
-        void next();
+        void next() noexcept override;
       private:
         std::random_device random_dev_;
         std::mt19937 generator_;
@@ -212,18 +217,18 @@ namespace arrangements
     class ArrangementsHeaps : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsHeaps(int length = 1)
+        explicit ArrangementsHeaps(int length = 1) noexcept
           : ArrangementsInSitu(length),
             heaps_algorithm_template_{length, arrangement()}
         {
         }
 
-        void next();
+        void next() noexcept override;
       private:
         heaps_algorithm::HeapsAlgorithmTemplate<std::vector<int> > heaps_algorithm_template_;
     };
 
-    std::shared_ptr<Arrangements> ArrangementsFactory(PermutationEnum permutation_type, int length);
+    std::shared_ptr<Arrangements> ArrangementsFactory(PermutationEnum permutation_type, int length) noexcept;
 
 }
 

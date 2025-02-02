@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -56,7 +56,7 @@ namespace
 
 //
 // Convert a double duration in seconds to a musical ratio.
-RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration) const
+RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration) const noexcept
 {
     //  beat    quarter   whole   minute
     // ------ * ------- * ----- * -------
@@ -90,7 +90,7 @@ RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration) cons
 
 //
 // Coerce a duration to be in multiples of the pulse/second value.
-RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, double pulse_per_second) const
+RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, double pulse_per_second) const noexcept
 {
     RhythmRational wholes_per_second{
       RhythmRational{TempoBeatsPerMinute} * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
@@ -129,7 +129,7 @@ RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm, dou
 }
 
 void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm& xml_form,
-    vector<list<int>>& leaders_topo_sort)
+    vector<list<int>>& leaders_topo_sort) noexcept
 {
     leaders_topo_sort.clear();
     // Build a composition priority graph.
@@ -215,7 +215,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
         }
         if (leader_only)
         {
-            leaders_topo_sort[0].emplace_back(follower_index); // if not a follower save it.
+            leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
         }
     }
 #if defined(TEXTMIDICGM_PRINT)
@@ -237,7 +237,7 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
                     const auto it{ranges::find(leaders_topo_sort[g - 1], leader_index)};
                     if (it != leaders_topo_sort[g - 1].end())
                     {
-                        leaders_topo_sort[g].emplace_back(follower_index);
+                        leaders_topo_sort[g].push_back(follower_index);
                     }
                 }
             }
@@ -257,12 +257,12 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 }
 
 void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>& track_scramble_sequences,
-    TicksDuration total_duration)
+    TicksDuration total_duration) noexcept
 {
     for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
     {
-        track_scramble_sequences.emplace_back(track_scramble_.arrangements_->arrangement());
+        track_scramble_sequences.push_back(track_scramble_.arrangements_->arrangement());
         track_scramble_.arrangements_->next();
     }
 #undef TEXTMIDICGM_PRINT
@@ -301,9 +301,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 
     for (auto v : xml_form.voices())
     {
-        tessitura.emplace_back(make_pair
-            (textmidi::pitchname_to_keynumber(v.low_pitch()).first,
-             textmidi::pitchname_to_keynumber(v.high_pitch()).first));
+        tessitura.emplace_back(
+            textmidi::pitchname_to_keynumber(v.low_pitch()).first,
+            textmidi::pitchname_to_keynumber(v.high_pitch()).first);
     }
     KeyScaleSeq key_scale;
     xml_form.string_scale_to_int_scale(key_scale);
@@ -499,10 +499,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                         }
                         NoteEvent temp_note_event{key_number,
                             dynamic, rhythm};
-                        track_note_events[tr].emplace_back(temp_note_event);
+                        track_note_events[tr].push_back(temp_note_event);
                     } else {
                         NoteEvent temp_note_event{RestPitch, 0, rhythm};
-                        track_note_events[tr].emplace_back(temp_note_event);
+                        track_note_events[tr].push_back(temp_note_event);
                     }
                 }
             }
@@ -623,6 +623,13 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             {
                 ranges::reverse(track_note_events[tr]);
             }
+            if (xml_form.voices()[tr].follower().duration_factor() != RhythmRational{1L})
+            {
+                ranges::for_each(track_note_events[tr],
+                    [&](cgm::NoteEvent& ne) { ne.musical_rhythm(
+                    ne.musical_rhythm() * xml_form.voices()[tr].follower().duration_factor() ); } );
+            }
+
             if (xml_form.voices()[tr].follower().delay())
             {
                 // Insert a rest for delay for canon effects.

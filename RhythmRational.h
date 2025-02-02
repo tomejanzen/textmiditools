@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // RhythmRational 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -44,7 +44,7 @@ namespace textmidi
         class RhythmRational
         {
             public:
-                typedef std::int64_t value_type;
+                using value_type = std::int64_t;
                 using SimpleContinuedFraction = std::pair<value_type, std::list<value_type>>;
                 explicit constexpr RhythmRational(std::int64_t numerator = 0L,
                     std::int64_t denominator = 1L, bool reduce_it = true)
@@ -61,7 +61,12 @@ namespace textmidi
                     }
                 }
 
-                operator double() const;
+                constexpr operator double() const
+                {
+                    return static_cast<double>(numerator_ / denominator_)
+                        + static_cast<double>(numerator_ % denominator_)
+                        / static_cast<double>(denominator_);
+                }
 
                 RhythmRational continued_fraction_list_to_rational(std::list<value_type> &denoms);
 
@@ -71,11 +76,24 @@ namespace textmidi
                 {
                     *this += continued_fraction_list_to_rational(scf.second);
                 }
-                std::int64_t numerator() const noexcept;
-                std::int64_t denominator() const noexcept;
+
+                constexpr std::int64_t numerator() const noexcept
+                {
+                    return numerator_;
+                }
+
+                constexpr std::int64_t denominator() const noexcept
+                {
+                    return denominator_;
+                }
+
                 void numerator(std::int64_t numerator) noexcept;
                 void denominator(std::int64_t denominator) noexcept;
-                operator bool() const;
+                constexpr operator bool() const
+                {
+                    return numerator_ != 0;
+                }
+
                 void invert();
                 RhythmRational(const RhythmRational& ) = default;
                 bool operator==(const RhythmRational& comparand) const;
@@ -133,7 +151,7 @@ namespace textmidi
                 : dotted_rhythm_{dotted_rhythm}
             {
             }
-            std::ostream& operator()(std::ostream& , const RhythmRational& tr);
+            std::ostream& operator()(std::ostream& , const RhythmRational& tr) override;
           private:
             long int convert_to_dotted_rhythm(RhythmRational& q);
             bool dotted_rhythm_;
@@ -142,7 +160,7 @@ namespace textmidi
 
         struct PrintRhythmSimpleContinuedFraction : public PrintRhythmBase
         {
-            std::ostream& operator()(std::ostream& , const RhythmRational& tr);
+            std::ostream& operator()(std::ostream& , const RhythmRational& tr) override;
         };
         extern std::unique_ptr<PrintRhythmBase> print_rhythm;
 

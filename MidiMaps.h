@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -12,6 +12,7 @@
 
 #include <ostream>
 #include <utility>
+#include <ranges>
 #include <optional>
 
 #include "Midi.h"
@@ -24,74 +25,57 @@ namespace midi
     template<typename NumType> class NumStringMap
     {
       public:
-        NumStringMap(std::initializer_list<std::pair<NumType, std::string_view> > in_initlist)
-          : num_string_map_(),
+        NumStringMap(std::initializer_list<const std::pair<NumType, std::string_view> > in_initlist) noexcept
+          : num_string_map_{in_initlist.begin(), in_initlist.end()},
             string_num_map_()
         {
-            for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
-            {
-                num_string_map_.emplace(*mi);
-                string_num_map_.emplace(std::make_pair(mi->second, mi->first));
-            }
+            std::for_each(in_initlist.begin(), in_initlist.end(),
+                [this](const std::pair<const NumType, const std::string_view>& p)
+                {this->string_num_map_.emplace(p.second, p.first); });
         }
 
-        NumStringMap(std::initializer_list<std::pair<std::string_view, NumType> > in_initlist)
+        NumStringMap(std::initializer_list<std::pair<const std::string_view, NumType> > in_initlist) noexcept
           : num_string_map_(),
-            string_num_map_()
+            string_num_map_(in_initlist)
         {
-            for (auto mi(in_initlist.begin()); mi != in_initlist.end(); ++mi)
-            {
-                num_string_map_.emplace(std::make_pair(mi->second, mi->first));
-                string_num_map_.emplace(*mi);
-            }
+            std::for_each(in_initlist.begin(), in_initlist.end(),
+                [this](const std::pair<const std::string_view, const NumType>& p)
+                {this->num_string_map_.emplace(p.second, p.first); });
         }
 
         NumStringMap(const NumStringMap& ) = default;
 
-        std::string_view at(NumType num) const
+        std::string_view at(NumType num) const noexcept
         {
             return num_string_map_.at(num);
         }
 
-        std::string_view operator[](NumType num) const
+        std::string_view operator[](NumType num) const noexcept
         {
             return num_string_map_.at(num);
         }
 
-        NumType at(const std::string_view& sv) const
+        NumType at(const std::string_view& sv) const noexcept
         {
             return string_num_map_.at(sv);
         }
 
-        NumType operator[](const std::string_view& sv) const
+        NumType operator[](const std::string_view& sv) const noexcept
         {
             return string_num_map_.at(sv);
         }
 
-        bool contains(NumType num) const
+        bool contains(NumType num) const noexcept
         {
             return num_string_map_.contains(num);
         }
 
-        bool contains(std::string_view sv) const
+        bool contains(std::string_view sv) const noexcept
         {
             return string_num_map_.contains(sv);
         }
 
-        bool contains(std::initializer_list<std::string_view> candidates)
-        {
-            bool rtn{};
-            for (auto candi{candidates.begin()}; candi != candidates.end(); ++candi)
-            {
-                if (this->contains(*candi))
-                {
-                    rtn = true;
-                }
-            }
-            return rtn;
-        }
-
-        std::optional<NumType> operator()(std::string_view str) const
+        std::optional<NumType> operator()(std::string_view str) const noexcept
         {
             if (this->contains(str))
             {
@@ -103,7 +87,7 @@ namespace midi
             }
         }
 
-        std::optional<std::string_view> operator()(NumType num) const
+        std::optional<std::string_view> operator()(NumType num) const noexcept
         {
             if (this->contains(num))
             {
@@ -115,15 +99,21 @@ namespace midi
             }
         }
 
-        const std::map<std::string_view, NumType> string_num_map() const
+        const std::map<std::string_view, NumType> string_num_map() const noexcept
         {
             return string_num_map_;
         }
 
-        void insert(std::map<std::string_view, NumType>::value_type insert_value)
+        void emplace(std::string_view sv, NumType num) noexcept
         {
-            string_num_map_.emplace(insert_value);
-            num_string_map_.emplace(std::make_pair(insert_value.second, insert_value.first));
+            string_num_map_.emplace(sv, num);
+            num_string_map_.emplace(num, sv);
+        }
+
+        void insert(std::map<std::string_view, NumType>::value_type insert_value) noexcept
+        {
+            string_num_map_.insert(insert_value);
+            num_string_map_.emplace(insert_value.second, insert_value.first);
         }
 
       private:

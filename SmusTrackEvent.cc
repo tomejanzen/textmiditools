@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -30,52 +30,52 @@ using namespace smus;
 using namespace textmidi;
 using namespace textmidi::rational;
 
-auto SmusTrackEventBase::decision() const
+auto SmusTrackEventBase::decision() const noexcept
 {
     return decision_;
 }
 
-auto SmusTrackEventBase::data() const
+auto SmusTrackEventBase::data() const noexcept
 {
     return data_;
 }
 
-void SmusTrackEventBase::add_to_delay_accum(const RhythmRational& delay)
+void SmusTrackEventBase::add_to_delay_accum(const RhythmRational& delay) noexcept
 {
     delay_accum_ += delay;
 }
 
-RhythmRational SmusTrackEventBase::delay_accum() const
+RhythmRational SmusTrackEventBase::delay_accum() const noexcept
 {
     return delay_accum_;
 }
 
-void SmusTrackEventBase::delay_accum(const RhythmRational& delay)
+void SmusTrackEventBase::delay_accum(const RhythmRational& delay) noexcept
 {
     delay_accum_ = delay;
 }
 
-int SmusTrackEventBase::current_dynamic()
+int SmusTrackEventBase::current_dynamic() noexcept
 {
     return current_dynamic_;
 }
 
-void SmusTrackEventBase::current_dynamic(int current_dynamic)
+void SmusTrackEventBase::current_dynamic(int current_dynamic) noexcept
 {
     current_dynamic_ = current_dynamic;
 }
 
-bool SmusTrackEventBase::i_am_lazy()
+bool SmusTrackEventBase::i_am_lazy() noexcept
 {
     return i_am_lazy_;
 }
 
-void SmusTrackEventBase::i_am_lazy(bool i_am_lazy)
+void SmusTrackEventBase::i_am_lazy(bool i_am_lazy) noexcept
 {
     i_am_lazy_ = i_am_lazy;
 }
 
-string SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy)
+string SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy) noexcept
 {
     string str{};
     if (i_am_lazy)
@@ -97,17 +97,17 @@ string SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy)
     return str;
 }
 
-int SmusTrackEventBase::channel()
+int SmusTrackEventBase::channel() noexcept
 {
     return channel_;
 }
 
-void SmusTrackEventBase::channel(int channel)
+void SmusTrackEventBase::channel(int channel) noexcept
 {
     channel_ = channel;
 }
 
-string SmusTrackEventBase::pre_rest()
+string SmusTrackEventBase::pre_rest() noexcept
 {
     ostringstream oss{};
     if (delay_accum() > rational::RhythmRational{0L})
@@ -121,7 +121,7 @@ string SmusTrackEventBase::pre_rest()
     return oss.str();
 }
 
-RhythmRational SmusTrackEventBase::duration() const
+RhythmRational SmusTrackEventBase::duration() const noexcept
 {
     // 7    6    5    4    3    2    1    0
     // chrd tie  tuplet... dot  division
@@ -144,22 +144,22 @@ RhythmRational SmusTrackEventBase::duration() const
     return len;
 }
 
-void SmusTrackEventBase::flush()
+void SmusTrackEventBase::flush() noexcept
 {
     delay_accum_ = RhythmRational{0L};
 }
 
-bool SmusTrackEventBase::is_dotted() const
+bool SmusTrackEventBase::is_dotted() const noexcept
 {
     return ((data() & (1 << 3)) != 0);
 }
 
-RhythmRational SmusTrackEventBase::dotted_multiplier() const
+RhythmRational SmusTrackEventBase::dotted_multiplier() const noexcept
 {
     return (is_dotted() ? RhythmRational(3L, 2L) : RhythmRational(1L));
 }
 
-RhythmRational SmusTrackEventBase::tuplet_multiplier() const
+RhythmRational SmusTrackEventBase::tuplet_multiplier() const noexcept
 {
     switch ((data() >> 4) & 3)
     {
@@ -180,7 +180,7 @@ RhythmRational SmusTrackEventBase::tuplet_multiplier() const
 
 RhythmRational SmusTrackEventBase::delay_accum_{};
 
-string SmusTrackEventPitch::textmidi_tempo()
+string SmusTrackEventPitch::textmidi_tempo() noexcept
 {
     if (!is_chorded())
     {
@@ -189,7 +189,7 @@ string SmusTrackEventPitch::textmidi_tempo()
     return string{};
 }
 
-string SmusTrackEventPitch::textmidi()
+string SmusTrackEventPitch::textmidi() noexcept
 {
     ostringstream oss{};
     std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
@@ -236,17 +236,17 @@ string SmusTrackEventPitch::textmidi()
     return oss.str();
 }
 
-bool SmusTrackEventPitch::is_tiedout() const
+bool SmusTrackEventPitch::is_tiedout() const noexcept
 {
     return ((data() & (1 << 6)) != 0);
 }
 
-bool SmusTrackEventPitch::is_chorded() const
+bool SmusTrackEventPitch::is_chorded() const noexcept
 {
     return ((data() & (1 << 7)) != 0);
 }
 
-bool SmusTrackEventPitch::is_tied_back(int tp) const
+bool SmusTrackEventPitch::is_tied_back(int tp) const noexcept
 {
     bool rtn{};
     const auto tplocal{tp};
@@ -259,7 +259,7 @@ bool SmusTrackEventPitch::is_tied_back(int tp) const
     return rtn;
 }
 
-void SmusTrackEventPitch::remove_from_tied()
+void SmusTrackEventPitch::remove_from_tied() noexcept
 {
     const auto tplocal{decision()};
     auto it{ranges::find_if(tied_vec_, [tplocal](char p)
@@ -270,12 +270,12 @@ void SmusTrackEventPitch::remove_from_tied()
     }
 }
 
-void SmusTrackEventPitch::add_to_tied()
+void SmusTrackEventPitch::add_to_tied() noexcept
 {
     tied_vec_.insert(tied_vec_.end(), decision());
 }
 
-void SmusTrackEventPitch::flush()
+void SmusTrackEventPitch::flush() noexcept
 {
     SmusTrackEventBase::flush();
     tied_vec_.clear();
@@ -284,36 +284,36 @@ void SmusTrackEventPitch::flush()
 vector<int> SmusTrackEventPitch::tied_vec_;
 int SmusTrackEventBase::channel_{};
 
-string SmusTrackEventRest::textmidi()
+string SmusTrackEventRest::textmidi() noexcept
 {
     return textmidi_tempo();
 }
 
-string SmusTrackEventRest::textmidi_tempo()
+string SmusTrackEventRest::textmidi_tempo() noexcept
 {
     delay_accum(delay_accum() + duration());
     return string{};
 }
 
-string SmusTrackEventInstrument::textmidi_tempo()
+string SmusTrackEventInstrument::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventInstrument::textmidi()
+string SmusTrackEventInstrument::textmidi() noexcept
 {
     return string{"; SMUS Instrument Number set to "}
         + lexical_cast<string>(data()) + '\n';
 }
 
-pair<unsigned, unsigned> SmusTrackEventTimeSignature::time_signature() const
+pair<unsigned, unsigned> SmusTrackEventTimeSignature::time_signature() const noexcept
 {
     return make_pair(((data() >> 3) & 0x1F) + 1,
         static_cast<unsigned>(pow(2.0, static_cast<double>
                     (data() & 7))));
 }
 
-string SmusTrackEventTimeSignature::textmidi_tempo()
+string SmusTrackEventTimeSignature::textmidi_tempo() noexcept
 {
     string str{pre_rest()};
     const auto time_sig{time_signature()};
@@ -325,17 +325,17 @@ string SmusTrackEventTimeSignature::textmidi_tempo()
     return str;
 }
 
-string SmusTrackEventTimeSignature::textmidi()
+string SmusTrackEventTimeSignature::textmidi() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventKeySignature::textmidi()
+string SmusTrackEventKeySignature::textmidi() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventKeySignature::textmidi_tempo()
+string SmusTrackEventKeySignature::textmidi_tempo() noexcept
 {
     auto str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -343,7 +343,7 @@ string SmusTrackEventKeySignature::textmidi_tempo()
     return str;
 }
 
-string SmusTrackEventKeySignature::key() const
+string SmusTrackEventKeySignature::key() const noexcept
 {
     string keystr{};
     switch (data())
@@ -399,12 +399,12 @@ string SmusTrackEventKeySignature::key() const
     return keystr;
 }
 
-string SmusTrackEventVolume::textmidi_tempo()
+string SmusTrackEventVolume::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventVolume::textmidi()
+string SmusTrackEventVolume::textmidi() noexcept
 {
     string str{};
     str += i_am_lazy_string(true);
@@ -426,12 +426,12 @@ string SmusTrackEventVolume::textmidi()
     return str;
 }
 
-string SmusTrackEventChannel::textmidi_tempo()
+string SmusTrackEventChannel::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventChannel::textmidi()
+string SmusTrackEventChannel::textmidi() noexcept
 {
     string str{};
     str += i_am_lazy_string(true);
@@ -442,12 +442,12 @@ string SmusTrackEventChannel::textmidi()
     return str;
 }
 
-string SmusTrackEventPreset::textmidi_tempo()
+string SmusTrackEventPreset::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventPreset::textmidi()
+string SmusTrackEventPreset::textmidi() noexcept
 {
     string str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -457,12 +457,12 @@ string SmusTrackEventPreset::textmidi()
 }
 
 // MIDI has no clef.
-string SmusTrackEventClef::textmidi_tempo()
+string SmusTrackEventClef::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventClef::textmidi()
+string SmusTrackEventClef::textmidi() noexcept
 {
     string str{"; SMUS Clef set to "};
     if (clef_map.contains(data()))
@@ -484,12 +484,12 @@ const midi::NumStringMap<int> smus::clef_map
    {3, string{"Tenor"}}
 };
 
-string SmusTrackEventTempo::textmidi()
+string SmusTrackEventTempo::textmidi() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventTempo::textmidi_tempo()
+string SmusTrackEventTempo::textmidi_tempo() noexcept
 {
     auto str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -498,7 +498,7 @@ string SmusTrackEventTempo::textmidi_tempo()
     return str;
 }
 
-string SmusTrackEventEnd::textmidi_tempo()
+string SmusTrackEventEnd::textmidi_tempo() noexcept
 {
     auto str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -507,12 +507,12 @@ string SmusTrackEventEnd::textmidi_tempo()
     return str;
 }
 
-string SmusTrackEventEnd::textmidi()
+string SmusTrackEventEnd::textmidi() noexcept
 {
     return string("\n") + textmidi_tempo();
 }
 
-std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const SmusTrackEventFilePod& te)
+std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const SmusTrackEventFilePod& te) noexcept
 {
     unique_ptr<SmusTrackEventBase> teb{};
     switch (te.decision)
@@ -553,10 +553,6 @@ std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const Smus
     }
     return teb;
 }
-
-
-
-
 
 int  smus::SmusTrackEventBase::current_dynamic_{64};
 bool smus::SmusTrackEventBase::i_am_lazy_{false};

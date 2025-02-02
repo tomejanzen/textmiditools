@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -24,7 +24,7 @@ namespace cgmlegacy
 #pragma pack(4) // crashes without alignment after the bool.
     struct VoiceOld
     {
-        VoiceOld()
+        VoiceOld() noexcept
           : low_pitch_(),
             high_pitch_(),
             channel_(),
@@ -35,7 +35,7 @@ namespace cgmlegacy
         VoiceOld(std::uint32_t low_pitch,
                  std::uint32_t high_pitch,
                  std::uint32_t channel,
-                 bool walking)
+                 bool walking) noexcept
           : low_pitch_(low_pitch),
             high_pitch_(high_pitch),
             channel_(channel),
@@ -57,17 +57,17 @@ namespace cgmlegacy
       public:
         OldFormElement(const double mean_period = 60,
             const double mean_phase = 0, const double range_period = 60,
-            const double range_phase = 0)
+            const double range_phase = 0) noexcept
           : mean_period_{mean_period},
             mean_phase_{mean_phase},
             range_period_{range_period},
             range_phase_{range_phase}
         {
         }
-        double mean_period() const;
-        double mean_phase() const;
-        double range_period() const;
-        double range_phase() const;
+        double mean_period() const noexcept;
+        double mean_phase() const noexcept;
+        double range_period() const noexcept;
+        double range_phase() const noexcept;
       private:
         double mean_period_;
         double mean_phase_;
@@ -78,35 +78,21 @@ namespace cgmlegacy
     // obsolescent but needed for conversions of old files (use --form *.frm).
     struct TextForm
     {
-        TextForm()
-          : len{60},
-            min_note_len{1.0},
-            max_note_len{1.0},
-            scale_qty{88},
-            scale{},
-            voice_qty{},
-            pulse{1.0},
-            pitch_form{},
-            rhythm_form{},
-            dynamic_form{},
-            texture_form{},
-            voices()
-        {
-        };
+        TextForm() = default;
 
         void read_from_file(const std::string& form_filename);
-        double len;
-        double min_note_len;
-        double max_note_len;
-        std::size_t scale_qty;
-        std::vector<std::uint32_t> scale;
-        std::size_t voice_qty;
-        double pulse;
-        OldFormElement pitch_form;
-        OldFormElement rhythm_form;
-        OldFormElement dynamic_form;
-        OldFormElement texture_form;
-        std::vector<VoiceOld> voices;
+        double len{60};
+        double min_note_len{1.0};
+        double max_note_len{1.0};
+        std::size_t scale_qty{15};
+        std::vector<std::uint32_t> scale{48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72};
+        std::size_t voice_qty{};
+        double pulse{1.0};
+        OldFormElement pitch_form{};
+        OldFormElement rhythm_form{};
+        OldFormElement dynamic_form{};
+        OldFormElement texture_form{};
+        std::vector<VoiceOld> voices{};
     };
 
 }

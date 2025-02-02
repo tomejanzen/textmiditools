@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -26,22 +26,22 @@ namespace textmidi
         const textmidi::rational::RhythmRational QuarterPerWhole{1, 4};
         const textmidi::rational::RhythmRational QuartersPerWholeRat(4, 1);
         using TicksRatio = std::ratio<1L, TicksPerQuarter>;
-        typedef std::chrono::duration<std::int64_t, TicksRatio> TicksDuration;
+        using TicksDuration = std::chrono::duration<std::int64_t, TicksRatio>;
 
         class Track
         {
           public:
-            explicit Track(int last_pitch_index = 0)
+            explicit Track(int last_pitch_index = 0) noexcept
               : the_last_time_(0),
                 the_next_time_(0),
                 last_pitch_index_(last_pitch_index)
             {
             }
-            TicksDuration the_next_time() const;
-            int last_pitch_index() const;
-            void the_last_time(const TicksDuration the_last_time);
-            void the_next_time(const TicksDuration the_next_time);
-            void last_pitch_index(const int last_pitch_index);
+            TicksDuration the_next_time() const noexcept;
+            int last_pitch_index() const noexcept;
+            void the_last_time(const TicksDuration the_last_time) noexcept;
+            void the_next_time(const TicksDuration the_next_time) noexcept;
+            void last_pitch_index(const int last_pitch_index) noexcept;
           private:
             TicksDuration the_last_time_;
             TicksDuration the_next_time_;

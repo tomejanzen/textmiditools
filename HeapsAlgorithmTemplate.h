@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -36,12 +36,12 @@ namespace heaps_algorithm
       public:
         // boost:: multi_array is used to permit
         // the use of 1-based indexing as in Heap.
-        typedef boost::multi_array<int, 1> Array;
-        typedef boost::multi_array_ref<int, 1> ArrayRef;
-        typedef boost::multi_array_types::extent_range Range;
-        typedef std::pair<int, int> SwapPair;
+        using Array = boost::multi_array<int, 1>;
+        using ArrayRef = boost::multi_array_ref<int, 1>;
+        using Range = boost::multi_array_types::extent_range;
+        using SwapPair = std::pair<int, int>;
 
-        HeapsAlgorithmTemplate(int N, ArrayLike& array_like)
+        HeapsAlgorithmTemplate(int N, ArrayLike& array_like) noexcept
           : done_{},
             M_{2},
             N_{N},
@@ -53,7 +53,7 @@ namespace heaps_algorithm
             A_[1] = 1;
         }
 
-        bool next()
+        bool next() noexcept
         {
             auto rtn{false};
             //while (!rtn)
@@ -80,7 +80,7 @@ namespace heaps_algorithm
             return rtn;
         }
 
-        const ArrayLike& array_like() const
+        const ArrayLike& array_like() const noexcept
         {
             return array_like_;
         }
@@ -92,14 +92,14 @@ namespace heaps_algorithm
         Array::extent_gen extents_;
         Array A_;
         ArrayRef array_ref_;
-        void clear()
+        void clear() noexcept
         {
             done_ = false;
             M_ = 2;
             std::ranges::fill(A_, 0);
             A_[1] = 1;
         }
-        constexpr bool is_even(int x)
+        constexpr bool is_even(int x) noexcept
         {
             return (x % 2) == 0;
         }

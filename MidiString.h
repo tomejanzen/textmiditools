@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -13,8 +13,8 @@
 
 namespace textmidi
 {
-    void make_raw_string(std::string& str);
-    void make_human_string(std::string& str);
+    void make_raw_string(std::string& str) noexcept;
+    void make_human_string(std::string& str) noexcept;
 }
 
 #endif // MIDISTRING_H

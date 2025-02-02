@@ -340,6 +340,7 @@ If the leader voice is a leader, then set this voice
 @itemize
 @item Random interval type
 @item random delay to something less than a whole note.
+@item duration_factor of 1.
 @item randomly set whether to invert the voice
 @item randomly set whether to make the voice retrograde
 @end itemize
@@ -818,6 +819,7 @@ The leader may be a higher-numbered voice.
 @item interval_type: a scaler or chromatic interval;
 @item interval: the interval, from -128 to + 128;
 @item delay: a rational musical rhythm value to delay after the leader;
+@item duration_factor: a rational value with which multiply all of the leader's durations (a conventional ratio: 4 is 4 whole notes; use 1/4 for one fourth);
 @item inversion: 0 to not invert the melody; 1 to invert;
 @item retrograde: 0 to copy the leader forwards; 1 to copy it in reverse time.
 @end itemize
@@ -1306,6 +1308,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1326,6 +1332,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1346,6 +1356,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1366,6 +1380,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1406,6 +1424,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1426,6 +1448,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1446,6 +1472,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -1466,6 +1496,10 @@ The current version's format is:
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>

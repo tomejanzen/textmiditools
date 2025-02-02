@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // MIDIKeyString.cc
 //
@@ -146,7 +146,7 @@ namespace {
 // Public function.
 // Convert a MIDI key number to a string.
 //
-string textmidi::num_to_note(int num, std::shared_ptr<bool> prefer_sharp)
+string textmidi::num_to_note(int num, std::shared_ptr<bool> prefer_sharp) noexcept
 {
     const int octave{num / 12 - 1};
     //
@@ -359,7 +359,7 @@ pair<int, bool> textmidi::pitchname_to_keynumber(const string& pitchname)
     return make_pair(keynumber, is_delta);
 }
 
-bool textmidi::CompareLowerNoteName::operator()(const string& left, const string& right) const
+bool textmidi::CompareLowerNoteName::operator()(const string& left, const string& right) const noexcept
 {
     return pitchname_to_keynumber(left) < pitchname_to_keynumber(right);
 }

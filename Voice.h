@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -47,12 +47,15 @@ namespace textmidi
                     Chromatic
                 };
 
+                // This can't be initialized as member definitions
+                // because it is enclosed in VoiceXml (init order issue).
                 Follower()
                  : follow_{false},
                    leader_{std::numeric_limits<int>().max()},
                    interval_type_{IntervalType::Neither},
                    interval_{},
                    delay_{rational::RhythmRational{0L}},
+                   duration_factor_{rational::RhythmRational{1L}},
                    inversion_{},
                    retrograde_{}
                 {
@@ -62,14 +65,17 @@ namespace textmidi
                 int leader() const;
                 IntervalType interval_type() const;
                 int interval() const;
-                rational::RhythmRational& delay() ;
+                const rational::RhythmRational& delay() const;
+                const rational::RhythmRational& duration_factor() const;
                 bool inversion() const;
                 bool retrograde() const;
+
                 void follow(bool follow);
                 void leader(int leader);
                 void interval_type(IntervalType interval_type);
                 void interval(int interval);
-                void delay(rational::RhythmRational delay);
+                void delay(const rational::RhythmRational& delay);
+                void duration_factor(const rational::RhythmRational& duration_factor);
                 void inversion(bool inversion);
                 void retrograde(bool retrograde);
 
@@ -83,18 +89,23 @@ namespace textmidi
                     if (version >= 2)
                     {
                         arc & BOOST_SERIALIZATION_NVP(delay_);
+                        if (version >= 3)
+                        {
+                            arc & BOOST_SERIALIZATION_NVP(duration_factor_);
+                        }
                         arc & BOOST_SERIALIZATION_NVP(inversion_);
                         arc & BOOST_SERIALIZATION_NVP(retrograde_);
                     }
                 }
               private:
-                bool follow_;
-                int leader_;
-                IntervalType interval_type_;
-                int interval_;
-                rational::RhythmRational delay_;
-                bool inversion_;
-                bool retrograde_;
+                bool follow_{};
+                int leader_{std::numeric_limits<int>().max()};
+                IntervalType interval_type_{IntervalType::Neither};
+                int interval_{};
+                rational::RhythmRational delay_{rational::RhythmRational{0L}};
+                rational::RhythmRational duration_factor_{rational::RhythmRational{1L}};
+                bool inversion_{};
+                bool retrograde_{};
             };
             // There is no serialize for string_view, so these have to be strings.
             explicit VoiceXml(
@@ -164,6 +175,6 @@ namespace textmidi
 #pragma pack()
     }
 }
-BOOST_CLASS_VERSION(textmidi::cgm::VoiceXml::Follower, 2)
+BOOST_CLASS_VERSION(textmidi::cgm::VoiceXml::Follower, 3)
 
 #endif

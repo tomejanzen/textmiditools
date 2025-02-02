@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -45,31 +45,27 @@ namespace smus
     class SmusTrackEventBase
     {
        public:
-        SmusTrackEventBase()
-          : decision_{},
-            data_{}
-        {
-        }
-        explicit SmusTrackEventBase(const SmusTrackEventFilePod evt)
+        SmusTrackEventBase() = default;
+        explicit SmusTrackEventBase(const SmusTrackEventFilePod evt) noexcept
           : decision_{evt.decision},
             data_{evt.data}
         {
         }
-        auto decision() const;
-        auto data() const;
-        void add_to_delay_accum(const textmidi::rational::RhythmRational& delay);
-        textmidi::rational::RhythmRational delay_accum() const;
-        void delay_accum(const textmidi::rational::RhythmRational& delay);
-        static int current_dynamic();
-        static void current_dynamic(int current_dynamic);
-        static bool i_am_lazy();
-        static void i_am_lazy(bool i_am_lazy);
-        static std::string i_am_lazy_string(bool i_am_lazy);
-        static int channel();
-        static void channel(int channel);
-        std::string pre_rest();
-        textmidi::rational::RhythmRational duration() const;
-        static void flush();
+        auto decision() const noexcept;
+        auto data() const noexcept;
+        void add_to_delay_accum(const textmidi::rational::RhythmRational& delay) noexcept;
+        textmidi::rational::RhythmRational delay_accum() const noexcept;
+        void delay_accum(const textmidi::rational::RhythmRational& delay) noexcept;
+        static int current_dynamic() noexcept;
+        static void current_dynamic(int current_dynamic) noexcept;
+        static bool i_am_lazy() noexcept;
+        static void i_am_lazy(bool i_am_lazy) noexcept;
+        static std::string i_am_lazy_string(bool i_am_lazy) noexcept;
+        static int channel() noexcept;
+        static void channel(int channel) noexcept;
+        std::string pre_rest() noexcept;
+        textmidi::rational::RhythmRational duration() const noexcept;
+        static void flush() noexcept;
         virtual std::string textmidi() = 0;
         virtual std::string textmidi_tempo() = 0;
         // Rule of 5: Abstract base classes with virtual d-tor should get
@@ -81,36 +77,36 @@ namespace smus
         virtual ~SmusTrackEventBase() = default;
         static textmidi::rational::RhythmRational delay_accum_;
       private:
-        int decision_;
-        int data_;
+        int decision_{};
+        int data_{};
         static int current_dynamic_;
         static bool i_am_lazy_;
         static int channel_;
 
-        bool is_dotted() const;
-        textmidi::rational::RhythmRational dotted_multiplier() const;
-        textmidi::rational::RhythmRational tuplet_multiplier() const;
+        bool is_dotted() const noexcept;
+        textmidi::rational::RhythmRational dotted_multiplier() const noexcept;
+        textmidi::rational::RhythmRational tuplet_multiplier() const noexcept;
     };
 
     // 0-127 pitches
     class SmusTrackEventPitch final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventPitch(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventPitch(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        SmusTrackEventPitch ()
+        SmusTrackEventPitch () noexcept
           : SmusTrackEventBase{}
         {}
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
-        bool is_tiedout() const;
-        bool is_chorded() const;
-        bool is_tied_back(int tp) const;
-        void remove_from_tied();
-        void add_to_tied();
-        static void flush();
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
+        bool is_tiedout() const noexcept;
+        bool is_chorded() const noexcept;
+        bool is_tied_back(int tp) const noexcept;
+        void remove_from_tied() noexcept;
+        void add_to_tied() noexcept;
+        static void flush() noexcept;
       private:
         static std::vector<int> tied_vec_;
     };
@@ -119,88 +115,88 @@ namespace smus
     class SmusTrackEventRest final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventRest(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventRest(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // InstrumentNumber
     class SmusTrackEventInstrument final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventInstrument(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventInstrument(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // TimeSignature
     class SmusTrackEventTimeSignature final : public SmusTrackEventBase
     {
       private:
-        std::pair<unsigned, unsigned> time_signature() const;
+        std::pair<unsigned, unsigned> time_signature() const noexcept;
       public:
-        explicit SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // KeySignature
     class SmusTrackEventKeySignature final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventKeySignature(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventKeySignature(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
       private:
-        std::string key() const;
+        std::string key() const noexcept;
     };
 
     // Volume
     class SmusTrackEventVolume final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventVolume(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventVolume(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // Channel
     class SmusTrackEventChannel final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventChannel(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventChannel(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // Preset
     class SmusTrackEventPreset final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventPreset(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventPreset(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     extern const midi::NumStringMap<int> clef_map;
@@ -209,45 +205,42 @@ namespace smus
     class SmusTrackEventClef final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventClef(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventClef(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // Tempo
     class SmusTrackEventTempo final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventTempo(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventTempo(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     // EndOfTrack
     class SmusTrackEventEnd final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventEnd(const SmusTrackEventFilePod evt)
+        explicit SmusTrackEventEnd(const SmusTrackEventFilePod evt) noexcept
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() override;
-        std::string textmidi() override;
+        std::string textmidi_tempo() noexcept override;
+        std::string textmidi() noexcept override;
     };
 
     class SmusTrackEventFactory
     {
       public:
-        SmusTrackEventFactory()
-        {
-        }
-        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEventFilePod& evt);
+        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEventFilePod& te) noexcept;
     };
 
 }

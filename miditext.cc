@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.84
+// TextMIDITools Version 1.0.85
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -99,7 +99,7 @@ namespace
                 cerr << errstr;
                 return;
             }
-            track_iters.emplace_back(StreamLengthPair(midiiter, num));
+            track_iters.emplace_back(midiiter, num);
             midiiter += num;
         }
     }
@@ -128,7 +128,7 @@ namespace
             do
             {
                 midi_delay_msg_pair = midi_event_factory(midiiter, ticks_accumulated);
-                message_pairs_.emplace_back(midi_delay_msg_pair);
+                message_pairs_.push_back(midi_delay_msg_pair);
             }
             while ((midiiter < midiend)
                 && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>(midi_delay_msg_pair.second.get()));
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(HelpOpt))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.84\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.85\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
         cout << logstr;
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(VersionOpt)) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.84\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.85\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -295,11 +295,11 @@ int main(int argc, char *argv[])
 
     if (answer && filesystem::exists(midi_filename))
     {
-        const string answer_string{(string{"Overwrite "} += midi_filename) += "?\n"};
-        cout << answer_string;
-        string answer{};
-        cin >> answer;
-        if (!((answer[0] == 'y') || (answer[0] == 'Y')))
+        const string answer_prompt{(string{"Overwrite "} += midi_filename) += "?\n"};
+        cout << answer_prompt;
+        string answerstr{};
+        cin >> answerstr;
+        if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
         {
             exit(EXIT_SUCCESS);
         }
@@ -376,7 +376,7 @@ int main(int argc, char *argv[])
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
     vector<DelayEvents> midi_delay_event_tracks(stream_length_pairs.size());
 
-#undef DEBUG_THREADLESS
+#define DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
     for (int i{}; auto& ti : stream_length_pairs)
     {
@@ -427,15 +427,15 @@ int main(int argc, char *argv[])
             // it should largely contain delays that are simply related to
             // whole notes and their musical ratios will have low divisors.
             const set<int64_t> musical_divisors{1, 2, 4, 6, 8, 12, 16};
-            const auto ticks_per_whole{QuartersPerWhole * ticksperquarter};
+            const auto ticks_per_whole_local{QuartersPerWhole * ticksperquarter};
             zero_rhythms_count += ranges::count_if(mdet, [](DelayEvent mde) { return !mde.first; } );
             rigid_rhythms_count += ranges::count_if(mdet,
-                [ticks_per_whole, musical_divisors](DelayEvent mde) {
-                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole)};
+                [ticks_per_whole_local, musical_divisors](DelayEvent mde) {
+                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole_local)};
                 return musical_divisors.contains(rr.denominator()); } );
             non_rigid_rhythms_count += ranges::count_if(mdet,
-                [ticks_per_whole, musical_divisors](DelayEvent mde) {
-                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole)};
+                [ticks_per_whole_local, musical_divisors](DelayEvent mde) {
+                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole_local)};
                 return !musical_divisors.contains(rr.denominator()); } );
         }
         if (lazy)

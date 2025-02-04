@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!DOCTYPE boost_serialization>
 <boost_serialization signature="serialization::archive" version="18">
-<temp_form class_id="0" tracking_level="0" version="3">
+<xml_form class_id="0" tracking_level="0" version="3">
 	<name_>pianoduo</name_>
 	<copyright_>pianoduo form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
 	<len_>3.00000000000000000e+03</len_>
@@ -110,7 +110,7 @@
 			<walking_>1.00000000000000000e+00</walking_>
 			<program_>1</program_>
 			<pan_>-12</pan_>
-			<follower_ class_id="7" tracking_level="0" version="2">
+			<follower_ class_id="7" tracking_level="0" version="3">
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
 				<interval_type_>0</interval_type_>
@@ -119,6 +119,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -139,6 +143,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -159,6 +167,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -179,6 +191,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -199,6 +215,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -219,6 +239,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -239,6 +263,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -259,6 +287,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -279,6 +311,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -299,6 +335,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -319,6 +359,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -339,6 +383,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -359,6 +407,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -379,6 +431,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -399,6 +455,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -419,6 +479,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -428,6 +492,6 @@
 		<algorithm_>1</algorithm_>
 		<period_>1.00000000000000000e+04</period_>
 	</arrangement_definition_>
-</temp_form>
+</xml_form>
 </boost_serialization>
 

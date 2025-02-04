@@ -1,146 +1,151 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!DOCTYPE boost_serialization>
 <boost_serialization signature="serialization::archive" version="18">
-	<xml_form class_id="0" tracking_level="0" version="3">
-		<name_>fastwalk</name_>
-		<copyright_>fastwalk form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
-		<len_>60.0</len_>
-		<min_note_len_>0.03</min_note_len_>
-		<max_note_len_>0.1</max_note_len_>
-		<scale_ class_id="1" tracking_level="0" version="0">
-			<count>49</count>
-			<item_version>0</item_version>
-			<item>C1</item>
-			<item>D1</item>
-			<item>E1</item>
-			<item>F1</item>
-			<item>G1</item>
-			<item>A1</item>
-			<item>B1</item>
-			<item>C2</item>
-			<item>D2</item>
-			<item>E2</item>
-			<item>F2</item>
-			<item>G2</item>
-			<item>A2</item>
-			<item>B2</item>
-			<item>C3</item>
-			<item>D3</item>
-			<item>E3</item>
-			<item>F3</item>
-			<item>G3</item>
-			<item>A3</item>
-			<item>B3</item>
-			<item>C4</item>
-			<item>D4</item>
-			<item>E4</item>
-			<item>F4</item>
-			<item>G4</item>
-			<item>A4</item>
-			<item>B4</item>
-			<item>C5</item>
-			<item>D5</item>
-			<item>E5</item>
-			<item>F5</item>
-			<item>G5</item>
-			<item>A5</item>
-			<item>B5</item>
-			<item>C6</item>
-			<item>D6</item>
-			<item>E6</item>
-			<item>F6</item>
-			<item>G6</item>
-			<item>A6</item>
-			<item>B6</item>
-			<item>C7</item>
-			<item>D7</item>
-			<item>E7</item>
-			<item>F7</item>
-			<item>G7</item>
-			<item>A7</item>
-			<item>B7</item>
-		</scale_>
-		<pulse_>100.0</pulse_>
-		<melody_probabilities_ class_id="2" tracking_level="0" version="0">
-			<down_>0.0</down_>
-			<same_>0.33</same_>
-			<up_>0.67</up_>
-		</melody_probabilities_>
-		<pitch_form_ class_id="3" tracking_level="0" version="0">
-			<mean_sine_ class_id="4" tracking_level="0" version="0">
-				<period_>1000000.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</mean_sine_>
-			<range_sine_>
-				<period_>1000000.0</period_>
-				<phase_>1.57</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</range_sine_>
-		</pitch_form_>
-		<rhythm_form_>
-			<mean_sine_>
-				<period_>1000000.0</period_>
-				<phase_>-.4</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</mean_sine_>
-			<range_sine_>
-				<period_>1000000.0</period_>
-				<phase_>-1.57</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</range_sine_>
-		</rhythm_form_>
-		<dynamic_form_>
-			<mean_sine_>
-				<period_>1000000.0</period_>
-				<phase_>0.0</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</mean_sine_>
-			<range_sine_>
-				<period_>1000000.0</period_>
-				<phase_>-1.66</phase_>
-				<amplitude_>0.5</amplitude_>
-				<offset_>0.5</offset_>
-			</range_sine_>
-		</dynamic_form_>
-		<texture_form_>
-			<period_>1000000.0</period_>
-			<phase_>-1.57</phase_>
-			<amplitude_>0.5</amplitude_>
-			<offset_>0.5</offset_>
-		</texture_form_>
-		<voices_ class_id="5" tracking_level="0" version="0">
-			<count>1</count>
-			<item_version>0</item_version>
-			<item class_id="6" tracking_level="0" version="0">
-				<low_pitch_>C1</low_pitch_>
-				<high_pitch_>C9</high_pitch_>
-				<channel_>15</channel_>
-				<walking_>1</walking_>
-				<program_>1</program_>
-				<pan_>0</pan_>
-				<follower_ class_id="7" tracking_level="0" version="2">
-					<follow_>0</follow_>
-					<leader_>2147483647</leader_>
-					<interval_type_>0</interval_type_>
-					<interval_>0</interval_>
-					<delay_ class_id="8" tracking_level="0" version="0">
-						<numerator_>0</numerator_>
-						<denominator_>1</denominator_>
-					</delay_>
-					<inversion_>0</inversion_>
-					<retrograde_>0</retrograde_>
-				</follower_>
-			</item>
-		</voices_>
-		<arrangement_definition_ class_id="9" tracking_level="0" version="0">
-			<algorithm_>1</algorithm_>
-			<period_>1.00000000000000000e+05</period_>
-		</arrangement_definition_>
-	</xml_form>
+<xml_form class_id="0" tracking_level="0" version="3">
+	<name_>fastwalk</name_>
+	<copyright_>fastwalk form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
+	<len_>6.00000000000000000e+01</len_>
+	<min_note_len_>2.99999999999999989e-02</min_note_len_>
+	<max_note_len_>1.00000000000000006e-01</max_note_len_>
+	<scale_ class_id="1" tracking_level="0" version="0">
+		<count>49</count>
+		<item_version>0</item_version>
+		<item>C1</item>
+		<item>D1</item>
+		<item>E1</item>
+		<item>F1</item>
+		<item>G1</item>
+		<item>A1</item>
+		<item>B1</item>
+		<item>C2</item>
+		<item>D2</item>
+		<item>E2</item>
+		<item>F2</item>
+		<item>G2</item>
+		<item>A2</item>
+		<item>B2</item>
+		<item>C3</item>
+		<item>D3</item>
+		<item>E3</item>
+		<item>F3</item>
+		<item>G3</item>
+		<item>A3</item>
+		<item>B3</item>
+		<item>C4</item>
+		<item>D4</item>
+		<item>E4</item>
+		<item>F4</item>
+		<item>G4</item>
+		<item>A4</item>
+		<item>B4</item>
+		<item>C5</item>
+		<item>D5</item>
+		<item>E5</item>
+		<item>F5</item>
+		<item>G5</item>
+		<item>A5</item>
+		<item>B5</item>
+		<item>C6</item>
+		<item>D6</item>
+		<item>E6</item>
+		<item>F6</item>
+		<item>G6</item>
+		<item>A6</item>
+		<item>B6</item>
+		<item>C7</item>
+		<item>D7</item>
+		<item>E7</item>
+		<item>F7</item>
+		<item>G7</item>
+		<item>A7</item>
+		<item>B7</item>
+	</scale_>
+	<pulse_>1.00000000000000000e+02</pulse_>
+	<melody_probabilities_ class_id="2" tracking_level="0" version="0">
+		<down_>0.00000000000000000e+00</down_>
+		<same_>3.30000000000000016e-01</same_>
+		<up_>6.70000000000000040e-01</up_>
+	</melody_probabilities_>
+	<pitch_form_ class_id="3" tracking_level="0" version="0">
+		<mean_sine_ class_id="4" tracking_level="0" version="0">
+			<period_>1.00000000000000000e+06</period_>
+			<phase_>0.00000000000000000e+00</phase_>
+			<amplitude_>5.00000000000000000e-01</amplitude_>
+			<offset_>5.00000000000000000e-01</offset_>
+		</mean_sine_>
+		<range_sine_>
+			<period_>1.00000000000000000e+06</period_>
+			<phase_>1.57000000000000006e+00</phase_>
+			<amplitude_>5.00000000000000000e-01</amplitude_>
+			<offset_>5.00000000000000000e-01</offset_>
+		</range_sine_>
+	</pitch_form_>
+	<rhythm_form_>
+		<mean_sine_>
+			<period_>1.00000000000000000e+06</period_>
+			<phase_>-4.00000000000000022e-01</phase_>
+			<amplitude_>5.00000000000000000e-01</amplitude_>
+			<offset_>5.00000000000000000e-01</offset_>
+		</mean_sine_>
+		<range_sine_>
+			<period_>1.00000000000000000e+06</period_>
+			<phase_>-1.57000000000000006e+00</phase_>
+			<amplitude_>5.00000000000000000e-01</amplitude_>
+			<offset_>5.00000000000000000e-01</offset_>
+		</range_sine_>
+	</rhythm_form_>
+	<dynamic_form_>
+		<mean_sine_>
+			<period_>1.00000000000000000e+06</period_>
+			<phase_>0.00000000000000000e+00</phase_>
+			<amplitude_>5.00000000000000000e-01</amplitude_>
+			<offset_>5.00000000000000000e-01</offset_>
+		</mean_sine_>
+		<range_sine_>
+			<period_>1.00000000000000000e+06</period_>
+			<phase_>-1.65999999999999992e+00</phase_>
+			<amplitude_>5.00000000000000000e-01</amplitude_>
+			<offset_>5.00000000000000000e-01</offset_>
+		</range_sine_>
+	</dynamic_form_>
+	<texture_form_>
+		<period_>1.00000000000000000e+06</period_>
+		<phase_>-1.57000000000000006e+00</phase_>
+		<amplitude_>5.00000000000000000e-01</amplitude_>
+		<offset_>5.00000000000000000e-01</offset_>
+	</texture_form_>
+	<voices_ class_id="5" tracking_level="0" version="0">
+		<count>1</count>
+		<item_version>0</item_version>
+		<item class_id="6" tracking_level="0" version="0">
+			<low_pitch_>C1</low_pitch_>
+			<high_pitch_>C9</high_pitch_>
+			<channel_>15</channel_>
+			<walking_>1.00000000000000000e+00</walking_>
+			<program_>1</program_>
+			<pan_>0</pan_>
+			<follower_ class_id="7" tracking_level="0" version="3">
+				<follow_>0</follow_>
+				<leader_>2147483647</leader_>
+				<interval_type_>0</interval_type_>
+				<interval_>0</interval_>
+				<delay_ class_id="8" tracking_level="0" version="0">
+					<numerator_>0</numerator_>
+					<denominator_>1</denominator_>
+				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
+				<inversion_>0</inversion_>
+				<retrograde_>0</retrograde_>
+			</follower_>
+		</item>
+	</voices_>
+	<arrangement_definition_ class_id="9" tracking_level="0" version="0">
+		<algorithm_>1</algorithm_>
+		<period_>1.00000000000000000e+05</period_>
+	</arrangement_definition_>
+</xml_form>
 </boost_serialization>
+

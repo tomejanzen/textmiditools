@@ -11,6 +11,7 @@ import tkinter.ttk
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
+from tkinter import messagebox
 import string
 from string import *
 from GeneralMIDI import *
@@ -47,7 +48,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.loading_low_pitch = False
         self.create_widgets()
         self.title('Instrumental Voices')
-        self.geometry('450x400-50+50')
+        self.geometry('450x500-50+50')
 
     def create_widgets(self):
 
@@ -265,13 +266,13 @@ class VoiceWindow(tkinter.Toplevel):
         vox = int(self.voice_number.get())
         prog_index = self.program.get()
         self.xml_form['voices'][vox]['low_pitch'] = GeneralMIDIInstrumentDict[prog_index][gm_low_pitch_index]
-        self.low_pitch.set(self.xml_form['voices'][vox]['low_pitch']) 
+        self.low_pitch.set(self.xml_form['voices'][vox]['low_pitch'])
 
     def high_pitch_from_program_callback(self, event=None, *args):
         vox = int(self.voice_number.get())
         prog_index = self.program.get()
         self.xml_form['voices'][vox]['high_pitch'] = GeneralMIDIInstrumentDict[prog_index][gm_high_pitch_index]
-        self.high_pitch.set(self.xml_form['voices'][vox]['high_pitch']) 
+        self.high_pitch.set(self.xml_form['voices'][vox]['high_pitch'])
 
     def high_pitch_callback(self, event, *args):
         vox = int(self.voice_number.get())
@@ -595,12 +596,15 @@ class VoiceWindow(tkinter.Toplevel):
 
     def validate_pitchname(self, d, i, P, s, S, v, V, W):
         # 1-insert, 0=del, -1 if forced
-        pat = re.compile('[a-gA-G]([#bx]|bb)-?\d')
+        #pat = re.compile(r"([A-Ga-g]([#bx]|bb)?[-][10])|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Gc-g]([#bx]|bb)?[9]))")
+        #pat = re.compile(r"([A-Ga-g]([#bx]|bb)?[-][10])|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))")
+        pat = re.compile(r"([C][#x]?[-1])|([ABDEFGabdefg]([#bx]|bb)?[-][10])|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))")
         ma = pat.match(str(P))
         ret = False
         if (ma):
             ret = True
         else:
             ret = False
+            messagebox.showerror('message', "bad pitch name (C-1 to G9")
         return ret
 

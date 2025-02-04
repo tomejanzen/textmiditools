@@ -535,9 +535,9 @@ class XmlForm(tkinter.Tk):
         return arrangement_definition_dict
 
     def traverse_xml_form(self):
-        self.xml_form_dict['name']         = self.dom.getElementsByTagName('name_')[0].firstChild.data
+        self.xml_form_dict['name']          = self.dom.getElementsByTagName('name_')[0].firstChild.data
         if (int(self.dom.getElementsByTagName('xml_form')[0].getAttribute('version')) >= 3):
-            self.xml_form_dict['copyright']    = self.dom.getElementsByTagName('copyright_')[0].firstChild.data
+            self.xml_form_dict['copyright'] = self.dom.getElementsByTagName('copyright_')[0].firstChild.data
         else:
             self.xml_form_dict['copyright']    = 'copyright unspecified'
         self.xml_form_dict['len']    = float(self.dom.getElementsByTagName('len_')[0].firstChild.data)

@@ -9,6 +9,7 @@
 import tkinter
 import tkinter.ttk
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import *
 import re
 
@@ -109,12 +110,13 @@ class Sine(tkinter.Frame):
         self.update()
     def validate_length(self, d, i, P, s, S, v, V, W):
         # 1-insert, 0=del, -1 if forced
-        pat = re.compile('\d+([.]\d*)?')
+        pat = re.compile(r"[0-9]+([.][0-9]*)?")
         ma = pat.match(str(P))
         ret = False
         if (ma):
             ret = True
         else:
             ret = False
+            messagebox.showerror('message', "bad value (5.125)")
         return ret
 

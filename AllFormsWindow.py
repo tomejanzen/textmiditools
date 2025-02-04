@@ -42,7 +42,7 @@ class ScaleFrame(tkinter.Frame):
                         'Diminished' : [0, 2, 3, 5, 6, 8, 9, 11],
                         'Chromatic'  : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
                         'Pentatonic' : [0, 2, 5, 7, 9],
-                        'Tritone' : [0, 2, 4, 5, 6, 8, 10, 11]}
+                        'Tritone'    : [0, 2, 4, 5, 6, 8, 10, 11]}
     full_midi_scale = ['C-1', 'C#-1', 'D-1', 'D#-1', 'E-1', 'F-1', 'F#-1', 'G-1', 'G#-1', 'A-1', 'A#-1', 'B-1',
                        'C0', 'C#0', 'D0', 'D#0', 'E0', 'F0', 'F#0', 'G0', 'G#0', 'A0', 'A#0', 'B0',
                        'C1', 'C#1', 'D1', 'D#1', 'E1', 'F1', 'F#1', 'G1', 'G#1', 'A1', 'A#1', 'B1',
@@ -186,7 +186,7 @@ class ScaleFrame(tkinter.Frame):
         for s in self.scale_names:
             if (s == scale_name):
                 final_scale_num = scale_ctr
-            scale_ctr = scale_ctr + 1 
+            scale_ctr = scale_ctr + 1
         for keynum in self.scales_dict[scale_name]:
             self.scale_untransposed.append(keynum)
         self.transpose_scale()

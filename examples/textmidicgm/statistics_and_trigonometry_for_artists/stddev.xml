@@ -5,7 +5,7 @@
 	<name_>stddev</name_>
 	<copyright_>stddev form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
 	<len_>4.20000000000000000e+02</len_>
-	<min_note_len_>0.03125</min_note_len_>
+	<min_note_len_>3.12500000000000000e-02</min_note_len_>
 	<max_note_len_>2.00000000000000000e+00</max_note_len_>
 	<scale_ class_id="1" tracking_level="0" version="0">
 		<count>56</count>
@@ -131,7 +131,7 @@
 			<walking_>0.00000000000000000e+00</walking_>
 			<program_>1</program_>
 			<pan_>-57</pan_>
-			<follower_ class_id="7" tracking_level="0" version="2">
+			<follower_ class_id="7" tracking_level="0" version="3">
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
 				<interval_type_>0</interval_type_>
@@ -140,6 +140,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -160,6 +164,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -180,6 +188,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -200,6 +212,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -220,6 +236,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -240,6 +260,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -260,6 +284,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -280,6 +308,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -300,6 +332,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
@@ -320,6 +356,10 @@
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
+				<duration_factor_>
+					<numerator_>1</numerator_>
+					<denominator_>1</denominator_>
+				</duration_factor_>
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>

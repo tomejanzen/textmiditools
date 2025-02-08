@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen
@@ -45,18 +45,18 @@ midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dyna
         program_options::options_description desc("Allowed dynamics configuration options");
 
         desc.add_options()
-         (pppppOpt.c_str(), program_options::value<int>(), pppppTxt)
-         ( ppppOpt.c_str(), program_options::value<int>(), ppppTxt)
-         (  pppOpt.c_str(), program_options::value<int>(), pppTxt)
-         (   ppOpt.c_str(), program_options::value<int>(), ppTxt)
-         (    pOpt.c_str(), program_options::value<int>(), pTxt)
-         (   mpOpt.c_str(), program_options::value<int>(), mpTxt)
-         (   mfOpt.c_str(), program_options::value<int>(), mfTxt)
-         (forteOpt.c_str(), program_options::value<int>(), forteTxt)
-         (   ffOpt.c_str(), program_options::value<int>(), ffTxt)
-         (  fffOpt.c_str(), program_options::value<int>(), fffTxt)
-         ( ffffOpt.c_str(), program_options::value<int>(), ffffTxt)
-         (fffffOpt.c_str(), program_options::value<int>(), fffffTxt)
+         (ppppp_option.registered_name(), program_options::value<int>(), ppppp_option.text())
+         ( pppp_option.registered_name(), program_options::value<int>(), pppp_option.text())
+         (  ppp_option.registered_name(), program_options::value<int>(), ppp_option.text())
+         (   pp_option.registered_name(), program_options::value<int>(), pp_option.text())
+         (    p_option.registered_name(), program_options::value<int>(), p_option.text())
+         (   mp_option.registered_name(), program_options::value<int>(), mp_option.text())
+         (   mf_option.registered_name(), program_options::value<int>(), mf_option.text())
+         (forte_option.registered_name(), program_options::value<int>(), forte_option.text())
+         (   ff_option.registered_name(), program_options::value<int>(), ff_option.text())
+         (  fff_option.registered_name(), program_options::value<int>(), fff_option.text())
+         ( ffff_option.registered_name(), program_options::value<int>(), ffff_option.text())
+         (fffff_option.registered_name(), program_options::value<int>(), fffff_option.text())
           ;
         program_options::positional_options_description pos_opts_desc;
         program_options::variables_map var_map;
@@ -66,53 +66,53 @@ midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dyna
 
         string input_filename;
 
-        if (var_map.count(pppppOpt))
+        if (var_map.count(ppppp_option.option()))
         {
-            option_map.emplace(pppppOpt, var_map[pppppOpt].as<int>());
+            option_map.emplace(ppppp_option.option(), var_map[ppppp_option.option()].as<int>());
         }
-        if (var_map.count(ppppOpt))
+        if (var_map.count(pppp_option.option()))
         {
-            option_map.emplace(ppppOpt, var_map[ppppOpt].as<int>());
+            option_map.emplace(pppp_option.option(), var_map[pppp_option.option()].as<int>());
         }
-        if (var_map.count(pppOpt))
+        if (var_map.count(ppp_option.option()))
         {
-            option_map.emplace(pppOpt, var_map[pppOpt].as<int>());
+            option_map.emplace(ppp_option.option(), var_map[ppp_option.option()].as<int>());
         }
-        if (var_map.count(ppOpt))
+        if (var_map.count(pp_option.option()))
         {
-            option_map.emplace(ppOpt, var_map[ppOpt].as<int>());
+            option_map.emplace(pp_option.option(), var_map[pp_option.option()].as<int>());
         }
-        if (var_map.count(pOpt))
+        if (var_map.count(p_option.option()))
         {
-            option_map.emplace(pOpt, var_map[pOpt].as<int>());
+            option_map.emplace(p_option.option(), var_map[p_option.option()].as<int>());
         }
-        if (var_map.count(mpOpt))
+        if (var_map.count(mp_option.option()))
         {
-            option_map.emplace(mpOpt, var_map[mpOpt].as<int>());
+            option_map.emplace(mp_option.option(), var_map[mp_option.option()].as<int>());
         }
-        if (var_map.count(mfOpt))
+        if (var_map.count(mf_option.option()))
         {
-            option_map.emplace(mfOpt, var_map[mfOpt].as<int>());
+            option_map.emplace(mf_option.option(), var_map[mf_option.option()].as<int>());
         }
-        if (var_map.count(forteOpt))
+        if (var_map.count(forte_option.option()))
         {
-            option_map.emplace(forteOpt, var_map[forteOpt].as<int>());
+            option_map.emplace(forte_option.option(), var_map[forte_option.option()].as<int>());
         }
-        if (var_map.count(ffOpt))
+        if (var_map.count(ff_option.option()))
         {
-            option_map.emplace(ffOpt, var_map[ffOpt].as<int>());
+            option_map.emplace(ff_option.option(), var_map[ff_option.option()].as<int>());
         }
-        if (var_map.count(fffOpt))
+        if (var_map.count(fff_option.option()))
         {
-            option_map.emplace(fffOpt, var_map[fffOpt].as<int>());
+            option_map.emplace(fff_option.option(), var_map[fff_option.option()].as<int>());
         }
-        if (var_map.count(ffffOpt))
+        if (var_map.count(ffff_option.option()))
         {
-            option_map.emplace(ffffOpt, var_map[ffffOpt].as<int>());
+            option_map.emplace(ffff_option.option(), var_map[ffff_option.option()].as<int>());
         }
-        if (var_map.count(fffffOpt))
+        if (var_map.count(fffff_option.option()))
         {
-            option_map.emplace(fffffOpt, var_map[fffffOpt].as<int>());
+            option_map.emplace(fffff_option.option(), var_map[fffff_option.option()].as<int>());
         }
     }
     return option_map;

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -58,10 +58,6 @@ using namespace textmidi::rational;
 namespace
 {
     using StreamLengthPair = pair<MidiStreamIterator, int>;
-    const string QuantizeOpt{"quantize"};
-    constexpr char QuantizeTxt[]{"quantization ratio in quotes: \"1/32\""};
-    const string LazyOpt{"lazy"};
-    constexpr char LazyTxt[]{"Try to write in textmidi's lazy mode"};
 
     void find_tracks(MidiStreamIterator midiiter, MidiStreamIterator midiend,
             vector<StreamLengthPair>& track_iters, size_t expected_track_qty)
@@ -145,23 +141,23 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt     + ",h").c_str(),                                       HelpTxt)
-        ((VerboseOpt  + ",v").c_str(),                                    VerboseTxt)
-        ((VersionOpt  + ",V").c_str(),                                    VersionTxt)
-        ((MidiOpt     + ",i").c_str(), program_options::value<string>(),     MidiTxt)
-        ((AnswerOpt   + ",a").c_str(),                                     AnswerTxt)
-        ((TextmidiOpt + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
-        ((QuantizeOpt + ",q").c_str(), program_options::value<string>(), QuantizeTxt)
-        ((LazyOpt     + ",l").c_str(),                                       LazyTxt)
-        ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
-        ((DottedRhythmsOpt + ",w").c_str(),    program_options::value<string>(), DottedRhythmsTxt)
-        ((RhythmExpressionOpt + ",e").c_str(), program_options::value<string>(), RhythmExpressionTxt)
+        ((help_option.registered_name()),                                       help_option.text())
+        ((verbose_option.registered_name()),                                    verbose_option.text())
+        ((version_option.registered_name()),                                    version_option.text())
+        ((midi_in_option.registered_name()), program_options::value<string>(),     midi_in_option.text())
+        ((answer_option.registered_name()),                                     answer_option.text())
+        ((textmidi_out_option.registered_name()), program_options::value<string>(), textmidi_out_option.text())
+        ((quantize_option.registered_name()), program_options::value<string>(), quantize_option.text())
+        ((lazy_option.registered_name()),                                       lazy_option.text())
+        ((dynamics_configuration_option.registered_name()), program_options::value<string>(),   dynamics_configuration_option.text())
+        ((dotted_rhythms_option.registered_name()),    program_options::value<string>(), dotted_rhythms_option.text())
+        ((rhythm_expression_option.registered_name()), program_options::value<string>(), rhythm_expression_option.text())
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
     try
     {
-        pos_opts_desc.add(MidiOpt.c_str(), -1);
+        pos_opts_desc.add(midi_in_option.option().c_str(), -1);
         program_options::store(
             program_options::command_line_parser(argc, argv)
             .options(desc).positional(pos_opts_desc).run(), var_map);
@@ -175,18 +171,18 @@ int main(int argc, char *argv[])
     }
 
 
-    if (var_map.count(HelpOpt))
+    if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.86\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.87\n"}
             += lexical_cast<string>(desc)) += '\n')
-            += "Report bugs to: janzentome@gmail.com\nmiditext home page: <https://www\n"};
+            += "Report bugs to: janzentome@gmail.com\nmiditext home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(VersionOpt)) [[unlikely]]
+    if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.86\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -194,12 +190,12 @@ int main(int argc, char *argv[])
     }
 
     string midi_filename;
-    if (var_map.count(MidiOpt))
+    if (var_map.count(midi_in_option.option()))
     {
-        midi_filename = var_map[MidiOpt].as<string>();
+        midi_filename = var_map[midi_in_option.option()].as<string>();
         if (!filesystem::exists(midi_filename))
         {
-            const string errstr{((string{MidiOpt} += ' ') += midi_filename) += " File does not exist.\n"};
+            const string errstr{((midi_in_option.option() + ' ') += midi_filename) += " File does not exist.\n"};
             cerr  << errstr;
             exit(EXIT_SUCCESS);
         }
@@ -211,33 +207,33 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
     RhythmRational quantum{0};
-    if (var_map.count(QuantizeOpt)) [[unlikely]]
+    if (var_map.count(quantize_option.option())) [[unlikely]]
     {
-        string quantum_string{var_map[QuantizeOpt].as<string>()};
+        string quantum_string{var_map[quantize_option.option()].as<string>()};
         istringstream iss{quantum_string};
         iss >> quantum;
     }
     bool lazy{};
-    if (var_map.count(LazyOpt))
+    if (var_map.count(lazy_option.option()))
     {
         lazy = true;
     }
 
     bool verbose{};
-    if (var_map.count(VerboseOpt)) [[unlikely]]
+    if (var_map.count(verbose_option.option())) [[unlikely]]
     {
         verbose = true;
     }
     bool answer{};
-    if (var_map.count(AnswerOpt)) [[unlikely]]
+    if (var_map.count(answer_option.option())) [[unlikely]]
     {
         answer = true;
     }
 
     string text_filename;
-    if (var_map.count(TextmidiOpt))
+    if (var_map.count(textmidi_out_option.option()))
     {
-        text_filename = var_map[TextmidiOpt].as<string>();
+        text_filename = var_map[textmidi_out_option.option()].as<string>();
     }
     else
     {
@@ -251,24 +247,24 @@ int main(int argc, char *argv[])
 
     {
         string dynamics_configuration_file{};
-        if (var_map.count(DynamicsConfigurationOpt)) [[unlikely]]
+        if (var_map.count(dynamics_configuration_option.option())) [[unlikely]]
         {
-            dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
+            dynamics_configuration_file = var_map[dynamics_configuration_option.option()].as<string>();
         }
         midi::dynamics_map = textmidi::read_dynamics_configuration(dynamics_configuration_file);
     }
 
     bool dotted_rhythms{true};
-    if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+    if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
     {
-        string dotted_rhythms_string{var_map[DottedRhythmsOpt].as<string>()};
+        string dotted_rhythms_string{var_map[dotted_rhythms_option.option()].as<string>()};
         to_upper(dotted_rhythms_string);
         dotted_rhythms = ("TRUE" == dotted_rhythms_string);
     }
 
-    if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
+    if (var_map.count(rhythm_expression_option.option())) [[unlikely]]
     {
-        string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
+        string rhythm_expression_string{var_map[rhythm_expression_option.option()].as<string>()};
         to_upper(rhythm_expression_string);
         if (midi::rhythm_expression_map.contains(rhythm_expression_string))
         {
@@ -286,7 +282,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+        if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
         {
             textmidi::rational::print_rhythm = make_unique<PrintRhythmRational>(dotted_rhythms);
         }

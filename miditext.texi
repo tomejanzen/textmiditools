@@ -119,6 +119,26 @@ miditext [@b{@minus{}i}|@b{@minus{}@minus{}midi}] @var{midi_input_file} @b{@minu
 @cindex @minus{}@minus{}help
 @cindex @minus{}h
 Print the options summary.
+@smallexample
+
+Usage: miditext [OPTION]... [MIDIFILE]
+miditext Version 1.0.86
+Allowed options:
+  -h [ --help ]                       help
+  -v [ --verbose ]                    write more trace information
+  -V [ --version ]                    Write version information
+  -i [ --midi ] arg                   binary MIDI file
+  -a [ --answer ]                     Ask before overwriting a file
+  -o [ --textmidi ] arg               textmidi file
+  -q [ --quantize ] arg               quantization ratio in quotes: "1/32"
+  -l [ --lazy ]                       Attempt writing in lazy mode
+  -y [ --dynamics_configuration ] arg dynamics_configuration file
+  -w [ --dotted_rhythms ] arg         true or false
+  -e [ --rhythmexpression ] arg       rational or simplecontinuedfraction
+
+Report bugs to: janzentome@atchar{}gmail.com
+miditext home page: https://github.com/tomejanzen/textmiditools
+@end smallexample
 @item @minus{}v, @minus{}@minus{}verbose
 @cindex @minus{}v
 @cindex @minus{}@minus{}verbose

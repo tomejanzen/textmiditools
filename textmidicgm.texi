@@ -624,6 +624,46 @@ Print the version of @command{textmidicgm}.
 @item @minus{}h, @minus{}@minus{}help
 @cindex help
 Print the options summary.
+@smallexample
+
+Usage: textmidicgm [OPTION]... [XMLFORMFILE]...
+textmidicgm Version 1.0.86
+Allowed options:
+  -h [ --help ]                   help
+  -v [ --verbose ]                write more trace information
+  -k [ --stacktracks ]            process each form file and add its tracks to 
+                                  the same output textmidi score
+  -V [ --version ]                Write version information
+  -f [ --form ] arg               input plain text Form files; double-quote 
+                                  wildcards
+  -x [ --xmlform ] arg            input XML text Form files; double-quote 
+                                  wildcards
+  -u [ --update ]                 update XML file with update_ prefix on the 
+                                  name given to --xmlform
+  -a [ --answer ]                 Ask before overwriting a file
+  -o [ --textmidi ] arg           textmidi file
+  -g [ --gnuplot ]                gnuplot data output file
+  -r [ --random ] arg             write a random form to the name given and 
+                                  exit
+  -i [ --instruments ] arg        random instrument groups: piano 
+                                  chromaticpercussion organ guitar bass strings
+                                  ensemble brass reed pipe synthlead synthpad 
+                                  syntheffects ethnic percussive soundeffects 
+                                  all melodic idiophone
+  -c [ --clampscale ]             In each form, clamp the scale to the union of
+                                  the voice ranges
+  -z [ --arrangements ] arg       rotateright rotateleft reverse 
+                                  previouspermutation nextpermutation swappairs
+                                  shuffle skip heaps identity
+  -t [ --maxeventspertrack ] arg  Maximum number of events in a track before 
+                                  stopping
+  -y [ --arrangementsperiod ] arg seconds before changing voice priority
+  -w [ --dotted_rhythms ] arg     true or false
+  -e [ --rhythmexpression ] arg   rational or simplecontinuedfraction
+
+Report bugs to: janzentome@atchar{}gmail.com
+textmidicgm home page: https://github.com/tomejanzen/textmiditools
+@end smallexample
 @item @minus{}k|@minus{}@minus{}stacktracks
 The @b{@minus{}@minus{}stacktracks} options cause all of the form file names resolved from the list and globbing to have their resulting
 textmidi output to be added to one output file.   The output file name may be specified with the @b{@minus{}@minus{}textmidi} option,
@@ -1151,7 +1191,7 @@ The follower voice can be set as the inversion of
 the leader voice.  The selection of scalar or chromatic following
 is obverved for the inversion.
 
-Lastly, the follower voice can be set as the retrograde (time-reversal) of
+The follower voice can be set as the retrograde (time-reversal) of
 the leader voice. 
 The pitch_follower field is always a 1; all followers follow
 the pitch of the leader.
@@ -1162,6 +1202,11 @@ any notes.  A following circle is created by any of the following:
 @item A voice follows another voice, which in turn follows the first voice.
 @item A chain of follows ultimately follow a member in the chain.
 @end itemize
+Finally, the following voice's rhythms may be multipled (before inserting a delay)
+by a rational number.  This value is rational but not in @command{textmidi} format:
+4 means 4 and 1/4 means a quarter.  If the duration factor is 1/4, then the
+follower will be four times faster than the lead voice, such that it finishes
+while only 1/4 of the lead voice's line has played.
 @end itemize
 The current version's format is:
 @example
@@ -1170,7 +1215,7 @@ The current version's format is:
 <boost_serialization signature="serialization::archive" version="18">
 <xml_form class_id="0" tracking_level="0" version="3">
 	<name_>random</name_>
-	<copyright_>© 2024</copyright_>
+	<copyright_>© 2024 Ludwig van Beethoven</copyright_>
 	<len_>1.80000000000000000e+03</len_>
 	<min_note_len_>0.00000000000000000e+00</min_note_len_>
 	<max_note_len_>2.00000000000000000e+00</max_note_len_>
@@ -1299,7 +1344,7 @@ The current version's format is:
 			<walking_>6.17341310053484582e-01</walking_>
 			<program_>81</program_>
 			<pan_>20</pan_>
-			<follower_ class_id="7" tracking_level="0" version="2">
+			<follower_ class_id="7" tracking_level="0" version="3">
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
 				<interval_type_>0</interval_type_>

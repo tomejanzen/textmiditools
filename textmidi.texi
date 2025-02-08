@@ -154,8 +154,8 @@ textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} 
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}d}|@b{@minus{}@minus{}detache} @var{numticks}]
 [@b{@minus{}l}|@b{@minus{}@minus{}lazynoteoff}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
 [@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}runningstatus} 
-[@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 @var{standard|never|persistentaftermeta|persistentaftersysex|persistentaftersysexormeta)}]
+[@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 @end smallexample
 
 @table @option
@@ -163,6 +163,32 @@ textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} 
 @item @minus{}h, @minus{}@minus{}help
 @cindex @minus{}h, @minus{}@minus{}help
 Print the options summary.
+@smallexample
+
+Usage: textmidi [OPTION]... [TEXTMIDIFILE]
+textmidi Version 1.0.86
+Allowed options:
+  -h [ --help ]                       help
+  -v [ --verbose ]                    write more trace information
+  -V [ --version ]                    Write version information
+  -i [ --textmidi ] arg               textmidi file
+  -o [ --midi ] arg                   binary MIDI file
+  -a [ --answer ]                     Ask before overwriting a file
+  -d [ --detache ] arg                number of ticks to cheat notes to 
+                                      separate consecutive notes
+  -l [ --lazynotesoff ]               To end notes, write MIDI note-offs with 
+                                      current dynamic rather than note-ons with
+                                      velocity 0
+  -n [ --runningstatus ] arg          with @lbracechar{}standard | never | 
+                                      persistentaftermeta | 
+                                      persistentaftersysex | 
+                                      persistentaftersysexormeta @rbracechar{}; default is 
+                                      standard
+  -y [ --dynamics_configuration ] arg dynamics_configuration file
+
+Report bugs to: janzentome@atchar{}gmail.com
+textmidi home page: https://github.com/tomejanzen/textmiditools
+@end smallexample
 @item @minus{}v, @minus{}@minus{}verbose
 @cindex  @minus{}v, @minus{}@minus{}verbose
 Write some informative messages to the screen.  Errors are printed

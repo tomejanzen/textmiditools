@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -113,15 +113,15 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt     + ",h").c_str(),                                       HelpTxt)
-        ((VerboseOpt  + ",v").c_str(),                                    VerboseTxt)
-        ((VersionOpt  + ",V").c_str(),                                    VersionTxt)
-        ((SMUSOpt     + ",i").c_str(), program_options::value<string>(),     SMUSTxt)
-        ((AnswerOpt   + ",a").c_str(),                                     AnswerTxt)
-        ((TextmidiOpt + ",o").c_str(), program_options::value<string>(), TextmidiTxt)
-        ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
-        ((DottedRhythmsOpt + ",w").c_str(),    program_options::value<string>(), DottedRhythmsTxt)
-        ((RhythmExpressionOpt + ",r").c_str(), program_options::value<string>(), RhythmExpressionTxt)
+        ((help_option.registered_name()),                                       help_option.text())
+        ((verbose_option.registered_name()),                                    verbose_option.text())
+        ((version_option.registered_name()),                                    version_option.text())
+        ((smus_option.registered_name()), program_options::value<string>(),     SMUSTxt)
+        ((answer_option.registered_name()),                                     answer_option.text())
+        ((textmidi_out_option.registered_name()), program_options::value<string>(), textmidi_out_option.text())
+        ((dynamics_configuration_option.registered_name()), program_options::value<string>(),   dynamics_configuration_option.text())
+        ((dotted_rhythms_option.registered_name()),    program_options::value<string>(), dotted_rhythms_option.text())
+        ((rhythm_expression_option.registered_name()), program_options::value<string>(), rhythm_expression_option.text())
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -142,18 +142,18 @@ int main(int argc, char *argv[])
     uint8_t ID_int[4];
     vector<char> smus_score{};
 
-    if (var_map.count(HelpOpt))
+    if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.86\n"}
+        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.87\n"}
             += lexical_cast<string>(desc)) += '\n')
-            += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: <https://www\n"};
+            += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(VersionOpt)) [[unlikely]]
+    if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.86\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -161,9 +161,9 @@ int main(int argc, char *argv[])
     }
 
     string smus_filename;
-    if (var_map.count(SMUSOpt)) [[likely]]
+    if (var_map.count(smus_option.option())) [[likely]]
     {
-        smus_filename = var_map[SMUSOpt].as<string>();
+        smus_filename = var_map[smus_option.option()].as<string>();
         if (!filesystem::exists(smus_filename))
         {
             const string errstr{((string(SMUSOpt) += ' ') += smus_filename) += " File does not exist.\n"};
@@ -181,31 +181,31 @@ int main(int argc, char *argv[])
     }
 
     bool answer{};
-    if (var_map.count(AnswerOpt)) [[unlikely]]
+    if (var_map.count(answer_option.option())) [[unlikely]]
     {
         answer = true;
     }
 
     {
         string dynamics_configuration_file{};
-        if (var_map.count(DynamicsConfigurationOpt)) [[unlikely]]
+        if (var_map.count(dynamics_configuration_option.option())) [[unlikely]]
         {
-            dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
+            dynamics_configuration_file = var_map[dynamics_configuration_option.option()].as<string>();
         }
         midi::dynamics_map = textmidi::read_dynamics_configuration(dynamics_configuration_file);
     }
 
     bool dotted_rhythms{true};
-    if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+    if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
     {
-        string dotted_rhythms_string{var_map[DottedRhythmsOpt].as<string>()};
+        string dotted_rhythms_string{var_map[dotted_rhythms_option.option()].as<string>()};
         to_upper(dotted_rhythms_string);
         dotted_rhythms = ("TRUE" == dotted_rhythms_string);
     }
 
-    if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
+    if (var_map.count(rhythm_expression_option.option())) [[unlikely]]
     {
-        string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
+        string rhythm_expression_string{var_map[rhythm_expression_option.option()].as<string>()};
         to_upper(rhythm_expression_string);
         if (midi::rhythm_expression_map.contains(rhythm_expression_string))
         {
@@ -223,16 +223,16 @@ int main(int argc, char *argv[])
     }
     else
     {
-        if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+        if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
         {
             textmidi::rational::print_rhythm = make_unique<PrintRhythmRational>(dotted_rhythms);
         }
     }
 
     string textmidi_filename;
-    if (var_map.count(TextmidiOpt)) [[likely]]
+    if (var_map.count(textmidi_out_option.option())) [[likely]]
     {
-        textmidi_filename = var_map[TextmidiOpt].as<string>();
+        textmidi_filename = var_map[textmidi_out_option.option()].as<string>();
     }
     else
     {

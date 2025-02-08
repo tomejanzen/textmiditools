@@ -145,6 +145,23 @@ smustextmidi [@b{@minus{}i}|@b{@minus{}@minus{}smus}] @var{smus_input_file} @b{@
 @cindex @minus{}h
 @cindex @minus{}@minus{}help
 Print the options summary.
+@smallexample
+Usage: smustextmidi [OPTION]... [SMUSFILE]
+smustextmidi Version 1.0.86
+Allowed options:
+  -h [ --help ]                       help
+  -v [ --verbose ]                    write more trace information
+  -V [ --version ]                    Write version information
+  -i [ --smus ] arg                   input binary SMUS file
+  -a [ --answer ]                     Ask before overwriting a file
+  -o [ --textmidi ] arg               textmidi file
+  -y [ --dynamics_configuration ] arg dynamics_configuration file
+  -w [ --dotted_rhythms ] arg         true or false
+  -e [ --rhythmexpression ] arg       rational or simplecontinuedfraction
+
+Report bugs to: janzentome@atchar{}gmail.com
+smustextmidi home page: https://github.com/tomejanzen/textmiditools
+@end smallexample
 @item @minus{}v, @minus{}@minus{}verbose
 @cindex @minus{}v
 @cindex @minus{}@minus{}verbose

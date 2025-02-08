@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.86
+** TextMIDITools Version 1.0.87
 ** Copyright © 2024 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -108,7 +108,7 @@ namespace
         //
         // Hard Lessons: you can't break a line with a backslash in the middle of a
         // Raw regular expression
-        const regex keyevent_re{R"((-?)(((([A-Ga-g])(([b#x]?)|(bb)))(-?)([[:digit:]]))|(([Kk])([+-]?)([[:digit:]]+)))(-?))"};
+        const regex keyevent_re{R"(([-]?)(([C][#x]?-1)|([ABDEFGabdefg]([b#x]|bb)?-1)|([A-Ga-g]([b#x]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9])|([Kk]([+-]?)[[:digit:]]+))([-]?))"};
         const auto mat{regex_match(keyevent, matches, keyevent_re)};
         if (!mat)
         {
@@ -117,16 +117,27 @@ namespace
         }
         else
         {
+            constexpr int match_all{0};
             constexpr int match_tie_in{1};
             constexpr int match_note_or_key{2};
-            constexpr int match_tie_out{15};
+            constexpr int match_c_note_oct_minus1{3};
+            constexpr int match_defgab_note_oct_minus1{4};
+            constexpr int match_defgab_accidental_oct_minus1{5};
+            constexpr int match_note_oct_0_8{6};
+            constexpr int match_accidental_oct_0_8{7};
+            constexpr int match_cdef_oct_9{8};
+            constexpr int match_cdef_accidental_oct_9{9};
+            constexpr int match_g_oct_9{10};
+            constexpr int match_g_accidental_oct_9{11};
+            constexpr int match_key{12};
+            constexpr int match_key_sign{13}; // key number does not have a match
+            constexpr int match_tie_out{14};
             tie_in  = !matches[match_tie_in].str().empty();
             tie_out = !matches[match_tie_out].str().empty();
 
             if (!matches[match_note_or_key].str().empty())
             {
-                tie(keynumber, is_delta)
-                    = pitchname_to_keynumber(matches[match_note_or_key]);
+                tie(keynumber, is_delta) = pitchname_to_keynumber(matches[match_note_or_key]);
             }
         }
         return keynumber;
@@ -480,7 +491,7 @@ NON_NOTE_LETTER ([^[A-Ga-g \t]])
 NOTE_NAME ({NOTE_LETTER}{ACCIDENTAL})
 PITCH_NAME (({NOTE_LETTER}{ACCIDENTAL}(-?){OCTAVE_DIGIT})|(([Kk])([+-]?)([[:digit:]]+)))
 KEY_COMMAND ([-]?K{INTEGER}[-]?)
-LAZY_PITCH_NAME ((-?)(({NOTE_LETTER}{ACCIDENTAL}(-?){OCTAVE_DIGIT})|(([Kk])([+-]?)([[:digit:]]+)))(-?))
+LAZY_PITCH_NAME ((-?)(([C][#x]?-1)|([ABDEFGabdefg]{ACCIDENTAL}?-1)|({NOTE_LETTER}{ACCIDENTAL}?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))(-?))
 STRING .*
 LINE (.*)
 LETTERUNDER ({LETTER}|_)

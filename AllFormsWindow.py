@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.86
+# TextMIDITools Version 1.0.87
 # textmidiform.py 1.0
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -11,6 +11,7 @@ import tkinter
 import tkinter.ttk
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 from tkinter.ttk import *
 import tkinter, tkinter.constants, tkinter.filedialog
 import re
@@ -267,33 +268,37 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
         self.len_label = tkinter.ttk.Label(self.frame, text='Len')
-        self.len_entry = tkinter.ttk.Entry(self.frame, textvariable=self.len)
+        validate_command = (self.register(self.validate_float),
+            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        self.len_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate='focusout', textvariable=self.len)
         self.len.set(self.xml_form['len'])
 
         self.min_note_len_label = tkinter.ttk.Label(self.frame, text='Min Note Len')
-        self.min_note_len_entry = tkinter.ttk.Entry(self.frame, textvariable=self.min_note_len)
+        self.min_note_len_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate='focusout', textvariable=self.min_note_len)
         self.min_note_len.set(self.xml_form['min_note_len'])
 
         self.max_note_len_label = tkinter.ttk.Label(self.frame, text='Max Note Len')
-        self.max_note_len_entry = tkinter.ttk.Entry(self.frame, textvariable=self.max_note_len)
+        self.max_note_len_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate='focusout', textvariable=self.max_note_len)
         self.max_note_len.set(self.xml_form['max_note_len'])
 
         self.pulse_label = tkinter.ttk.Label(self.frame, text='Pulse/Sec')
-        self.pulse_entry = tkinter.ttk.Entry(self.frame, textvariable=self.pulse)
+        self.pulse_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_command, validate='focusout', textvariable=self.pulse)
         self.pulse.set(self.xml_form['pulse'])
 
         self.melody_probabilities_label = tkinter.ttk.Label(self.frame, text='MELODY PROBABILITIES')
 
+        validate_prob_command = (self.register(self.validate_probability),
+            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.down_label = tkinter.ttk.Label(self.frame, text='Down')
-        self.down_entry = tkinter.ttk.Entry(self.frame, textvariable=self.down)
+        self.down_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_prob_command, validate='focusout', textvariable=self.down)
         self.down.set(self.xml_form['melody_probabilities']['down'])
 
         self.same_label = tkinter.ttk.Label(self.frame, text='Same')
-        self.same_entry = tkinter.ttk.Entry(self.frame, textvariable=self.same)
+        self.same_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_prob_command, validate='focusout', textvariable=self.same)
         self.same.set(self.xml_form['melody_probabilities']['same'])
 
         self.up_label = tkinter.ttk.Label(self.frame, text='Up')
-        self.up_entry = tkinter.ttk.Entry(self.frame, textvariable=self.up)
+        self.up_entry = tkinter.ttk.Entry(self.frame, validatecommand=validate_prob_command, validate='focusout', textvariable=self.up)
         self.up.set(self.xml_form['melody_probabilities']['up'])
 
         self.scale_frame = ScaleFrame(self)
@@ -957,4 +962,40 @@ class AllFormsWindow(tkinter.Toplevel):
         algorithm = self.xml_form['arrangement_definition']['algorithm']
         self.arrangement_algorithm.set(algorithm)
 
+    def validate_float(self, d, i, P, s, S, v, V, W):
+        # 1-insert, 0=del, -1 if forced
+        pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        ma = pat.fullmatch(str(P))
+        ret = False
+        if (ma):
+            ret = True
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (5.125 or 5.125E05)")
+        return ret
+
+    def validate_probability(self, d, i, P, s, S, v, V, W):
+        # 1-insert, 0=del, -1 if forced
+        pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        ma = pat.fullmatch(str(P))
+        ret = False
+        if (ma):
+            ret = ret and True
+            num = float(str(P))
+            inrange = ((num <= 1.0) and (num >= 0.0))
+            if (inrange):
+                ret = ret and True
+            else:
+                ret = False
+                messagebox.showerror('message', "bad value (0.0 to 1.0)")
+            if ((float(self.xml_form['melody_probabilities']['down']) <= float(self.xml_form['melody_probabilities']['same']))
+               and (float(self.xml_form['melody_probabilities']['same']) <= float(self.xml_form['melody_probabilities']['up']))):
+                ret = ret and True
+            else:
+                messagebox.showerror('message', "improper values: required: down <= same <= up")
+                ret = False
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (0.0 to 1.0 or 1.0E-4)")
+        return ret
 

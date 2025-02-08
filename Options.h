@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -11,24 +11,38 @@
 #    define  OPTIONS_H
 
 #include <string>
+#include <string_view>
 
-const std::string HelpOpt{"help"};
-inline constexpr char HelpTxt[]{"Write help text"};
-const std::string VerboseOpt{"verbose"};
-inline constexpr char VerboseTxt[]{"write more trace information"};
-const std::string VersionOpt{"version"};
-inline constexpr char VersionTxt[]{"Write version information"};
-const std::string MidiOpt{"midi"};
-inline constexpr char MidiTxt[]{"binary MIDI file"};
-const std::string AnswerOpt{"answer"};
-inline constexpr char AnswerTxt[]{"Ask before overwriting a file"};
-const std::string TextmidiOpt{"textmidi"};
-inline constexpr char TextmidiTxt[]{"textmidi file"};
-const std::string DynamicsConfigurationOpt{"dynamics_configuration"};
-inline constexpr char DynamicsConfigurationTxt[]{"dynamics_configuration file"};
-const std::string DottedRhythmsOpt{"dotted_rhythms"};
-inline constexpr char DottedRhythmsTxt[]{"true or false"};
-const std::string RhythmExpressionOpt{"rhythmexpression"};
-inline constexpr char RhythmExpressionTxt[]{"rational or simplecontinuedfraction"};
+#include "OptionName.h"
+
+const textmidi::OptionName help_option{"help", "help", 'h'};
+const textmidi::OptionName verbose_option{"verbose", "write more trace information", 'v'};
+const std::string_view VerboseTxt{"write more trace information"};
+const textmidi::OptionName version_option{"version", "Write version information", 'V'};
+const textmidi::OptionName midi_in_option{"midi", "binary MIDI file", 'i'};
+const textmidi::OptionName midi_out_option{"midi", "binary MIDI file", 'o'};
+const textmidi::OptionName answer_option{"answer", "Ask before overwriting a file", 'a'};
+const textmidi::OptionName textmidi_in_option{"textmidi", "textmidi file", 'i'};
+const textmidi::OptionName textmidi_out_option{"textmidi", "textmidi file", 'o'};
+const textmidi::OptionName dynamics_configuration_option{"dynamics_configuration", "dynamics_configuration file", 'y'};
+const textmidi::OptionName dotted_rhythms_option{"dotted_rhythms", "true or false", 'w'};
+const textmidi::OptionName rhythm_expression_option{"rhythmexpression", "rational or simplecontinuedfraction", 'e'};
+const textmidi::OptionName detache_option{"detache", "number of ticks to cheat notes to separate consecutive notes", 'd'};
+const textmidi::OptionName lazy_notes_off_option{"lazynotesoff", "To end notes, write MIDI note-offs with current dynamic rather than note-ons with velocity 0", 'l'};
+const textmidi::OptionName running_status_option{"runningstatus", "with {standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta }; default is standard", 'n'};
+const textmidi::OptionName quantize_option{"quantize", "quantization ratio in quotes: \"1/32\"", 'q'};
+const textmidi::OptionName lazy_option{"lazy", "Attempt writing in lazy mode", 'l'};
+const textmidi::OptionName smus_option{"smus", "input binary SMUS file", 'i'};
+const textmidi::OptionName form_option{"form", "input plain text Form files; double-quote wildcards", 'f'};
+const textmidi::OptionName XML_form_option{"xmlform", "input XML text Form files; double-quote wildcards", 'x'};
+const textmidi::OptionName xml_update_option{"update", "update XML file with update_ prefix on the name given to --xmlform", 'u'};
+const textmidi::OptionName gnuplot_option{"gnuplot", "gnuplot data output file", 'g'};
+const textmidi::OptionName random_option{"random", "write a random form to the name given and exit", 'r'};
+const textmidi::OptionName instruments_option{"instruments", "random instrument groups: piano chromaticpercussion organ guitar bass strings ensemble brass reed pipe synthlead synthpad syntheffects ethnic percussive soundeffects all melodic idiophone", 'i'};
+const textmidi::OptionName clamp_scale_option{"clampscale", "In each form, clamp the scale to the union of the voice ranges", 'c'};
+const textmidi::OptionName arrangements_option{"arrangements", "rotateright rotateleft reverse previouspermutation nextpermutation swappairs shuffle skip heaps identity", 'z'};
+const textmidi::OptionName arrangements_period_option{"arrangementsperiod", "seconds before changing voice priority", 'y'};
+const textmidi::OptionName max_events_per_track_option{"maxeventspertrack", "Maximum number of events in a track before stopping", 't'};
+const textmidi::OptionName stack_tracks_option{"stacktracks", "process each form file and add its tracks to the same output textmidi score", 'k'};
 
 #endif

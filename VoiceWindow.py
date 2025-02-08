@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.86
+# TextMIDITools Version 1.0.87
 # textmidiform.py 1.0
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -596,9 +596,7 @@ class VoiceWindow(tkinter.Toplevel):
 
     def validate_pitchname(self, d, i, P, s, S, v, V, W):
         # 1-insert, 0=del, -1 if forced
-        #pat = re.compile(r"([A-Ga-g]([#bx]|bb)?[-][10])|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Gc-g]([#bx]|bb)?[9]))")
-        #pat = re.compile(r"([A-Ga-g]([#bx]|bb)?[-][10])|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))")
-        pat = re.compile(r"([C][#x]?[-1])|([ABDEFGabdefg]([#bx]|bb)?[-][10])|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))")
+        pat = re.compile(r"([C][#x]?-1)|([ABDEFGabdefg]([#bx]|bb)?-1)|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))")
         ma = pat.match(str(P))
         ret = False
         if (ma):

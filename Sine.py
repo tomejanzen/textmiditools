@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.86
+# TextMIDITools Version 1.0.87
 # textmidiform.py 1.0
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -47,7 +47,7 @@ class Sine(tkinter.Frame):
         # %v type of validation currently set
         # %V type of validation that triggered us (key, focusin, focusout, forced)
         # %W tk name of widget
-        validate_command = (self.register(self.validate_length),
+        validate_command = (self.register(self.validate_float),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.phase_scroll_label = tkinter.ttk.Label(self, text='-pi..................0..................pi')
         self.period_label = tkinter.ttk.Label(self, text='Period')
@@ -59,7 +59,7 @@ class Sine(tkinter.Frame):
         phase = self.xml_sine['phase'] / (2.0 * self.pi) + 0.5
         self.phase_scrollbar.set(phase, phase)
 
-        self.amplitude_label = tkinter.ttk.Label(self, text='Gain')
+        self.amplitude_label = tkinter.ttk.Label(self, text='Amplitude')
         self.amplitude_entry = tkinter.ttk.Entry(self, validatecommand=validate_command, validate='focusout', textvariable=self.amplitude)
 
         self.offset_label = tkinter.ttk.Label(self, text='Offset')
@@ -108,15 +108,15 @@ class Sine(tkinter.Frame):
         self.offset_scrollbar.set(offset, offset)
         self.offset_scrollbar.update()
         self.update()
-    def validate_length(self, d, i, P, s, S, v, V, W):
+    def validate_float(self, d, i, P, s, S, v, V, W):
         # 1-insert, 0=del, -1 if forced
-        pat = re.compile(r"[0-9]+([.][0-9]*)?")
-        ma = pat.match(str(P))
+        pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        ma = pat.fullmatch(str(P))
         ret = False
         if (ma):
             ret = True
         else:
             ret = False
-            messagebox.showerror('message', "bad value (5.125)")
+            messagebox.showerror('message', "bad value (5.125 or 5.125E05)")
         return ret
 

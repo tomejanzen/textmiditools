@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -108,59 +108,30 @@ namespace {
 
     using GlobStatusMap = unordered_map<int, string>;
 
-    // Derived from Stroustrup Tour of C++ 2nd Ed p 191
-
-    const string FormOpt{"form"};
-    constexpr char FormTxt[]{
-        "input plain text Form files; double-quote wildcards"};
-    const string XML_FormOpt{"xmlform"};
-    constexpr char XML_FormTxt[]{"alternate input XML Form file"};
-    const string XML_UpdateOpt{"update"};
-    constexpr char XML_UpdateTxt[]{"update XML file with update_ prefix on the name given to --xmlform."};
-    const string GnuplotOpt{"gnuplot"};
-    constexpr char GnuplotTxt[]{"gnuplot data output file"};
-    const string RandomOpt{"random"};
-    constexpr char RandomTxt[]{"{filename} - write a random form and exit"};
-    const string InstrumentsOpt{"instruments"};
-    constexpr char InstrumentsTxt[]{"random instrument groups: piano "
-        "chromaticpercussion organ guitar bass strings ensemble brass reed pipe "
-        "synthlead synthpad syntheffects ethnic percussive soundeffects all "
-        "melodic idiophone"};
-    const string ClampScaleOpt{"clampscale"};
-    constexpr char ClampScaleTxt[]{"in each form, clamp the scale to the union of the voice ranges"};
-    const string ArrangementsOpt{"arrangements"};
-    constexpr char ArrangementsTxt[]{"rotateright rotateleft reverse previouspermutation "
-        "nextpermutation swappairs shuffle skip heaps identity"};
-    const string ArrangementsPeriodOpt{"arrangementsperiod"};
-    constexpr char ArrangementsPeriodTxt[]{"floating seconds"};
-    const string MaxEventsPerTrackOpt{"maxeventspertrack"};
-    constexpr char MaxEventsPerTrackTxt[]{"integer"};
-    const string StackTracksOpt{"stacktracks"};
-    constexpr char StackTracksTxt[]{"process each form file and add its tracks to the same output textmidi score"};
 }
 
 int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt                + ",h").c_str(),                                                                HelpTxt)
-        ((VerboseOpt             + ",v").c_str(),                                                             VerboseTxt)
-        ((StackTracksOpt         + ",k").c_str(),                                                         StackTracksTxt)
-        ((VersionOpt             + ",V").c_str(),                                                             VersionTxt)
-        ((FormOpt                + ",f").c_str(), program_options::value<string>(),                              FormTxt)
-        ((XML_FormOpt            + ",x").c_str(), program_options::value<vector<string>>()->multitoken(),    XML_FormTxt)
-        ((XML_UpdateOpt          + ",u").c_str(),                                                          XML_UpdateTxt)
-        ((AnswerOpt              + ",a").c_str(),                                                              AnswerTxt)
-        ((TextmidiOpt            + ",o").c_str(), program_options::value<string>(),                          TextmidiTxt)
-        ((GnuplotOpt             + ",g").c_str(),                                                             GnuplotTxt)
-        ((RandomOpt              + ",r").c_str(), program_options::value<string>(),                            RandomTxt)
-        ((InstrumentsOpt         + ",i").c_str(), program_options::value<vector<string>>()->multitoken(), InstrumentsTxt)
-        ((ClampScaleOpt          + ",c").c_str(),                                                          ClampScaleTxt)
-        ((ArrangementsOpt        + ",z").c_str(), program_options::value<string>(),                      ArrangementsTxt)
-        ((MaxEventsPerTrackOpt   + ",t").c_str(), program_options::value<int>(),                    MaxEventsPerTrackTxt)
-        ((ArrangementsPeriodOpt  + ",y").c_str(), program_options::value<double>(),                ArrangementsPeriodTxt)
-        ((DottedRhythmsOpt       + ",w").c_str(), program_options::value<string>(),                     DottedRhythmsTxt)
-        ((RhythmExpressionOpt    + ",e").c_str(), program_options::value<string>(),                  RhythmExpressionTxt)
+        ((help_option.registered_name()),                                                                help_option.text())
+        ((verbose_option.registered_name()),                                                             verbose_option.text())
+        ((stack_tracks_option.registered_name()),                                                         stack_tracks_option.text())
+        ((version_option.registered_name()),                                                             version_option.text())
+        ((form_option.registered_name()), program_options::value<string>(),                              form_option.text())
+        ((XML_form_option.registered_name()), program_options::value<vector<string>>()->multitoken(),    XML_form_option.text())
+        ((xml_update_option.registered_name()),                                                          xml_update_option.text())
+        ((answer_option.registered_name()),                                                              answer_option.text())
+        ((textmidi_out_option.registered_name()), program_options::value<string>(),                          textmidi_out_option.text())
+        ((gnuplot_option.registered_name()),                                                             gnuplot_option.text())
+        ((random_option.registered_name()), program_options::value<string>(),                            random_option.text())
+        ((instruments_option.registered_name()), program_options::value<vector<string>>()->multitoken(), instruments_option.text())
+        ((clamp_scale_option.registered_name()),                                                          clamp_scale_option.text())
+        ((arrangements_option.registered_name()), program_options::value<string>(),                      arrangements_option.text())
+        ((max_events_per_track_option.registered_name()), program_options::value<int>(),                    max_events_per_track_option.text())
+        ((arrangements_period_option.registered_name()), program_options::value<double>(),                arrangements_period_option.text())
+        ((dotted_rhythms_option.registered_name()), program_options::value<string>(),                     dotted_rhythms_option.text())
+        ((rhythm_expression_option.registered_name()), program_options::value<string>(),                  rhythm_expression_option.text())
     ;
     program_options::variables_map var_map;
     try
@@ -174,19 +145,19 @@ int main(int argc, char *argv[])
         cerr << errstr;
         exit(EXIT_SUCCESS);
     }
-    if (var_map.count(HelpOpt))
+    if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.86\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.87\n"}
             += lexical_cast<string>(desc)) += '\n')
-            += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: <https://www\n"};
+            += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(VersionOpt)) [[unlikely]]
+    if (var_map.count(version_option.option())) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.86\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -194,39 +165,39 @@ int main(int argc, char *argv[])
     }
 
     bool verbose{};
-    if (var_map.count(VerboseOpt)) [[unlikely]]
+    if (var_map.count(verbose_option.option())) [[unlikely]]
     {
         verbose = true;
     }
 
     bool stacktracks{};
-    if (var_map.count(StackTracksOpt)) [[unlikely]]
+    if (var_map.count(stack_tracks_option.option())) [[unlikely]]
     {
         stacktracks = true;
     }
 
     vector<string> form_filename_globs;
-    if (var_map.count(FormOpt))
+    if (var_map.count(form_option.option()))
     {
-        form_filename_globs = var_map[FormOpt].as<vector<string>>();
+        form_filename_globs = var_map[form_option.option()].as<vector<string>>();
     }
     else
     {
-        if (var_map.count(XML_FormOpt))
+        if (var_map.count(XML_form_option.option()))
         {
-            form_filename_globs = var_map[XML_FormOpt].as<vector<string>>();
+            form_filename_globs = var_map[XML_form_option.option()].as<vector<string>>();
         }
         else
         {
-            if (var_map.count(RandomOpt))
+            if (var_map.count(random_option.option()))
             {
-                auto random_filename{var_map[RandomOpt].as<string>()};
+                auto random_filename{var_map[random_option.option()].as<string>()};
 
                 int32_t instrument_flags{0};
 
-                if (var_map.count(InstrumentsOpt))
+                if (var_map.count(instruments_option.option()))
                 {
-                    vector<string> instruments{var_map[InstrumentsOpt].as<vector<string>>()};
+                    vector<string> instruments{var_map[instruments_option.option()].as<vector<string>>()};
                     for (const auto& instrument : instruments)
                     {
                         if (program_group_map.contains(instrument))
@@ -274,7 +245,7 @@ int main(int argc, char *argv[])
         }
     }
     vector<string> form_filenames;
-    if (var_map.count(FormOpt) || var_map.count(XML_FormOpt))
+    if (var_map.count(form_option.option()) || var_map.count(XML_form_option.option()))
     {
         GlobStatusMap globStatusMap
         {
@@ -329,7 +300,7 @@ int main(int argc, char *argv[])
     }
 
     vector<MusicalForm> xml_forms;
-    if (var_map.count(FormOpt))
+    if (var_map.count(form_option.option()))
     {
         for (const auto& form_filename_temp : form_filenames)
         {
@@ -341,7 +312,7 @@ int main(int argc, char *argv[])
     else
     {
         // The new XML form file. 2019-12-07
-        if (var_map.count(XML_FormOpt))
+        if (var_map.count(XML_form_option.option()))
         {
             for (const auto& form_filename : form_filenames)
             {
@@ -358,7 +329,7 @@ int main(int argc, char *argv[])
                             cerr << errstr;
                         }
                         xml_forms.push_back(xml_form);
-                        if (var_map.count(XML_UpdateOpt) && xml_form.valid())
+                        if (var_map.count(xml_update_option.option()) && xml_form.valid())
                         {
                             string update_name{};
                             {
@@ -417,7 +388,7 @@ int main(int argc, char *argv[])
     }
 
     bool answer{};
-    if (var_map.count(AnswerOpt)) [[unlikely]]
+    if (var_map.count(answer_option.option())) [[unlikely]]
     {
         answer = true;
     }
@@ -425,38 +396,38 @@ int main(int argc, char *argv[])
     PermutationEnum track_scramble_type{PermutationEnum::Undefined};
     TicksDuration track_scramble_period{60000 * TicksPerQuarter};
 
-    if (var_map.count(ArrangementsOpt)) [[unlikely]]
+    if (var_map.count(arrangements_option.option())) [[unlikely]]
     {
-        const string scramble_string{var_map[ArrangementsOpt].as<string>()};
+        const string scramble_string{var_map[arrangements_option.option()].as<string>()};
         if (arrangement_map.contains(scramble_string))
         {
             track_scramble_type = arrangement_map.at(scramble_string);
         }
         else
         {
-            const string logstr{(string{"Track scrambling selections are: "} += ArrangementsTxt) += '\n'};
+            const string logstr{(string{"Track scrambling selections are: "} += arrangements_option.option()) += '\n'};
             cout << logstr;
             exit(EXIT_SUCCESS);
         }
-        if (var_map.count(ArrangementsPeriodOpt))
+        if (var_map.count(arrangements_period_option.option()))
         {
             track_scramble_period = TicksDuration{
-                static_cast<int64_t>(floor(var_map[ArrangementsPeriodOpt].as<double>())) * TicksPerQuarter};
+                static_cast<int64_t>(floor(var_map[arrangements_period_option.option()].as<double>())) * TicksPerQuarter};
         }
     }
-    const size_t max_events_per_track{var_map.count(MaxEventsPerTrackOpt) ? var_map[MaxEventsPerTrackOpt].as<size_t>() : 100000};
+    const size_t max_events_per_track{var_map.count(max_events_per_track_option.option()) ? var_map[max_events_per_track_option.option()].as<size_t>() : 100000};
 
     bool dotted_rhythms{true};
-    if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+    if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
     {
-        string dotted_rhythms_string{var_map[DottedRhythmsOpt].as<string>()};
+        string dotted_rhythms_string{var_map[dotted_rhythms_option.option()].as<string>()};
         to_upper(dotted_rhythms_string);
         dotted_rhythms = ("TRUE" == dotted_rhythms_string);
     }
 
-    if (var_map.count(RhythmExpressionOpt)) [[unlikely]]
+    if (var_map.count(rhythm_expression_option.option())) [[unlikely]]
     {
-        string rhythm_expression_string{var_map[RhythmExpressionOpt].as<string>()};
+        string rhythm_expression_string{var_map[rhythm_expression_option.option()].as<string>()};
         to_upper(rhythm_expression_string);
         if (midi::rhythm_expression_map.contains(rhythm_expression_string))
         {
@@ -474,16 +445,16 @@ int main(int argc, char *argv[])
     }
     else
     {
-        if (var_map.count(DottedRhythmsOpt)) [[unlikely]]
+        if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
         {
             textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmRational>(dotted_rhythms);
         }
     }
 
     string textmidi_filename;
-    if (var_map.count(TextmidiOpt))
+    if (var_map.count(textmidi_out_option.option()))
     {
-        textmidi_filename = var_map[TextmidiOpt].as<string>();
+        textmidi_filename = var_map[textmidi_out_option.option()].as<string>();
     }
     if (answer && filesystem::exists(textmidi_filename))
     {
@@ -496,14 +467,14 @@ int main(int argc, char *argv[])
         }
     }
     bool gnuplot{};
-    if (var_map.count(GnuplotOpt))
+    if (var_map.count(gnuplot_option.option()))
     {
         gnuplot = true;
     }
 
     // This block writes an XML form file if the input was an old form file.
     // It appends ".xml" to the name.
-    if (var_map.count(FormOpt))
+    if (var_map.count(form_option.option()))
     {
         for (int xf{}; auto& xml_form : xml_forms)
         {
@@ -528,7 +499,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (var_map.count(ClampScaleOpt))
+    if (var_map.count(clamp_scale_option.option()))
     {
         for (auto& xml_form : xml_forms)
         {
@@ -545,7 +516,7 @@ int main(int argc, char *argv[])
         {
             auto& xml_form{xml_forms[x]};
 
-            if (var_map.count(TextmidiOpt))
+            if (var_map.count(textmidi_out_option.option()))
             {
                 textmidi_file.open(textmidi_filename.c_str());
             }
@@ -566,7 +537,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                if (var_map.count(TextmidiOpt))
+                if (var_map.count(textmidi_out_option.option()))
                 {
                     textmidi_file.open(textmidi_filename.c_str());
                 }

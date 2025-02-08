@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -386,7 +386,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     track.the_last_time(track.the_next_time());
                     track.the_next_time(track.the_next_time() + rhythmtd);
 
-                    int pitch_index{0};
+                    int pitch_index{};
 
                     MelodyProbabilities::MelodyDirection
                         direction{xml_form.melody_probabilities()
@@ -461,8 +461,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
 
                     // coerce to be on scale
                     if ((pitch_index != RestPitchIndex)
-                        && (pitch_index
-                            >= static_cast<int>(xml_form.scale().size())))
+                        && (pitch_index >= static_cast<int>(xml_form.scale().size())))
                     {
                         // This is probably why it keeps banging
                         // on the top of the scale.
@@ -473,6 +472,11 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     {
                         pitch_index = 0;
                     }
+                    if ((pitch_index >= xml_form.scale().size()) && (pitch_index < RestPitchIndex))
+                    {
+                        pitch_index = (xml_form.scale().size() ? (xml_form.scale().size() - 1) : 0);
+                    }
+
                     // Same pitch index as the last pitch index
                     if (pitch_index != RestPitchIndex)
                     {

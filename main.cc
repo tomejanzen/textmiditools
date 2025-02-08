@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -31,16 +31,6 @@
 using namespace std;
 using namespace boost;
 
-namespace
-{
-    const string DetacheOpt{"detache"};
-    constexpr char DetacheTxt[]{"number of ticks to cheat notes to separate consecutive notes"};
-    const string LazyNoteOffOpt{"lazynoteoff"};
-    constexpr char LazyNoteOffTxt[]{"To end notes, write MIDI note-offs with current dynamic rather than note-ons with velocity 0"};
-    const string RunningStatusOpt{"runningstatus"};
-    constexpr char RunningStatusTxt[]{"with {standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta }; default is standard"};
-}
-
 extern FILE* yyin;
 extern int yylex(void);
 
@@ -50,23 +40,23 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((HelpOpt        + ",h").c_str(),                                       HelpTxt)
-        ((VerboseOpt     + ",v").c_str(),                                       VerboseTxt)
-        ((VersionOpt     + ",V").c_str(),                                       VersionTxt)
-        ((TextmidiOpt    + ",i").c_str(),   program_options::value<string>(),   TextmidiTxt)
-        ((MidiOpt        + ",o").c_str(),   program_options::value<string>(),   MidiTxt)
-        ((AnswerOpt      + ",a").c_str(),                                       AnswerTxt)
-        ((DetacheOpt     + ",d").c_str(),   program_options::value<uint32_t>(), DetacheTxt)
-        ((LazyNoteOffOpt + ",l").c_str(),                                       LazyNoteOffTxt)
-        ((RunningStatusOpt + ",n").c_str(), program_options::value<string>(),   RunningStatusTxt)
-        ((DynamicsConfigurationOpt + ",y").c_str(), program_options::value<string>(),   DynamicsConfigurationTxt)
+        ((help_option.registered_name()),                                       help_option.text())
+        ((verbose_option.registered_name()),                                       verbose_option.text())
+        ((version_option.registered_name()),                                       version_option.text())
+        ((textmidi_in_option.registered_name()), program_options::value<string>(),   textmidi_in_option.text())
+        ((midi_out_option.registered_name()), program_options::value<string>(),   midi_out_option.text())
+        ((answer_option.registered_name()),                                       answer_option.text())
+        ((detache_option.registered_name()),   program_options::value<uint32_t>(), detache_option.text())
+        ((lazy_notes_off_option.registered_name()),                                       lazy_notes_off_option.text())
+        ((running_status_option.registered_name()), program_options::value<string>(),   running_status_option.text())
+        ((dynamics_configuration_option.registered_name()), program_options::value<string>(),   dynamics_configuration_option.text())
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
 
     try
     {
-        pos_opts_desc.add(TextmidiOpt.c_str(), -1);
+        pos_opts_desc.add(textmidi_in_option.registered_name(), -1);
         program_options::store(
             program_options::command_line_parser(argc, argv)
             .options(desc).positional(pos_opts_desc).run(), var_map);
@@ -79,43 +69,43 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(HelpOpt)) [[unlikely]]
+    if (var_map.count(help_option.option())) [[unlikely]]
     {
-        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.86\n"}
+        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.87\n"}
             += lexical_cast<string>(desc)) += '\n')
-            += "Report bugs to: janzentome@gmail.com\ntextmidi home page: <https://www\n"};
+            += "Report bugs to: janzentome@gmail.com\ntextmidi home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(VersionOpt)) [[unlikely]]
+    if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.86\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(VerboseOpt)) [[unlikely]]
+    if (var_map.count(verbose_option.option())) [[unlikely]]
     {
         textmidi::TextMidiFeatures::me()->verbose(true);
     }
 
     bool answer{};
-    if (var_map.count(AnswerOpt)) [[unlikely]]
+    if (var_map.count(answer_option.option())) [[unlikely]]
     {
         answer = true;
     }
 
     string text_filename{}; // set in main.cc as option
-    if (var_map.count(TextmidiOpt))
+    if (var_map.count(textmidi_in_option.option()))
     {
-        text_filename = var_map[TextmidiOpt].as<string>();
+        text_filename = var_map[textmidi_in_option.option()].as<string>();
         textmidi::TextMidiFeatures::me()->text_filename(text_filename);
         if (!filesystem::exists(text_filename))
         {
-            const string errstr{((string(TextmidiOpt) + ' ') += text_filename) += " File does not exist.\n"};
+            const string errstr{((textmidi_in_option.option() + ' ') += text_filename) += " File does not exist.\n"};
             cerr << errstr;
             exit(EXIT_SUCCESS);
         }
@@ -128,9 +118,9 @@ int main(int argc, char *argv[])
     }
 
     string midi_filename{};
-    if (var_map.count(MidiOpt))
+    if (var_map.count(midi_out_option.option()))
     {
-        midi_filename = var_map[MidiOpt].as<string>();
+        midi_filename = var_map[midi_out_option.option()].as<string>();
         if (answer && filesystem::exists(midi_filename))
         {
             const string outstr{(string{"Overwrite "} += midi_filename) += "?\n"};
@@ -155,28 +145,28 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    if (var_map.count(DetacheOpt)) [[unlikely]]
+    if (var_map.count(detache_option.option())) [[unlikely]]
     {
-        textmidi::TextMidiFeatures::me()->detache(var_map[DetacheOpt].as<uint32_t>());
+        textmidi::TextMidiFeatures::me()->detache(var_map[detache_option.option()].as<uint32_t>());
     }
 
-    if (var_map.count(LazyNoteOffOpt)) [[unlikely]]
+    if (var_map.count(lazy_notes_off_option.option())) [[unlikely]]
     {
         textmidi::TextMidiFeatures::me()->note_off_select(true);
     }
 
     {
         string dynamics_configuration_file{};
-        if (var_map.count(DynamicsConfigurationOpt)) [[unlikely]]
+        if (var_map.count(dynamics_configuration_option.option())) [[unlikely]]
         {
-            dynamics_configuration_file = var_map[DynamicsConfigurationOpt].as<string>();
+            dynamics_configuration_file = var_map[dynamics_configuration_option.option()].as<string>();
         }
         midi::dynamics_map = textmidi::read_dynamics_configuration(dynamics_configuration_file);
     }
 
-    if (var_map.count(RunningStatusOpt)) [[unlikely]]
+    if (var_map.count(running_status_option.option())) [[unlikely]]
     {
-        string running_status_str{var_map[RunningStatusOpt].as<string>()};
+        string running_status_str{var_map[running_status_option.option()].as<string>()};
         to_upper(running_status_str);
         if (midi::running_status_policy_map.contains(running_status_str))
         {

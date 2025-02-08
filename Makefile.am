@@ -20,9 +20,9 @@ all : ${bin_PROGRAMS}
 
 textmidi$(EXEEXT) : main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o MidiMaps.o MidiString.o DynamicsOptions.o
 	$(CXX) $(AM_CXXFLAGS) -o $@ main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o MidiMaps.o MidiString.o DynamicsOptions.o $(AM_LDFLAGS)
-main.o: main.cc textmidi.h Midi.h Options.h
+main.o: main.cc textmidi.h Midi.h Options.h OptionName.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-textmidi.o: textmidi.cc Midi.h MidiMaps.h TextmidiUtils.h MIDIKeyString.h MidiString.h textmidi.h DynamicsOptions.h
+textmidi.o: textmidi.cc Midi.h MidiMaps.h TextmidiUtils.h MIDIKeyString.h MidiString.h textmidi.h DynamicsOptions.h OptionName.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 textmidi.cc : textmidi.l
 	$(LEX) $(LEXFLAGS) -o $@ $<
@@ -32,7 +32,7 @@ rational_support.o: rational_support.cc rational_support.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MidiString.o: MidiString.cc MidiString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-miditext.o: miditext.cc rational_support.h RhythmRational.h TextmidiUtils.h MidiEvents.h Midi.h MidiMaps.h Options.h DynamicsOptions.h
+miditext.o: miditext.cc rational_support.h RhythmRational.h TextmidiUtils.h MidiEvents.h Midi.h MidiMaps.h Options.h DynamicsOptions.h OptionName.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Midi.o : Midi.cc Midi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
@@ -44,18 +44,18 @@ MidiEvents.o: MidiEvents.cc MidiEvents.h RhythmRational.h Midi.h MidiMaps.h rati
 	$(CXX) $(AM_CXXFLAGS) -c -o MidiEvents.o MidiEvents.cc
 smustextmidi$(EXEEXT) : smustextmidi.o SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o DynamicsOptions.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o DynamicsOptions.o $(AM_LDFLAGS)
-smustextmidi.o: smustextmidi.cc Midi.h TextmidiUtils.h rational_support.h RhythmRational.h SmusTrackEvent.h MidiMaps.h Options.h DynamicsOptions.h
+smustextmidi.o: smustextmidi.cc Midi.h TextmidiUtils.h rational_support.h RhythmRational.h SmusTrackEvent.h MidiMaps.h Options.h DynamicsOptions.h OptionName.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h Midi.h MidiMaps.h RhythmRational.h rational_support.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 RhythmRational.o: RhythmRational.cc RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-DynamicsOptions.o: DynamicsOptions.cc DynamicsOptions.h
+DynamicsOptions.o: DynamicsOptions.cc DynamicsOptions.h OptionName.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
 textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o $(AM_LDFLAGS) 
-textmidicgm.o: textmidicgm.cc MIDIKeyString.h Midi.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h Options.h Composer.h RhythmRational.h
+textmidicgm.o: textmidicgm.cc MIDIKeyString.h Midi.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h Options.h Composer.h RhythmRational.h OptionName.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
@@ -78,34 +78,34 @@ Composer.o: Composer.cc Composer.h Midi.h MidiMaps.h RhythmRational.h MusicalFor
 GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
-clean:
+    clean:
 	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o textmidi.cc Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o DynamicsOptions.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT) *.cps *.toc *.cp *.aux textmidi.log textmidicgm.log smustextmidi.log miditext.log textmidiformedit.log
-install:
+    install:
 	$(INSTALL_PROGRAM) textmidi$(EXEEXT) $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) miditext$(EXEEXT) $(DESTDIR)$(bindir)/miditext$(EXEEXT)
 	$(INSTALL_PROGRAM) smustextmidi$(EXEEXT) $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) textmidicgm$(EXEEXT) $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
-uninstall:
+    uninstall:
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/miditext$(EXEEXT)
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
-install-strip:
+    install-strip:
 	$(MAKE) $(INSTALL_PROGRAM) = '$(INSTALL_PROGRAM) -s' install
-distclean : clean
-mostlyclean : clean
-maintainer-clean : distclean
-TAGS : $(SOURCES)
+    distclean : clean
+    mostlyclean : clean
+    maintainer-clean : distclean
+    TAGS : $(SOURCES)
 	etags $(SOURCES)
 	ctags $(SOURCES)
-miditext.info: miditext.texi
+    miditext.info: miditext.texi
 	$(MAKEINFO) miditext.texi
-textmidi.info: textmidi.texi
+    textmidi.info: textmidi.texi
 	$(MAKEINFO) textmidi.texi
-smustextmidi.info: smustextmidi.texi
+    smustextmidi.info: smustextmidi.texi
 	$(MAKEINFO) smustextmidi.texi
-textmidicgm.info: textmidicgm.texi
+    textmidicgm.info: textmidicgm.texi
 	$(MAKEINFO) textmidicgm.texi
-textmidiformedit.info: textmidiformedit.texi
+    textmidiformedit.info: textmidiformedit.texi
 	$(MAKEINFO) textmidiformedit.texi
 

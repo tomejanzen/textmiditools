@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.86
+// TextMIDITools Version 1.0.87
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen
@@ -15,45 +15,23 @@
 #include <utility>
 
 #include "MidiMaps.h"
+#include "OptionName.h"
 
 namespace textmidi
 {
 
-const std::string pppppOpt{"ppppp"};
-inline constexpr char pppppTxt[]{"piano pianissimo pianissimo value integer 0-127"};
-
-const std::string ppppOpt{"pppp"};
-inline constexpr char ppppTxt[]{"pianissimo pianissimo value integer 0-127"};
-
-const std::string pppOpt{"ppp"};
-inline constexpr char pppTxt[]{"piano pianissimo value integer 0-127"};
-
-const std::string ppOpt{"pp"};
-inline constexpr char ppTxt[]{"pianissimo value integer 0-127"};
-
-const std::string pOpt{"p"};
-inline constexpr char pTxt[]{"piano value integer 0-127"};
-
-const std::string mpOpt{"mp"};
-inline constexpr char mpTxt[]{"mezzo-piano value integer 0-127"};
-
-const std::string mfOpt{"mf"};
-inline constexpr char mfTxt[]{"mezzo-forte value integer 0-127"};
-
-const std::string forteOpt{"forte"};
-inline constexpr char forteTxt[]{"forte value integer 0-127"};
-
-const std::string ffOpt{"ff"};
-inline constexpr char ffTxt[]{"fortissimo value integer 0-127"};
-
-const std::string fffOpt{"fff"};
-inline constexpr char fffTxt[]{"forte fortissimo value integer 0-127"};
-
-const std::string ffffOpt{"ffff"};
-inline constexpr char ffffTxt[]{"fortissimo fortissimo value integer 0-127"};
-
-const std::string fffffOpt{"fffff"};
-inline constexpr char fffffTxt[]{"forte fortissimo fortissimo value integer 0-127"};
+const OptionName ppppp_option{"ppppp", "piano pianissimo pianissimo value integer 0-127"};
+const OptionName pppp_option{"pppp", "pianissimo pianissimo value integer 0-127"};
+const OptionName ppp_option{"ppp", "piano pianissimo value integer 0-127"};
+const OptionName pp_option{"pp", "pianissimo value integer 0-127"};
+const OptionName p_option{"p", "piano value integer 0-127"};
+const OptionName mp_option{"mp", "mezzo-piano value integer 0-127"};
+const OptionName mf_option{"mf", "mezzo-forte value integer 0-127"};
+const OptionName forte_option{"forte", "forte value integer 0-127"};
+const OptionName ff_option{"ff", "fortissimo value integer 0-127"};
+const OptionName fff_option{"fff", "forte fortissimo value integer 0-127"};
+const OptionName ffff_option{"ffff", "fortissimo fortissimo value integer 0-127"};
+const OptionName fffff_option{"fffff", "forte fortissimo fortissimo value integer 0-127"};
 
 midi::NumStringMap<int> read_dynamics_configuration(const std::string& dynamics_file_name);
 

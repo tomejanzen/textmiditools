@@ -1,3 +1,34 @@
+2025-02-08     Thomas E. Janzen <janzentome@gmail.com>
+        * OptionName.h, DynamicsOptions.cc, DynamicsOptions.h, Makefile, Makefile.am, 
+        Makefile.in, OptionName.h, Options.h, main.cc, miditext.cc, miditext.texi, 
+        smustextmidi.cc, smustextmidi.texi, textmidi.texi, textmidicgm.cc, 
+        textmidicgm.texi:
+        Bring DynamicalOptions into OptionName class usage.  Create OptionName.h
+        Update documentation.  Fix website name printed by --help.  Text in OptionName
+        can't be a stringview, the storage disasppears; make it a string.
+
+2025-02-07     Thomas E. Janzen <janzentome@gmail.com>
+        * Options.h, main.cc, miditext.cc, smustextmidi.cc, textmidicgm.cc, ChangeLog:
+        use string_view on command-line options texts.
+        * Options.h, main.cc, miditext.cc, smustextmidi.cc, textmidicgm.cc:
+        Write new OptionBundle class for options.
+
+2025-02-06     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: constrain pitch_index to [0..scale.size()) or RestPitchIndex.
+
+2025-02-06     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Sine.py: validate tk::Entry input.
+        Allow scientific notation.
+
+2025-02-03     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, KeyboardWindowscroll.py, Sine.py, VoiceWindow.py,
+	textmidiformedit.py: fix regular expression for key names.
+        Remove trailing spaces; fix an alignment; fix VoiceWindow geometry
+        to not hide the bottom buttons.
+        Make pitch name validation very precise (C-1 to G9; allow neither Cb-1
+        nor G#9).  Add error box popup for bad pitch names and bad length floating
+        point numbers.
+
 2025-02-02     Thomas E. Janzen <janzentome@gmail.com>
         * MusicalForm.cc, textmidiformedit.py: wasn't creating and writing
         the voice follower duration_factor XML element.

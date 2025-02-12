@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -114,24 +114,24 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((help_option.registered_name()),                                                                help_option.text())
-        ((verbose_option.registered_name()),                                                             verbose_option.text())
-        ((stack_tracks_option.registered_name()),                                                         stack_tracks_option.text())
-        ((version_option.registered_name()),                                                             version_option.text())
-        ((form_option.registered_name()), program_options::value<string>(),                              form_option.text())
-        ((XML_form_option.registered_name()), program_options::value<vector<string>>()->multitoken(),    XML_form_option.text())
-        ((xml_update_option.registered_name()),                                                          xml_update_option.text())
-        ((answer_option.registered_name()),                                                              answer_option.text())
-        ((textmidi_out_option.registered_name()), program_options::value<string>(),                          textmidi_out_option.text())
-        ((gnuplot_option.registered_name()),                                                             gnuplot_option.text())
-        ((random_option.registered_name()), program_options::value<string>(),                            random_option.text())
-        ((instruments_option.registered_name()), program_options::value<vector<string>>()->multitoken(), instruments_option.text())
-        ((clamp_scale_option.registered_name()),                                                          clamp_scale_option.text())
-        ((arrangements_option.registered_name()), program_options::value<string>(),                      arrangements_option.text())
-        ((max_events_per_track_option.registered_name()), program_options::value<int>(),                    max_events_per_track_option.text())
-        ((arrangements_period_option.registered_name()), program_options::value<double>(),                arrangements_period_option.text())
-        ((dotted_rhythms_option.registered_name()), program_options::value<string>(),                     dotted_rhythms_option.text())
-        ((rhythm_expression_option.registered_name()), program_options::value<string>(),                  rhythm_expression_option.text())
+        ((help_option.registered_name().c_str()),                                                                         help_option.text().c_str())
+        ((verbose_option.registered_name().c_str()),                                                                      verbose_option.text().c_str())
+        ((stack_tracks_option.registered_name().c_str()),                                                                 stack_tracks_option.text().c_str())
+        ((version_option.registered_name().c_str()),                                                                      version_option.text().c_str())
+        ((form_option.registered_name().c_str()),                 program_options::value<string>(),                       form_option.text().c_str())
+        ((XML_form_option.registered_name().c_str()),             program_options::value<vector<string>>()->multitoken(), XML_form_option.text().c_str())
+        ((xml_update_option.registered_name().c_str()),                                                                   xml_update_option.text().c_str())
+        ((answer_option.registered_name().c_str()),                                                                       answer_option.text().c_str())
+        ((textmidi_out_option.registered_name().c_str()),         program_options::value<string>(),                       textmidi_out_option.text().c_str())
+        ((gnuplot_option.registered_name().c_str()),                                                                      gnuplot_option.text().c_str())
+        ((random_option.registered_name().c_str()),               program_options::value<string>(),                       random_option.text().c_str())
+        ((instruments_option.registered_name().c_str()),          program_options::value<vector<string>>()->multitoken(), instruments_option.text().c_str())
+        ((clamp_scale_option.registered_name().c_str()),                                                                  clamp_scale_option.text().c_str())
+        ((arrangements_option.registered_name().c_str()),         program_options::value<string>(),                       arrangements_option.text().c_str())
+        ((max_events_per_track_option.registered_name().c_str()), program_options::value<int>(),                          max_events_per_track_option.text().c_str())
+        ((arrangements_period_option.registered_name().c_str()),  program_options::value<double>(),                       arrangements_period_option.text().c_str())
+        ((dotted_rhythms_option.registered_name().c_str()),       program_options::value<string>(),                       dotted_rhythms_option.text().c_str())
+        ((rhythm_expression_option.registered_name().c_str()),    program_options::value<string>(),                       rhythm_expression_option.text().c_str())
     ;
     program_options::variables_map var_map;
     try
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     }
     if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.87\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.88\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     if (var_map.count(version_option.option())) [[unlikely]]
     {
 
-        cout << "textmidicgm\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -282,10 +282,8 @@ int main(int argc, char *argv[])
                 exit(0);
             }
         }
-        for (unsigned filectr{}; filectr < glob_data.gl_pathc; ++filectr)
-        {
-            form_filenames.emplace_back(glob_data.gl_pathv[filectr]);
-        }
+        for_each_n(&glob_data.gl_pathv[0], glob_data.gl_pathc, [&](const auto& gdgp) {
+            form_filenames.emplace_back(gdgp); } );
         globfree(&glob_data);
     }
     else
@@ -501,10 +499,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(clamp_scale_option.option()))
     {
-        for (auto& xml_form : xml_forms)
-        {
-            xml_form.clamp_scale_to_instrument_ranges();
-        }
+        ranges::for_each(xml_forms, [](auto& xml_form) { xml_form.clamp_scale_to_instrument_ranges(); } );
     }
 
     Composer composer{gnuplot, answer, track_scramble_type, track_scramble_period, max_events_per_track};

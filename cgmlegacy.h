@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -24,14 +24,7 @@ namespace cgmlegacy
 #pragma pack(4) // crashes without alignment after the bool.
     struct VoiceOld
     {
-        VoiceOld() noexcept
-          : low_pitch_(),
-            high_pitch_(),
-            channel_(),
-            walking_()
-        {
-        }
-
+        VoiceOld() = default;
         VoiceOld(std::uint32_t low_pitch,
                  std::uint32_t high_pitch,
                  std::uint32_t channel,
@@ -43,10 +36,10 @@ namespace cgmlegacy
         {
         }
 
-        std::uint32_t low_pitch_;
-        std::uint32_t high_pitch_;
-        std::uint32_t channel_; // zero-based in VoiceOld
-        bool walking_;
+        std::uint32_t low_pitch_{};
+        std::uint32_t high_pitch_{};
+        std::uint32_t channel_{}; // zero-based in VoiceOld
+        bool walking_{};
         friend std::istream& operator>>(std::istream& is, VoiceOld& v);
     };
 #pragma pack()
@@ -55,9 +48,10 @@ namespace cgmlegacy
     class OldFormElement
     {
       public:
-        OldFormElement(const double mean_period = 60,
-            const double mean_phase = 0, const double range_period = 60,
-            const double range_phase = 0) noexcept
+        OldFormElement() = default;
+        OldFormElement(const double mean_period,
+            const double mean_phase, const double range_period,
+            const double range_phase) noexcept
           : mean_period_{mean_period},
             mean_phase_{mean_phase},
             range_period_{range_period},
@@ -69,10 +63,10 @@ namespace cgmlegacy
         double range_period() const noexcept;
         double range_phase() const noexcept;
       private:
-        double mean_period_;
-        double mean_phase_;
-        double range_period_;
-        double range_phase_;
+        double mean_period_  = 60.0;
+        double mean_phase_   = 0.0;
+        double range_period_ = 60.0;
+        double range_phase_  = 0.0;
     };
 
     // obsolescent but needed for conversions of old files (use --form *.frm).

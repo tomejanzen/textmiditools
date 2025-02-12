@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -40,23 +40,23 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((help_option.registered_name()),                                       help_option.text())
-        ((verbose_option.registered_name()),                                       verbose_option.text())
-        ((version_option.registered_name()),                                       version_option.text())
-        ((textmidi_in_option.registered_name()), program_options::value<string>(),   textmidi_in_option.text())
-        ((midi_out_option.registered_name()), program_options::value<string>(),   midi_out_option.text())
-        ((answer_option.registered_name()),                                       answer_option.text())
-        ((detache_option.registered_name()),   program_options::value<uint32_t>(), detache_option.text())
-        ((lazy_notes_off_option.registered_name()),                                       lazy_notes_off_option.text())
-        ((running_status_option.registered_name()), program_options::value<string>(),   running_status_option.text())
-        ((dynamics_configuration_option.registered_name()), program_options::value<string>(),   dynamics_configuration_option.text())
+        ((help_option.registered_name().c_str()),                                                       help_option.text().c_str())
+        ((verbose_option.registered_name().c_str()),                                                    verbose_option.text().c_str())
+        ((version_option.registered_name().c_str()),                                                    version_option.text().c_str())
+        ((textmidi_in_option.registered_name().c_str()),            program_options::value<string>(),   textmidi_in_option.text().c_str())
+        ((midi_out_option.registered_name().c_str()),               program_options::value<string>(),   midi_out_option.text().c_str())
+        ((answer_option.registered_name().c_str()),                                                     answer_option.text().c_str())
+        ((detache_option.registered_name().c_str()),                program_options::value<uint32_t>(), detache_option.text().c_str())
+        ((lazy_note_off_option.registered_name().c_str()),                                             lazy_note_off_option.text().c_str())
+        ((running_status_option.registered_name().c_str()),         program_options::value<string>(),   running_status_option.text().c_str())
+        ((dynamics_configuration_option.registered_name().c_str()), program_options::value<string>(),   dynamics_configuration_option.text().c_str())
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
 
     try
     {
-        pos_opts_desc.add(textmidi_in_option.registered_name(), -1);
+        pos_opts_desc.add(textmidi_in_option.registered_name().c_str(), -1);
         program_options::store(
             program_options::command_line_parser(argc, argv)
             .options(desc).positional(pos_opts_desc).run(), var_map);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(help_option.option())) [[unlikely]]
     {
-        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.87\n"}
+        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.88\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
         textmidi::TextMidiFeatures::me()->detache(var_map[detache_option.option()].as<uint32_t>());
     }
 
-    if (var_map.count(lazy_notes_off_option.option())) [[unlikely]]
+    if (var_map.count(lazy_note_off_option.option())) [[unlikely]]
     {
         textmidi::TextMidiFeatures::me()->note_off_select(true);
     }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -32,9 +32,7 @@ namespace textmidi
         {
           public:
             explicit Track(int last_pitch_index = 0) noexcept
-              : the_last_time_(0),
-                the_next_time_(0),
-                last_pitch_index_(last_pitch_index)
+              : last_pitch_index_(last_pitch_index)
             {
             }
             TicksDuration the_next_time() const noexcept;
@@ -43,9 +41,9 @@ namespace textmidi
             void the_next_time(const TicksDuration the_next_time) noexcept;
             void last_pitch_index(const int last_pitch_index) noexcept;
           private:
-            TicksDuration the_last_time_;
-            TicksDuration the_next_time_;
-            int last_pitch_index_;
+            TicksDuration the_last_time_{};
+            TicksDuration the_next_time_{};
+            int last_pitch_index_{};
         };
     }
 }

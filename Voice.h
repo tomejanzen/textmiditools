@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -50,17 +50,17 @@ namespace textmidi
                 // This can't be initialized as member definitions
                 // because it is enclosed in VoiceXml (init order issue).
                 Follower()
-                 : follow_{false},
-                   leader_{std::numeric_limits<int>().max()},
-                   interval_type_{IntervalType::Neither},
-                   interval_{},
-                   delay_{rational::RhythmRational{0L}},
-                   duration_factor_{rational::RhythmRational{1L}},
-                   inversion_{},
-                   retrograde_{}
+                  : follow_{},
+                    leader_{std::numeric_limits<int>().max()},
+                    interval_type_{IntervalType::Neither},
+                    interval_{},
+                    delay_{rational::RhythmRational{0L}},
+                    duration_factor_{rational::RhythmRational{1L}},
+                    inversion_{},
+                    retrograde_{}
                 {
                 }
-              public:
+
                 bool follow() const;
                 int leader() const;
                 IntervalType interval_type() const;
@@ -98,14 +98,14 @@ namespace textmidi
                     }
                 }
               private:
-                bool follow_{};
-                int leader_{std::numeric_limits<int>().max()};
-                IntervalType interval_type_{IntervalType::Neither};
-                int interval_{};
-                rational::RhythmRational delay_{rational::RhythmRational{0L}};
-                rational::RhythmRational duration_factor_{rational::RhythmRational{1L}};
-                bool inversion_{};
-                bool retrograde_{};
+                bool follow_;
+                int leader_;
+                IntervalType interval_type_;
+                int interval_;
+                rational::RhythmRational delay_;
+                rational::RhythmRational duration_factor_;
+                bool inversion_;
+                bool retrograde_;
             };
             // There is no serialize for string_view, so these have to be strings.
             explicit VoiceXml(

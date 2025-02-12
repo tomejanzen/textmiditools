@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.87
+** TextMIDITools Version 1.0.88
 ** Copyright © 2024 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -65,10 +65,6 @@ using namespace boost::algorithm; // for to_upper(string)
 using namespace midi;
 using namespace textmidi;
 using namespace textmidi::rational;
-
-#if 0
-extern "C" int32_t yywrap (void) {};
-#endif
 
 // running_status is a MIDI trick to avoid repeating events such as NOTE_ON.
 // "Meta events and sysex events cancel any running status that was in effect."
@@ -210,15 +206,21 @@ namespace
         MidiStreamVector numvec{};
         if (val)
         {
-            int log_base_2{};
+            bitset<64> bs{val};
+            int log_base_2{sizeof(int64_t) * CHAR_BIT};
+            while (!bs.test(--log_base_2))
             {
-                bitset<64> bs{val};
-                while (bs.any())
+                if ((log_base_2 == 0) && !bs.test(log_base_2))
                 {
-                    bs >>= 1;
-                    ++log_base_2;
+                    --log_base_2;
+                    break;
                 }
             }
+            ++log_base_2; // we need the rounded-up log;
+            // we actually want the number of bits from the MSB set bit.
+            // we tested for zero val before entering this block,
+            // so the algorithm above should not produce a -1.
+
             constexpr int seven_bits{7};
             int byte_qty{1};
             if (log_base_2 % seven_bits)
@@ -441,17 +443,7 @@ namespace lazy
 
     int count_dots(const string& rhythmsubstr) noexcept
     {
-        int dotqty{};
-        size_t dotpos{};
-        do {
-            dotpos = rhythmsubstr.find(".", dotpos);
-            if (dotpos != rhythmsubstr.npos)
-            {
-                ++dotqty;
-                ++dotpos;
-            }
-        } while (dotpos < rhythmsubstr.size());
-        return dotqty;
+        return ranges::count(rhythmsubstr, '.');
     }
 
 }
@@ -617,14 +609,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     trackchunk.clear();
     trackchunk.reserve(33000); // about the longest track I've seen
-    trackchunk.push_back('M');
-    trackchunk.push_back('T');
-    trackchunk.push_back('r');
-    trackchunk.push_back('k');
-    trackchunk.push_back(0);
-    trackchunk.push_back(0);
-    trackchunk.push_back(0);
-    trackchunk.push_back(0);
+    trackchunk.insert(trackchunk.end(), MidiTrackChunkName.cbegin(), MidiTrackChunkName.cend());
+    trackchunk.insert(trackchunk.end(), 4, 0);
     total_beats = 0;
     global_total_track_ticks = 0.0;
     // Invalidate running_status at the start of a track.
@@ -1705,8 +1691,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
             trackchunk.push_back(static_cast<MidiStreamAtom>(keytie.key_ & byte7_mask));
 
+#if defined(SELECT_NOTE_OFF_VELOCITY)
             // If we are using a note_off, then use the prevailing dynamic; else 0.
-#if 0
             const MidiStreamAtom velocity{TextMidiFeatures::me()->note_off_select()
                 ? static_cast<MidiStreamAtom>(keytie.velocity_) : note_off_velocity};
 #else
@@ -1716,24 +1702,10 @@ DEVICE_ID (ALL_CALL|{BYTE})
             release_list.push_back(keytie);
         }
     }
-#if 1
+    // don't erase all matches, just one.
     ranges::for_each(release_list,
         [&](KeyTie kt) { auto ktit{ranges::find(lazy::chord, kt)};
                          if (ktit != lazy::chord.end()) { lazy::chord.erase(ktit); } } );
-#else
-    for (auto& keytie : release_list)
-    {
-        const auto kt{keytie};
-        const auto ktit{ranges::find(lazy::chord, kt)};
-        if (ktit != lazy::chord.end())
-        {
-            lazy::chord.erase(ktit);
-        }
-#if 0
-        lazy::chord.remove(kt);
-#endif
-    }
-#endif
     release_list.clear();
 
     if (static_cast<double>(TextMidiFeatures::me()->detache()) < total_duration)

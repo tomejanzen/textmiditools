@@ -213,8 +213,7 @@ with no delay between note-off and note-on events.
 The time is stolen from the preceding note's duration, not added.
 @item @minus{}l, @minus{}@minus{}lazynoteoff
 @cindex @minus{}l, @minus{}@minus{}lazynoteoff
-In LAZY mode, for the ends of a note's duration, use a MIDI note-off
-with the global velocity rather than a note-on with a velocity of zero.
+In LAZY mode, for the ends of a note's duration, use a MIDI note-off.
 @item @minus{}a, @minus{}@minus{}answer
 @cindex @minus{}a, @minus{}@minus{}answer
 If the output textmidi file already exists, ask before overwriting it.

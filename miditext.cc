@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -36,6 +36,7 @@
 #include <filesystem>
 #include <ranges>
 #include <memory>
+#include <algorithm>
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
@@ -66,10 +67,7 @@ namespace
         track_iters.reserve(140); // one file had 140 tracks
         while (midiiter != midiend)
         {
-            if (! ((*(midiiter++) == 'M')
-                && (*(midiiter++) == 'T')
-                && (*(midiiter++) == 'r')
-                && (*(midiiter++) == 'k')))
+            if (!std::equal(midiiter, midiiter + MidiTrackChunkName.size(), MidiTrackChunkName.begin()))
             {
                 const auto track_num{track_iters.size() + 1};
                 if (track_num > expected_track_qty)
@@ -84,6 +82,7 @@ namespace
                 }
                 return;
             }
+            midiiter += MidiTrackChunkName.size();
             int32_t num{};
             copy(midiiter, midiiter + sizeof(num), io_bytes(num));
             midiiter += sizeof(num);
@@ -141,17 +140,17 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((help_option.registered_name()),                                       help_option.text())
-        ((verbose_option.registered_name()),                                    verbose_option.text())
-        ((version_option.registered_name()),                                    version_option.text())
-        ((midi_in_option.registered_name()), program_options::value<string>(),     midi_in_option.text())
-        ((answer_option.registered_name()),                                     answer_option.text())
-        ((textmidi_out_option.registered_name()), program_options::value<string>(), textmidi_out_option.text())
-        ((quantize_option.registered_name()), program_options::value<string>(), quantize_option.text())
-        ((lazy_option.registered_name()),                                       lazy_option.text())
-        ((dynamics_configuration_option.registered_name()), program_options::value<string>(),   dynamics_configuration_option.text())
-        ((dotted_rhythms_option.registered_name()),    program_options::value<string>(), dotted_rhythms_option.text())
-        ((rhythm_expression_option.registered_name()), program_options::value<string>(), rhythm_expression_option.text())
+        ((help_option.registered_name().c_str()),                                                     help_option.text().c_str())
+        ((verbose_option.registered_name().c_str()),                                                  verbose_option.text().c_str())
+        ((version_option.registered_name().c_str()),                                                  version_option.text().c_str())
+        ((midi_in_option.registered_name().c_str()),                program_options::value<string>(), midi_in_option.text().c_str())
+        ((answer_option.registered_name().c_str()),                                                   answer_option.text().c_str())
+        ((textmidi_out_option.registered_name().c_str()),           program_options::value<string>(), textmidi_out_option.text().c_str())
+        ((quantize_option.registered_name().c_str()),               program_options::value<string>(), quantize_option.text().c_str())
+        ((lazy_option.registered_name().c_str()),                                                     lazy_option.text().c_str())
+        ((dynamics_configuration_option.registered_name().c_str()), program_options::value<string>(), dynamics_configuration_option.text().c_str())
+        ((dotted_rhythms_option.registered_name().c_str()),         program_options::value<string>(), dotted_rhythms_option.text().c_str())
+        ((rhythm_expression_option.registered_name().c_str()),      program_options::value<string>(), rhythm_expression_option.text().c_str())
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -173,7 +172,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.87\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.88\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -182,7 +181,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -372,7 +371,7 @@ int main(int argc, char *argv[])
     find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
     vector<DelayEvents> midi_delay_event_tracks(stream_length_pairs.size());
 
-#define DEBUG_THREADLESS
+#undef DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
     for (int i{}; auto& ti : stream_length_pairs)
     {

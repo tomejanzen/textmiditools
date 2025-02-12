@@ -1,3 +1,38 @@
+2025-02-11     Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, miditext.cc, textmidi.l: 
+        Add definitions for names of MIDI header and track chunks, and use
+        appropriately.  Use more C++ library e.g. std::equal.  Try to 
+        clean up MidiHeader initialization.
+        Neaten command-line options registrations for readability.
+        * smustextmidi.cc: use MidiStreamArray4 and C++ library copy and equal.
+        * Options.h, textmidi.texi: clarify use of note-offs in lazy mode.
+        The velocity selection feature is currently disabled.
+
+2025-02-10     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, Composer.h, DynamicsOptions.cc, DynamicsOptions.h, Midi.h, 
+        MidiEvents.h, MidiMaps.h, OptionName.h, RandomDouble.h, RandomInt.h, 
+        RhythmRational.h, Track.h, Voice.h, cgmlegacy.h, main.cc, miditext.cc, 
+        smustextmidi.cc, textmidi.h, textmidicgm.cc:
+        Core Guidelines: don't use c-tor defaults and member initialization syntax
+        for default member values.
+        * Composer.cc: use none_of(), rather than !any_of().
+        * textmidi.l: Use bitset::test to find the number of bits to encode as an
+        extended MIDI value.
+
+2025-02-09     Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: loop over followers_graph after 200 was using wrong
+        terminating lengths that happened to be the same.
+	* Makefile, Makefile.am: remove extra install-strip target.
+	* OptionName.h: fiddle with const correctness, get nowhere.
+	* miditext.cc: undefine debugging macro for unthreaded debugging.
+        * textmidicgm.cc: use for for_each to replace for loops.
+
+2025-02-09     Thomas E. Janzen <janzentome@gmail.com>
+        * textmidiformedit.py: set default minimum note length to 0.00128.
+        * MusicalFOrm.cc: Set random min note length to at least 0.00128,
+        the length of time for a note-on/note-off pair with no status bytes.
+        * examples/textmidicgm/: make min_note_len_ 0.00128 seconds.
+
 2025-02-08     Thomas E. Janzen <janzentome@gmail.com>
         * OptionName.h, DynamicsOptions.cc, DynamicsOptions.h, Makefile, Makefile.am, 
         Makefile.in, OptionName.h, Options.h, main.cc, miditext.cc, miditext.texi, 

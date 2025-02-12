@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -28,7 +28,7 @@ const textmidi::OptionName dynamics_configuration_option{"dynamics_configuration
 const textmidi::OptionName dotted_rhythms_option{"dotted_rhythms", "true or false", 'w'};
 const textmidi::OptionName rhythm_expression_option{"rhythmexpression", "rational or simplecontinuedfraction", 'e'};
 const textmidi::OptionName detache_option{"detache", "number of ticks to cheat notes to separate consecutive notes", 'd'};
-const textmidi::OptionName lazy_notes_off_option{"lazynotesoff", "To end notes, write MIDI note-offs with current dynamic rather than note-ons with velocity 0", 'l'};
+const textmidi::OptionName lazy_note_off_option{"lazynoteoff", "To end a note in lazy mode, write a MIDI note-off instead of a note-on with zero velocity.", 'l'};
 const textmidi::OptionName running_status_option{"runningstatus", "with {standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta }; default is standard", 'n'};
 const textmidi::OptionName quantize_option{"quantize", "quantization ratio in quotes: \"1/32\"", 'q'};
 const textmidi::OptionName lazy_option{"lazy", "Attempt writing in lazy mode", 'l'};

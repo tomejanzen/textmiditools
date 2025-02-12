@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -26,8 +26,7 @@ namespace midi
     {
       public:
         NumStringMap(std::initializer_list<const std::pair<NumType, std::string_view> > in_initlist) noexcept
-          : num_string_map_{in_initlist.begin(), in_initlist.end()},
-            string_num_map_()
+          : num_string_map_{in_initlist.begin(), in_initlist.end()}
         {
             std::for_each(in_initlist.begin(), in_initlist.end(),
                 [this](const std::pair<const NumType, const std::string_view>& p)
@@ -35,8 +34,7 @@ namespace midi
         }
 
         NumStringMap(std::initializer_list<std::pair<const std::string_view, NumType> > in_initlist) noexcept
-          : num_string_map_(),
-            string_num_map_(in_initlist)
+          : string_num_map_(in_initlist)
         {
             std::for_each(in_initlist.begin(), in_initlist.end(),
                 [this](const std::pair<const std::string_view, const NumType>& p)
@@ -117,8 +115,8 @@ namespace midi
         }
 
       private:
-        std::map<NumType, std::string_view> num_string_map_;
-        std::map<std::string_view, NumType> string_num_map_;
+        std::map<NumType, std::string_view> num_string_map_{};
+        std::map<std::string_view, NumType> string_num_map_{};
     };
 
     extern const NumStringMap<int> smpte_fps_map;

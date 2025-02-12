@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -24,8 +24,7 @@ namespace textmidi
           public:
             using result_type = double;
             explicit RandomDouble(double low = 0.0, double high = 1.0) noexcept
-              : re_{},
-                dist_{low, high}
+              : dist_{low, high}
             {
                 std::chrono::time_point<std::chrono::system_clock>
                     today(std::chrono::system_clock::now());
@@ -39,8 +38,8 @@ namespace textmidi
                 return dist_(re_);
             }
           private:
-            std::default_random_engine re_;
-            std::uniform_real_distribution<> dist_;
+            std::default_random_engine re_{};
+            std::uniform_real_distribution<> dist_{};
         };
 
     }

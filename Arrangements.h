@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -73,10 +73,7 @@ namespace arrangements
     class Arrangements : public ArrangementsABC
     {
       public:
-        Arrangements() :
-            ArrangementsABC(), arrangements_impl_{}
-        {
-        }
+        Arrangements()  = default;
         int counter() const noexcept override;
         void counter(int counter) noexcept override;
         void inc() noexcept;

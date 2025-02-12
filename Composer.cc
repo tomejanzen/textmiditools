@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,8 +15,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <iterator>
+#undef TEXTMIDICGM_PRINT
+#if defined(TEXTMIDICGM_PRINT)
 #include <iostream>
 #include <iomanip>
+#endif
 #include <sstream>
 #include <filesystem>
 #include <algorithm>
@@ -151,17 +154,17 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
     // For all follower tracks
     //
     // Square matrix to represent the follower graph.
-    // 1 follows 2
-    // 2 follows 0
-    // 3 follows 0
+    // 1 is follower of 2
+    // 2 is follower of 0
+    // 3 is follower of 0
     // |  F  F  F  F  |
     // |  F  F  T  F  |
     // |  T  F  F  F  |
     // |  T  F  F  F  |
     //
-    // 0 follows 1
-    // 1 follows 2
-    // 2 follows 3
+    // 0 is follower of 1
+    // 1 is follower of 2
+    // 2 is follower of 3
     // |  F  T  F  F  |
     // |  F  F  T  F  |
     // |  F  F  F  T  |
@@ -172,27 +175,26 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
     // Then generate the voices backwards from the leader to all followers in its column,
     // and follow the leaders to the next followers.
 
-    // Make a square matrix of false.
+    // Make a square matrix of false. followers_graph[followers][leaders]
     vector<vector<bool>> followers_graph(xml_form.voices().size(), vector<bool>(xml_form.voices().size(), false));
 
-    for (int tr{}; tr < static_cast<int>(xml_form.voices().size()); ++tr)
+    for (int follower{}; follower < static_cast<int>(xml_form.voices().size()); ++follower)
     {
-        if (xml_form.voices()[tr].follower().follow()) [[unlikely]]
+        if (xml_form.voices()[follower].follower().follow())
         {
-            if (xml_form.voices()[tr].follower().leader() < static_cast<int>(followers_graph.size()))
+            if (xml_form.voices()[follower].follower().leader() < static_cast<int>(xml_form.voices().size()))
             {
-                followers_graph[xml_form.voices()[tr].follower().leader()][tr] = true;
-                if (xml_form.voices()[tr].follower().leader() == tr)
+                followers_graph[follower][xml_form.voices()[follower].follower().leader()] = true;
+                if (xml_form.voices()[follower].follower().leader() == follower)
                 {
                     const string errstr{((((string{__FILE__ } += ':')
                         += BOOST_PP_STRINGIZE(__LINE__)) += " voice ")
-                        += lexical_cast<string>(tr)) += " is a self-follower!\n"};
+                        += lexical_cast<string>(follower)) += " is a self-follower!\n"};
                     cerr << errstr;
                 }
             }
         }
     }
-#undef TEXTMIDICGM_PRINT
 #if defined(TEXTMIDICGM_PRINT)
     for (auto& row : followers_graph)
     {
@@ -203,17 +205,11 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
     // This is not wrong to resize. 2023-02-20
     leaders_topo_sort.resize(followers_graph.size());
 
-    for (int follower_index{}; follower_index < static_cast<int>(followers_graph.size()); ++follower_index)
+    // Check each voice for being only a leader and not a follower.
+    for (int follower_index{}; follower_index < static_cast<int>(followers_graph[0].size()); ++follower_index)
     {
-        bool leader_only{true};
-        for (int leader_index{}; leader_index < static_cast<int>(followers_graph[0].size()); ++leader_index)
-        {
-            if (followers_graph[leader_index][follower_index]) // if this is a follower
-            {
-                leader_only = false;
-            }
-        }
-        if (leader_only)
+        const auto& vb{followers_graph[follower_index]};
+        if (ranges::none_of(vb, [&](bool b) { return b; } ))
         {
             leaders_topo_sort[0].push_back(follower_index); // if not a follower save it.
         }
@@ -225,14 +221,14 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 #endif
     for (int g{1}; g < static_cast<int>(followers_graph.size()); ++g)
     {
-        for (int follower_index{}; follower_index < static_cast<int>(followers_graph[0].size()); ++follower_index)
+        for (int follower_index{}; follower_index < static_cast<int>(followers_graph.size()); ++follower_index)
         {
-            for (int leader_index{}; leader_index < static_cast<int>(followers_graph.size()); ++leader_index)
+            for (int leader_index{}; leader_index < static_cast<int>(followers_graph[0].size()); ++leader_index)
              {
 #if defined(TEXTMIDICGM_PRINT)
-                cout << "** " << leader_index << ' ' << follower_index << ' ' << followers_graph[leader_index][follower_index] << '\n';
+                cout << "** " << leader_index << ' ' << follower_index << ' ' << boolalpha << followers_graph[leader_index][follower_index] << '\n';
 #endif
-                if (followers_graph[leader_index][follower_index]) // if this is a follower
+                if (followers_graph[follower_index][leader_index]) // if this is a follower
                 {
                     const auto it{ranges::find(leaders_topo_sort[g - 1], leader_index)};
                     if (it != leaders_topo_sort[g - 1].end())
@@ -248,11 +244,8 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
     }
 #if defined(TEXTMIDICGM_PRINT)
     cout << "order of composing:\n";
-    for (auto& lts : leaders_topo_sort)
-    {
-        ranges::copy(lts, ostream_iterator<int>(cout, " "));
-        cout << '\n';
-    }
+    ranges::for_each(leaders_topo_sort, [&](auto lts) {
+        ranges::copy(lts, ostream_iterator<int>(cout, " ")); cout << '\n'; } );
 #endif
 }
 
@@ -268,11 +261,8 @@ void textmidi::cgm::Composer::build_track_scramble_sequences(vector<vector<int>>
 #undef TEXTMIDICGM_PRINT
 #if defined(TEXTMIDICGM_PRINT)
     cout << "track_scramble_sequences\n";
-    for (auto tss : track_scramble_sequences)
-    {
-        ranges::copy(tss, ostream_iterator<int>(cout, " "));
-        cout << '\n';
-    }
+    ranges::for_each(track_scramble_sequences, [&](auto tss) { ranges::copy(tss, ostream_iterator<int>(cout, " "));
+        cout << '\n'; } );
 #endif
 #undef TEXTMIDICGM_PRINT
 }
@@ -299,12 +289,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
     track_scramble_.arrangements_ = ArrangementsFactory(track_scramble_.scramble_,
         xml_form.voices().size());
 
-    for (auto v : xml_form.voices())
-    {
-        tessitura.emplace_back(
-            textmidi::pitchname_to_keynumber(v.low_pitch()).first,
-            textmidi::pitchname_to_keynumber(v.high_pitch()).first);
-    }
+    ranges::for_each(xml_form.voices(), [&](auto v) {
+        tessitura.emplace_back( textmidi::pitchname_to_keynumber(v.low_pitch()).first,
+            textmidi::pitchname_to_keynumber(v.high_pitch()).first); } );
     KeyScaleSeq key_scale;
     xml_form.string_scale_to_int_scale(key_scale);
     const TicksDuration time_step{xml_form.pulse()
@@ -719,21 +706,20 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
             += "\nLAZY\nchan ") += lexical_cast<string>(voice.channel())) += '\n';
         textmidi_file << textmidi_str;
         int lastVel{128};
-        for (const auto&  eventRef : track_note_events[track_index])
+        ranges::for_each(track_note_events[track_index], [&](const auto& eventRef)
         {
             // round the duration in seconds to be in pulses.
             // This program assumes that one quarter note
             // is one second and the tempo
             // is M.M. quarter = 60.
             //
-            if ((RestPitch != eventRef.pitch())
-               && (eventRef.vel() != lastVel))
+            if ((RestPitch != eventRef.pitch()) && (eventRef.vel() != lastVel))
             {
                 textmidi_file << "vel " << eventRef.vel() << " ";
                 lastVel = eventRef.vel();
             }
             textmidi_file << eventRef << '\n';
-        }
+        });
         textmidi_file << "ticks \"End of Track\"\nEND_LAZY\nEND_OF_TRACK\n";
         ++track_index;
     }

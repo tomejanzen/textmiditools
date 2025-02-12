@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -30,16 +30,17 @@ namespace textmidi
           public:
             struct TrackScramble
             {
-                explicit constexpr TrackScramble(arrangements::PermutationEnum scramble = arrangements::PermutationEnum::Identity,
-                    TicksDuration period = TicksDuration{120LU * TicksPerQuarter}) noexcept
+                TrackScramble() = default;
+                explicit constexpr TrackScramble(arrangements::PermutationEnum scramble,
+                    TicksDuration period) noexcept
                   : scramble_(scramble),
                     period_(period),
                     arrangements_{}
                 {}
 
-                arrangements::PermutationEnum scramble_;
-                TicksDuration     period_;
-                std::shared_ptr<arrangements::Arrangements> arrangements_;
+                arrangements::PermutationEnum scramble_{arrangements::PermutationEnum::Identity};
+                TicksDuration     period_{120LU * TicksPerQuarter};
+                std::shared_ptr<arrangements::Arrangements> arrangements_{};
             };
 
             Composer(bool gnuplot, bool answer, arrangements::PermutationEnum track_scramble,

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -23,14 +23,7 @@ namespace textmidi
     struct TextMidiFeatures
     {
       public:
-        TextMidiFeatures() noexcept
-          : text_filename_{"unknown.txt"},
-            midi_filestr_{},
-            line_ctr_{1},
-            detache_{0},
-            note_off_select_{},
-            verbose_{}
-        {}
+        TextMidiFeatures() = default;
         static std::unique_ptr<TextMidiFeatures>& me()
         {
             if (!me_)
@@ -106,22 +99,22 @@ namespace textmidi
 
         // The input file name, selected by command-line options, is used in error
         // messages.
-        std::string text_filename_;
+        std::string text_filename_{"unknown.txt"};
         // The ofstream of the binary standard MIDI output file.
-        std::ofstream midi_filestr_;
+        std::ofstream midi_filestr_{};
         // line_ctr counts the lines in the input text file so that error messages can
         // refer to the line on which the error was encountered.
-        int line_ctr_;
+        int line_ctr_{1};
         // detache is set by a command-line argument for the separation of consecutive
         // notes.  Defaults to 10.
-        std::uint32_t detache_;
+        std::uint32_t detache_{};
         // lazy_note_off_select is set by a command-line argument.  If true, then
         // in LAZY or BRIEF mode, note_off events (with the global velocity) are
         // written as the endings of notes; else note_ons (with a zero velocity) are
         // used to end notes.
-        bool note_off_select_;
+        bool note_off_select_{};
         // Verbose flag taken from command-line options
-        bool verbose_;
+        bool verbose_{};
     };
 }
 

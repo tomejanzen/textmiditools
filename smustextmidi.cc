@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -49,6 +49,7 @@
 #include <filesystem>
 #include <ranges>
 #include <memory>
+#include <algorithm>
 
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
@@ -89,21 +90,15 @@ namespace
     };
 #pragma pack()
 
-    using IdType = std::array<unsigned char, 4>;
-    constexpr IdType FormId{'F', 'O', 'R', 'M'};
-    constexpr IdType SmusId{'S', 'M', 'U', 'S'};
-    constexpr IdType ShdrId{'S', 'H', 'D', 'R'}; // SMUS header
-    constexpr IdType NameId{'N', 'A', 'M', 'E'};
-    constexpr IdType Ins1Id{'I', 'N', 'S', '1'};
-    constexpr IdType CopyId{'(', 'c', ')', ' '}; // optional
-    constexpr IdType AuthId{'A', 'U', 'T', 'H'}; // optional
-    constexpr IdType TrakId{'T', 'R', 'A', 'K'};
-    constexpr IdType AnnoId{'A', 'N', 'N', 'O'}; // optional
-
-    bool compare_id(IdType id, uint8_t rhs[4])
-    {
-        return std::equal(id.begin(), id.end(), &rhs[0]);
-    }
+    constexpr MidiStreamArray4 FormId{'F', 'O', 'R', 'M'};
+    constexpr MidiStreamArray4 SmusId{'S', 'M', 'U', 'S'};
+    constexpr MidiStreamArray4 ShdrId{'S', 'H', 'D', 'R'}; // SMUS header
+    constexpr MidiStreamArray4 NameId{'N', 'A', 'M', 'E'};
+    constexpr MidiStreamArray4 Ins1Id{'I', 'N', 'S', '1'};
+    constexpr MidiStreamArray4 CopyId{'(', 'c', ')', ' '}; // optional
+    constexpr MidiStreamArray4 AuthId{'A', 'U', 'T', 'H'}; // optional
+    constexpr MidiStreamArray4 TrakId{'T', 'R', 'A', 'K'};
+    constexpr MidiStreamArray4 AnnoId{'A', 'N', 'N', 'O'}; // optional
 
     const string SMUSOpt{"smus"};
     constexpr char SMUSTxt[]{"input binary SMUS file"};
@@ -113,15 +108,15 @@ int main(int argc, char *argv[])
 {
     program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((help_option.registered_name()),                                       help_option.text())
-        ((verbose_option.registered_name()),                                    verbose_option.text())
-        ((version_option.registered_name()),                                    version_option.text())
-        ((smus_option.registered_name()), program_options::value<string>(),     SMUSTxt)
-        ((answer_option.registered_name()),                                     answer_option.text())
-        ((textmidi_out_option.registered_name()), program_options::value<string>(), textmidi_out_option.text())
-        ((dynamics_configuration_option.registered_name()), program_options::value<string>(),   dynamics_configuration_option.text())
-        ((dotted_rhythms_option.registered_name()),    program_options::value<string>(), dotted_rhythms_option.text())
-        ((rhythm_expression_option.registered_name()), program_options::value<string>(), rhythm_expression_option.text())
+        ((help_option.registered_name().c_str()),                                                     help_option.text().c_str())
+        ((verbose_option.registered_name().c_str()),                                                  verbose_option.text().c_str())
+        ((version_option.registered_name().c_str()),                                                  version_option.text().c_str())
+        ((smus_option.registered_name().c_str()),                   program_options::value<string>(), SMUSTxt)
+        ((answer_option.registered_name().c_str()),                                                   answer_option.text().c_str())
+        ((textmidi_out_option.registered_name().c_str()),           program_options::value<string>(), textmidi_out_option.text().c_str())
+        ((dynamics_configuration_option.registered_name().c_str()), program_options::value<string>(), dynamics_configuration_option.text().c_str())
+        ((dotted_rhythms_option.registered_name().c_str()),         program_options::value<string>(), dotted_rhythms_option.text().c_str())
+        ((rhythm_expression_option.registered_name().c_str()),      program_options::value<string>(), rhythm_expression_option.text().c_str())
     ;
     program_options::positional_options_description pos_opts_desc;
     program_options::variables_map var_map;
@@ -139,12 +134,12 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    uint8_t ID_int[4];
+    MidiStreamArray4 ID_int{};
     vector<char> smus_score{};
 
     if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.87\n"}
+        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.88\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -153,7 +148,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.87\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -170,7 +165,6 @@ int main(int argc, char *argv[])
             cerr << errstr;
             exit(EXIT_SUCCESS);
         }
-
     }
     else
     {
@@ -248,7 +242,7 @@ int main(int argc, char *argv[])
         cin >> answerstr;
         if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
         {
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
     }
     //
@@ -266,7 +260,7 @@ int main(int argc, char *argv[])
         }
         smus_file.seekg(0);
         smus_file.read(io_bytes(ID_int), sizeof ID_int);
-        if (!compare_id(FormId, ID_int))
+        if (!equal(FormId.begin(), FormId.end(), ID_int.begin()))
         {
             cerr << "Not a FORM file\n";
             exit(EXIT_SUCCESS);
@@ -288,16 +282,16 @@ int main(int argc, char *argv[])
 
     // check for SMUS
     unsigned int smus_index{};
-    memcpy((char *)ID_int, &smus_score[smus_index], sizeof ID_int);
-    if (!compare_id(SmusId, ID_int))
+    copy_n(&smus_score[smus_index], ID_int.size(), ID_int.begin());
+    if (!equal(SmusId.begin(), SmusId.end(), ID_int.begin()))
     {
         cerr << "Input file was not an SMUS file!?\n";
         exit(EXIT_SUCCESS);
     }
     smus_index += sizeof ID_int;
     // check for SHDR
-    memcpy((char *)ID_int, &smus_score[smus_index], sizeof ID_int);
-    if (!compare_id(ShdrId, ID_int))
+    copy_n(&smus_score[smus_index], ID_int.size(), ID_int.begin());
+    if (!equal(ShdrId.begin(), ShdrId.end(), ID_int.begin()))
     {
         cerr << "No SHDR chunk!\n";
         exit(EXIT_SUCCESS);
@@ -334,7 +328,7 @@ int main(int argc, char *argv[])
         smus_index += sizeof len;
         len = htobe32(len);
 
-        if (compare_id(NameId, ID_int))
+        if (equal(NameId.begin(), NameId.end(), ID_int.begin()))
         {
             char score_name[1024];
             memcpy((char *) score_name, &smus_score[smus_index], len);
@@ -343,7 +337,7 @@ int main(int argc, char *argv[])
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
         }
 
-        if (compare_id(CopyId, ID_int))
+        if (equal(CopyId.begin(), CopyId.end(), ID_int.begin()))
         {
             char copyright[1024];
             memcpy((char *) copyright, &smus_score[smus_index], len);
@@ -352,7 +346,7 @@ int main(int argc, char *argv[])
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
         }
 
-        if (compare_id(AuthId, ID_int))
+        if (equal(AuthId.begin(), AuthId.end(), ID_int.begin()))
         {
             char author[1024];
             memcpy((char *) author, &smus_score[smus_index], len);
@@ -361,7 +355,7 @@ int main(int argc, char *argv[])
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
         }
 
-        if (compare_id(Ins1Id, ID_int))
+        if (equal(Ins1Id.begin(), Ins1Id.end(), ID_int.begin()))
         {
             // copy instrument
             // get length of instrument name
@@ -380,7 +374,7 @@ int main(int argc, char *argv[])
         // Instrument index is the number of instruments now.
         // I hope all the instruments have been listed by now.
         //
-        if (compare_id(TrakId, ID_int))
+        if (equal(TrakId.begin(), TrakId.end(), ID_int.begin()))
         {
             in_track = true;
             // len is the byte length of the track
@@ -427,10 +421,10 @@ int main(int argc, char *argv[])
     {
         textmidi_file << "\nSTARTTRACK\n";
         memcpy((char *) &ID_int, &smus_score[smus_index], sizeof ID_int);
-        if (!compare_id(TrakId, ID_int))
+        if (!equal(TrakId.begin(), TrakId.end(), ID_int.begin()))
         {
             cerr << "This was supposed to be a TRACK\n";
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
         smus_index += sizeof ID_int;
         uint32_t bytes_per_track{};

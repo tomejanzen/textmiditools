@@ -479,3 +479,39 @@
       programs and min_note_len_.  Add positions also.
       Add disclaimer re: AI.
 
+    * Version 1.0.85
+    C++-iness improvements.
+    textmidicgm:
+      duration_factor
+        Add duration_factor to version 3 of Follower under MusicalForm.
+        Add duration_factor to the python textmidiformedit.py.
+      Fixes
+        Fix crash of pitch_index being negative in textmidicgm.
+        Fix removing members of release_list from chord.
+    After upload, found pitch_index < 0 in Composer.cc in
+    textmidicgm; also textmidiformedit.py was not writing out
+    duration_factor.
+
+    * Version 1.0.86
+    Make sure that textmidiformedit.py creates the voice follower 
+    duration_factor XML element.  Also random musical forms could have
+    self-followers, so just disable a self-following voice's following.
+    Fix missing comma after a "C0" that caused the non-note "C0D0" to appear
+    in a scale.
+    Changed MusicalForm.cc to pull out the random scales index.  Fix out 
+    of range (negative) pitch index in textmidicgm, and get textmidiformedit.py 
+    to write duration_factor.
+
+    * Version 1.0.87
+    textmidicgm : Constrain pitch_index to [0..scale.size()) or RestPitchIndex,
+    to fix a crash on negative pitch_index.
+
+    Design: Write new OptionName class for command-line options management.
+    Apply to command-line options and to dynamical options.
+    Fix website name printed by --help.  Update documentation.
+
+    textmidiformedit.py: validate tk::Entry input and display error alerts.
+    Allow scientific notation in floating point type Entry boxes.
+    Size VoiceWindow geometry to not hide the bottom buttons.
+
+    textmidi: Refine regular expression for key names to constrain precisely as (C-1..G9).

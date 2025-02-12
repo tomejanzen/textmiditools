@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TextMIDITools Version 1.0.87
+# TextMIDITools Version 1.0.88
 # Copyright © 2024 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -302,7 +302,10 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['name'] = 'defaults'
         self.xml_form_dict['copyright'] = 'copyright unspecified'
         self.xml_form_dict['len'] = 600.0
-        self.xml_form_dict['min_note_len'] = 0.0
+        # at the old MIDI baud rate a note_on+note_off with running status
+        # (i.e., no status byte) is 0.00128 seconds.  Zero can
+        # make scores that don't advance in time, or make players crash.
+        self.xml_form_dict['min_note_len'] = 0.00128
         self.xml_form_dict['max_note_len'] = 2.0
         self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
         self.xml_form_dict['pulse'] = 8.0
@@ -862,7 +865,7 @@ class XmlForm(tkinter.Tk):
         about_window = tkinter.Text(about_top)
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
-        about_window.insert('1.0', 'TextMIDITools Version 1.0.87\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
+        about_window.insert('1.0', 'TextMIDITools Version 1.0.88\nCopyright © 2024 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\ntextmidiformedit musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
         about_window['state'] = 'disabled'
         about_window.focus()
 

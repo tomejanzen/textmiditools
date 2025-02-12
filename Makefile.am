@@ -90,8 +90,6 @@ GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/miditext$(EXEEXT)
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/smustextmidi$(EXEEXT)
 	/usr/bin/env rm -f $(DESTDIR)$(bindir)/textmidicgm$(EXEEXT)
-    install-strip:
-	$(MAKE) $(INSTALL_PROGRAM) = '$(INSTALL_PROGRAM) -s' install
     distclean : clean
     mostlyclean : clean
     maintainer-clean : distclean

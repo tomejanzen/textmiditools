@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen
@@ -21,16 +21,16 @@ namespace textmidi
 {
 
 const OptionName ppppp_option{"ppppp", "piano pianissimo pianissimo value integer 0-127"};
-const OptionName pppp_option{"pppp", "pianissimo pianissimo value integer 0-127"};
-const OptionName ppp_option{"ppp", "piano pianissimo value integer 0-127"};
-const OptionName pp_option{"pp", "pianissimo value integer 0-127"};
-const OptionName p_option{"p", "piano value integer 0-127"};
-const OptionName mp_option{"mp", "mezzo-piano value integer 0-127"};
-const OptionName mf_option{"mf", "mezzo-forte value integer 0-127"};
+const OptionName pppp_option {"pppp",  "pianissimo pianissimo value integer 0-127"};
+const OptionName ppp_option  {"ppp",   "piano pianissimo value integer 0-127"};
+const OptionName pp_option   {"pp",    "pianissimo value integer 0-127"};
+const OptionName p_option    {"p",     "piano value integer 0-127"};
+const OptionName mp_option   {"mp",    "mezzo-piano value integer 0-127"};
+const OptionName mf_option   {"mf",    "mezzo-forte value integer 0-127"};
 const OptionName forte_option{"forte", "forte value integer 0-127"};
-const OptionName ff_option{"ff", "fortissimo value integer 0-127"};
-const OptionName fff_option{"fff", "forte fortissimo value integer 0-127"};
-const OptionName ffff_option{"ffff", "fortissimo fortissimo value integer 0-127"};
+const OptionName ff_option   {"ff",    "fortissimo value integer 0-127"};
+const OptionName fff_option  {"fff",   "forte fortissimo value integer 0-127"};
+const OptionName ffff_option {"ffff",  "fortissimo fortissimo value integer 0-127"};
 const OptionName fffff_option{"fffff", "forte fortissimo fortissimo value integer 0-127"};
 
 midi::NumStringMap<int> read_dynamics_configuration(const std::string& dynamics_file_name);

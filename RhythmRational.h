@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.87
+// TextMIDITools Version 1.0.88
 //
 // RhythmRational 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -46,6 +46,7 @@ namespace textmidi
             public:
                 using value_type = std::int64_t;
                 using SimpleContinuedFraction = std::pair<value_type, std::list<value_type>>;
+
                 explicit constexpr RhythmRational(std::int64_t numerator = 0L,
                     std::int64_t denominator = 1L, bool reduce_it = true)
                   : numerator_{numerator},
@@ -116,8 +117,8 @@ namespace textmidi
                     arc & BOOST_SERIALIZATION_NVP(denominator_);
                 }
             private:
-                std::int64_t numerator_;
-                std::int64_t denominator_;
+                std::int64_t numerator_{0L};
+                std::int64_t denominator_{1L};
                 std::int64_t most_positive_equal_divisor() const;
                 std::int64_t most_positive_equal_divisor(std::int64_t a, std::int64_t b) const;
                 RhythmRational& unreduced_product(const RhythmRational& multiplier);
@@ -147,15 +148,15 @@ namespace textmidi
 
         struct PrintRhythmRational : public PrintRhythmBase
         {
-            PrintRhythmRational(bool dotted_rhythm = true)
+            PrintRhythmRational() = default;
+            PrintRhythmRational(bool dotted_rhythm)
                 : dotted_rhythm_{dotted_rhythm}
             {
             }
             std::ostream& operator()(std::ostream& , const RhythmRational& tr) override;
           private:
             long int convert_to_dotted_rhythm(RhythmRational& q);
-            bool dotted_rhythm_;
-
+            bool dotted_rhythm_{true};
         };
 
         struct PrintRhythmSimpleContinuedFraction : public PrintRhythmBase

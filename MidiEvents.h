@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -106,7 +106,7 @@ namespace textmidi
         int events_to_next_note_on_{};
     };
 
-    class MidiEvent : MidiEventABC
+    class MidiEvent : public MidiEventABC
     {
       public:
         MidiEvent() = default;
@@ -118,10 +118,6 @@ namespace textmidi
         MidiEvent& operator=(const MidiEvent& ) = default;
         MidiEvent& operator=(MidiEvent&& ) = default;
         virtual ~MidiEvent() = default;
-        //
-        // Write the textmidi version of a MIDI event to os.
-        virtual std::ostream& text(std::ostream& ) const = 0;
-        //
         // Report the accumulated number of ticks so far in this track.
         constexpr std::int64_t ticks_accumulated() const noexcept;
         void ticks_accumulated(std::int64_t ) noexcept;
@@ -136,12 +132,12 @@ namespace textmidi
         void wholes_to_next_event(const rational::RhythmRational& ) noexcept;
         int events_to_next_note_on() const noexcept;
         void events_to_next_note_on(int events_to_next_note_on) noexcept;
-      private:
-        MidiEventImpl midi_event_impl_{};
         //
         // Interpret the bytes of the MIDI binary stream and save
         // the data in the class.
-        virtual void consume_stream(midi::MidiStreamIterator& ) = 0;
+        virtual void consume_stream(midi::MidiStreamIterator& ) noexcept = 0;
+      private:
+        MidiEventImpl midi_event_impl_{};
     };
 
     std::ostream& operator<<(std::ostream& , const MidiEvent& );
@@ -154,18 +150,16 @@ namespace textmidi
     class MidiSysExEvent final : public MidiEvent
     {
       public:
-        explicit MidiSysExEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiSysExEvent() noexcept
             : MidiEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent>
             recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
-        std::vector<midi::MidiStreamAtom> data_{};
+      private:
+        midi::MidiStreamVector data_{};
     };
 
     // I don't know what this is; maybe it's in spec 1.1.
@@ -175,18 +169,16 @@ namespace textmidi
     class MidiSysExRawEvent final : public MidiEvent
     {
       public:
-        explicit MidiSysExRawEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiSysExRawEvent() noexcept
             : MidiEvent{}
         {
-            consume_stream(midiiter);
         }
 
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
-        std::vector<midi::MidiStreamAtom> data_{};
+      private:
+        midi::MidiStreamVector data_{};
     };
 
     std::ostream& operator<<(std::ostream& , const MidiSysExRawEvent& );
@@ -197,7 +189,6 @@ namespace textmidi
     {
       public:
         explicit MidiFileMetaEvent() = default;
-        static const long prefix_len;
         static bool recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -206,19 +197,17 @@ namespace textmidi
     class MidiFileMetaSequenceEvent final : public MidiFileMetaEvent
     {
       public:
-          explicit MidiFileMetaSequenceEvent(midi::MidiStreamIterator& midiiter) noexcept
+          explicit MidiFileMetaSequenceEvent() noexcept
             : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
         std::ostream& text(std::ostream& ) const override;
         void sequence_number(std::uint16_t sequence_number) noexcept;
         std::uint16_t sequence_number() const noexcept;
-        static const long prefix_len;
         // Meant to recognize 0xFF 0x00 0x02
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint16_t sequence_number_{};
     };
 
@@ -229,17 +218,15 @@ namespace textmidi
     class MidiFileMetaUnknownEvent final : public MidiFileMetaEvent
     {
       public:
-          explicit MidiFileMetaUnknownEvent(midi::MidiStreamIterator& midiiter) noexcept
+          explicit MidiFileMetaUnknownEvent() noexcept
             : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         // Meant to recognize 0xFF 0x00 0x02
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         midi::MidiStreamAtom meta_code_{};
         midi::MidiStreamVector data_{};
     };
@@ -249,19 +236,17 @@ namespace textmidi
     class MidiFileMetaMidiChannelEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaMidiChannelEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaMidiChannelEvent() noexcept
           : MidiFileMetaEvent{},
             channel_{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
         void channel(std::uint16_t ) noexcept;
         constexpr std::uint16_t channel() noexcept;
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint16_t channel_;
     };
 
@@ -270,19 +255,16 @@ namespace textmidi
     class MidiFileMetaSetTempoEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaSetTempoEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaSetTempoEvent() noexcept
           : MidiFileMetaEvent{},
             tempo_{60}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
         void tempo(std::uint32_t tempo) noexcept;
-        std::uint32_t tempo() const noexcept;
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint32_t tempo_;
     };
 
@@ -291,28 +273,20 @@ namespace textmidi
     class MidiFileMetaSMPTEOffsetEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaSMPTEOffsetEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaEvent{},
-            fps_{midi::smpte_24fps},
-            hours_{},
-            minutes_{},
-            seconds_{},
-            fr_{},
-            ff_{}
+        explicit MidiFileMetaSMPTEOffsetEvent() noexcept
+          : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
-        std::uint16_t fps_;
-        std::uint16_t hours_;
-        std::uint16_t minutes_;
-        std::uint16_t seconds_;
-        std::uint16_t fr_;
-        std::uint16_t ff_;
+      private:
+        std::uint16_t fps_{midi::smpte_24fps};
+        std::uint16_t hours_{};
+        std::uint16_t minutes_{};
+        std::uint16_t seconds_{};
+        std::uint16_t fr_{};
+        std::uint16_t ff_{};
     };
 
     std::ostream& operator<<(std::ostream& , const MidiFileMetaSMPTEOffsetEvent& );
@@ -322,17 +296,15 @@ namespace textmidi
     class MidiFileMetaMidiPortEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaMidiPortEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaMidiPortEvent() noexcept
           : MidiFileMetaEvent{},
             midiport_{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint16_t midiport_;
     };
 
@@ -341,16 +313,14 @@ namespace textmidi
     class MidiFileMetaTimeSignatureEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaTimeSignatureEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaTimeSignatureEvent() noexcept
           : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint16_t numerator_{};
         std::uint16_t denominator_{};
         std::uint16_t clocks_per_click_{};
@@ -362,16 +332,14 @@ namespace textmidi
     class MidiFileMetaKeySignatureEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaKeySignatureEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaKeySignatureEvent() noexcept
           : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::int32_t accidentals_{};
         bool minor_mode_{};
     };
@@ -381,18 +349,15 @@ namespace textmidi
     class MidiFileMetaXmfPatchTypeEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaXmfPatchTypeEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaEvent{},
-            xmf_patch_type_(static_cast<midi::MidiStreamAtom>(midi::XmfPatchTypeEnum::GM1))
+        explicit MidiFileMetaXmfPatchTypeEvent() noexcept
+          : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
-        midi::MidiStreamAtom xmf_patch_type_;
+      private:
+        midi::MidiStreamAtom xmf_patch_type_{static_cast<midi::MidiStreamAtom>(midi::XmfPatchTypeEnum::GM1)};
     };
 
     std::ostream& operator<<(std::ostream& , const MidiFileMetaXmfPatchTypeEvent& );
@@ -400,16 +365,14 @@ namespace textmidi
     class MidiFileMetaSequencerSpecificEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaSequencerSpecificEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaSequencerSpecificEvent() noexcept
           : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         midi::MidiStreamVector data_{};
     };
 
@@ -418,15 +381,12 @@ namespace textmidi
     class MidiFileMetaEndOfTrackEvent final : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaEndOfTrackEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaEndOfTrackEvent() noexcept
           : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
     };
 
@@ -438,26 +398,24 @@ namespace textmidi
     class MidiFileMetaStringEvent : public MidiFileMetaEvent
     {
       public:
-        explicit MidiFileMetaStringEvent(midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiFileMetaStringEvent() noexcept
           : MidiFileMetaEvent{}
         {
-            consume_stream(midiiter);
         }
         std::ostream& text(std::ostream& ) const override;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::string str_{};
     };
 
     class MidiFileMetaTextEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaTextEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaTextEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -466,12 +424,11 @@ namespace textmidi
     class MidiFileMetaProgramNameEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaProgramNameEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaProgramNameEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -480,12 +437,11 @@ namespace textmidi
     class MidiFileMetaDeviceNameEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaDeviceNameEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaDeviceNameEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -494,12 +450,11 @@ namespace textmidi
     class MidiFileMetaText0AEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaText0AEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaText0AEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -508,12 +463,11 @@ namespace textmidi
     class MidiFileMetaText0BEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaText0BEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaText0BEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -522,12 +476,11 @@ namespace textmidi
     class MidiFileMetaText0CEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaText0CEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaText0CEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -536,12 +489,11 @@ namespace textmidi
     class MidiFileMetaText0DEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaText0DEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaText0DEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -550,12 +502,11 @@ namespace textmidi
     class MidiFileMetaText0EEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaText0EEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaText0EEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -564,12 +515,11 @@ namespace textmidi
     class MidiFileMetaText0FEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaText0FEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaText0FEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
     };
 
@@ -578,13 +528,12 @@ namespace textmidi
     class MidiFileMetaCopyrightEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaCopyrightEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter},
+        explicit MidiFileMetaCopyrightEvent() noexcept
+          : MidiFileMetaStringEvent{},
             copyright_{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
       private:
         std::string copyright_;
@@ -597,12 +546,11 @@ namespace textmidi
     class MidiFileMetaTrackNameEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaTrackNameEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaTrackNameEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
       private:
         std::string name_{};
@@ -613,13 +561,12 @@ namespace textmidi
     class MidiFileMetaInstrumentEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaInstrumentEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaInstrumentEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
     };
 
     std::ostream& operator<<(std::ostream& , const MidiFileMetaInstrumentEvent& );
@@ -627,13 +574,12 @@ namespace textmidi
     class MidiFileMetaLyricEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaLyricEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaLyricEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
     };
 
     std::ostream& operator<<(std::ostream& , const MidiFileMetaLyricEvent& );
@@ -641,13 +587,12 @@ namespace textmidi
     class MidiFileMetaMarkerEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaMarkerEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaMarkerEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
     };
 
     std::ostream& operator<<(std::ostream& , const MidiFileMetaMarkerEvent& );
@@ -655,13 +600,12 @@ namespace textmidi
     class MidiFileMetaCuePointEvent final : public MidiFileMetaStringEvent
     {
       public:
-        explicit MidiFileMetaCuePointEvent(midi::MidiStreamIterator& midiiter) noexcept
-          : MidiFileMetaStringEvent{midiiter}
+        explicit MidiFileMetaCuePointEvent() noexcept
+          : MidiFileMetaStringEvent{}
         {
         }
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end) noexcept;
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
       private:
         std::string cue_point_{};
     };
@@ -686,13 +630,13 @@ namespace textmidi
         const midi::RunningStatusStandard& local_status() const noexcept;
         void local_status(const midi::RunningStatusStandard& ) noexcept;
         midi::RunningStatusStandard& local_status() noexcept;
-        static const long prefix_len;
-        static bool recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& running_status) noexcept;
+        static bool recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end,
+            const midi::RunningStatusStandard& running_status) noexcept;
       private:
         midi::RunningStatusStandard running_status_;
         midi::RunningStatusStandard local_status_{};
         midi::MidiStreamAtom channel_;
-        bool operator==(MidiChannelVoiceModeEvent& mcvme) const
+        bool operator==(const MidiChannelVoiceModeEvent& mcvme) const
         {
             return mcvme.local_status().running_status_value()
                 == this->local_status().running_status_value();
@@ -706,20 +650,7 @@ namespace textmidi
     class MidiChannelVoiceNoteEvent : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceNoteEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
-          : MidiChannelVoiceModeEvent{running_status},
-            ticks_per_whole_{ticks_per_whole},
-            key_{},
-            velocity_{},
-            key_string_{},
-            wholes_to_noteoff_{},
-            prefer_sharp_{prefer_sharp},
-            matched_{}
-        {
-            consume_stream(midiiter);
-        }
-        // needed to make rests and have rests in the same hierarchy.
-        MidiChannelVoiceNoteEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp)
+        explicit MidiChannelVoiceNoteEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp)
           : MidiChannelVoiceModeEvent{running_status},
             ticks_per_whole_{ticks_per_whole},
             prefer_sharp_{prefer_sharp}
@@ -746,8 +677,8 @@ namespace textmidi
         {
             matched_ = true;
         }
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint32_t ticks_per_whole_;
         midi::MidiStreamAtom key_{};
         midi::MidiStreamAtom velocity_{};
@@ -764,10 +695,8 @@ namespace textmidi
     class MidiChannelVoiceNoteOnEvent final : public MidiChannelVoiceNoteEvent
     {
       public:
-        explicit MidiChannelVoiceNoteOnEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter)
-          : MidiChannelVoiceNoteEvent(running_status, ticks_per_whole, prefer_sharp, midiiter),
-            ticks_to_noteoff_{std::numeric_limits<std::int64_t>().max()},
-            note_off_{}
+        explicit MidiChannelVoiceNoteOnEvent(const midi::RunningStatusStandard& running_status, std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp)
+          : MidiChannelVoiceNoteEvent(running_status, ticks_per_whole, prefer_sharp)
         {
         }
         MidiChannelVoiceNoteOnEvent(const MidiChannelVoiceNoteOnEvent& ) = default;
@@ -775,20 +704,10 @@ namespace textmidi
         std::ostream& text(std::ostream& ) const override;
         void ticks_to_noteoff(std::int64_t ) noexcept;
         constexpr std::int64_t ticks_to_noteoff() const noexcept;
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter,
             midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp, std::uint32_t ticks_per_whole) noexcept;
-        void note_off(MidiChannelVoiceNoteEvent* note_off) noexcept
-        {
-            note_off_ = note_off;
-        }
-        MidiChannelVoiceNoteEvent* note_off() noexcept
-        {
-            return note_off_;
-        }
       private:
-        std::int64_t ticks_to_noteoff_{};
-        MidiChannelVoiceNoteEvent* note_off_{}; // call use_count() > 0 for validity
+        std::int64_t ticks_to_noteoff_{std::numeric_limits<std::int64_t>().max()};
     };
 
     std::ostream& operator<<(std::ostream& , const MidiChannelVoiceNoteOnEvent& );
@@ -797,12 +716,11 @@ namespace textmidi
     {
       public:
         explicit MidiChannelVoiceNoteOffEvent(midi::RunningStatusStandard& running_status,
-            std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter) noexcept
-          : MidiChannelVoiceNoteEvent{running_status, ticks_per_whole, prefer_sharp, midiiter}
+            std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp) noexcept
+          : MidiChannelVoiceNoteEvent{running_status, ticks_per_whole, prefer_sharp}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter,
             midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp, std::uint32_t ticks_per_whole) noexcept;
     };
@@ -812,18 +730,16 @@ namespace textmidi
     class MidiChannelVoiceProgramChangeEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceProgramChangeEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiChannelVoiceProgramChangeEvent(const midi::RunningStatusStandard& running_status) noexcept
           : MidiChannelVoiceModeEvent{running_status}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
         void program(midi::MidiStreamAtom ) noexcept;
         constexpr midi::MidiStreamAtom program() const noexcept;
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& ) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         midi::MidiStreamAtom program_{};
     };
 
@@ -832,18 +748,15 @@ namespace textmidi
     class MidiChannelVoicePitchBendEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoicePitchBendEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiChannelVoicePitchBendEvent(const midi::RunningStatusStandard& running_status) noexcept
           : MidiChannelVoiceModeEvent{running_status}
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
-        void pitch_wheel(midi::MidiStreamAtom ) noexcept;
+        std::ostream& text(std::ostream& ) const final;
         midi::MidiStreamAtom pitch_wheel() const noexcept;
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& ) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         std::uint16_t pitch_wheel_{};
     };
 
@@ -852,20 +765,18 @@ namespace textmidi
     class MidiChannelVoiceControlChangeEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceControlChangeEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiChannelVoiceControlChangeEvent(const midi::RunningStatusStandard& running_status) noexcept
           : MidiChannelVoiceModeEvent(running_status)
         {
-            consume_stream(midiiter);
         }
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
         midi::MidiStreamAtom id() const noexcept;
         void id(midi::MidiStreamAtom ) noexcept;
         midi::MidiStreamAtom value() const noexcept;
         void value(midi::MidiStreamAtom ) noexcept;
-        static const long prefix_len;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& ) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& midiiter) noexcept override;
+      private:
         midi::MidiStreamAtom id_{};
         midi::MidiStreamAtom value_{};
     };
@@ -875,19 +786,14 @@ namespace textmidi
     class MidiChannelVoiceChannelPressureEvent final : public MidiChannelVoiceModeEvent
     {
       public:
-        explicit MidiChannelVoiceChannelPressureEvent(const midi::RunningStatusStandard& running_status, midi::MidiStreamIterator& midiiter) noexcept
+        explicit MidiChannelVoiceChannelPressureEvent(const midi::RunningStatusStandard& running_status) noexcept
           : MidiChannelVoiceModeEvent(running_status)
         {
-            consume_stream(midiiter);
         }
-
-        std::ostream& text(std::ostream& ) const override;
-        void pressure(midi::MidiStreamAtom ) noexcept;
-        midi::MidiStreamAtom pressure() const noexcept;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& ) noexcept;
-      private:
         void consume_stream(midi::MidiStreamIterator& ) noexcept override;
+      private:
         midi::MidiStreamAtom pressure_{};
     };
 
@@ -897,12 +803,11 @@ namespace textmidi
     {
       public:
         explicit MidiChannelVoicePolyphonicKeyPressureEvent(const midi::RunningStatusStandard& running_status,
-            std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp, midi::MidiStreamIterator& midiiter) noexcept
-          : MidiChannelVoiceNoteEvent{running_status, ticks_per_whole, prefer_sharp, midiiter}
+            std::uint32_t ticks_per_whole, std::shared_ptr<bool> prefer_sharp) noexcept
+          : MidiChannelVoiceNoteEvent{running_status, ticks_per_whole, prefer_sharp}
         {
         }
-        std::ostream& text(std::ostream& ) const override;
-        static const long prefix_len;
+        std::ostream& text(std::ostream& ) const final;
         static std::shared_ptr<MidiEvent> recognize(midi::MidiStreamIterator& midiiter, midi::MidiStreamIterator the_end, midi::RunningStatusStandard& , std::shared_ptr<bool> prefer_sharp, std::uint32_t ticks_per_whole) noexcept;
     };
 
@@ -922,7 +827,7 @@ namespace textmidi
         }
         MidiChannelVoiceNoteRestEvent(const MidiChannelVoiceNoteRestEvent& ) = default;
         MidiChannelVoiceNoteRestEvent& operator=(const MidiChannelVoiceNoteRestEvent& ) = default;
-        std::ostream& text(std::ostream& ) const override;
+        std::ostream& text(std::ostream& ) const final;
     };
 
     //
@@ -995,7 +900,15 @@ namespace textmidi
         rational::RhythmRational wholes_to_last_event_{};
         ChannelKeyboards channel_keyboards_{midi::MidiChannelQty, KeyBoard(midi::MidiPitchQty, 0)};
 
-        friend std::ostream& operator<<(std::ostream&, PrintLazyTrack& );
+        friend std::ostream& operator<<(std::ostream& os, PrintLazyTrack& print_lazy_track)
+        {
+            for (auto& mp : print_lazy_track.delay_events_)
+            {
+                print_lazy_track.print(os, mp);
+            }
+            return os;
+        }
+
     };
     std::ostream& operator<<(std::ostream& , PrintLazyTrack& );
 }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -17,15 +17,6 @@
 
 using namespace std;
 using namespace cgmlegacy;
-
-/*
-** Read in the legacy form text file from AlgoRhythms 3.0 for the Amiga.
-*/
-istream& cgmlegacy::operator>>(istream& is, cgmlegacy::VoiceOld& v)
-{
-    is >> v.low_pitch_ >> v.high_pitch_ >> v.channel_ >> v.walking_;
-    return is;
-}
 
 double cgmlegacy::OldFormElement::mean_period() const noexcept
 {

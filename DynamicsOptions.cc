@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidi
 // Copyright © 2024 Thomas E. Janzen
@@ -63,8 +63,6 @@ midi::NumStringMap<int> textmidi::read_dynamics_configuration(const string& dyna
         program_options::store(
             program_options::parse_config_file(dynamics_configuration_file.c_str(), desc), var_map);
         program_options::notify(var_map);
-
-        string input_filename;
 
         if (var_map.count(ppppp_option.option()))
         {

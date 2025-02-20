@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -20,13 +20,6 @@
 
 using namespace std;
 using namespace midi;
-
-void midi::MidiHeader::to_bytes(MidiStreamAtom* bytes) noexcept
-{
-    MidiHeader* header_bytes{reinterpret_cast<MidiHeader*>(bytes)};
-    *header_bytes = *this;
-    header_bytes->swapbytes();
-}
 
 void midi::MidiHeader::swapbytes() noexcept
 {
@@ -196,8 +189,6 @@ std::unique_ptr<RunningStatusBase> RunningStatusFactory::operator()(RunningStatu
         break;
       case RunningStatusPolicy::PersistentAfterSysexOrMeta:
         rsp = make_unique<RunningStatusPersistentAfterSysexOrMeta>();
-        break;
-      default:
         break;
     }
     return rsp;

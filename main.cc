@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(help_option.option())) [[unlikely]]
     {
-        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.88\n"}
+        const string logstr{((string{"Usage: textmidi [OPTION]... [TEXTMIDIFILE]\ntextmidi Version 1.0.89\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "textmidi\nTextMIDITools 1.0.89\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";

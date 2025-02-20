@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -109,11 +109,11 @@ namespace textmidi
             };
             // There is no serialize for string_view, so these have to be strings.
             explicit VoiceXml(
-                    std::string low_pitch = "",
-                    std::string high_pitch = "",
+                    const std::string& low_pitch = "",
+                    const std::string& high_pitch = "",
                     std::uint32_t channel = 0U,
                     double walking = 0.0,
-                    std::string program = std::string("1"),
+                    const std::string& program = std::string("1"),
                     std::int32_t pan = 0,
                     Follower follower = Follower{})
               : low_pitch_{low_pitch},
@@ -127,7 +127,7 @@ namespace textmidi
             }
 
             std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
-            VoiceXml(const cgmlegacy::VoiceOld& v)
+            explicit VoiceXml(const cgmlegacy::VoiceOld& v)
               : low_pitch_{textmidi::num_to_note(v.low_pitch_, prefer_sharp)},
                 high_pitch_{textmidi::num_to_note(v.high_pitch_, prefer_sharp)},
                 channel_{v.channel_ + 1},
@@ -136,30 +136,41 @@ namespace textmidi
                 pan_{},
                 follower_()
             {}
+            VoiceXml& operator=(const cgmlegacy::VoiceOld& v)
+            {
+                low_pitch_ = textmidi::num_to_note(v.low_pitch_, prefer_sharp);
+                high_pitch_ = textmidi::num_to_note(v.high_pitch_, prefer_sharp);
+                channel_ = v.channel_ + 1;
+                walking_ = (v.walking_ ? 1.0 : 0.0);
+                program_ = "1";
+                pan_ = 0;
+                follower_ = Follower{};
+                return *this;
+            }
             std::string low_pitch() const noexcept;
-            void low_pitch(std::string_view low_pitch) noexcept;
+            void low_pitch(const std::string_view& low_pitch) noexcept;
             std::string high_pitch() const noexcept;
-            void high_pitch(std::string_view high_pitch) noexcept;
+            void high_pitch(const std::string_view& high_pitch) noexcept;
             std::uint32_t channel() const noexcept;
             void channel(std::uint32_t channel) noexcept;
             double walking() const noexcept;
             void walking(double walking) noexcept;
 
             std::string program() const noexcept;
-            void program(std::string program) noexcept;
+            void program(const std::string& program) noexcept;
             std::int32_t pan() const noexcept;
             void pan(std::int32_t pan) noexcept;
             const Follower& follower() const noexcept;
             Follower& follower() noexcept;
             void follower(const Follower& follower) noexcept;
           private:
-            std::string low_pitch_;
-            std::string high_pitch_;
-            std::uint32_t channel_; // one-based in VoiceXml
-            double walking_;
-            std::string program_;
-            std::int32_t pan_; // 0 = center, negative is left, positive is right.
-            Follower follower_;
+            std::string low_pitch_{};
+            std::string high_pitch_{};
+            std::uint32_t channel_{}; // one-based in VoiceXml
+            double walking_{};
+            std::string program_{"1"};
+            std::int32_t pan_{}; // 0 = center, negative is left, positive is right.
+            Follower follower_{};
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
             {

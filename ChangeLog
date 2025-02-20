@@ -1,3 +1,48 @@
+2025-02-19     Thomas E. Janzen <janzentome@gmail.com>
+        *Arrangements.h, Makefile.opt.sed, Midi.h, MidiEvents.cc, MusicalForm.cc,
+        miditext.cc, smustextmidi.cc, textmidi.l:
+        Get compilation by clang to work and pass tests.  However g++ is the 
+        compiler to be used to build.
+        * MidiEvents.cc, MidiEvents.h, MidiString.cc, miditext.cc:  Use
+        cppcheck and fix resulting reports.  Fix calling a virtual
+        function from a constructor (MidiEvents used by miditext).
+ 
+2025-02-15     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{h,cc}: Youtube CPPCON with Nicolai Josuttis.
+        Discard ArrangementVec.  
+        Switches use all enum values and no default when possible.
+        Specify final on classes.
+        Specify final and override on functions as possible.
+        * Composer.cc, MusicalForm.cc:  Fix compiler warnings.
+        * Midi.{h,cc}:
+        Switches use all enum values and no default when possible.
+        Specify final on classes.
+        Specify final and override on functions as possible.
+        * MidiEvents.{h,cc}:
+        Make operator<< a hidden friend (defined inside class).
+        Specify final on classes.
+        Specify final and override on functions as possible.
+        * MidiString.{h,cc}:
+        Mark make_raw_string() and ake_human_string() as extern.
+        Delete strip_sapce().
+        * RhythmRational.h, SmusTrackEvent.h:
+        Specify final and override on functions as possible.
+        Fix numeric_limits mistakes.
+        * TextmidiUtils.h: change "class" to typename.
+        * cgmlegacy.{h,cc}: Make operator>>() a hidden friend.
+        * textmidi.l:  For compiler warnings, ifdef out unused
+        regex field constants.
+
+2025-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.h, HeapsAlgorithmTemplate.h, MidiEvents.h, MidiMaps.h,
+        MusicalForm.h, RhythmRational.h, Voice.h:
+        straighten up rule of 5 mostly, and member initialization.  Cf.
+        spreadsheet ruleof5.ods.
+
+2025-02-14     Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.{h,cc}: Add numeric_limits support.
+        Add move copy and assignment.
+
 2025-02-11     Thomas E. Janzen <janzentome@gmail.com>
         * Midi.h, miditext.cc, textmidi.l: 
         Add definitions for names of MIDI header and track chunks, and use

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -406,7 +406,7 @@ namespace midi
             division_{division}
             {}
 
-        MidiHeader(MidiStreamAtom* bytes) noexcept
+        explicit MidiHeader(MidiStreamAtom* bytes) noexcept
           : chunk_len_{},
             format_{},
             ntrks_{},
@@ -416,7 +416,6 @@ namespace midi
             swapbytes();
         }
 
-        void to_bytes(MidiStreamAtom* bytes) noexcept;
 #pragma pack(push)
 #pragma pack(1)
         MidiStreamArray4 chunk_name_{MidiHeaderChunkName};
@@ -454,11 +453,11 @@ namespace midi
         virtual ~RunningStatusImplBase() = default;
     };
 
-    class RunningStatusImpl : public RunningStatusImplBase
+    class RunningStatusImpl final : public RunningStatusImplBase
     {
       public:
         RunningStatusImpl() = default;
-        virtual void running_status(MidiStreamAtom running_status_value) noexcept override;
+        virtual void running_status(MidiStreamAtom running_status_value) noexcept final;
         bool running_status_valid() const noexcept override;
         MidiStreamAtom running_status_value() const noexcept override;
         void clear() noexcept override;
@@ -468,7 +467,6 @@ namespace midi
       private:
         bool running_status_valid_{};
         MidiStreamAtom running_status_value_{};
-        RunningStatusPolicy policy_{RunningStatusPolicy::Standard};
     };
 
     class RunningStatusBase
@@ -515,34 +513,34 @@ namespace midi
         std::shared_ptr<RunningStatusImplBase> running_status_impl_{std::make_shared<RunningStatusImpl>()};
     };
 
-    class RunningStatusStandard : public RunningStatusBase
+    class RunningStatusStandard final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
     };
 
-    class RunningStatusNever : public RunningStatusBase
+    class RunningStatusNever final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
     };
 
-    class RunningStatusPersistentAfterMeta : public RunningStatusBase
+    class RunningStatusPersistentAfterMeta final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
     };
 
-    class RunningStatusPersistentAfterSysex : public RunningStatusBase
+    class RunningStatusPersistentAfterSysex final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
     };
 
-    class RunningStatusPersistentAfterSysexOrMeta : public RunningStatusBase
+    class RunningStatusPersistentAfterSysexOrMeta final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept override;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
     };
 
     class RunningStatusFactory

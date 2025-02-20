@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -162,22 +162,6 @@ void add_quotes(string& str)
 {
     string quoted("\"");
     (quoted += str) += '\"';
-}
-
-void strip_space(string& str)
-{
-    if (!str.empty())
-    {
-        string::size_type pos{};
-        const string blanks{" \t\n\r"};
-        if ((pos = str.find_last_not_of(blanks)) != str.npos)
-        {
-            if ((pos + 1) < str.size())
-            {
-                str.erase(pos + 1);
-            }
-        }
-    }
 }
 
 }

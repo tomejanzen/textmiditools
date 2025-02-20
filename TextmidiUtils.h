@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -13,7 +13,7 @@ namespace textmidi
 {
     // Stroustrup, Bjarne.  "Programming Principles and Practice Using C++."
     // 2009.  Addison-Wesley.  Upper Saddle River, NJ. p. 388.
-    template<class T>
+    template<typename T>
     char* io_bytes(T& i)
     {
         void* addr = &i;

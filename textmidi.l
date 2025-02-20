@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.88
+** TextMIDITools Version 1.0.89
 ** Copyright © 2024 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -83,8 +83,10 @@ namespace
     uint32_t accum_delay{}; // Delay accumulated between events.
     double global_total_track_ticks{}; // accum. tracks ticks to print for "ticks" cmd
     uint32_t total_beats{}; // beat to print for errors.
+#if defined(SELECT_NOTE_OFF_VELOCITY)
     // To turn off notes using NOTE_ON, use a zero velocity.
     constexpr MidiStreamAtom note_off_velocity{};
+#endif
     // Map textmidi strings to MIDI file format codes.
 
     int global_ticks_per_quarter{384};
@@ -113,9 +115,11 @@ namespace
         }
         else
         {
-            constexpr int match_all{0};
             constexpr int match_tie_in{1};
+            constexpr int match_tie_out{14};
             constexpr int match_note_or_key{2};
+#if defined(USE_ALL_PITCH_NAME_REGEX_FIELD)
+            constexpr int match_all{0};
             constexpr int match_c_note_oct_minus1{3};
             constexpr int match_defgab_note_oct_minus1{4};
             constexpr int match_defgab_accidental_oct_minus1{5};
@@ -127,7 +131,7 @@ namespace
             constexpr int match_g_accidental_oct_9{11};
             constexpr int match_key{12};
             constexpr int match_key_sign{13}; // key number does not have a match
-            constexpr int match_tie_out{14};
+#endif
             tie_in  = !matches[match_tie_in].str().empty();
             tie_out = !matches[match_tie_out].str().empty();
 

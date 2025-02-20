@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <string>
 #include <type_traits>
+#include <stdexcept>
 
 #include <boost/lexical_cast.hpp>
 
@@ -36,8 +37,12 @@ void textmidi::rational::RhythmRational::numerator(int64_t numerator) noexcept
     numerator_ = numerator;
 }
 
-void textmidi::rational::RhythmRational::denominator(int64_t denominator) noexcept
+void textmidi::rational::RhythmRational::denominator(int64_t denominator)
 {
+    if (0 == denominator)
+    {
+        throw std::overflow_error{string((string(__FUNCTION__) += ' ') += "denominator is zero")};
+    }
     denominator_ = denominator;
 }
 
@@ -360,7 +365,6 @@ istream& textmidi::rational::operator>>(istream& is, RhythmRational::SimpleConti
         {
             if (!matches[2].str().empty())
             {
-                string first_fraction_str{matches[2].str()};
                 auto denom_begin{sregex_iterator(s.begin(), s.end(), continued_fraction_re2)};
                 auto denom_end{sregex_iterator()};
                 for (auto mi{denom_begin}; mi != denom_end; ++mi)
@@ -440,11 +444,10 @@ std::istream& textmidi::rational::ReadMusicRational::operator()(std::istream& is
 
     if (mat) // if it's just an int
     {
-        int64_t denom{};
         // If there is no slash but there is a denominator:
         if (matches[slash_match].str().empty() && !matches[denominator_match].str().empty())
         {
-            denom = std::atol(matches[denominator_match].str().c_str());
+            auto denom = std::atol(matches[denominator_match].str().c_str());
             tr = RhythmRational{1L, denom};
             const auto rtn_save{tr};
             for (int64_t dot{1}; static_cast<size_t>(dot) <= matches[dots_match].str().size(); ++dot)
@@ -493,7 +496,7 @@ long int textmidi::rational::PrintRhythmRational::convert_to_dotted_rhythm(Rhyth
 std::ostream& textmidi::rational::PrintRhythmRational::operator()(std::ostream& os, const RhythmRational& tr)
 {
     auto flags{os.flags()};
-    auto tr_temp{tr};
+    RhythmRational tr_temp{tr};
     tr_temp.reduce();
     //if (tr_temp > RhythmRational{})
     {

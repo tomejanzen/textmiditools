@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -61,19 +61,6 @@ const Arrangement& ArrangementsInSitu::arrangement() const noexcept
 Arrangement& ArrangementsInSitu::arrangement() noexcept
 {
     return arrangement_;
-}
-
-const ArrangementVec& ArrangementsSequence::arrangements() const noexcept
-{
-    return arrangements_;
-}
-ArrangementVec& ArrangementsSequence::arrangements() noexcept
-{
-    return arrangements_;
-}
-int ArrangementsSequence::length() const noexcept
-{
-    return length_;
 }
 
 const Arrangement& ArrangementsIdentity::arrangement() const noexcept
@@ -153,6 +140,7 @@ shared_ptr<Arrangements> arrangements::ArrangementsFactory(PermutationEnum permu
 {
     switch (permutation_type)
     {
+      case PermutationEnum::Undefined:
       case PermutationEnum::Identity:
         return make_shared<ArrangementsIdentity>(length);
         break;
@@ -182,8 +170,6 @@ shared_ptr<Arrangements> arrangements::ArrangementsFactory(PermutationEnum permu
         break;
       case PermutationEnum::Heaps:
         return make_shared<ArrangementsHeaps>(length);
-        break;
-      default:
         break;
     }
     return make_shared<ArrangementsIdentity>(length);

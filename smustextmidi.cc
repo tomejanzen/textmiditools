@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -98,7 +98,9 @@ namespace
     constexpr MidiStreamArray4 CopyId{'(', 'c', ')', ' '}; // optional
     constexpr MidiStreamArray4 AuthId{'A', 'U', 'T', 'H'}; // optional
     constexpr MidiStreamArray4 TrakId{'T', 'R', 'A', 'K'};
+#if defined(SUPPORT_ANNOD)
     constexpr MidiStreamArray4 AnnoId{'A', 'N', 'N', 'O'}; // optional
+#endif
 
     const string SMUSOpt{"smus"};
     constexpr char SMUSTxt[]{"input binary SMUS file"};
@@ -139,7 +141,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.88\n"}
+        const string logstr{((string{"Usage: smustextmidi [OPTION]... [SMUSFILE]\nsmustextmidi Version 1.0.89\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -148,7 +150,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.89\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -331,7 +333,7 @@ int main(int argc, char *argv[])
         if (equal(NameId.begin(), NameId.end(), ID_int.begin()))
         {
             char score_name[1024];
-            memcpy((char *) score_name, &smus_score[smus_index], len);
+            copy_n(&smus_score[smus_index], len, score_name);
             score_name[len] = '\0';
             ((meta_events_string += "TEXT NameId ") += score_name) += '\n';
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
@@ -340,7 +342,7 @@ int main(int argc, char *argv[])
         if (equal(CopyId.begin(), CopyId.end(), ID_int.begin()))
         {
             char copyright[1024];
-            memcpy((char *) copyright, &smus_score[smus_index], len);
+            copy_n(&smus_score[smus_index], len, copyright);
             copyright[len] = '\0';
             ((meta_events_string += "COPYRIGHT ") += copyright) += '\n';
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
@@ -349,7 +351,7 @@ int main(int argc, char *argv[])
         if (equal(AuthId.begin(), AuthId.end(), ID_int.begin()))
         {
             char author[1024];
-            memcpy((char *) author, &smus_score[smus_index], len);
+            copy_n(&smus_score[smus_index], len, author);
             author[len] = '\0';
             ((meta_events_string += "TEXT AUTHOR ") += author) += '\n';
             smus_index += len + (len % 2); // Will be on 2-byte boundaries.
@@ -360,7 +362,7 @@ int main(int argc, char *argv[])
             // copy instrument
             // get length of instrument name
             SoundItem sound_item{};
-            memcpy(&sound_item, &smus_score[smus_index], len);
+            copy_n(&smus_score[smus_index], sizeof sound_item, reinterpret_cast<char*>(&sound_item));
             sound_item.name[len - 4] = '\0'; // -4 because instruments are structs
             // skip past name length but land on 2-byte alignment
             smus_index += len + (len % 2);

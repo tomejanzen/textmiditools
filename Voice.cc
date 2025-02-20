@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -26,7 +26,7 @@ string VoiceXml::low_pitch() const noexcept
     return low_pitch_;
 }
 
-void VoiceXml::low_pitch(string_view low_pitch) noexcept
+void VoiceXml::low_pitch(const string_view& low_pitch) noexcept
 {
     low_pitch_ = low_pitch;
 }
@@ -36,7 +36,7 @@ string VoiceXml::high_pitch() const noexcept
     return high_pitch_;
 }
 
-void VoiceXml::high_pitch(string_view high_pitch) noexcept
+void VoiceXml::high_pitch(const string_view& high_pitch) noexcept
 {
     high_pitch_ = high_pitch;
 }
@@ -66,7 +66,7 @@ string VoiceXml::program() const noexcept
     return program_;
 }
 
-void VoiceXml::program(string program) noexcept
+void VoiceXml::program(const string& program) noexcept
 {
     program_ = program;
 }

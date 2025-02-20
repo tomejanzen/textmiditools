@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -40,10 +40,14 @@ namespace cgmlegacy
         std::uint32_t high_pitch_{};
         std::uint32_t channel_{}; // zero-based in VoiceOld
         bool walking_{};
-        friend std::istream& operator>>(std::istream& is, VoiceOld& v);
+        friend std::istream& operator>>(std::istream& is, VoiceOld& v)
+        {
+            is >> v.low_pitch_ >> v.high_pitch_ >> v.channel_ >> v.walking_;
+            return is;
+        }
+
     };
 #pragma pack()
-    std::istream& operator>>(std::istream& is, VoiceOld& v);
 
     class OldFormElement
     {

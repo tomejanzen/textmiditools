@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // MIDIKeyString.cc
 //
@@ -105,11 +105,10 @@ namespace {
     {
         // The diatonic scale.
         constexpr std::array<uint32_t, 7> step_array{0, 2, 4, 5, 7, 9, 11};
-        uint32_t stepindex{};
         int32_t step{};
         if (note_name.size() > 0) [[likely]]
         {
-            stepindex = toupper(note_name[0]) - 'A';
+            int stepindex{toupper(note_name[0]) - 'A'};
             stepindex += 5;
             stepindex %= 7;
             step = step_array[stepindex];
@@ -244,7 +243,7 @@ string textmidi::num_to_note(int num, std::shared_ptr<bool> prefer_sharp) noexce
 // key_sig_name_to_accidentals
 // returns an integer per MIDI spec 1.1
 //
-pair<int, bool> textmidi::key_sig_name_to_accidentals(string &key_sig_name)
+pair<int, bool> textmidi::key_sig_name_to_accidentals(const string& key_sig_name)
 {
     uint32_t step{};
     int32_t accident{};

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -39,14 +39,6 @@ RhythmRational textmidi::rational::round(RhythmRational ratnum) noexcept
        ratnum -= remainder;
    }
    return ratnum;
-}
-
-int64_t textmidi::rational::snap_to_int(RhythmRational num, RhythmRational grid) noexcept
-{
-    const auto modnum{(num % grid)};
-    RhythmRational snapped{ (modnum >= (grid / RhythmRational{2})) ?
-          num + (grid - modnum) : num - modnum};
-    return round(snapped).numerator();
 }
 
 RhythmRational textmidi::rational::snap(RhythmRational num, RhythmRational grid) noexcept

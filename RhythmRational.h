@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // RhythmRational 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -54,7 +54,7 @@ namespace textmidi
                 {
                     if (0L == denominator)
                     {
-                        throw std::out_of_range("RhythmRational constructor zero denominator");
+                        throw std::overflow_error("RhythmRational constructor zero denominator");
                     }
                     if (reduce_it)
                     {
@@ -89,14 +89,13 @@ namespace textmidi
                 }
 
                 void numerator(std::int64_t numerator) noexcept;
-                void denominator(std::int64_t denominator) noexcept;
+                void denominator(std::int64_t denominator);
                 constexpr operator bool() const
                 {
                     return numerator_ != 0;
                 }
 
                 void invert();
-                RhythmRational(const RhythmRational& ) = default;
                 bool operator==(const RhythmRational& comparand) const;
                 bool operator!=(const RhythmRational& comparand) const;
                 bool operator<(RhythmRational comparand) const;
@@ -127,7 +126,7 @@ namespace textmidi
         };
         RhythmRational operator+(RhythmRational addend1, RhythmRational addend2);
         RhythmRational operator-(RhythmRational value, RhythmRational subtrahend);
-        RhythmRational operator/(RhythmRational divisor, RhythmRational dividend);
+        RhythmRational operator/(RhythmRational dividend, RhythmRational divisor);
         RhythmRational operator*(RhythmRational value, RhythmRational multiplier);
         RhythmRational abs(RhythmRational val);
         std::istream& operator>>(std::istream& is, RhythmRational& tr);
@@ -149,11 +148,11 @@ namespace textmidi
         struct PrintRhythmRational : public PrintRhythmBase
         {
             PrintRhythmRational() = default;
-            PrintRhythmRational(bool dotted_rhythm)
+            explicit PrintRhythmRational(bool dotted_rhythm)
                 : dotted_rhythm_{dotted_rhythm}
             {
             }
-            std::ostream& operator()(std::ostream& , const RhythmRational& tr) override;
+            std::ostream& operator()(std::ostream& , const RhythmRational& tr) final;
           private:
             long int convert_to_dotted_rhythm(RhythmRational& q);
             bool dotted_rhythm_{true};
@@ -161,13 +160,64 @@ namespace textmidi
 
         struct PrintRhythmSimpleContinuedFraction : public PrintRhythmBase
         {
-            std::ostream& operator()(std::ostream& , const RhythmRational& tr) override;
+            std::ostream& operator()(std::ostream& , const RhythmRational& tr) final;
         };
         extern std::unique_ptr<PrintRhythmBase> print_rhythm;
 
     }
 #pragma pack()
 
+}
+
+namespace std
+{
+    template<>
+    struct numeric_limits<textmidi::rational::RhythmRational>
+    {
+        static constexpr textmidi::rational::RhythmRational max() noexcept
+            { return textmidi::rational::RhythmRational
+            {std::numeric_limits<textmidi::rational::RhythmRational::value_type>::max(), 1L}; }
+        static constexpr textmidi::rational::RhythmRational min() noexcept
+            { return textmidi::rational::RhythmRational
+            {-std::numeric_limits<textmidi::rational::RhythmRational::value_type>::max(), 1L}; }
+        static constexpr textmidi::rational::RhythmRational lowest() noexcept
+            { return textmidi::rational::RhythmRational
+            {std::numeric_limits<textmidi::rational::RhythmRational::value_type>::lowest(), 1L}; }
+        static constexpr textmidi::rational::RhythmRational epsilon() noexcept
+            { return textmidi::rational::RhythmRational
+            {1L, std::numeric_limits<textmidi::rational::RhythmRational::value_type>::max()}; }
+        static constexpr textmidi::rational::RhythmRational round_error() noexcept
+            { return textmidi::rational::RhythmRational{0L}; }
+        static constexpr textmidi::rational::RhythmRational infinity() noexcept
+            { return textmidi::rational::RhythmRational{0L}; }
+        static constexpr textmidi::rational::RhythmRational quiet_NaN() noexcept
+            { return textmidi::rational::RhythmRational{0L}; }
+        static constexpr textmidi::rational::RhythmRational signaling_NaN() noexcept
+            { return textmidi::rational::RhythmRational{0L}; }
+        static constexpr textmidi::rational::RhythmRational denorm_min() noexcept
+            { return textmidi::rational::RhythmRational{0L}; }
+        static const bool is_specialized = true;
+        static const bool is_signed = true;
+        static const bool is_integer = false;
+        static const bool is_exact = true;
+        static const bool has_infinity = false;
+        static const bool has_quiet_NaN = false;
+        static const bool has_signaling_NaN = false;
+        static const bool has_denorm = false;
+        static const bool has_denorm_loss = false;
+        static const float_round_style round_style = std::round_to_nearest;
+        static const bool is_iec559 = false;
+        static const bool is_bounded = true;
+        static const bool is_modulo = false;
+        static const int digits = 63;
+        static const int digits10 = 19;
+        static const int max_digits10 = 19;
+        static const int radix = 2;
+        static const int min_exponent = 0;
+        static const int max_exponent = 0;
+        static const bool traps = true;
+        static const bool tinyness_before = false;
+    };
 }
 
 #endif

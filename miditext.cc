@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.88\n"}
+        const string logstr{((string{"Usage: miditext [OPTION]... [MIDIFILE]\nmiditext Version 1.0.89\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.88\nCopyright © 2024 Thomas E. Janzen\n"
+        cout << "miditext\nTextMIDITools 1.0.89\nCopyright © 2024 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             "This is free software: you are free to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
@@ -398,10 +398,7 @@ int main(int argc, char *argv[])
     {
         const string logstr{(string{"Will write to: "} += text_filename) += '\n'};
         cout << logstr;
-    }
 
-    if (verbose)
-    {
         cout << "Events per track:\n";
         for (int i{}; auto& mdep : midi_delay_event_tracks)
         {
@@ -413,7 +410,7 @@ int main(int argc, char *argv[])
     int64_t rigid_rhythms_count{};
     int64_t non_rigid_rhythms_count{};
     int64_t zero_rhythms_count{};
-    for (int i{}; auto& mdet : midi_delay_event_tracks)
+    for (auto& mdet : midi_delay_event_tracks)
     {
         text_filestr << "\nSTARTTRACK\n";
         if (verbose)
@@ -442,7 +439,6 @@ int main(int argc, char *argv[])
         {
             ranges::copy(mdet, ostream_iterator<DelayEvent>(text_filestr, "\n"));
         }
-        ++i;
     }
     if (verbose)
     {

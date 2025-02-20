@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -35,7 +35,7 @@ namespace textmidi
 
         TextMidiFeatures(const TextMidiFeatures& ) = delete;
 
-        void text_filename(std::string text_filename)
+        void text_filename(const std::string& text_filename)
         {
             this->text_filename_ = text_filename;
         }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -42,11 +42,8 @@ namespace heaps_algorithm
         using SwapPair = std::pair<int, int>;
 
         HeapsAlgorithmTemplate(int N, ArrayLike& array_like) noexcept
-          : done_{},
-            M_{2},
-            N_{N},
+          : N_{N},
             array_like_(array_like),
-            extents_{},
             A_{extents_[Range(1, N + 1)]},
             array_ref_(array_like.data(), extents_[Range(1, N_ + 1)])
         {
@@ -80,16 +77,12 @@ namespace heaps_algorithm
             return rtn;
         }
 
-        const ArrayLike& array_like() const noexcept
-        {
-            return array_like_;
-        }
       private:
-        bool done_;
-        int M_;
+        bool done_{};
+        int M_{2};
         const int N_;
         ArrayLike& array_like_;
-        Array::extent_gen extents_;
+        Array::extent_gen extents_{};
         Array A_;
         ArrayRef array_ref_;
         void clear() noexcept

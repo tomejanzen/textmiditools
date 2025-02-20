@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // Copyright © 2024 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -459,7 +459,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     {
                         pitch_index = 0;
                     }
-                    if ((pitch_index >= xml_form.scale().size()) && (pitch_index < RestPitchIndex))
+                    if ((static_cast<size_t>(pitch_index) >= xml_form.scale().size()) && (pitch_index < RestPitchIndex))
                     {
                         pitch_index = (xml_form.scale().size() ? (xml_form.scale().size() - 1) : 0);
                     }
@@ -514,19 +514,17 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                     exit(0);
                 }
                 int pivot_key{RestPitch};
-                int pivot_key_index{static_cast<int>(key_scale.size())};
+                long pivot_key_index{static_cast<int>(key_scale.size())};
                 for (auto& ne : track_note_events[tr])
                 {
                     switch (xml_form.voices()[tr].follower().interval_type())
                     {
                       [[likely]] case VoiceXml::Follower::IntervalType::Scalar:
                         {
-                            int key_index{0U};
-
                             KeyScaleSeq::const_iterator key_iter{ranges::find(key_scale, ne.pitch())};
                             if (key_iter != key_scale.cend())
                             {
-                                key_index = std::distance(key_scale.cbegin(), key_iter);
+                                long key_index{std::distance(key_scale.cbegin(), key_iter)};
                                 if (xml_form.voices()[tr].follower().interval() < 0)
                                 {
                                     // Check there's room down the scale
@@ -561,9 +559,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file, const MusicalF
                                 }
                                 if (xml_form.voices()[tr].follower().inversion())
                                 {
-                                    const int shift{2 * (key_index - pivot_key_index)};
-                                    if ((  (shift > 0) && (key_index >= shift))
-                                       || ((shift < 0) && (static_cast<size_t>(key_index) < (key_scale.size() - shift))))
+                                    const long shift{2L * (key_index - pivot_key_index)};
+                                    if ((  (shift > 0L) && (key_index >= shift))
+                                       || ((shift < 0L) && (static_cast<size_t>(key_index) < (key_scale.size() - shift))))
                                     {
                                         key_index -= shift;
                                     }

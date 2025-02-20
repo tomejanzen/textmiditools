@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -40,8 +40,6 @@ namespace midi
                 [this](const std::pair<const std::string_view, const NumType>& p)
                 {this->num_string_map_.emplace(p.second, p.first); });
         }
-
-        NumStringMap(const NumStringMap& ) = default;
 
         std::string_view at(NumType num) const noexcept
         {

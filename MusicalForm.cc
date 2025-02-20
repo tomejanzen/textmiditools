@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -127,7 +127,7 @@ Sine& MeanRangeSines::range_sine() noexcept
 
 bool MeanRangeSines::valid() const
 {
-    auto test = [](Sine sine) { return sine.valid(); };
+    auto test = [](const Sine& sine) { return sine.valid(); };
     bool rtn{};
     try
     {
@@ -226,11 +226,6 @@ string MusicalForm::name() const noexcept
 void MusicalForm::name(const string_view name) noexcept
 {
     name_ = name;
-}
-
-string MusicalForm::copyright() const noexcept
-{
-    return copyright_;
 }
 
 void MusicalForm::copyright(const string_view copyright) noexcept
@@ -556,7 +551,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
         auto follower{(ri() % 3) == 0}; // don't have more than 1/3 of voices be followers
         auto leader{ri() % voices_.size()};
         // if this is a self-follower, then don't be a follower.
-        if (vctr == leader)
+        if (static_cast<size_t>(vctr) == leader)
         {
             follower = false;
         }
@@ -565,7 +560,9 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
             v.follower().follow(true);
             v.follower().leader(leader);
             v.follower().interval_type(static_cast<VoiceXml::Follower::IntervalType>(ri() % 2 + 1));
-            v.follower().delay(rational::RhythmRational{ri() % (TicksPerQuarter * 4), TicksPerQuarter * 4});
+            v.follower().delay(rational::RhythmRational{
+                static_cast<int64_t>(ri() / 2) % (TicksPerQuarter * 4L), 
+                TicksPerQuarter * 4L});
             v.follower().inversion((ri() % 2) == 1);
             v.follower().retrograde((ri() % 2) == 1);
         }
@@ -606,11 +603,11 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
         channel_to_program[ch] = programs[ri() % programs.size()];} );
     for (auto& v : voices_)
     {
-        const auto program{channel_to_program[v.channel()]};
-        v.low_pitch(midi_programs[program].range_.first);
-        v.high_pitch(midi_programs[program].range_.second);
+        const auto program_num{channel_to_program[v.channel()]};
+        v.low_pitch(midi_programs[program_num].range_.first);
+        v.high_pitch(midi_programs[program_num].range_.second);
         // If idiophones were selected, then coerce channel to 10.
-        if (IdiophoneMarker == program)
+        if (IdiophoneMarker == program_num)
         {
             v.program(lexical_cast<string>(1));
             v.channel(IdiophoneChannel);
@@ -619,7 +616,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
         }
         else
         {
-            v.program(lexical_cast<string>(program));
+            v.program(lexical_cast<string>(program_num));
         }
     }
     // Coerce idiophones to be pan-centered.

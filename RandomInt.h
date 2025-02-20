@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -23,7 +23,7 @@ namespace textmidi
         {
           public:
             using result_type = std::uint64_t;
-            RandomInt(std::uint64_t low = 0LU,
+            explicit RandomInt(std::uint64_t low = 0LU,
                       std::uint64_t high = std::numeric_limits<std::uint64_t>().max()) noexcept
               : dist_{low, high},
                 low_{low},

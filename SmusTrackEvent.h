@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -53,7 +53,6 @@ namespace smus
         }
         auto decision() const noexcept;
         auto data() const noexcept;
-        void add_to_delay_accum(const textmidi::rational::RhythmRational& delay) noexcept;
         textmidi::rational::RhythmRational delay_accum() const noexcept;
         void delay_accum(const textmidi::rational::RhythmRational& delay) noexcept;
         static int current_dynamic() noexcept;
@@ -99,8 +98,8 @@ namespace smus
         SmusTrackEventPitch () noexcept
           : SmusTrackEventBase{}
         {}
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
         bool is_tiedout() const noexcept;
         bool is_chorded() const noexcept;
         bool is_tied_back(int tp) const noexcept;
@@ -119,8 +118,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // InstrumentNumber
@@ -131,8 +130,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // TimeSignature
@@ -145,8 +144,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // KeySignature
@@ -157,8 +156,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
       private:
         std::string key() const noexcept;
     };
@@ -171,8 +170,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // Channel
@@ -183,8 +182,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // Preset
@@ -195,8 +194,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     extern const midi::NumStringMap<int> clef_map;
@@ -209,8 +208,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // Tempo
@@ -221,8 +220,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     // EndOfTrack
@@ -233,8 +232,8 @@ namespace smus
           : SmusTrackEventBase{evt}
         {
         }
-        std::string textmidi_tempo() noexcept override;
-        std::string textmidi() noexcept override;
+        std::string textmidi_tempo() noexcept final;
+        std::string textmidi() noexcept final;
     };
 
     class SmusTrackEventFactory

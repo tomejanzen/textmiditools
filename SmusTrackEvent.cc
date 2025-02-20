@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // smustextmidi 1.0.6
 // Copyright © 2024 Thomas E. Janzen
@@ -38,11 +38,6 @@ auto SmusTrackEventBase::decision() const noexcept
 auto SmusTrackEventBase::data() const noexcept
 {
     return data_;
-}
-
-void SmusTrackEventBase::add_to_delay_accum(const RhythmRational& delay) noexcept
-{
-    delay_accum_ += delay;
 }
 
 RhythmRational SmusTrackEventBase::delay_accum() const noexcept

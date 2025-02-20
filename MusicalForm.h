@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.88
+// TextMIDITools Version 1.0.89
 //
 // textmidicgm 1.0
 // Copyright © 2024 Thomas E. Janzen
@@ -152,8 +152,9 @@ namespace textmidi
             double up_{0.6667};
         };
 
-        struct ArrangementDefinition
+        class ArrangementDefinition
         {
+          public:
             explicit ArrangementDefinition(arrangements::PermutationEnum
                 algorithm = arrangements::PermutationEnum::Identity,
                 double period = 100000.0) noexcept
@@ -217,20 +218,16 @@ namespace textmidi
             // A ctor for converting old files
             MusicalForm(const std::string& name, const cgmlegacy::TextForm& form) noexcept
               : name_{name},
-                copyright_{"© "},
                 len_{form.len},
                 min_note_len_{form.min_note_len},
                 max_note_len_{form.max_note_len},
-                scale_{},
                 pulse_{form.pulse},
                 melody_probabilities_{},
                 pitch_form_{form.pitch_form},
                 rhythm_form_{form.rhythm_form},
                 dynamic_form_{form.dynamic_form},
                 texture_form_{Sine{form.texture_form.range_period(),
-                                   form.texture_form.range_phase()}},
-                voices_{},
-                arrangement_definition_{arrangements::PermutationEnum::Identity, 10000.0}
+                                   form.texture_form.range_phase()}}
             {
                 scale_.clear();
                 scale_.reserve(form.scale.size());
@@ -245,7 +242,6 @@ namespace textmidi
 
             std::string name() const noexcept;
             void name(const std::string_view name) noexcept;
-            std::string copyright() const noexcept;
             void copyright(const std::string_view copyright) noexcept;
             double len() const noexcept;
             void len(double len) noexcept;
@@ -281,7 +277,7 @@ namespace textmidi
             void clamp_scale_to_instrument_ranges() noexcept;
           private:
             std::string name_{};
-            std::string copyright_{};
+            std::string copyright_{"© "};
             double len_{};
             double min_note_len_{};
             double max_note_len_{};
@@ -293,7 +289,7 @@ namespace textmidi
             MeanRangeSines dynamic_form_{};
             Sine                 texture_form_{};
             std::vector<VoiceXml>    voices_{};
-            ArrangementDefinition arrangement_definition_{};
+            ArrangementDefinition arrangement_definition_{arrangements::PermutationEnum::Identity, 10000.0};
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int version)
             {
@@ -323,7 +319,6 @@ namespace textmidi
 
         extern RandomDouble rd;
         extern RandomInt ri;
-
     }
 }
 BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 3)

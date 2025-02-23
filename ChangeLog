@@ -1,5 +1,12 @@
+2025-02-22     Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiFormEdit.texi, *.py: fix warnings from pylint.  
+        Found one functional defect and fixed.
+        Retest using textmidiformedittest.xml.
+        Update documentation to reflect capitalization change of
+        python names.
+
 2025-02-19     Thomas E. Janzen <janzentome@gmail.com>
-        *Arrangements.h, Makefile.opt.sed, Midi.h, MidiEvents.cc, MusicalForm.cc,
+        * Arrangements.h, Makefile.opt.sed, Midi.h, MidiEvents.cc, MusicalForm.cc,
         miditext.cc, smustextmidi.cc, textmidi.l:
         Get compilation by clang to work and pass tests.  However g++ is the 
         compiler to be used to build.

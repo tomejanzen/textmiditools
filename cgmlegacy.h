@@ -1,12 +1,12 @@
 //
-// TextMIDITools Version 1.0.89
+// TextMIDITools Version 1.0.90
 //
 // textmidicgm 1.0
-// Copyright © 2024 Thomas E. Janzen
+// Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
-// textmidicgm Copyright © 2024 Thomas E. Janzen
+// textmidicgm Copyright © 2025 Thomas E. Janzen
 //
 #if !defined(CGMLEGACY_H)
 #    define  CGMLEGACY_H

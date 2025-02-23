@@ -6,7 +6,7 @@ smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc Midi.cc MidiEvents.cc M
 textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc RhythmRational.cc Midi.cc MidiMaps.cc Arrangements.cc
 
 textmidi_LDADD = @LEXLIB@
-info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
+info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi TextMidiFormEdit.texi
 
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
 CXX = /usr/bin/env g++
@@ -79,7 +79,7 @@ GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
     clean:
-	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o textmidi.cc Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o DynamicsOptions.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT) *.cps *.toc *.cp *.aux textmidi.log textmidicgm.log smustextmidi.log miditext.log textmidiformedit.log
+	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o textmidi.cc Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o DynamicsOptions.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT) *.cps *.toc *.cp *.aux textmidi.log textmidicgm.log smustextmidi.log miditext.log TextMidiFormEdit.log
     install:
 	$(INSTALL_PROGRAM) textmidi$(EXEEXT) $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) miditext$(EXEEXT) $(DESTDIR)$(bindir)/miditext$(EXEEXT)
@@ -104,6 +104,6 @@ GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	$(MAKEINFO) smustextmidi.texi
     textmidicgm.info: textmidicgm.texi
 	$(MAKEINFO) textmidicgm.texi
-    textmidiformedit.info: textmidiformedit.texi
-	$(MAKEINFO) textmidiformedit.texi
+    TextMidiFormEdit.info: TextMidiFormEdit.texi
+	$(MAKEINFO) TextMidiFormEdit.texi
 

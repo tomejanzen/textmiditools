@@ -222,18 +222,18 @@ am__v_texidevnull_0 = > /dev/null
 am__v_texidevnull_1 = 
 INFO_DEPS = $(srcdir)/textmidi.info $(srcdir)/miditext.info \
 	$(srcdir)/smustextmidi.info $(srcdir)/textmidicgm.info \
-	$(srcdir)/textmidiformedit.info
+	$(srcdir)/TextMidiFormEdit.info
 am__TEXINFO_TEX_DIR = $(srcdir)
 DVIS = textmidi.dvi miditext.dvi smustextmidi.dvi textmidicgm.dvi \
-	textmidiformedit.dvi
+	TextMidiFormEdit.dvi
 PDFS = textmidi.pdf miditext.pdf smustextmidi.pdf textmidicgm.pdf \
-	textmidiformedit.pdf
+	TextMidiFormEdit.pdf
 PSS = textmidi.ps miditext.ps smustextmidi.ps textmidicgm.ps \
-	textmidiformedit.ps
+	TextMidiFormEdit.ps
 HTMLS = textmidi.html miditext.html smustextmidi.html textmidicgm.html \
-	textmidiformedit.html
+	TextMidiFormEdit.html
 TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi \
-	textmidicgm.texi textmidiformedit.texi
+	textmidicgm.texi TextMidiFormEdit.texi
 TEXI2DVI = texi2dvi
 TEXI2PDF = $(TEXI2DVI) --pdf --batch
 MAKEINFOHTML = $(MAKEINFO) --html
@@ -419,7 +419,7 @@ miditext_SOURCES = miditext.cc MidiEvents.cc MIDIKeyString.cc RhythmRational.cc 
 smustextmidi_SOURCES = smustextmidi.cc SmusTrackEvent.cc Midi.cc MidiEvents.cc MidiMaps.cc MIDIKeyString.cc RhythmRational.cc rational_support.cc MidiString.cc
 textmidicgm_SOURCES = textmidicgm.cc cgmlegacy.cc MIDIKeyString.cc MusicalForm.cc NoteEvent.cc Track.cc Voice.cc GnuPlot.cc Composer.cc Scales.cc GeneralMIDI.cc RhythmRational.cc Midi.cc MidiMaps.cc Arrangements.cc
 textmidi_LDADD = @LEXLIB@
-info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi textmidiformedit.texi
+info_TEXINFOS = textmidi.texi miditext.texi smustextmidi.texi textmidicgm.texi TextMidiFormEdit.texi
 AM_LDFLAGS = -pthread -lboost_program_options -lboost_system -lboost_serialization
 AM_CXXFLAGS = -D_GLIBCXX_ASSERTIONS -std=c++23 -Wall -Wpedantic \
 	-Wextra -Weffc++ -Wshadow -O2
@@ -648,10 +648,10 @@ $(srcdir)/textmidicgm.info: textmidicgm.texi
 textmidicgm.dvi: textmidicgm.texi 
 textmidicgm.pdf: textmidicgm.texi 
 textmidicgm.html: textmidicgm.texi 
-$(srcdir)/textmidiformedit.info: textmidiformedit.texi 
-textmidiformedit.dvi: textmidiformedit.texi 
-textmidiformedit.pdf: textmidiformedit.texi 
-textmidiformedit.html: textmidiformedit.texi 
+$(srcdir)/TextMidiFormEdit.info: TextMidiFormEdit.texi 
+TextMidiFormEdit.dvi: TextMidiFormEdit.texi 
+TextMidiFormEdit.pdf: TextMidiFormEdit.texi 
+TextMidiFormEdit.html: TextMidiFormEdit.texi 
 .dvi.ps:
 	$(AM_V_DVIPS)TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	$(DVIPS) $(AM_V_texinfo) -o $@ $<
@@ -735,21 +735,21 @@ dist-info: $(INFO_DEPS)
 mostlyclean-aminfo:
 	-rm -rf textmidi.t2d textmidi.t2p miditext.t2d miditext.t2p \
 	  smustextmidi.t2d smustextmidi.t2p textmidicgm.t2d \
-	  textmidicgm.t2p textmidiformedit.t2d textmidiformedit.t2p
+	  textmidicgm.t2p TextMidiFormEdit.t2d TextMidiFormEdit.t2p
 
 clean-aminfo:
 	-test -z "textmidi.dvi textmidi.pdf textmidi.ps textmidi.html miditext.dvi \
 	  miditext.pdf miditext.ps miditext.html smustextmidi.dvi \
 	  smustextmidi.pdf smustextmidi.ps smustextmidi.html \
 	  textmidicgm.dvi textmidicgm.pdf textmidicgm.ps \
-	  textmidicgm.html textmidiformedit.dvi textmidiformedit.pdf \
-	  textmidiformedit.ps textmidiformedit.html" \
+	  textmidicgm.html TextMidiFormEdit.dvi TextMidiFormEdit.pdf \
+	  TextMidiFormEdit.ps TextMidiFormEdit.html" \
 	|| rm -rf textmidi.dvi textmidi.pdf textmidi.ps textmidi.html miditext.dvi \
 	  miditext.pdf miditext.ps miditext.html smustextmidi.dvi \
 	  smustextmidi.pdf smustextmidi.ps smustextmidi.html \
 	  textmidicgm.dvi textmidicgm.pdf textmidicgm.ps \
-	  textmidicgm.html textmidiformedit.dvi textmidiformedit.pdf \
-	  textmidiformedit.ps textmidiformedit.html
+	  textmidicgm.html TextMidiFormEdit.dvi TextMidiFormEdit.pdf \
+	  TextMidiFormEdit.ps TextMidiFormEdit.html
 
 maintainer-clean-aminfo:
 	@list='$(INFO_DEPS)'; for i in $$list; do \
@@ -1327,7 +1327,7 @@ GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
     clean:
-	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o textmidi.cc Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o DynamicsOptions.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT) *.cps *.toc *.cp *.aux textmidi.log textmidicgm.log smustextmidi.log miditext.log textmidiformedit.log
+	rm -f cgmlegacy.o Composer.o GeneralMIDI.o GnuPlot.o main.o MIDIKeyString.o MidiEvents.o MidiMaps.o MidiString.o Midi.o miditext.o MusicalForm.o NoteEvent.o Scales.o smustextmidi.o SmusTrackEvent.o textmidicgm.o textmidi.o textmidi.cc Track.o Voice.o RhythmRational.o rational_support.o Arrangements.o DynamicsOptions.o textmidicgm$(EXEEXT) miditext$(EXEEXT) textmidi$(EXEEXT) smustextmidi$(EXEEXT) *.cps *.toc *.cp *.aux textmidi.log textmidicgm.log smustextmidi.log miditext.log TextMidiFormEdit.log
     install:
 	$(INSTALL_PROGRAM) textmidi$(EXEEXT) $(DESTDIR)$(bindir)/textmidi$(EXEEXT)
 	$(INSTALL_PROGRAM) miditext$(EXEEXT) $(DESTDIR)$(bindir)/miditext$(EXEEXT)
@@ -1352,8 +1352,8 @@ GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h
 	$(MAKEINFO) smustextmidi.texi
     textmidicgm.info: textmidicgm.texi
 	$(MAKEINFO) textmidicgm.texi
-    textmidiformedit.info: textmidiformedit.texi
-	$(MAKEINFO) textmidiformedit.texi
+    TextMidiFormEdit.info: TextMidiFormEdit.texi
+	$(MAKEINFO) TextMidiFormEdit.texi
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

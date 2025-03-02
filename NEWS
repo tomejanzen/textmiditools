@@ -515,3 +515,22 @@
     Size VoiceWindow geometry to not hide the bottom buttons.
 
     textmidi: Refine regular expression for key names to constrain precisely as (C-1..G9).
+
+    * Version 1.0.88
+    C++-iness: Use more C++ library to replace hand-written code.
+    textmidi: Clarify --lazynoteoff documentation.
+    Unify chunk IDs for MIDI and SMUS with array<unsigned char, 4>.
+    Unify options in Options.h and OptionName.
+
+    test report:
+    test/roundtriptests.bash
+    test/chorded.com
+    test/textmidicgmtest.bash
+    passed
+
+    * Version 1.0.89
+    Python GUI upgrade via pylint.
+
+    * Version 1.0.90
+    Python GUI upgrade via pylint, testing, and adding sunken reliefs.
+    The pylint score is 8.64.

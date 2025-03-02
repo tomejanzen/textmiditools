@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""TextMIDITools: TextMidiFormEdit.py Form Frame, 
+"""TextMIDITools: TextMidiFormEdit.py Form Frame,
 allowing the editing of the musical form's sinusoids.
 """
-# TextMIDITools Version 1.0.90
+# TextMIDITools Version 1.0.91
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -14,7 +14,6 @@ import tkinter
 import tkinter.ttk
 
 from tkinter import *
-from tkinter import ttk
 
 from Sine import Sine
 
@@ -37,7 +36,7 @@ class FormFrame(tkinter.Frame):
         self.mean_on = mean_on
         self.range_on = range_on
         super().__init__(parent)
-        self.grid(sticky=NSEW, padx=10, pady=10)
+        self.grid(sticky=NSEW, padx=2, pady=2)
         self.form_title = form_title
         self.create_widgets()
 

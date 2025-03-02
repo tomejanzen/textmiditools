@@ -1,3 +1,34 @@
+2025-03-01     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py, *.png: update Python GUI to stop forcing the window
+        geometry.
+        * test/TextMidiForm.xsd: write an XML Schema File
+        for form files.
+        * text/testtextmidiformedit.bash: step-wise test of the
+        Python GUI.
+
+2025-02-28     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
+        Tighten up window geometry; add frames with sunken boxes;
+        group related widgets more clearly.
+        Fix mistakes with BooleanVar usage.  
+        Scale from Keyboard was broken; appears fixed now.
+        Test with textmidiformedittest.xml.
+        Arrangement algorithm was being saved as a string rather
+        than an int.
+        Raise pylint score to 8.64
+
+2025-02-27     Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py, Sine.py: replace ".trace()" calls 
+        with ".trace_add()."
+        One of my old TCL/Tk books says the other old book is obsolete.
+        Also write a callback for arrangement_period, omitted unintentionally.
+        * TextMidiFormEdit.py, VoiceWindow.py: inversion checkbutton callback
+        had not been bound.
+        * AllFormsWindow.py: rearrange to make the window shorter.
+
+2025-02-23     Thomas E. Janzen <janzentome@gmail.com>
+        * *.py: More polishing with warnings from pylint: score 8.6.
+
 2025-02-22     Thomas E. Janzen <janzentome@gmail.com>
         * TextMidiFormEdit.texi, *.py: fix warnings from pylint.  
         Found one functional defect and fixed.

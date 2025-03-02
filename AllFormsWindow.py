@@ -1,6 +1,6 @@
 #!usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py voice window, which permits editing one Voice's attributes."""
-# TextMIDITools Version 1.0.90
+# TextMIDITools Version 1.0.91
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -14,7 +14,6 @@ import tkinter.constants
 
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 
 import FormFrame
 import Sine
@@ -91,9 +90,9 @@ class ScaleFrame(tkinter.Frame):
                     if key < self.midi_keys_qty:
                         self.scales_dict[scale_name].append(key)
         self.scale_transposed = []
-        for k in self.scales_dict['Chromatic'] :
-            self.scale_untransposed.append(k)
-            self.scale_transposed.append(k)
+        for key in self.scales_dict['Chromatic'] :
+            self.scale_untransposed.append(key)
+            self.scale_transposed.append(key)
 
         self.scale_name = StringVar()
         self.transpose = IntVar()  # Spinbox
@@ -102,10 +101,10 @@ class ScaleFrame(tkinter.Frame):
     def set_keyboard(self):
         """Set up the keyboard window."""
         midi_key_selects = []
-        for scale in self.full_midi_scale:
+        for key in self.full_midi_scale:
             midi_key_selects.append(False)
-        for transposed_scale in self.scale_transposed:
-            midi_key_selects[transposed_scale] = True
+        for transposed_key in self.scale_transposed:
+            midi_key_selects[transposed_key] = True
         self.keyboard_window.keyboard_frame.set_selects(midi_key_selects)
 
     def set_keyboard_from_xml(self, xml_form):
@@ -158,39 +157,41 @@ class ScaleFrame(tkinter.Frame):
     def create_widgets(self):
         """Create AllFormsWindow widgets."""
         self.keyboard_window = KeyboardWindow()
-        self.keyboard_window.geometry('1500x162+50-50')
         self.set_keyboard()
 
-        self.scale_name_label = tkinter.ttk.Label(self, text='Scale')
-        self.scale_name_spinbox = tkinter.ttk.Spinbox(self, wrap=True,
+        self.scale_frame = tkinter.ttk.Frame(self, padding='1 1 1 1', borderwidth=2,
+                relief='sunken')
+        self.scale_name_label = tkinter.ttk.Label(self.scale_frame, text='Scale')
+        self.scale_name_spinbox = tkinter.ttk.Spinbox(self.scale_frame, wrap=True,
             textvariable=self.scale_name, values=self.scale_names,
             state='readonly')
         self.scale_name.set('Chromatic')
 
-        self.transpose_label = tkinter.ttk.Label(self, text='Transpose')
-        self.transpose_spinbox = tkinter.ttk.Spinbox(self, wrap=True,
+        self.transpose_label = tkinter.ttk.Label(self.scale_frame, text='Transpose')
+        self.transpose_spinbox = tkinter.ttk.Spinbox(self.scale_frame, wrap=True,
             textvariable=self.transpose)
         self.transpose_spinbox['increment'] = 1
         self.transpose_spinbox['from']      = -5
         self.transpose_spinbox['to']        = 6
         self.transpose_spinbox['state'] = 'readonly'
-        self.from_keyboard_button = tkinter.ttk.Button(self, text='From Keyboard',
+        self.from_keyboard_button = tkinter.ttk.Button(self.scale_frame, text='From Keyboard',
               command=self.from_keyboard_callback)
 
         the_row = 0
         self.columnconfigure(index=the_row, weight=1)
         self.rowconfigure(index=the_row, weight=1)
-        self.scale_name_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.scale_name_spinbox.grid(row=the_row, column=1, sticky=NSEW)
-        the_row = the_row + 1
+        self.scale_frame.grid(row=the_row, column=0, stick=NSEW, columnspan=4)
+        self.scale_name_label.grid(row=0, column=0, sticky=NSEW)
+        self.scale_name_spinbox.grid(row=0, column=1, sticky=NSEW)
+
         self.columnconfigure(index=the_row, weight=1)
         self.rowconfigure(index=the_row, weight=1)
-        self.transpose_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.transpose_spinbox.grid(row=the_row, column=1, sticky=NSEW)
-        self.from_keyboard_button.grid(row=the_row, column=2, stick=NSEW)
+        self.transpose_label.grid(row=0, column=3, sticky=NSEW)
+        self.transpose_spinbox.grid(row=0, column=4, sticky=NSEW)
+        self.from_keyboard_button.grid(row=0, column=2, sticky=NSEW)
 
-        self.scale_name.trace('w', self.scale_name_callback)
-        self.transpose.trace('w', self.transpose_callback)
+        self.scale_name.trace_add("write", self.scale_name_callback)
+        self.transpose.trace_add("write", self.transpose_callback)
         self.transpose.set(0)
 
     def from_keyboard_callback(self):
@@ -201,7 +202,7 @@ class ScaleFrame(tkinter.Frame):
             self.scale_untransposed.append(key)
         self.transpose_scale()
         self.scale_name_spinbox['state'] = '!readonly'
-        self.scale_name_spinbox.set(self.scale_names[0])
+        self.scale_name_spinbox.set('unknown')
         self.scale_name_spinbox['state'] = 'readonly'
 
         self.transpose_spinbox['state'] = '!readonly'
@@ -216,17 +217,18 @@ class ScaleFrame(tkinter.Frame):
     def scale_name_callback(self, event, *args):
         """Scale name text field event."""
         scale_name = self.scale_name.get()
-        self.scale_untransposed = []
-        scale_ctr = 0
-        final_scale_num = 0
-        for a_scale_name in self.scale_names:
-            if a_scale_name == scale_name:
-                final_scale_num = scale_ctr
-            scale_ctr = scale_ctr + 1
-        for keynum in self.scales_dict[scale_name]:
-            self.scale_untransposed.append(keynum)
-        self.transpose_scale()
-        self.set_keyboard()
+        if scale_name != 'unknown':
+            self.scale_untransposed = []
+            scale_ctr = 0
+            final_scale_num = 0
+            for a_scale_name in self.scale_names:
+                if a_scale_name == scale_name:
+                    final_scale_num = scale_ctr
+                scale_ctr = scale_ctr + 1
+            for keynum in self.scales_dict[scale_name]:
+                self.scale_untransposed.append(keynum)
+            self.transpose_scale()
+            self.set_keyboard()
 
     def transpose_scale(self):
         """Transpose scale inc/dec."""
@@ -235,18 +237,18 @@ class ScaleFrame(tkinter.Frame):
             key_index = keynum + int(self.transpose.get())
             self.scale_transposed.append(key_index)
 
-        for k in range(0, len(self.scale_transposed)):
-            if self.scale_transposed[k] < 0:
-                self.scale_transposed[k] = self.scale_transposed[k] + 128
+        for key in range(0, len(self.scale_transposed)):
+            if self.scale_transposed[key] < 0:
+                self.scale_transposed[key] = self.scale_transposed[key] + 128
 
-        for k in range(0, len(self.scale_transposed)):
-            if self.scale_transposed[k]  >= self.midi_keys_qty:
-                self.scale_transposed[k]  = self.scale_transposed[k]  - 128
+        for key in range(0, len(self.scale_transposed)):
+            if self.scale_transposed[key]  >= self.midi_keys_qty:
+                self.scale_transposed[key]  = self.scale_transposed[key]  - 128
 
         low = 0
-        for k in range(1, len(self.scale_transposed)):
-            if self.scale_transposed[k - 1] > self.scale_transposed[k]:
-                low = k
+        for key in range(1, len(self.scale_transposed)):
+            if self.scale_transposed[key - 1] > self.scale_transposed[key]:
+                low = key
         right_partition = self.scale_transposed[0:low]
         left_partition  = self.scale_transposed[low:]
         left_partition.extend(right_partition)
@@ -290,7 +292,6 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.columnconfigure(index=0, weight=1)
         self.title('Musical Form')
         # width by height
-        self.geometry('600x1000+20+50')
 
     def create_widgets(self):
         """Create widgets in all forms window."""
@@ -335,25 +336,26 @@ class AllFormsWindow(tkinter.Toplevel):
             textvariable=self.pulse)
         self.pulse.set(self.xml_form['pulse'])
 
+        self.melody_probabilities_frame = tkinter.ttk.Frame(self,
+                padding='1 1 1 1', borderwidth=2, relief='sunken')
         self.melody_probabilities_label = tkinter.ttk.Label(
-                self.frame, text='MELODY PROBABILITIES')
+                self.melody_probabilities_frame, text='MELODY PROBABILITIES')
 
         validate_prob_command = (self.register(self.validate_probability),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
-        self.down_var_label = tkinter.ttk.Label(self.frame, text='Down')
-        self.down_var_entry = tkinter.ttk.Entry(self.frame,
+        self.probabilities_var_label = tkinter.ttk.Label(self.melody_probabilities_frame,
+                text='Down/Same/Up')
+        self.down_var_entry = tkinter.ttk.Entry(self.melody_probabilities_frame,
             validatecommand=validate_prob_command,
             validate='focusout', textvariable=self.down_var)
         self.down_var.set(self.xml_form['melody_probabilities']['down'])
 
-        self.same_var_label = tkinter.ttk.Label(self.frame, text='Same')
-        self.same_var_entry = tkinter.ttk.Entry(self.frame,
+        self.same_var_entry = tkinter.ttk.Entry(self.melody_probabilities_frame,
             validatecommand=validate_prob_command, validate='focusout',
             textvariable=self.same_var)
         self.same_var.set(self.xml_form['melody_probabilities']['same'])
 
-        self.up_var_label = tkinter.ttk.Label(self.frame, text='Up')
-        self.up_var_entry = tkinter.ttk.Entry(self.frame,
+        self.up_var_entry = tkinter.ttk.Entry(self.melody_probabilities_frame,
             validatecommand=validate_prob_command, validate='focusout',
             textvariable=self.up_var)
         self.up_var.set(self.xml_form['melody_probabilities']['up'])
@@ -402,17 +404,19 @@ class AllFormsWindow(tkinter.Toplevel):
                 offset_callback=self.texture_range_offset_callback,
                 xml_sine=self.xml_form['texture_form'])
 
+        self.arrangements_frame = tkinter.ttk.Frame(self.frame, padding='1 1 1 1',
+                borderwidth=2, relief='sunken')
         self.arrangement_label = tkinter.ttk.Label(
-            self.frame, text='ARRANGEMENTS')
+            self.arrangements_frame, text='ARRANGEMENTS')
         self.arrangement_algorithm_label = tkinter.ttk.Label(
-            self.frame, text='Algorithm')
+            self.arrangements_frame, text='Algorithm')
         self.arrangement_algorithm_spinbox = tkinter.ttk.Spinbox(
-            self.frame, values=ArrangementAlgorithmList,
+            self.arrangements_frame, values=ArrangementAlgorithmList,
             state='readonly', wrap=True,
             textvariable=self.arrangement_algorithm)
         self.arrangement_period_label = tkinter.ttk.Label(
-            self.frame, text='Period')
-        self.arrangement_period_entry = tkinter.ttk.Entry(self.frame,
+            self.arrangements_frame, text='Period')
+        self.arrangement_period_entry = tkinter.ttk.Entry(self.arrangements_frame,
             textvariable=self.arrangement_period)
         self.arrangement_period.set(
             self.xml_form['arrangement_definition']['period'])
@@ -427,10 +431,9 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=the_row, weight=1)
         self.name_label.grid(row=the_row, column=0, sticky=NSEW)
         self.name_entry.grid(row=the_row, column=1, sticky=NSEW)
-        the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.copyright_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.copyright_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.copyright_label.grid(row=the_row, column=2, sticky=NSEW)
+        self.copyright_entry.grid(row=the_row, column=3, sticky=NSEW)
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
         self.len_label.grid(row=the_row, column=0, sticky=NSEW)
@@ -439,29 +442,23 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=the_row, weight=1)
         self.min_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.min_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
-        the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.max_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.max_note_len_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.max_note_len_label.grid(row=the_row, column=2, sticky=NSEW)
+        self.max_note_len_entry.grid(row=the_row, column=3, sticky=NSEW)
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
         self.pulse_label.grid(row=the_row, column=0, sticky=NSEW)
         self.pulse_entry.grid(row=the_row, column=1, sticky=NSEW)
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.melody_probabilities_label.grid(row=the_row, column=0, sticky=NSEW)
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
-        self.down_var_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.down_var_entry.grid(row=the_row, column=1, sticky=NSEW)
-        the_row = the_row + 1
-        self.frame.rowconfigure(index=the_row, weight=1)
-        self.same_var_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.same_var_entry.grid(row=the_row, column=1, sticky=NSEW)
-        the_row = the_row + 1
-        self.frame.rowconfigure(index=the_row, weight=1)
-        self.up_var_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.up_var_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.melody_probabilities_frame.grid(row=the_row, column=0, sticky=NSEW, columnspan=4)
+        self.melody_probabilities_label.grid(row=0, column=0, sticky=NSEW)
+        self.probabilities_var_label.grid(row=1, column=0, sticky=NSEW)
+        self.down_var_entry.grid(row=1, column=1, sticky=NSEW)
+        self.same_var_entry.grid(row=1, column=2, sticky=NSEW)
+        self.up_var_entry.grid(row=1, column=3, sticky=NSEW)
         the_row = the_row + 1
         self.scale_frame.grid(sticky='w', row=the_row, column=0)
         the_row = the_row + 1
@@ -473,26 +470,27 @@ class AllFormsWindow(tkinter.Toplevel):
         the_row = the_row + 1
         self.texture_form.grid(row=the_row, column=0, sticky=NSEW)
         the_row = the_row + 1
-        self.arrangement_label.grid(row=the_row, column=0, stick=NSEW)
-        the_row = the_row + 1
-        self.arrangement_algorithm_label.grid(row=the_row, column=0, stick=NSEW)
-        self.arrangement_algorithm_spinbox.grid(row=the_row, column=1,
+        self.arrangements_frame.grid(row=the_row, column=0, sticky=NSEW, columnspan=4)
+        arrangement_row = 0
+        self.arrangement_label.grid(row=arrangement_row, column=0, sticky=NSEW)
+        arrangement_row = arrangement_row + 1
+        self.arrangement_algorithm_label.grid(row=arrangement_row, column=0, sticky=NSEW)
+        self.arrangement_algorithm_spinbox.grid(row=arrangement_row, column=1,
             sticky=NSEW)
-        the_row = the_row + 1
-        self.arrangement_period_label.grid(row=the_row, column=0, sticky=NSEW)
-        self.arrangement_period_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.arrangement_period_label.grid(row=arrangement_row, column=2, sticky=NSEW)
+        self.arrangement_period_entry.grid(row=arrangement_row, column=3, sticky=NSEW)
 
-        self.name.trace('w', self.name_callback)
-        self.copyright.trace('w', self.copyright_callback)
-        self.len.trace('w', self.len_callback)
-        self.min_note_len.trace('w', self.min_note_len_callback)
-        self.max_note_len.trace('w', self.max_note_len_callback)
-        self.pulse.trace('w', self.pulse_callback)
-        self.down_var.trace('w', self.melody_down_callback)
-        self.same_var.trace('w', self.melody_same_callback)
-        self.up_var.trace('w', self.melody_up_callback)
-        self.arrangement_algorithm.trace('w',
-            self.arrangement_algorithm_callback)
+        self.name.trace_add("write", self.name_callback)
+        self.copyright.trace_add("write", self.copyright_callback)
+        self.len.trace_add("write", self.len_callback)
+        self.min_note_len.trace_add("write", self.min_note_len_callback)
+        self.max_note_len.trace_add("write", self.max_note_len_callback)
+        self.pulse.trace_add("write", self.pulse_callback)
+        self.down_var.trace_add("write", self.melody_down_callback)
+        self.same_var.trace_add("write", self.melody_same_callback)
+        self.up_var.trace_add("write", self.melody_up_callback)
+        self.arrangement_algorithm.trace_add("write", self.arrangement_algorithm_callback)
+        self.arrangement_period.trace_add("write", self.arrangement_period_callback)
         self.pitch_form.install_callbacks()
         self.rhythm_form.install_callbacks()
         self.dynamic_form.install_callbacks()
@@ -1132,7 +1130,8 @@ class AllFormsWindow(tkinter.Toplevel):
             The arrangement algorithm spinbox had an event;
             save the value to the internal form structure.
         """
-        self.xml_form['arrangement_definition']['algorithm'] = self.arrangement_algorithm.get()
+        self.xml_form['arrangement_definition']['algorithm'] = (
+                AlgorithmDict[self.arrangement_algorithm.get()])
 
     def arrangement_period_callback(self, event, *args):
         """
@@ -1173,7 +1172,7 @@ class AllFormsWindow(tkinter.Toplevel):
         # v: index of string to be added or deleted
         # V: 1 insert, 0 delete, -1 if forced validation or a text var validation
         # W:
-        pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        pat = re.compile(r"[0-9]*([.][0-9]*)?([Ee][-+]?[0-9]+)?")
         mat = pat.fullmatch(str(proposed))
         ret = False
         if mat:

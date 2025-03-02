@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
-"""TextMIDITools: TextMidiFormEdit.py KeyBoard display, 
+"""TextMIDITools: TextMidiFormEdit.py KeyBoard display,
 which displays a 128-key keyboard for editing scales.
 """
-# TextMIDITools Version 1.0.90
+# TextMIDITools Version 1.0.91
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 #
 
-import math
-import sys
 import tkinter
 import tkinter.ttk
 import tkinter.constants
 import tkinter.filedialog
 
 from tkinter import *
-from tkinter import ttk
 
 class KeyboardButtons(tkinter.Frame):
     """Present a 128-key keyboard for scale-editing."""
@@ -28,6 +25,8 @@ class KeyboardButtons(tkinter.Frame):
         self.frame.grid(sticky=NSEW, row=1, column=0)
         self.draw_widgets()
         self.keyboard = keyboard
+        self.win_width = 7700
+        self.win_height = 1000
 
     def draw_widgets(self):
         """Draw the widgets in keyboard."""
@@ -52,31 +51,31 @@ class KeyboardButtons(tkinter.Frame):
     def clear_keyboard_callback(self):
         """User pressed Clear [keyboard]; zero out the scale."""
         self.keyboard.draw_keyboard()
-        for k in range(0, len(self.keyboard.midi_key_selects)):
-            self.keyboard.midi_key_selects[k] = False
+        for key in range(0, len(self.keyboard.midi_key_selects)):
+            self.keyboard.midi_key_selects[key] = False
         self.keyboard.set_keys_from_selects()
 
     def all_keyboard_callback(self):
         """User pressed All button; select all 128 keys for the scale."""
-        for k in range(0, len(self.keyboard.midi_key_selects)):
-            self.keyboard.midi_key_selects[k] = True
+        for key in range(0, len(self.keyboard.midi_key_selects)):
+            self.keyboard.midi_key_selects[key] = True
         self.keyboard.set_keys_from_selects()
 
     def complement_keyboard_callback(self):
         """Complement the scale; selected keys are deselected; deselected keys are selected."""
-        for k in range(0, len(self.keyboard.midi_key_selects)):
-            self.keyboard.midi_key_selects[k] = not self.keyboard.midi_key_selects[k]
+        for key in range(0, len(self.keyboard.midi_key_selects)):
+            self.keyboard.midi_key_selects[key] = not self.keyboard.midi_key_selects[key]
         self.keyboard.set_keys_from_selects()
 
     def octave_repeat_keyboard_callback(self):
         """What keys are selected, make that pitch selected in every octave."""
-        for k in range(0, len(self.keyboard.midi_key_selects)):
-            if self.keyboard.midi_key_selects[k]:
-                for sel in range(k % 12, 128, 12):
+        for key in range(0, len(self.keyboard.midi_key_selects)):
+            if self.keyboard.midi_key_selects[key]:
+                for sel in range(key % 12, 128, 12):
                     self.keyboard.midi_key_selects[sel] = True
         self.keyboard.set_keys_from_selects()
 
-class one_octave():
+class OneOctave():
     """Present one octave of a 128-key keyboard for scale-editing."""
     full_octaves = 10
     remainder_keys = 8
@@ -161,17 +160,18 @@ class one_octave():
         for ref_key in range(0, len(self.ref_keys)):
             for pit in range(0, len(self.ref_keys[ref_key][2])):
                 for ccc in range(0, len(self.ref_keys[ref_key][2][pit])):
-                    self.keys[ref_key][2][pit][ccc] = int(scaler * self.ref_keys[ref_key][2][pit][ccc])
+                    self.keys[ref_key][2][pit][ccc] = int(scaler *
+                            self.ref_keys[ref_key][2][pit][ccc])
 
-    def translate_one_octave(self):
+    def translate_OneOctave(self):
         """Position an octave of the scale."""
         self.translate_x(self.keys[11][2][5][0] - self.keys[0][2][0][0])
 
     def translate_x(self, delta_x):
         """Compute the geometric horizontal position of this octave."""
         for key in range(0, len(self.keys)):
-            for p in range(0, len(self.keys[key][2])):
-                self.keys[key][2][p][0] = int(delta_x + self.keys[key][2][p][0])
+            for puma in range(0, len(self.keys[key][2])):
+                self.keys[key][2][puma][0] = int(delta_x + self.keys[key][2][puma][0])
 
 class KeyboardFrame(tkinter.Frame):
     """Present the underlying frame for a 128-key keyboard for scale-editing."""
@@ -183,15 +183,15 @@ class KeyboardFrame(tkinter.Frame):
         """Init Keyboard frame."""
         super().__init__(parent)
         self.frame = tkinter.ttk.Frame(self, padding='1 1 1 1')
-        for k in range(0, 128):
+        for keynum in range(0, 128):
             self.midi_key_selects.append(False)
 
         self.frame.grid(sticky=NSEW, row=0, column=0)
-        self.one_octave = one_octave()
-        self.one_octave.scale(0.20)
-        self.canvas_width = (self.one_octave.keys[0][2][3][0]
+        self.OneOctave = OneOctave()
+        self.OneOctave.scale(0.20)
+        self.canvas_width = (self.OneOctave.keys[0][2][3][0]
             * self.number_of_white_keys)
-        self.canvas_height = self.one_octave.keys[0][2][1][1]
+        self.canvas_height = self.OneOctave.keys[0][2][1][1]
         self.canvas = Canvas(self.frame, bg='white', height=self.canvas_height,
               width=self.canvas_width, background='#88AAFF')
         self.canvas.grid(row=0, column=0)
@@ -219,72 +219,72 @@ class KeyboardFrame(tkinter.Frame):
         """Draw the keyboard."""
         self.full_keyboard = []
 
-        for octave in range(0, self.one_octave.full_octaves):
-            for k in range(0, len(self.one_octave.keys)):
+        for octave in range(0, self.OneOctave.full_octaves):
+            for key in range(0, len(self.OneOctave.keys)):
                 temp_key = []
-                temp_key.append(self.one_octave.keys[k][0] + str(octave - 1))
-                temp_key.append(self.one_octave.keys[k][1])
+                temp_key.append(self.OneOctave.keys[key][0] + str(octave - 1))
+                temp_key.append(self.OneOctave.keys[key][1])
                 temp_poly = []
-                for p in range(0, len(self.one_octave.keys[k][2])):
+                for puma in range(0, len(self.OneOctave.keys[key][2])):
                     temp_point = []
-                    for c in range(0, len(self.one_octave.keys[k][2][p])):
-                        temp_point.append(self.one_octave.keys[k][2][p][c])
+                    for cat in self.OneOctave.keys[key][2][puma]:
+                        temp_point.append(cat)
                     temp_poly.append(temp_point)
                 temp_key.append(temp_poly)
                 self.full_keyboard.append(temp_key)
-            self.one_octave.translate_one_octave()
+            self.OneOctave.translate_OneOctave()
 
         # put in the C to G in the top octave
         octave = 10
-        for k in range(0, 8):
+        for key in range(0, 8):
             temp_key = []
-            temp_key.append(self.one_octave.keys[k][0] + str(octave - 1))
-            temp_key.append(self.one_octave.keys[k][1])
+            temp_key.append(self.OneOctave.keys[key][0] + str(octave - 1))
+            temp_key.append(self.OneOctave.keys[key][1])
             temp_poly = []
-            for p in range(0, len(self.one_octave.keys[k][2])):
+            for puma in range(0, len(self.OneOctave.keys[key][2])):
                 temp_point = []
-                for c in range(0, len(self.one_octave.keys[k][2][p])):
-                    temp_point.append(self.one_octave.keys[k][2][p][c])
+                for cat in self.OneOctave.keys[key][2][puma]:
+                    temp_point.append(cat)
                 temp_poly.append(temp_point)
             temp_key.append(temp_poly)
             self.full_keyboard.append(temp_key)
 
         self.canvas.delete(all)
         key_ids = []
-        for k in range(0, len(self.full_keyboard)):
+        for key in range(0, len(self.full_keyboard)):
             the_width = '1.0'
-            if 60 == k:
+            if 60 == key:
                 the_width = '4.0'
-            key_ids.append(self.canvas.create_polygon(self.full_keyboard[k][2],
-                fill=self.full_keyboard[k][1], activefill='yellow',
+            key_ids.append(self.canvas.create_polygon(self.full_keyboard[key][2],
+                fill=self.full_keyboard[key][1], activefill='yellow',
                 disabledfill='gray', width=the_width, outline='black',
-                tags=self.full_keyboard[k][0]))
+                tags=self.full_keyboard[key][0]))
         self.set_keys_from_selects()
 
     def set_keys_from_selects(self):
         """Set the key color from the scale selection in place."""
         if len(self.full_keyboard) > 0:
-            for k in range(0, len(self.midi_key_selects)):
-                if self.midi_key_selects[k]:
-                    if self.full_keyboard[k][1] == 'white':
+            for key in range(0, len(self.midi_key_selects)):
+                if self.midi_key_selects[key]:
+                    if self.full_keyboard[key][1] == 'white':
                         self.canvas.itemconfigure(
-                            tagOrId=self.full_keyboard[k][0],
+                            tagOrId=self.full_keyboard[key][0],
                             fill='blue', stipple='gray50')
                     else:
                         self.canvas.itemconfigure(
-                            tagOrId=self.full_keyboard[k][0],
+                            tagOrId=self.full_keyboard[key][0],
                             fill='red', stipple='gray50')
                 else:
                     self.canvas.itemconfigure(
-                        tagOrId=self.full_keyboard[k][0],
-                        fill=self.full_keyboard[k][1], stipple='')
+                        tagOrId=self.full_keyboard[key][0],
+                        fill=self.full_keyboard[key][1], stipple='')
 
     def set_selects(self, selects):
         """Set the key selections."""
         if (len(selects) > 0
             and len(selects) == len(self.midi_key_selects)):
-            for k in range(0, len(self.midi_key_selects)):
-                self.midi_key_selects[k] = selects[k]
+            for key in range(0, len(self.midi_key_selects)):
+                self.midi_key_selects[key] = selects[key]
             self.set_keys_from_selects()
 
     def get_key_ints(self):

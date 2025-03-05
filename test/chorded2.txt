@@ -6,11 +6,14 @@ TEMPO 60
 KEY_SIGNATURE C
 TEXT CREATED BY THOMAS E. JANZEN
 TRACK chords
-LAZY mf chan 1 C4- 4
+LAZY forte chan 1 C4- 4
 -C4- E4- 4
--C4- -E4- G4- 4
--C4 -E4 -G4 C5 4
+vel 60
+END_LAZY TEXT "mid chord text"
+LAZY -C4- -E4- chan 2 G4- 4
+chan 1 -C4 -E4 chan 2 -G4 chan 1 C5 4
+
 END_LAZY
-ticks "End of Track"
+
 END_OF_TRACK
 

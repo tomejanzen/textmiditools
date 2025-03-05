@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xml:lang="EN">
+
+    <xs:element name="boost_serialization">
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="1">
+                <xs:element name="xml_form" type="xml_form_type" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+            <xs:attribute name="signature" type="xs:string"/>
+            <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="BoolType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="SineType">
+        <xs:sequence>
+            <xs:element name="period_"    type="durationType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="phase_"     type="xs:double" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="amplitude_" type="xs:double" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="offset_"    type="xs:double" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:complexType name="FormType">
+        <xs:sequence>
+            <xs:element name="mean_sine_" type="SineType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="range_sine_" type="SineType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:complexType name="posrational">
+        <xs:sequence>
+            <xs:element name="numerator_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="denominator_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:complexType name="followerType">
+        <xs:sequence>
+            <xs:element name="follow_" type="BoolType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="leader_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="interval_type_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="interval_" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="delay_" type="posrational" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="duration_factor_" type="posrational" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="inversion_" type="BoolType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="retrograde_" type="BoolType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:simpleType name="channelType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="16"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="programType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="128"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="panType">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="-64"/>
+            <xs:maxInclusive value="63"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="voice_item">
+        <xs:sequence>
+            <xs:element name="low_pitch_" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="high_pitch_" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="channel_" type="channelType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="walking_" type="probabilityType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="program_" type="programType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="pan_" type="panType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="follower_" type="followerType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:integer"/>
+        <xs:attribute name="tracking_level" type="xs:integer"/>
+        <xs:attribute name="version" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="voicesType">
+        <xs:sequence>
+            <xs:element name="count" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="item_version" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="item" type="voice_item" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:complexType name="arrangement_definition">
+        <xs:sequence>
+            <xs:element name="algorithm_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="period_" type="durationType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:simpleType name="keynameType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="C-1"/>
+            <xs:enumeration value="C#-1"/>
+            <xs:enumeration value="Cx-1"/>
+            <xs:enumeration value="Dbb-1"/>
+            <xs:enumeration value="Db-1"/>
+            <xs:enumeration value="D-1"/>
+            <xs:enumeration value="D#-1"/>
+            <xs:enumeration value="Dx-1"/>
+            <xs:enumeration value="Ebb-1"/>
+            <xs:enumeration value="Eb-1"/>
+            <xs:enumeration value="E-1"/>
+            <xs:enumeration value="E#-1"/>
+            <xs:enumeration value="Fb-1"/>
+            <xs:enumeration value="F-1"/>
+            <xs:enumeration value="F#-1"/>
+            <xs:enumeration value="Fx-1"/>
+            <xs:enumeration value="Gbb-1"/>
+            <xs:enumeration value="Gb-1"/>
+            <xs:enumeration value="G-1"/>
+            <xs:enumeration value="G#-1"/>
+            <xs:enumeration value="Gx-1"/>
+            <xs:enumeration value="Abb-1"/>
+            <xs:enumeration value="Ab-1"/>
+            <xs:enumeration value="A-1"/>
+            <xs:enumeration value="A#-1"/>
+            <xs:enumeration value="Ax-1"/>
+            <xs:enumeration value="Bbb-1"/>
+            <xs:enumeration value="Bb-1"/>
+            <xs:enumeration value="B-1"/>
+            <xs:enumeration value="B#-1"/>
+            <xs:enumeration value="Cb0"/>
+            <xs:enumeration value="C0"/>
+            <xs:enumeration value="C#0"/>
+            <xs:enumeration value="Cx0"/>
+            <xs:enumeration value="Dbb0"/>
+            <xs:enumeration value="Db0"/>
+            <xs:enumeration value="D0"/>
+            <xs:enumeration value="D#0"/>
+            <xs:enumeration value="Dx0"/>
+            <xs:enumeration value="Ebb0"/>
+            <xs:enumeration value="Eb0"/>
+            <xs:enumeration value="E0"/>
+            <xs:enumeration value="E#0"/>
+            <xs:enumeration value="Fb0"/>
+            <xs:enumeration value="F0"/>
+            <xs:enumeration value="F#0"/>
+            <xs:enumeration value="Fx0"/>
+            <xs:enumeration value="Gbb0"/>
+            <xs:enumeration value="Gb0"/>
+            <xs:enumeration value="G0"/>
+            <xs:enumeration value="G#0"/>
+            <xs:enumeration value="Gx0"/>
+            <xs:enumeration value="Abb0"/>
+            <xs:enumeration value="Ab0"/>
+            <xs:enumeration value="A0"/>
+            <xs:enumeration value="A#0"/>
+            <xs:enumeration value="Ax0"/>
+            <xs:enumeration value="Bbb0"/>
+            <xs:enumeration value="Bb0"/>
+            <xs:enumeration value="B0"/>
+            <xs:enumeration value="B#0"/>
+            <xs:enumeration value="Cb1"/>
+            <xs:enumeration value="C1"/>
+            <xs:enumeration value="C#1"/>
+            <xs:enumeration value="Cx1"/>
+            <xs:enumeration value="Dbb1"/>
+            <xs:enumeration value="Db1"/>
+            <xs:enumeration value="D1"/>
+            <xs:enumeration value="D#1"/>
+            <xs:enumeration value="Dx1"/>
+            <xs:enumeration value="Ebb1"/>
+            <xs:enumeration value="Eb1"/>
+            <xs:enumeration value="E1"/>
+            <xs:enumeration value="E#1"/>
+            <xs:enumeration value="Fb1"/>
+            <xs:enumeration value="F1"/>
+            <xs:enumeration value="F#1"/>
+            <xs:enumeration value="Fx1"/>
+            <xs:enumeration value="Gbb1"/>
+            <xs:enumeration value="Gb1"/>
+            <xs:enumeration value="G1"/>
+            <xs:enumeration value="G#1"/>
+            <xs:enumeration value="Gx1"/>
+            <xs:enumeration value="Abb1"/>
+            <xs:enumeration value="Ab1"/>
+            <xs:enumeration value="A1"/>
+            <xs:enumeration value="A#1"/>
+            <xs:enumeration value="Ax1"/>
+            <xs:enumeration value="Bbb1"/>
+            <xs:enumeration value="Bb1"/>
+            <xs:enumeration value="B1"/>
+            <xs:enumeration value="B#1"/>
+            <xs:enumeration value="Cb2"/>
+            <xs:enumeration value="C2"/>
+            <xs:enumeration value="C#2"/>
+            <xs:enumeration value="Cx2"/>
+            <xs:enumeration value="Dbb2"/>
+            <xs:enumeration value="Db2"/>
+            <xs:enumeration value="D2"/>
+            <xs:enumeration value="D#2"/>
+            <xs:enumeration value="Dx2"/>
+            <xs:enumeration value="Ebb2"/>
+            <xs:enumeration value="Eb2"/>
+            <xs:enumeration value="E2"/>
+            <xs:enumeration value="E#2"/>
+            <xs:enumeration value="Fb2"/>
+            <xs:enumeration value="F2"/>
+            <xs:enumeration value="F#2"/>
+            <xs:enumeration value="Fx2"/>
+            <xs:enumeration value="Gbb2"/>
+            <xs:enumeration value="Gb2"/>
+            <xs:enumeration value="G2"/>
+            <xs:enumeration value="G#2"/>
+            <xs:enumeration value="Gx2"/>
+            <xs:enumeration value="Abb2"/>
+            <xs:enumeration value="Ab2"/>
+            <xs:enumeration value="A2"/>
+            <xs:enumeration value="A#2"/>
+            <xs:enumeration value="Ax2"/>
+            <xs:enumeration value="Bbb2"/>
+            <xs:enumeration value="Bb2"/>
+            <xs:enumeration value="B2"/>
+            <xs:enumeration value="B#2"/>
+            <xs:enumeration value="Cb3"/>
+            <xs:enumeration value="C3"/>
+            <xs:enumeration value="C#3"/>
+            <xs:enumeration value="Cx3"/>
+            <xs:enumeration value="Dbb3"/>
+            <xs:enumeration value="Db3"/>
+            <xs:enumeration value="D3"/>
+            <xs:enumeration value="D#3"/>
+            <xs:enumeration value="Dx3"/>
+            <xs:enumeration value="Ebb3"/>
+            <xs:enumeration value="Eb3"/>
+            <xs:enumeration value="E3"/>
+            <xs:enumeration value="E#3"/>
+            <xs:enumeration value="Fb3"/>
+            <xs:enumeration value="F3"/>
+            <xs:enumeration value="F#3"/>
+            <xs:enumeration value="Fx3"/>
+            <xs:enumeration value="Gbb3"/>
+            <xs:enumeration value="Gb3"/>
+            <xs:enumeration value="G3"/>
+            <xs:enumeration value="G#3"/>
+            <xs:enumeration value="Gx3"/>
+            <xs:enumeration value="Abb3"/>
+            <xs:enumeration value="Ab3"/>
+            <xs:enumeration value="A3"/>
+            <xs:enumeration value="A#3"/>
+            <xs:enumeration value="Ax3"/>
+            <xs:enumeration value="Bbb3"/>
+            <xs:enumeration value="Bb3"/>
+            <xs:enumeration value="B3"/>
+            <xs:enumeration value="B#3"/>
+            <xs:enumeration value="Cb4"/>
+            <xs:enumeration value="C4"/>
+            <xs:enumeration value="C#4"/>
+            <xs:enumeration value="Cx4"/>
+            <xs:enumeration value="Dbb4"/>
+            <xs:enumeration value="Db4"/>
+            <xs:enumeration value="D4"/>
+            <xs:enumeration value="D#4"/>
+            <xs:enumeration value="Dx4"/>
+            <xs:enumeration value="Ebb4"/>
+            <xs:enumeration value="Eb4"/>
+            <xs:enumeration value="E4"/>
+            <xs:enumeration value="E#4"/>
+            <xs:enumeration value="Fb4"/>
+            <xs:enumeration value="F4"/>
+            <xs:enumeration value="F#4"/>
+            <xs:enumeration value="Fx4"/>
+            <xs:enumeration value="Gbb4"/>
+            <xs:enumeration value="Gb4"/>
+            <xs:enumeration value="G4"/>
+            <xs:enumeration value="G#4"/>
+            <xs:enumeration value="Gx4"/>
+            <xs:enumeration value="Abb4"/>
+            <xs:enumeration value="Ab4"/>
+            <xs:enumeration value="A4"/>
+            <xs:enumeration value="A#4"/>
+            <xs:enumeration value="Ax4"/>
+            <xs:enumeration value="Bbb4"/>
+            <xs:enumeration value="Bb4"/>
+            <xs:enumeration value="B4"/>
+            <xs:enumeration value="B#4"/>
+            <xs:enumeration value="Cb5"/>
+            <xs:enumeration value="C5"/>
+            <xs:enumeration value="C#5"/>
+            <xs:enumeration value="Cx5"/>
+            <xs:enumeration value="Dbb5"/>
+            <xs:enumeration value="Db5"/>
+            <xs:enumeration value="D5"/>
+            <xs:enumeration value="D#5"/>
+            <xs:enumeration value="Dx5"/>
+            <xs:enumeration value="Ebb5"/>
+            <xs:enumeration value="Eb5"/>
+            <xs:enumeration value="E5"/>
+            <xs:enumeration value="E#5"/>
+            <xs:enumeration value="Fb5"/>
+            <xs:enumeration value="F5"/>
+            <xs:enumeration value="F#5"/>
+            <xs:enumeration value="Fx5"/>
+            <xs:enumeration value="Gbb5"/>
+            <xs:enumeration value="Gb5"/>
+            <xs:enumeration value="G5"/>
+            <xs:enumeration value="G#5"/>
+            <xs:enumeration value="Gx5"/>
+            <xs:enumeration value="Abb5"/>
+            <xs:enumeration value="Ab5"/>
+            <xs:enumeration value="A5"/>
+            <xs:enumeration value="A#5"/>
+            <xs:enumeration value="Ax5"/>
+            <xs:enumeration value="Bbb5"/>
+            <xs:enumeration value="Bb5"/>
+            <xs:enumeration value="B5"/>
+            <xs:enumeration value="B#5"/>
+            <xs:enumeration value="Cb6"/>
+            <xs:enumeration value="C6"/>
+            <xs:enumeration value="C#6"/>
+            <xs:enumeration value="Cx6"/>
+            <xs:enumeration value="Dbb6"/>
+            <xs:enumeration value="Db6"/>
+            <xs:enumeration value="D6"/>
+            <xs:enumeration value="D#6"/>
+            <xs:enumeration value="Dx6"/>
+            <xs:enumeration value="Ebb6"/>
+            <xs:enumeration value="Eb6"/>
+            <xs:enumeration value="E6"/>
+            <xs:enumeration value="E#6"/>
+            <xs:enumeration value="Fb6"/>
+            <xs:enumeration value="F6"/>
+            <xs:enumeration value="F#6"/>
+            <xs:enumeration value="Fx6"/>
+            <xs:enumeration value="Gbb6"/>
+            <xs:enumeration value="Gb6"/>
+            <xs:enumeration value="G6"/>
+            <xs:enumeration value="G#6"/>
+            <xs:enumeration value="Gx6"/>
+            <xs:enumeration value="Abb6"/>
+            <xs:enumeration value="Ab6"/>
+            <xs:enumeration value="A6"/>
+            <xs:enumeration value="A#6"/>
+            <xs:enumeration value="Ax6"/>
+            <xs:enumeration value="Bbb6"/>
+            <xs:enumeration value="Bb6"/>
+            <xs:enumeration value="B6"/>
+            <xs:enumeration value="B#6"/>
+            <xs:enumeration value="Cb7"/>
+            <xs:enumeration value="C7"/>
+            <xs:enumeration value="C#7"/>
+            <xs:enumeration value="Cx7"/>
+            <xs:enumeration value="Dbb7"/>
+            <xs:enumeration value="Db7"/>
+            <xs:enumeration value="D7"/>
+            <xs:enumeration value="D#7"/>
+            <xs:enumeration value="Dx7"/>
+            <xs:enumeration value="Ebb7"/>
+            <xs:enumeration value="Eb7"/>
+            <xs:enumeration value="E7"/>
+            <xs:enumeration value="E#7"/>
+            <xs:enumeration value="Fb7"/>
+            <xs:enumeration value="F7"/>
+            <xs:enumeration value="F#7"/>
+            <xs:enumeration value="Fx7"/>
+            <xs:enumeration value="Gbb7"/>
+            <xs:enumeration value="Gb7"/>
+            <xs:enumeration value="G7"/>
+            <xs:enumeration value="G#7"/>
+            <xs:enumeration value="Gx7"/>
+            <xs:enumeration value="Abb7"/>
+            <xs:enumeration value="Ab7"/>
+            <xs:enumeration value="A7"/>
+            <xs:enumeration value="A#7"/>
+            <xs:enumeration value="Ax7"/>
+            <xs:enumeration value="Bbb7"/>
+            <xs:enumeration value="Bb7"/>
+            <xs:enumeration value="B7"/>
+            <xs:enumeration value="B#7"/>
+            <xs:enumeration value="Cb8"/>
+            <xs:enumeration value="C8"/>
+            <xs:enumeration value="C#8"/>
+            <xs:enumeration value="Cx8"/>
+            <xs:enumeration value="Dbb8"/>
+            <xs:enumeration value="Db8"/>
+            <xs:enumeration value="D8"/>
+            <xs:enumeration value="D#8"/>
+            <xs:enumeration value="Dx8"/>
+            <xs:enumeration value="Ebb8"/>
+            <xs:enumeration value="Eb8"/>
+            <xs:enumeration value="E8"/>
+            <xs:enumeration value="E#8"/>
+            <xs:enumeration value="Fb8"/>
+            <xs:enumeration value="F8"/>
+            <xs:enumeration value="F#8"/>
+            <xs:enumeration value="Fx8"/>
+            <xs:enumeration value="Gbb8"/>
+            <xs:enumeration value="Gb8"/>
+            <xs:enumeration value="G8"/>
+            <xs:enumeration value="G#8"/>
+            <xs:enumeration value="Gx8"/>
+            <xs:enumeration value="Abb8"/>
+            <xs:enumeration value="Ab8"/>
+            <xs:enumeration value="A8"/>
+            <xs:enumeration value="A#8"/>
+            <xs:enumeration value="Ax8"/>
+            <xs:enumeration value="Bbb8"/>
+            <xs:enumeration value="Bb8"/>
+            <xs:enumeration value="B8"/>
+            <xs:enumeration value="B#8"/>
+            <xs:enumeration value="Cb9"/>
+            <xs:enumeration value="C9"/>
+            <xs:enumeration value="C#9"/>
+            <xs:enumeration value="Cx9"/>
+            <xs:enumeration value="Dbb9"/>
+            <xs:enumeration value="Db9"/>
+            <xs:enumeration value="D9"/>
+            <xs:enumeration value="D#9"/>
+            <xs:enumeration value="Dx9"/>
+            <xs:enumeration value="Ebb9"/>
+            <xs:enumeration value="Eb9"/>
+            <xs:enumeration value="E9"/>
+            <xs:enumeration value="E#9"/>
+            <xs:enumeration value="Fb9"/>
+            <xs:enumeration value="F9"/>
+            <xs:enumeration value="F#9"/>
+            <xs:enumeration value="Fx9"/>
+            <xs:enumeration value="Gbb9"/>
+            <xs:enumeration value="Gb9"/>
+            <xs:enumeration value="G9"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="ScaleType">
+        <xs:sequence>
+            <xs:element name="count" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="item_version" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:sequence>
+                <xs:element name="item" type="keynameType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:simpleType name="probabilityType">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0.0"/>
+            <xs:maxInclusive value="1.0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="melodyProbabilitiesType">
+        <xs:sequence>
+            <xs:element name="down_" type="probabilityType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="same_" type="probabilityType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="up_" type="probabilityType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:simpleType name="durationType">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0.0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="pulseType">
+        <xs:restriction base="xs:double">
+            <xs:minExclusive value="0.0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="xml_form_type">
+        <xs:sequence>
+            <xs:element name="name_" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="copyright_" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="len_" type="durationType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="min_note_len_" type="durationType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="max_note_len_" type="durationType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="scale_" type="ScaleType"/>
+            <xs:element name="pulse_" type="pulseType"/>
+            <xs:element name="melody_probabilities_" type="melodyProbabilitiesType"/>
+            <xs:element name="pitch_form_" type="FormType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="rhythm_form_" type="FormType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="dynamic_form_" type="FormType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="texture_form_" type="SineType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="voices_" type="voicesType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="arrangement_definition_" type="arrangement_definition" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+</xs:schema>

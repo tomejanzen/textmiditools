@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -31,16 +31,17 @@ namespace smus
 
     // decision:
     // 0-127 pitches
-    inline constexpr int Rest{128};
-    inline constexpr int InstrumentNumber{129};
-    inline constexpr int TimeSignature{130};
-    inline constexpr int KeySignature{131};
-    inline constexpr int Volume{132};
-    inline constexpr int Channel{133};
-    inline constexpr int Preset{134};
-    inline constexpr int Clef{135}; // 0 treble , 1 bass, 2 alto , 3 tenor  (unknown)
-    inline constexpr int Tempo{136};
-    inline constexpr int EndOfTrack{255};
+    inline constexpr std::int32_t Rest{128};
+    inline constexpr std::int32_t InstrumentNumber{129};
+    inline constexpr std::int32_t TimeSignature{130};
+    inline constexpr std::int32_t KeySignature{131};
+    inline constexpr std::int32_t Volume{132};
+    inline constexpr std::int32_t Channel{133};
+    inline constexpr std::int32_t Preset{134};
+    // 0 treble , 1 bass, 2 alto , 3 tenor  (unknown)
+    inline constexpr std::int32_t Clef{135};
+    inline constexpr std::int32_t Tempo{136};
+    inline constexpr std::int32_t EndOfTrack{255};
 
     class SmusTrackEventBase
     {
@@ -54,13 +55,14 @@ namespace smus
         auto decision() const noexcept;
         auto data() const noexcept;
         textmidi::rational::RhythmRational delay_accum() const noexcept;
-        void delay_accum(const textmidi::rational::RhythmRational& delay) noexcept;
-        static int current_dynamic() noexcept;
+        void delay_accum(const textmidi::rational::RhythmRational& delay)
+            noexcept;
+        static std::int32_t current_dynamic() noexcept;
         static void current_dynamic(int current_dynamic) noexcept;
         static bool i_am_lazy() noexcept;
         static void i_am_lazy(bool i_am_lazy) noexcept;
         static std::string i_am_lazy_string(bool i_am_lazy) noexcept;
-        static int channel() noexcept;
+        static std::int32_t channel() noexcept;
         static void channel(int channel) noexcept;
         std::string pre_rest() noexcept;
         textmidi::rational::RhythmRational duration() const noexcept;
@@ -76,11 +78,11 @@ namespace smus
         virtual ~SmusTrackEventBase() = default;
         static textmidi::rational::RhythmRational delay_accum_;
       private:
-        int decision_{};
-        int data_{};
-        static int current_dynamic_;
+        std::int32_t decision_{};
+        std::int32_t data_{};
+        static std::int32_t current_dynamic_;
         static bool i_am_lazy_;
-        static int channel_;
+        static std::int32_t channel_;
 
         bool is_dotted() const noexcept;
         textmidi::rational::RhythmRational dotted_multiplier() const noexcept;
@@ -107,7 +109,7 @@ namespace smus
         void add_to_tied() noexcept;
         static void flush() noexcept;
       private:
-        static std::vector<int> tied_vec_;
+        static std::vector<std::int32_t> tied_vec_;
     };
 
     // Rest
@@ -126,7 +128,8 @@ namespace smus
     class SmusTrackEventInstrument final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventInstrument(const SmusTrackEventFilePod evt) noexcept
+        explicit SmusTrackEventInstrument(const SmusTrackEventFilePod evt)
+            noexcept
           : SmusTrackEventBase{evt}
         {
         }
@@ -140,7 +143,8 @@ namespace smus
       private:
         std::pair<unsigned, unsigned> time_signature() const noexcept;
       public:
-        explicit SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt) noexcept
+        explicit SmusTrackEventTimeSignature(const SmusTrackEventFilePod evt)
+            noexcept
           : SmusTrackEventBase{evt}
         {
         }
@@ -152,7 +156,8 @@ namespace smus
     class SmusTrackEventKeySignature final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventKeySignature(const SmusTrackEventFilePod evt) noexcept
+        explicit SmusTrackEventKeySignature(const SmusTrackEventFilePod evt)
+            noexcept
           : SmusTrackEventBase{evt}
         {
         }
@@ -178,7 +183,8 @@ namespace smus
     class SmusTrackEventChannel final : public SmusTrackEventBase
     {
       public:
-        explicit SmusTrackEventChannel(const SmusTrackEventFilePod evt) noexcept
+        explicit SmusTrackEventChannel(const SmusTrackEventFilePod evt)
+            noexcept
           : SmusTrackEventBase{evt}
         {
         }
@@ -198,7 +204,7 @@ namespace smus
         std::string textmidi() noexcept final;
     };
 
-    extern const midi::NumStringMap<int> clef_map;
+    extern const midi::NumStringMap<std::int32_t> clef_map;
 
     // Clef
     class SmusTrackEventClef final : public SmusTrackEventBase
@@ -239,9 +245,10 @@ namespace smus
     class SmusTrackEventFactory
     {
       public:
-        std::unique_ptr<SmusTrackEventBase> operator()(const SmusTrackEventFilePod& te) noexcept;
+        std::unique_ptr<SmusTrackEventBase>
+        operator()(const SmusTrackEventFilePod& te) noexcept;
     };
 
-}
+} // namespace smus
 
 #endif

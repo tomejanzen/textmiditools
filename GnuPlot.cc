@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -20,20 +20,20 @@
 #include "GnuPlot.h"
 #include "Track.h"
 
-using namespace std;
-using namespace boost;
-using namespace textmidi;
-using namespace textmidi::cgm;
+using std::string, std::ofstream;
+using boost::lexical_cast;
+using textmidi::cgm::MusicalForm, textmidi::cgm::TicksDuration;
 
 //
 // Write the form in values for the sinusoidal functions
 // so that gnuplot can plot them using textmidicgm.gnuplot.
 //
-void cgm::write_form_as_gnuplot_data(const MusicalForm& xml_form,
+void textmidi::cgm::write_form_as_gnuplot_data(const MusicalForm& xml_form,
         const string& gnuplot_filename)
 {
     const TicksDuration time_step{TicksPerQuarter};
-    const TicksDuration endTime{TicksPerQuarter * static_cast<int64_t>(xml_form.len())};
+    const TicksDuration
+        endTime{TicksPerQuarter * static_cast<int64_t>(xml_form.len())};
 
     // gnuplot : plot 'concerto.form.plot' index [0123]
     // using 1:2:3:4 with yerror

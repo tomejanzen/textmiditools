@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -22,9 +22,9 @@
 
 namespace arrangements
 {
-    using Arrangement = std::vector<int>;
+    using Arrangement = std::vector<std::int32_t>;
     using ArrangementVec = std::vector<Arrangement>;
-    enum class PermutationEnum : int
+    enum class PermutationEnum : std::int32_t
     {
         Undefined,
         Identity,
@@ -43,8 +43,8 @@ namespace arrangements
     {
       public:
         ArrangementsABC() = default;
-        virtual int counter() const = 0;
-        virtual void counter(int counter) = 0;
+        virtual std::int32_t counter() const = 0;
+        virtual void counter(std::int32_t counter) = 0;
         virtual void inc() = 0;
         virtual bool counter_finite() const noexcept = 0;
         virtual void next() = 0;
@@ -60,20 +60,20 @@ namespace arrangements
     class ArrangementsImpl
     {
       public:
-        int counter() const noexcept;
-        void counter(int counter) noexcept;
+        std::int32_t counter() const noexcept;
+        void counter(std::int32_t counter) noexcept;
         void inc() noexcept;
         bool counter_finite() const noexcept;
       private:
-        int counter_{};
+        std::int32_t counter_{};
     };
 
     class Arrangements : public ArrangementsABC
     {
       public:
         Arrangements()  = default;
-        int counter() const noexcept final;
-        void counter(int counter) noexcept final;
+        std::int32_t counter() const noexcept final;
+        void counter(std::int32_t counter) noexcept final;
         void inc() noexcept final;
         bool counter_finite() const noexcept final;
       private:
@@ -83,7 +83,7 @@ namespace arrangements
     class ArrangementsInSitu : public Arrangements
     {
         public:
-            explicit ArrangementsInSitu(int length) noexcept
+            explicit ArrangementsInSitu(std::int32_t length) noexcept
               : Arrangements(), arrangement_()
             {
                 auto counting = std::views::iota(0, length);
@@ -98,7 +98,7 @@ namespace arrangements
     class ArrangementsIdentity final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsIdentity(int length) noexcept
+        explicit ArrangementsIdentity(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -109,7 +109,7 @@ namespace arrangements
     class ArrangementsLexicographicForward final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsLexicographicForward(int length) noexcept
+        explicit ArrangementsLexicographicForward(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -119,7 +119,7 @@ namespace arrangements
     class ArrangementsLexicographicBackward final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsLexicographicBackward(int length) noexcept
+        explicit ArrangementsLexicographicBackward(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -129,7 +129,7 @@ namespace arrangements
     class ArrangementsRotateRight final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsRotateRight(int length) noexcept
+        explicit ArrangementsRotateRight(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -139,7 +139,7 @@ namespace arrangements
     class ArrangementsRotateLeft final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsRotateLeft(int length) noexcept
+        explicit ArrangementsRotateLeft(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -149,7 +149,7 @@ namespace arrangements
     class ArrangementsReverse final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsReverse(int length) noexcept
+        explicit ArrangementsReverse(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -159,7 +159,7 @@ namespace arrangements
     class ArrangementsSwapPairs final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsSwapPairs(int length) noexcept
+        explicit ArrangementsSwapPairs(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -169,7 +169,7 @@ namespace arrangements
     class ArrangementsSkip final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsSkip(int length) noexcept
+        explicit ArrangementsSkip(std::int32_t length) noexcept
           : ArrangementsInSitu(length)
         {
         }
@@ -179,8 +179,10 @@ namespace arrangements
     class ArrangementsShuffle final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsShuffle(int length) noexcept
-          : ArrangementsInSitu(length), random_dev_(), generator_(random_dev_())
+        explicit ArrangementsShuffle(std::int32_t length) noexcept
+          : ArrangementsInSitu(length),
+            random_dev_(),
+            generator_(random_dev_())
         {
         }
         void next() noexcept final;
@@ -195,7 +197,7 @@ namespace arrangements
     class ArrangementsHeaps final : public ArrangementsInSitu
     {
       public:
-        explicit ArrangementsHeaps(int length = 1) noexcept
+        explicit ArrangementsHeaps(std::int32_t length = 1) noexcept
           : ArrangementsInSitu(length),
             heaps_algorithm_template_(length, arrangement())
         {
@@ -203,11 +205,13 @@ namespace arrangements
 
         void next() noexcept final;
       private:
-        heaps_algorithm::HeapsAlgorithmTemplate<std::vector<int> > heaps_algorithm_template_;
+        heaps_algorithm::HeapsAlgorithmTemplate<std::vector<std::int32_t> >
+            heaps_algorithm_template_;
     };
 
-    std::shared_ptr<Arrangements> ArrangementsFactory(PermutationEnum permutation_type, int length) noexcept;
+    std::shared_ptr<Arrangements> ArrangementsFactory(
+            PermutationEnum permutation_type, std::int32_t length) noexcept;
 
-}
+} // namespace arrangements
 
 #endif

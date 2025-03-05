@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // MIDIKeyString.cc
 //
@@ -21,16 +21,20 @@
 
 namespace textmidi
 {
-    inline constexpr int halfsteps_per_octave{12};
-    extern std::pair<int, bool> key_sig_name_to_accidentals(const std::string& key_sig_name);
-    extern std::pair<int, bool> pitchname_to_keynumber(const std::string& pitchname);
-    extern std::string num_to_note(int num, std::shared_ptr<bool> prefer_sharp) noexcept;
+    inline constexpr std::int32_t halfsteps_per_octave{12};
+    extern std::pair<std::int32_t, bool>
+        key_sig_name_to_accidentals(const std::string& key_sig_name);
+    extern std::pair<std::int32_t, bool>
+        pitchname_to_keynumber(const std::string& pitchname);
+    extern std::string
+        num_to_note(std::int32_t num, std::shared_ptr<bool> prefer_sharp) noexcept;
 
     struct CompareLowerNoteName
     {
-        bool operator()(const std::string& left, const std::string& right) const noexcept;
+        bool operator()
+            (const std::string& left, const std::string& right) const noexcept;
     };
 
-}
+} // namespace textmidi
 #endif
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -29,7 +29,8 @@ namespace textmidi
                 std::chrono::time_point<std::chrono::system_clock>
                     today(std::chrono::system_clock::now());
                 std::int64_t count{today.time_since_epoch().count()};
-                const std::int32_t seed((count & 0x00000000FFFFFFFF) ^ (count >> 32));
+                const std::int32_t seed((count & 0x00000000FFFFFFFF)
+                    ^ (count >> 32));
 
                 re_.seed(static_cast<double>(seed));
             }
@@ -42,7 +43,7 @@ namespace textmidi
             std::uniform_real_distribution<> dist_{};
         };
 
-    }
-}
+    } // namespace cgm
+} // namespace textmidi
 #endif
 

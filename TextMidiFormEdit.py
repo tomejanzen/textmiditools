@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.0.90
+# TextMIDITools Version 1.0.92
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -14,13 +14,9 @@ import tkinter.filedialog
 import tkinter.ttk
 
 from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
 from tkinter.ttk import *
 from xml.dom import minidom
 from xml.dom.minidom import parse, Node, getDOMImplementation
-
-import FormFrame
 
 from AllFormsWindow import *
 from AllFormsWindow import AllFormsWindow
@@ -62,7 +58,6 @@ class XmlForm(tkinter.Tk):
         self.frame.grid(sticky='we', row=0, column=2)
         self.frame.rowconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=2, weight=1)
-        self.geometry('1000x600+435+50')
 
         if filename != '':
             self.install_file(filename)
@@ -109,12 +104,12 @@ class XmlForm(tkinter.Tk):
         self.canvas.create_line(0, y_midline - 0.5 * y_real_estate,
             self.win_width, y_midline - 0.5 * y_real_estate,
             fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
-        for i in range(1, self.win_width, 1):
+        for x_pixel in range(1, self.win_width, 1):
             mean_freq  = (1.0 / float(self.xml_form_dict
                         ['pitch_form']['mean']['period']))
             range_freq = (1.0
                 / float(self.xml_form_dict['pitch_form']['range']['period']))
-            the_time = float(i) * seconds_per_pixel
+            the_time = float(x_pixel) * seconds_per_pixel
             # omega * t = twopi * mean_freq  * the_time
             # The phase = self.xml_form_dict['pitch_form']['mean']['phase']
             # omega * t + phase = twopi * mean_freq  * the_time
@@ -146,10 +141,10 @@ class XmlForm(tkinter.Tk):
                 * y_real_estate)
 
             y_range = max(y_range, 1.0)
-            poly_lr.append(i)
+            poly_lr.append(x_pixel)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
-            poly_rl.append(i)
+            poly_rl.append(x_pixel)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
         fill_color = '#004400'
@@ -170,12 +165,12 @@ class XmlForm(tkinter.Tk):
             fill=axis_color, dash='.', width=1, activewidth=1, disabledwidth=1)
         poly_lr = []
         poly_rl = []
-        for i in range(1, self.win_width):
+        for x_pixel in range(1, self.win_width):
             mean_freq  = (1.0
                 / float(self.xml_form_dict['rhythm_form']['mean']['period']))
             range_freq = (1.0
                 / float(self.xml_form_dict['rhythm_form']['range']['period']))
-            the_time = float(i) * seconds_per_pixel
+            the_time = float(x_pixel) * seconds_per_pixel
             twopi_t = self.twopi * the_time
             y_mean  = ((math.sin(twopi_t * mean_freq
                  + float(self.xml_form_dict['rhythm_form']['mean']['phase']))
@@ -188,10 +183,10 @@ class XmlForm(tkinter.Tk):
                 + float(self.xml_form_dict['rhythm_form']['range']['offset']))
                 * y_real_estate)
             y_range = max(y_range, 1.0)
-            poly_lr.append(i)
+            poly_lr.append(x_pixel)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
-            poly_rl.append(i)
+            poly_rl.append(x_pixel)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
         rhythm_plot_id = self.canvas.create_polygon(polygon, fill=fill_color,
@@ -211,12 +206,12 @@ class XmlForm(tkinter.Tk):
             dash='.', width=1, activewidth=1, disabledwidth=1)
         poly_lr = []
         poly_rl = []
-        for i in range(1, self.win_width):
+        for x_pixel in range(1, self.win_width):
             mean_freq = (1.0
                 / float(self.xml_form_dict['dynamic_form']['mean']['period']))
             range_freq = (1.0
                 / float(self.xml_form_dict['dynamic_form']['range']['period']))
-            the_time = float(i) * seconds_per_pixel
+            the_time = float(x_pixel) * seconds_per_pixel
             twopi_t = self.twopi * the_time
             y_mean  = (((math.sin(twopi_t * mean_freq
                 + float(self.xml_form_dict['dynamic_form']['mean']['phase']))
@@ -229,10 +224,10 @@ class XmlForm(tkinter.Tk):
                + float(self.xml_form_dict['dynamic_form']['range']['offset']))
                * y_real_estate))
             y_range = max(y_range, 1.0)
-            poly_lr.append(i)
+            poly_lr.append(x_pixel)
             poly_lr.append(y_mean - y_range / 2)
             poly_rl.append(y_mean + y_range / 2)
-            poly_rl.append(i)
+            poly_rl.append(x_pixel)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
         dynamic_plot_id = self.canvas.create_polygon(polygon, fill=fill_color,
@@ -254,9 +249,9 @@ class XmlForm(tkinter.Tk):
             dash='.', width=1, activewidth=1, disabledwidth=1)
         poly_lr = []
         poly_rl = []
-        for i in range(1, self.win_width):
+        for x_pixel in range(1, self.win_width):
             mean_freq = (1.0 / float(self.xml_form_dict['texture_form']['period']))
-            the_time = float(i) * seconds_per_pixel
+            the_time = float(x_pixel) * seconds_per_pixel
             twopi_t = self.twopi * the_time
             y_mean  = ((math.sin(twopi_t * mean_freq
                  + float(self.xml_form_dict['texture_form']['phase']))
@@ -264,10 +259,10 @@ class XmlForm(tkinter.Tk):
                  + float(self.xml_form_dict['texture_form']['offset']))
                  * (-y_real_estate))
             y_range = y_midline
-            poly_lr.append(i)
+            poly_lr.append(x_pixel)
             poly_lr.append(y_range - y_mean / 2)
             poly_rl.append(y_range + y_mean / 2)
-            poly_rl.append(i)
+            poly_rl.append(x_pixel)
         poly_rl.reverse()
         polygon = poly_lr + poly_rl
         texture_plot_id = self.canvas.create_polygon(polygon, fill=fill_color,
@@ -275,8 +270,8 @@ class XmlForm(tkinter.Tk):
 
         y_range = max(y_range, 1.0)
         # Draw minute markers
-        for s in range(0, int(duration), 60):
-            tickx = s / seconds_per_pixel
+        for time_ctr in range(0, int(duration), 60):
+            tickx = time_ctr / seconds_per_pixel
             self.canvas.create_line(tickx, 0, tickx, self.win_height,
                 fill=axis_color, dash='-', width=2, activewidth=2,
                 disabledwidth=2)
@@ -311,9 +306,9 @@ class XmlForm(tkinter.Tk):
         #     # (silent)
         #     # (silent)
         melody_probabilities_dict = {}
-        melody_probabilities_dict['down'] = 0.25
-        melody_probabilities_dict['same'] = 0.5
-        melody_probabilities_dict['up'] = 0.75
+        melody_probabilities_dict['down'] = 0.0
+        melody_probabilities_dict['same'] = 0.333333333
+        melody_probabilities_dict['up'] = 0.6666667
         return melody_probabilities_dict
 
     def default_form(self):
@@ -355,7 +350,7 @@ class XmlForm(tkinter.Tk):
             voice_dict['program'] = 1
             voice_dict['pan'] = 0
             follower_dict = {}
-            follower_dict['follow'] = 0
+            follower_dict['follow'] = False
             follower_dict['leader'] = 2147483647
             follower_dict['interval_type'] = 0
             follower_dict['interval'] = 0
@@ -367,8 +362,8 @@ class XmlForm(tkinter.Tk):
             duration_factor_dict['numerator'] = '1'
             duration_factor_dict['denominator'] = '1'
             follower_dict['duration_factor'] = duration_factor_dict
-            follower_dict['inversion'] = '0'
-            follower_dict['retrograde'] = '0'
+            follower_dict['inversion'] = False
+            follower_dict['retrograde'] = False
             voice_dict['follower'] = follower_dict
             vox_list.append(voice_dict)
 
@@ -384,7 +379,7 @@ class XmlForm(tkinter.Tk):
     def default_xml_form(self):
         """Install default form."""
         self.xml_form_dict['name'] = 'defaults'
-        self.xml_form_dict['copyright'] = 'copyright unspecified'
+        self.xml_form_dict['copyright'] = 'Copyright © unspecified'
         self.xml_form_dict['len'] = 600.0
         # at the old MIDI baud rate a note_on+note_off with running status
         # (i.e., no status byte) is 0.00128 seconds.  Zero can
@@ -573,16 +568,13 @@ class XmlForm(tkinter.Tk):
             follower_dict = {}
             follower_node = vox.getElementsByTagName('follower_')[0]
             follow_node = follower_node.getElementsByTagName('follow_')[0]
-            follow = follow_node.firstChild.data
-            follower_dict['follow'] = int(follow)
+            follower_dict['follow'] = bool(int(follow_node.firstChild.data))
             leader_node = follower_node.getElementsByTagName('leader_')[0]
-            leader = leader_node.firstChild.data
-            follower_dict['leader'] = int(leader)
+            follower_dict['leader'] = int(leader_node.firstChild.data)
             follower_dict['interval_type'] = (int(follower_node
                 .getElementsByTagName('interval_type_')[0].firstChild.data))
             interval_node = follower_node.getElementsByTagName('interval_')[0]
-            interval = interval_node.firstChild.data
-            follower_dict['interval'] = int(interval)
+            follower_dict['interval'] = int(interval_node.firstChild.data)
 
             delay_dict = {}
             duration_factor_dict = {}
@@ -610,17 +602,18 @@ class XmlForm(tkinter.Tk):
                     duration_factor_dict['numerator'] = numerator
                     duration_factor_dict['denominator'] = denominator
 
-                follower_dict['inversion'] = (follower_node
-                    .getElementsByTagName('inversion_')[0].firstChild.data)
-                follower_dict['retrograde'] = (follower_node
-                    .getElementsByTagName('retrograde_')[0].firstChild.data)
+                follower_dict['inversion'] = bool(int(follower_node
+                    .getElementsByTagName('inversion_')[0].firstChild.data))
+
+                follower_dict['retrograde'] = bool(int(follower_node
+                    .getElementsByTagName('retrograde_')[0].firstChild.data))
             else:
                 delay_dict['numerator'] = '0'
                 delay_dict['denominator'] = '1'
                 duration_factor_dict['numerator'] = '1'
                 duration_factor_dict['denominator'] = '1'
-                follower_dict['inversion'] = '0'
-                follower_dict['retrograde'] = '0'
+                follower_dict['inversion'] = False
+                follower_dict['retrograde'] = False
             follower_dict['delay'] = delay_dict
             follower_dict['duration_factor'] = duration_factor_dict
             voice_dict['follower'] = follower_dict
@@ -969,21 +962,21 @@ class XmlForm(tkinter.Tk):
         follower_element.appendChild(duration_factor_element)
         self.add_text_element(doc, follower_element, 'inversion', 'inversion_',
                 str(int(voice_dict['follower']['inversion'])))
-        self.add_text_element(doc, follower_element, 'retrograde',
-            'retrograde_', str(int(voice_dict['follower']['retrograde'])))
+        self.add_text_element(doc, follower_element, 'retrograde', 'retrograde_',
+                str(int(voice_dict['follower']['retrograde'])))
         item_element.appendChild(follower_element)
         parent.appendChild(item_element)
 
     def add_form_element(self, doc, parent, form_name, add_attributes = False):
         """Add a form element to the internal form structure."""
         form_element = doc.createElement(form_name + '_')
-        if add_attributes == True:
+        if add_attributes is True:
             form_element.setAttribute('class_id', '3')
             form_element.setAttribute('tracking_level', '0')
             form_element.setAttribute('version', '0')
 
         mean_sine_element = doc.createElement('mean_sine_')
-        if add_attributes == True:
+        if add_attributes is True:
             mean_sine_element.setAttribute('class_id', '4')
             mean_sine_element.setAttribute('tracking_level', '0')
             mean_sine_element.setAttribute('version', '0')
@@ -1025,9 +1018,9 @@ class XmlForm(tkinter.Tk):
 
     def add_text_element(self, doc, parent, name, xmltag = None, value = None):
         """Add a text element to the DOM."""
-        if xmltag == None:
+        if xmltag is None:
             xmltag = name + '_'
-        if value == None:
+        if value is None:
             value = str(self.xml_form_dict[name])
 
         any_element = doc.createElement(xmltag)
@@ -1123,7 +1116,10 @@ class XmlForm(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.0.90\nCopyright © 2025 Thomas E. Janzen\nLicense GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\nTextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
+            'TextMIDITools Version 1.0.92\nCopyright © 2025 Thomas E. Janzen\n'
+            'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
+            'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
+            'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
         about_window['state'] = 'disabled'
         about_window.focus()
 

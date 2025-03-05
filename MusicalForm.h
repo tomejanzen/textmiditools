@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #include <vector>
 #include <ranges>
 #include <memory>
+#include <algorithm>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -38,7 +39,8 @@ namespace textmidi
         class MusicalFormException
         {
           public:
-            explicit MusicalFormException(const std::string& exception_msg) noexcept
+            explicit MusicalFormException(const std::string& exception_msg)
+                noexcept
               : exception_msg_(exception_msg)
             {
             }
@@ -97,7 +99,8 @@ namespace textmidi
           public:
             MeanRangeSines() = default;
 
-            explicit MeanRangeSines(const cgmlegacy::OldFormElement& form_element) noexcept
+            explicit MeanRangeSines(
+                const cgmlegacy::OldFormElement& form_element) noexcept
               : mean_sine_ {form_element.mean_period(),
                             form_element.mean_phase()},
                 range_sine_{form_element.range_period(),
@@ -204,7 +207,7 @@ namespace textmidi
             double dynamic_range{};
             double texture_range{};
             double duration(double rf) noexcept;
-            int pitch_index(double rf) noexcept;
+            std::int32_t pitch_index(double rf) noexcept;
         };
 
         class MusicalForm
@@ -216,7 +219,8 @@ namespace textmidi
             std::shared_ptr<bool> prefer_sharp_{std::make_shared<bool>()};
 
             // A ctor for converting old files
-            MusicalForm(const std::string& name, const cgmlegacy::TextForm& form) noexcept
+            MusicalForm(const std::string& name,
+                const cgmlegacy::TextForm& form) noexcept
               : name_{name},
                 len_{form.len},
                 min_note_len_{form.min_note_len},
@@ -254,7 +258,8 @@ namespace textmidi
             double pulse() const noexcept;
             void pulse(double pulse) noexcept;
             const MelodyProbabilities& melody_probabilities() const noexcept;
-            void melody_probabilities(const MelodyProbabilities& melody_probabilities) noexcept;
+            void melody_probabilities(
+                const MelodyProbabilities& melody_probabilities) noexcept;
             MeanRangeSines pitch_form() const noexcept;
             MeanRangeSines& pitch_form() noexcept;
             MeanRangeSines rhythm_form() const noexcept;
@@ -267,12 +272,17 @@ namespace textmidi
             std::vector<VoiceXml> voices() const noexcept;
             std::vector<VoiceXml>& voices() noexcept;
             ArrangementDefinition& arrangement_definition() noexcept;
-            const ArrangementDefinition& arrangement_definition() const noexcept;
-            void arrangement_definition(ArrangementDefinition arrangement_definition) noexcept;
-            void string_scale_to_int_scale(std::vector<int>& key_scale) const noexcept;
+            const ArrangementDefinition& arrangement_definition() const
+                noexcept;
+            void arrangement_definition(
+                ArrangementDefinition arrangement_definition) noexcept;
+            void string_scale_to_int_scale(
+                std::vector<std::int32_t>& key_scale) const noexcept;
             void character_now(TicksDuration theTime,
                     MusicalCharacter& musical_character) const noexcept;
-            void random(std::string formname = "random", std::int32_t instrument_flags = static_cast<std::int32_t>(GeneralMIDIGroup::Melodic));
+            void random(std::string formname = "random",
+                std::int32_t instrument_flags
+                = static_cast<std::int32_t>(GeneralMIDIGroup::Melodic));
             bool valid() const;
             void clamp_scale_to_instrument_ranges() noexcept;
           private:
@@ -289,7 +299,9 @@ namespace textmidi
             MeanRangeSines dynamic_form_{};
             Sine                 texture_form_{};
             std::vector<VoiceXml>    voices_{};
-            ArrangementDefinition arrangement_definition_{arrangements::PermutationEnum::Identity, 10000.0};
+            ArrangementDefinition
+                arrangement_definition_{
+                arrangements::PermutationEnum::Identity, 10000.0};
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int version)
             {
@@ -319,8 +331,8 @@ namespace textmidi
 
         extern RandomDouble rd;
         extern RandomInt ri;
-    }
-}
+    } // namespace cgm
+} // namespace textmidi
 BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 3)
 
 #endif

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -24,6 +24,6 @@ namespace textmidi
             const MusicalForm& musical_form,
             const std::string& gnuplot_filename);
 
-    }
-}
+    } // namespace cgm
+} // namespace textmidi
 #endif

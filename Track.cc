@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0.16
 // Copyright © 2025 Thomas E. Janzen
@@ -11,30 +11,51 @@
 //
 #include "Track.h"
 
-using namespace std;
-using namespace textmidi;
-using namespace textmidi::cgm;
-
-TicksDuration cgm::Track::the_next_time() const noexcept
+textmidi::cgm::TicksDuration
+    textmidi::cgm::Track::the_next_time() const noexcept
 {
     return the_next_time_;
 }
-int cgm::Track::last_pitch_index() const noexcept
+int32_t textmidi::cgm::Track::last_pitch_index() const noexcept
 {
     return last_pitch_index_;
 }
 
-void cgm::Track::the_last_time(const TicksDuration the_last_time) noexcept
+void textmidi::cgm::Track::
+    the_last_time(const textmidi::cgm::TicksDuration the_last_time) noexcept
 {
     the_last_time_ = the_last_time;
 }
-void cgm::Track::the_next_time(const TicksDuration the_next_time) noexcept
+void textmidi::cgm::Track::
+    the_next_time(const textmidi::cgm::TicksDuration the_next_time) noexcept
 {
     the_next_time_ = the_next_time;
 }
 
-void cgm::Track::last_pitch_index(const int last_pitch_index) noexcept
+void textmidi::cgm::Track::
+    last_pitch_index(const int32_t last_pitch_index) noexcept
 {
     last_pitch_index_ = last_pitch_index;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

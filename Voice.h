@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -14,6 +14,7 @@
 #include <cstdio>
 #include <limits>
 #include <memory>
+#include <string>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -51,7 +52,7 @@ namespace textmidi
                 // because it is enclosed in VoiceXml (init order issue).
                 Follower()
                   : follow_{},
-                    leader_{std::numeric_limits<int>().max()},
+                    leader_{std::numeric_limits<std::int32_t>().max()},
                     interval_type_{IntervalType::Neither},
                     interval_{},
                     delay_{rational::RhythmRational{0L}},
@@ -62,20 +63,21 @@ namespace textmidi
                 }
 
                 bool follow() const;
-                int leader() const;
+                std::int32_t leader() const;
                 IntervalType interval_type() const;
-                int interval() const;
+                std::int32_t interval() const;
                 const rational::RhythmRational& delay() const;
                 const rational::RhythmRational& duration_factor() const;
                 bool inversion() const;
                 bool retrograde() const;
 
                 void follow(bool follow);
-                void leader(int leader);
+                void leader(std::int32_t leader);
                 void interval_type(IntervalType interval_type);
-                void interval(int interval);
+                void interval(std::int32_t interval);
                 void delay(const rational::RhythmRational& delay);
-                void duration_factor(const rational::RhythmRational& duration_factor);
+                void duration_factor(const rational::RhythmRational&
+                    duration_factor);
                 void inversion(bool inversion);
                 void retrograde(bool retrograde);
 
@@ -99,15 +101,16 @@ namespace textmidi
                 }
               private:
                 bool follow_;
-                int leader_;
+                std::int32_t leader_;
                 IntervalType interval_type_;
-                int interval_;
+                std::int32_t interval_;
                 rational::RhythmRational delay_;
                 rational::RhythmRational duration_factor_;
                 bool inversion_;
                 bool retrograde_;
             };
-            // There is no serialize for string_view, so these have to be strings.
+            // There is no serialize for string_view,
+            // so these have to be strings.
             explicit VoiceXml(
                     const std::string& low_pitch = "",
                     const std::string& high_pitch = "",
@@ -129,7 +132,8 @@ namespace textmidi
             std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
             explicit VoiceXml(const cgmlegacy::VoiceOld& v)
               : low_pitch_{textmidi::num_to_note(v.low_pitch_, prefer_sharp)},
-                high_pitch_{textmidi::num_to_note(v.high_pitch_, prefer_sharp)},
+                high_pitch_{
+                    textmidi::num_to_note(v.high_pitch_, prefer_sharp)},
                 channel_{v.channel_ + 1},
                 walking_{v.walking_ ? 1.0 : 0.0},
                 program_{"1"},
@@ -139,7 +143,8 @@ namespace textmidi
             VoiceXml& operator=(const cgmlegacy::VoiceOld& v)
             {
                 low_pitch_ = textmidi::num_to_note(v.low_pitch_, prefer_sharp);
-                high_pitch_ = textmidi::num_to_note(v.high_pitch_, prefer_sharp);
+                high_pitch_
+                    = textmidi::num_to_note(v.high_pitch_, prefer_sharp);
                 channel_ = v.channel_ + 1;
                 walking_ = (v.walking_ ? 1.0 : 0.0);
                 program_ = "1";
@@ -169,7 +174,8 @@ namespace textmidi
             std::uint32_t channel_{}; // one-based in VoiceXml
             double walking_{};
             std::string program_{"1"};
-            std::int32_t pan_{}; // 0 = center, negative is left, positive is right.
+            // 0 = center, negative is left, positive is right.
+            std::int32_t pan_{};
             Follower follower_{};
             template<class Archive>
                 void serialize(Archive& arc, const unsigned int )
@@ -184,8 +190,8 @@ namespace textmidi
             }
         };
 #pragma pack()
-    }
-}
+    } // namespace cgm
+} // namespace textmidi
 BOOST_CLASS_VERSION(textmidi::cgm::VoiceXml::Follower, 3)
 
 #endif

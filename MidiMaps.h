@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -10,10 +10,13 @@
 #if !defined(MIDIMAPS_H)
 #    define  MIDIMAPS_H
 
+#include <cstdint>
+
 #include <ostream>
 #include <utility>
 #include <ranges>
 #include <optional>
+#include <map>
 
 #include "Midi.h"
 #include "RhythmRational.h"
@@ -25,19 +28,23 @@ namespace midi
     template<typename NumType> class NumStringMap
     {
       public:
-        NumStringMap(std::initializer_list<const std::pair<NumType, std::string_view> > in_initlist) noexcept
+        NumStringMap(std::initializer_list<const std::pair<NumType,
+            std::string_view> > in_initlist) noexcept
           : num_string_map_{in_initlist.begin(), in_initlist.end()}
         {
             std::for_each(in_initlist.begin(), in_initlist.end(),
-                [this](const std::pair<const NumType, const std::string_view>& p)
+                [this](const std::pair<const NumType,
+                    const std::string_view>& p)
                 {this->string_num_map_.emplace(p.second, p.first); });
         }
 
-        NumStringMap(std::initializer_list<std::pair<const std::string_view, NumType> > in_initlist) noexcept
+        NumStringMap(std::initializer_list
+            <std::pair<const std::string_view, NumType> > in_initlist) noexcept
           : string_num_map_(in_initlist)
         {
             std::for_each(in_initlist.begin(), in_initlist.end(),
-                [this](const std::pair<const std::string_view, const NumType>& p)
+                [this](const std::pair<const std::string_view,
+                    const NumType>& p)
                 {this->num_string_map_.emplace(p.second, p.first); });
         }
 
@@ -95,7 +102,8 @@ namespace midi
             }
         }
 
-        const std::map<std::string_view, NumType> string_num_map() const noexcept
+        const std::map<std::string_view, NumType> string_num_map() const
+            noexcept
         {
             return string_num_map_;
         }
@@ -106,7 +114,8 @@ namespace midi
             num_string_map_.emplace(num, sv);
         }
 
-        void insert(std::map<std::string_view, NumType>::value_type insert_value) noexcept
+        void insert(std::map<std::string_view,
+            NumType>::value_type insert_value) noexcept
         {
             string_num_map_.insert(insert_value);
             num_string_map_.emplace(insert_value.second, insert_value.first);
@@ -117,9 +126,9 @@ namespace midi
         std::map<std::string_view, NumType> string_num_map_{};
     };
 
-    extern const NumStringMap<int> smpte_fps_map;
-    extern NumStringMap<int> dynamics_map;
-    extern const NumStringMap<int> pan_map;
+    extern const NumStringMap<std::int32_t> smpte_fps_map;
+    extern NumStringMap<std::int32_t> dynamics_map;
+    extern const NumStringMap<std::int32_t> pan_map;
     extern const NumStringMap<midi::MIDI_Format> format_map;
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;
     extern const NumStringMap<midi::MidiStreamAtom> control_function_map;
@@ -135,11 +144,13 @@ namespace midi
     extern const NumStringMap<midi::Registered00ParameterLsbs> parm_00_map;
     extern const NumStringMap<midi::Registered3dParameterLsbs> parm_3d_map;
 
-    extern const NumStringMap<midi::RunningStatusPolicy> running_status_policy_map;
+    extern const NumStringMap<midi::RunningStatusPolicy>
+        running_status_policy_map;
 
-    extern const NumStringMap<textmidi::rational::RhythmExpression> rhythm_expression_map;
+    extern const NumStringMap<textmidi::rational::RhythmExpression>
+        rhythm_expression_map;
 
-}
+} // namespace midi
 
 #endif
 

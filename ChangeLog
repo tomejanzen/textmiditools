@@ -1,3 +1,11 @@
+2025-03-04     Thomas E. Janzen <janzentome@gmail.com>
+        * *.cc: Change using namespace directives to
+        using declarations per cpplint.
+        * TextMidiForm.xsd: firm up restrictions on types.
+
+2025-03-02     Thomas E. Janzen <janzentome@gmail.com>
+        * *.{h,cc}: apply some recommendations from cpplint.
+
 2025-03-01     Thomas E. Janzen <janzentome@gmail.com>
         * *.py, *.png: update Python GUI to stop forcing the window
         geometry.

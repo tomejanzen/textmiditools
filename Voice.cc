@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -15,11 +15,13 @@
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
 
+#include <string>
+
 #include "Voice.h"
 
-using namespace std;
-using namespace textmidi;
-using namespace textmidi::cgm;
+using std::string, std::string_view;
+using textmidi::cgm::VoiceXml;
+using textmidi::rational::RhythmRational;
 
 string VoiceXml::low_pitch() const noexcept
 {
@@ -101,7 +103,7 @@ bool VoiceXml::Follower::follow() const
     return follow_;
 }
 
-int VoiceXml::Follower::leader() const
+int32_t VoiceXml::Follower::leader() const
 {
     return leader_;
 }
@@ -111,17 +113,17 @@ VoiceXml::Follower::IntervalType VoiceXml::Follower::interval_type() const
     return interval_type_;
 }
 
-int VoiceXml::Follower::interval() const
+int32_t VoiceXml::Follower::interval() const
 {
     return interval_;
 }
 
-const rational::RhythmRational& VoiceXml::Follower::delay() const
+const RhythmRational& VoiceXml::Follower::delay() const
 {
     return delay_;
 }
 
-const rational::RhythmRational& VoiceXml::Follower::duration_factor() const
+const RhythmRational& VoiceXml::Follower::duration_factor() const
 {
     return duration_factor_;
 }
@@ -141,7 +143,7 @@ void VoiceXml::Follower::follow(bool follow)
     follow_ = follow;
 }
 
-void VoiceXml::Follower::leader(int leader)
+void VoiceXml::Follower::leader(int32_t leader)
 {
     leader_ = leader;
 }
@@ -151,17 +153,18 @@ void VoiceXml::Follower::interval_type(IntervalType interval_type)
     interval_type_ = interval_type;
 }
 
-void VoiceXml::Follower::interval(int interval)
+void VoiceXml::Follower::interval(int32_t interval)
 {
     interval_ = interval;
 }
 
-void VoiceXml::Follower::delay(const rational::RhythmRational& delay)
+void VoiceXml::Follower::delay(const RhythmRational& delay)
 {
     delay_ = delay;
 }
 
-void VoiceXml::Follower::duration_factor(const rational::RhythmRational& duration_factor)
+void VoiceXml::Follower::
+    duration_factor(const RhythmRational& duration_factor)
 {
     duration_factor_ = duration_factor;
 }
@@ -175,4 +178,3 @@ void VoiceXml::Follower::retrograde(bool retrograde)
 {
     retrograde_ = retrograde;
 }
-

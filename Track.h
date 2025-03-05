@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -9,6 +9,8 @@
 //
 #if !defined(TRACK_H)
 #    define  TRACK_H
+
+#include <cstdint>
 
 #include <ostream>
 #include <vector>
@@ -31,21 +33,21 @@ namespace textmidi
         class Track
         {
           public:
-            explicit Track(int last_pitch_index = 0) noexcept
+            explicit Track(std::int32_t last_pitch_index = 0) noexcept
               : last_pitch_index_(last_pitch_index)
             {
             }
             TicksDuration the_next_time() const noexcept;
-            int last_pitch_index() const noexcept;
+            std::int32_t last_pitch_index() const noexcept;
             void the_last_time(const TicksDuration the_last_time) noexcept;
             void the_next_time(const TicksDuration the_next_time) noexcept;
-            void last_pitch_index(const int last_pitch_index) noexcept;
+            void last_pitch_index(const std::int32_t last_pitch_index) noexcept;
           private:
             TicksDuration the_last_time_{};
             TicksDuration the_next_time_{};
-            int last_pitch_index_{};
+            std::int32_t last_pitch_index_{};
         };
-    }
-}
+    } // namespace cgm
+} // namespace textmidi
 
 #endif

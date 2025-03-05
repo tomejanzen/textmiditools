@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -34,38 +34,40 @@ namespace midi
 
     inline constexpr double UsecPerSecond{1000000.0};
     inline constexpr double SecondsPerMinute{60.0};
-    inline constexpr int SecondsPerMinuteI{static_cast<int>(SecondsPerMinute)};
+    inline constexpr std::int32_t
+        SecondsPerMinuteI{static_cast<std::int32_t>(SecondsPerMinute)};
     inline constexpr double MinDynamic{30};
     inline constexpr double MaxDynamic{127};
     inline constexpr double MaxPitchBend{127};
-    inline constexpr int MinSignedPan{-64};
-    inline constexpr int CenterSignedPan{0};
-    inline constexpr int MaxSignedPan{63};
+    inline constexpr std::int32_t MinSignedPan{-64};
+    inline constexpr std::int32_t CenterSignedPan{0};
+    inline constexpr std::int32_t MaxSignedPan{63};
 
-    inline constexpr int MaxSmpteHours{23};
-    inline constexpr int MaxSmpteMinutes{59};
-    inline constexpr int MaxSmpteSeconds{59};
-    inline constexpr int MaxSmpteFrames{29};
-    inline constexpr int MaxSmpteHundredths{99};
+    inline constexpr std::int32_t MaxSmpteHours{23};
+    inline constexpr std::int32_t MaxSmpteMinutes{59};
+    inline constexpr std::int32_t MaxSmpteSeconds{59};
+    inline constexpr std::int32_t MaxSmpteFrames{29};
+    inline constexpr std::int32_t MaxSmpteHundredths{99};
 
-    inline constexpr int MidiPitchQty{128};
-    inline constexpr int MidiProgramQty{128};
+    inline constexpr std::int32_t MidiPitchQty{128};
+    inline constexpr std::int32_t MidiProgramQty{128};
     inline constexpr double MaxKeyboardKey{127};
-    inline constexpr int MidiChannelQty{16};
-    inline constexpr int MidiIdiophoneChannel{10};
+    inline constexpr std::int32_t MidiChannelQty{16};
+    inline constexpr std::int32_t MidiIdiophoneChannel{10};
     inline constexpr std::int32_t PanExcess64{64};
     inline constexpr std::uint32_t variable_len_word_mask{0xfffffff};
 
-    inline constexpr long int variable_length_quantity_max_len{sizeof(int)};
-    inline constexpr long int variable_length_quantity_min_len{sizeof(int)};
+    inline constexpr std::int64_t
+        variable_length_quantity_min_len{sizeof(std::int32_t)};
     inline constexpr MidiStreamAtom event_flag               {0x80};
     inline constexpr MidiStreamAtom variable_len_flag        {0x80};
     inline constexpr MidiStreamAtom
-        variable_len_byte_mask   {static_cast<MidiStreamAtom>(~variable_len_flag)};
+        variable_len_byte_mask
+        {static_cast<MidiStreamAtom>(~variable_len_flag)};
     inline constexpr MidiStreamAtom variable_len_shift       {7};
     inline constexpr MidiStreamAtom octet_mask               {0xff};
     inline constexpr MidiStreamArray1 meta_prefix{0xff};
-    inline constexpr MidiStreamArray2 sequence_number_prefix {0x00, 0x02}; // sequence number
+    inline constexpr MidiStreamArray2 sequence_number_prefix {0x00, 0x02};
     // Variable-length string meta-events.
     inline constexpr MidiStreamArray1 text_prefix            {0x01};
     inline constexpr MidiStreamArray1 copyright_prefix       {0x02};
@@ -83,13 +85,13 @@ namespace midi
     inline constexpr MidiStreamArray1 text_0E_prefix         {0x0E};
     inline constexpr MidiStreamArray1 text_0F_prefix         {0x0F};
     inline constexpr MidiStreamArray1 unknown_prefix         {0x11};
-    inline constexpr MidiStreamArray2 smpte_prefix           {0x54, 5}; // prefix, length
-    inline constexpr MidiStreamArray2 midi_channel_prefix    {0x20, 1}; // prefix, length
-    inline constexpr MidiStreamArray2 end_of_track_prefix    {0x2f, 0}; // prefix, length
-    inline constexpr MidiStreamArray2 tempo_prefix           {0x51, 3}; // prefix, length
-    inline constexpr MidiStreamArray2 time_signature_prefix  {0x58, 4}; // prefix, length
-    inline constexpr MidiStreamArray2 key_signature_prefix   {0x59, 2}; // prefix, length
-    inline constexpr MidiStreamArray2 xmf_patch_type_prefix  {0x60, 1}; // GM1, or GM2, or DLS.
+    inline constexpr MidiStreamArray2 smpte_prefix{0x54, 5};
+    inline constexpr MidiStreamArray2 midi_channel_prefix    {0x20, 1};
+    inline constexpr MidiStreamArray2 end_of_track_prefix    {0x2f, 0};
+    inline constexpr MidiStreamArray2 tempo_prefix           {0x51, 3};
+    inline constexpr MidiStreamArray2 time_signature_prefix  {0x58, 4};
+    inline constexpr MidiStreamArray2 key_signature_prefix   {0x59, 2};
+    inline constexpr MidiStreamArray2 xmf_patch_type_prefix  {0x60, 1};
     enum class XmfPatchTypeEnum : MidiStreamAtom
     {
         GM1 = 1,
@@ -101,18 +103,23 @@ namespace midi
     inline constexpr MidiStreamAtom patch_type_gm2{0x02};
     inline constexpr MidiStreamAtom patch_type_dls{0x03};
     // Quicktime left out the major/minor mode byte.
-    inline constexpr MidiStreamArray2 key_signature_prefix_mode_missing   {0x59, 1}; // prefix, length;
+    inline constexpr MidiStreamArray2
+        key_signature_prefix_mode_missing{0x59, 1};
     inline constexpr MidiStreamArray2 midi_port_prefix       {0x21, 1};
     inline constexpr MidiStreamArray1 sequencer_specific_prefix{0x7f};
 
-    // To recognize what is an unknown meta event, first check if it is in this list.
-    const std::set<MidiStreamAtom> Initial_Meta{sequence_number_prefix[0], text_prefix[0],
-        copyright_prefix[0], track_name_prefix[0], instrument_name_prefix[0],
-        lyric_prefix[0], marker_prefix[0], cue_point_prefix[0], program_name_prefix[0],
-        device_name_prefix[0], text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
-        text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0], midi_channel_prefix[0],
-        end_of_track_prefix[0], tempo_prefix[0], smpte_prefix[0], time_signature_prefix[0],
-        key_signature_prefix[0], xmf_patch_type_prefix[0], sequencer_specific_prefix[0], midi_port_prefix[0]};
+    // To recognize what is an unknown meta event,
+    // first check if it is in this list.
+    const std::set<MidiStreamAtom> Initial_Meta{sequence_number_prefix[0],
+        text_prefix[0], copyright_prefix[0], track_name_prefix[0],
+        instrument_name_prefix[0], lyric_prefix[0], marker_prefix[0],
+        cue_point_prefix[0], program_name_prefix[0], device_name_prefix[0],
+        text_0A_prefix[0], text_0B_prefix[0], text_0C_prefix[0],
+        text_0D_prefix[0], text_0E_prefix[0], text_0F_prefix[0],
+        midi_channel_prefix[0], end_of_track_prefix[0], tempo_prefix[0],
+        smpte_prefix[0], time_signature_prefix[0], key_signature_prefix[0],
+        xmf_patch_type_prefix[0], sequencer_specific_prefix[0],
+        midi_port_prefix[0]};
 
     // fixed-length meta-events
     inline constexpr MidiStreamAtom smpte_24fps          {0};
@@ -133,9 +140,10 @@ namespace midi
 
     inline constexpr MidiStreamArray1 note_on                {NoteOn};
     inline constexpr MidiStreamArray1 note_off               {NoteOff};
-    inline constexpr int          full_note_length       {3};
-    inline constexpr int          running_status_note_length{2};
-    inline constexpr MidiStreamArray1 polyphonic_key_pressure{PolyphonicKeyPressure};
+    inline constexpr std::int32_t          full_note_length       {3};
+    inline constexpr std::int32_t          running_status_note_length{2};
+    inline constexpr MidiStreamArray1
+        polyphonic_key_pressure{PolyphonicKeyPressure};
     inline constexpr MidiStreamArray1 control                {Control};
     inline constexpr MidiStreamArray1 channel_mode           {0xb0};
     inline constexpr MidiStreamArray1 program                {Program};
@@ -244,8 +252,10 @@ namespace midi
     inline constexpr MidiStreamArray1 control_phaser_depth   {0x5f};
     inline constexpr MidiStreamArray1 control_data_increment {0x60};
     inline constexpr MidiStreamArray1 control_data_decrement {0x61};
-    inline constexpr MidiStreamArray1 control_non_registered_parameter_lsb {0x62};
-    inline constexpr MidiStreamArray1 control_non_registered_parameter_msb {0x63};
+    inline constexpr MidiStreamArray1
+        control_non_registered_parameter_lsb {0x62};
+    inline constexpr MidiStreamArray1
+        control_non_registered_parameter_msb {0x63};
     inline constexpr MidiStreamArray1 control_registered_parameter_lsb {0x64};
     inline constexpr MidiStreamArray1 control_registered_parameter_msb {0x65};
 
@@ -269,87 +279,143 @@ namespace midi
     inline constexpr MidiStreamArray1 start_of_sysex         {0xf0};
     inline constexpr MidiStreamArray1 end_of_sysex           {0xf7};
 
-    // MIDI 1.0 Detailed Specification M1_v4-2-1_MIDI_1-0_Detailed_Specification_96-1-4.pdf
+    // MIDI 1.0 Detailed Specification
+    // M1_v4-2-1_MIDI_1-0_Detailed_Specification_96-1-4.pdf
     // page 35, "Device ID" 0x7f is "All Call" or, on page 57, "Broadcast".
     inline constexpr MidiStreamArray1 sysex_deviceid_all_call {0x7f};
-    inline constexpr MidiStreamArray1 sysex_subid_non_commercial {0x7d}; //  "NON_COMMERCIAL"
-    inline constexpr MidiStreamArray1 sysex_subid_non_realtime {0x7e}; //  "NON_REALTIME"
-    inline constexpr MidiStreamArray1 sysex_subid_realtime {0x7f}; //  "REAL_TIME"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_sample_dump_header {0x01}; //  "NONRT_SAMPLE_DUMP_HEADER"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_sample_data_packet {0x02}; //  "NONRT_SAMPLE_DATA_PACKET"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_sample_dump_request {0x03}; //  "NONRT_SAMPLE_DUMP_REQUEST"
+    inline constexpr MidiStreamArray1 sysex_subid_non_commercial {0x7d};
+    inline constexpr MidiStreamArray1 sysex_subid_non_realtime {0x7e};
+    inline constexpr MidiStreamArray1 sysex_subid_realtime {0x7f};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_sample_dump_header {0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_sample_data_packet {0x02};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_sample_dump_request {0x03};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_timecode{0x04}; //  "NONRT_TIMECODE"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_special {0x00}; //  "SPECIAL"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_punch_in_points {0x01}; //  "TIMECODE_PUNCH_IN_PTS"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_punch_out_points {0x02}; //  "TIMECODE_PUNCH_OUT_PTS"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_delete_punch_in_point {0x03}; //  "TIMECODE_DELETE_PUNCH_IN_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_delete_punch_out_point {0x04}; //  "TIMECODE_DELETE_PUNCH_OUT_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_event_start_point {0x05}; //  "TIMECODE_EVENT_START_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_event_stop_point {0x06}; //  "TIMECODE_EVENT_STOP_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_event_start_points_with_additional_info {0x07}; //  "TIMECODE_EVENT_START_PTS_WITH_ADDITIONAL_INFO"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_event_stop_points_with_additional_info {0x08}; //  "TIMECODE_EVENT_STOP_PTS_WITH_ADDITIONAL_INFO"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_delete_event_start_point {0x09}; //  "TIMECODE_DELETE_EVENT_START_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_delete_event_stop_point {0x0a}; //  "TIMECODE_DELETE_EVENT_STOP_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_cue_points {0x0b}; //  "TIMECODE_CUE_PTS"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_cue_points_with_additional_info {0x0c}; //  "TIMECODE_CUE_PTS_WITH_ADDITIONAL_INFO"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_delete_cue_point {0x0d}; //  "TIMECODE_DELETE_CUE_POINT"
-    inline constexpr MidiStreamArray1     sysex_subid_timecode_event_name_in_additional_info {0x0e}; //  "TIMECODE_EVENT_NAME_IN_ADDITIONAL_INFO"
+    inline constexpr MidiStreamArray1 sysex_subid_nonrt_timecode{0x04};
+    inline constexpr MidiStreamArray1 sysex_subid_timecode_special{0x00};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_punch_in_points{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_punch_out_points{0x02};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_delete_punch_in_point{0x03};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_delete_punch_out_point{0x04};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_event_start_point{0x05};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_event_stop_point{0x06};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_event_start_points_with_additional_info{0x07};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_event_stop_points_with_additional_info{0x08};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_delete_event_start_point{0x09};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_delete_event_stop_point{0x0a};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_cue_points{0x0b};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_cue_points_with_additional_info{0x0c};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_delete_cue_point{0x0d};
+    inline constexpr MidiStreamArray1
+        sysex_subid_timecode_event_name_in_additional_info{0x0e};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_sample_dump_extensions{0x05}; //  "NONRT_SAMPLE_DUMP_EXTENSIONS"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_sample_dump_extensions_multiple_loop_points{0x01}; //  "NONRT_SAMPLE_DUMP_EXTENSIONS_MULTIPLE_LOOP_PTS"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_sample_dump_extensions_loop_points_request{0x02}; //  "NONRT_SAMPLE_DUMP_EXTENSIONS_LOOP_PTS_REQUEST"
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_sample_dump_extensions{0x05};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_sample_dump_extensions_multiple_loop_points{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_sample_dump_extensions_loop_points_request{0x02};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_general_info{0x06}; //  "NONRT_GENERAL_INFO"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_general_info_id_request{0x01}; //  "NONRT_GENERAL_INFO_ID_REQUEST"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_general_info_id_reply{0x02}; //  "NONRT_GENERAL_INFO_ID_REPLY"
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_general_info{0x06};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_general_info_id_request{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_general_info_id_reply{0x02};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_file_dump{0x07}; //  "NONRT_FILE_DUMP"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_file_dump_header{0x01}; //  "NONRT_FILE_DUMP_HEADER"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_file_dump_data_packet{0x02}; //  "NONRT_FILE_DUMP_DATA_PACKET"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_file_dump_data_request{0x03}; //  "NONRT_FILE_DUMP_DATA_REQUEST"
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_file_dump{0x07};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_file_dump_header{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_file_dump_data_packet{0x02};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_file_dump_data_request{0x03};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_tuning_std{0x08}; //  "NONRT_TUNING_STD"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_tuning_std_bulk_dump_request{0x01}; //  "NONRT_TUNING_STD_BULK_DUMP_REQUEST"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_tuning_std_bulk_dump_reply{0x02}; //  "NONRT_TUNING_STD_BULK_DUMP_REPLY"
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_tuning_std{0x08};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_tuning_std_bulk_dump_request{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_tuning_std_bulk_dump_reply{0x02};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_gm{0x09}; //  "NONRT_GM"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_gm_on{0x01}; //  "NONRT_GM_ON"
-    inline constexpr MidiStreamArray1     sysex_subid_nonrt_gm_off{0x02}; //  "NONRT_GM_OFF"
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_gm{0x09};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_gm_on{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_gm_off{0x02};
 
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_end_of_file{0x7b}; //  "NONRT_END_OF_FILE"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_wait{0x7c}; //  "NONRT_WAIT"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_cancel{0x7d}; //  "NONRT_CANCEL"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_nak{0x7e}; //  "NONRT_NAK"
-    inline constexpr MidiStreamArray1   sysex_subid_nonrt_ack{0x7f}; //  "NONRT_ACK"
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_end_of_file{0x7b};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_wait{0x7c};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_cancel{0x7d};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_nak{0x7e};
+    inline constexpr MidiStreamArray1
+        sysex_subid_nonrt_ack{0x7f};
 
-    inline constexpr MidiStreamArray1   sysex_subid_rt_timecode{0x01}; //   "RT_TIMECODE"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_timecode_full_message {0x01}; //   "RT_TIMECODE_FULL_MESSAGE"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_timecode_user_bits{0x02}; //  "RT_TIMECODE_USER_BITS"
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_timecode{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_timecode_full_message {0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_timecode_user_bits{0x02};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_show_control{0x02};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_show_control_extensions {0x00};
 
-    inline constexpr MidiStreamArray1   sysex_subid_rt_show_control{0x02}; //  "RT_SHOW_CONTROL"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_show_control_extensions {0x00}; //  "RT_SHOW_CONTROL_EXTENSIONS"
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_notation_information{0x03};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_notation_information_bar_number{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_notation_information_time_signature_immediate{0x02};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_notation_information_time_signature_delayed{0x42};
 
-    inline constexpr MidiStreamArray1   sysex_subid_rt_notation_information{0x03}; //  "RT_NOTATION_INFORMATION"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_notation_information_bar_number{0x01}; //  "RT_NOTATION_INFORMATION_BAR_NUMBER"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_notation_information_time_signature_immediate{0x02}; //  "RT_NOTATION_INFORMATION_TIME_SIGNATURE_IMMEDIATE"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_notation_information_time_signature_delayed{0x42}; //  "RT_NOTATION_INFORMATION_TIME_SIGNATURE_DELAYED"
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_device_control{0x04};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_device_control_main_volume{0x01};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_device_control_main_balance{0x02};
 
-    inline constexpr MidiStreamArray1   sysex_subid_rt_device_control{0x04}; //  "RT_DEVICE_CONTROL"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_device_control_main_volume{0x01}; //  "RT_DEVICE_CONTROL_MAIN_VOLUME"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_device_control_main_balance{0x02}; //  "RT_DEVICE_CONTROL_MAIN_BALANCE"
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_mtc_cueing{0x05};
+    // Use non-RT timecode commands except delete punch,
+    // delete event, delete cue point.
 
-    inline constexpr MidiStreamArray1   sysex_subid_rt_mtc_cueing{0x05}; //  "RT_MTC_CUEING"
-    // Use non-RT timecode commands except delete punch, delete event, delete cue point.
-
-    inline constexpr MidiStreamArray1   sysex_subid_rt_machine_control_commands{0x06}; //  "RT_MACHINE_CONTROL_COMMANDS"
-    inline constexpr MidiStreamArray1   sysex_subid_rt_machine_control_responses{0x07}; //  "RT_MACHINE_CONTROL_RESPONSES"
-    inline constexpr MidiStreamArray1   sysex_subid_rt_tuning_std{0x08}; //  "RT_TUNING_STD"
-    inline constexpr MidiStreamArray1     sysex_subid_rt_tuning_std_note_change{0x02}; //  "RT_TUNING_STD"
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_machine_control_commands{0x06};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_machine_control_responses{0x07};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_tuning_std{0x08};
+    inline constexpr MidiStreamArray1
+        sysex_subid_rt_tuning_std_note_change{0x02};
 
     inline constexpr MidiStreamAtom MiddleC{60};
 
-    inline constexpr int SMPTE_hours_max{23};
+    inline constexpr std::int32_t SMPTE_hours_max{23};
 
     inline constexpr std::int64_t QuartersPerWhole(4);
     inline constexpr size_t bits_per_byte{8};
@@ -398,8 +464,8 @@ namespace midi
     struct MidiHeader
     {
         MidiHeader() = default;
-        MidiHeader(std::uint32_t chunk_len, MIDI_Format format, std::uint16_t ntrks,
-                   std::uint16_t division) noexcept
+        MidiHeader(std::uint32_t chunk_len, MIDI_Format format,
+            std::uint16_t ntrks, std::uint16_t division) noexcept
          :  chunk_len_{chunk_len},
             format_{format},
             ntrks_{ntrks},
@@ -432,7 +498,7 @@ namespace midi
 
 #pragma pack()
 
-    enum class RunningStatusPolicy : int
+    enum class RunningStatusPolicy : std::int32_t
     {
         Standard                   = 1,
         Never                      = 2,
@@ -457,7 +523,8 @@ namespace midi
     {
       public:
         RunningStatusImpl() = default;
-        virtual void running_status(MidiStreamAtom running_status_value) noexcept final;
+        void running_status(MidiStreamAtom running_status_value)
+            noexcept final;
         bool running_status_valid() const noexcept override;
         MidiStreamAtom running_status_value() const noexcept override;
         void clear() noexcept override;
@@ -475,7 +542,8 @@ namespace midi
         RunningStatusBase() = default;
         // Rule of zero: if no custom D-tor, copy, assign, move, move copy,
         // then define none of them.
-        virtual void running_status(midi::MidiStreamAtom running_status_value) noexcept
+        virtual void running_status(midi::MidiStreamAtom running_status_value)
+            noexcept
         {
             running_status_impl_->running_status(running_status_value);
         }
@@ -485,7 +553,8 @@ namespace midi
             running_status_impl_->clear();
         }
 
-        virtual void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) = 0;
+        virtual void operator()(MidiStreamAtom status_byte,
+            MidiStreamVector& track) = 0;
 
         virtual bool running_status_valid() const noexcept
         {
@@ -510,43 +579,51 @@ namespace midi
 
         virtual ~RunningStatusBase() = default;
       private:
-        std::shared_ptr<RunningStatusImplBase> running_status_impl_{std::make_shared<RunningStatusImpl>()};
+        std::shared_ptr<RunningStatusImplBase>
+            running_status_impl_{std::make_shared<RunningStatusImpl>()};
     };
 
     class RunningStatusStandard final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+            noexcept final;
     };
 
     class RunningStatusNever final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+            noexcept final;
     };
 
     class RunningStatusPersistentAfterMeta final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+            noexcept final;
     };
 
     class RunningStatusPersistentAfterSysex final : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+            noexcept final;
     };
 
-    class RunningStatusPersistentAfterSysexOrMeta final : public RunningStatusBase
+    class RunningStatusPersistentAfterSysexOrMeta final
+        : public RunningStatusBase
     {
       public:
-        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track) noexcept final;
+        void operator()(MidiStreamAtom status_byte, MidiStreamVector& track)
+            noexcept final;
     };
 
     class RunningStatusFactory
     {
       public:
-          std::unique_ptr<RunningStatusBase> operator()(RunningStatusPolicy policy) noexcept;
+          std::unique_ptr<RunningStatusBase>
+              operator()(RunningStatusPolicy policy) noexcept;
     };
-}
+} // namespace midi
 #endif // MIDI_H

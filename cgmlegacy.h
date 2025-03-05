@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -45,7 +45,6 @@ namespace cgmlegacy
             is >> v.low_pitch_ >> v.high_pitch_ >> v.channel_ >> v.walking_;
             return is;
         }
-
     };
 #pragma pack()
 
@@ -83,7 +82,8 @@ namespace cgmlegacy
         double min_note_len{1.0};
         double max_note_len{1.0};
         std::size_t scale_qty{15};
-        std::vector<std::uint32_t> scale{48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72};
+        std::vector<std::uint32_t>
+            scale{48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72};
         std::size_t voice_qty{};
         double pulse{1.0};
         OldFormElement pitch_form{};
@@ -93,6 +93,6 @@ namespace cgmlegacy
         std::vector<VoiceOld> voices{};
     };
 
-}
+} // namespace cgmlegacy
 
 #endif

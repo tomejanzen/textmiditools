@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py sine wave support and sinusoid subwindow."""
-# TextMIDITools Version 1.0.90
+# TextMIDITools Version 1.0.92
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -13,13 +13,12 @@ import tkinter.ttk
 
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk
 
 class Sine(tkinter.Frame):
     """Sine wave support for forms."""
     pi = 3.14159265358979323846264338327950288419716939937508
 
-    def __init__(self, parent, sine_title, period_callback, 
+    def __init__(self, parent, sine_title, period_callback,
             phase_callback, amplitude_callback, offset_callback, xml_sine):
         """Init a sine class."""
         # assignment of class data must be first
@@ -40,8 +39,10 @@ class Sine(tkinter.Frame):
     def create_widgets(self):
         """Create the widgets for a sinusoid sub-window."""
 
+        self.sine_frame = tkinter.ttk.Frame(self, padding='1 1 1 1', borderwidth=2, relief='sunken')
+        self.sine_frame.grid(row=1, column=0)
         # Mean or Range
-        self.curve_label = tkinter.ttk.Label(self, text=self.sine_title)
+        self.curve_label = tkinter.ttk.Label(self.sine_frame, text=self.sine_title)
         self.curve_label.grid(row=1, column=0)
 
         # TCL book p 509
@@ -55,32 +56,32 @@ class Sine(tkinter.Frame):
         # %W tk name of widget
         validate_command = (self.register(self.validate_float),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
-        self.phase_scroll_label = tkinter.ttk.Label(self,
+        self.phase_scroll_label = tkinter.ttk.Label(self.sine_frame,
             text='-pi..................0..................pi')
-        self.period_label = tkinter.ttk.Label(self, text='Period')
-        self.period_entry = tkinter.ttk.Entry(self,
+        self.period_label = tkinter.ttk.Label(self.sine_frame, text='Period')
+        self.period_entry = tkinter.ttk.Entry(self.sine_frame,
             validatecommand=validate_command, validate='focusout',
             textvariable=self.period)
 
-        self.phase_label = tkinter.ttk.Label(self, text='Phase')
-        self.phase_scrollbar = tkinter.ttk.Scrollbar(self,
+        self.phase_label = tkinter.ttk.Label(self.sine_frame, text='Phase')
+        self.phase_scrollbar = tkinter.ttk.Scrollbar(self.sine_frame,
             command=self.phase_callback)
         self.phase_scrollbar['orient'] = 'horizontal'
         phase = self.xml_sine['phase'] / (2.0 * self.pi) + 0.5
         self.phase_scrollbar.set(phase, phase)
 
-        self.amplitude_label = tkinter.ttk.Label(self, text='Amplitude')
-        self.amplitude_entry = tkinter.ttk.Entry(self,
+        self.amplitude_label = tkinter.ttk.Label(self.sine_frame, text='Amplitude')
+        self.amplitude_entry = tkinter.ttk.Entry(self.sine_frame,
             validatecommand=validate_command, validate='focusout',
             textvariable=self.amplitude)
 
-        self.offset_label = tkinter.ttk.Label(self, text='Offset')
-        self.offset_scrollbar = tkinter.ttk.Scrollbar(self,
+        self.offset_label = tkinter.ttk.Label(self.sine_frame, text='Offset')
+        self.offset_scrollbar = tkinter.ttk.Scrollbar(self.sine_frame,
             command=self.offset_callback)
         self.offset_scrollbar['orient'] = 'horizontal'
         offset = self.xml_sine['offset'] / 2.0 + 0.5
         self.offset_scrollbar.set(offset, offset)
-        self.phase_scroll_label = tkinter.ttk.Label(self,
+        self.phase_scroll_label = tkinter.ttk.Label(self.sine_frame,
             text='-1...................0...................1')
 
         the_row = 0
@@ -109,8 +110,8 @@ class Sine(tkinter.Frame):
 
     def install_callbacks(self):
         """Install sine callbacks."""
-        self.period.trace('w', self.period_callback)
-        self.amplitude.trace('w', self.amplitude_callback)
+        self.period.trace_add("write", self.period_callback)
+        self.amplitude.trace_add("write", self.amplitude_callback)
 
     def install_xml_sine(self, xml_sine):
         """Install the values from the domain oject model."""

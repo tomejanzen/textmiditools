@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -86,17 +86,21 @@
 #include "Composer.h"
 #include "RhythmRational.h"
 
-using namespace std;
-using namespace boost;
-using namespace textmidi;
-using namespace textmidi::cgm;
-using namespace cgmlegacy;
-using namespace arrangements;
+using std::int32_t, std::string, std::vector, std::unordered_map,
+      std::cerr, std::cin, std::cout, std::ofstream, std::ifstream,
+      std::make_unique, std::ranges::for_each;
+using boost::lexical_cast, boost::to_upper;
+using textmidi::rational::RhythmExpression, textmidi::rational::print_rhythm;
+using arrangements::PermutationEnum;
+using cgmlegacy::TextForm;
+using textmidi::cgm::MusicalForm, textmidi::cgm::MusicalFormException,
+      textmidi::cgm::TicksDuration, textmidi::cgm::TicksPerQuarter,
+      textmidi::cgm::arrangement_map, textmidi::cgm::Composer;
 
 // This isn't really necessary but i wrote it in a
 // quest to get glob to compile, which wouldn't because
 // of a different mistake.
-int glob_error(const char*, int)
+int32_t glob_error(const char*, int32_t)
 {
     return 0;
 }
@@ -106,60 +110,92 @@ int glob_error(const char*, int)
 //
 namespace {
 
-    using GlobStatusMap = unordered_map<int, string>;
+    using GlobStatusMap = unordered_map<int32_t, string>;
 
 }
 
-int main(int argc, char *argv[])
+int32_t main(int argc, char *argv[])
 {
-    program_options::options_description desc("Allowed options");
+    boost::program_options::options_description desc("Allowed options");
     desc.add_options()
-        ((help_option.registered_name().c_str()),                                                                         help_option.text().c_str())
-        ((verbose_option.registered_name().c_str()),                                                                      verbose_option.text().c_str())
-        ((stack_tracks_option.registered_name().c_str()),                                                                 stack_tracks_option.text().c_str())
-        ((version_option.registered_name().c_str()),                                                                      version_option.text().c_str())
-        ((form_option.registered_name().c_str()),                 program_options::value<string>(),                       form_option.text().c_str())
-        ((XML_form_option.registered_name().c_str()),             program_options::value<vector<string>>()->multitoken(), XML_form_option.text().c_str())
-        ((xml_update_option.registered_name().c_str()),                                                                   xml_update_option.text().c_str())
-        ((answer_option.registered_name().c_str()),                                                                       answer_option.text().c_str())
-        ((textmidi_out_option.registered_name().c_str()),         program_options::value<string>(),                       textmidi_out_option.text().c_str())
-        ((gnuplot_option.registered_name().c_str()),                                                                      gnuplot_option.text().c_str())
-        ((random_option.registered_name().c_str()),               program_options::value<string>(),                       random_option.text().c_str())
-        ((instruments_option.registered_name().c_str()),          program_options::value<vector<string>>()->multitoken(), instruments_option.text().c_str())
-        ((clamp_scale_option.registered_name().c_str()),                                                                  clamp_scale_option.text().c_str())
-        ((arrangements_option.registered_name().c_str()),         program_options::value<string>(),                       arrangements_option.text().c_str())
-        ((max_events_per_track_option.registered_name().c_str()), program_options::value<int>(),                          max_events_per_track_option.text().c_str())
-        ((arrangements_period_option.registered_name().c_str()),  program_options::value<double>(),                       arrangements_period_option.text().c_str())
-        ((dotted_rhythms_option.registered_name().c_str()),       program_options::value<string>(),                       dotted_rhythms_option.text().c_str())
-        ((rhythm_expression_option.registered_name().c_str()),    program_options::value<string>(),                       rhythm_expression_option.text().c_str())
+        ((help_option.registered_name().c_str()), help_option.text().c_str())
+        ((verbose_option.registered_name().c_str()),
+            verbose_option.text().c_str())
+        ((stack_tracks_option.registered_name().c_str()),
+            stack_tracks_option.text().c_str())
+        ((version_option.registered_name().c_str()),
+            version_option.text().c_str())
+        ((form_option.registered_name().c_str()),
+            boost::program_options::value<string>(), form_option.text().c_str())
+        ((XML_form_option.registered_name().c_str()),
+            boost::program_options::value<vector<string>>()->multitoken(),
+            XML_form_option.text().c_str())
+        ((xml_update_option.registered_name().c_str()),
+            xml_update_option.text().c_str())
+        ((answer_option.registered_name().c_str()),
+            answer_option.text().c_str())
+        ((textmidi_out_option.registered_name().c_str()),
+            boost::program_options::value<string>(),
+            textmidi_out_option.text().c_str())
+        ((gnuplot_option.registered_name().c_str()),
+            gnuplot_option.text().c_str())
+        ((random_option.registered_name().c_str()),
+            boost::program_options::value<string>(),
+            random_option.text().c_str())
+        ((instruments_option.registered_name().c_str()),
+            boost::program_options::value<vector<string>>()->multitoken(),
+            instruments_option.text().c_str())
+        ((clamp_scale_option.registered_name().c_str()),
+            clamp_scale_option.text().c_str())
+        ((arrangements_option.registered_name().c_str()),
+            boost::program_options::value<string>(),
+            arrangements_option.text().c_str())
+        ((max_events_per_track_option.registered_name().c_str()),
+            boost::program_options::value<int32_t>(),
+            max_events_per_track_option.text().c_str())
+        ((arrangements_period_option.registered_name().c_str()),
+            boost::program_options::value<double>(),
+            arrangements_period_option.text().c_str())
+        ((dotted_rhythms_option.registered_name().c_str()),
+            boost::program_options::value<string>(),
+            dotted_rhythms_option.text().c_str())
+        ((rhythm_expression_option.registered_name().c_str()),
+            boost::program_options::value<string>(),
+            rhythm_expression_option.text().c_str())
     ;
-    program_options::variables_map var_map;
+    boost::program_options::variables_map var_map;
     try
     {
-        program_options::store(program_options::parse_command_line(argc, argv, desc), var_map);
-        program_options::notify(var_map);
+        boost::program_options::store(boost::program_options::
+            parse_command_line(argc, argv, desc), var_map);
+        boost::program_options::notify(var_map);
     }
     catch (std::logic_error& err)
     {
-        const string errstr{(string{"Program options error: "} += err.what()) += '\n'};
+        const string errstr{(string{"Program options error: "} += err.what())
+            += '\n'};
         cerr << errstr;
         exit(EXIT_SUCCESS);
     }
     if (var_map.count(help_option.option()))
     {
-        const string logstr{((string{"Usage: textmidicgm [OPTION]... [XMLFORMFILE]...\ntextmidicgm Version 1.0.90\n"}
+        const string logstr{((string{"Usage: textmidicgm [OPTION]... "
+                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.92\n"}
             += lexical_cast<string>(desc)) += '\n')
-            += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: https://github.com/tomejanzen/textmiditools\n"};
+            += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: "
+            "https://github.com/tomejanzen/textmiditools\n"};
         cout << logstr;
         exit(EXIT_SUCCESS);
     }
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-
-        cout << "textmidicgm\nTextMIDITools 1.0.90\nCopyright © 2025 Thomas E. Janzen\n"
-            "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
-            "This is free software: you are free to change and redistribute it.\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.92\n"
+            "Copyright © 2025 Thomas E. Janzen\n"
+            "License GPLv3+: GNU GPL version 3 "
+            "or later <https://gnu.org/licenses/gpl.html>\n"
+            "This is free software: you are free "
+            "to change and redistribute it.\n"
             "There is NO WARRANTY, to the extent permitted by law.\n";
         exit(EXIT_SUCCESS);
     }
@@ -179,40 +215,52 @@ int main(int argc, char *argv[])
     vector<string> form_filename_globs;
     if (var_map.count(form_option.option()))
     {
-        form_filename_globs = var_map[form_option.option()].as<vector<string>>();
+        form_filename_globs
+            = var_map[form_option.option()].as<vector<string>>();
     }
     else
     {
         if (var_map.count(XML_form_option.option()))
         {
-            form_filename_globs = var_map[XML_form_option.option()].as<vector<string>>();
+            form_filename_globs
+                = var_map[XML_form_option.option()].as<vector<string>>();
         }
         else
         {
             if (var_map.count(random_option.option()))
             {
-                auto random_filename{var_map[random_option.option()].as<string>()};
+                auto random_filename{
+                    var_map[random_option.option()].as<string>()};
 
                 int32_t instrument_flags{0};
 
                 if (var_map.count(instruments_option.option()))
                 {
-                    vector<string> instruments{var_map[instruments_option.option()].as<vector<string>>()};
+                    vector<string> instruments{
+                        var_map[instruments_option.option()]
+                            .as<vector<string>>()};
                     for (const auto& instrument : instruments)
                     {
-                        if (program_group_map.contains(instrument))
+                        if (textmidi::cgm::program_group_map
+                            .contains(instrument))
                         {
-                            instrument_flags |= static_cast<int>(program_group_map.at(instrument));
+                            instrument_flags
+                                |= static_cast<int32_t>(
+                                textmidi::cgm::program_group_map
+                                .at(instrument));
                         }
                         else
                         {
-                            cerr << instrument << " is not an instrument group\n";
+                            cerr << instrument
+                                 << " is not an instrument group\n";
                         }
                     }
                 }
                 else
                 {
-                    instrument_flags = static_cast<int>(GeneralMIDIGroup::Melodic);
+                    instrument_flags
+                        = static_cast<int32_t>(
+                        textmidi::cgm::GeneralMIDIGroup::Melodic);
                 }
 
                 MusicalForm xml_form{};
@@ -221,7 +269,7 @@ int main(int argc, char *argv[])
                     ofstream xml_form_stream{(random_filename
                             + string(".xml")).c_str()};
                     {
-                        archive::xml_oarchive oarc(xml_form_stream);
+                        boost::archive::xml_oarchive oarc(xml_form_stream);
                         oarc << BOOST_SERIALIZATION_NVP(xml_form);
                     }
                     if (verbose)
@@ -245,7 +293,8 @@ int main(int argc, char *argv[])
         }
     }
     vector<string> form_filenames;
-    if (var_map.count(form_option.option()) || var_map.count(XML_form_option.option()))
+    if (var_map.count(form_option.option())
+        || var_map.count(XML_form_option.option()))
     {
         GlobStatusMap globStatusMap
         {
@@ -254,8 +303,8 @@ int main(int argc, char *argv[])
             {GLOB_NOMATCH, "NOMATCH"}
         };
         ::glob_t glob_data;
-        int globsts{};
-        long unsigned int pat{};
+        int32_t globsts{};
+        std::uint64_t pat{};
         for ( ; pat < 1; pat++)
         {
             if (0 != (globsts = ::glob(form_filename_globs[pat].c_str(),
@@ -282,7 +331,8 @@ int main(int argc, char *argv[])
                 exit(0);
             }
         }
-        for_each_n(&glob_data.gl_pathv[0], glob_data.gl_pathc, [&](const auto& gdgp) {
+        std::for_each_n(&glob_data.gl_pathv[0], glob_data.gl_pathc,
+                [&](const auto& gdgp) {
             form_filenames.emplace_back(gdgp); } );
         globfree(&glob_data);
     }
@@ -318,33 +368,41 @@ int main(int argc, char *argv[])
                 {
                     try
                     {
-                        archive::xml_iarchive iarc(xml_form_file);
+                        boost::archive::xml_iarchive iarc(xml_form_file);
                         MusicalForm xml_form;
                         iarc >> BOOST_SERIALIZATION_NVP(xml_form);
                         if (!xml_form.valid())
                         {
-                            const string errstr{((string{__FILE__} += ':') += BOOST_PP_STRINGIZE(__LINE__)) += " Invalid Form.\n"};
+                            const string errstr{((string{__FILE__} += ':')
+                                += BOOST_PP_STRINGIZE(__LINE__))
+                                += " Invalid Form.\n"};
                             cerr << errstr;
                         }
                         xml_forms.push_back(xml_form);
-                        if (var_map.count(xml_update_option.option()) && xml_form.valid())
+                        if (var_map.count(xml_update_option.option())
+                            && xml_form.valid())
                         {
                             string update_name{};
                             {
                                 string pathstr{form_filename};
                                 char tempthepath[FILENAME_MAX];
-                                tempthepath[pathstr.copy(tempthepath, pathstr.size(), 0)] = '\0';
+                                tempthepath[pathstr.copy(tempthepath,
+                                    pathstr.size(), 0)] = '\0';
 
                                 string thedir{::dirname(tempthepath)};
-                                tempthepath[pathstr.copy(tempthepath, pathstr.size(), 0)] = '\0';
+                                tempthepath[pathstr.copy(tempthepath,
+                                    pathstr.size(), 0)] = '\0';
                                 string thefilename{::basename(tempthepath)};
-                                auto newfilename{string{"update_"} + thefilename};
-                                (update_name += (thedir += '/')) += newfilename;
+                                auto newfilename{string{"update_"}
+                                    + thefilename};
+                                (update_name += (thedir += '/'))
+                                    += newfilename;
                             }
                             ofstream xml_form_stream{update_name.c_str()};
                             if (xml_form_stream)
                             {
-                                archive::xml_oarchive oarc(xml_form_stream);
+                                boost::archive::xml_oarchive oarc
+                                    (xml_form_stream);
                                 oarc << BOOST_SERIALIZATION_NVP(xml_form);
                             }
                         }
@@ -352,21 +410,22 @@ int main(int argc, char *argv[])
                     catch (MusicalFormException& mfe)
                     {
                         const string errstr{((((((string{__FILE__} += ':')
-                            += BOOST_PP_STRINGIZE(__LINE__)) += ' ') += form_filename)
+                            += BOOST_PP_STRINGIZE(__LINE__)) += ' ')
+                            += form_filename)
                             += " is an Invalid Form ") += mfe.what()) += '\n'};
                         cerr << errstr;
                         exit(EXIT_SUCCESS);
                     }
-                    catch (ios_base::failure &iosfail)
+                    catch (std::ios_base::failure &iosfail)
                     {
                         cerr << iosfail.what() << '\n';
                         exit(EXIT_SUCCESS);
                     }
-                    catch (archive::xml_archive_exception& xae)
+                    catch (boost::archive::xml_archive_exception& xae)
                     {
                         cerr << xae.what() << '\n';
                     }
-                    catch (archive::archive_exception& ae)
+                    catch (boost::archive::archive_exception& ae)
                     {
                         cerr << ae.what() << '\n';
                     }
@@ -396,47 +455,58 @@ int main(int argc, char *argv[])
 
     if (var_map.count(arrangements_option.option())) [[unlikely]]
     {
-        const string scramble_string{var_map[arrangements_option.option()].as<string>()};
+        const string scramble_string{
+            var_map[arrangements_option.option()].as<string>()};
         if (arrangement_map.contains(scramble_string))
         {
             track_scramble_type = arrangement_map.at(scramble_string);
         }
         else
         {
-            const string logstr{(string{"Track scrambling selections are: "} += arrangements_option.option()) += '\n'};
+            const string logstr{(string{"Track scrambling selections are: "}
+                += arrangements_option.option()) += '\n'};
             cout << logstr;
             exit(EXIT_SUCCESS);
         }
         if (var_map.count(arrangements_period_option.option()))
         {
             track_scramble_period = TicksDuration{
-                static_cast<int64_t>(floor(var_map[arrangements_period_option.option()].as<double>())) * TicksPerQuarter};
+                static_cast<int64_t>(floor(var_map[
+                    arrangements_period_option.option()].as<double>()))
+                    * TicksPerQuarter};
         }
     }
-    const size_t max_events_per_track{var_map.count(max_events_per_track_option.option()) ? var_map[max_events_per_track_option.option()].as<size_t>() : 100000};
+    const size_t max_events_per_track{
+        var_map.count(max_events_per_track_option.option())
+        ? var_map[max_events_per_track_option.option()].as<size_t>() : 100000};
 
     bool dotted_rhythms{true};
     if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
     {
-        string dotted_rhythms_string{var_map[dotted_rhythms_option.option()].as<string>()};
+        string dotted_rhythms_string{
+            var_map[dotted_rhythms_option.option()].as<string>()};
         to_upper(dotted_rhythms_string);
         dotted_rhythms = ("TRUE" == dotted_rhythms_string);
     }
 
     if (var_map.count(rhythm_expression_option.option())) [[unlikely]]
     {
-        string rhythm_expression_string{var_map[rhythm_expression_option.option()].as<string>()};
+        string rhythm_expression_string{
+            var_map[rhythm_expression_option.option()].as<string>()};
         to_upper(rhythm_expression_string);
         if (midi::rhythm_expression_map.contains(rhythm_expression_string))
         {
-            const rational::RhythmExpression rhythm_expression{midi::rhythm_expression_map[rhythm_expression_string]};
+            const RhythmExpression rhythm_expression{
+                midi::rhythm_expression_map[rhythm_expression_string]};
             switch (rhythm_expression)
             {
-              case textmidi::rational::RhythmExpression::Rational:
-                textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmRational>(dotted_rhythms);
+              case RhythmExpression::Rational:
+                print_rhythm = make_unique<textmidi::rational::
+                    PrintRhythmRational>(dotted_rhythms);
                 break;
-              case textmidi::rational::RhythmExpression::SimpleContinuedFraction:
-                textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmSimpleContinuedFraction>();
+              case RhythmExpression::SimpleContinuedFraction:
+                print_rhythm = make_unique<textmidi
+                    ::rational::PrintRhythmSimpleContinuedFraction>();
                 break;
             }
         }
@@ -445,7 +515,8 @@ int main(int argc, char *argv[])
     {
         if (var_map.count(dotted_rhythms_option.option())) [[unlikely]]
         {
-            textmidi::rational::print_rhythm = make_unique<textmidi::rational::PrintRhythmRational>(dotted_rhythms);
+            print_rhythm = make_unique<textmidi::rational
+                ::PrintRhythmRational>(dotted_rhythms);
         }
     }
 
@@ -454,7 +525,7 @@ int main(int argc, char *argv[])
     {
         textmidi_filename = var_map[textmidi_out_option.option()].as<string>();
     }
-    if (answer && filesystem::exists(textmidi_filename))
+    if (answer && std::filesystem::exists(textmidi_filename))
     {
         cout << "Overwrite " << textmidi_filename << "?\n";
         string answerstr{};
@@ -474,10 +545,10 @@ int main(int argc, char *argv[])
     // It appends ".xml" to the name.
     if (var_map.count(form_option.option()))
     {
-        for (int xf{}; auto& xml_form : xml_forms)
+        for (int32_t xf{}; auto& xml_form : xml_forms)
         {
             const string form_filename_local(form_filenames[xf]);
-            if (answer && filesystem::exists(form_filename_local))
+            if (answer && std::filesystem::exists(form_filename_local))
             {
                 cout << "Overwrite " << form_filename_local << "?\n";
                 string answerstr{};
@@ -490,7 +561,7 @@ int main(int argc, char *argv[])
 
             ofstream xml_form_stream{(form_filename_local + ".xml").c_str()};
             {
-                archive::xml_oarchive oarc(xml_form_stream);
+                boost::archive::xml_oarchive oarc(xml_form_stream);
                 oarc << BOOST_SERIALIZATION_NVP(xml_form);
             }
             ++xf;
@@ -499,14 +570,16 @@ int main(int argc, char *argv[])
 
     if (var_map.count(clamp_scale_option.option()))
     {
-        ranges::for_each(xml_forms, [](auto& xml_form) { xml_form.clamp_scale_to_instrument_ranges(); } );
+        for_each(xml_forms, [](auto& xml_form)
+            { xml_form.clamp_scale_to_instrument_ranges(); } );
     }
 
-    Composer composer{gnuplot, answer, track_scramble_type, track_scramble_period, max_events_per_track};
+    Composer composer{gnuplot, answer, track_scramble_type,
+        track_scramble_period, max_events_per_track};
 
     {
         ofstream textmidi_file;
-        unsigned long int x{};
+        uint64_t x{};
         if (stacktracks)
         {
             auto& xml_form{xml_forms[x]};
@@ -545,5 +618,4 @@ int main(int argc, char *argv[])
             }
         }
     }
-
 }

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -21,34 +21,35 @@ namespace textmidi
     namespace cgm
     {
 
-    inline constexpr int RestPitch{129};
+    inline constexpr std::int32_t RestPitch{129};
 
     class NoteEvent
     {
       public:
-        constexpr NoteEvent(int pitch, int vel, textmidi::rational::RhythmRational musical_rhythm) noexcept
+        constexpr NoteEvent(std::int32_t pitch, std::int32_t vel,
+            textmidi::rational::RhythmRational musical_rhythm) noexcept
           : pitch_{pitch},
             vel_{vel},
             musical_rhythm_{musical_rhythm}
         {
         }
-        void pitch(int pitch) noexcept;
-        int pitch() const noexcept;
-        int vel() const noexcept;
+        void pitch(std::int32_t pitch) noexcept;
+        std::int32_t pitch() const noexcept;
+        std::int32_t vel() const noexcept;
         textmidi::rational::RhythmRational musical_rhythm() const noexcept;
         void musical_rhythm(textmidi::rational::RhythmRational mr) noexcept
         {
             musical_rhythm_ = mr;
         }
       private:
-        int pitch_;
-        int vel_;
+        std::int32_t pitch_;
+        std::int32_t vel_;
         textmidi::rational::RhythmRational musical_rhythm_;
     };
 
     std::ostream& operator<<(std::ostream& os, const NoteEvent& ne);
 
-    }
-}
+    } // namespace cgm
+} // namespace textmidi
 
 #endif

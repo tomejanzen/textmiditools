@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,8 +12,7 @@
 
 #include "rational_support.h"
 
-using namespace textmidi;
-using namespace textmidi::rational;
+using textmidi::rational::RhythmRational;
 
 RhythmRational textmidi::rational::operator%(RhythmRational dividend,
     const RhythmRational& divisor) noexcept
@@ -28,20 +27,21 @@ RhythmRational textmidi::rational::operator%(RhythmRational dividend,
 RhythmRational textmidi::rational::round(RhythmRational ratnum) noexcept
 {
    const RhythmRational remainder(
-       ratnum.numerator() % ratnum.denominator(),
-       ratnum.denominator());
-   if (remainder >= RhythmRational{1L, 2L})
-   {
-       ratnum += RhythmRational{1L} - remainder;
-   }
-   else
-   {
+        ratnum.numerator() % ratnum.denominator(),
+        ratnum.denominator());
+    if (remainder >= RhythmRational{1L, 2L})
+    {
+        ratnum += RhythmRational{1L} - remainder;
+    }
+    else
+    {
        ratnum -= remainder;
-   }
-   return ratnum;
+    }
+    return ratnum;
 }
 
-RhythmRational textmidi::rational::snap(RhythmRational num, RhythmRational grid) noexcept
+RhythmRational textmidi::rational::
+    snap(RhythmRational num, RhythmRational grid) noexcept
 {
     const auto modnum{(num % grid)};
     if (grid != RhythmRational{0})
@@ -54,4 +54,3 @@ RhythmRational textmidi::rational::snap(RhythmRational num, RhythmRational grid)
         return num;
     }
 }
-

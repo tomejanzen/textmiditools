@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -10,10 +10,13 @@
 #if !defined(HEAPSALGORITHMTEMPLATE_H)
 #    define  HEAPSALGORITHMTEMPLATE_H
 
+#include <cstdint>
+
 #include <ranges>
 #include <numeric>
 #include <algorithm>
 #include <concepts>
+#include <utility>
 #include <vector>
 
 #include <boost/multi_array.hpp>
@@ -36,12 +39,12 @@ namespace heaps_algorithm
       public:
         // boost:: multi_array is used to permit
         // the use of 1-based indexing as in Heap.
-        using Array = boost::multi_array<int, 1>;
-        using ArrayRef = boost::multi_array_ref<int, 1>;
+        using Array = boost::multi_array<std::int32_t, 1>;
+        using ArrayRef = boost::multi_array_ref<std::int32_t, 1>;
         using Range = boost::multi_array_types::extent_range;
-        using SwapPair = std::pair<int, int>;
+        using SwapPair = std::pair<std::int32_t, int32_t>;
 
-        HeapsAlgorithmTemplate(int N, ArrayLike& array_like) noexcept
+        HeapsAlgorithmTemplate(std::int32_t N, ArrayLike& array_like) noexcept
           : N_{N},
             array_like_(array_like),
             A_{extents_[Range(1, N + 1)]},
@@ -53,7 +56,7 @@ namespace heaps_algorithm
         bool next() noexcept
         {
             auto rtn{false};
-            //while (!rtn)
+            // while (!rtn)
             {
                 ++A_[M_];
                 if (A_[M_] == M_)
@@ -67,8 +70,8 @@ namespace heaps_algorithm
                 }
                 else
                 {
-                    int X = M_;
-                    int Y{is_even(M_) ?  A_[M_] : 1};
+                    std::int32_t X = M_;
+                    std::int32_t Y{is_even(M_) ?  A_[M_] : 1};
                     std::swap(array_ref_[X], array_ref_[Y]);
                     M_ = 2;
                     rtn = true;
@@ -79,8 +82,8 @@ namespace heaps_algorithm
 
       private:
         bool done_{};
-        int M_{2};
-        const int N_;
+        std::int32_t M_{2};
+        const std::int32_t N_;
         ArrayLike& array_like_;
         Array::extent_gen extents_{};
         Array A_;
@@ -92,11 +95,11 @@ namespace heaps_algorithm
             std::ranges::fill(A_, 0);
             A_[1] = 1;
         }
-        constexpr bool is_even(int x) noexcept
+        constexpr bool is_even(std::int32_t x) noexcept
         {
             return (x % 2) == 0;
         }
     };
-}
+} // namespace heaps_algorithm
 #endif
 

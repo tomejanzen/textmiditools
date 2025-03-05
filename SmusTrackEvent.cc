@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -12,6 +12,7 @@
 #if HAVE_CONFIG_H
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
+#include <cstdint>
 
 #include <ranges>
 #include <memory>
@@ -23,54 +24,60 @@
 #include "MIDIKeyString.h"
 #include "MidiMaps.h"
 
-using namespace std;
-using namespace boost;
+using std::int32_t, std::string, std::ostringstream, std::vector,
+    std::pair, std::unique_ptr, std::make_pair, std::make_unique;
+using std::ranges::find_if;
+using boost::lexical_cast;
 
-using namespace smus;
-using namespace textmidi;
-using namespace textmidi::rational;
+using smus::SmusTrackEventFilePod, smus::SmusTrackEventFactory,
+      smus::SmusTrackEventBase, smus::SmusTrackEventPitch,
+      smus::SmusTrackEventEnd;
 
-auto SmusTrackEventBase::decision() const noexcept
+using textmidi::rational::RhythmRational;
+using textmidi::rational::print_rhythm;
+using textmidi::num_to_note;
+
+auto smus::SmusTrackEventBase::decision() const noexcept
 {
     return decision_;
 }
 
-auto SmusTrackEventBase::data() const noexcept
+auto smus::SmusTrackEventBase::data() const noexcept
 {
     return data_;
 }
 
-RhythmRational SmusTrackEventBase::delay_accum() const noexcept
+RhythmRational smus::SmusTrackEventBase::delay_accum() const noexcept
 {
     return delay_accum_;
 }
 
-void SmusTrackEventBase::delay_accum(const RhythmRational& delay) noexcept
+void smus::SmusTrackEventBase::delay_accum(const RhythmRational& delay) noexcept
 {
     delay_accum_ = delay;
 }
 
-int SmusTrackEventBase::current_dynamic() noexcept
+int32_t smus::SmusTrackEventBase::current_dynamic() noexcept
 {
     return current_dynamic_;
 }
 
-void SmusTrackEventBase::current_dynamic(int current_dynamic) noexcept
+void smus::SmusTrackEventBase::current_dynamic(int32_t current_dynamic) noexcept
 {
     current_dynamic_ = current_dynamic;
 }
 
-bool SmusTrackEventBase::i_am_lazy() noexcept
+bool smus::SmusTrackEventBase::i_am_lazy() noexcept
 {
     return i_am_lazy_;
 }
 
-void SmusTrackEventBase::i_am_lazy(bool i_am_lazy) noexcept
+void smus::SmusTrackEventBase::i_am_lazy(bool i_am_lazy) noexcept
 {
     i_am_lazy_ = i_am_lazy;
 }
 
-string SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy) noexcept
+string smus::SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy) noexcept
 {
     string str{};
     if (i_am_lazy)
@@ -92,20 +99,20 @@ string SmusTrackEventBase::i_am_lazy_string(bool i_am_lazy) noexcept
     return str;
 }
 
-int SmusTrackEventBase::channel() noexcept
+int32_t smus::SmusTrackEventBase::channel() noexcept
 {
     return channel_;
 }
 
-void SmusTrackEventBase::channel(int channel) noexcept
+void smus::SmusTrackEventBase::channel(int32_t channel) noexcept
 {
     channel_ = channel;
 }
 
-string SmusTrackEventBase::pre_rest() noexcept
+string smus::SmusTrackEventBase::pre_rest() noexcept
 {
     ostringstream oss{};
-    if (delay_accum() > rational::RhythmRational{0L})
+    if (delay_accum() > RhythmRational{0L})
     {
         oss << i_am_lazy_string(true);
         oss << "R ";
@@ -116,14 +123,14 @@ string SmusTrackEventBase::pre_rest() noexcept
     return oss.str();
 }
 
-RhythmRational SmusTrackEventBase::duration() const noexcept
+RhythmRational smus::SmusTrackEventBase::duration() const noexcept
 {
     // 7    6    5    4    3    2    1    0
     // chrd tie  tuplet... dot  division
     //      out  1=trip,2=      0-whole
     //           quintet        1=half,2-qtr,3=8th,4=16th,5=32nd,6=64th,7=128th
     //           3=septuplet
-    const int value{data() & 0x7};
+    const int32_t value{data() & 0x7};
     auto denominator = 0L;
     if (0 == value)
     {
@@ -139,22 +146,22 @@ RhythmRational SmusTrackEventBase::duration() const noexcept
     return len;
 }
 
-void SmusTrackEventBase::flush() noexcept
+void smus::SmusTrackEventBase::flush() noexcept
 {
     delay_accum_ = RhythmRational{0L};
 }
 
-bool SmusTrackEventBase::is_dotted() const noexcept
+bool smus::SmusTrackEventBase::is_dotted() const noexcept
 {
     return ((data() & (1 << 3)) != 0);
 }
 
-RhythmRational SmusTrackEventBase::dotted_multiplier() const noexcept
+RhythmRational smus::SmusTrackEventBase::dotted_multiplier() const noexcept
 {
     return (is_dotted() ? RhythmRational(3L, 2L) : RhythmRational(1L));
 }
 
-RhythmRational SmusTrackEventBase::tuplet_multiplier() const noexcept
+RhythmRational smus::SmusTrackEventBase::tuplet_multiplier() const noexcept
 {
     switch ((data() >> 4) & 3)
     {
@@ -173,9 +180,9 @@ RhythmRational SmusTrackEventBase::tuplet_multiplier() const noexcept
     }
 }
 
-RhythmRational SmusTrackEventBase::delay_accum_{};
+RhythmRational smus::SmusTrackEventBase::delay_accum_{};
 
-string SmusTrackEventPitch::textmidi_tempo() noexcept
+string smus::SmusTrackEventPitch::textmidi_tempo() noexcept
 {
     if (!is_chorded())
     {
@@ -184,7 +191,7 @@ string SmusTrackEventPitch::textmidi_tempo() noexcept
     return string{};
 }
 
-string SmusTrackEventPitch::textmidi() noexcept
+string smus::SmusTrackEventPitch::textmidi() noexcept
 {
     ostringstream oss{};
     std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
@@ -194,8 +201,8 @@ string SmusTrackEventPitch::textmidi() noexcept
         oss << pre_rest();
         if (SmusTrackEventBase::channel() == 0)
         {
-            SmusTrackEventBase::channel(1);
-            oss << "chan " << SmusTrackEventBase::channel() << ' ';
+            smus::SmusTrackEventBase::channel(1);
+            oss << "chan " << smus::SmusTrackEventBase::channel() << ' ';
         }
 
         const auto tied_back{is_tied_back(decision())};
@@ -231,21 +238,21 @@ string SmusTrackEventPitch::textmidi() noexcept
     return oss.str();
 }
 
-bool SmusTrackEventPitch::is_tiedout() const noexcept
+bool smus::SmusTrackEventPitch::is_tiedout() const noexcept
 {
     return ((data() & (1 << 6)) != 0);
 }
 
-bool SmusTrackEventPitch::is_chorded() const noexcept
+bool smus::SmusTrackEventPitch::is_chorded() const noexcept
 {
     return ((data() & (1 << 7)) != 0);
 }
 
-bool SmusTrackEventPitch::is_tied_back(int tp) const noexcept
+bool smus::SmusTrackEventPitch::is_tied_back(int32_t tp) const noexcept
 {
     bool rtn{};
     const auto tplocal{tp};
-    auto it{ranges::find_if(tied_vec_, [tplocal](char p)
+    auto it{find_if(tied_vec_, [tplocal](char p)
         { return tplocal == p; })};
     if (it != tied_vec_.end()) // this is tied back
     {
@@ -254,10 +261,10 @@ bool SmusTrackEventPitch::is_tied_back(int tp) const noexcept
     return rtn;
 }
 
-void SmusTrackEventPitch::remove_from_tied() noexcept
+void smus::SmusTrackEventPitch::remove_from_tied() noexcept
 {
     const auto tplocal{decision()};
-    auto it{ranges::find_if(tied_vec_, [tplocal](char p)
+    auto it{find_if(tied_vec_, [tplocal](char p)
         { return tplocal == p; })};
     if (it != tied_vec_.end()) // this is tied back
     {
@@ -265,50 +272,52 @@ void SmusTrackEventPitch::remove_from_tied() noexcept
     }
 }
 
-void SmusTrackEventPitch::add_to_tied() noexcept
+void smus::SmusTrackEventPitch::add_to_tied() noexcept
 {
     tied_vec_.insert(tied_vec_.end(), decision());
 }
 
-void SmusTrackEventPitch::flush() noexcept
+void smus::SmusTrackEventPitch::flush() noexcept
 {
-    SmusTrackEventBase::flush();
+    smus::SmusTrackEventBase::flush();
     tied_vec_.clear();
 }
 
-vector<int> SmusTrackEventPitch::tied_vec_;
-int SmusTrackEventBase::channel_{};
+vector<int32_t> smus::SmusTrackEventPitch::tied_vec_;
+int32_t smus::SmusTrackEventBase::channel_{};
 
-string SmusTrackEventRest::textmidi() noexcept
+string smus::SmusTrackEventRest::textmidi() noexcept
 {
     return textmidi_tempo();
 }
 
-string SmusTrackEventRest::textmidi_tempo() noexcept
+string smus::SmusTrackEventRest::textmidi_tempo() noexcept
 {
     delay_accum(delay_accum() + duration());
     return string{};
 }
 
-string SmusTrackEventInstrument::textmidi_tempo() noexcept
+string smus::SmusTrackEventInstrument::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventInstrument::textmidi() noexcept
+string smus::SmusTrackEventInstrument::textmidi() noexcept
 {
     return string{"; SMUS Instrument Number set to "}
         + lexical_cast<string>(data()) + '\n';
 }
 
-pair<unsigned, unsigned> SmusTrackEventTimeSignature::time_signature() const noexcept
+pair<unsigned, unsigned>
+    smus::SmusTrackEventTimeSignature::time_signature() const
+    noexcept
 {
     return make_pair(((data() >> 3) & 0x1F) + 1,
-        static_cast<unsigned>(pow(2.0, static_cast<double>
+        static_cast<uint32_t>(pow(2.0, static_cast<double>
                     (data() & 7))));
 }
 
-string SmusTrackEventTimeSignature::textmidi_tempo() noexcept
+string smus::SmusTrackEventTimeSignature::textmidi_tempo() noexcept
 {
     string str{pre_rest()};
     const auto time_sig{time_signature()};
@@ -320,17 +329,17 @@ string SmusTrackEventTimeSignature::textmidi_tempo() noexcept
     return str;
 }
 
-string SmusTrackEventTimeSignature::textmidi() noexcept
+string smus::SmusTrackEventTimeSignature::textmidi() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventKeySignature::textmidi() noexcept
+string smus::SmusTrackEventKeySignature::textmidi() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventKeySignature::textmidi_tempo() noexcept
+string smus::SmusTrackEventKeySignature::textmidi_tempo() noexcept
 {
     auto str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -338,7 +347,7 @@ string SmusTrackEventKeySignature::textmidi_tempo() noexcept
     return str;
 }
 
-string SmusTrackEventKeySignature::key() const noexcept
+string smus::SmusTrackEventKeySignature::key() const noexcept
 {
     string keystr{};
     switch (data())
@@ -394,12 +403,12 @@ string SmusTrackEventKeySignature::key() const noexcept
     return keystr;
 }
 
-string SmusTrackEventVolume::textmidi_tempo() noexcept
+string smus::SmusTrackEventVolume::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventVolume::textmidi() noexcept
+string smus::SmusTrackEventVolume::textmidi() noexcept
 {
     string str{};
     str += i_am_lazy_string(true);
@@ -421,12 +430,12 @@ string SmusTrackEventVolume::textmidi() noexcept
     return str;
 }
 
-string SmusTrackEventChannel::textmidi_tempo() noexcept
+string smus::SmusTrackEventChannel::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventChannel::textmidi() noexcept
+string smus::SmusTrackEventChannel::textmidi() noexcept
 {
     string str{};
     str += i_am_lazy_string(true);
@@ -437,12 +446,12 @@ string SmusTrackEventChannel::textmidi() noexcept
     return str;
 }
 
-string SmusTrackEventPreset::textmidi_tempo() noexcept
+string smus::SmusTrackEventPreset::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventPreset::textmidi() noexcept
+string smus::SmusTrackEventPreset::textmidi() noexcept
 {
     string str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -452,12 +461,12 @@ string SmusTrackEventPreset::textmidi() noexcept
 }
 
 // MIDI has no clef.
-string SmusTrackEventClef::textmidi_tempo() noexcept
+string smus::SmusTrackEventClef::textmidi_tempo() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventClef::textmidi() noexcept
+string smus::SmusTrackEventClef::textmidi() noexcept
 {
     string str{"; SMUS Clef set to "};
     if (clef_map.contains(data()))
@@ -471,20 +480,20 @@ string SmusTrackEventClef::textmidi() noexcept
     return str;
 }
 
-const midi::NumStringMap<int> smus::clef_map
+const midi::NumStringMap<int32_t> smus::clef_map
 {
-   {0, string{"Treble"}},
-   {1, string{"Bass"}},
-   {2, string{"Alto"}},
-   {3, string{"Tenor"}}
+    {0, string{"Treble"}},
+    {1, string{"Bass"}},
+    {2, string{"Alto"}},
+    {3, string{"Tenor"}}
 };
 
-string SmusTrackEventTempo::textmidi() noexcept
+string smus::SmusTrackEventTempo::textmidi() noexcept
 {
     return string{};
 }
 
-string SmusTrackEventTempo::textmidi_tempo() noexcept
+string smus::SmusTrackEventTempo::textmidi_tempo() noexcept
 {
     auto str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -493,7 +502,7 @@ string SmusTrackEventTempo::textmidi_tempo() noexcept
     return str;
 }
 
-string SmusTrackEventEnd::textmidi_tempo() noexcept
+string smus::SmusTrackEventEnd::textmidi_tempo() noexcept
 {
     auto str{pre_rest()};
     str += i_am_lazy_string(false);
@@ -502,53 +511,53 @@ string SmusTrackEventEnd::textmidi_tempo() noexcept
     return str;
 }
 
-string SmusTrackEventEnd::textmidi() noexcept
+string smus::SmusTrackEventEnd::textmidi() noexcept
 {
     return string("\n") + textmidi_tempo();
 }
 
-std::unique_ptr<SmusTrackEventBase> SmusTrackEventFactory::operator()(const SmusTrackEventFilePod& te) noexcept
+std::unique_ptr<SmusTrackEventBase> smus::SmusTrackEventFactory::
+    operator()(const smus::SmusTrackEventFilePod& te) noexcept
 {
     unique_ptr<SmusTrackEventBase> teb{};
     switch (te.decision)
     {
       case Rest:
-        teb = std::make_unique<SmusTrackEventRest>(te);
+        teb = std::make_unique<smus::SmusTrackEventRest>(te);
         break;
       case InstrumentNumber:
-        teb = make_unique<SmusTrackEventInstrument>(te);
+        teb = make_unique<smus::SmusTrackEventInstrument>(te);
         break;
       case TimeSignature:
-        teb = make_unique<SmusTrackEventTimeSignature>(te);
+        teb = make_unique<smus::SmusTrackEventTimeSignature>(te);
         break;
       case KeySignature: // trackEventIt->data is key
-        teb = make_unique<SmusTrackEventKeySignature>(te);
+        teb = make_unique<smus::SmusTrackEventKeySignature>(te);
         break;
       case Volume: // Set Volume
-        teb = make_unique<SmusTrackEventVolume>(te);
+        teb = make_unique<smus::SmusTrackEventVolume>(te);
         break;
       case Channel:
-        teb = make_unique<SmusTrackEventChannel>(te);
+        teb = make_unique<smus::SmusTrackEventChannel>(te);
         break;
       case Preset:
-        teb = make_unique<SmusTrackEventPreset>(te);
+        teb = make_unique<smus::SmusTrackEventPreset>(te);
         break;
       [[unlikely]] case Clef:
-        teb = make_unique<SmusTrackEventClef>(te);
+        teb = make_unique<smus::SmusTrackEventClef>(te);
         break;
       case Tempo:
-        teb = make_unique<SmusTrackEventTempo>(te);
+        teb = make_unique<smus::SmusTrackEventTempo>(te);
         break;
       case EndOfTrack:
-        teb = make_unique<SmusTrackEventEnd>(te);
+        teb = make_unique<smus::SmusTrackEventEnd>(te);
         break;
       default: // these are pitches
-        teb = make_unique<SmusTrackEventPitch>(te);
+        teb = make_unique<smus::SmusTrackEventPitch>(te);
         break;
     }
     return teb;
 }
 
-int  smus::SmusTrackEventBase::current_dynamic_{64};
+int32_t smus::SmusTrackEventBase::current_dynamic_{64};
 bool smus::SmusTrackEventBase::i_am_lazy_{false};
-

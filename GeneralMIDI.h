@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -9,6 +9,8 @@
 //
 #if !defined(GENERALMIDI_H)
 #    define  GENERALMIDI_H
+
+#include <cstdint>
 
 #include <string>
 #include <utility>
@@ -22,9 +24,9 @@ namespace textmidi
     namespace cgm
     {
         const std::pair IdiophoneRange{std::string{"Eb1"}, std::string{"Eb6"}};
-        inline constexpr int MIDIInstrumentsPerGroup{8};
-        inline constexpr int IdiophoneChannel{10};
-        enum class GeneralMIDIGroup : int
+        inline constexpr std::int32_t MIDIInstrumentsPerGroup{8};
+        inline constexpr std::int32_t IdiophoneChannel{10};
+        enum class GeneralMIDIGroup : std::int32_t
         {
             Piano               = (1 << 0),
             ChromaticPercussion = (1 << 1),
@@ -54,14 +56,14 @@ namespace textmidi
 
         struct MIDI_Program
         {
-            int Number_;
+            std::int32_t Number_;
             const std::string_view Name_;
             std::pair<std::string_view, std::string_view> range_;
         };
 
-        const extern MIDI_Program midi_programs[];
-    }
-}
+        extern const MIDI_Program midi_programs[];
+    } // namespace cgm
+} // namespace textmidi
 
 #endif
 

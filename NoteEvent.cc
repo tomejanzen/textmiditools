@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -11,23 +11,24 @@
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
 
+#include <memory>
+
 #include "NoteEvent.h"
 #include "MIDIKeyString.h"
 
-using namespace textmidi;
-using namespace textmidi::cgm;
+using textmidi::cgm::NoteEvent;
 
-void NoteEvent::pitch(int pitch) noexcept
+void NoteEvent::pitch(int32_t pitch) noexcept
 {
     pitch_ = pitch;
 }
 
-int NoteEvent::pitch() const noexcept
+int32_t NoteEvent::pitch() const noexcept
 {
     return pitch_;
 }
 
-int NoteEvent::vel() const noexcept
+int32_t NoteEvent::vel() const noexcept
 {
     return vel_;
 }
@@ -39,7 +40,7 @@ textmidi::rational::RhythmRational NoteEvent::musical_rhythm() const noexcept
 
 //
 // Write a note event as a textmidi text event.
-std::ostream& cgm::operator<<(std::ostream& os, const NoteEvent& ne)
+std::ostream& textmidi::cgm::operator<<(std::ostream& os, const NoteEvent& ne)
 {
     auto flags{os.flags()};
     std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};

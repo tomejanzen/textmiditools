@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,8 +15,7 @@
 
 #include "cgmlegacy.h"
 
-using namespace std;
-using namespace cgmlegacy;
+using std::ifstream, std::istringstream, std::string, std::getline;
 
 double cgmlegacy::OldFormElement::mean_period() const noexcept
 {
@@ -224,4 +223,3 @@ void cgmlegacy::TextForm::read_from_file(const string& form_filename)
     // Ignore channel, string of audio instrument until end of file
     form_stream.close();
 }
-

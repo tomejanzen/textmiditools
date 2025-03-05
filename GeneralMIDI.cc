@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,15 +12,14 @@
 
 #include "GeneralMIDI.h"
 
-using namespace std;
-using namespace textmidi;
-using namespace textmidi::cgm;
+using midi::NumStringMap;
+using textmidi::cgm::GeneralMIDIGroup;
 
 //
 // These values reflect the MIDI Specification 1.1,
 // Chapter 5: General MIDI System Level I.
 //
-const midi::NumStringMap<cgm::GeneralMIDIGroup> cgm::program_group_map
+const midi::NumStringMap<GeneralMIDIGroup> textmidi::cgm::program_group_map
 {
     {"piano",        GeneralMIDIGroup::Piano},
     {"chromaticpercussion", GeneralMIDIGroup::ChromaticPercussion},
@@ -43,7 +42,7 @@ const midi::NumStringMap<cgm::GeneralMIDIGroup> cgm::program_group_map
     {"idiophone",    GeneralMIDIGroup::Idiophone}
 };
 
-const MIDI_Program cgm::midi_programs[] =
+const textmidi::cgm::MIDI_Program textmidi::cgm::midi_programs[] =
 {
     // This is used as a 1-based sequence.
     // MIDI refers to channels and programs in a unit (1)-based way.
@@ -197,4 +196,3 @@ const MIDI_Program cgm::midi_programs[] =
     // Idiophones
     {129, "Channel 10 percussion",          {"Eb1", "Eb6"}}
 };
-

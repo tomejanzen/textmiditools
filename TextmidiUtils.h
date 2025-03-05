@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.90
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -19,6 +19,6 @@ namespace textmidi
         void* addr = &i;
         return static_cast<char*>(addr);
     }
-}
+} // namespace textmidi
 
 #endif

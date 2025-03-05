@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.91
+// TextMIDITools Version 1.0.92
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -8,8 +8,7 @@
 //
 #include "MidiString.h"
 
-using namespace std;
-using namespace textmidi;
+using std::string;
 
 namespace
 {
@@ -26,21 +25,24 @@ void escape(string& str)
     while ((pos < str.size()) && (pos = str.find('\a', pos)) != str.npos)
     {
         const char control_string[]{R"(\a)"};
-        str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
+        str.replace(pos, string::size_type{1},
+            &control_string[0], string::size_type{2});
         ++pos;
     }
     pos = 0;
     while ((pos < str.size()) && (pos = str.find('\b', pos)) != str.npos)
     {
         const char control_string[]{R"(\b)"};
-        str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
+        str.replace(pos, string::size_type{1},
+            &control_string[0], string::size_type{2});
         ++pos;
     }
     pos = 0;
     while ((pos < str.size()) && (pos = str.find('\t', pos)) != str.npos)
     {
         const char control_string[]{R"(\t)"};
-        str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
+        str.replace(pos, string::size_type{1},
+            &control_string[0], string::size_type{2});
         ++pos;
     }
     pos = 0;
@@ -65,14 +67,16 @@ void escape(string& str)
     while ((pos < str.size()) && (pos = str.find('\r', pos)) != str.npos)
     {
         const char control_string[]{R"(\r)"};
-        str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
+        str.replace(pos, string::size_type{1},
+            &control_string[0], string::size_type{2});
         ++pos;
     }
     pos = 0;
     while ((pos < str.size()) && (pos = str.find('\"', pos)) != str.npos)
     {
         const char control_string[]{R"(\")"};
-        str.replace(pos, string::size_type{1}, &control_string[0], string::size_type{2});
+        str.replace(pos, string::size_type{1},
+            &control_string[0], string::size_type{2});
         pos += 2;
     }
 }
@@ -141,7 +145,8 @@ void strip_quotes(string& str)
             if (str.size() >= 2)
             {
                 // if a non-escape double quote at end
-                if (('\"' == str[str.size() - 1]) && ('\\' != str[str.size() - 2]))
+                if (('\"' == str[str.size() - 1])
+                    && ('\\' != str[str.size() - 2]))
                 {
                     str.erase(str.size() - 1);
                 }
@@ -158,13 +163,7 @@ void strip_quotes(string& str)
     }
 }
 
-void add_quotes(string& str)
-{
-    string quoted("\"");
-    (quoted += str) += '\"';
-}
-
-}
+} // namespace
 
 void textmidi::make_raw_string(string& str) noexcept
 {
@@ -175,6 +174,4 @@ void textmidi::make_raw_string(string& str) noexcept
 void textmidi::make_human_string(string& str) noexcept
 {
     escape(str);
-    add_quotes(str);
 }
-

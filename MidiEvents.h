@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -9,7 +9,7 @@
 //
 // 2021-03-02 don't write zero delays
 //
-// 2020-04-03 rewrite mididisasm Thomas Janzen Maynard, MA
+// 2020-04-03 rewrite mididisasm Thomas Janzen
 //
 // 2020-07-15 fix crash.  byte counting in MidiEvents.h
 //

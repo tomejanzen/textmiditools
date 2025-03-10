@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -37,66 +37,50 @@
 #include "Midi.h"
 
 using std::string_view, std::string, std::ostream, std::shared_ptr;
-using std::ranges::copy_n, std::ranges::for_each, std::ranges::find,
-      std::ranges::find_if,
-      std::ranges::transform, std::ranges::take_view, std::ranges::drop_view,
-      std::hex, std::setw, std::setfill, std::dec, std::make_shared,
-      std::make_shared, std::cerr, std::list, std::numeric_limits,
-      std::setprecision, std::set, std::ostringstream, std::runtime_error;
-using textmidi::MidiEvent;
-using textmidi::rational::RhythmRational, textmidi::rational::print_rhythm;
-
-using midi::MidiStreamIterator, midi::MidiStreamAtom, midi::dynamics_map,
+using std::ranges::copy_n, std::ranges::for_each, std::ranges::find, std::hex,
+      std::setw, std::setfill, std::dec, std::make_shared, std::cerr, std::list;
+using midi::MidiStreamIterator, midi::MidiStreamAtom, 
       midi::variable_len_flag, midi::variable_len_shift,
       midi::variable_len_byte_mask, midi::variable_len_word_mask,
-      midi::end_of_sysex, midi::meta_prefix, midi::sequence_number_prefix,
-      midi::midi_channel_prefix, midi::tempo_prefix, midi::smpte_prefix,
-      midi::midi_port_prefix, midi::time_signature_prefix,
-      midi::key_signature_prefix, midi::xmf_patch_type_prefix,
-      midi::sequencer_specific_prefix, midi::end_of_track_prefix,
-      midi::text_prefix, midi::program_name_prefix, midi::device_name_prefix,
-      midi::text_0A_prefix, midi::text_0B_prefix, midi::text_0C_prefix,
-      midi::text_0D_prefix, midi::text_0E_prefix, midi::text_0F_prefix,
-      midi::copyright_prefix, midi::track_name_prefix,
-      midi::instrument_name_prefix, midi::lyric_prefix, midi::marker_prefix,
-      midi::cue_point_prefix, midi::variable_length_quantity_min_len,
-      midi::RunningStatusStandard, midi::event_flag, midi::full_note_length,
-      midi::program, midi::note_off, midi::byte7_mask, midi::byte7_shift,
-      midi::note_on, midi::MaxKeyboardKey, midi::MaxDynamic,
-      midi::channel_mask, midi::MaxPitchBend, midi::control;
-using textmidi::MidiSysExEvent, textmidi::MidiSysExRawEvent;
-using textmidi::MidiFileMetaEvent, textmidi::MidiFileMetaSequenceEvent;
-using textmidi::MidiFileMetaUnknownEvent,
-      textmidi::MidiFileMetaMidiChannelEvent;
-using textmidi::MidiFileMetaSetTempoEvent,
-      textmidi::MidiFileMetaSMPTEOffsetEvent;
-using textmidi::MidiFileMetaMidiPortEvent,
-      textmidi::MidiFileMetaTimeSignatureEvent;
-using textmidi::MidiFileMetaKeySignatureEvent,
-      textmidi::MidiFileMetaXmfPatchTypeEvent;
-using textmidi::MidiFileMetaSequencerSpecificEvent;
-using textmidi::MidiFileMetaEndOfTrackEvent, textmidi::MidiFileMetaStringEvent;
-using textmidi::MidiFileMetaTextEvent, textmidi::MidiFileMetaProgramNameEvent;
-using textmidi::MidiFileMetaDeviceNameEvent;
-using textmidi::MidiFileMetaText0AEvent, textmidi::MidiFileMetaText0BEvent;
-using textmidi::MidiFileMetaText0CEvent, textmidi::MidiFileMetaText0DEvent;
-using textmidi::MidiFileMetaText0EEvent, textmidi::MidiFileMetaText0FEvent;
-using textmidi::MidiFileMetaCopyrightEvent,
-      textmidi::MidiFileMetaTrackNameEvent;
-using textmidi::MidiFileMetaInstrumentEvent, textmidi::MidiFileMetaLyricEvent;
-using textmidi::MidiFileMetaMarkerEvent, textmidi::MidiFileMetaCuePointEvent;
-using textmidi::MidiChannelVoiceModeEvent, textmidi::MidiChannelVoiceNoteEvent;
-using textmidi::MidiChannelVoiceNoteOffEvent;
-using textmidi::MidiChannelVoiceNoteOnEvent;
-using textmidi::MidiChannelVoiceNoteOffEvent;
-using textmidi::MidiChannelVoiceProgramChangeEvent;
-using textmidi::MidiChannelVoicePitchBendEvent;
-using textmidi::MidiChannelVoiceControlChangeEvent;
-using textmidi::MidiChannelVoiceChannelPressureEvent;
-using textmidi::MidiChannelVoicePolyphonicKeyPressureEvent;
-using textmidi::MidiChannelVoiceNoteRestEvent;
-using textmidi::MidiEventFactory;
-using textmidi::DelayEvent;
+      midi::end_of_sysex, midi::meta_prefix, midi::key_signature_prefix, 
+      midi::variable_length_quantity_min_len, midi::RunningStatusStandard, 
+      midi::event_flag, midi::full_note_length, midi::program, midi::note_off,
+      midi::byte7_mask, midi::byte7_shift, midi::note_on, midi::MaxDynamic,
+      midi::channel_mask;
+using textmidi::MidiEvent,
+      textmidi::rational::RhythmRational, textmidi::rational::print_rhythm,
+      textmidi::MidiSysExEvent, textmidi::MidiSysExRawEvent,
+      textmidi::MidiFileMetaEvent, textmidi::MidiFileMetaSequenceEvent,
+      textmidi::MidiFileMetaUnknownEvent, 
+      textmidi::MidiFileMetaMidiChannelEvent,
+      textmidi::MidiFileMetaSetTempoEvent, 
+      textmidi::MidiFileMetaSMPTEOffsetEvent,
+      textmidi::MidiFileMetaMidiPortEvent, 
+      textmidi::MidiFileMetaTimeSignatureEvent, 
+      textmidi::MidiFileMetaKeySignatureEvent,
+      textmidi::MidiFileMetaXmfPatchTypeEvent, 
+      textmidi::MidiFileMetaSequencerSpecificEvent,
+      textmidi::MidiFileMetaEndOfTrackEvent, textmidi::MidiFileMetaStringEvent,
+      textmidi::MidiFileMetaTextEvent, textmidi::MidiFileMetaProgramNameEvent,
+      textmidi::MidiFileMetaDeviceNameEvent, textmidi::MidiFileMetaText0AEvent, 
+      textmidi::MidiFileMetaText0BEvent, textmidi::MidiFileMetaText0CEvent, 
+      textmidi::MidiFileMetaText0DEvent, textmidi::MidiFileMetaText0EEvent, 
+      textmidi::MidiFileMetaText0FEvent, textmidi::MidiFileMetaCopyrightEvent,
+      textmidi::MidiFileMetaTrackNameEvent, 
+      textmidi::MidiFileMetaInstrumentEvent,
+      textmidi::MidiFileMetaLyricEvent, textmidi::MidiFileMetaMarkerEvent, 
+      textmidi::MidiFileMetaCuePointEvent, textmidi::MidiChannelVoiceModeEvent, 
+      textmidi::MidiChannelVoiceNoteEvent, 
+      textmidi::MidiChannelVoiceNoteOffEvent,
+      textmidi::MidiChannelVoiceNoteOnEvent, 
+      textmidi::MidiChannelVoiceNoteOffEvent,
+      textmidi::MidiChannelVoiceProgramChangeEvent,
+      textmidi::MidiChannelVoicePitchBendEvent,
+      textmidi::MidiChannelVoiceControlChangeEvent,
+      textmidi::MidiChannelVoiceChannelPressureEvent,
+      textmidi::MidiChannelVoicePolyphonicKeyPressureEvent,
+      textmidi::MidiChannelVoiceNoteRestEvent, textmidi::MidiEventFactory,
+      textmidi::DelayEvent;
 
 namespace
 {
@@ -112,6 +96,7 @@ namespace
 
     string dynamic_string(int32_t velocity) noexcept
     {
+        using midi::dynamics_map;
         string rtn{};
         // If it matches the velocity map then use a symbol instead of vel nn
         if (dynamics_map.contains(velocity))
@@ -483,6 +468,7 @@ bool MidiFileMetaEvent::recognize(MidiStreamIterator& midiiter,
 shared_ptr<MidiEvent> MidiFileMetaSequenceEvent::recognize(
     MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
+    using midi::sequence_number_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>(meta_prefix.size()
         + sequence_number_prefix.size()))
@@ -581,6 +567,7 @@ ostream& textmidi::MidiFileMetaUnknownEvent::text(ostream& os) const
 shared_ptr<MidiEvent> MidiFileMetaMidiChannelEvent::recognize(
     MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
+    using midi::midi_channel_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + midi_channel_prefix.size())))
@@ -648,6 +635,7 @@ shared_ptr<MidiEvent> MidiFileMetaSetTempoEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::tempo_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + tempo_prefix.size())))
@@ -683,6 +671,7 @@ void textmidi::MidiFileMetaSetTempoEvent::consume_stream(
 
 ostream& textmidi::MidiFileMetaSetTempoEvent::text(ostream& os) const
 {
+    using std::setprecision;
     auto flags{os.flags()};
     if (0 == tempo_)
     {
@@ -713,6 +702,7 @@ shared_ptr<MidiEvent> MidiFileMetaSMPTEOffsetEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::smpte_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + smpte_prefix.size())))
@@ -792,6 +782,7 @@ shared_ptr<MidiEvent> MidiFileMetaMidiPortEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::midi_port_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + midi_port_prefix.size())))
@@ -838,6 +829,7 @@ ostream& textmidi::operator<<(ostream& os,
 shared_ptr<MidiEvent> MidiFileMetaTimeSignatureEvent::recognize(
     MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
+    using midi::time_signature_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + time_signature_prefix.size())))
@@ -975,6 +967,7 @@ ostream& textmidi::operator<<(ostream& os,
 shared_ptr<MidiEvent> MidiFileMetaXmfPatchTypeEvent::recognize(
     MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
+    using midi::xmf_patch_type_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + xmf_patch_type_prefix.size())))
@@ -1032,6 +1025,7 @@ shared_ptr<MidiEvent> MidiFileMetaSequencerSpecificEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::sequencer_specific_prefix;
     bool recognized{};
     // page 10 of file format chapter.
     // FF 7F [variable_len] mgfID or 00 mfgid0 mfgid1
@@ -1089,6 +1083,7 @@ shared_ptr<MidiEvent> MidiFileMetaEndOfTrackEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::end_of_track_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>
         (meta_prefix.size() + end_of_track_prefix.size()))
@@ -1154,6 +1149,7 @@ shared_ptr<MidiEvent> MidiFileMetaTextEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + text_prefix.size() + variable_length_quantity_min_len)))
@@ -1188,6 +1184,7 @@ shared_ptr<MidiEvent> MidiFileMetaProgramNameEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::program_name_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>
@@ -1219,6 +1216,7 @@ shared_ptr<MidiEvent> MidiFileMetaDeviceNameEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::device_name_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + device_name_prefix.size() + variable_length_quantity_min_len)))
@@ -1248,6 +1246,7 @@ shared_ptr<MidiEvent> MidiFileMetaText0AEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_0A_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>(meta_prefix.size()
         + text_0A_prefix.size() + variable_length_quantity_min_len))
@@ -1277,6 +1276,7 @@ shared_ptr<MidiEvent> MidiFileMetaText0BEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_0B_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size()
@@ -1307,6 +1307,7 @@ shared_ptr<MidiEvent> MidiFileMetaText0CEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_0C_prefix;
     bool recognized{};
     if (distance(midiiter, the_end) >= static_cast<int64_t>((meta_prefix.size()
         + text_0C_prefix.size() + variable_length_quantity_min_len)))
@@ -1336,6 +1337,7 @@ shared_ptr<MidiEvent> MidiFileMetaText0DEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_0D_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size()
@@ -1366,6 +1368,7 @@ shared_ptr<MidiEvent> MidiFileMetaText0EEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_0E_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size()
@@ -1396,6 +1399,7 @@ shared_ptr<MidiEvent> MidiFileMetaText0FEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::text_0F_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size()
@@ -1426,6 +1430,7 @@ shared_ptr<MidiEvent> MidiFileMetaCopyrightEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::copyright_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size() + copyright_prefix.size()
@@ -1462,6 +1467,7 @@ shared_ptr<MidiEvent> MidiFileMetaTrackNameEvent::recognize(
     MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::track_name_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size() + track_name_prefix.size()
@@ -1497,6 +1503,7 @@ ostream& textmidi::MidiFileMetaInstrumentEvent::text(ostream& os) const
 shared_ptr<MidiEvent> MidiFileMetaInstrumentEvent::recognize(
     MidiStreamIterator& midiiter, MidiStreamIterator the_end) noexcept
 {
+    using midi::instrument_name_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>
@@ -1534,6 +1541,7 @@ shared_ptr<MidiEvent> MidiFileMetaLyricEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::lyric_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size() + lyric_prefix.size()
@@ -1569,6 +1577,7 @@ shared_ptr<MidiEvent> MidiFileMetaMarkerEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::marker_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size() + marker_prefix.size()
@@ -1604,6 +1613,7 @@ shared_ptr<MidiEvent> MidiFileMetaCuePointEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end) noexcept
 {
+    using midi::cue_point_prefix;
     bool recognized{};
     if (distance(midiiter, the_end)
         >= static_cast<int64_t>(meta_prefix.size() + cue_point_prefix.size()
@@ -1720,6 +1730,7 @@ ostream& textmidi::operator<<(ostream& os,
 void textmidi::MidiChannelVoiceNoteEvent::
     consume_stream(MidiStreamIterator& midiiter) noexcept
 {
+    using midi::MaxKeyboardKey;
     // Skip a beginning byte that is an event type byte.
     if (event_flag & *midiiter)
     {
@@ -1929,6 +1940,7 @@ shared_ptr<MidiEvent> MidiChannelVoicePitchBendEvent::
 void textmidi::MidiChannelVoicePitchBendEvent::
     consume_stream(MidiStreamIterator& midiiter) noexcept
 {
+    using midi::MaxPitchBend;
     local_status(running_status());
     MidiStreamAtom pitch_wheel_lsb{*midiiter++};
     if (pitch_wheel_lsb > MaxPitchBend)
@@ -1973,6 +1985,7 @@ shared_ptr<MidiEvent> MidiChannelVoiceControlChangeEvent::
     recognize(MidiStreamIterator& midiiter,
     MidiStreamIterator the_end, RunningStatusStandard& running_status) noexcept
 {
+    using midi::control;
     bool recognized{};
     if (distance(midiiter, the_end) >= full_note_length)
     {
@@ -2009,6 +2022,7 @@ void textmidi::MidiChannelVoiceControlChangeEvent::
 
 ostream& textmidi::MidiChannelVoiceControlChangeEvent::text(ostream& os) const
 {
+    using std::set;
     auto flags{os.flags()};
     os << "CONTROL " << dec << static_cast<uint32_t>(channel()) << ' ';
     if (midi::control_pan[0] == id_)
@@ -2293,6 +2307,7 @@ ostream& textmidi::operator<<(ostream& os,
 DelayEvent textmidi::MidiEventFactory::operator()(MidiStreamIterator& midiiter,
     int64_t& ticks_accumulated)
 {
+    using std::runtime_error;
     int64_t delaynum64{variable_len_value(midiiter)};
     DelayEvent midi_delay_event_pair(delaynum64, nullptr);
     ticks_accumulated += delaynum64;
@@ -2528,6 +2543,7 @@ DelayEvent textmidi::MidiEventFactory::operator()(MidiStreamIterator& midiiter,
 
 bool textmidi::PrintLazyTrack::is_in_rest() const noexcept
 {
+    using std::ranges::find_if;
     auto inrest{true};
     for_each(channel_keyboards_,
         [&](const KeyBoard& chkb) { inrest = inrest
@@ -2538,6 +2554,7 @@ bool textmidi::PrintLazyTrack::is_in_rest() const noexcept
 
 void textmidi::PrintLazyTrack::ticks_to_note_stop() noexcept
 {
+    using std::numeric_limits;
     for (auto delay_event_iter   {delay_events_.begin()};
              (delay_event_iter != delay_events_.end())
         && !dynamic_cast<MidiFileMetaEndOfTrackEvent*>(
@@ -2692,6 +2709,8 @@ void textmidi::PrintLazyTrack::ticks_to_a_note_start() noexcept
 
 void textmidi::PrintLazyTrack::ticks_to_next_event() noexcept
 {
+    using std::ranges::drop_view, std::ranges::transform,
+          std::ranges::take_view;
     const auto len(delay_events_.size());
     auto lopped_end   = take_view(delay_events_, len - 1);
     auto lopped_begin = drop_view(delay_events_, 1);
@@ -2717,6 +2736,7 @@ void textmidi::PrintLazyTrack::ticks_to_next_event() noexcept
 
 void textmidi::PrintLazyTrack::print(ostream& os, DelayEvent& mdep) noexcept
 {
+    using std::ostringstream;
     int64_t rest_ticks{};
     auto me{mdep.second.get()};
     auto note{dynamic_cast<MidiChannelVoiceNoteEvent*>(me)};

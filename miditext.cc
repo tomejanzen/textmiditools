@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -51,18 +51,12 @@
 #include "Options.h"
 #include "DynamicsOptions.h"
 
-using std::size_t, std::pair, std::vector, std::cin, std::cout, std::cerr,
-      std::ifstream, std::ofstream, std::string, std::setw,
-      std::istringstream, std::filesystem::exists, std::filesystem::file_size,
-      std::make_unique, std::set, std::ranges::count_if, std::ranges::copy;
-
+using std::size_t, std::pair, std::vector, std::cin, std::cerr,
+      std::string, std::ranges::copy;
 using textmidi::rational::RhythmRational,
       textmidi::rational::PrintRhythmRational,
-      textmidi::DelayEvents, textmidi::DelayEvent,
-      textmidi::rational::RhythmExpression,
-      textmidi::PrintLazyTrack;
-using boost::lexical_cast, boost::to_upper;
-
+      textmidi::DelayEvents, textmidi::DelayEvent;
+using boost::lexical_cast;
 namespace
 {
     using StreamLengthPair = pair<midi::MidiStreamIterator, int>;
@@ -154,6 +148,11 @@ namespace
 
 int main(int argc, char *argv[])
 {
+    using boost::to_upper;
+    using std::cout, std::filesystem::exists, std::filesystem::file_size,
+        std::ifstream, std::istringstream, std::make_unique,
+        std::ofstream, std::ranges::count_if, std::set, std::setw;
+    using textmidi::PrintLazyTrack, textmidi::rational::RhythmExpression;
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ((help_option.registered_name().c_str()), help_option.text().c_str())
@@ -206,7 +205,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: miditext [OPTION]... "
-            "[MIDIFILE]\nmiditext Version 1.0.92\n"}
+            "[MIDIFILE]\nmiditext Version 1.0.93\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: "
                "https://github.com/tomejanzen/textmiditools\n"};
@@ -216,7 +215,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.92\n"
+        cout << "miditext\nTextMIDITools 1.0.93\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"

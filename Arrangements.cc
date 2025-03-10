@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -16,10 +16,8 @@
 
 #include "Arrangements.h"
 
-using std::swap, std::shared_ptr, std::make_shared,
-    std::ranges::next_permutation, std::ranges::prev_permutation,
-    std::ranges::copy, std::ranges::rotate, std::ranges::reverse,
-    std::ranges::shuffle;
+using std::shared_ptr,
+    std::ranges::rotate;
 
 int32_t arrangements::ArrangementsImpl::counter() const noexcept
 {
@@ -75,12 +73,14 @@ const arrangements::Arrangement& arrangements::ArrangementsIdentity
 
 void arrangements::ArrangementsLexicographicForward::next() noexcept
 {
+    using std::ranges::next_permutation;
     next_permutation(arrangement());
     inc();
 }
 
 void arrangements::ArrangementsLexicographicBackward::next() noexcept
 {
+    using std::ranges::prev_permutation;
     prev_permutation(arrangement());
 }
 
@@ -89,8 +89,11 @@ void arrangements::ArrangementsRotateRight::next() noexcept
     rotate(arrangement(),
         arrangement().begin() + (arrangement().size() - 1));
 #if defined(TEXTMIDICGM_PRINT)
-    copy(arrangement(), ostream_iterator<int32_t>(cout, " "));
-    cout << '\n';
+    {
+        using std::ranges::copy;
+        copy(arrangement(), ostream_iterator<int32_t>(cout, " "));
+        cout << '\n';
+    }
 #endif
     inc();
 }
@@ -103,6 +106,7 @@ void arrangements::ArrangementsRotateLeft::next() noexcept
 
 void arrangements::ArrangementsReverse::next() noexcept
 {
+    using std::ranges::reverse;
     reverse(arrangement());
     inc();
 }
@@ -120,6 +124,7 @@ void arrangements::ArrangementsSwapPairs::next() noexcept
 
 void arrangements::ArrangementsSkip::next() noexcept
 {
+    using std::swap;
     const int32_t anchor{counter() & 1};
     for (int32_t i{anchor}; i < static_cast<int32_t>(arrangement().size()
         - (arrangement().size() % 2LU)); i += 2)
@@ -132,6 +137,7 @@ void arrangements::ArrangementsSkip::next() noexcept
 
 void arrangements::ArrangementsShuffle::next() noexcept
 {
+    using std::ranges::shuffle;
     shuffle(arrangement(), generator_);
     inc();
 }
@@ -145,6 +151,7 @@ void arrangements::ArrangementsHeaps::next() noexcept
 shared_ptr<arrangements::Arrangements> arrangements::ArrangementsFactory(
         PermutationEnum permutation_type, int32_t length) noexcept
 {
+    using std::make_shared;
     switch (permutation_type)
     {
       case PermutationEnum::Undefined:

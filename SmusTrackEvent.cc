@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -25,7 +25,7 @@
 #include "MidiMaps.h"
 
 using std::int32_t, std::string, std::ostringstream, std::vector,
-    std::pair, std::unique_ptr, std::make_pair, std::make_unique;
+    std::pair, std::unique_ptr, std::make_pair;
 using std::ranges::find_if;
 using boost::lexical_cast;
 
@@ -33,9 +33,8 @@ using smus::SmusTrackEventFilePod, smus::SmusTrackEventFactory,
       smus::SmusTrackEventBase, smus::SmusTrackEventPitch,
       smus::SmusTrackEventEnd;
 
-using textmidi::rational::RhythmRational;
-using textmidi::rational::print_rhythm;
-using textmidi::num_to_note;
+using textmidi::rational::RhythmRational,
+      textmidi::rational::print_rhythm;
 
 auto smus::SmusTrackEventBase::decision() const noexcept
 {
@@ -193,6 +192,7 @@ string smus::SmusTrackEventPitch::textmidi_tempo() noexcept
 
 string smus::SmusTrackEventPitch::textmidi() noexcept
 {
+    using textmidi::num_to_note;
     ostringstream oss{};
     std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
     if (decision() < Rest)
@@ -519,6 +519,7 @@ string smus::SmusTrackEventEnd::textmidi() noexcept
 std::unique_ptr<SmusTrackEventBase> smus::SmusTrackEventFactory::
     operator()(const smus::SmusTrackEventFilePod& te) noexcept
 {
+    using std::make_unique;
     unique_ptr<SmusTrackEventBase> teb{};
     switch (te.decision)
     {

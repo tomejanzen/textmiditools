@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -87,16 +87,7 @@
 #include "RhythmRational.h"
 
 using std::int32_t, std::string, std::vector, std::unordered_map,
-      std::cerr, std::cin, std::cout, std::ofstream, std::ifstream,
-      std::make_unique, std::ranges::for_each;
-using boost::lexical_cast, boost::to_upper;
-using textmidi::rational::RhythmExpression, textmidi::rational::print_rhythm;
-using arrangements::PermutationEnum;
-using cgmlegacy::TextForm;
-using textmidi::cgm::MusicalForm, textmidi::cgm::MusicalFormException,
-      textmidi::cgm::TicksDuration, textmidi::cgm::TicksPerQuarter,
-      textmidi::cgm::arrangement_map, textmidi::cgm::Composer;
-
+      std::cerr, std::cin, std::cout;
 // This isn't really necessary but i wrote it in a
 // quest to get glob to compile, which wouldn't because
 // of a different mistake.
@@ -109,13 +100,19 @@ int32_t glob_error(const char*, int32_t)
 // gather rests
 //
 namespace {
-
     using GlobStatusMap = unordered_map<int32_t, string>;
-
 }
 
 int32_t main(int argc, char *argv[])
 {
+    using std::make_unique, std::ranges::for_each, std::ofstream, std::ifstream;
+    using boost::lexical_cast, boost::to_upper;
+    using textmidi::rational::RhythmExpression, textmidi::rational::print_rhythm,
+      textmidi::cgm::MusicalForm, textmidi::cgm::MusicalFormException,
+      textmidi::cgm::TicksDuration, textmidi::cgm::TicksPerQuarter,
+      textmidi::cgm::arrangement_map, textmidi::cgm::Composer;
+    using cgmlegacy::TextForm;
+    using arrangements::PermutationEnum;
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ((help_option.registered_name().c_str()), help_option.text().c_str())
@@ -180,7 +177,7 @@ int32_t main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: textmidicgm [OPTION]... "
-                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.92\n"}
+                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.93\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -190,7 +187,7 @@ int32_t main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidicgm\nTextMIDITools 1.0.92\n"
+        cout << "textmidicgm\nTextMIDITools 1.0.93\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"

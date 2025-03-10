@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -63,20 +63,15 @@
 #include "Options.h"
 #include "DynamicsOptions.h"
 
-using std::string, std::uint8_t, std::uint16_t, std::cerr, std::vector,
-    std::cout, std::make_unique, std::cin, std::ifstream, std::equal,
-    std::copy_n, std::ofstream, std::unique_ptr, std::ranges::for_each;
-using boost::lexical_cast, boost::to_upper;
+using std::string, std::uint8_t, std::cerr,
+    std::cout, std::make_unique, std::cin, std::ifstream, 
+    std::ofstream, std::unique_ptr, std::uint16_t;
 using textmidi::rational::RhythmRational,
       textmidi::rational::PrintRhythmRational,
       textmidi::rational::RhythmExpression,
       textmidi::rational::print_rhythm,
       textmidi::rational::PrintRhythmSimpleContinuedFraction;
-using textmidi::io_bytes;
-using midi::MidiStreamArray4, midi::rhythm_expression_map;
-using smus::SmusTrackEventFilePod, smus::SmusTrackEventFactory,
-      smus::SmusTrackEventBase, smus::SmusTrackEventPitch,
-      smus::SmusTrackEventEnd;
+using midi::MidiStreamArray4;
 
 namespace
 {
@@ -116,6 +111,14 @@ namespace
 
 int main(int argc, char *argv[])
 {
+    using smus::SmusTrackEventFilePod, smus::SmusTrackEventFactory,
+          smus::SmusTrackEventBase, smus::SmusTrackEventPitch,
+          smus::SmusTrackEventEnd;
+    using boost::to_upper, boost::lexical_cast;
+    using std::ranges::for_each, std::vector, std::copy_n,
+          std::equal;
+    using textmidi::io_bytes;
+    using midi::rhythm_expression_map;
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ((help_option.registered_name().c_str()), help_option.text().c_str())
@@ -162,7 +165,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: smustextmidi [OPTION]..."
-                    " [SMUSFILE]\nsmustextmidi Version 1.0.92\n"}
+                    " [SMUSFILE]\nsmustextmidi Version 1.0.93\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page:"
             " https://github.com/tomejanzen/textmiditools\n"};
@@ -172,7 +175,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.92\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.93\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

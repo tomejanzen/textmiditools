@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -28,17 +28,16 @@
 #include "Options.h"
 #include "DynamicsOptions.h"
 
-using std::string, std::cerr, std::cout, std::cin;
-using boost::lexical_cast, boost::to_upper;
-
 extern FILE* yyin;
 extern int yylex(void);
-
 
 //
 // The main function for the textmidi program.
 int main(int argc, char *argv[])
 {
+    using std::string, std::cerr, std::cout, std::cin;
+    using boost::lexical_cast, boost::to_upper;
+
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ((help_option.registered_name().c_str()), help_option.text().c_str())
@@ -89,7 +88,7 @@ int main(int argc, char *argv[])
     {
         const string logstr{((string{
             "Usage: textmidi [OPTION]..."
-            " [TEXTMIDIFILE]\ntextmidi Version 1.0.92\n"}
+            " [TEXTMIDIFILE]\ntextmidi Version 1.0.93\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -99,7 +98,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.92\n"
+        cout << "textmidi\nTextMIDITools 1.0.93\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

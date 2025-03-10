@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -18,7 +18,6 @@
 
 #include "Midi.h"
 
-using std::make_unique;
 using midi::MidiStreamAtom;
 
 void midi::MidiHeader::swapbytes() noexcept
@@ -183,6 +182,7 @@ void midi::RunningStatusPersistentAfterSysexOrMeta::operator()(MidiStreamAtom
 std::unique_ptr<midi::RunningStatusBase> midi::RunningStatusFactory::operator()(
     midi::RunningStatusPolicy policy) noexcept
 {
+    using std::make_unique;
     std::unique_ptr<midi::RunningStatusBase> rsp
         = make_unique<midi::RunningStatusStandard>();
     switch (policy)

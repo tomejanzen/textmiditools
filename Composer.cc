@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -45,15 +45,10 @@
 #include "RhythmRational.h"
 
 using std::numeric_limits, std::list, std::vector, std::string, std::cerr,
-      std::ofstream, std::int32_t, std::pair, std::max, std::min,
-      std::out_of_range, std::error_code, std::cin, std::cout,
-      std::ostringstream, std::put_time;
-using std::ranges::copy, std::ranges::none_of, std::ranges::find,
-      std::ranges::for_each, std::ranges::reverse;
-using std::chrono::time_point;
+      std::ofstream, std::int32_t, std::max, std::min, std::cout;
+using std::ranges::copy, std::ranges::find, std::ranges::for_each;
 using boost::lexical_cast;
-using midi::SecondsPerMinuteI, midi::MaxDynamic, midi::MinDynamic,
-      midi::MIDI_Format;
+using midi::SecondsPerMinuteI;
 using textmidi::rational::RhythmRational;
 using arrangements::PermutationEnum;
 
@@ -151,6 +146,7 @@ void textmidi::cgm::Composer
     ::build_composition_priority_graph(const MusicalForm& xml_form,
     vector<list<int32_t>>& leaders_topo_sort) noexcept
 {
+    using std::ranges::none_of;
     leaders_topo_sort.clear();
     // Build a composition priority graph.
     // The leaders have to be composed first.
@@ -315,6 +311,9 @@ void textmidi::cgm::Composer::
 void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     const MusicalForm& xml_form, bool write_header)
 {
+    using std::pair, std::ostringstream, std::put_time, std::ranges::reverse;
+    using std::chrono::time_point;
+    using midi::MaxDynamic, midi::MinDynamic, midi::MIDI_Format;
     // If the command line did not set arrangements,
     // then set them from the XML file.
     track_scramble_.period_
@@ -581,6 +580,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             }
             else [[unlikely]] // it is a follower
             {
+                using std::out_of_range;
                 try
                 {
                     track_note_events[tr] = track_note_events.at(
@@ -737,6 +737,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     //
     if (gnuplot_) [[unlikely]]
     {
+        using std::cin;
+        using std::error_code;
         // gnuplot : plot 'concerto.form.plot' index [0123]
         // using 1:2:3:4 with yerror
         const string gnuplot_filename{xml_form.name() + ".plot"};

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,7 +15,7 @@
 
 #include "cgmlegacy.h"
 
-using std::ifstream, std::istringstream, std::string, std::getline;
+using std::string;
 
 double cgmlegacy::OldFormElement::mean_period() const noexcept
 {
@@ -39,6 +39,8 @@ double cgmlegacy::OldFormElement::range_phase() const noexcept
 
 void cgmlegacy::TextForm::read_from_file(const string& form_filename)
 {
+    using std::ifstream, std::istringstream, std::getline;
+
     ifstream form_stream(form_filename.c_str());
     string form_string;
 

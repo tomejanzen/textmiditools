@@ -1,3 +1,9 @@
+2025-03-10     Thomas E. Janzen <janzentome@gmail.com>
+        * OptionsNames.h: add.  Had left out of kits.
+
+2025-03-06     Thomas E. Janzen <janzentome@gmail.com>
+        * *.cc Push using declarations down to lower scope.
+
 2025-03-04     Thomas E. Janzen <janzentome@gmail.com>
         * *.cc: Change using namespace directives to
         using declarations per cpplint.

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // textmidi
 // Copyright © 2025 Thomas E. Janzen
@@ -24,15 +24,15 @@
 #include "DynamicsOptions.h"
 
 using std::int32_t, std::string;
-using boost::program_options::options_description,
-    boost::program_options::value,
-    boost::program_options::positional_options_description,
-    boost::program_options::variables_map, boost::program_options::store,
-    boost::program_options::notify;
 
 midi::NumStringMap<int32_t> textmidi::read_dynamics_configuration(
     const string& dynamics_configuration_file)
 {
+    using boost::program_options::options_description,
+    boost::program_options::notify, boost::program_options::store,
+    boost::program_options::positional_options_description,
+    boost::program_options::value, boost::program_options::variables_map;
+
     midi::NumStringMap<int32_t> option_map
       {{{  5, "ppppp"},
         { 10, "pppp"},

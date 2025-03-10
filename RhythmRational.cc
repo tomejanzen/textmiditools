@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -30,8 +30,7 @@
 
 #include "RhythmRational.h"
 
-using std::istringstream, std::unique_ptr, std::string, std::regex, std::smatch,
-      std::bitset, std::dec, std::make_unique;
+using std::unique_ptr, std::string, std::make_unique;
 
 using textmidi::rational::RhythmRational, textmidi::rational::print_rhythm,
       textmidi::rational::PrintRhythmSimpleContinuedFraction,
@@ -257,6 +256,8 @@ textmidi::rational::RhythmRational
 std::istream& textmidi::rational::ReadMusicRational::
     operator()(std::istream& is, RhythmRational& tr)
 {
+    using std::smatch, std::regex;
+    using std::istringstream;
     // Check for a single integer, because in textmidi lazy mode
     // this is a short hand for a numerator of 1.
     auto flags{is.flags()};
@@ -310,6 +311,7 @@ std::istream& textmidi::rational::ReadMusicRational::
 std::int64_t textmidi::rational::PrintRhythmRational::
     convert_to_dotted_rhythm(RhythmRational& q)
 {
+    using std::bitset;
     auto numerator{q.numerator()};
     RhythmRational denominator_q{q.denominator()};
 
@@ -333,6 +335,7 @@ std::int64_t textmidi::rational::PrintRhythmRational::
 std::ostream& textmidi::rational::PrintRhythmRational::
     operator()(std::ostream& os, const RhythmRational& tr)
 {
+    using std::dec;
     auto flags{os.flags()};
     RhythmRational tr_temp{tr};
     tr_temp.reduce();

@@ -2,7 +2,7 @@
 """TextMIDITools: TextMidiFormEdit.py Form Frame,
 allowing the editing of the musical form's sinusoids.
 """
-# TextMIDITools Version 1.0.92
+# TextMIDITools Version 1.0.93
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>

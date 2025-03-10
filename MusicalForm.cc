@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.93
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -46,11 +46,8 @@
 
 using std::int32_t, std::string, std::string_view, std::vector;
 using std::ranges::for_each, std::ranges::copy, std::ranges::min_element,
-      std::ranges::max_element, std::ranges::transform, std::ranges::find,
-      std::ranges::sort, std::ranges::unique, std::ranges::remove_if,
-      std::map;
-using std::views::iota;
-using midi::MidiIdiophoneChannel;
+      std::ranges::max_element, std::ranges::find,
+      std::ranges::unique, std::ranges::remove_if;
 using textmidi::cgm::Sine, textmidi::cgm::MeanRangeSines,
       textmidi::cgm::MelodyProbabilities, textmidi::cgm::MusicalCharacter,
       textmidi::cgm::MusicalForm,
@@ -424,6 +421,9 @@ void MusicalForm::character_now(TicksDuration theTime,
 // This is an optional command-line option in textmidicgm.
 void MusicalForm::random(string formname, int32_t instrument_flags)
 {
+    using midi::MidiIdiophoneChannel;
+    using std::ranges::sort, std::ranges::transform, std::map;
+    using std::views::iota;
     constexpr int32_t IdiophoneMarker{129};
     name_ = formname;
     const auto suffixpos{name_.find(".xml")};

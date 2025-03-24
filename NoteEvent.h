@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -45,6 +45,7 @@ namespace textmidi
         std::int32_t pitch_;
         std::int32_t vel_;
         textmidi::rational::RhythmRational musical_rhythm_;
+      friend std::ostream& operator<<(std::ostream& , const NoteEvent& );
     };
 
     std::ostream& operator<<(std::ostream& os, const NoteEvent& ne);

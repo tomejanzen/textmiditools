@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -23,8 +23,6 @@
 
 namespace midi
 {
-    std::ostream& operator<<(std::ostream& os, const midi::MidiHeader& mh);
-
     template<typename NumType> class NumStringMap
     {
       public:
@@ -130,6 +128,9 @@ namespace midi
     extern NumStringMap<std::int32_t> dynamics_map;
     extern const NumStringMap<std::int32_t> pan_map;
     extern const NumStringMap<midi::MIDI_Format> format_map;
+
+    std::ostream& operator<<(std::ostream& os, midi::MIDI_Format mf);
+
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;
     extern const NumStringMap<midi::MidiStreamAtom> control_function_map;
     extern const NumStringMap<MidiStreamAtom> control_on_off_map;
@@ -138,8 +139,6 @@ namespace midi
     extern const NumStringMap<midi::MidiStreamAtom> sysex_subid_map;
     extern const NumStringMap<midi::MidiStreamAtom> sysex_nonrt_id1_map;
     extern const NumStringMap<midi::MidiStreamAtom> sysex_rt_id1_map;
-    std::ostream& operator<<(std::ostream& os, midi::MIDI_Format mf);
-
     extern const NumStringMap<midi::MidiStreamAtom> sysex_device_id_map;
     extern const NumStringMap<midi::Registered00ParameterLsbs> parm_00_map;
     extern const NumStringMap<midi::Registered3dParameterLsbs> parm_3d_map;
@@ -153,4 +152,3 @@ namespace midi
 } // namespace midi
 
 #endif
-

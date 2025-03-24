@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     {
         const string logstr{((string{
             "Usage: textmidi [OPTION]..."
-            " [TEXTMIDIFILE]\ntextmidi Version 1.0.93\n"}
+            " [TEXTMIDIFILE]\ntextmidi Version 1.0.94\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.93\n"
+        cout << "textmidi\nTextMIDITools 1.0.94\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

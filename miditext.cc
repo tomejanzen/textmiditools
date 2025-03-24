@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.92
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -53,27 +53,30 @@
 
 using std::size_t, std::pair, std::vector, std::cin, std::cerr,
       std::string, std::ranges::copy;
+using midi::MidiStreamRange;
 using textmidi::rational::RhythmRational,
       textmidi::rational::PrintRhythmRational,
       textmidi::DelayEvents, textmidi::DelayEvent;
 using boost::lexical_cast;
 namespace
 {
-    using StreamLengthPair = pair<midi::MidiStreamIterator, int>;
+    using std::equal;
+    using TrackPositionLength = pair<size_t, size_t>;
 
-    void find_tracks(midi::MidiStreamIterator midiiter,
-            midi::MidiStreamIterator midiend,
-            vector<StreamLengthPair>& track_iters, size_t expected_track_qty)
+    template <typename R>
+    void find_tracks(const R&& midi_view,
+        vector<TrackPositionLength>& track_bounds, size_t expected_track_qty)
     {
-        track_iters.clear();
-        track_iters.reserve(140); // one file had 140 tracks
-        while (midiiter != midiend)
+        track_bounds.clear();
+        track_bounds.reserve(140); // Saw a file with 140 tracks.
+        size_t midi_ctr{sizeof(midi::MidiHeader)};
+        while (midi_ctr < midi_view.size())
         {
-            if (!std::equal(midiiter,
-                midiiter + midi::MidiTrackChunkName.size(),
-                midi::MidiTrackChunkName.begin()))
+            if (!equal(&midi_view[midi_ctr],
+                &midi_view[midi_ctr + midi::MidiTrackChunkName.size()],
+                &midi::MidiTrackChunkName[0]))
             {
-                const auto track_num{track_iters.size() + 1};
+                const auto track_num{track_bounds.size() + 1};
                 if (track_num > expected_track_qty)
                 {
                     cerr << "There is extra data after "
@@ -88,61 +91,61 @@ namespace
                 }
                 return;
             }
-            midiiter += midi::MidiTrackChunkName.size();
-            int32_t num{};
-            copy(midiiter, midiiter + sizeof(num), textmidi::io_bytes(num));
-            midiiter += sizeof(num);
-            num = htobe32(num);
-            if (std::distance(&(*midiiter), &(*midiend)) < num)
+            midi_ctr += midi::MidiTrackChunkName.size();
+            int32_t track_len{};
+            copy(&midi_view[midi_ctr], &midi_view[midi_ctr] + (sizeof track_len),
+                textmidi::io_bytes(track_len));
+            midi_ctr += sizeof(track_len);
+            // swap the bytes of the track length
+            track_len = htobe32(track_len);
+            if ((midi_view.size() - midi_ctr) < track_len)
             {
                 const string errstr{(string{
-                    "File too short for track length in track:"}
-                    += lexical_cast<string>(track_iters.size())) += '\n'};
+                    "File too short for track the length found in the track:"}
+                    += lexical_cast<string>(track_bounds.size())) += '\n'};
                 cerr << errstr;
                 return;
             }
-            track_iters.emplace_back(midiiter, num);
-            midiiter += num;
+            track_bounds.emplace_back(midi_ctr, track_len);
+            midi_ctr += track_len;
         }
     }
 
     class ConvertTrack
     {
       public:
-        ConvertTrack(StreamLengthPair stream_length_pair,
-            DelayEvents& message_pairs,
-            uint32_t ticks_per_whole, RhythmRational quantum)
-          : stream_length_pair_{stream_length_pair},
+        ConvertTrack(DelayEvents& message_pairs,
+            uint32_t ticks_per_whole, RhythmRational quantum, MidiStreamRange stream_range)
+          :
             message_pairs_{message_pairs},
             ticks_per_whole_{ticks_per_whole},
-            quantum_{quantum}
+            quantum_{quantum},
+            stream_range_(stream_range)
         {
         }
         void operator()()
         {
-            auto midiiter{stream_length_pair_.first};
-            const auto midiend{
-                stream_length_pair_.first + stream_length_pair_.second};
-
-            textmidi::MidiEventFactory midi_event_factory{midiend, ticks_per_whole_};
+            using std::optional, std::tie;
+            textmidi::MidiEventFactory midi_event_factory{ticks_per_whole_};
             DelayEvent midi_delay_msg_pair;
             int64_t ticks_accumulated{};
 
             do
             {
-                midi_delay_msg_pair
-                    = midi_event_factory(midiiter, ticks_accumulated);
-                message_pairs_.push_back(midi_delay_msg_pair);
+                optional<DelayEvent> de;
+                tie(stream_range_, de) = (midi_event_factory(stream_range_, ticks_accumulated));
+                if (de.has_value())
+                {
+                    message_pairs_.push_back(de.value());
+                }
             }
-            while ((midiiter < midiend)
-                && !dynamic_cast<textmidi::MidiFileMetaEndOfTrackEvent*>
-                (midi_delay_msg_pair.second.get()));
+            while (stream_range_.size() > 0);
         }
      private:
-        const StreamLengthPair stream_length_pair_;
         DelayEvents& message_pairs_;
         const uint32_t ticks_per_whole_;
         const RhythmRational quantum_;
+        MidiStreamRange stream_range_;
     };
 } // namespace
 
@@ -205,7 +208,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: miditext [OPTION]... "
-            "[MIDIFILE]\nmiditext Version 1.0.93\n"}
+            "[MIDIFILE]\nmiditext Version 1.0.92\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: "
                "https://github.com/tomejanzen/textmiditools\n"};
@@ -215,7 +218,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.93\n"
+        cout << "miditext\nTextMIDITools 1.0.92\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -336,7 +339,6 @@ int main(int argc, char *argv[])
         }
     }
 
-
     if (answer && exists(midi_filename))
     {
         const string answer_prompt{(string{"Overwrite "}
@@ -421,28 +423,31 @@ int main(int argc, char *argv[])
     }
     size_t track_qty{midi_header.ntrks_};
 
-    vector<StreamLengthPair> stream_length_pairs{};
-    find_tracks(midiiter, midivector.end(), stream_length_pairs, track_qty);
-    vector<DelayEvents> midi_delay_event_tracks(stream_length_pairs.size());
+    vector<TrackPositionLength> track_locations{};
+    find_tracks(std::views::all(midivector), track_locations, track_qty);
+    vector<DelayEvents> midi_delay_event_tracks(track_locations.size());
 
 #undef DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
-    for (int32_t i{}; auto& ti : stream_length_pairs)
+    for (int32_t i{}; auto& track_loc : track_locations)
     {
-        ConvertTrack convert_track{
-            ti, midi_delay_event_tracks[i], ticks_per_whole,
-            quantum};
+        MidiStreamRange track_stream{midivector.begin() + track_loc.first,
+            midivector.begin() + track_loc.first + track_loc.second};
+        ConvertTrack convert_track{midi_delay_event_tracks[i], ticks_per_whole, quantum,
+            track_stream};
         convert_track();
         ++i;
     }
 #else
     {
-        vector<std::jthread> track_threads(stream_length_pairs.size());
+        vector<std::jthread> track_threads(track_locations.size());
 
-        for (int32_t i{}; auto& ti : stream_length_pairs)
+        for (int32_t i{}; auto& track_loc : track_locations)
         {
-            ConvertTrack convert_track{ti, midi_delay_event_tracks[i],
-                ticks_per_whole, quantum};
+            MidiStreamRange track_stream{midivector.begin() + track_loc.first,
+                midivector.begin() + track_loc.first + track_loc.second};
+            ConvertTrack convert_track(midi_delay_event_tracks[i], ticks_per_whole,
+                    quantum, track_stream);
             std::jthread track_thread{convert_track};
             track_threads[i] = std::move(track_thread);
             ++i;

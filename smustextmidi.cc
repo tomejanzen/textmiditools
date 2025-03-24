@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -64,7 +64,7 @@
 #include "DynamicsOptions.h"
 
 using std::string, std::uint8_t, std::cerr,
-    std::cout, std::make_unique, std::cin, std::ifstream, 
+    std::cout, std::make_unique, std::cin, std::ifstream,
     std::ofstream, std::unique_ptr, std::uint16_t;
 using textmidi::rational::RhythmRational,
       textmidi::rational::PrintRhythmRational,
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: smustextmidi [OPTION]..."
-                    " [SMUSFILE]\nsmustextmidi Version 1.0.93\n"}
+                    " [SMUSFILE]\nsmustextmidi Version 1.0.94\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page:"
             " https://github.com/tomejanzen/textmiditools\n"};
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.93\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.94\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"
@@ -537,4 +537,3 @@ int main(int argc, char *argv[])
     textmidi_file.close();
     exit(EXIT_SUCCESS);
 }
-

@@ -1,3 +1,11 @@
+2025-03-23     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{cc,h}, miditext.cc, Midi.h:   Overhaul
+        MidiEvents: replace use of iterators with ranges::subrange;
+        make operator<<()s friends.  Roll up nest if predicates
+        that don't have side-effects using logical-AND operators.
+        * NoteEvent.{cc,h}: declare operator<< as friend and 
+        change operator<< to directly use data members.
+
 2025-03-10     Thomas E. Janzen <janzentome@gmail.com>
         * OptionsNames.h: add.  Had left out of kits.
 

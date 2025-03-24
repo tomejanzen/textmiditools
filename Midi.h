@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -19,6 +19,7 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include <ranges>
 
 namespace midi
 {
@@ -31,6 +32,7 @@ namespace midi
     using MidiStreamArray1 = std::array<MidiStreamAtom, 1>;
     using MidiStreamArray2 = std::array<MidiStreamAtom, 2>;
     using MidiStreamArray4 = std::array<MidiStreamAtom, 4>;
+    using MidiStreamRange = std::ranges::subrange<MidiStreamIterator>;
 
     inline constexpr double UsecPerSecond{1000000.0};
     inline constexpr double SecondsPerMinute{60.0};
@@ -494,7 +496,10 @@ namespace midi
         std::uint16_t division_{};  // ticks/quarter (unless SMPTE, check spec)
 #pragma pack(pop)
         void swapbytes() noexcept;
+      friend std::ostream& operator<<(std::ostream& os, const midi::MidiHeader& mh);
     };
+
+    std::ostream& operator<<(std::ostream& os, const midi::MidiHeader& mh);
 
 #pragma pack()
 
@@ -625,5 +630,6 @@ namespace midi
           std::unique_ptr<RunningStatusBase>
               operator()(RunningStatusPolicy policy) noexcept;
     };
+
 } // namespace midi
 #endif // MIDI_H

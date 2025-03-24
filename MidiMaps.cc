@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -42,6 +42,30 @@ const midi::NumStringMap<midi::MIDI_Format> midi::format_map
     {"MULTITRACK", midi::MIDI_Format::MultiTrack},
     {"MULTISEQUENCE", midi::MIDI_Format::MultiSequence}
 };
+
+ostream& midi::operator<<(ostream& os, const midi::MidiHeader& mh)
+{
+    auto flags{os.flags()};
+    os << mh.chunk_name_[0] << mh.chunk_name_[1]    << mh.chunk_name_[2]
+       << mh.chunk_name_[3] << ' ' << mh.chunk_len_ << ' ' << mh.format_
+       << ' ' << mh.ntrks_  << ' ' << mh.division_;
+    static_cast<void>(os.flags(flags));
+    return os;
+}
+ostream& midi::operator<<(ostream& os, midi::MIDI_Format mf)
+{
+    auto flags{os.flags()};
+    if (format_map.contains(mf))
+    {
+        os << format_map.at(mf);
+    }
+    else [[unlikely]]
+    {
+        os << "UNKNOWN FORMAT";
+    }
+    static_cast<void>(os.flags(flags));
+    return os;
+}
 
 // MIDI Pan is actually excess 64,
 // but textmidi treats it as -64..0..63, where 0 is center.
@@ -197,31 +221,6 @@ const midi::NumStringMap<midi::XmfPatchTypeEnum> midi::xmf_patch_type_map
     {"DLS", midi::XmfPatchTypeEnum::DLS}
 };
 
-ostream& midi::operator<<(ostream& os, midi::MIDI_Format mf)
-{
-    auto flags{os.flags()};
-    if (format_map.contains(mf))
-    {
-        os << format_map.at(mf);
-    }
-    else [[unlikely]]
-    {
-        os << "UNKNOWN FORMAT";
-    }
-    static_cast<void>(os.flags(flags));
-    return os;
-}
-
-ostream& midi::operator<<(ostream& os, const midi::MidiHeader& mh)
-{
-    auto flags{os.flags()};
-    os << mh.chunk_name_[0] << mh.chunk_name_[1]    << mh.chunk_name_[2]
-       << mh.chunk_name_[3] << ' ' << mh.chunk_len_ << ' ' << mh.format_
-       << ' ' << mh.ntrks_  << ' ' << mh.division_;
-    static_cast<void>(os.flags(flags));
-    return os;
-}
-
 const midi::NumStringMap<midi::MidiStreamAtom> midi::sysex_subid_map
 {
     {"NON_COMMERCIAL", sysex_subid_non_commercial[0]},
@@ -311,5 +310,3 @@ const midi::NumStringMap<textmidi::rational::RhythmExpression>
     {"SIMPLECONTINUEDFRACTION",
         textmidi::rational::RhythmExpression::SimpleContinuedFraction},
 };
-
-

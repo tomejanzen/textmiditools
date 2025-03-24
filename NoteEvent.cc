@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -44,17 +44,16 @@ std::ostream& textmidi::cgm::operator<<(std::ostream& os, const NoteEvent& ne)
 {
     auto flags{os.flags()};
     std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
-    if (RestPitch == ne.pitch())
+    if (RestPitch == ne.pitch_)
     {
         os << "R ";
     }
     else
     {
-        const auto note_name(textmidi::num_to_note(ne.pitch(), prefer_sharp));
+        const auto note_name(textmidi::num_to_note(ne.pitch_, prefer_sharp));
         os << note_name << ' ';
     }
-    (*textmidi::rational::print_rhythm)(os, ne.musical_rhythm());
+    (*textmidi::rational::print_rhythm)(os, ne.musical_rhythm_);
     static_cast<void>(os.flags(flags));
     return os;
 }
-

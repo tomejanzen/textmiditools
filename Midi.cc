@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.93
+// TextMIDITools Version 1.0.94
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -18,6 +18,7 @@
 
 #include "Midi.h"
 
+using std::ostream;
 using midi::MidiStreamAtom;
 
 void midi::MidiHeader::swapbytes() noexcept
@@ -205,4 +206,5 @@ std::unique_ptr<midi::RunningStatusBase> midi::RunningStatusFactory::operator()(
     }
     return rsp;
 }
+
 

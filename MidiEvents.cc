@@ -41,7 +41,7 @@ using std::string_view, std::string, std::ostream, std::shared_ptr,
 using std::copy_n, std::ranges::for_each, std::ranges::find, std::hex,
       std::setw, std::setfill, std::dec, std::make_shared, std::cerr, std::list,
       std::tuple, std::int32_t, std::optional, std::tie, std::ostringstream,
-      std::copy, std::equal;
+      std::copy, std::equal, std::copy_if;
 using midi::MidiStreamRange, midi::MidiStreamIterator, midi::MidiStreamAtom,
       midi::variable_len_flag, midi::variable_len_shift,
       midi::variable_len_byte_mask, midi::variable_len_word_mask,
@@ -88,17 +88,16 @@ using textmidi::MidiEvent,
 tuple<MidiStreamRange, int64_t> textmidi::variable_len_value(MidiStreamRange midi_stream_tail) noexcept
 {
     uint64_t len{};
-    auto midiiter{midi_stream_tail.begin()};
-    while ((*midiiter) & midi::variable_len_flag)
+    while (midi_stream_tail[0] & midi::variable_len_flag)
     {
         len <<= midi::variable_len_shift;
-        len |= (*(midiiter++) & midi::variable_len_byte_mask);
+        len |= midi_stream_tail[0] & midi::variable_len_byte_mask;
+        midi_stream_tail.advance(1);
     }
     len <<= midi::variable_len_shift;
-    len |= *midiiter;
-    midiiter++;
+    len |= midi_stream_tail[0];
+    midi_stream_tail.advance(1);
     len &= midi::variable_len_word_mask;
-    midi_stream_tail.advance(midiiter - midi_stream_tail.begin());
     return tuple(midi_stream_tail, len);
 }
 
@@ -338,16 +337,9 @@ MidiStreamRange MidiSysExEvent::consume_stream(MidiStreamRange midi_stream_tail)
 {
     int64_t len{};
     tie(midi_stream_tail, len) = variable_len_value(midi_stream_tail);
-    int64_t count{};
-    do
-    {
-        data_.push_back(midi_stream_tail[0]);
-    } while ((midi_stream_tail.advance(1)[0] != midi::end_of_sysex[0]) && (++count < len));
-    if (midi_stream_tail[0] == midi::end_of_sysex[0])
-    {
-        midi_stream_tail.advance(1);
-    }
-    return midi_stream_tail;
+    copy_if(midi_stream_tail.begin(), midi_stream_tail.begin() + len, back_inserter(data_),
+        [](MidiStreamAtom a) { return a != midi::end_of_sysex[0];});
+    return midi_stream_tail.advance(len);
 }
 
 ostream& MidiSysExEvent::print(ostream& os) const
@@ -946,7 +938,7 @@ tuple<MidiStreamRange, optional<shared_ptr<MidiEvent>>>
         && equal(xmf_patch_type_prefix.cbegin(),
             xmf_patch_type_prefix.cend(), midi_stream_tail.begin() + 1))
     {
-        midi_stream_tail.advance(midi::meta_prefix.size() + sizeof(xmf_patch_type_prefix[0]));
+        midi_stream_tail.advance(midi::meta_prefix.size() + xmf_patch_type_prefix.size());
         auto evt = make_shared<MidiFileMetaXmfPatchTypeEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
         return tuple(midi_stream_tail, evt);
@@ -1012,13 +1004,8 @@ MidiStreamRange MidiFileMetaSequencerSpecificEvent::consume_stream(MidiStreamRan
 {
     int64_t len{};
     tie(midi_stream_tail, len) = variable_len_value(midi_stream_tail);
-    int64_t count{};
-    do
-    {
-        data_.push_back(midi_stream_tail[0]);
-        midi_stream_tail.advance(1);
-    } while (++count < len);
-    return midi_stream_tail;
+    copy_n(midi_stream_tail.begin(), len, back_inserter(data_));
+    return midi_stream_tail.advance(len);
 }
 
 ostream& MidiFileMetaSequencerSpecificEvent::print(ostream& os) const
@@ -2538,12 +2525,8 @@ MidiEventFactory::operator()(MidiStreamRange midi_stream_tail, int64_t& ticks_ac
         copy(&midi_stream_tail[0], &midi_stream_tail[32], ostream_iterator<int>(cerr, " "));
         cerr << dec << '\n';
         cerr << "seeking next command\n";
-        size_t i{};
-        while ((i < midi_stream_tail.size()) && ((midi_stream_tail[i] & event_flag) == 0))
-        {
-            ++i;
-        }
-        --i;
+        size_t i = count_if(midi_stream_tail.begin(), midi_stream_tail.end(),
+            [](MidiStreamAtom msa) { return ((msa & event_flag) == 0); });
         auto second = make_shared<MidiFileMetaTextEvent>();
         midi_stream_tail.advance(i);
         second->consume_stream(midi_stream_tail);

@@ -2,7 +2,7 @@
 """TextMIDITools: TextMidiFormEdit.py KeyBoard display,
 which displays a 128-key keyboard for editing scales.
 """
-# TextMIDITools Version 1.0.94
+# TextMIDITools Version 1.0.95
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.

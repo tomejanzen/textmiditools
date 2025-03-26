@@ -1,3 +1,9 @@
+2025-03-25     Thomas E. Janzen <janzentome@gmail.com>
+        * *test/eventtests.txt, eventtests.com, MidiEvents.cc: 
+        Fixed XmfPathcType which advanced midi_stream_tail wrong.
+        Rewrite a couple while loops.
+        * miditext.cc: cast away comparison of ints warning.
+
 2025-03-23     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{cc,h}, miditext.cc, Midi.h:   Overhaul
         MidiEvents: replace use of iterators with ranges::subrange;

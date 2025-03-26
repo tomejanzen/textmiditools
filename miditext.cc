@@ -98,7 +98,7 @@ namespace
             midi_ctr += sizeof(track_len);
             // swap the bytes of the track length
             track_len = htobe32(track_len);
-            if ((midi_view.size() - midi_ctr) < track_len)
+            if ((midi_view.size() - midi_ctr) < static_cast<long unsigned>(track_len))
             {
                 const string errstr{(string{
                     "File too short for track the length found in the track:"}
@@ -427,8 +427,11 @@ int main(int argc, char *argv[])
     find_tracks(std::views::all(midivector), track_locations, track_qty);
     vector<DelayEvents> midi_delay_event_tracks(track_locations.size());
 
-#undef DEBUG_THREADLESS
 #if defined(DEBUG_THREADLESS)
+    if (verbose)
+    {
+        cout << "Running unthreaded\n";
+    }
     for (int32_t i{}; auto& track_loc : track_locations)
     {
         MidiStreamRange track_stream{midivector.begin() + track_loc.first,
@@ -439,6 +442,10 @@ int main(int argc, char *argv[])
         ++i;
     }
 #else
+    if (verbose)
+    {
+        cout << "Running threaded\n";
+    }
     {
         vector<std::jthread> track_threads(track_locations.size());
 

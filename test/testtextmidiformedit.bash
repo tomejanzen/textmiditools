@@ -3,7 +3,7 @@
 /usr/bin/env echo "Save the defaults form file without changing anything"
 /usr/bin/env echo "and exit."
 ../TextMidiFormEdit.py
-/usr/bin/env git diff defaults.xml
+/usr/bin/env git diff -bBw defaults.xml
 /usr/bin/env xmllint --schema ../TextMidiForm.xsd defaults.xml
 /usr/bin/env textmidicgm --xmlform defaults.xml 
 /usr/bin/env textmidi --textmidi defaults.txt --midi defaults.mid
@@ -11,7 +11,7 @@
 
 /usr/bin/env echo "Check each field and save and exit."
 ../TextMidiFormEdit.py textmidiformedittest.xml
-/usr/bin/env git diff textmidiformedittest.xml
+/usr/bin/env git diff -bBw textmidiformedittest.xml
 /usr/bin/env xmllint --schema ../TextMidiForm.xsd textmidiformedittest.xml
 
 /usr/bin/env echo "Change the numbers; add 1 to ints, double floats"
@@ -20,5 +20,5 @@
 /usr/bin/env echo "Save the file and exit."
 ../TextMidiFormEdit.py textmidiformedittest.xml
 /usr/bin/env xmllint --schema ../TextMidiForm.xsd test.xml
-/usr/bin/env diff textmidiformedittest.xml test.xml
+/usr/bin/env diff -bBw textmidiformedittest.xml test.xml
 

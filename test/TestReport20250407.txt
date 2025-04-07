@@ -1,0 +1,169 @@
+1. Regenerate dependencies.  
+-Didn't bother.
+
+2. source cpplint.com and cppcheck.com.
+sed -i -f cpplint.sed cpplintout.txt
+-Examine cpplintout.txt.
+-cleaned up mostly MidiString colon spaces in range for.
+-Some extra spaces in RhythmRational.h.
+Review cppcheckout.txt.
+- nothing to note.
+
+4. Run a test with miditext.cc #define DEBUG_THREADLESS.
+and with #undef DEBUG_THREADLESS
+-Skipping.
+
+5. Check and up-date header file dependencies in Makefile.am.
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
+-- didn't bother
+
+6.  After executing this test sequence, compile with clang.
+- compiled OK.
+
+7. ./roundtriptests.bash
+grep Percentage *log20250304.txt:
+All test and binary comparisons should be identical.
+
+classical_archives0log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives1log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives2log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives3log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives5log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives6log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never0log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never1log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never2log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never3log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never4log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never5log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_never6log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantized0log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantized1log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantized2log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantized3log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantizedsimplecontinuedfraction0log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantizedsimplecontinuedfraction1log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantizedsimplecontinuedfraction2log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+classical_archives_quantizedsimplecontinuedfraction3log20250407.txt:Percentage identical MIDI files:  100.0  ; Percentage identical text files:  100.0 
+
+8. source chorded.com
+All files are to be identical.
+
+Files chorded.mid and chordedlazy.mid are identical
+Files chorded2.mid and chorded2lazy.mid are identical
+Files chorded3.mid and chorded3lazy.mid are identical
+
+9. cd test; source eventtests.com
+
+1a2
+> 
+4,6c5,7
+< DELAY 240 CONTROL 1 PAN CENTER
+< DELAY 240 CONTROL 1 SOFTPEDAL ON
+< DELAY 240 COPYRIGHT Copyright © 2025 Ludwig van Beethoven
+---
+> DELAY 240 CONTROL 1 PAN  CENTER  
+> DELAY 240 CONTROL 1 SOFTPEDAL 0x7f 
+> DELAY 240 COPYRIGHT "Copyright © 2025 Ludwig van Beethoven"
+8,9c9,10
+< DELAY 240 DEVICE_NAME computer
+< DELAY 240 INSTRUMENT Lead Sax
+---
+> DELAY 240 DEVICE_NAME "computer"
+> DELAY 240 INSTRUMENT "Lead Sax"
+15,19c16,20
+< DELAY 240 NOTE_OFF 1 A#4 64
+< DELAY 240 PAN 1 LEFT
+< DELAY 240 PAN 1 CENTER
+< DELAY 240 PAN 1 RIGHT
+< DELAY 240 PAN 1 2
+---
+> DELAY 240 NOTE_OFF 1 Bb4 64
+> DELAY 240 CONTROL 1 PAN  LEFT  
+> DELAY 240 CONTROL 1 PAN  CENTER  
+> DELAY 240 CONTROL 1 PAN  RIGHT  
+> DELAY 240 CONTROL 1 PAN  2  
+23,24c24,26
+< DELAY 240 PROGRAM_NAME Electric Piano 1
+< DELAY 240 SEQUENCER_SPECIFIC 0x00 0x00 0x00 0x6a 0x00 0x04 0x01
+---
+> DELAY 240 PROGRAM_NAME "Electric Piano 1"
+> DELAY 240 
+> SEQUENCER_SPECIFIC 0x00 0x00 0x00 0x6a 0x00 0x04 0x01
+28c30
+< DELAY 240 SYSEX NON_REALTIME 0x06 0x7c 0x00 0x2a 0x43 0x4c 0x20 0x20 0x43 0x4c 0x50 0x27 0x30 0x33 0x30 0x30 0x00 0x00 0x7f 0x0a 0x00 0x01 0x0b 0x0a 0x0a 0x00 0x0a 0x36 0x0a 0x01 0x01 0x0a 0x0a 0x00 0x02 0x00 0x02 0x00 0x00 0x00 0x0a 0x01 0x01 0x40 0x78 0x00 0x0a 0x0d
+---
+> DELAY 240 SYSEX NON_REALTIME 0x06 NONRT_WAIT 0x00 0x2a 0x43 0x4c 0x20 0x20 0x43 0x4c 0x50 0x27 0x30 0x33 0x30 0x30 0x00 0x00 0x7f 0x0a 0x00 0x01 0x0b 0x0a 0x0a 0x00 0x0a 0x36 0x0a 0x01 0x01 0x0a 0x0a 0x00 0x02 0x00 0x02 0x00 0x00 0x00 0x0a 0x01 0x01 0x40 0x78 0x00 0x0a 0x0d
+30c32
+< DELAY 240 TEMPO 60.125
+---
+> DELAY 240 TEMPO 60.12499987
+38c40
+< DELAY 240 TICKS "MEASURE 42"
+---
+> DELAY 240 TEXT_0F "Ticks: 8640 \"MEASURE 42\""
+43,53c45,55
+< DELAY 240 BREATH 1 0x40
+< DELAY 240 DAMPER 1 0x40
+< DELAY 240 SOFTPEDAL 1 0x40
+< DELAY 240 MONO_ON 1 0x40
+< DELAY 240 SOFTPEDAL 1 ON
+< DELAY 240 ALL_SOUND_OFF 1
+< DELAY 240 RESET_ALL_CONTROLLERS 2
+< DELAY 240 ALL_NOTES_OFF 3
+< DELAY 240 OMNI_OFF 4
+< DELAY 240 OMNI_ON 5
+< DELAY 240 POLY_ON 6
+---
+> DELAY 240 CONTROL 1 BREATH 0x40 
+> DELAY 240 CONTROL 1 DAMPER 0x40 
+> DELAY 240 CONTROL 1 SOFTPEDAL 0x40 
+> DELAY 240 CONTROL 1 MONO_ON 0x40 
+> DELAY 480 CONTROL 1 ALL_SOUND_OFF 0x00 
+> DELAY 240 CONTROL 2 RESET_ALL_CONTROLLERS 0x00 
+> DELAY 240 CONTROL 3 ALL_NOTES_OFF 0x00 
+> DELAY 240 CONTROL 4 OMNI_OFF 0x00 
+> DELAY 240 CONTROL 5 OMNI_ON 0x00 
+> DELAY 240 CONTROL 6 POLY_ON 0x00 
+> 
+
+10. ./testtextmidiformedit.bash
+Follow printed instructions at each step.
+DONE
+
+11. ./testtextmidicgmtest.bash
+DONE
+
+12. For SMUS conversion: source sacre.com
+musescore sacre_sacrifice.mid
+timidity -invvvt -Os sacre_sacrifice.mid
+Should be the Sacrificial Dance of Stravinksy's The Rite of Spring.
+VERIFIED
+
+13.  Then edit version.sed and version.bash to upgrade both the
+new and old version numbers.
+DONE
+
+./buildkit.bash
+DONE
+
+Check in the changed files.
+git status > ci.com; edit ci.com to just have the changed files with "git add " in front of them.
+run ci.com
+git commit -m "new version TextMIDITools v1.0.99"
+DONE
+
+14. 
+cp ~/textmiditools-1.0.nn temp
+cd temp
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
+and watch for a successful build of textmidi, miditext, textmidicgm, and smustextmidi.
+DONE

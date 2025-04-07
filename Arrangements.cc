@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -86,8 +86,7 @@ void arrangements::ArrangementsLexicographicBackward::next() noexcept
 
 void arrangements::ArrangementsRotateRight::next() noexcept
 {
-    rotate(arrangement(),
-        arrangement().begin() + (arrangement().size() - 1));
+    rotate(arrangement(), arrangement().begin() + (arrangement().size() - 1));
 #if defined(TEXTMIDICGM_PRINT)
     {
         using std::ranges::copy;
@@ -114,7 +113,7 @@ void arrangements::ArrangementsReverse::next() noexcept
 void arrangements::ArrangementsSwapPairs::next() noexcept
 {
     for (auto it{arrangement().begin()};
-              it < (arrangement().end() - (arrangement().size() % 2LU));
+              it < (arrangement().end() - (arrangement().size() % 2UL));
               it += 2)
     {
         iter_swap(it, it + 1);
@@ -126,8 +125,7 @@ void arrangements::ArrangementsSkip::next() noexcept
 {
     using std::swap;
     const int32_t anchor{counter() & 1};
-    for (int32_t i{anchor}; i < static_cast<int32_t>(arrangement().size()
-        - (arrangement().size() % 2LU)); i += 2)
+    for (int32_t i{anchor}; std::cmp_less(i, arrangement().size() - (arrangement().size() % 2UL)); i += 2)
     {
         swap(arrangement()[i],
             arrangement()[(i + 1) % arrangement().size()]);

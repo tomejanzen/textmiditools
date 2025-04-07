@@ -530,6 +530,21 @@ CUE_POINT "Letter A"
 @end example
 It is not entirely clear what the MIDI spec meant, or how studio musicians
 use these.
+@item TICKS [string]<EOL>
+@cindex TICKS
+@example
+TICKS Measure 86
+TICKS 'Measure 86'
+@end example
+@command{textmidi} will add a TEXT0F event with the given comment to the MIDI 
+file.  The number of ticks will be written into the string.  Double quotes are 
+not recommended for the comment, but single quotes or no quotes are fine.  If 
+you use this in a textmidi file and convert it to MIDI using @command{textmidi}, 
+then convert it back to a textmidi file (with a different name for example) 
+using @command{miditext}, then the comment at the TICKS command will show the 
+computed number of ticks at that point.  This makes it possible to compare 
+tracks to see if they are landing on the same MIDI time tick at the same
+measure, for example.
 @end table
 
 @node Non-text meta events

@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.95
+** TextMIDITools Version 1.0.96
 ** Copyright © 2025 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -1784,8 +1784,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
             // then use the prevailing dynamic; else 0.
             const MidiStreamAtom velocity{
                 TextMidiFeatures::me()->note_off_select()
-                ? static_cast<MidiStreamAtom>(
-                keytie.velocity_) : note_off_velocity};
+                ? static_cast<MidiStreamAtom>(keytie.velocity_) 
+                : note_off_velocity};
 #else
             const MidiStreamAtom velocity{0};
 #endif
@@ -1820,9 +1820,8 @@ DEVICE_ID (ALL_CALL|{BYTE})
            thedivisor{1.0},
            thenumerator{1.0};
     uint32_t total_duration{240};
-    int32_t bracket{};
-    if (static_cast<size_t>(bracket
-        = static_cast<size_t>(rhythmsubstr.find('['))) != rhythmsubstr.npos)
+    const string::size_type bracket{rhythmsubstr.find('[')};
+    if (std::cmp_not_equal(bracket, rhythmsubstr.npos))
     {
         string fractionstr{rhythmsubstr.substr(bracket)};
         SimpleContinuedFraction scf{};

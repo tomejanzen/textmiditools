@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -315,7 +315,7 @@ std::int64_t textmidi::rational::PrintRhythmRational::
     auto numerator{q.numerator()};
     RhythmRational denominator_q{q.denominator()};
 
-    std::uint64_t numerator_inc{numerator + 1LLU};
+    std::uint64_t numerator_inc{numerator + 1UL};
     bitset<64> bs{numerator_inc};
     int32_t dots{};
     if ((bs.count() == 1) && dotted_rhythm_) // then the numerator is 2^n - 1

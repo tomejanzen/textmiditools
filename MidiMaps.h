@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -30,9 +30,8 @@ namespace midi
             std::string_view> > in_initlist) noexcept
           : num_string_map_{in_initlist.begin(), in_initlist.end()}
         {
-            std::for_each(in_initlist.begin(), in_initlist.end(),
-                [this](const std::pair<const NumType,
-                    const std::string_view>& p)
+            std::ranges::for_each(in_initlist,
+                [this](const std::pair<const NumType, const std::string_view>& p)
                 {this->string_num_map_.emplace(p.second, p.first); });
         }
 
@@ -40,9 +39,8 @@ namespace midi
             <std::pair<const std::string_view, NumType> > in_initlist) noexcept
           : string_num_map_(in_initlist)
         {
-            std::for_each(in_initlist.begin(), in_initlist.end(),
-                [this](const std::pair<const std::string_view,
-                    const NumType>& p)
+            std::ranges::for_each(in_initlist,
+                [this](const std::pair<const std::string_view, const NumType>& p)
                 {this->num_string_map_.emplace(p.second, p.first); });
         }
 

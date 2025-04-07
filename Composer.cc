@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -195,13 +195,12 @@ void textmidi::cgm::Composer
             vector<bool>(xml_form.voices().size(), false));
 
     for (int32_t follower{};
-        follower < static_cast<int32_t>(xml_form.voices().size());
-        ++follower)
+         std::cmp_less(follower, xml_form.voices().size());
+         ++follower)
     {
         if (xml_form.voices()[follower].follower().follow())
         {
-            if (xml_form.voices()[follower].follower().leader()
-                    < static_cast<int32_t>(xml_form.voices().size()))
+            if (std::cmp_less(xml_form.voices()[follower].follower().leader(), xml_form.voices().size()))
             {
                 followers_graph[follower][xml_form
                     .voices()[follower].follower().leader()] = true;
@@ -229,7 +228,7 @@ void textmidi::cgm::Composer
 
     // Check each voice for being only a leader and not a follower.
     for (int32_t follower_index{};
-         follower_index < static_cast<int32_t>(followers_graph[0].size());
+         std::cmp_less(follower_index, followers_graph[0].size());
          ++follower_index)
     {
         const auto& vb{followers_graph[follower_index]};
@@ -244,14 +243,14 @@ void textmidi::cgm::Composer
     copy(leaders_topo_sort[0], ostream_iterator<int32_t>(cout, " "));
     cout << '\n';
 #endif
-    for (int32_t g{1}; g < static_cast<int32_t>(followers_graph.size()); ++g)
+    for (int32_t g{1}; std::cmp_less(g, followers_graph.size()); ++g)
     {
         for (int32_t follower_index{};
-             follower_index < static_cast<int32_t>(followers_graph.size());
+             std::cmp_less(follower_index, followers_graph.size());
              ++follower_index)
         {
             for (int32_t leader_index{};
-                 leader_index < static_cast<int32_t>(followers_graph[0].size());
+                 std::cmp_less(leader_index, followers_graph[0].size());
                  ++leader_index)
             {
 #if defined(TEXTMIDICGM_PRINT)
@@ -372,11 +371,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                 {
                     auto scramble_index{track.the_next_time()
                         / track_scramble_.period_};
-                    scramble_index = ((scramble_index
-                        < static_cast<int64_t>
-                        (track_scramble_sequences.size()))
-                        ?  scramble_index :
-                        track_scramble_sequences.size() - 1);
+                    scramble_index
+                        = (std::cmp_less(scramble_index, track_scramble_sequences.size())
+                        ?  scramble_index
+                        : track_scramble_sequences.size() - 1);
 #if defined(TEXTMIDICGM_PRINT)
                     cout << "scramble_index: " << scramble_index << '\n';
 #endif
@@ -384,10 +382,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     xml_form.character_now(track.the_next_time(),
                         musical_character);
                     int32_t number_of_voices
-                        = static_cast<int32_t>(musical_character.texture_range)
-                        + 1;
-                    number_of_voices = (static_cast<size_t>(number_of_voices)
-                        > xml_form.voices().size()) ? xml_form.voices().size()
+                        = static_cast<int32_t>(musical_character.texture_range) + 1;
+                    number_of_voices = std::cmp_greater(number_of_voices, xml_form.voices().size())
+                        ? xml_form.voices().size()
                         : number_of_voices;
                     number_of_voices
                         = (number_of_voices < 1) ? 1 : number_of_voices;
@@ -403,10 +400,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                       +  musical_character.dynamic_mean};
                     int32_t dynamic{static_cast<int32_t>(round(dynamicd))};
 
-                    dynamic = std::min(dynamic,
-                        static_cast<int32_t>(std::round(MaxDynamic)));
-                    dynamic = std::max(dynamic,
-                        static_cast<int32_t>(std::round(MinDynamic)));
+                    dynamic = std::min(dynamic, static_cast<int32_t>(std::round(MaxDynamic)));
+                    dynamic = std::max(dynamic, static_cast<int32_t>(std::round(MinDynamic)));
 
                     double rhythmd
                         {musical_character.duration(random_double())};
@@ -466,9 +461,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                             switch (direction)
                             {
                                 case MelodyProbabilities::MelodyDirection::Up:
-                                    if (track.last_pitch_index()
-                                        < static_cast<int32_t>
-                                        (xml_form.scale().size() - 1))
+                                    if (std::cmp_less(track.last_pitch_index(), xml_form.scale().size() - 1))
                                     {
                                         pitch_index
                                             = track.last_pitch_index() + 1;
@@ -513,8 +506,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     }
 
                     // coerce to be on scale
-                    if ((pitch_index != RestPitchIndex) && (pitch_index
-                        >= static_cast<int32_t>(xml_form.scale().size())))
+                    if ((pitch_index != RestPitchIndex)
+                        && std::cmp_greater_equal(pitch_index, xml_form.scale().size()))
                     {
                         // This is probably why it keeps banging
                         // on the top of the scale.
@@ -525,11 +518,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     {
                         pitch_index = 0;
                     }
-                    if ((static_cast<size_t>(pitch_index)
-                         >= xml_form.scale().size())
-                            && (pitch_index < RestPitchIndex))
+                    if (std::cmp_greater_equal(pitch_index, xml_form.scale().size())
+                        && (pitch_index < RestPitchIndex))
                     {
-                        pitch_index = (xml_form.scale().size()
+                        pitch_index = (!xml_form.scale().empty()
                             ? (xml_form.scale().size() - 1) : 0);
                     }
 
@@ -618,9 +610,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                         key_index += xml_form.voices()[tr]
                                             .follower().interval();
                                     }
-                                    if (key_scale.size()
-                                        == static_cast<uint64_t>
-                                        (pivot_key_index))
+                                    if (std::cmp_equal(key_scale.size(), pivot_key_index))
                                     {
                                         pivot_key_index = key_index;
                                     }
@@ -628,16 +618,12 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                 else // follower interval is 0 or positive
                                 {
                                     // Check there's room up the scale
-                                    if ((xml_form.voices()[tr]
-                                        .follower().interval() + key_index)
-                                        < static_cast<int32_t>(
-                                            key_scale.size()))
+                                    if (std::cmp_less(xml_form.voices()[tr].follower().interval() + key_index,
+                                        key_scale.size()))
                                     {
                                         key_index += xml_form.voices()[tr]
                                             .follower().interval();
-                                        if (key_scale.size()
-                                            == static_cast<uint64_t>(
-                                                pivot_key_index))
+                                        if (std::cmp_equal(key_scale.size(), pivot_key_index))
                                         {
                                             pivot_key_index = key_index;
                                         }
@@ -652,10 +638,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                 {
                                     const int64_t shift{2L
                                         * (key_index - pivot_key_index)};
-                                    if (((shift > 0L) && (key_index >= shift))
-                                       || ((shift < 0L) && (static_cast<size_t>
-                                       (key_index)
-                                       < (key_scale.size() - shift))))
+                                    if (((shift > 0L) && (key_index >= shift)) || ((shift < 0L)
+                                        && std::cmp_less(key_index, key_scale.size() - shift)))
                                     {
                                         key_index -= shift;
                                     }
@@ -791,7 +775,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
         (*textmidi::rational::print_rhythm)(textmidi_file, musical_rhythm);
         textmidi_file << '\n';
     }
-    textmidi_file << "END_LAZY\nticks \"End of Track\"\nEND_OF_TRACK\n";
+    textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n";
 
     for (int32_t track_index{}; auto voice : xml_form.voices())
     {
@@ -831,7 +815,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             }
             textmidi_file << eventRef << '\n';
         });
-        textmidi_file << "ticks \"End of Track\"\nEND_LAZY\nEND_OF_TRACK\n";
+        textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n";
         ++track_index;
     }
 }

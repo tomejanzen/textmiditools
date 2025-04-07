@@ -1,3 +1,35 @@
+2025-04- 07    Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc, Composer.cc, Composer.h, MidiEvents.cc, RandomInt.h,
+        RhythmRational.cc, RhythmRational.h, miditext.cc, textmidi.l:
+        Alex Dathskovsky CPPCON 2024 "To Int Or To Uint".  Use
+        std::cmp_* to compare integers.  I don't have access to
+        vector.ssize() yet.  I did not fully review use of integer types.
+        Possible bug with eventtests.txt in accidentally using a known text
+        meta number for an unknown meta test.
+
+2025-03-30     Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.cc, Composer.cc, MIDIKeyString.cc, RhythmRational.h,
+        miditext.cc: Allow somewhat longer lines for readability.
+        Use !container::empty() rather than "size()".  Use 
+        container::back() rather than container[container.size() - 1].
+
+2025-03-29     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiString.cc: Shorten functions.  Only remove
+        double quotes if they are both at front and back of
+        string.
+        * textmidi.texi: had never documented the TICKS command;
+        now taken care of.
+        * Composer.cc: ticks statement was written before the
+        END_LAZY, so ticks (TEXT0F) events were not appearing in the MIDI file.
+        * miditext.cc, miditext.texi: change "rigid" to "quantized" [rhythms].
+
+2025-03-27     Thomas E. Janzen <janzentome@gmail.com>
+        * MidiMaps.h, MidiEvents.cc, MusicalForm.cc:
+        Clean up loops and algorithm calls: use cbegin, cend;
+        use < end() when possible.
+        * MidiEvents.{cc,h}, miditext.cc: Define the return
+        event types.  Try to use unique_ptr and give up.
+
 2025-03-25     Thomas E. Janzen <janzentome@gmail.com>
         * *test/eventtests.txt, eventtests.com, MidiEvents.cc: 
         Fixed XmfPathcType which advanced midi_stream_tail wrong.

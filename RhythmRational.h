@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -206,9 +206,9 @@ namespace textmidi
                     std::string buf_string(cnt + 1, '\0');
                     // not expected to be null-terminated
                     is.rdbuf()->sgetn(buf_string.data(), cnt);
-                    if (buf_string.size())
+                    if (!buf_string.empty())
                     {
-                        buf_string[buf_string.size() - 1] = '\0';
+                        buf_string.back() = '\0';
                     }
                     std::smatch matches{};
                     const auto mat{regex_match(buf_string, matches,
@@ -248,16 +248,16 @@ namespace textmidi
                             message += buf_string;
                             throw std::runtime_error(message);
                         }
-                        const auto offs{-matches[remainder_match]
-                            .str().size()};
+                        const auto offs{-matches[remainder_match].str().size()};
                         if (offs != 0)
                         {
                             is.seekg(offs, std::ios_base::cur);
                         }
                         RhythmRational rtn{numer, denom};
                         const RhythmRational rtn_save{numer, denom};
-                        for (int64_t dot{1}; static_cast<size_t>(dot)
-                            <= matches[dots_match].str().size(); ++dot)
+                        for (int64_t dot{1};
+                            std::cmp_less_equal(dot, matches[dots_match].str().size());
+                            ++dot)
                         {
                             rtn += rtn_save / RhythmRational{1L << dot};
                         }

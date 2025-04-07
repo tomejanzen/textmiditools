@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: smustextmidi [OPTION]..."
-                    " [SMUSFILE]\nsmustextmidi Version 1.0.95\n"}
+                    " [SMUSFILE]\nsmustextmidi Version 1.0.96\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page:"
             " https://github.com/tomejanzen/textmiditools\n"};
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.95\n"
+        cout << "smustextmidi\nTextMIDITools 1.0.96\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

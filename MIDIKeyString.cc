@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // MIDIKeyString.cc
 //
@@ -109,7 +109,7 @@ namespace
         // The diatonic scale.
         constexpr std::array<uint32_t, 7> step_array{0, 2, 4, 5, 7, 9, 11};
         int32_t step{};
-        if (note_name.size() > 0) [[likely]]
+        if (!note_name.empty()) [[likely]]
         {
             int32_t stepindex{toupper(note_name[0]) - 'A'};
             stepindex += 5;

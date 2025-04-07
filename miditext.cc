@@ -98,7 +98,7 @@ namespace
             midi_ctr += sizeof(track_len);
             // swap the bytes of the track length
             track_len = htobe32(track_len);
-            if ((midi_view.size() - midi_ctr) < static_cast<long unsigned>(track_len))
+            if (std::cmp_less(midi_view.size() - midi_ctr, track_len))
             {
                 const string errstr{(string{
                     "File too short for track the length found in the track:"}
@@ -139,7 +139,7 @@ namespace
                     message_pairs_.push_back(de.value());
                 }
             }
-            while (stream_range_.size() > 0);
+            while (!stream_range_.empty());
         }
      private:
         DelayEvents& message_pairs_;
@@ -475,8 +475,8 @@ int main(int argc, char *argv[])
             ++i;
         }
     }
-    int64_t rigid_rhythms_count{};
-    int64_t non_rigid_rhythms_count{};
+    int64_t quantized_rhythms_count{};
+    int64_t non_quantized_rhythms_count{};
     int64_t zero_rhythms_count{};
     for (auto& mdet : midi_delay_event_tracks)
     {
@@ -490,14 +490,12 @@ int main(int argc, char *argv[])
             const set<int64_t> musical_divisors{1, 2, 4, 6, 8, 12, 16};
             const auto ticks_per_whole_local{
                 midi::QuartersPerWhole * ticksperquarter};
-            zero_rhythms_count += count_if(mdet, [](DelayEvent mde)
-                { return !mde.first; } );
-            rigid_rhythms_count += count_if(mdet,
+            zero_rhythms_count  += count_if(mdet, [](const DelayEvent& mde) { return !mde.first; } );
+            quantized_rhythms_count += count_if(mdet,
                 [ticks_per_whole_local, musical_divisors](DelayEvent mde) {
-                const RhythmRational
-                    rr{mde.first, static_cast<int64_t>(ticks_per_whole_local)};
+                const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole_local)};
                 return musical_divisors.contains(rr.denominator()); } );
-            non_rigid_rhythms_count += count_if(mdet,
+            non_quantized_rhythms_count += std::count_if(mdet.begin(), mdet.end(),
                 [ticks_per_whole_local, musical_divisors](DelayEvent mde) {
                 const RhythmRational rr{mde.first,
                     static_cast<int64_t>(ticks_per_whole_local)};
@@ -515,12 +513,12 @@ int main(int argc, char *argv[])
     }
     if (verbose)
     {
-        rigid_rhythms_count -= zero_rhythms_count;
-        const double rigid_rhythms_fraction{
-            static_cast<double>(rigid_rhythms_count)
-            / static_cast<double>(non_rigid_rhythms_count
-            + rigid_rhythms_count)};
-        cout << "Rigid rhythms: " << (rigid_rhythms_fraction * 100.0) << "%\n";
+        quantized_rhythms_count -= zero_rhythms_count;
+        const double quantized_rhythms_fraction{
+            static_cast<double>(quantized_rhythms_count)
+            / static_cast<double>(non_quantized_rhythms_count
+            + quantized_rhythms_count)};
+        cout << "Quantized rhythms: " << (quantized_rhythms_fraction * 100.0) << "%\n";
     }
     return EXIT_SUCCESS;
 }

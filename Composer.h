@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -42,7 +42,7 @@ namespace textmidi
 
                 arrangements::PermutationEnum scramble_
                     {arrangements::PermutationEnum::Identity};
-                TicksDuration     period_{120LU * TicksPerQuarter};
+                TicksDuration     period_{120UL * TicksPerQuarter};
                 std::shared_ptr<arrangements::Arrangements> arrangements_{};
             };
 

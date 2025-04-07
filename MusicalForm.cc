@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.95
+// TextMIDITools Version 1.0.96
 //
 // textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -46,8 +46,8 @@
 
 using std::int32_t, std::string, std::string_view, std::vector;
 using std::ranges::for_each, std::ranges::copy, std::ranges::min_element,
-      std::ranges::max_element, std::ranges::find,
-      std::ranges::unique, std::ranges::remove_if;
+      std::ranges::max_element, std::ranges::find, std::tie,
+      std::ranges::unique, std::ranges::remove_if, std::cerr;
 using textmidi::cgm::Sine, textmidi::cgm::MeanRangeSines,
       textmidi::cgm::MelodyProbabilities, textmidi::cgm::MusicalCharacter,
       textmidi::cgm::MusicalForm,
@@ -647,17 +647,24 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     // truncate scale to not exceed the instrument ranges.
     // The scales provided are monotonically increasing but
     // user-edited forms may have non-monotonic scales.
-    // This algorithm assume a monotonically increasng scale.
+    // This algorithm assume a monotonically increasing scale.
     // Find the maximum instrument range note.
     CompareLowerNoteName lower_note{};
-    const auto min_instrument_range = *min_element(voices_,
-        [lower_note](const VoiceXml& vleft,
-        const VoiceXml& vright){ return lower_note(vleft.low_pitch(),
-        vright.low_pitch()); });
-    const auto max_instrument_range = *max_element(voices_,
-        [lower_note](const VoiceXml& vleft, const VoiceXml& vright){
-        return lower_note(vleft.high_pitch(), vright.high_pitch()); });
-
+    VoiceXml min_instrument_range{},
+             max_instrument_range{};
+    if (!voices_.empty())
+    {
+        const auto [minv, maxv] = std::ranges::minmax_element(voices_,
+            [lower_note](const VoiceXml& vleft, const VoiceXml& vright){
+            return lower_note(vleft.high_pitch(), vright.high_pitch()); });
+        min_instrument_range = *minv;
+        max_instrument_range = *maxv;
+    }
+    else
+    {
+        cerr << "Empty voice list!  Exitting!";
+        exit(EXIT_SUCCESS);
+    }
     auto rem_if_scale_pitch_is_outside_instrument_range =
         [max_instrument_range, min_instrument_range, lower_note]
         (const string& scale_pitch){
@@ -729,10 +736,8 @@ void MusicalForm::clamp_scale_to_instrument_ranges() noexcept
         auto max_high_pitch = [](const VoiceXml& v1, const VoiceXml& v2)
             { return CompareLowerNoteName()(v1.high_pitch(),
               v2.high_pitch());};
-        const auto voice_max_note{max_element(voices_,
-            max_high_pitch)->high_pitch()};
-        auto out_of_range = [voice_min_note, voice_max_note]
-            (const string& note_name)
+        const auto voice_max_note{max_element(voices_, max_high_pitch)->high_pitch()};
+        auto out_of_range = [voice_min_note, voice_max_note] (const string& note_name)
             { return CompareLowerNoteName()(note_name, voice_min_note)
             || CompareLowerNoteName()(voice_max_note, note_name); };
         const auto [undefined, theend] = remove_if(scale_, out_of_range);

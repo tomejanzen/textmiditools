@@ -150,19 +150,19 @@ The items written are:
 @item The contents of the MIDI file header.
 @item The format of the MIDI file.
 @item The number of events per track.
-@item The percentage of rigid events.
+@item The percentage of quantized events.
 @end itemize
-@quotedblleft{}Rigid events@quotedblright{} are events that have a delay preceding
+@quotedblleft{}Quantized events@quotedblright{} are events that have a delay preceding
 them that has a simple relationship to the length of a whole note.
 If @minus{}@minus{}verbose is specified, then the delay preceding each event is
 converted into a fraction of a whole note, much the that musical rhythm is expressed.
 If the resulting fraction has a denominator of 1, 2, 4, 6, 8, 12, or 16, then it
-is counted as a rigid rhythm.  For example, 3/4 is a dotted half note, and a 1/12
+is counted as a quantized rhythm.  For example, 3/4 is a dotted half note, and a 1/12
 note is a triplet eighth.  Delays of zero are not counted in the computation of
-the percentage.  Files with 90% and higher of rigid rhythms are easy for
+the percentage.  Files with 90% and higher of quantized rhythms are easy for
 @command{miditext} to convert into LAZY format tracks, even if the
 @minus{}@minus{}quantize option is not specified.  MIDI files that were developed
-in a scoring program by mousing note by note tend to have a rigid rhythm.  A more
+in a scoring program by mousing note by note tend to have a quantized rhythm.  A more
 fluid performance might still be achieved by frequently adjusting the tempo and
 dynamics, both of which @command{textmidi} makes possible.
 @item @minus{}V, @minus{}@minus{}version

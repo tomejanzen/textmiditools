@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // textmidi
 // Copyright © 2025 Thomas E. Janzen
@@ -12,9 +12,9 @@
 
 #include <cstdint>
 
-#include <vector>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "MidiMaps.h"
 #include "OptionName.h"

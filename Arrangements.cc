@@ -1,14 +1,14 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
 // There is NO WARRANTY, to the extent permitted by law.
 //
-#include <utility>
 #include <ranges>
-#undef TEXTMIDICGM_PRINT
+#include <utility>
+
 #if defined(TEXTMIDICGM_PRINT)
 #include <iostream>
 #include <iterator>
@@ -16,41 +16,26 @@
 
 #include "Arrangements.h"
 
-using std::shared_ptr,
-    std::ranges::rotate;
+using std::unique_ptr, std::ranges::rotate;
 
 int32_t arrangements::ArrangementsImpl::counter() const noexcept
 {
     return counter_;
 }
-void arrangements::ArrangementsImpl::counter(int32_t counter) noexcept
-{
-    counter_ = counter;
-}
+
 void arrangements::ArrangementsImpl::inc() noexcept
 {
     ++counter_;
-}
-bool arrangements::ArrangementsImpl::counter_finite() const noexcept
-{
-    return counter_ != 0;
 }
 
 int32_t arrangements::Arrangements::counter() const noexcept
 {
     return arrangements_impl_.counter();
 }
-void arrangements::Arrangements::counter(int32_t counter) noexcept
-{
-    arrangements_impl_.counter(counter);
-}
+
 void arrangements::Arrangements::inc() noexcept
 {
     arrangements_impl_.inc();
-}
-bool arrangements::Arrangements::counter_finite() const noexcept
-{
-    return arrangements_impl_.counter_finite();
 }
 
 const arrangements::Arrangement& arrangements::ArrangementsInSitu::arrangement()
@@ -146,45 +131,45 @@ void arrangements::ArrangementsHeaps::next() noexcept
     while (!heaps_algorithm_template_.next()) {}
 }
 
-shared_ptr<arrangements::Arrangements> arrangements::ArrangementsFactory(
+unique_ptr<arrangements::Arrangements> arrangements::ArrangementsFactory(
         PermutationEnum permutation_type, int32_t length) noexcept
 {
-    using std::make_shared;
+    using std::make_unique;
     switch (permutation_type)
     {
       case PermutationEnum::Undefined:
       case PermutationEnum::Identity:
-        return make_shared<arrangements::ArrangementsIdentity>(length);
+        return std::move(make_unique<arrangements::ArrangementsIdentity>(length));
         break;
       case PermutationEnum::LexicographicForward:
-        return make_shared<arrangements
-            ::ArrangementsLexicographicForward>(length);
+        return std::move(make_unique<arrangements
+            ::ArrangementsLexicographicForward>(length));
         break;
       case PermutationEnum::LexicographicBackward:
-        return make_shared<arrangements
-            ::ArrangementsLexicographicBackward>(length);
+        return std::move(make_unique<arrangements
+            ::ArrangementsLexicographicBackward>(length));
         break;
       case PermutationEnum::RotateRight:
-        return make_shared<arrangements::ArrangementsRotateRight>(length);
+        return std::move(make_unique<arrangements::ArrangementsRotateRight>(length));
         break;
       case PermutationEnum::RotateLeft:
-        return make_shared<arrangements::ArrangementsRotateLeft>(length);
+        return std::move(make_unique<arrangements::ArrangementsRotateLeft>(length));
         break;
       case PermutationEnum::Reverse:
-        return make_shared<arrangements::ArrangementsReverse>(length);
+        return std::move(make_unique<arrangements::ArrangementsReverse>(length));
         break;
       case PermutationEnum::SwapPairs:
-        return make_shared<arrangements::ArrangementsSwapPairs>(length);
+        return std::move(make_unique<arrangements::ArrangementsSwapPairs>(length));
         break;
       case PermutationEnum::Skip:
-        return make_shared<arrangements::ArrangementsSkip>(length);
+        return std::move(make_unique<arrangements::ArrangementsSkip>(length));
         break;
       case PermutationEnum::Shuffle:
-        return make_shared<arrangements::ArrangementsShuffle>(length);
+        return std::move(make_unique<arrangements::ArrangementsShuffle>(length));
         break;
       case PermutationEnum::Heaps:
-        return make_shared<arrangements::ArrangementsHeaps>(length);
+        return std::move(make_unique<arrangements::ArrangementsHeaps>(length));
         break;
     }
-    return make_shared<arrangements::ArrangementsIdentity>(length);
+    return std::move(make_unique<arrangements::ArrangementsIdentity>(length));
 }

@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidi
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -13,9 +12,9 @@
 
 #include <cstdint>
 
-#include <utility>
-#include <memory>
 #include <filesystem>
+#include <memory>
+#include <utility>
 
 #include <boost/program_options.hpp>
 #include <boost/archive/xml_iarchive.hpp>

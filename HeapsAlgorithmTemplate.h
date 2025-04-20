@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidi 1.0.6
+//
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -12,10 +12,10 @@
 
 #include <cstdint>
 
-#include <ranges>
-#include <numeric>
 #include <algorithm>
 #include <concepts>
+#include <numeric>
+#include <ranges>
 #include <utility>
 #include <vector>
 

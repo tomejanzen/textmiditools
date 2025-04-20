@@ -1,4 +1,28 @@
-2025-04- 07    Thomas E. Janzen <janzentome@gmail.com>
+2025-04-20    Thomas E. Janzen <janzentome@gmail.com>
+        * Arrangements.{h,cc}: Remove [unused] counter(int) mutator.
+        Remove counter_finite().  Factory now returns a unique_ptr.  
+        * MusicalForm.{h,cc}: Remove copyright accessor & mutator.
+        * MidiMaps.h: remove "noexcept" on functions that use "at()".
+        * NoteEvent.{h,cc}, Composer.cc: Change "musical_rhythm" to "rhythm".
+        * *.{cc,h}: remove trailing spaces.
+        * Animations_v3_v2.xml: fix the version of follower_.
+        * MidiEvents.cc: delete extra space printed after PAN.
+
+2025-04-19    Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MIDIKeyString.cc: combine nested ifs as conjunctions.
+        * *.{cc,h}: clean up Version strings when comments or
+        printed help.  Some were not getting updated by version.sed
+        because they lacked the word "Version".
+
+2025-04-16    Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc: simplify computation of pitch_index and only
+        make it slightly worse.
+
+2025-04-08    Thomas E. Janzen <janzentome@gmail.com>
+	* Composer.cc, main.cc, miditext.cc, smustextmidi.cc, textmidicgm.cc:
+        Use toupper to compare to 'y' or 'Y' on interactive queries.
+
+2025-04-07    Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.cc, Composer.cc, Composer.h, MidiEvents.cc, RandomInt.h,
         RhythmRational.cc, RhythmRational.h, miditext.cc, textmidi.l:
         Alex Dathskovsky CPPCON 2024 "To Int Or To Uint".  Use

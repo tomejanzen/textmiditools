@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -10,13 +10,13 @@
 #    define  ARRANGEMENTS_H
 
 #include <algorithm>
-#include <vector>
+#include <cstdint>
 #include <iterator>
 #include <memory>
-#include <cstdint>
-#include <ranges>
-#include <random>
 #include <numeric>
+#include <random>
+#include <ranges>
+#include <vector>
 
 #include "HeapsAlgorithmTemplate.h"
 
@@ -44,9 +44,7 @@ namespace arrangements
       public:
         ArrangementsABC() = default;
         virtual std::int32_t counter() const = 0;
-        virtual void counter(std::int32_t counter) = 0;
         virtual void inc() = 0;
-        virtual bool counter_finite() const noexcept = 0;
         virtual void next() = 0;
         virtual const Arrangement& arrangement() const noexcept = 0;
         virtual Arrangement& arrangement() noexcept = 0;
@@ -61,9 +59,7 @@ namespace arrangements
     {
       public:
         std::int32_t counter() const noexcept;
-        void counter(std::int32_t counter) noexcept;
         void inc() noexcept;
-        bool counter_finite() const noexcept;
       private:
         std::int32_t counter_{};
     };
@@ -73,9 +69,7 @@ namespace arrangements
       public:
         Arrangements()  = default;
         std::int32_t counter() const noexcept final;
-        void counter(std::int32_t counter) noexcept final;
         void inc() noexcept final;
-        bool counter_finite() const noexcept final;
       private:
         ArrangementsImpl arrangements_impl_{};
     };
@@ -209,7 +203,7 @@ namespace arrangements
             heaps_algorithm_template_;
     };
 
-    std::shared_ptr<Arrangements> ArrangementsFactory(
+    std::unique_ptr<Arrangements> ArrangementsFactory(
             PermutationEnum permutation_type, std::int32_t length) noexcept;
 
 } // namespace arrangements

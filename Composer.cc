@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -14,23 +14,24 @@
 
 #include <cmath>
 #include <cstdint>
+#include <cctype>
 
-#include <limits>
-#include <utility>
-#include <string>
+#include <algorithm>
+#include <chrono>
 #include <cstdlib>
+#include <filesystem>
 #include <iterator>
-#undef TEXTMIDICGM_PRINT
+#include <limits>
+#include <list>
+#include <ranges>
+#include <sstream>
+#include <string>
+#include <utility>
+
 #if defined(TEXTMIDICGM_PRINT)
 #include <iostream>
 #include <iomanip>
 #endif
-#include <sstream>
-#include <filesystem>
-#include <algorithm>
-#include <list>
-#include <ranges>
-#include <chrono>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -45,7 +46,7 @@
 #include "RhythmRational.h"
 
 using std::numeric_limits, std::list, std::vector, std::string, std::cerr,
-      std::ofstream, std::int32_t, std::max, std::min, std::cout;
+      std::ofstream, std::int32_t, std::max, std::min, std::cout, std::toupper;
 using std::ranges::copy, std::ranges::find, std::ranges::for_each;
 using boost::lexical_cast;
 using midi::SecondsPerMinuteI;
@@ -198,21 +199,17 @@ void textmidi::cgm::Composer
          std::cmp_less(follower, xml_form.voices().size());
          ++follower)
     {
-        if (xml_form.voices()[follower].follower().follow())
+        if (xml_form.voices()[follower].follower().follow()
+            &&  std::cmp_less(xml_form.voices()[follower].follower().leader(),
+                xml_form.voices().size()))
         {
-            if (std::cmp_less(xml_form.voices()[follower].follower().leader(), xml_form.voices().size()))
+            followers_graph[follower][xml_form.voices()[follower].follower().leader()] = true;
+            if (xml_form.voices()[follower].follower().leader() == follower)
             {
-                followers_graph[follower][xml_form
-                    .voices()[follower].follower().leader()] = true;
-                if (xml_form.voices()[follower].follower().leader()
-                        == follower)
-                {
-                    const string errstr{((((string{__FILE__ } += ':')
-                        += BOOST_PP_STRINGIZE(__LINE__)) += " voice ")
-                        += lexical_cast<string>(follower))
-                        += " is a self-follower!\n"};
-                    cerr << errstr;
-                }
+                const string errstr{((((string{__FILE__ } += ':')
+                    += BOOST_PP_STRINGIZE(__LINE__)) += " voice ")
+                    += lexical_cast<string>(follower)) += " is a self-follower!\n"};
+                cerr << errstr;
             }
         }
     }
@@ -259,14 +256,12 @@ void textmidi::cgm::Composer
                      << followers_graph[leader_index][follower_index] << '\n';
 #endif
                 // If this is a follower...
-                if (followers_graph[follower_index][leader_index])
-                {
-                    const auto it{find(leaders_topo_sort[g - 1], leader_index)};
-                    if (it != leaders_topo_sort[g - 1].end())
+                if (followers_graph[follower_index][leader_index]
+                    && (find(leaders_topo_sort[g - 1], leader_index)
+                        != leaders_topo_sort[g - 1].end()))
                     {
                         leaders_topo_sort[g].push_back(follower_index);
                     }
-                }
             }
 #if defined(TEXTMIDICGM_PRINT)
             cout << '\n';
@@ -437,17 +432,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                         direction{xml_form.melody_probabilities()
                         (random_double())};
                     bool crisp_walking{};
-                    if (1.0 == xml_form.voices()[tr].walking())
+                    if (xml_form.voices()[tr].walking() > 0.0)
                     {
-                        crisp_walking = true;
-                    }
-                    else
-                    {
-                        if (xml_form.voices()[tr].walking() > 0.0)
-                        {
-                            crisp_walking = (xml_form.voices()[tr].walking()
-                                > random_double()) ? true : false;
-                        }
+                        crisp_walking = (xml_form.voices()[tr].walking() >= random_double()) ? true : false;
                     }
                     if (crisp_walking)
                     {
@@ -458,31 +445,33 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                         }
                         else
                         {
+                            pitch_index = track.last_pitch_index();
                             switch (direction)
                             {
                                 case MelodyProbabilities::MelodyDirection::Up:
-                                    if (std::cmp_less(track.last_pitch_index(), xml_form.scale().size() - 1))
+                                    if (!xml_form.scale().empty())
                                     {
-                                        pitch_index
-                                            = track.last_pitch_index() + 1;
+                                        if (std::cmp_less(pitch_index, xml_form.scale().size() - 1))
+                                        {
+                                            ++pitch_index;
+                                        }
+                                        else
+                                        {
+                                            pitch_index = xml_form.scale().size() - 1;
+                                        }
                                     }
                                     else
                                     {
-                                        pitch_index = track.last_pitch_index();
+                                        pitch_index = 0;
+                                        cerr << "You have a zero-long scale!  Fill in a scale!\n";
                                     }
                                     break;
                                 case MelodyProbabilities::MelodyDirection::Same:
-                                    pitch_index = track.last_pitch_index();
                                     break;
                                 case MelodyProbabilities::MelodyDirection::Down:
-                                    if (track.last_pitch_index() > 0)
+                                    if (pitch_index > 0)
                                     {
-                                        pitch_index = track.last_pitch_index()
-                                                    - 1;
-                                    }
-                                    else
-                                    {
-                                        pitch_index = track.last_pitch_index();
+                                        --pitch_index;
                                     }
                                     break;
                                 case MelodyProbabilities::MelodyDirection::Rest:
@@ -493,43 +482,36 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     }
                     else
                     {
-                        if (direction
-                            != MelodyProbabilities::MelodyDirection::Rest)
+                        // Play random ("jumpy") keys.
+                        if (direction != MelodyProbabilities::MelodyDirection::Rest)
                         {
-                            pitch_index = musical_character.pitch_index
-                                (random_double());
+                            pitch_index = musical_character.pitch_index(random_double());
+
+                            // coerce to be on scale
+                            if (!xml_form.scale().empty())
+                            {
+                                if (!std::cmp_less(pitch_index, xml_form.scale().size()))
+                                {
+                                    // This is probably why it keeps banging
+                                    // on the top of the scale.
+                                    // Alternatively it could be changed to a rest.
+                                    pitch_index = xml_form.scale().size() - 1;
+                                }
+                                pitch_index = ((pitch_index < 0) ? 0 : pitch_index);
+                                // Same pitch index as the last pitch index
+                            }
+                            else
+                            {
+                                cerr << "You have a zero-long scale!  Fill in a scale!\n";
+                            }
                         }
                         else
                         {
                             pitch_index = RestPitchIndex;
                         }
                     }
-
-                    // coerce to be on scale
-                    if ((pitch_index != RestPitchIndex)
-                        && std::cmp_greater_equal(pitch_index, xml_form.scale().size()))
-                    {
-                        // This is probably why it keeps banging
-                        // on the top of the scale.
-                        // Alternatively it could be changed to a rest.
-                        pitch_index = xml_form.scale().size() - 1;
-                    }
-                    if (pitch_index < 0)
-                    {
-                        pitch_index = 0;
-                    }
-                    if (std::cmp_greater_equal(pitch_index, xml_form.scale().size())
-                        && (pitch_index < RestPitchIndex))
-                    {
-                        pitch_index = (!xml_form.scale().empty()
-                            ? (xml_form.scale().size() - 1) : 0);
-                    }
-
-                    // Same pitch index as the last pitch index
-                    if (pitch_index != RestPitchIndex)
-                    {
-                        track.last_pitch_index(pitch_index);
-                    }
+                    track.last_pitch_index((pitch_index != RestPitchIndex)
+                        ? pitch_index : track.last_pitch_index());
 
                     // Use number_of_voices to subset
                     // track_scramble_sequences[scramble_index].
@@ -633,15 +615,14 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                         }
                                     }
                                 }
-                                if (xml_form.voices()[tr].follower()
-                                    .inversion())
+                                if (xml_form.voices()[tr].follower().inversion())
                                 {
-                                    const int64_t shift{2L
-                                        * (key_index - pivot_key_index)};
-                                    if (((shift > 0L) && (key_index >= shift)) || ((shift < 0L)
-                                        && std::cmp_less(key_index, key_scale.size() - shift)))
+                                    const int64_t shift{2L * (key_index - pivot_key_index)};
+                                    const int64_t temp_key_index = key_index - shift;
+                                    key_index = (temp_key_index < 0L) ? 0L : temp_key_index;
+                                    if (!key_scale.empty())
                                     {
-                                        key_index -= shift;
+                                        key_index = (temp_key_index >= key_scale.size()) ? key_scale.size() - 1 : temp_key_index;
                                     }
                                 }
                                 const auto pitch{key_scale[key_index]};
@@ -699,8 +680,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     != RhythmRational{1L})
             {
                 for_each(track_note_events[tr],
-                    [&](cgm::NoteEvent& ne) { ne.musical_rhythm(
-                    ne.musical_rhythm()
+                    [&](cgm::NoteEvent& ne) { ne.rhythm(
+                    ne.rhythm()
                     * xml_form.voices()[tr].follower().duration_factor() ); }
                     );
             }
@@ -732,7 +713,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             cout << "Overwrite " << gnuplot_filename << "?\n";
             string answerstr{};
             cin >> answerstr;
-            if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
+            if (!(toupper(answerstr[0]) == 'Y'))
             {
                 exit(0);
             }
@@ -771,8 +752,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
          aTime += TicksDuration(4 * TicksPerQuarter))
     {
         textmidi_file << "R ";
-        textmidi::rational::RhythmRational musical_rhythm{1L};
-        (*textmidi::rational::print_rhythm)(textmidi_file, musical_rhythm);
+        textmidi::rational::RhythmRational rhythm{1L};
+        (*textmidi::rational::print_rhythm)(textmidi_file, rhythm);
         textmidi_file << '\n';
     }
     textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n";

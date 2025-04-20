@@ -1,5 +1,6 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.97
+//
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -25,24 +26,25 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <cctype>
 
+#include <algorithm>
+#include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <iterator>
+#include <map>
+#include <memory>
+#include <ranges>
+#include <set>
 #include <string>
 #include <thread>
 #include <vector>
-#include <set>
-#include <map>
-#include <filesystem>
-#include <ranges>
-#include <memory>
-#include <algorithm>
 
-#include <boost/program_options.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/case_conv.hpp> // to_upper
+#include <boost/lexical_cast.hpp>
+#include <boost/program_options.hpp>
 
 #include "rational_support.h"
 #include "TextmidiUtils.h"
@@ -52,7 +54,7 @@
 #include "DynamicsOptions.h"
 
 using std::size_t, std::pair, std::vector, std::cin, std::cerr,
-      std::string, std::ranges::copy;
+      std::string, std::ranges::copy, std::toupper;
 using midi::MidiStreamRange;
 using textmidi::rational::RhythmRational,
       textmidi::rational::PrintRhythmRational,
@@ -208,7 +210,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: miditext [OPTION]... "
-            "[MIDIFILE]\nmiditext Version 1.0.92\n"}
+            "[MIDIFILE]\nmiditext Version 1.0.97\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: "
                "https://github.com/tomejanzen/textmiditools\n"};
@@ -218,7 +220,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools 1.0.92\n"
+        cout << "miditext\nTextMIDITools Version 1.0.97\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -346,7 +348,7 @@ int main(int argc, char *argv[])
         cout << answer_prompt;
         string answerstr{};
         cin >> answerstr;
-        if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
+        if (!(toupper(answerstr[0]) == 'Y'))
         {
             exit(EXIT_SUCCESS);
         }

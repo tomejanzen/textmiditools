@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -12,6 +11,7 @@
 
 #include <cstdint>
 #include <cstdio>
+
 #include <limits>
 #include <memory>
 #include <string>
@@ -19,8 +19,8 @@
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "cgmlegacy.h"
 #include "MIDIKeyString.h"

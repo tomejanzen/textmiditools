@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -27,14 +27,14 @@
 #include <memory>
 #include <regex>
 #include <stdexcept>
-#include <utility>
 #include <string>
+#include <utility>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
-#include <boost/lexical_cast.hpp>
 
 namespace textmidi
 {
@@ -438,7 +438,6 @@ namespace std
         static const bool has_infinity = false;
         static const bool has_quiet_NaN = false;
         static const bool has_signaling_NaN = false;
-        static const bool has_denorm = false;
         static const bool has_denorm_loss = false;
         static const float_round_style round_style = std::round_to_nearest;
         static const bool is_iec559 = false;

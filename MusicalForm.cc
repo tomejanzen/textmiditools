@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -30,11 +29,12 @@
 
 #include <cmath>
 #include <ctime>
-#include <numeric>
+
 #include <algorithm>
 #include <iostream>
-#include <ranges>
 #include <memory>
+#include <numeric>
+#include <ranges>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -231,11 +231,6 @@ string MusicalForm::name() const noexcept
 void MusicalForm::name(const string_view name) noexcept
 {
     name_ = name;
-}
-
-void MusicalForm::copyright(const string_view copyright) noexcept
-{
-    copyright_ = copyright;
 }
 
 double MusicalForm::len() const noexcept
@@ -528,8 +523,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
             {
                 if (instrument_flags & (1 << flag))
                 {
-                    if (static_cast<GeneralMIDIGroup>
-                        (instrument_flags & (1 << 16))
+                    if (static_cast<GeneralMIDIGroup>(instrument_flags & (1 << 16))
                         == GeneralMIDIGroup::Idiophone)
                     {
                         for (int32_t n{}; n < MIDIInstrumentsPerGroup; ++n)

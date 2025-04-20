@@ -1,7 +1,7 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidicgm 1.0
+//
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -12,11 +12,11 @@
 
 #include <cstdint>
 
-#include <ostream>
-#include <utility>
-#include <ranges>
-#include <optional>
 #include <map>
+#include <optional>
+#include <ostream>
+#include <ranges>
+#include <utility>
 
 #include "Midi.h"
 #include "RhythmRational.h"
@@ -44,22 +44,22 @@ namespace midi
                 {this->num_string_map_.emplace(p.second, p.first); });
         }
 
-        std::string_view at(NumType num) const noexcept
+        std::string_view at(NumType num) const
         {
             return num_string_map_.at(num);
         }
 
-        std::string_view operator[](NumType num) const noexcept
+        std::string_view operator[](NumType num) const
         {
             return num_string_map_.at(num);
         }
 
-        NumType at(const std::string_view& sv) const noexcept
+        NumType at(const std::string_view& sv) const
         {
             return string_num_map_.at(sv);
         }
 
-        NumType operator[](const std::string_view& sv) const noexcept
+        NumType operator[](const std::string_view& sv) const
         {
             return string_num_map_.at(sv);
         }

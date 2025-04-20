@@ -1,9 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// MIDIKeyString.cc
-//
-// textmiditools 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -13,12 +10,13 @@
 #if HAVE_CONFIG_H
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
-#include <string>
-#include <regex>
-#include <map>
 
 #include <cstdlib>
+
 #include <iostream>
+#include <map>
+#include <regex>
+#include <string>
 
 #include <boost/lexical_cast.hpp>
 

@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -9,10 +8,11 @@
 //
 #if !defined(RANDOMINT_H)
 #    define  RANDOMINT_H
+
+#include <chrono>
 #include <iostream>
 #include <limits>
 #include <random>
-#include <chrono>
 
 namespace textmidi
 {

@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -10,11 +9,11 @@
 #if !defined(TEXTMIDIFORM_H)
 #    define  TEXTMIDIFORM_H
 
+#include <algorithm>
+#include <memory>
+#include <ranges>
 #include <string>
 #include <vector>
-#include <ranges>
-#include <memory>
-#include <algorithm>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -246,7 +245,6 @@ namespace textmidi
 
             std::string name() const noexcept;
             void name(const std::string_view name) noexcept;
-            void copyright(const std::string_view copyright) noexcept;
             double len() const noexcept;
             void len(double len) noexcept;
             double min_note_len() const noexcept;

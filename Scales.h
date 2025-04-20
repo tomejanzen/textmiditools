@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -10,8 +9,8 @@
 #if !defined(SCALES_H)
 #    define  SCALES_H
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace textmidi
 {

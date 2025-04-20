@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -14,15 +13,15 @@
 #endif /* HAVE_CONFIG_H */
 #include <cstdint>
 
-#include <ranges>
 #include <memory>
+#include <ranges>
 
 #include <boost/lexical_cast.hpp>
 
-#include "SmusTrackEvent.h"
-#include "rational_support.h"
 #include "MIDIKeyString.h"
 #include "MidiMaps.h"
+#include "SmusTrackEvent.h"
+#include "rational_support.h"
 
 using std::int32_t, std::string, std::ostringstream, std::vector,
     std::pair, std::unique_ptr, std::make_pair;

@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.92
+// TextMIDITools Version 1.0.97
 //
-// textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -16,8 +15,8 @@
 
 #include <algorithm>
 #include <iomanip>
-#include <iterator>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <map>
 #include <memory>
@@ -27,6 +26,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 #include <boost/lexical_cast.hpp>
 
 #include "MidiEvents.h"
@@ -1934,7 +1934,7 @@ ostream& MidiChannelVoiceControlChangeEvent::print(ostream& os) const
         string panstring{};
         const auto pan = midi::pan_map(temp_pan);
         panstring = (pan ? *pan : boost::lexical_cast<string>(temp_pan));
-        os << "PAN " << ' ' << panstring << ' ';
+        os << "PAN " << panstring << ' ';
     }
     else
     {

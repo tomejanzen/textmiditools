@@ -1,9 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// MIDIKeyString.cc
-//
-// textmiditools 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -13,9 +10,9 @@
 #if !defined(MIDIKEYSTRING_H)
 #    define  MIDIKEYSTRING_H
 
-#include <utility>
-#include <string>
 #include <memory>
+#include <string>
+#include <utility>
 
 #include "Midi.h"
 

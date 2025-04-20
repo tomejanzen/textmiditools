@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -11,17 +11,18 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <cstdio>
+#include <cctype>
 
-#include <iostream>
+#include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <memory>
 #include <string>
-#include <filesystem>
 
 #include <unistd.h>
 
-#include <boost/program_options.hpp>
 #include <boost/algorithm/string/case_conv.hpp> // to_upper
+#include <boost/program_options.hpp>
 
 #include "textmidi.h"
 #include "MidiMaps.h"
@@ -35,7 +36,7 @@ extern int yylex(void);
 // The main function for the textmidi program.
 int main(int argc, char *argv[])
 {
-    using std::string, std::cerr, std::cout, std::cin;
+    using std::string, std::cerr, std::cout, std::cin, std::toupper;
     using boost::lexical_cast, boost::to_upper;
 
     boost::program_options::options_description desc("Allowed options");
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
     {
         const string logstr{((string{
             "Usage: textmidi [OPTION]..."
-            " [TEXTMIDIFILE]\ntextmidi Version 1.0.96\n"}
+            " [TEXTMIDIFILE]\ntextmidi Version 1.0.97\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools 1.0.96\n"
+        cout << "textmidi\nTextMIDITools Version 1.0.97\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"
@@ -150,7 +151,7 @@ int main(int argc, char *argv[])
             cout << outstr;
             string answerstr{};
             cin >> answerstr;
-            if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
+            if (!(toupper(answerstr[0]) == 'Y'))
             {
                 exit(0);
             }

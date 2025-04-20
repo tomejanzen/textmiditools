@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidicgm 1.0
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -47,47 +46,47 @@
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
 
-#include <unistd.h>
 #include <glob.h>
 #include <libgen.h>
+#include <unistd.h>
 
+#include <cctype>
 #include <cmath>
-#include <cstdlib>
 #include <cstdint>
+#include <cstdlib>
 
 #include <algorithm>
-#include <fstream>
-#include <iterator>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
-#include <limits>
-#include <unordered_map>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <limits>
 #include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
-#include <boost/program_options.hpp>
-#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/case_conv.hpp> // to_upper
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/xml_archive_exception.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
+#include <boost/program_options.hpp>
 #include <boost/serialization/version.hpp>
-#include <boost/algorithm/string/case_conv.hpp> // to_upper
-
-#include "MIDIKeyString.h"
-#include "MusicalForm.h"
-#include "cgmlegacy.h"
 
 #include "Arrangements.h"
+#include "Composer.h"
+#include "MIDIKeyString.h"
+#include "MusicalForm.h"
+#include "Options.h"
+#include "RhythmRational.h"
 #include "Track.h"
 #include "Voice.h"
-#include "Options.h"
-#include "Composer.h"
-#include "RhythmRational.h"
+#include "cgmlegacy.h"
 
 using std::int32_t, std::string, std::vector, std::unordered_map,
-      std::cerr, std::cin, std::cout;
+      std::cerr, std::cin, std::cout, std::toupper;
 // This isn't really necessary but i wrote it in a
 // quest to get glob to compile, which wouldn't because
 // of a different mistake.
@@ -177,7 +176,7 @@ int32_t main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: textmidicgm [OPTION]... "
-                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.96\n"}
+                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.97\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -187,7 +186,7 @@ int32_t main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidicgm\nTextMIDITools 1.0.96\n"
+        cout << "textmidicgm\nTextMIDITools Version 1.0.97\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -527,7 +526,7 @@ int32_t main(int argc, char *argv[])
         cout << "Overwrite " << textmidi_filename << "?\n";
         string answerstr{};
         cin >> answerstr;
-        if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
+        if (!(toupper(answerstr[0]) == 'Y'))
         {
             exit(0);
         }
@@ -550,7 +549,7 @@ int32_t main(int argc, char *argv[])
                 cout << "Overwrite " << form_filename_local << "?\n";
                 string answerstr{};
                 cin >> answerstr;
-                if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
+                if (!(toupper(answerstr[0]) == 'Y'))
                 {
                     exit(0);
                 }

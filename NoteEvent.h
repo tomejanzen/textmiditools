@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// textmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -27,24 +26,24 @@ namespace textmidi
     {
       public:
         constexpr NoteEvent(std::int32_t pitch, std::int32_t vel,
-            textmidi::rational::RhythmRational musical_rhythm) noexcept
+            textmidi::rational::RhythmRational rhythm) noexcept
           : pitch_{pitch},
             vel_{vel},
-            musical_rhythm_{musical_rhythm}
+            rhythm_{rhythm}
         {
         }
         void pitch(std::int32_t pitch) noexcept;
         std::int32_t pitch() const noexcept;
         std::int32_t vel() const noexcept;
-        textmidi::rational::RhythmRational musical_rhythm() const noexcept;
-        void musical_rhythm(textmidi::rational::RhythmRational mr) noexcept
+        textmidi::rational::RhythmRational rhythm() const noexcept;
+        void rhythm(textmidi::rational::RhythmRational mr) noexcept
         {
-            musical_rhythm_ = mr;
+            rhythm_ = mr;
         }
       private:
         std::int32_t pitch_;
         std::int32_t vel_;
-        textmidi::rational::RhythmRational musical_rhythm_;
+        textmidi::rational::RhythmRational rhythm_;
       friend std::ostream& operator<<(std::ostream& , const NoteEvent& );
     };
 

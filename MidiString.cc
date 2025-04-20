@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -34,7 +34,7 @@ namespace
         };
 
         // if the string is not zero-length remove trailing ASCII nul bytes.
-        // The && operator has a short-circuit, so the check for empty is first 
+        // The && operator has a short-circuit, so the check for empty is first
         // and makes back() valid.
         while (!str.empty() && (0x0 == str.back()))
         {

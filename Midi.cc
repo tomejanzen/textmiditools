@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,9 +12,9 @@
 
 #include <endian.h>
 
-#include <set>
 #include <algorithm>
 #include <ranges>
+#include <set>
 
 #include "Midi.h"
 

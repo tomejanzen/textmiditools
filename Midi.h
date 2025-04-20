@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -10,16 +10,16 @@
 #    define  MIDI_H
 
 #include <cstddef>
-#include <cstdint>
 #include <cstring>
+#include <cstdint>
 
-#include <memory>
 #include <array>
-#include <vector>
-#include <map>
-#include <set>
 #include <iostream>
+#include <map>
+#include <memory>
 #include <ranges>
+#include <set>
+#include <vector>
 
 namespace midi
 {

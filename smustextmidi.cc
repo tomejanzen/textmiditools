@@ -1,7 +1,6 @@
 //
-// TextMIDITools Version 1.0.96
+// TextMIDITools Version 1.0.97
 //
-// smustextmidi 1.0.6
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 // This is free software: you are free to change and redistribute it.
@@ -41,19 +40,19 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <algorithm>
+#include <array>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <array>
-#include <vector>
-#include <filesystem>
-#include <ranges>
 #include <memory>
-#include <algorithm>
+#include <ranges>
+#include <string>
+#include <vector>
 
-#include <boost/program_options.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/case_conv.hpp> // to_upper
+#include <boost/lexical_cast.hpp>
+#include <boost/program_options.hpp>
 
 #include "Midi.h"
 #include "MidiMaps.h"
@@ -63,7 +62,7 @@
 #include "Options.h"
 #include "DynamicsOptions.h"
 
-using std::string, std::uint8_t, std::cerr,
+using std::string, std::uint8_t, std::cerr, std::toupper,
     std::cout, std::make_unique, std::cin, std::ifstream,
     std::ofstream, std::unique_ptr, std::uint16_t;
 using textmidi::rational::RhythmRational,
@@ -165,7 +164,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: smustextmidi [OPTION]..."
-                    " [SMUSFILE]\nsmustextmidi Version 1.0.96\n"}
+                    " [SMUSFILE]\nsmustextmidi Version 1.0.97\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page:"
             " https://github.com/tomejanzen/textmiditools\n"};
@@ -175,7 +174,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools 1.0.96\n"
+        cout << "smustextmidi\nTextMIDITools Version 1.0.97\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"
@@ -279,7 +278,7 @@ int main(int argc, char *argv[])
         cout << "Overwrite " << textmidi_filename << "?" << '\n';
         string answerstr{};
         cin >> answerstr;
-        if (!((answerstr[0] == 'y') || (answerstr[0] == 'Y')))
+        if (!(toupper(answerstr[0]) == 'Y'))
         {
             exit(EXIT_SUCCESS);
         }

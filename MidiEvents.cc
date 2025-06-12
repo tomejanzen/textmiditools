@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -29,17 +29,17 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include "MIDIKeyString.h"
+#include "Midi.h"
 #include "MidiEvents.h"
 #include "MidiMaps.h"
-#include "rational_support.h"
-#include "MIDIKeyString.h"
 #include "MidiString.h"
-#include "Midi.h"
+#include "rational_support.h"
 
-using std::string_view, std::string, std::ostream, std::shared_ptr,
+using std::string_view, std::string, std::ostream, std::shared_ptr, std::unique_ptr,
       std::ostream_iterator;
 using std::copy_n, std::ranges::for_each, std::ranges::find, std::hex,
-      std::setw, std::setfill, std::dec, std::make_shared, std::cerr, std::list,
+      std::setw, std::setfill, std::dec, std::make_shared, std::make_unique, std::cerr, std::list,
       std::tuple, std::int32_t, std::optional, std::tie, std::ostringstream,
       std::copy, std::equal, std::copy_if;
 using midi::MidiStreamRange, midi::MidiStreamIterator, midi::MidiStreamAtom,
@@ -322,10 +322,10 @@ tuple<MidiStreamRange, OptionalEvent>
     if ((midi_stream_tail.size() >= midi::start_of_sysex.size())
         && (midi::start_of_sysex[0] == midi_stream_tail[0]))
     {
-        auto evt = make_shared<MidiSysExEvent>();
+        auto evt = make_unique<MidiSysExEvent>();
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -420,9 +420,9 @@ tuple<MidiStreamRange, OptionalEvent>
         && (midi::end_of_sysex[0] == midi_stream_tail[i]))
     {
         midi_stream_tail.advance(1);
-        auto evt = make_shared<MidiSysExRawEvent>();
+        auto evt = make_unique<MidiSysExRawEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -481,9 +481,9 @@ tuple<MidiStreamRange, OptionalEvent>
             sequence_number_prefix.cend(), midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::sequence_number_prefix.size());
-        auto evt = make_shared<MidiFileMetaSequenceEvent>();
+        auto evt = make_unique<MidiFileMetaSequenceEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -521,9 +521,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaUnknownEvent::recognize(MidiSt
         && !midi::Initial_Meta.contains(midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size());
-        auto evt = make_shared<MidiFileMetaUnknownEvent>();
+        auto evt = make_unique<MidiFileMetaUnknownEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -584,9 +584,9 @@ tuple<MidiStreamRange, OptionalEvent>
                 midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::midi_channel_prefix.size());
-        auto evt = make_shared<MidiFileMetaMidiChannelEvent>();
+        auto evt = make_unique<MidiFileMetaMidiChannelEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -639,9 +639,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaSetTempoEvent::recognize(MidiS
        && equal(tempo_prefix.cbegin(), tempo_prefix.cend(), midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::tempo_prefix.size());
-        auto evt = make_shared<MidiFileMetaSetTempoEvent>();
+        auto evt = make_unique<MidiFileMetaSetTempoEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -694,9 +694,9 @@ tuple<MidiStreamRange, OptionalEvent>
         && equal(smpte_prefix.cbegin(), smpte_prefix.cend(), midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::smpte_prefix.size());
-        auto evt = make_shared<MidiFileMetaSMPTEOffsetEvent>();
+        auto evt = make_unique<MidiFileMetaSMPTEOffsetEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -766,9 +766,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaMidiPortEvent::recognize(MidiS
         && equal(midi_port_prefix.cbegin(), midi_port_prefix.cend(), midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::midi_port_prefix.size());
-        auto evt = make_shared<MidiFileMetaMidiPortEvent>();
+        auto evt = make_unique<MidiFileMetaMidiPortEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -807,9 +807,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaTimeSignatureEvent::recognize(
             time_signature_prefix.cend(), midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::time_signature_prefix.size());
-        auto evt = make_shared<MidiFileMetaTimeSignatureEvent>();
+        auto evt = make_unique<MidiFileMetaTimeSignatureEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -874,9 +874,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaKeySignatureEvent::recognize(M
     }
     if (recognized)
     {
-        auto evt = make_shared<MidiFileMetaKeySignatureEvent>();
+        auto evt = make_unique<MidiFileMetaKeySignatureEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -938,9 +938,9 @@ tuple<MidiStreamRange, OptionalEvent>
             xmf_patch_type_prefix.cend(), midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + xmf_patch_type_prefix.size());
-        auto evt = make_shared<MidiFileMetaXmfPatchTypeEvent>();
+        auto evt = make_unique<MidiFileMetaXmfPatchTypeEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -989,9 +989,9 @@ tuple<MidiStreamRange, OptionalEvent>
         &&  (sequencer_specific_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::sequencer_specific_prefix.size());
-        auto evt = make_shared<MidiFileMetaSequencerSpecificEvent>();
+        auto evt = make_unique<MidiFileMetaSequencerSpecificEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1037,9 +1037,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaEndOfTrackEvent::recognize(Mid
                 midi_stream_tail.begin() + 1))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::end_of_track_prefix.size());
-        auto evt = make_shared<MidiFileMetaEndOfTrackEvent>();
+        auto evt = make_unique<MidiFileMetaEndOfTrackEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1091,9 +1091,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaTextEvent::recognize(MidiStrea
         && (midi::text_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_prefix.size());
-        auto evt = make_shared<MidiFileMetaTextEvent>();
+        auto evt = make_unique<MidiFileMetaTextEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1123,9 +1123,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaProgramNameEvent::recognize(Mi
         && (midi::program_name_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::program_name_prefix.size());
-        auto evt = make_shared<MidiFileMetaProgramNameEvent>();
+        auto evt = make_unique<MidiFileMetaProgramNameEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1154,9 +1154,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaDeviceNameEvent::recognize(Mid
         && (midi::device_name_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::device_name_prefix.size());
-        auto evt = make_shared<MidiFileMetaDeviceNameEvent>();
+        auto evt = make_unique<MidiFileMetaDeviceNameEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1185,9 +1185,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaText0AEvent::recognize(MidiStr
         && (midi::text_0A_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_0A_prefix.size());
-        auto evt = make_shared<MidiFileMetaText0AEvent>();
+        auto evt = make_unique<MidiFileMetaText0AEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1216,9 +1216,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaText0BEvent::recognize(MidiStr
         && (midi::text_0B_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_0B_prefix.size());
-        auto evt = make_shared<MidiFileMetaText0BEvent>();
+        auto evt = make_unique<MidiFileMetaText0BEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1247,9 +1247,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaText0CEvent::recognize(MidiStr
         && (midi::text_0C_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_0C_prefix.size());
-        auto evt = make_shared<MidiFileMetaText0CEvent>();
+        auto evt = make_unique<MidiFileMetaText0CEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1279,9 +1279,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaText0DEvent::recognize(MidiStr
         && (midi::text_0D_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_0D_prefix.size());
-        auto evt = make_shared<MidiFileMetaText0DEvent>();
+        auto evt = make_unique<MidiFileMetaText0DEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1309,9 +1309,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaText0EEvent::recognize(MidiStr
         && (midi::text_0E_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_0E_prefix.size());
-        auto evt = make_shared<MidiFileMetaText0EEvent>();
+        auto evt = make_unique<MidiFileMetaText0EEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1339,9 +1339,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaText0FEvent::recognize(MidiStr
             && (midi::text_0F_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::text_0F_prefix.size());
-        auto evt = make_shared<MidiFileMetaText0FEvent>();
+        auto evt = make_unique<MidiFileMetaText0FEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1371,9 +1371,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaCopyrightEvent::recognize(Midi
         && (midi::copyright_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::copyright_prefix.size());
-        auto evt = make_shared<MidiFileMetaCopyrightEvent>();
+        auto evt = make_unique<MidiFileMetaCopyrightEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1402,9 +1402,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaTrackNameEvent::recognize(Midi
         && (midi::track_name_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::track_name_prefix.size());
-        auto evt = make_shared<MidiFileMetaTrackNameEvent>();
+        auto evt = make_unique<MidiFileMetaTrackNameEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1435,9 +1435,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaInstrumentEvent::recognize(Mid
         && (midi::instrument_name_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::instrument_name_prefix.size());
-        auto evt = make_shared<MidiFileMetaInstrumentEvent>();
+        auto evt = make_unique<MidiFileMetaInstrumentEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1467,9 +1467,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaLyricEvent::recognize(MidiStre
         && (midi::lyric_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::lyric_prefix.size());
-        auto evt = make_shared<MidiFileMetaLyricEvent>();
+        auto evt = make_unique<MidiFileMetaLyricEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1499,9 +1499,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaMarkerEvent::recognize(MidiStr
         && (midi::marker_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::marker_prefix.size());
-        auto evt = make_shared<MidiFileMetaMarkerEvent>();
+        auto evt = make_unique<MidiFileMetaMarkerEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1531,9 +1531,9 @@ tuple<MidiStreamRange, OptionalEvent> MidiFileMetaCuePointEvent::recognize(MidiS
         && (midi::cue_point_prefix[0] == midi_stream_tail[1]))
     {
         midi_stream_tail.advance(midi::meta_prefix.size() + midi::cue_point_prefix.size());
-        auto evt = make_shared<MidiFileMetaCuePointEvent>();
+        auto evt = make_unique<MidiFileMetaCuePointEvent>();
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1759,13 +1759,13 @@ tuple<MidiStreamRange, OptionalEvent>
     if ((midi_stream_tail.size() >= midi::full_note_length)
         && ((midi_stream_tail[0] & ~midi::channel_mask) == midi::note_on[0]))
     {
-        shared_ptr<MidiChannelVoiceNoteOnEvent> evt{
-            make_shared<MidiChannelVoiceNoteOnEvent>(
+        unique_ptr<MidiChannelVoiceNoteOnEvent> evt{
+            make_unique<MidiChannelVoiceNoteOnEvent>(
             running_status, ticks_per_whole, prefer_sharp)};
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1784,18 +1784,19 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceNoteOnEvent& ms
     return msg.print(os);
 }
 
-tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole) noexcept
+tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceNoteOffEvent::recognize(MidiStreamRange midi_stream_tail,
+    midi::RunningStatusStandard& running_status, shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole) noexcept
 {
     if ((midi_stream_tail.size() >= midi::full_note_length)
         && ((midi_stream_tail[0] & ~midi::channel_mask) == midi::note_off[0]))
     {
-        shared_ptr<MidiChannelVoiceNoteOffEvent> evt
-            = make_shared<MidiChannelVoiceNoteOffEvent>(running_status,
+        unique_ptr<MidiChannelVoiceNoteOffEvent> evt
+            = make_unique<MidiChannelVoiceNoteOffEvent>(running_status,
               ticks_per_whole, prefer_sharp);
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1819,17 +1820,18 @@ ostream& textmidi::operator <<(ostream& os, const MidiChannelVoicePitchBendEvent
     return msg.print(os);
 }
 
-tuple<MidiStreamRange, OptionalEvent> MidiChannelVoicePitchBendEvent::recognize(MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept
+tuple<MidiStreamRange, OptionalEvent> MidiChannelVoicePitchBendEvent::recognize(MidiStreamRange midi_stream_tail,
+    midi::RunningStatusStandard& running_status) noexcept
 {
     using midi::pitch_wheel;
     if ((midi_stream_tail.size() >= midi::full_note_length)
         && ((midi_stream_tail[0] & ~midi::channel_mask) == pitch_wheel[0]))
     {
-        auto evt{make_shared<MidiChannelVoicePitchBendEvent>(running_status)};
+        auto evt{make_unique<MidiChannelVoicePitchBendEvent>(running_status)};
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1877,18 +1879,19 @@ ostream& MidiChannelVoicePitchBendEvent::print(ostream& os) const
     return os;
 }
 
-tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceControlChangeEvent::recognize(MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept
+tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceControlChangeEvent::recognize(MidiStreamRange midi_stream_tail,
+    midi::RunningStatusStandard& running_status) noexcept
 {
     using midi::control;
 
     if ((midi_stream_tail.size() >= midi::full_note_length)
         && ((midi_stream_tail[0] & ~midi::channel_mask) == control[0]))
     {
-        auto evt{make_shared<MidiChannelVoiceControlChangeEvent>(running_status)};
+        auto evt{make_unique<MidiChannelVoiceControlChangeEvent>(running_status)};
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -1991,16 +1994,17 @@ void textmidi::MidiChannelVoiceControlChangeEvent::id(MidiStreamAtom id)
     id_ = id;
 }
 
-tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceProgramChangeEvent::recognize(MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept
+tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceProgramChangeEvent::recognize(MidiStreamRange midi_stream_tail,
+    midi::RunningStatusStandard& running_status) noexcept
 {
     if ((midi_stream_tail.size() >= midi::full_note_length)
         && ((midi_stream_tail[0] & ~midi::channel_mask) == midi::program[0]))
     {
-        auto evt{make_shared<MidiChannelVoiceProgramChangeEvent>(running_status)};
+        auto evt{make_unique<MidiChannelVoiceProgramChangeEvent>(running_status)};
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -2048,16 +2052,17 @@ ostream& textmidi::operator<<(ostream& os, const MidiChannelVoiceControlChangeEv
     return msg.print(os);
 }
 
-tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceChannelPressureEvent::recognize(MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept
+tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceChannelPressureEvent::recognize(MidiStreamRange midi_stream_tail,
+    midi::RunningStatusStandard& running_status) noexcept
 {
     if ((midi_stream_tail.size() >= midi::full_note_length)
         && ((midi_stream_tail[0] & ~midi::channel_mask) == midi::channel_pressure[0]))
     {
-        auto evt{make_shared<MidiChannelVoiceChannelPressureEvent>(running_status)};
+        auto evt{make_unique<MidiChannelVoiceChannelPressureEvent>(running_status)};
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -2104,12 +2109,12 @@ tuple<MidiStreamRange, OptionalEvent>
     if ((midi_stream_tail.size() >= midi::full_note_length)
     && ((midi_stream_tail[0] & ~midi::channel_mask) == midi::polyphonic_key_pressure[0]))
     {
-        auto evt{make_shared<MidiChannelVoicePolyphonicKeyPressureEvent>(
+        auto evt{make_unique<MidiChannelVoicePolyphonicKeyPressureEvent>(
             running_status, ticks_per_whole, prefer_sharp)};
         running_status.running_status(midi_stream_tail[0]);
         midi_stream_tail.advance(1);
         midi_stream_tail = evt->consume_stream(midi_stream_tail);
-        return tuple(midi_stream_tail, evt);
+        return tuple(midi_stream_tail, std::move(evt));
     }
     else
     {
@@ -2408,64 +2413,64 @@ MidiEventFactory::operator()(MidiStreamRange midi_stream_tail, int64_t& ticks_ac
                 {
                   case NoteOn:
                     {
-                      auto note_on_evt = make_shared<MidiChannelVoiceNoteOnEvent>(
+                      auto note_on_evt = make_unique<MidiChannelVoiceNoteOnEvent>(
                           running_status_, ticks_per_whole_, prefer_sharp_);
                       midi_stream_tail = note_on_evt->consume_stream(midi_stream_tail);
-                      recognition = note_on_evt;
+                      recognition = std::move(note_on_evt);
                     }
                     break;
                   case NoteOff:
                     {
                       auto note_off_evt
-                          = make_shared<MidiChannelVoiceNoteOffEvent>(
+                          = make_unique<MidiChannelVoiceNoteOffEvent>(
                           running_status_, ticks_per_whole_, prefer_sharp_);
                       midi_stream_tail = note_off_evt->consume_stream(midi_stream_tail);
-                      recognition = note_off_evt;
+                      recognition = std::move(note_off_evt);
                     }
                     break;
                   case PolyphonicKeyPressure:
                     {
                       auto polyphonic_key_pressure_evt
-                          = make_shared<MidiChannelVoicePolyphonicKeyPressureEvent>
+                          = make_unique<MidiChannelVoicePolyphonicKeyPressureEvent>
                           (running_status_, ticks_per_whole_, prefer_sharp_);
                       midi_stream_tail = polyphonic_key_pressure_evt->consume_stream(midi_stream_tail);
-                      recognition = polyphonic_key_pressure_evt;
+                      recognition = std::move(polyphonic_key_pressure_evt);
                     }
                     break;
                   case Control:
                     {
                       auto control_evt
-                          = make_shared<MidiChannelVoiceControlChangeEvent>
+                          = make_unique<MidiChannelVoiceControlChangeEvent>
                           (running_status_);
                       midi_stream_tail = control_evt->consume_stream(midi_stream_tail);
-                      recognition = control_evt;
+                      recognition = std::move(control_evt);
                     }
                     break;
                   case Program:
                     {
                       auto program_evt
-                          = make_shared<MidiChannelVoiceProgramChangeEvent>
+                          = make_unique<MidiChannelVoiceProgramChangeEvent>
                           (running_status_);
                       midi_stream_tail = program_evt->consume_stream(midi_stream_tail);
-                      recognition = program_evt;
+                      recognition = std::move(program_evt);
                     }
                     break;
                   case ChannelPressure:
                     {
                       auto channel_pressure_evt
-                          = make_shared<MidiChannelVoiceChannelPressureEvent>
+                          = make_unique<MidiChannelVoiceChannelPressureEvent>
                           (running_status_);
                       midi_stream_tail = channel_pressure_evt->consume_stream(midi_stream_tail);
-                      recognition = channel_pressure_evt;
+                      recognition = std::move(channel_pressure_evt);
                     }
                     break;
                   case PitchWheel:
                     {
                       auto pitchwheel_evt
-                          = make_shared<MidiChannelVoicePitchBendEvent>
+                          = make_unique<MidiChannelVoicePitchBendEvent>
                           (running_status_);
                       midi_stream_tail = pitchwheel_evt->consume_stream(midi_stream_tail);
-                      recognition = pitchwheel_evt;
+                      recognition = std::move(pitchwheel_evt);
                     }
                     break;
                   default:
@@ -2514,7 +2519,7 @@ MidiEventFactory::operator()(MidiStreamRange midi_stream_tail, int64_t& ticks_ac
         {
             running_status_ = mcvm->local_status();
         }
-        midi_delay_event_pair.second = recognition.value();
+        midi_delay_event_pair.second = std::move(recognition.value());
     }
     else
     {
@@ -2525,7 +2530,7 @@ MidiEventFactory::operator()(MidiStreamRange midi_stream_tail, int64_t& ticks_ac
         cerr << "seeking next command\n";
         size_t i = std::ranges::count_if(midi_stream_tail,
             [](MidiStreamAtom msa) { return ((msa & event_flag) == 0); });
-        auto second = make_shared<MidiFileMetaTextEvent>();
+        auto second = make_unique<MidiFileMetaTextEvent>();
         midi_stream_tail.advance(i);
         second->consume_stream(midi_stream_tail);
         second->ticks_accumulated(ticks_accumulated);
@@ -2533,9 +2538,9 @@ MidiEventFactory::operator()(MidiStreamRange midi_stream_tail, int64_t& ticks_ac
         {
             ticks_accumulated = 0UL;
         }
-        midi_delay_event_pair.second = second;
+        midi_delay_event_pair.second = std::move(second);
     }
-    return tuple(midi_stream_tail, midi_delay_event_pair);
+    return tuple(midi_stream_tail, std::move(midi_delay_event_pair));
 }
 
 //
@@ -2596,20 +2601,19 @@ void textmidi::PrintLazyTrack::ticks_to_next_event() noexcept
     if (len > 1)
     {
         transform(lopped_end, lopped_begin, delay_events_.begin(),
-            [this](const DelayEvent& mde1, const DelayEvent& mde2)
-            { DelayEvent mde_rtn{mde1};
-            mde_rtn.second->ticks_to_next_event(
+            [this](DelayEvent& mde1, DelayEvent& mde2)
+            { mde1.second->ticks_to_next_event(
                 mde2.second->ticks_accumulated()
                 - mde1.second->ticks_accumulated());
             RhythmRational ratio_to_next_event{
-                mde_rtn.second->ticks_to_next_event(),
+                mde1.second->ticks_to_next_event(),
                 QuartersPerWhole * ticksperquarter_};
-            mde_rtn.second->wholes_to_next_event(rational::
+            mde1.second->wholes_to_next_event(rational::
                 snap(ratio_to_next_event, quantum_));
-            auto temp{mde_rtn.second->wholes_to_next_event()};
+            auto temp{mde1.second->wholes_to_next_event()};
             temp.reduce();
-            mde_rtn.second->wholes_to_next_event(temp);
-            return mde_rtn; });
+            mde1.second->wholes_to_next_event(temp);
+            return std::move(mde1); });
     }
 }
 
@@ -2876,7 +2880,7 @@ void textmidi::PrintLazyTrack::insert_rests() noexcept
             if (rest_ticks)
             {
                 // Construct a rest pseudo-event.
-                auto rest{make_shared<MidiChannelVoiceNoteRestEvent>
+                auto rest{make_unique<MidiChannelVoiceNoteRestEvent>
                     (running_status_, QuartersPerWhole * ticksperquarter_,
                      prefer_sharp_)};
                 rest->ticks_accumulated(rest_start_ticks_accumulated);
@@ -2885,8 +2889,8 @@ void textmidi::PrintLazyTrack::insert_rests() noexcept
                     QuartersPerWhole * ticksperquarter_};
                 wholes.reduce();
                 rest->wholes_to_next_event(wholes);
-                DelayEvent rest_pair{rest_start_ticks_accumulated, rest};
-                delay_events_.emplace(delay_event_iter, rest_pair);
+                DelayEvent rest_pair{rest_start_ticks_accumulated, std::move(rest)};
+                delay_events_.emplace(delay_event_iter, std::move(rest_pair));
 #if 0
                 // cppcheck pointed out redundancy
                 rest_start_ticks_accumulated = me->ticks_accumulated()

@@ -1,6 +1,6 @@
 #!usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py voice window, which permits editing one Voice's attributes."""
-# TextMIDITools Version 1.0.97
+# TextMIDITools Version 1.0.98
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -38,6 +38,53 @@ AlgorithmDict = {
 }
 
 ArrangementAlgorithmList = list(AlgorithmDict)
+
+class MusicTime():
+    """Class for music time values; a convenience that does not affect the music."""
+
+    def __init__(self, XmlForm = None):
+        """Init a MusicTime"""
+        super().__init__()
+        self.xml_form = XmlForm
+        self.ticks_per_quarter = tkinter.StringVar()
+        self.ticks_per_quarter.set('1440')
+        self.meter = tkinter.StringVar()
+        self.meter.set('4/4')
+        self.beat = tkinter.StringVar()
+        self.beat.set('1/4')
+        self.beat_tempo = tkinter.DoubleVar()
+        self.beat_tempo.set(60.0)
+        self.music_time_dict = self.defaults()
+
+    def traverse(self, music_time_dom):
+        """Build a music_time from the domain object model."""
+        self.music_time_dict['ticks_per_quarter'] = music_time_dom.getElementsByTagName('ticks_per_quarter')
+        beat_dict = {}
+        beat_xml = music_time.getElementsByTagName('beat')
+        beat_dict['numerator']   = beat_xml.getElementsByTagName('numerator_')
+        beat_dict['denominator'] = beat_xml.getElementsByTagName('denominator_')
+        self.music_time_dict['beat'] = beat_dict
+        meter_dict = {}
+        meter_xml = music_time.getElementsByTagName('meter')
+        meter_dict['numerator']   = meter_xml.getElementsByTagName('numerator_')
+        meter_dict['denominator'] = meter_xml.getElementsByTagName('denominator_')
+        self.music_time_dict['meter'] = meter_dict
+        self.music_time_dict['beat_tempo'] = music_time.getElementsByTagName('beat_tempo_')
+        return self.music_time_dict
+
+    def defaults(self):
+        music_time_dict = {}
+        music_time_dict['ticks_per_quarter'] = '1440'
+        beat_dict = {}
+        beat_dict['numerator']   = 1
+        beat_dict['denominator'] = 4
+        music_time_dict['beat'] = beat_dict
+        meter_dict = {}
+        meter_dict['numerator']   = 4
+        meter_dict['denominator'] = 4
+        music_time_dict['meter']  = meter_dict
+        music_time_dict['beat_tempo'] = 60.0
+        return music_time_dict
 
 class ScaleFrame(tkinter.Frame):
     """Support Multiple musical scales over MIDI key numbers."""
@@ -271,13 +318,22 @@ class AllFormsWindow(tkinter.Toplevel):
         super().__init__()
         self.frame = tkinter.ttk.Frame(self, padding='1 1 1 1')
         self.xml_form = XmlForm
-
         self.name = StringVar()
         self.copyright = StringVar()
 
         self.len  = StringVar()
         self.min_note_len = StringVar()
         self.max_note_len = StringVar()
+
+        # scale is after max_note_len and before music_time
+
+        self.music_time = MusicTime(XmlForm)
+
+        self.ticks_per_quarter = StringVar()
+        self.beat = StringVar()
+        self.meter = StringVar()
+        self.beat_tempo = StringVar()
+
         self.pulse = StringVar()
         self.down_var = StringVar()
         self.same_var = StringVar()
@@ -309,30 +365,62 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
         self.len_label = tkinter.ttk.Label(self.frame, text='Len')
-        validate_command = (self.register(self.validate_float),
+        validate_dbl_cmd = (self.register(self.validate_float),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.len_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_command, validate='focusout',
+            validatecommand=validate_dbl_cmd, validate='focusout',
             textvariable=self.len)
         self.len.set(self.xml_form['len'])
 
         self.min_note_len_label = tkinter.ttk.Label(
             self.frame, text='Min Note Len')
         self.min_note_len_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_command, validate='focusout',
+            validatecommand=validate_dbl_cmd, validate='focusout',
             textvariable=self.min_note_len)
         self.min_note_len.set(self.xml_form['min_note_len'])
 
         self.max_note_len_label = tkinter.ttk.Label(
             self.frame, text='Max Note Len')
         self.max_note_len_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_command, validate='focusout',
+            validatecommand=validate_dbl_cmd, validate='focusout',
             textvariable=self.max_note_len)
         self.max_note_len.set(self.xml_form['max_note_len'])
 
+        self.ticks_per_quarter_label = tkinter.ttk.Label(self.frame, text='Ticks per Quarter')
+        self.ticks_per_quarter_entry = tkinter.ttk.Entry(self.frame,
+            validatecommand=validate_dbl_cmd, validate='focusout',
+            textvariable=self.ticks_per_quarter)
+        self.ticks_per_quarter.set(self.xml_form['music_time']['ticks_per_quarter'])
+
+        validate_ratio_command = (self.register(self.validate_rational),
+            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        self.beat_label = tkinter.ttk.Label(self.frame, text='Beat Size')
+        self.beat_entry = tkinter.ttk.Entry(self.frame,
+            validatecommand=validate_ratio_command, validate='focusout',
+            textvariable=self.beat)
+        beat_ratio = "/"        
+        beat_ratio = beat_ratio.join([str(self.xml_form['music_time']['beat']['numerator']),
+            str(self.xml_form['music_time']['beat']['denominator'])])
+        self.beat.set(beat_ratio)
+
+        self.meter_label = tkinter.ttk.Label(self.frame, text='Meter')
+        self.meter_entry = tkinter.ttk.Entry(self.frame,
+            validatecommand=validate_ratio_command, validate='focusout',
+            textvariable=self.meter)
+        meter_ratio = "/"
+        meter_ratio = meter_ratio.join([str(self.xml_form['music_time']['meter']['numerator']),
+            str(self.xml_form['music_time']['meter']['denominator'])])
+        self.meter.set(meter_ratio)
+
+        self.beat_tempo_label = tkinter.ttk.Label(self.frame, text='Tempo per Beat')
+        self.beat_tempo_entry = tkinter.ttk.Entry(self.frame,
+            validatecommand=validate_dbl_cmd, validate='focusout',
+            textvariable=self.beat_tempo)
+        self.beat_tempo.set(self.xml_form['music_time']['beat_tempo'])
+
         self.pulse_label = tkinter.ttk.Label(self.frame, text='Pulse/Sec')
         self.pulse_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_command, validate='focusout',
+            validatecommand=validate_dbl_cmd, validate='focusout',
             textvariable=self.pulse)
         self.pulse.set(self.xml_form['pulse'])
 
@@ -434,10 +522,16 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=the_row, weight=1)
         self.copyright_label.grid(row=the_row, column=2, sticky=NSEW)
         self.copyright_entry.grid(row=the_row, column=3, sticky=NSEW)
+        self.ticks_per_quarter_label.grid(row=the_row, column=4, sticky=NSEW)
+        self.ticks_per_quarter_entry.grid(row=the_row, column=5, sticky=NSEW)
+
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
         self.len_label.grid(row=the_row, column=0, sticky=NSEW)
         self.len_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.beat_label.grid(row=the_row, column=4, sticky=NSEW)
+        self.beat_entry.grid(row=the_row, column=5, sticky=NSEW)
+
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
         self.min_note_len_label.grid(row=the_row, column=0, sticky=NSEW)
@@ -445,10 +539,17 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.rowconfigure(index=the_row, weight=1)
         self.max_note_len_label.grid(row=the_row, column=2, sticky=NSEW)
         self.max_note_len_entry.grid(row=the_row, column=3, sticky=NSEW)
+        self.meter_label.grid(row=the_row, column=4, sticky=NSEW)
+        self.meter_entry.grid(row=the_row, column=5, sticky=NSEW)
+
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
+
         self.pulse_label.grid(row=the_row, column=0, sticky=NSEW)
         self.pulse_entry.grid(row=the_row, column=1, sticky=NSEW)
+        self.beat_tempo_label.grid(row=the_row, column=4, sticky=NSEW)
+        self.beat_tempo_entry.grid(row=the_row, column=5, sticky=NSEW)
+
         the_row = the_row + 1
         self.frame.rowconfigure(index=the_row, weight=1)
         the_row = the_row + 1
@@ -485,6 +586,11 @@ class AllFormsWindow(tkinter.Toplevel):
         self.len.trace_add("write", self.len_callback)
         self.min_note_len.trace_add("write", self.min_note_len_callback)
         self.max_note_len.trace_add("write", self.max_note_len_callback)
+        self.ticks_per_quarter.trace_add("write", self.ticks_per_quarter_callback)
+        self.beat.trace_add("write", self.beat_callback)
+        self.meter.trace_add("write", self.meter_callback)
+        self.beat_tempo.trace_add("write", self.beat_tempo_callback)
+
         self.pulse.trace_add("write", self.pulse_callback)
         self.down_var.trace_add("write", self.melody_down_callback)
         self.same_var.trace_add("write", self.melody_same_callback)
@@ -515,6 +621,40 @@ class AllFormsWindow(tkinter.Toplevel):
     def max_note_len_callback(self, event, *args):
         """The max note len had an event; save value to the domain object model."""
         self.xml_form['max_note_len'] = self.max_note_len.get()
+
+    def ticks_per_quarter_callback(self, event, *args):
+        """The ticks_per_quarter field had an event; save value to the domain object model."""
+        self.xml_form['music_time']['ticks_per_quarter'] = self.ticks_per_quarter.get()
+
+    def beat_callback(self, event=None, *args):
+        """Beat size,e.g. 1/4; set the internal form."""
+        beat_quotient = self.beat.get()
+        slash_index = beat_quotient.find("/")
+        if slash_index > 0:
+            num_list = beat_quotient.split("/")
+            if len(num_list) == 2:
+                self.xml_form['music_time']['beat']['numerator'] = num_list[0]
+                self.xml_form['music_time']['beat']['denominator'] = num_list[1]
+        else:
+            self.xml_form['music_time']['beat']['numerator'] = beat_quotient
+            self.xml_form['music_time']['beat']['denominator'] = 1
+
+    def meter_callback(self, event=None, *args):
+        """Beat size,e.g. 1/4; set the internal form."""
+        meter_quotient = self.meter.get()
+        slash_index = meter_quotient.find("/")
+        if slash_index > 0:
+            num_list = meter_quotient.split("/")
+            if len(num_list) == 2:
+                self.xml_form['music_time']['meter']['numerator'] = num_list[0]
+                self.xml_form['music_time']['meter']['denominator'] = num_list[1]
+        else:
+            self.xml_form['music_time']['meter']['numerator'] = meter_quotient
+            self.xml_form['music_time']['meter']['denominator'] = 1
+
+    def beat_tempo_callback(self, event, *args):
+        """The beat_tempo field had an event; save value to the domain object model."""
+        self.xml_form['music_time']['beat_tempo'] = self.beat_tempo.get()
 
     def pulse_callback(self, event, *args):
         """The pulse field had an event; save value to the domain object model."""
@@ -1148,8 +1288,22 @@ class AllFormsWindow(tkinter.Toplevel):
         self.len.set(self.xml_form['len'])
         self.min_note_len.set(float(self.xml_form['min_note_len']))
         self.max_note_len.set(float(self.xml_form['max_note_len']))
-        self.pulse.set(float(self.xml_form['pulse']))
 
+        self.ticks_per_quarter.set(self.xml_form['music_time']['ticks_per_quarter'])
+
+        beat_ratio = "/"
+        beat_ratio = beat_ratio.join([str(self.xml_form['music_time']['beat']['numerator']),
+            str(self.xml_form['music_time']['beat']['denominator'])])
+        self.beat.set(beat_ratio)
+
+        meter_ratio = "/"
+        meter_ratio = meter_ratio.join([str(self.xml_form['music_time']['meter']['numerator']),
+            str(self.xml_form['music_time']['meter']['denominator'])])
+        self.meter.set(meter_ratio)
+
+        self.beat_tempo.set(self.xml_form['music_time']['beat_tempo'])
+
+        self.pulse.set(float(self.xml_form['pulse']))
         self.down_var.set(float(self.xml_form['melody_probabilities']['down']))
         self.same_var.set(float(self.xml_form['melody_probabilities']['same']))
         self.up_var.set(float(self.xml_form['melody_probabilities']['up']))
@@ -1163,6 +1317,24 @@ class AllFormsWindow(tkinter.Toplevel):
         self.arrangement_period.set(self.xml_form['arrangement_definition']['period'])
         algorithm = self.xml_form['arrangement_definition']['algorithm']
         self.arrangement_algorithm.set(ArrangementAlgorithmList[int(algorithm)])
+
+    def validate_rational(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+        """Validate a rational value, slash required, from the user and put up an alert if it is improper."""
+        # P: proposed value
+        # s: chars added or deleted
+        # S: current value prior to change
+        # v: index of string to be added or deleted
+        # V: 1 insert, 0 delete, -1 if forced validation or a text var validation
+        # W:
+        pat = re.compile(r"[1-9][0-9]*/[1-9][0-9]*")
+        mat = pat.fullmatch(str(proposed))
+        ret = False
+        if mat:
+            ret = True
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (1/2, 3/4, 51/1440)")
+        return ret
 
     def validate_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
         """Validate a floating value from the user and put up an alert if it is improper."""

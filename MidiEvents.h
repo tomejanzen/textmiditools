@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -22,22 +22,22 @@
 #include <iomanip>
 #include <limits>
 #include <list>
-#include <map>
 #include <memory>
 #include <ostream>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor.hpp>
 
-#include "RhythmRational.h"
-#include "Midi.h"
 #include "MIDIKeyString.h"
+#include "Midi.h"
+#include "RhythmRational.h"
 
 namespace textmidi
 {
@@ -47,8 +47,8 @@ namespace textmidi
     // to a textmidi value (usu. channel or program) in (1..16)
     midi::MidiStreamAtom channel_0_to_1(midi::MidiStreamAtom channel) noexcept;
 
-    using KeySignatureMap = std::map<std::pair<std::int32_t, bool>,
-        std::string_view>;
+    using midi::KeyNumBool, midi::KeyNumBoolEqual;
+    using KeySignatureMap = std::unordered_map<KeyNumBool, std::string_view>;
     using std::cout;
     extern KeySignatureMap key_signature_map;
 
@@ -145,8 +145,8 @@ namespace textmidi
     };
     std::ostream& operator<<(std::ostream& , const MidiEvent& );
 
-    using DelayEvent = std::pair<std::int64_t, std::shared_ptr<MidiEvent> >;
-    using OptionalEvent = std::optional<std::shared_ptr<MidiEvent>>;
+    using DelayEvent = std::pair<std::int64_t, std::unique_ptr<MidiEvent> >;
+    using OptionalEvent = std::optional<std::unique_ptr<MidiEvent>>;
     using StreamEvent = std::tuple<midi::MidiStreamRange, OptionalEvent>;
     std::ostream& operator<<(std::ostream& , const DelayEvent& );
 
@@ -785,7 +785,9 @@ namespace textmidi
             ticks_per_whole, prefer_sharp}
         {
         }
-        static StreamEvent recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status, std::shared_ptr<bool> prefer_sharp, uint32_t ticks_per_whole) noexcept;
+        static StreamEvent recognize(midi::MidiStreamRange midi_stream_tail,
+            midi::RunningStatusStandard& running_status, std::shared_ptr<bool> prefer_sharp,
+            uint32_t ticks_per_whole) noexcept;
         std::ostream& print(std::ostream& os) const final;
       friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceNoteOffEvent& );
     };

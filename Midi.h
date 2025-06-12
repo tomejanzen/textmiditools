@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,10 +15,11 @@
 
 #include <array>
 #include <iostream>
-#include <map>
 #include <memory>
 #include <ranges>
 #include <set>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace midi
@@ -631,5 +632,27 @@ namespace midi
               operator()(RunningStatusPolicy policy) noexcept;
     };
 
+    using KeyNumBool = std::pair<std::int32_t, bool>;
+    struct KeyNumBoolEqual
+    {
+        bool operator()(const KeyNumBool& p1, const KeyNumBool& p2) const
+        {
+            return p1.first == p2.first && p1.second == p2.second;
+        }
+    };
+
 } // namespace midi
+
+namespace std
+{
+    template<>
+    struct hash<midi::KeyNumBool>
+    {
+        size_t operator()(const midi::KeyNumBool& p) const
+        {
+            return hash<int32_t>()(p.first) ^ (hash<bool>()(p.second) << 2);
+        }
+    };
+} // namespace std
+
 #endif // MIDI_H

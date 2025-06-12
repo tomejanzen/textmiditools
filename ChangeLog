@@ -1,3 +1,38 @@
+2025-06-11    Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Composer.cc, MusicalFormWindow.png, TextMidiFormEdit.py, 
+        TextMidiFormEdit.texi, test/music_time_test.txt, textmidicgm.texi, GnuPlot.cc,
+        MIDIKeyString.cc, Midi.h:
+        Support music_time in the XML form files.
+
+2025-06-05    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidicgm, Track.{h,cc}, RhythmRational.{h,cc},
+        textmidicgm.cc, MusicalForm.{h,cc}, GnuPlot.cc,
+        Composer.{h,cc}: add MusicTime to form files.
+        Rewrite Composer to phase out MIDI ticks and use
+        seconds and rhythms both as rationals.
+
+2025-05-08    Thomas E. Janzen <janzentome@gmail.com>
+        * MIDIKeyString.cc, MidiEvents.{h,cc}, MidiMaps.h, MusicalForm.cc, Midi.h:
+        Replace map with unordered map while storm approaches.
+        The round-trip test got slower again.
+        * Composer.cc, Composer.h, MidiEvents.cc, MidiEvents.h, MusicalForm.cc, 
+        MusicalForm.h, NoteEvent.cc, Voice.h, main.cc, miditext.cc, smustextmidi.cc,
+        textmidi.l: alphabetize include files.
+        * Makefile*: re-gen includes for new alphabetic orders.
+
+2025-05-07    Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, GeneralMIDI.h, MIDIKeyString.{h,cc}:
+        Minor cleanup for readability, names.
+
+2025-05-06    Thomas E. Janzen <janzentome@gmail.com>
+        * MIDIKeyString.cc: simplify prefer_sharp logic more (remove switch), 
+        and use map in note_name_to_scale_step.
+
+2025-05-05    Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{h,cc}, miditext.cc: change shared_ptr in MidiEvent
+        to unique_ptr.
+        * MIDIKeyString.cc: simplify prefer_sharp logic.
+
 2025-04-20    Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.{h,cc}: Remove [unused] counter(int) mutator.
         Remove counter_finite().  Factory now returns a unique_ptr.  

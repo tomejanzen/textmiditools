@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -37,17 +37,17 @@
 #include <boost/preprocessor/stringize.hpp>
 
 #include "Composer.h"
+#include "GnuPlot.h"
+#include "Midi.h"
 #include "NoteEvent.h"
 #include "RandomDouble.h"
 #include "RandomInt.h"
-#include "Track.h"
-#include "GnuPlot.h"
-#include "Midi.h"
 #include "RhythmRational.h"
+#include "Track.h"
 
 using std::numeric_limits, std::list, std::vector, std::string, std::cerr,
       std::ofstream, std::int32_t, std::max, std::min, std::cout, std::toupper;
-using std::ranges::copy, std::ranges::find, std::ranges::for_each;
+using std::ranges::copy, std::ranges::find, std::ranges::for_each, std::cmp_greater_equal;
 using boost::lexical_cast;
 using midi::SecondsPerMinuteI;
 using textmidi::rational::RhythmRational;
@@ -56,7 +56,6 @@ using arrangements::PermutationEnum;
 namespace
 {
     // might become settable at a later time.
-    constexpr int32_t TempoBeatsPerMinute{60};
     constexpr int32_t RestPitchIndex{numeric_limits<int32_t>().max()};
 
     using KeyScaleSeq = std::vector<int32_t>;
@@ -64,7 +63,7 @@ namespace
 
 //
 // Convert a double duration in seconds to a musical ratio.
-RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
+RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration, const MusicTime& music_time)
     const noexcept
 {
     //  beat    quarter   whole   minute
@@ -74,43 +73,44 @@ RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration)
     //  beat    whole   minute
     // ------ * ----- * -------
     // minute   beat    seconds
-    RhythmRational wholes_per_second{
-      RhythmRational{TempoBeatsPerMinute}
-      * WholesPerBeat / RhythmRational{midi::SecondsPerMinuteI} };
+    RhythmRational wholes_per_second{RhythmRational{music_time.beat_tempo_}
+      * music_time.beat_ / RhythmRational{midi::SecondsPerMinuteI} };
     // wholes_per_second.reduce();
     //  Ticks    Quarters    whole
     // ------- * -------- * -------
     // Quarter     Whole    second
-    const RhythmRational TicksPerSecond{
-         RhythmRational{TicksPerQuarter} * QuartersPerWholeRat
-             * wholes_per_second};
+    const RhythmRational ticks_per_second{QuartersPerWholeRat * wholes_per_second
+        * RhythmRational{music_time.ticks_per_quarter_}};
     // Turn the rhythm (duration) into a ratio and multiply
-    // both the numerator and the denominator by TicksPerSecond.
+    // both the numerator and the denominator by ticks_per_second.
     // This gives us the actual musical rhythm value.
-    const double TicksPerSecondDouble{
-          static_cast<double>(TicksPerSecond.numerator())
-        / static_cast<double>(TicksPerSecond.denominator())};
-    const int64_t TicksPerSecondInt64
-        {static_cast<int64_t>(round(TicksPerSecondDouble))};
-    RhythmRational rhythm
-        {static_cast<int64_t>(duration * TicksPerSecondDouble),
-        TicksPerSecondInt64};
-    rhythm *= wholes_per_second;
-    return abs(rhythm);
+    const double ticks_per_second_dbl{
+          static_cast<double>(ticks_per_second.numerator())
+        / static_cast<double>(ticks_per_second.denominator())};
+    const int64_t ticks_per_second_int
+        {static_cast<int64_t>(round(ticks_per_second_dbl))};
+    RhythmRational duration_rat{};
+    duration_rat.from_double(duration, ticks_per_second_int);
+    RhythmRational beat_tempo_rat{};
+    RhythmRational ticks_per_beat{QuartersPerWholeRat * music_time.beat_
+        * RhythmRational{music_time.ticks_per_quarter_}};
+    beat_tempo_rat.from_double(music_time.beat_tempo_, ticks_per_beat.numerator()
+        * ticks_per_beat.denominator());
+    auto rhythm{duration_rat * wholes_per_second};
+    return rhythm;
 }
 
 //
 // Coerce a duration to be in multiples of the pulse/second value.
 RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm,
-        double pulse_per_second) const noexcept
+        double pulse_per_second, const MusicTime& music_time) const noexcept
 {
     RhythmRational wholes_per_second{
-      RhythmRational{TempoBeatsPerMinute}
+      RhythmRational{music_time.beat_tempo_}
       * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
     // wholes_per_second.reduce();
-    const RhythmRational TicksPerSecond{
-         RhythmRational{TicksPerQuarter}
-         * QuartersPerWholeRat * wholes_per_second};
+    const RhythmRational TicksPerSecond{QuartersPerWholeRat * wholes_per_second
+        * RhythmRational{music_time.ticks_per_quarter_}};
     const double TicksPerSecondDouble{
           static_cast<double>(TicksPerSecond.numerator())
         / static_cast<double>(TicksPerSecond.denominator())};
@@ -124,12 +124,10 @@ RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm,
     // Get rid of the remainder.
     // but first round off by adding a half-pulse.
     RhythmRational
-        pulse_per_rhythm{(rhythm + whole_per_pulse / RhythmRational{2L})
-            / whole_per_pulse};
+        pulse_per_rhythm{(rhythm + whole_per_pulse / RhythmRational{2L}) / whole_per_pulse};
     if (pulse_per_rhythm.denominator() != 1)
     {
-        const auto rem{pulse_per_rhythm.numerator()
-                     % pulse_per_rhythm.denominator()};
+        const auto rem{pulse_per_rhythm.numerator() % pulse_per_rhythm.denominator()};
         // snap the rhythm (duration) to pulses.
         pulse_per_rhythm = RhythmRational{pulse_per_rhythm.numerator() - rem,
             pulse_per_rhythm.denominator()};
@@ -283,16 +281,14 @@ void textmidi::cgm::Composer::
     for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
     {
-        track_scramble_sequences.
-            push_back(track_scramble_.arrangements_->arrangement());
+        track_scramble_sequences.push_back(track_scramble_.arrangements_->arrangement());
         track_scramble_.arrangements_->next();
     }
 #undef TEXTMIDICGM_PRINT
 #if defined(TEXTMIDICGM_PRINT)
     cout << "track_scramble_sequences\n";
     for_each(track_scramble_sequences, [&](auto tss)
-        { copy(tss, ostream_iterator<int32_t>(cout, " "));
-        cout << '\n'; } );
+        { copy(tss, ostream_iterator<int32_t>(cout, " ")); cout << '\n'; } );
 #endif
 #undef TEXTMIDICGM_PRINT
 }
@@ -308,13 +304,23 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     using std::pair, std::ostringstream, std::put_time, std::ranges::reverse;
     using std::chrono::time_point;
     using midi::MaxDynamic, midi::MinDynamic, midi::MIDI_Format;
+
+    const auto ticks_per_second_{static_cast<std::int64_t>((
+        static_cast<double>(xml_form.music_time().ticks_per_quarter_
+        * midi::QuartersPerWhole * xml_form.music_time().beat_.numerator())
+        * xml_form.music_time().beat_tempo_)
+        / static_cast<double>(SecondsPerMinute * xml_form.music_time().beat_.denominator()))};
+    const auto seconds_per_whole_{static_cast<std::int64_t>((static_cast<double>(
+        midi::QuartersPerWhole * xml_form.music_time().beat_.numerator())
+        * xml_form.music_time().beat_tempo_)
+        / static_cast<double>(SecondsPerMinute * xml_form.music_time().beat_.denominator()))};
+
     // If the command line did not set arrangements,
     // then set them from the XML file.
     track_scramble_.period_
         = ((PermutationEnum::Undefined == track_scramble_.scramble_)
         ? (static_cast<TicksDuration>(
-        static_cast<int32_t>(round(xml_form.arrangement_definition().period())))
-            * TicksPerQuarter)
+        static_cast<int32_t>(round(xml_form.arrangement_definition().period()))))
         : track_scramble_.period_);
 
     track_scramble_.scramble_ = (track_scramble_.scramble_
@@ -326,8 +332,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     vector<pair<int32_t, int32_t>> tessitura;
 
     track_scramble_.arrangements_
-        = ArrangementsFactory(track_scramble_.scramble_,
-        xml_form.voices().size());
+        = ArrangementsFactory(track_scramble_.scramble_, xml_form.voices().size());
 
     for_each(xml_form.voices(), [&](auto v) {
         tessitura.emplace_back( textmidi::
@@ -335,12 +340,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
         textmidi::pitchname_to_keynumber(v.high_pitch()).first); } );
     KeyScaleSeq key_scale;
     xml_form.string_scale_to_int_scale(key_scale);
-    const TicksDuration time_step{xml_form.pulse()
-        ? (static_cast<int64_t>(static_cast<double>
-          (TicksPerQuarter) / xml_form.pulse())) : 1};
-    const TicksDuration total_duration(
-            static_cast<int64_t>(floor(xml_form.len()
-          * static_cast<double>(TicksPerQuarter))));
+    const TicksDuration time_step{xml_form.pulse() ? 1 / xml_form.pulse() : 1};
+
+    const TicksDuration total_duration(duration_to_rhythm(xml_form.len(), music_time_));
 
     vector<list<int32_t>> leaders_topo_sort;
     build_composition_priority_graph(xml_form, leaders_topo_sort);
@@ -364,33 +366,28 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                 while ((track.the_next_time() < total_duration)
                     && (track_note_events.size() < max_events_per_track_))
                 {
-                    auto scramble_index{track.the_next_time()
-                        / track_scramble_.period_};
+                    size_t scramble_index{(track.the_next_time() / track_scramble_.period_).numerator()};
                     scramble_index
                         = (std::cmp_less(scramble_index, track_scramble_sequences.size())
-                        ?  scramble_index
+                        ? scramble_index
                         : track_scramble_sequences.size() - 1);
 #if defined(TEXTMIDICGM_PRINT)
                     cout << "scramble_index: " << scramble_index << '\n';
 #endif
                     MusicalCharacter musical_character{};
-                    xml_form.character_now(track.the_next_time(),
-                        musical_character);
+                    xml_form.character_now(track.the_next_time(), musical_character);
                     int32_t number_of_voices
                         = static_cast<int32_t>(musical_character.texture_range) + 1;
                     number_of_voices = std::cmp_greater(number_of_voices, xml_form.voices().size())
                         ? xml_form.voices().size()
                         : number_of_voices;
-                    number_of_voices
-                        = (number_of_voices < 1) ? 1 : number_of_voices;
+                    number_of_voices = (number_of_voices < 1) ? 1 : number_of_voices;
 #if defined(TEXTMIDICGM_PRINT)
                     cout << "texture_range: "
                          << musical_character.texture_range
                          << " number_of_voices: " << number_of_voices << '\n';
 #endif
-
-                    double dynamicd{(musical_character.dynamic_range
-                                   * random_double())
+                    double dynamicd{(musical_character.dynamic_range * random_double())
                       - (musical_character.dynamic_range / 2.0)
                       +  musical_character.dynamic_mean};
                     int32_t dynamic{static_cast<int32_t>(round(dynamicd))};
@@ -398,39 +395,25 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     dynamic = std::min(dynamic, static_cast<int32_t>(std::round(MaxDynamic)));
                     dynamic = std::max(dynamic, static_cast<int32_t>(std::round(MinDynamic)));
 
-                    double rhythmd
-                        {musical_character.duration(random_double())};
-                    auto rhythm{duration_to_rhythm(rhythmd)};
+                    double rhythmd {musical_character.duration(random_double())};
+                    auto rhythm{duration_to_rhythm(rhythmd, xml_form.music_time())};
 
                     // Now apply the pulse.
                     // pulse is in pulses per second.
                     if (xml_form.pulse() != 0)
                     {
-                        rhythm = snap_to_pulse(rhythm, xml_form.pulse());
+                        rhythm = snap_to_pulse(rhythm, xml_form.pulse(), xml_form.music_time());
                     }
                     const RhythmRational wholes_per_second{
-                        RhythmRational{TempoBeatsPerMinute} * WholesPerBeat
+                        RhythmRational{xml_form.music_time().beat_tempo_} * WholesPerBeat
                             / RhythmRational{SecondsPerMinuteI}};
-                    const RhythmRational TicksPerSecond(
-                        RhythmRational{TicksPerQuarter} * QuartersPerWholeRat
-                                        * wholes_per_second);
-                    // wholes   Ticks    second
-                    // ------ * ------ * ------
-                    // note     Second   wholes
-                    auto rhythmtdrational{rhythm * TicksPerSecond
-                        / wholes_per_second};
-                    TicksDuration rhythmtd{
-                        ( rhythmtdrational.numerator()
-                        + rhythmtdrational.denominator() / 2)
-                        / rhythmtdrational.denominator()};
                     track.the_last_time(track.the_next_time());
-                    track.the_next_time(track.the_next_time() + rhythmtd);
+                    track.the_next_time(track.the_next_time() + rhythm);
 
                     int32_t pitch_index{};
 
                     MelodyProbabilities::MelodyDirection
-                        direction{xml_form.melody_probabilities()
-                        (random_double())};
+                        direction{xml_form.melody_probabilities()(random_double())};
                     bool crisp_walking{};
                     if (xml_form.voices()[tr].walking() > 0.0)
                     {
@@ -511,7 +494,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                         }
                     }
                     track.last_pitch_index((pitch_index != RestPitchIndex)
-                        ? pitch_index : track.last_pitch_index());
+                        ? pitch_index
+                        : track.last_pitch_index());
 
                     // Use number_of_voices to subset
                     // track_scramble_sequences[scramble_index].
@@ -519,12 +503,10 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
 
                     auto trit{find(
                         track_scramble_sequences[scramble_index].begin(),
-                        track_scramble_sequences[scramble_index].begin()
-                        + number_of_voices, tr)};
+                        track_scramble_sequences[scramble_index].begin() + number_of_voices, tr)};
                     if ((pitch_index != RestPitchIndex)
                         && (trit
-                        != (track_scramble_sequences[scramble_index].begin()
-                        + number_of_voices)))
+                        != (track_scramble_sequences[scramble_index].begin() + number_of_voices)))
                     {
                         auto key_number(key_scale[pitch_index]);
                         key_number = max(key_number, tessitura[tr].first);
@@ -535,16 +517,14 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                 find(key_scale, key_number)};
                             if (key_iter != key_scale.cend())
                             {
-                                key_index = std::distance(key_scale.cbegin(),
-                                    key_iter);
+                                key_index = std::distance(key_scale.cbegin(), key_iter);
                             }
                         }
                         if (pitch_index != RestPitchIndex)
                         {
                             track.last_pitch_index(key_index);
                         }
-                        NoteEvent temp_note_event{key_number,
-                            dynamic, rhythm};
+                        NoteEvent temp_note_event{key_number, dynamic, rhythm};
                         track_note_events[tr].push_back(temp_note_event);
                     } else {
                         NoteEvent temp_note_event{RestPitch, 0, rhythm};
@@ -576,21 +556,16 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     {
                       [[likely]] case VoiceXml::Follower::IntervalType::Scalar:
                         {
-                            KeyScaleSeq::const_iterator key_iter{
-                                find(key_scale, ne.pitch())};
+                            KeyScaleSeq::const_iterator key_iter{find(key_scale, ne.pitch())};
                             if (key_iter != key_scale.cend())
                             {
-                                int64_t key_index{std::distance(
-                                    key_scale.cbegin(), key_iter)};
-                                if (xml_form.voices()[tr].follower()
-                                    .interval() < 0)
+                                int64_t key_index{std::distance(key_scale.cbegin(), key_iter)};
+                                if (xml_form.voices()[tr].follower().interval() < 0)
                                 {
                                     // Check there's room down the scale
-                                    if (abs(xml_form.voices()[tr]
-                                        .follower().interval()) < key_index)
+                                    if (abs(xml_form.voices()[tr].follower().interval()) < key_index)
                                     {
-                                        key_index += xml_form.voices()[tr]
-                                            .follower().interval();
+                                        key_index += xml_form.voices()[tr].follower().interval();
                                     }
                                     if (std::cmp_equal(key_scale.size(), pivot_key_index))
                                     {
@@ -603,8 +578,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                     if (std::cmp_less(xml_form.voices()[tr].follower().interval() + key_index,
                                         key_scale.size()))
                                     {
-                                        key_index += xml_form.voices()[tr]
-                                            .follower().interval();
+                                        key_index += xml_form.voices()[tr].follower().interval();
                                         if (std::cmp_equal(key_scale.size(), pivot_key_index))
                                         {
                                             pivot_key_index = key_index;
@@ -622,9 +596,12 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                                     key_index = (temp_key_index < 0L) ? 0L : temp_key_index;
                                     if (!key_scale.empty())
                                     {
-                                        key_index = (temp_key_index >= key_scale.size()) ? key_scale.size() - 1 : temp_key_index;
+                                        key_index = cmp_greater_equal(temp_key_index, key_scale.size())
+                                            ? key_scale.size() - 1
+                                            : temp_key_index;
                                     }
                                 }
+                                key_index = std::max(key_index, 0L);
                                 const auto pitch{key_scale[key_index]};
                                 ne.pitch(pitch);
                             }
@@ -636,11 +613,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
 
                           if (xml_form.voices()[tr].follower().interval() < 0)
                           {
-                              if (abs(xml_form.voices()[tr]
-                                 .follower().interval()) < key)
+                              if (abs(xml_form.voices()[tr].follower().interval()) < key)
                               {
-                                  ne.pitch(key + xml_form.voices()[tr]
-                                      .follower().interval());
+                                  ne.pitch(key + xml_form.voices()[tr].follower().interval());
                                   if (RestPitch == pivot_key)
                                   {
                                       pivot_key = ne.pitch();
@@ -649,11 +624,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                           }
                           else
                           {
-                              if (key + xml_form.voices()[tr]
-                                  .follower().interval() < midi::MidiPitchQty)
+                              if (key + xml_form.voices()[tr].follower().interval() < midi::MidiPitchQty)
                               {
-                                  ne.pitch(key + xml_form.voices()[tr]
-                                      .follower().interval());
+                                  ne.pitch(key + xml_form.voices()[tr].follower().interval());
                                   if (RestPitch == pivot_key)
                                   {
                                       pivot_key = ne.pitch();
@@ -662,8 +635,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                           }
                           if (xml_form.voices()[tr].follower().inversion())
                           {
-                              ne.pitch(ne.pitch() - 2
-                                  * (ne.pitch() - pivot_key));
+                              ne.pitch(ne.pitch() - 2 * (ne.pitch() - pivot_key));
                           }
                         }
                         break;
@@ -680,10 +652,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     != RhythmRational{1L})
             {
                 for_each(track_note_events[tr],
-                    [&](cgm::NoteEvent& ne) { ne.rhythm(
-                    ne.rhythm()
-                    * xml_form.voices()[tr].follower().duration_factor() ); }
-                    );
+                    [&](cgm::NoteEvent& ne) { ne.rhythm(ne.rhythm()
+                    * xml_form.voices()[tr].follower().duration_factor() ); });
             }
 
             if (xml_form.voices()[tr].follower().delay())
@@ -691,8 +661,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                 // Insert a rest for delay for canon effects.
                 const auto start_delay = cgm::NoteEvent{RestPitch, 0,
                     xml_form.voices()[tr].follower().delay()};
-                track_note_events[tr].insert(track_note_events[tr].cbegin(),
-                    start_delay);
+                track_note_events[tr].insert(track_note_events[tr].cbegin(), start_delay);
             }
         }
     }
@@ -730,7 +699,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     {
         ((((((textmidi_str += "FILEHEADER ")
             += lexical_cast<string>(xml_form.voices().size() + 1))
-            += ' ') += lexical_cast<string>(TicksPerQuarter)) += ' ')
+            += ' ') += lexical_cast<string>(music_time_.ticks_per_quarter_)) += ' ')
             += lexical_cast<string>(MIDI_Format::MultiTrack)) += "\n\n";
         textmidi_file << textmidi_str;
     }
@@ -739,24 +708,26 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     ostringstream timeoss;
     struct ::tm tm_temp{};
     timeoss << put_time(localtime_r(&t, &tm_temp), "%FT%T%Z");
-    TicksDuration maxTime(total_duration);
     textmidi_str.clear();
-    ((((((((textmidi_str += "STARTTRACK\nTEXT Generated ") += timeoss.str())
-        += "\nTIME_SIGNATURE 4 4 ") += lexical_cast<string>(TicksPerQuarter))
-        += "\nTEMPO ") += lexical_cast<string>(TempoBeatsPerMinute))
+    const auto quarter_tempo{music_time_.beat_tempo_ * static_cast<double>(music_time_.beat_ * QuartersPerWholeRat)};
+    (((((((((((textmidi_str += "STARTTRACK\nTEXT Generated ") += timeoss.str())
+        += "\nTIME_SIGNATURE ") += lexical_cast<string>(music_time_.meter_.numerator()))
+        += ' ') += lexical_cast<string>(music_time_.meter_.denominator()) += ' ')
+        += lexical_cast<string>(music_time_.ticks_per_quarter_))
+        += "\nTEMPO ") += lexical_cast<string>(quarter_tempo))
         += "\nKEY_SIGNATURE C\nTEXT Computer-generated music "
            "from the textmidicgm software\nTRACK ")
         += xml_form.name()) += "\nLAZY\n";
     textmidi_file << textmidi_str;
-    for (TicksDuration aTime(0); aTime < maxTime;
-         aTime += TicksDuration(4 * TicksPerQuarter))
+    for (TicksDuration aTime{0L}; aTime < total_duration;
+         aTime += TicksDuration{4L * music_time_.ticks_per_quarter_})
     {
         textmidi_file << "R ";
-        textmidi::rational::RhythmRational rhythm{1L};
+        textmidi::rational::RhythmRational rhythm{music_time_.meter_};
         (*textmidi::rational::print_rhythm)(textmidi_file, rhythm);
         textmidi_file << '\n';
     }
-    textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n";
+    textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n\n";
 
     for (int32_t track_index{}; auto voice : xml_form.voices())
     {
@@ -781,8 +752,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             += '\n';
         textmidi_file << textmidi_str;
         int32_t lastVel{128};
-        for_each(track_note_events[track_index],
-            [&](const auto& eventRef)
+        for_each(track_note_events[track_index], [&](const auto& eventRef)
         {
             // round the duration in seconds to be in pulses.
             // This program assumes that one quarter note
@@ -796,7 +766,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             }
             textmidi_file << eventRef << '\n';
         });
-        textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n";
+        textmidi_file << "END_LAZY\nticks 'End of Track'\nEND_OF_TRACK\n\n";
         ++track_index;
     }
 }

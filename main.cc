@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -24,10 +24,10 @@
 #include <boost/algorithm/string/case_conv.hpp> // to_upper
 #include <boost/program_options.hpp>
 
-#include "textmidi.h"
+#include "DynamicsOptions.h"
 #include "MidiMaps.h"
 #include "Options.h"
-#include "DynamicsOptions.h"
+#include "textmidi.h"
 
 extern FILE* yyin;
 extern int yylex(void);
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     {
         const string logstr{((string{
             "Usage: textmidi [OPTION]..."
-            " [TEXTMIDIFILE]\ntextmidi Version 1.0.97\n"}
+            " [TEXTMIDIFILE]\ntextmidi Version 1.0.98\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools Version 1.0.97\n"
+        cout << "textmidi\nTextMIDITools Version 1.0.98\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

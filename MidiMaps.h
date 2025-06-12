@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 //
 // Copyright © 2025 Thomas E. Janzen
@@ -12,10 +12,10 @@
 
 #include <cstdint>
 
-#include <map>
 #include <optional>
 #include <ostream>
 #include <ranges>
+#include <unordered_map>
 #include <utility>
 
 #include "Midi.h"
@@ -98,7 +98,7 @@ namespace midi
             }
         }
 
-        const std::map<std::string_view, NumType> string_num_map() const
+        const std::unordered_map<std::string_view, NumType> string_num_map() const
             noexcept
         {
             return string_num_map_;
@@ -110,7 +110,7 @@ namespace midi
             num_string_map_.emplace(num, sv);
         }
 
-        void insert(std::map<std::string_view,
+        void insert(std::unordered_map<std::string_view,
             NumType>::value_type insert_value) noexcept
         {
             string_num_map_.insert(insert_value);
@@ -118,8 +118,8 @@ namespace midi
         }
 
       private:
-        std::map<NumType, std::string_view> num_string_map_{};
-        std::map<std::string_view, NumType> string_num_map_{};
+        std::unordered_map<NumType, std::string_view> num_string_map_{};
+        std::unordered_map<std::string_view, NumType> string_num_map_{};
     };
 
     extern const NumStringMap<std::int32_t> smpte_fps_map;

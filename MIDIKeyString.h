@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -24,7 +24,7 @@ namespace textmidi
     extern std::pair<std::int32_t, bool>
         pitchname_to_keynumber(const std::string& pitchname);
     extern std::string
-        num_to_note(std::int32_t num, std::shared_ptr<bool> prefer_sharp) noexcept;
+        num_to_note(std::int32_t keynum, std::shared_ptr<bool> prefer_sharp) noexcept;
 
     struct CompareLowerNoteName
     {

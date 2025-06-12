@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -39,12 +39,12 @@ namespace textmidi
             Pipe                = (1 << 9),
             SynthLead           = (1 << 10),
             SynthPad            = (1 << 11),
-            Melodic             = 4095,
+            Melodic             = 0b111111111111,
             SynthEffects        = (1 << 12),
             Ethnic              = (1 << 13),
             Percussive          = (1 << 14),
             SoundEffects        = (1 << 15),
-            All                 = 65535,
+            All                 = 0b1111111111111111,
             Idiophone           = (1 << 16)
         };
 

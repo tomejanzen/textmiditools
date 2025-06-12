@@ -18,62 +18,62 @@ LEX=/usr/bin/env lex
 
 all : ${bin_PROGRAMS}
 
-textmidi$(EXEEXT) : main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o MidiMaps.o MidiString.o DynamicsOptions.o
+textmidi$(EXEEXT): main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o MidiMaps.o MidiString.o DynamicsOptions.o
 	$(CXX) $(AM_CXXFLAGS) -o $@ main.o textmidi.o Midi.o MIDIKeyString.o RhythmRational.o MidiMaps.o MidiString.o DynamicsOptions.o $(AM_LDFLAGS)
-main.o: main.cc textmidi.h Midi.h MidiMaps.h RhythmRational.h Options.h OptionName.h DynamicsOptions.h
+main.o: main.cc DynamicsOptions.h MidiMaps.h Midi.h RhythmRational.h OptionName.h Options.h textmidi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-textmidi.o: textmidi.cc Midi.h MidiMaps.h RhythmRational.h TextmidiUtils.h MIDIKeyString.h MidiString.h textmidi.h
+textmidi.o: textmidi.cc MIDIKeyString.h Midi.h MidiMaps.h RhythmRational.h MidiString.h TextmidiUtils.h textmidi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-textmidi.cc : textmidi.l
+textmidi.cc: textmidi.l
 	$(LEX) $(LEXFLAGS) -o $@ $<
-miditext$(EXEEXT) : miditext.o Midi.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiMaps.o MidiString.o DynamicsOptions.o
+miditext$(EXEEXT): miditext.o Midi.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiMaps.o MidiString.o DynamicsOptions.o
 	$(CXX) $(AM_CXXFLAGS) -o $@ $< Midi.o RhythmRational.o MidiEvents.o MIDIKeyString.o rational_support.o MidiMaps.o MidiString.o DynamicsOptions.o $(AM_LDFLAGS)
 rational_support.o: rational_support.cc rational_support.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MidiString.o: MidiString.cc MidiString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-miditext.o: miditext.cc rational_support.h RhythmRational.h TextmidiUtils.h MidiEvents.h Midi.h MIDIKeyString.h MidiMaps.h Options.h OptionName.h DynamicsOptions.h
+miditext.o: miditext.cc DynamicsOptions.h MidiMaps.h Midi.h RhythmRational.h OptionName.h MidiEvents.h MIDIKeyString.h Options.h TextmidiUtils.h rational_support.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Midi.o : Midi.cc Midi.h
+Midi.o: Midi.cc Midi.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 MidiMaps.o: MidiMaps.cc MidiMaps.h Midi.h RhythmRational.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
 Arrangements.o: Arrangements.cc Arrangements.h HeapsAlgorithmTemplate.h
 	$(CXX) -c $(AM_CXXFLAGS) -o $@ $<
-MidiEvents.o: MidiEvents.cc MidiEvents.h RhythmRational.h Midi.h MidiMaps.h rational_support.h MIDIKeyString.h MidiString.h
+MidiEvents.o: MidiEvents.cc MIDIKeyString.h Midi.h MidiEvents.h RhythmRational.h MidiMaps.h MidiString.h rational_support.h
 	$(CXX) $(AM_CXXFLAGS) -c -o MidiEvents.o MidiEvents.cc
-smustextmidi$(EXEEXT) : smustextmidi.o SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o DynamicsOptions.o
+smustextmidi$(EXEEXT): smustextmidi.o SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o DynamicsOptions.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ SmusTrackEvent.o Midi.o MidiMaps.o MidiEvents.o MIDIKeyString.o RhythmRational.o rational_support.o MidiString.o DynamicsOptions.o $(AM_LDFLAGS)
-smustextmidi.o: smustextmidi.cc Midi.h TextmidiUtils.h rational_support.h RhythmRational.h SmusTrackEvent.h MidiMaps.h Options.h DynamicsOptions.h OptionName.h
+smustextmidi.o: smustextmidi.cc DynamicsOptions.h MidiMaps.h Midi.h RhythmRational.h OptionName.h Options.h SmusTrackEvent.h TextmidiUtils.h rational_support.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-SmusTrackEvent.o: SmusTrackEvent.cc SmusTrackEvent.h Midi.h MidiMaps.h RhythmRational.h rational_support.h MIDIKeyString.h
+SmusTrackEvent.o: SmusTrackEvent.cc MIDIKeyString.h Midi.h MidiMaps.h RhythmRational.h SmusTrackEvent.h rational_support.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 RhythmRational.o: RhythmRational.cc RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 DynamicsOptions.o: DynamicsOptions.cc DynamicsOptions.h MidiMaps.h Midi.h RhythmRational.h OptionName.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 
-textmidicgm$(EXEEXT) : textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o
+textmidicgm$(EXEEXT): textmidicgm.o cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o
 	$(CXX) $(AM_CXXFLAGS) $< -o $@ cgmlegacy.o MIDIKeyString.o MusicalForm.o NoteEvent.o Track.o Voice.o GnuPlot.o Composer.o Scales.o GeneralMIDI.o RhythmRational.o Midi.o MidiMaps.o Arrangements.o $(AM_LDFLAGS) 
-textmidicgm.o: textmidicgm.cc MIDIKeyString.h Midi.h MusicalForm.h cgmlegacy.h Voice.h Track.h NoteEvent.h RhythmRational.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h Options.h Composer.h OptionName.h
+textmidicgm.o: textmidicgm.cc Arrangements.h HeapsAlgorithmTemplate.h Composer.h Midi.h MidiMaps.h RhythmRational.h MusicalForm.h GeneralMIDI.h MIDIKeyString.h RandomDouble.h RandomInt.h Scales.h Track.h NoteEvent.h Voice.h cgmlegacy.h Options.h OptionName.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-cgmlegacy.o : cgmlegacy.cc  cgmlegacy.h
+cgmlegacy.o: cgmlegacy.cc  cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MIDIKeyString.o: MIDIKeyString.cc Midi.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-MusicalForm.o: MusicalForm.cc MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Midi.h RhythmRational.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h
+MusicalForm.o: MusicalForm.cc GeneralMIDI.h Midi.h MidiMaps.h RhythmRational.h MIDIKeyString.h MusicalForm.h Arrangements.h HeapsAlgorithmTemplate.h RandomDouble.h RandomInt.h Scales.h Track.h NoteEvent.h Voice.h cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Track.o: Track.cc Track.h NoteEvent.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Voice.o: Voice.cc Voice.h cgmlegacy.h MIDIKeyString.h Midi.h RhythmRational.h
+Voice.o: Voice.cc Voice.h MIDIKeyString.h Midi.h RhythmRational.h cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Scales.o : Scales.cc Scales.h
+Scales.o: Scales.cc Scales.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-NoteEvent.o: NoteEvent.cc NoteEvent.h RhythmRational.h MIDIKeyString.h Midi.h
+NoteEvent.o: NoteEvent.cc MIDIKeyString.h Midi.h NoteEvent.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Midi.h RhythmRational.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h MidiMaps.h Arrangements.h HeapsAlgorithmTemplate.h
+GnuPlot.o: GnuPlot.cc GnuPlot.h MusicalForm.h Arrangements.h HeapsAlgorithmTemplate.h GeneralMIDI.h Midi.h MidiMaps.h RhythmRational.h MIDIKeyString.h RandomDouble.h RandomInt.h Scales.h Track.h NoteEvent.h Voice.h cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Composer.o: Composer.cc Composer.h Midi.h MidiMaps.h RhythmRational.h MusicalForm.h cgmlegacy.h Voice.h MIDIKeyString.h Track.h NoteEvent.h RandomDouble.h RandomInt.h Scales.h GeneralMIDI.h Arrangements.h HeapsAlgorithmTemplate.h GnuPlot.h
+Composer.o: Composer.cc Composer.h Arrangements.h HeapsAlgorithmTemplate.h Midi.h MidiMaps.h RhythmRational.h MusicalForm.h GeneralMIDI.h MIDIKeyString.h RandomDouble.h RandomInt.h Scales.h Track.h NoteEvent.h Voice.h cgmlegacy.h GnuPlot.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 GeneralMIDI.o: GeneralMIDI.cc GeneralMIDI.h Midi.h MidiMaps.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<

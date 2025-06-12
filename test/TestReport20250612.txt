@@ -1,0 +1,81 @@
+
+Thu Jun 12 12:03:54 AM EDT 2025
+1. Regenerate dependencies.  
+done, no changes
+
+2. source cpplint.com
+sed -i -f cpplint.sed cpplintout.txt
+Examine cpplintout.txt.
+done, minor changes
+
+3.  Run cppcheck.com
+Review cppcheckout.txt.
+done, minor changes
+
+4. Run a test with miditext.cc #define DEBUG_THREADLESS.
+and with #undef DEBUG_THREADLESS
+skipped threadless test.
+
+5. Check and up-date header file dependencies in Makefile.am.
+cp Makefile Makefile.save
+aclocal
+autoconf
+automake --add-missing
+./configure
+diff Makefile Makefile.save [ no differences ]
+make
+
+6.  After executing this test sequence, compile with clang.  skipped.
+
+7. ./roundtriptests.bash
+grep Percentage *log20250304.txt:
+All test and binary comparisons should be identical.
+DONE, passed.
+
+8. source chorded.com
+All files are to be identical.
+
+Files chorded.mid and chordedlazy.mid are identical
+Files chorded2.mid and chorded2lazy.mid are identical
+Files chorded3.mid and chorded3lazy.mid are identical
+
+9. cd test; source eventtests.com
+ran, did not examine very closely.
+
+10. ./testtextmidiformedit.bash
+Follow printed instructions at each step.
+DONE
+
+11. ./testtextmidicgmtest.bash
+DONE
+
+12. For SMUS conversion: source sacre.com
+musescore sacre_sacrifice.miditext
+timidity -invvvt -Os sacre_sacrifice.mid
+Should be the Sacrificial Dance of Stravinksy's The Rite of Spring.
+skipped
+
+13.  Then edit version.sed and version.bash to upgrade both the
+new and old version numbers.
+./version.bash
+DONE
+
+./buildkit.bash
+DONE
+
+Check in the changed files.
+git status > ci.com; edit ci.com to just have the changed files with "git add " in front of them.
+run ci.com
+git commit -m "new version TextMIDITools v1.0.99"
+DONE
+
+14. 
+cd ~/textmiditools-1.0.nn/
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
+and watch for a successful build of textmidi, miditext, textmidicgm, and smustextmidi.
+DONE
+

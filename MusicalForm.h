@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -8,6 +8,8 @@
 //
 #if !defined(TEXTMIDIFORM_H)
 #    define  TEXTMIDIFORM_H
+
+#include <cassert>
 
 #include <algorithm>
 #include <memory>
@@ -21,20 +23,24 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
 
-#include "cgmlegacy.h"
-#include "Voice.h"
-#include "Track.h"
+#include "Arrangements.h"
+#include "GeneralMIDI.h"
+#include "Midi.h"
+#include "MIDIKeyString.h"
 #include "RandomDouble.h"
 #include "RandomInt.h"
+#include "RhythmRational.h"
 #include "Scales.h"
-#include "GeneralMIDI.h"
-#include "MIDIKeyString.h"
-#include "Arrangements.h"
+#include "Track.h"
+#include "Voice.h"
+#include "cgmlegacy.h"
 
 namespace textmidi
 {
     namespace cgm
     {
+        constexpr std::int64_t SecondsPerMinute{60L};
+
         class MusicalFormException
         {
           public:
@@ -50,6 +56,33 @@ namespace textmidi
             }
           private:
             std::string exception_msg_;
+        };
+
+        struct MusicTime
+        {
+            friend class boost::serialization::access;
+            MusicTime() = default;
+            explicit MusicTime(std::int64_t ticks_per_quarter, rational::RhythmRational beat,
+                rational::RhythmRational meter, double beat_tempo)
+              : ticks_per_quarter_{ticks_per_quarter},
+                beat_{beat},
+                meter_(meter.numerator(), meter.denominator(), false),
+                beat_tempo_{beat_tempo}
+            {
+            }
+            std::int64_t ticks_per_quarter_{1440};
+            rational::RhythmRational beat_{1L, 4L};
+            rational::RhythmRational meter_{4L, 4L, false};
+            double beat_tempo_{60.0};
+            template<class Archive>
+                void serialize(Archive& arc, const unsigned int version)
+            {
+                arc & BOOST_SERIALIZATION_NVP(ticks_per_quarter_);
+                arc & BOOST_SERIALIZATION_NVP(beat_);
+                arc & BOOST_SERIALIZATION_NVP(meter_);
+                arc & BOOST_SERIALIZATION_NVP(beat_tempo_);
+                assert(beat_tempo_ > 0.0);
+            }
         };
 
         class Sine
@@ -253,6 +286,7 @@ namespace textmidi
             void max_note_len(double max_note_len) noexcept;
             const std::vector<std::string>& scale() const noexcept;
             std::vector<std::string>& scale() noexcept;
+            const MusicTime& music_time() const noexcept;
             double pulse() const noexcept;
             void pulse(double pulse) noexcept;
             const MelodyProbabilities& melody_probabilities() const noexcept;
@@ -290,6 +324,7 @@ namespace textmidi
             double min_note_len_{};
             double max_note_len_{};
             std::vector<std::string> scale_{};
+            MusicTime music_time_{};
             double pulse_{};
             MelodyProbabilities melody_probabilities_{};
             MeanRangeSines pitch_form_{};
@@ -312,6 +347,10 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(min_note_len_);
                 arc & BOOST_SERIALIZATION_NVP(max_note_len_);
                 arc & BOOST_SERIALIZATION_NVP(scale_);
+                if (version >= 4)
+                {
+                    arc & BOOST_SERIALIZATION_NVP(music_time_);
+                }
                 arc & BOOST_SERIALIZATION_NVP(pulse_);
                 arc & BOOST_SERIALIZATION_NVP(melody_probabilities_);
                 arc & BOOST_SERIALIZATION_NVP(pitch_form_);
@@ -331,6 +370,6 @@ namespace textmidi
         extern RandomInt ri;
     } // namespace cgm
 } // namespace textmidi
-BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 3)
+BOOST_CLASS_VERSION(textmidi::cgm::MusicalForm, 4)
 
 #endif

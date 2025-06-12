@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,8 +12,8 @@
 
 #include <memory>
 
-#include "NoteEvent.h"
 #include "MIDIKeyString.h"
+#include "NoteEvent.h"
 
 using textmidi::cgm::NoteEvent;
 

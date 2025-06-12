@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.97
+** TextMIDITools Version 1.0.98
 ** Copyright © 2025 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -55,13 +55,13 @@
 #include <boost/algorithm/string/case_conv.hpp> // to_upper
 #include <boost/preprocessor/stringize.hpp>
 
+#include "MIDIKeyString.h"
 #include "Midi.h" // MIDI codes and MIDI file header
 #include "MidiMaps.h" // string-number maps
-#include "TextmidiUtils.h"
-#include "MIDIKeyString.h"
 #include "MidiString.h"
-#include "textmidi.h" // For this file's interfaces to main.cc
 #include "RhythmRational.h"
+#include "TextmidiUtils.h"
+#include "textmidi.h" // For this file's interfaces to main.cc
 
 using std::string, std::string_view, std::int32_t, std::regex, std::smatch,
       std::cerr, std::cout, std::ostream_iterator,

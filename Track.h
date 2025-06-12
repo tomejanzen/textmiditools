@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,19 +15,17 @@
 #include <ostream>
 #include <vector>
 
+#include "Midi.h"
 #include "NoteEvent.h"
 
 namespace textmidi
 {
     namespace cgm
     {
-        inline constexpr std::int64_t TicksPerQuarter(240);
         // MIDI specifies tempo as per quarter note.
         const textmidi::rational::RhythmRational WholesPerBeat{1, 4};
-        const textmidi::rational::RhythmRational QuarterPerWhole{1, 4};
         const textmidi::rational::RhythmRational QuartersPerWholeRat(4, 1);
-        using TicksRatio = std::ratio<1L, TicksPerQuarter>;
-        using TicksDuration = std::chrono::duration<std::int64_t, TicksRatio>;
+        using TicksDuration = textmidi::rational::RhythmRational;
 
         class Track
         {

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -46,12 +46,12 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 
-#include "rational_support.h"
-#include "TextmidiUtils.h"
+#include "DynamicsOptions.h"
 #include "MidiEvents.h"
 #include "MidiMaps.h"
 #include "Options.h"
-#include "DynamicsOptions.h"
+#include "TextmidiUtils.h"
+#include "rational_support.h"
 
 using std::size_t, std::pair, std::vector, std::cin, std::cerr,
       std::string, std::ranges::copy, std::toupper;
@@ -138,7 +138,7 @@ namespace
                 tie(stream_range_, de) = (midi_event_factory(stream_range_, ticks_accumulated));
                 if (de.has_value())
                 {
-                    message_pairs_.push_back(de.value());
+                    message_pairs_.push_back(std::move(de.value()));
                 }
             }
             while (!stream_range_.empty());
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: miditext [OPTION]... "
-            "[MIDIFILE]\nmiditext Version 1.0.97\n"}
+            "[MIDIFILE]\nmiditext Version 1.0.98\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: "
                "https://github.com/tomejanzen/textmiditools\n"};
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools Version 1.0.97\n"
+        cout << "miditext\nTextMIDITools Version 1.0.98\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -494,11 +494,11 @@ int main(int argc, char *argv[])
                 midi::QuartersPerWhole * ticksperquarter};
             zero_rhythms_count  += count_if(mdet, [](const DelayEvent& mde) { return !mde.first; } );
             quantized_rhythms_count += count_if(mdet,
-                [ticks_per_whole_local, musical_divisors](DelayEvent mde) {
+                [ticks_per_whole_local, musical_divisors](const DelayEvent& mde) {
                 const RhythmRational rr{mde.first, static_cast<int64_t>(ticks_per_whole_local)};
                 return musical_divisors.contains(rr.denominator()); } );
-            non_quantized_rhythms_count += std::count_if(mdet.begin(), mdet.end(),
-                [ticks_per_whole_local, musical_divisors](DelayEvent mde) {
+            non_quantized_rhythms_count += count_if(mdet,
+                [ticks_per_whole_local, musical_divisors](const DelayEvent& mde) {
                 const RhythmRational rr{mde.first,
                     static_cast<int64_t>(ticks_per_whole_local)};
                 return !musical_divisors.contains(rr.denominator()); } );

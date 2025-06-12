@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.0.97
+# TextMIDITools Version 1.0.98
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -28,6 +28,7 @@ class XmlForm(tkinter.Tk):
     xml_form_dict = {}
     twopi = 2.0 * math.pi
     the_filename = 'Untitled'
+
     def __init__(self, filename):
         """Init the XML form (a C++ boost libraries serialization XML archive style DOM)."""
         super().__init__()
@@ -387,6 +388,18 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['min_note_len'] = 0.00128
         self.xml_form_dict['max_note_len'] = 2.0
         self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
+        self.xml_form_dict['music_time'] = {}
+        self.xml_form_dict['music_time']['ticks_per_quarter'] = '1440'
+        beat_dict = {}
+        beat_dict['numerator']   = 1
+        beat_dict['denominator'] = 4
+        self.xml_form_dict['music_time']['beat'] = beat_dict
+        meter_dict = {}
+        meter_dict['numerator']   = 4
+        meter_dict['denominator'] = 4
+        self.xml_form_dict['music_time']['meter']  = meter_dict
+        self.xml_form_dict['music_time']['beat_tempo'] = 60.0
+
         self.xml_form_dict['pulse'] = 8.0
         self.xml_form_dict['melody_probabilities'] = self.default_melody_probabilities()
         self.xml_form_dict['pitch_form'] = self.default_form()
@@ -396,31 +409,57 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['voices'] = self.default_voices()
         self.xml_form_dict['arrangement_definition'] = self.default_arrangement_definition()
 
-    def traverse_scale(self, scale):
+    def traverse_scale(self, scale_dom):
         """Build a scale from the domain object model."""
         scale_array = []
-        scale_list = scale.getElementsByTagName('item')
+        scale_list = scale_dom.getElementsByTagName('item')
 
         for item_node in scale_list :
             scale_array.append(item_node.firstChild.data)
         return scale_array
 
-    def traverse_melody_probabilities(self, melody_probabilities):
+    def traverse_music_time(self, music_time_dom):
+        """Build a music_time from the domain object model."""
+        music_time_dict = {}
+        ticks_per_quarter_node = music_time_dom.getElementsByTagName('ticks_per_quarter_')[0]
+        music_time_dict['ticks_per_quarter'] = ticks_per_quarter_node.firstChild.data
+        meter_node = music_time_dom.getElementsByTagName('meter_')[0]
+        numerator_node = meter_node.getElementsByTagName('numerator_')[0]
+        numerator = numerator_node.firstChild.data
+        denominator_node = meter_node.getElementsByTagName('denominator_')[0]
+        denominator = denominator_node.firstChild.data
+        music_time_dict['meter'] = {}
+        music_time_dict['meter']['numerator'] = numerator
+        music_time_dict['meter']['denominator'] = denominator
+
+        beat_node = music_time_dom.getElementsByTagName('beat_')[0]
+        numerator_node = beat_node.getElementsByTagName('numerator_')[0]
+        numerator = numerator_node.firstChild.data
+        denominator_node = beat_node.getElementsByTagName('denominator_')[0]
+        denominator = denominator_node.firstChild.data
+        music_time_dict['beat'] = {}
+        music_time_dict['beat']['numerator'] = numerator
+        music_time_dict['beat']['denominator'] = denominator
+        beat_tempo_node = music_time_dom.getElementsByTagName('beat_tempo_')[0]
+        music_time_dict['beat_tempo'] = beat_tempo_node.firstChild.data
+        return music_time_dict
+
+    def traverse_melody_probabilities(self, melody_probabilities_dom):
         """Install melody probabilities from the file DOM."""
         melody_probabilities_dict = {}
-        down_element_list = melody_probabilities.getElementsByTagName('down_')
+        down_element_list = melody_probabilities_dom.getElementsByTagName('down_')
         melody_probabilities_dict['down'] = down_element_list[0].firstChild.data
-        same_element_list = melody_probabilities.getElementsByTagName('same_')
+        same_element_list = melody_probabilities_dom.getElementsByTagName('same_')
         melody_probabilities_dict['same'] = same_element_list[0].firstChild.data
-        up_element_list = melody_probabilities.getElementsByTagName('up_')
+        up_element_list = melody_probabilities_dom.getElementsByTagName('up_')
         melody_probabilities_dict['up'] = up_element_list[0].firstChild.data
         return melody_probabilities_dict
 
-    def traverse_pitch_form(self, pitch_form):
+    def traverse_pitch_form(self, pitch_form_dom):
         """Install the pitch form settings from the DOM."""
         pitch_dict = {}
         pitch_mean_dict = {}
-        mean_sine_node = pitch_form.getElementsByTagName('mean_sine_')[0]
+        mean_sine_node = pitch_form_dom.getElementsByTagName('mean_sine_')[0]
         mean_period_node    = mean_sine_node.getElementsByTagName('period_')[0]
         mean_period = mean_period_node.firstChild.data
         pitch_mean_dict['period'] = float(mean_period)
@@ -436,7 +475,7 @@ class XmlForm(tkinter.Tk):
         pitch_dict['mean'] = pitch_mean_dict
 
         pitch_range_dict = {}
-        range_sine_node = pitch_form.getElementsByTagName('range_sine_')[0]
+        range_sine_node = pitch_form_dom.getElementsByTagName('range_sine_')[0]
         range_period_node = range_sine_node.getElementsByTagName('period_')[0]
         range_period = range_period_node.firstChild.data
         pitch_range_dict['period'] = float(range_period)
@@ -452,11 +491,11 @@ class XmlForm(tkinter.Tk):
         pitch_dict['range'] = pitch_range_dict
         return pitch_dict
 
-    def traverse_rhythm_form(self, rhythm_form):
+    def traverse_rhythm_form(self, rhythm_form_dom):
         """Install the rhythm form settings from the DOM."""
         rhythm_dict = {}
         rhythm_mean_dict = {}
-        mean_sine_node = rhythm_form.getElementsByTagName('mean_sine_')[0]
+        mean_sine_node = rhythm_form_dom.getElementsByTagName('mean_sine_')[0]
         mean_period_node    = mean_sine_node.getElementsByTagName('period_')[0]
         mean_period = mean_period_node.firstChild.data
         rhythm_mean_dict['period'] = float(mean_period)
@@ -472,7 +511,7 @@ class XmlForm(tkinter.Tk):
         rhythm_dict['mean'] = rhythm_mean_dict
 
         rhythm_range_dict = {}
-        range_sine_node = rhythm_form.getElementsByTagName('range_sine_')[0]
+        range_sine_node = rhythm_form_dom.getElementsByTagName('range_sine_')[0]
         range_period_node = range_sine_node.getElementsByTagName('period_')[0]
         range_period = range_period_node.firstChild.data
         rhythm_range_dict['period'] = float(range_period)
@@ -488,11 +527,11 @@ class XmlForm(tkinter.Tk):
         rhythm_dict['range'] = rhythm_range_dict
         return rhythm_dict
 
-    def traverse_dynamic_form(self, dynamic_form):
+    def traverse_dynamic_form(self, dynamic_form_dom):
         """Install the dynamic form settings from the DOM."""
         dynamic_dict = {}
         dynamic_mean_dict = {}
-        mean_sine_node = dynamic_form.getElementsByTagName('mean_sine_')[0]
+        mean_sine_node = dynamic_form_dom.getElementsByTagName('mean_sine_')[0]
         mean_period_node    = mean_sine_node.getElementsByTagName('period_')[0]
         mean_period = mean_period_node.firstChild.data
         dynamic_mean_dict['period'] = float(mean_period)
@@ -508,7 +547,7 @@ class XmlForm(tkinter.Tk):
         dynamic_dict['mean'] = dynamic_mean_dict
 
         dynamic_range_dict = {}
-        range_sine_node = dynamic_form.getElementsByTagName('range_sine_')[0]
+        range_sine_node = dynamic_form_dom.getElementsByTagName('range_sine_')[0]
         range_period_node = range_sine_node.getElementsByTagName('period_')[0]
         range_period = range_period_node.firstChild.data
         dynamic_range_dict['period'] = float(range_period)
@@ -524,26 +563,26 @@ class XmlForm(tkinter.Tk):
         dynamic_dict['range'] = dynamic_range_dict
         return dynamic_dict
 
-    def traverse_texture_form(self, texture_form):
+    def traverse_texture_form(self, texture_form_dom):
         """Install the texture form settings from the DOM."""
         texture_dict = {}
-        period_node    = texture_form.getElementsByTagName('period_')[0]
+        period_node    = texture_form_dom.getElementsByTagName('period_')[0]
         period = period_node.firstChild.data
         texture_dict['period'] = float(period)
-        phase_node     = texture_form.getElementsByTagName('phase_')[0]
+        phase_node     = texture_form_dom.getElementsByTagName('phase_')[0]
         phase = phase_node.firstChild.data
         texture_dict['phase'] = float(phase)
-        amplitude_node = texture_form.getElementsByTagName('amplitude_')[0]
+        amplitude_node = texture_form_dom.getElementsByTagName('amplitude_')[0]
         amplitude = amplitude_node.firstChild.data
         texture_dict['amplitude'] = float(amplitude)
-        offset_node    = texture_form.getElementsByTagName('offset_')[0]
+        offset_node    = texture_form_dom.getElementsByTagName('offset_')[0]
         offset = offset_node.firstChild.data
         texture_dict['offset'] = float(offset)
         return texture_dict
 
-    def traverse_voices(self, voices):
+    def traverse_voices(self, voices_dom):
         """Install the voice settings from the XML file's DOM."""
-        xml_voice_list = voices.getElementsByTagName('item')
+        xml_voice_list = voices_dom.getElementsByTagName('item')
         voice_list = []
         for vox in xml_voice_list:
             voice_dict = {}
@@ -621,13 +660,13 @@ class XmlForm(tkinter.Tk):
 
         return voice_list
 
-    def traverse_arrangement_definition(self, arrangement_definition):
+    def traverse_arrangement_definition(self, arrangement_definition_dom):
         """Get the file's DOM arrangement settings and install in the internal form structure."""
         arrangement_definition_dict = {}
-        algorithm_list = (arrangement_definition
+        algorithm_list = (arrangement_definition_dom
             .getElementsByTagName('algorithm_'))
         arrangement_definition_dict['algorithm'] = algorithm_list[0].firstChild.data
-        period_list = arrangement_definition.getElementsByTagName('period_')
+        period_list = arrangement_definition_dom.getElementsByTagName('period_')
         arrangement_definition_dict['period'] = period_list[0].firstChild.data
         return arrangement_definition_dict
 
@@ -649,9 +688,10 @@ class XmlForm(tkinter.Tk):
                     'min_note_len_')[0].firstChild.data)
         self.xml_form_dict['max_note_len'] = (self.dom.getElementsByTagName(
                     'max_note_len_')[0].firstChild.data)
-
         self.xml_form_dict['scale'] = (self.traverse_scale(
                     self.dom.getElementsByTagName('scale_')[0]))
+        self.xml_form_dict['music_time'] = (self.traverse_music_time(
+                    self.dom.getElementsByTagName('music_time_')[0]))
         self.xml_form_dict['pulse'] = self.dom.getElementsByTagName('pulse_')[0].firstChild.data
         self.xml_form_dict['melody_probabilities'] = (self.traverse_melody_probabilities
             (self.dom.getElementsByTagName('melody_probabilities_')[0]))
@@ -731,13 +771,16 @@ class XmlForm(tkinter.Tk):
         # copy form parts of xml_form_dict from AllForms
         # copy voice parts from Voice
 
-        self.xml_form_dict['name'] = self.all_forms_window.xml_form['name']
-        self.xml_form_dict['copyright'] = self.all_forms_window.xml_form['copyright']
-        self.xml_form_dict['len']       = self.all_forms_window.xml_form['len']
+        class_id = 0;
+
+        self.xml_form_dict['name']         = self.all_forms_window.xml_form['name']
+        self.xml_form_dict['copyright']    = self.all_forms_window.xml_form['copyright']
+        self.xml_form_dict['len']          = self.all_forms_window.xml_form['len']
         self.xml_form_dict['min_note_len'] = self.all_forms_window.xml_form['min_note_len']
         self.xml_form_dict['max_note_len'] = self.all_forms_window.xml_form['max_note_len']
         # scale
-        self.xml_form_dict['scale'] = self.all_forms_window.xml_form['scale']
+        self.xml_form_dict['scale']        = self.all_forms_window.xml_form['scale']
+
         self.xml_form_dict['pulse'] = self.all_forms_window.xml_form['pulse']
         self.xml_form_dict['melody_probabilities']['down'] = (
                 self.all_forms_window.xml_form['melody_probabilities']['down'])
@@ -815,9 +858,10 @@ class XmlForm(tkinter.Tk):
         top.setAttribute('signature', 'serialization::archive')
         top.setAttribute('version', '18')
         xml_form_element = form_document.createElement('xml_form')
-        xml_form_element.setAttribute('class_id', '0')
+        xml_form_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
         xml_form_element.setAttribute('tracking_level', '0')
-        xml_form_element.setAttribute('version', '3')
+        xml_form_element.setAttribute('version', '4')
         top.appendChild(xml_form_element)
 
         self.add_text_element(form_document, xml_form_element, 'name')
@@ -827,7 +871,8 @@ class XmlForm(tkinter.Tk):
         self.add_text_element(form_document, xml_form_element, 'max_note_len')
 
         scale_element = form_document.createElement('scale_')
-        scale_element.setAttribute('class_id', '1')
+        scale_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
         scale_element.setAttribute('tracking_level', '0')
         scale_element.setAttribute('version', '0')
 
@@ -846,10 +891,37 @@ class XmlForm(tkinter.Tk):
 
         xml_form_element.appendChild(scale_element)
 
+        music_time_element = form_document.createElement('music_time_')
+        music_time_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
+        music_time_element.setAttribute('tracking_level', '0')
+        music_time_element.setAttribute('version', '0')
+        self.add_text_element(form_document, music_time_element, 'ticks_per_quarter', 'ticks_per_quarter_', str(self.xml_form_dict['music_time']['ticks_per_quarter']))
+        beat_element = form_document.createElement('beat_')
+        beat_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
+        beat_element.setAttribute('tracking_level', '0')
+        beat_element.setAttribute('version', '0')
+        self.add_text_element(form_document, beat_element, 'numerator', 'numerator_',
+                str(self.xml_form_dict['music_time']['beat']['numerator']))
+        self.add_text_element(form_document, beat_element, 'denominator', 'denominator_',
+                str(self.xml_form_dict['music_time']['beat']['denominator']))
+        music_time_element.appendChild(beat_element)
+
+        meter_element = form_document.createElement('meter_')
+        self.add_text_element(form_document, meter_element, 'numerator', 'numerator_',
+                str(self.xml_form_dict['music_time']['meter']['numerator']))
+        self.add_text_element(form_document, meter_element, 'denominator', 'denominator_',
+                str(self.xml_form_dict['music_time']['meter']['denominator']))
+        music_time_element.appendChild(meter_element)
+        self.add_text_element(form_document, music_time_element, 'beat_tempo', 'beat_tempo_', str(self.xml_form_dict['music_time']['beat_tempo']))
+        xml_form_element.appendChild(music_time_element)
+
         self.add_text_element(form_document, xml_form_element, 'pulse')
 
         melody_probabilities_element = form_document.createElement('melody_probabilities_')
-        melody_probabilities_element.setAttribute('class_id', '2')
+        melody_probabilities_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
         melody_probabilities_element.setAttribute('tracking_level', '0')
         melody_probabilities_element.setAttribute('version', '0')
 
@@ -863,17 +935,17 @@ class XmlForm(tkinter.Tk):
             'up_', str(self.xml_form_dict['melody_probabilities']['up']))
         xml_form_element.appendChild(melody_probabilities_element)
 
-        self.add_form_element(form_document, xml_form_element, 'pitch_form',
-            True)
+        self.add_form_element(form_document, xml_form_element, 'pitch_form', True, class_id)
+        class_id = class_id + 2
         self.add_form_element(form_document, xml_form_element, 'rhythm_form')
         self.add_form_element(form_document, xml_form_element, 'dynamic_form')
         self.add_sine_element(form_document, xml_form_element, 'texture_form')
 
         voices_element = form_document.createElement('voices_')
-        voices_element.setAttribute('class_id', '5')
+        voices_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
         voices_element.setAttribute('tracking_level', '0')
         voices_element.setAttribute('version', '0')
-
         self.add_text_element(form_document, voices_element, 'count', 'count',
             str(len(self.xml_form_dict['voices'])))
         self.add_text_element(form_document, voices_element, 'item_version',
@@ -881,14 +953,14 @@ class XmlForm(tkinter.Tk):
 
         write_version = True
         for vox in self.xml_form_dict['voices']:
-            self.add_voice_element(form_document, voices_element, vox,
-                    write_version)
+            self.add_voice_element(form_document, voices_element, vox, write_version, class_id)
             write_version = False
-
+        class_id = class_id + 2
         xml_form_element.appendChild(voices_element)
 
         arrangement_definition_element = form_document.createElement('arrangement_definition_')
-        arrangement_definition_element.setAttribute('class_id', '9')
+        arrangement_definition_element.setAttribute('class_id', str(class_id))
+        class_id = class_id + 1
         arrangement_definition_element.setAttribute('tracking_level', '0')
         arrangement_definition_element.setAttribute('version', '0')
 
@@ -905,11 +977,12 @@ class XmlForm(tkinter.Tk):
             newl='\n', encoding='UTF-8', standalone=True)
         form_document.unlink()
 
-    def add_voice_element(self, doc, parent, voice_dict, write_version):
+    def add_voice_element(self, doc, parent, voice_dict, write_version = False, class_id = 0):
         """Add a voice element to the internal form structure."""
         item_element = doc.createElement('item')
         if write_version:
-            item_element.setAttribute('class_id', '6')
+            item_element.setAttribute('class_id', str(class_id))
+            class_id = class_id + 1
             item_element.setAttribute('tracking_level', '0')
             item_element.setAttribute('version', '0')
 
@@ -927,7 +1000,8 @@ class XmlForm(tkinter.Tk):
                 str(int(voice_dict['pan'])))
         follower_element = doc.createElement('follower_')
         if write_version:
-            follower_element.setAttribute('class_id', '7')
+            follower_element.setAttribute('class_id', str(class_id))
+            class_id = class_id + 1
             follower_element.setAttribute('tracking_level', '0')
             follower_element.setAttribute('version', '3')
 
@@ -941,11 +1015,6 @@ class XmlForm(tkinter.Tk):
                 str(int(voice_dict['follower']['interval'])))
 
         delay_element = doc.createElement('delay_')
-        if write_version:
-            delay_element.setAttribute('class_id', '8')
-            delay_element.setAttribute('tracking_level', '0')
-            delay_element.setAttribute('version', '0')
-
         self.add_text_element(doc, delay_element, 'numerator', 'numerator_',
                 str(voice_dict['follower']['delay']['numerator']))
         self.add_text_element(doc, delay_element, 'denominator', 'denominator_',
@@ -967,17 +1036,19 @@ class XmlForm(tkinter.Tk):
         item_element.appendChild(follower_element)
         parent.appendChild(item_element)
 
-    def add_form_element(self, doc, parent, form_name, add_attributes = False):
+    def add_form_element(self, doc, parent, form_name, add_attributes = False, class_id = 0):
         """Add a form element to the internal form structure."""
         form_element = doc.createElement(form_name + '_')
         if add_attributes is True:
-            form_element.setAttribute('class_id', '3')
+            form_element.setAttribute('class_id', str(class_id))
+            class_id = class_id + 1
             form_element.setAttribute('tracking_level', '0')
             form_element.setAttribute('version', '0')
 
         mean_sine_element = doc.createElement('mean_sine_')
         if add_attributes is True:
-            mean_sine_element.setAttribute('class_id', '4')
+            mean_sine_element.setAttribute('class_id', str(class_id))
+            class_id = class_id + 1
             mean_sine_element.setAttribute('tracking_level', '0')
             mean_sine_element.setAttribute('version', '0')
         self.add_text_element(doc, mean_sine_element , 'period', 'period_',
@@ -1116,7 +1187,7 @@ class XmlForm(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.0.97\nCopyright © 2025 Thomas E. Janzen\n'
+            'TextMIDITools Version 1.0.98\nCopyright © 2025 Thomas E. Janzen\n'
             'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
             'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
             'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')

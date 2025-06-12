@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -108,56 +108,41 @@ int32_t main(int argc, char *argv[])
     using boost::lexical_cast, boost::to_upper;
     using textmidi::rational::RhythmExpression, textmidi::rational::print_rhythm,
       textmidi::cgm::MusicalForm, textmidi::cgm::MusicalFormException,
-      textmidi::cgm::TicksDuration, textmidi::cgm::TicksPerQuarter,
+      textmidi::cgm::TicksDuration,
       textmidi::cgm::arrangement_map, textmidi::cgm::Composer;
     using cgmlegacy::TextForm;
     using arrangements::PermutationEnum;
     boost::program_options::options_description desc("Allowed options");
     desc.add_options()
         ((help_option.registered_name().c_str()), help_option.text().c_str())
-        ((verbose_option.registered_name().c_str()),
-            verbose_option.text().c_str())
-        ((stack_tracks_option.registered_name().c_str()),
-            stack_tracks_option.text().c_str())
-        ((version_option.registered_name().c_str()),
-            version_option.text().c_str())
+        ((verbose_option.registered_name().c_str()), verbose_option.text().c_str())
+        ((stack_tracks_option.registered_name().c_str()), stack_tracks_option.text().c_str())
+        ((version_option.registered_name().c_str()), version_option.text().c_str())
         ((form_option.registered_name().c_str()),
             boost::program_options::value<string>(), form_option.text().c_str())
         ((XML_form_option.registered_name().c_str()),
             boost::program_options::value<vector<string>>()->multitoken(),
             XML_form_option.text().c_str())
-        ((xml_update_option.registered_name().c_str()),
-            xml_update_option.text().c_str())
-        ((answer_option.registered_name().c_str()),
-            answer_option.text().c_str())
-        ((textmidi_out_option.registered_name().c_str()),
-            boost::program_options::value<string>(),
+        ((xml_update_option.registered_name().c_str()), xml_update_option.text().c_str())
+        ((answer_option.registered_name().c_str()), answer_option.text().c_str())
+        ((textmidi_out_option.registered_name().c_str()), boost::program_options::value<string>(),
             textmidi_out_option.text().c_str())
-        ((gnuplot_option.registered_name().c_str()),
-            gnuplot_option.text().c_str())
-        ((random_option.registered_name().c_str()),
-            boost::program_options::value<string>(),
+        ((gnuplot_option.registered_name().c_str()), gnuplot_option.text().c_str())
+        ((random_option.registered_name().c_str()), boost::program_options::value<string>(),
             random_option.text().c_str())
         ((instruments_option.registered_name().c_str()),
-            boost::program_options::value<vector<string>>()->multitoken(),
-            instruments_option.text().c_str())
-        ((clamp_scale_option.registered_name().c_str()),
-            clamp_scale_option.text().c_str())
+            boost::program_options::value<vector<string>>()->multitoken(), instruments_option.text().c_str())
+        ((clamp_scale_option.registered_name().c_str()), clamp_scale_option.text().c_str())
         ((arrangements_option.registered_name().c_str()),
-            boost::program_options::value<string>(),
-            arrangements_option.text().c_str())
+            boost::program_options::value<string>(), arrangements_option.text().c_str())
         ((max_events_per_track_option.registered_name().c_str()),
-            boost::program_options::value<int32_t>(),
-            max_events_per_track_option.text().c_str())
+            boost::program_options::value<int32_t>(), max_events_per_track_option.text().c_str())
         ((arrangements_period_option.registered_name().c_str()),
-            boost::program_options::value<double>(),
-            arrangements_period_option.text().c_str())
+            boost::program_options::value<double>(), arrangements_period_option.text().c_str())
         ((dotted_rhythms_option.registered_name().c_str()),
-            boost::program_options::value<string>(),
-            dotted_rhythms_option.text().c_str())
+            boost::program_options::value<string>(), dotted_rhythms_option.text().c_str())
         ((rhythm_expression_option.registered_name().c_str()),
-            boost::program_options::value<string>(),
-            rhythm_expression_option.text().c_str())
+            boost::program_options::value<string>(), rhythm_expression_option.text().c_str())
     ;
     boost::program_options::variables_map var_map;
     try
@@ -176,7 +161,7 @@ int32_t main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: textmidicgm [OPTION]... "
-                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.97\n"}
+                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.98\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -186,7 +171,7 @@ int32_t main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidicgm\nTextMIDITools Version 1.0.97\n"
+        cout << "textmidicgm\nTextMIDITools Version 1.0.98\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -382,17 +367,13 @@ int32_t main(int argc, char *argv[])
                             {
                                 string pathstr{form_filename};
                                 char tempthepath[FILENAME_MAX];
-                                tempthepath[pathstr.copy(tempthepath,
-                                    pathstr.size(), 0)] = '\0';
+                                tempthepath[pathstr.copy(tempthepath, pathstr.size(), 0)] = '\0';
 
                                 string thedir{::dirname(tempthepath)};
-                                tempthepath[pathstr.copy(tempthepath,
-                                    pathstr.size(), 0)] = '\0';
+                                tempthepath[pathstr.copy(tempthepath, pathstr.size(), 0)] = '\0';
                                 string thefilename{::basename(tempthepath)};
-                                auto newfilename{string{"update_"}
-                                    + thefilename};
-                                (update_name += (thedir += '/'))
-                                    += newfilename;
+                                auto newfilename{string{"update_"} + thefilename};
+                                (update_name += (thedir += '/')) += newfilename;
                             }
                             ofstream xml_form_stream{update_name.c_str()};
                             if (xml_form_stream)
@@ -447,7 +428,7 @@ int32_t main(int argc, char *argv[])
     }
 
     PermutationEnum track_scramble_type{PermutationEnum::Undefined};
-    TicksDuration track_scramble_period{60000 * TicksPerQuarter};
+    TicksDuration track_scramble_period{60L};
 
     if (var_map.count(arrangements_option.option())) [[unlikely]]
     {
@@ -467,9 +448,8 @@ int32_t main(int argc, char *argv[])
         if (var_map.count(arrangements_period_option.option()))
         {
             track_scramble_period = TicksDuration{
-                static_cast<int64_t>(floor(var_map[
-                    arrangements_period_option.option()].as<double>()))
-                    * TicksPerQuarter};
+                static_cast<int64_t>(
+                floor(var_map[arrangements_period_option.option()].as<double>()))};
         }
     }
     const size_t max_events_per_track{
@@ -571,8 +551,7 @@ int32_t main(int argc, char *argv[])
     }
 
     Composer composer{gnuplot, answer, track_scramble_type,
-        track_scramble_period, max_events_per_track};
-
+        track_scramble_period, xml_forms[0].music_time(), max_events_per_track};
     {
         ofstream textmidi_file;
         uint64_t x{};
@@ -588,11 +567,10 @@ int32_t main(int argc, char *argv[])
             {
                 textmidi_file.open((xml_form.name() + ".txt").c_str());
             }
-
             composer(textmidi_file, xml_form);
             ++x;
         }
-
+        // Continue with successive forms, whether stacked or written separately.
         for ( ; x < xml_forms.size(); ++x)
         {
             if (stacktracks)

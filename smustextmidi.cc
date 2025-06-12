@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -54,13 +54,13 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 
+#include "DynamicsOptions.h"
 #include "Midi.h"
 #include "MidiMaps.h"
+#include "Options.h"
+#include "SmusTrackEvent.h"
 #include "TextmidiUtils.h"
 #include "rational_support.h"
-#include "SmusTrackEvent.h"
-#include "Options.h"
-#include "DynamicsOptions.h"
 
 using std::string, std::uint8_t, std::cerr, std::toupper,
     std::cout, std::make_unique, std::cin, std::ifstream,
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: smustextmidi [OPTION]..."
-                    " [SMUSFILE]\nsmustextmidi Version 1.0.97\n"}
+                    " [SMUSFILE]\nsmustextmidi Version 1.0.98\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page:"
             " https://github.com/tomejanzen/textmiditools\n"};
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools Version 1.0.97\n"
+        cout << "smustextmidi\nTextMIDITools Version 1.0.98\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

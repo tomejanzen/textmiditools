@@ -112,7 +112,7 @@ When you quit the application, just exit from python with control-D or
 @node Musical Form Window
 @chapter Musical Form Window
 @cindex Musical Form Window
-@image{MusicalFormWindow,2.65in,4.6in,Musical Form Window, png}
+@image{MusicalFormWindow,5.7in,6.25in,Musical Form Window, png}
 The Musical Form window allows the setting of global form
 qualities except for the instrumental attributes of individual
 voices, which is done on the Voices window.
@@ -122,6 +122,10 @@ voices, which is done on the Voices window.
 * Len::
 * Min/Max Note Len::
 * Pulse/Sec::
+* Ticks per Quarter::
+* Beat Size::
+* Meter::
+* Tempo per Beat::
 * Melodic Probabilities::
 * Arrangements::
 * Scale Transpose and From Keyboard::
@@ -163,6 +167,40 @@ beats and accents.  The original concept for this model of form (develoiped in 1
 composition) was connected to very fluid, conversational, ametrical rhythms.
 On the other hand, setting a pulse can make works produced by textmidicgm sound more dance-like,
 for example, with a pulse of about 5 or so per second.
+@node Ticks per Quarter
+@section Ticks per Quarter
+@cindex Ticks per Quarter
+The musical time values of ticks/quarter, beat size, meter and tempo per beat are 
+conveniences that specify how the @command{textmidi} language file is to be written.
+They do not, in principle, add to the capability of @command{textmidicgm}.
+Ticks per quarter is required by the MIDI spec and may be a convenient value.  It could be
+as low as 24, is often 240, but can be a higher value such as 720.  It may be helpful to
+have a factor-rich value for ticks/quarter so that divisions such as triplets,
+quintuplets, and the usual divisions of 2 can be exact.  For example, 720 is the product of
+2*2*2*2*3*3*5.  A quarter note is already 1/(2*2) of a whole note, so that 720 ticks per
+quarter can exact represent 64th notes as well as 1/8 triplets and quintuplets down to 1/16ths.
+A value of ticks per quarter that results
+in higher resolution that your MIDI playing software's timing offers is probably not meaningful.
+@node Beat Size
+@section Beat Size
+@cindex Beat Size
+The beat size is the musical ratio for the size of a beat.  In 6/8 meter, for example,
+you could specify a beat size of 3/8.
+@node Meter
+@section Meter
+@cindex Meter
+@emph{meter} is written as you give it, but with separate number of beats and beat size,
+into the @command{textmidi} file as a TIME_SIGNATURE command, along with ticks per quarter.
+@node Tempo per Beat
+@section Tempo per Beat
+@cindex Tempo per Beat
+The tempo per beat is the metronomic tempo of beats per minute for the beat size specified in the
+@emph{beat size} field.  It is converted into a tempo of quarters per minute for the 
+@command{textmidicgm} language output because that is how MIDI (1) uses tempo.
+@command{textmidicgm} will compute rhythms based on beat size, meter, and tempo per beat,
+but must write the equivalent tempo for a quarter note (for example, a meter of 60 for a 
+beat size of 3/8 and with 1440 ticks/quarter will be written as a command TEMPO 90 1440
+because MIDI tempo is always for a quarter note.
 @node Melodic Probabilities
 @section Melodic Probabilities
 @cindex Melodic Probabilities

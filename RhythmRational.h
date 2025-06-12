@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -19,6 +19,7 @@
 #    define  TEXTMIDI_RATIONAL_H
 
 #include <cstdint>
+#include <cmath>
 
 #include <bitset>
 #include <iostream>
@@ -68,13 +69,31 @@ namespace textmidi
                     }
                 }
 
+                void from_double(double x, std::int64_t denominator = 1L, bool reduce_it = true)
+                {
+                    if (0L == denominator)
+                    {
+                        throw std::overflow_error(
+                            "RhythmRational from_double zero denominator");
+                    }
+                    denominator_ = denominator;
+                    double integerd{};
+                    const double fractiond{std::modf(x, &integerd)};
+                    numerator_ = static_cast<int64_t>(integerd) * denominator
+                        + static_cast<std::int64_t>(std::round(std::abs(fractiond)
+                        * static_cast<double>(denominator)));
+                    if (reduce_it)
+                    {
+                        reduce();
+                    }
+                }
+
                 constexpr operator double() const
                 {
                     return static_cast<double>(numerator_ / denominator_)
                         + static_cast<double>(numerator_ % denominator_)
                         / static_cast<double>(denominator_);
                 }
-
 
                 constexpr std::int64_t numerator() const noexcept
                 {
@@ -135,7 +154,17 @@ namespace textmidi
                     operator<<(std::ostream& os, RhythmRational tr)
                 {
                     auto flags{os.flags()};
+#if defined(REDUCE_DEBUG)
+                    auto temp{tr};
+#endif
                     tr.reduce();
+#if defined(REDUCE_DEBUG)
+                    if ((temp.numerator() != tr.numerator())
+                            || (temp.denominator() != tr.denominator()))
+                    {
+                        std::cerr << "the reduce in operator<< changed the ratio\n";
+                    }
+#endif
                     if (1L == tr.denominator())
                     {
                         os << std::dec << tr.numerator();

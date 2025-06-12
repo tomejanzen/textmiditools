@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.97
+// TextMIDITools Version 1.0.98
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -35,14 +35,15 @@
 #include <memory>
 #include <numeric>
 #include <ranges>
+#include <unordered_map>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
-#include "MusicalForm.h"
-#include "Midi.h"
 #include "GeneralMIDI.h"
 #include "MIDIKeyString.h"
+#include "Midi.h"
+#include "MusicalForm.h"
 
 using std::int32_t, std::string, std::string_view, std::vector;
 using std::ranges::for_each, std::ranges::copy, std::ranges::min_element,
@@ -273,6 +274,11 @@ vector<string>& MusicalForm::scale() noexcept
     return scale_;
 }
 
+const textmidi::cgm::MusicTime& textmidi::cgm::MusicalForm::music_time() const noexcept
+{
+    return music_time_;
+}
+
 double MusicalForm::pulse() const noexcept
 {
     return pulse_;
@@ -381,10 +387,7 @@ void MusicalForm::string_scale_to_int_scale (vector<int32_t>& key_scale) const
 void MusicalForm::character_now(TicksDuration theTime,
         MusicalCharacter& musical_character) const noexcept
 {
-    const double dblTime(
-        static_cast<double>(theTime.count() / TicksPerQuarter)
-        + (static_cast<double>(theTime.count() % TicksPerQuarter)
-            / static_cast<double>(TicksPerQuarter)));
+    const double dblTime(static_cast<double>(theTime));
     musical_character.pitch_mean
         = pitch_form().mean_sine().value_now(dblTime)
         * double (scale().size());
@@ -417,7 +420,7 @@ void MusicalForm::character_now(TicksDuration theTime,
 void MusicalForm::random(string formname, int32_t instrument_flags)
 {
     using midi::MidiIdiophoneChannel;
-    using std::ranges::sort, std::ranges::transform, std::map;
+    using std::ranges::sort, std::ranges::transform, std::unordered_map;
     using std::views::iota;
     constexpr int32_t IdiophoneMarker{129};
     name_ = formname;
@@ -574,9 +577,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
             v.follower().leader(leader);
             v.follower().interval_type(static_cast<VoiceXml::Follower::
                 IntervalType>(ri() % 2 + 1));
-            v.follower().delay(rational::RhythmRational{
-                static_cast<int64_t>(ri() / 2) % (TicksPerQuarter * 4L),
-                TicksPerQuarter * 4L});
+            v.follower().delay(textmidi::rational::RhythmRational{static_cast<std::int64_t>(ri() / 2L)});
             v.follower().inversion((ri() % 2) == 1);
             v.follower().retrograde((ri() % 2) == 1);
         }
@@ -606,7 +607,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     const int32_t stereo_zones{static_cast<int32_t>(channels.size() + 1)};
     const auto pan_step{(midi::PanExcess64 * 2) / stereo_zones};
     const auto first_pan{pan_step - midi::PanExcess64};
-    map<int32_t, int32_t> channel_to_pan;
+    unordered_map<int32_t, int32_t> channel_to_pan;
     int32_t pan(first_pan);
     for_each(channels, [&](int32_t ch) { channel_to_pan[ch] = pan;
         pan += pan_step; } );
@@ -614,7 +615,7 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
     for_each(voices_, [&](VoiceXml& v) {
         v.pan(channel_to_pan[v.channel()]); });
 
-    map<int32_t, int32_t> channel_to_program;
+    unordered_map<int32_t, int32_t> channel_to_program;
     for_each(channels, [&](int32_t ch) {
         channel_to_program[ch] = programs[ri() % programs.size()];} );
     for (auto& v : voices_)

@@ -532,5 +532,80 @@
     Python GUI upgrade via pylint.
 
     * Version 1.0.90
+    2024-02-22
     Python GUI upgrade via pylint, testing, bug fixing, and adding sunken reliefs.
     The pylint score is 8.64.
+
+    * Version 1.0.91
+    2024-03-04
+    Apply cpplint lint suggestions about using declarations; as well
+    as other suggestions.
+    Further restrict types in TextMidiForm.xsd XML schema file.
+    Remove forced dimensions on windows in textmidiformedit.py.
+    Write a test/testtextmidiformedit.bash.
+    Python: add frames with sunken boxes;
+    group related widgets more clearly.
+    Fix mistakes with BooleanVar.
+    Scale from Keyboard was broken.
+    Test with textmidiformedittest.xml.
+    Arrangement algorithm was being saved as a string rather
+    than an int.
+    Raise pylint score to 8.64.
+    Python: replace ".trace()" calls with ".trace_add()."
+    Also write a callback for arrangement_period, which had been
+    omitted.
+    Inversion checkbutton callback had not been bound.
+
+    * Version 1.0.92
+    2024-03-22
+    OptionsNames.h had been omitted from kits.
+    C++: Push using declarations down to lower scope.
+
+    * Version 1.0.93
+    2024-03-24
+    Overhaul MidiEvents: replace use of iterators with ranges::subrange;
+    make operator<<()s friends.  Roll up nest if predicates
+    that don't have side-effects using logical-AND operators.
+    * NoteEvent.{cc,h}: declare operator<< as friend and 
+    change operator<< to directly use data members.
+
+    * Version 1.0.94
+    2024-03-24
+
+    * Version 1.0.95
+    2024-04-07
+
+    * Version 1.0.96
+    2024-04-19
+    Alex Dathskovsky CPPCON 2024 "To Int Or To Uint".  Use
+    std::cmp_* to compare integers.
+    Use !container::empty() rather than "size()".  Use 
+    container::back() rather than container[container.size() - 1].
+
+    Only remove double quotes if they are both at front and back of string.
+    * textmidi.texi: Documented the TICKS command.
+    * textmidicgm: ticks statement was written before the
+    END_LAZY, so ticks (TEXT0F) events were not appearing in the MIDI file.
+    * miditext: in verbose reports, change "rigid" to "quantized" [rhythms].
+
+    use cbegin, cend more; use < end() when possible rather than != end().
+    * MidiEvents.{cc,h}, miditext.cc: Define the return event types.
+
+    * Version 1.0.97
+    2025-04-20
+    General:
+    Found malformed version strings and fixed.
+    Use toupper to compare to 'y' or 'Y' on interactive queries.
+    
+    textmidicgm:  Code cleanup.
+    Remove unused class member mutators and accessors.
+    Arrangements Factory now returns a unique_ptr rather than
+    shared_ptr.  Remove "noexcept" if function uses "at()".
+    Change some variable names.  Remove trailing spaces.
+    Combine some nested if's as conjunctions.
+    Simplify computation of pitch_index and only make it slightly worse.
+    
+    Tests:
+    Animations_v3_v2.xml: fix the version of follower_.
+    
+    miditext: delete extra space character printed after PAN.

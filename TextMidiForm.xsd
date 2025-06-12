@@ -19,6 +19,13 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="MusicTime">
+        <xs:element name="ticks_per_quarter_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="beat_"       type="posrational" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="meter_"      type="posrational" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="beat_tempo_" type="xs:double"  minOccurs="1" maxOccurs="1"/>
+    </xs:simpleType>
+
     <xs:complexType name="SineType">
         <xs:sequence>
             <xs:element name="period_"    type="durationType" minOccurs="1" maxOccurs="1"/>
@@ -509,6 +516,7 @@
             <xs:element name="min_note_len_" type="durationType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="max_note_len_" type="durationType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="scale_" type="ScaleType"/>
+            <xs:element name="music_time_" type="MusicTime"/>
             <xs:element name="pulse_" type="pulseType"/>
             <xs:element name="melody_probabilities_" type="melodyProbabilitiesType"/>
             <xs:element name="pitch_form_" type="FormType" minOccurs="1" maxOccurs="1"/>

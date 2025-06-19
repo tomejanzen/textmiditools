@@ -1,32 +1,54 @@
+#!/usr/bin/make
+
+SHELL=/usr/bin/ksh
+
+.SUFFIXES: .txt .mid .xml
+
+M4=/usr/bin/m4
+CP=/bin/cp
+RM=/bin/rm
+TEXTMIDI:=textmidi
+TEXTMIDICGM:=textmidicgm
+opus=Demo93
+
+names:=\
+20fastwalk \
+Animations_v0 \
+Animations_v2_v2 \
+Animations_v2 \
+Animations_v3_v2 \
+Animations_v3_v3 \
+Animations \
+concerto \
+drums \
+fasthira \
+fastpure \
+fastwalk \
+gamelan \
+harmonics \
+heavenhigh \
+heavenlow \
+koto \
+lucy \
+opentheflute \
+philfisa \
+test \
+wholetruth \
+windoctet \
+
+
+forms:=$(names:%=%.xml)
+txts:=$(names:%=%.txt)
+mids:=$(names:%=%.mid)
+
+.PHONY:all
+all:$(mids)
+
+%.mid:%.txt
+	$(TEXTMIDI) --textmidi $< --midi $@
 %.txt:%.xml
-	textmidicgm --xmlform $< --textmidi $@
+	$(TEXTMIDICGM) --xmlform $< --textmidi $@
 
-midis = \
-20fastwalk.mid \
-Animations.mid \
-concerto.mid \
-drums.mid \
-fasthira.mid \
-fastpure.mid \
-fastwalk.mid \
-gamelan.mid \
-harmonics.mid \
-heavenhigh.mid \
-heavenlow.mid \
-koto.mid \
-lucy.mid \
-opentheflute.mid \
-philfisa.mid \
-test.mid \
-wholetruth.mid \
-windoctet.mid
-
-txts := $(midis:%.mid=%.txt)
-
-all : $(midis)
-
-$(midis): %.mid: %.txt
-	textmidi --textmidi $< --midi $@
-
+.PHONY: clean
 clean:
-	/usr/bin/env rm $(midis) $(txts)
+	$(RM) $(txts) $(mids)

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!DOCTYPE boost_serialization>
 <boost_serialization signature="serialization::archive" version="18">
-<xml_form class_id="0" tracking_level="0" version="3">
+<xml_form class_id="0" tracking_level="0" version="4">
 	<name_>wholetruth</name_>
 	<copyright_>wholetruth form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
 	<len_>4.20000000000000000e+02</len_>
-	<min_note_len_>3.12500000000000000e-02</min_note_len_>
+	<min_note_len_>1.28000000000000010e-03</min_note_len_>
 	<max_note_len_>1.00000000000000006e-01</max_note_len_>
 	<scale_ class_id="1" tracking_level="0" version="0">
 		<count>42</count>
@@ -53,14 +53,26 @@
 		<item>G#7</item>
 		<item>A#7</item>
 	</scale_>
+	<music_time_ class_id="2" tracking_level="0" version="0">
+		<ticks_per_quarter_>1440</ticks_per_quarter_>
+		<beat_ class_id="3" tracking_level="0" version="0">
+			<numerator_>1</numerator_>
+			<denominator_>4</denominator_>
+		</beat_>
+		<meter_>
+			<numerator_>4</numerator_>
+			<denominator_>4</denominator_>
+		</meter_>
+		<beat_tempo_>6.00000000000000000e+01</beat_tempo_>
+	</music_time_>
 	<pulse_>8.00000000000000000e+00</pulse_>
-	<melody_probabilities_ class_id="2" tracking_level="0" version="0">
+	<melody_probabilities_ class_id="4" tracking_level="0" version="0">
 		<down_>0.00000000000000000e+00</down_>
 		<same_>3.30000000000000016e-01</same_>
 		<up_>6.70000000000000040e-01</up_>
 	</melody_probabilities_>
-	<pitch_form_ class_id="3" tracking_level="0" version="0">
-		<mean_sine_ class_id="4" tracking_level="0" version="0">
+	<pitch_form_ class_id="5" tracking_level="0" version="0">
+		<mean_sine_ class_id="6" tracking_level="0" version="0">
 			<period_>1.17599999999999994e+02</period_>
 			<phase_>8.19999999999999951e-01</phase_>
 			<amplitude_>5.00000000000000000e-01</amplitude_>
@@ -107,22 +119,22 @@
 		<amplitude_>5.00000000000000000e-01</amplitude_>
 		<offset_>5.00000000000000000e-01</offset_>
 	</texture_form_>
-	<voices_ class_id="5" tracking_level="0" version="0">
+	<voices_ class_id="7" tracking_level="0" version="0">
 		<count>8</count>
 		<item_version>0</item_version>
-		<item class_id="6" tracking_level="0" version="0">
+		<item class_id="8" tracking_level="0" version="0">
 			<low_pitch_>C1</low_pitch_>
 			<high_pitch_>C9</high_pitch_>
 			<channel_>1</channel_>
 			<walking_>0.00000000000000000e+00</walking_>
 			<program_>1</program_>
 			<pan_>0</pan_>
-			<follower_ class_id="7" tracking_level="0" version="3">
+			<follower_ class_id="9" tracking_level="0" version="3">
 				<follow_>0</follow_>
 				<leader_>2147483647</leader_>
 				<interval_type_>0</interval_type_>
 				<interval_>0</interval_>
-				<delay_ class_id="8" tracking_level="0" version="0">
+				<delay_>
 					<numerator_>0</numerator_>
 					<denominator_>1</denominator_>
 				</delay_>
@@ -303,7 +315,7 @@
 			</follower_>
 		</item>
 	</voices_>
-	<arrangement_definition_ class_id="9" tracking_level="0" version="0">
+	<arrangement_definition_ class_id="10" tracking_level="0" version="0">
 		<algorithm_>1</algorithm_>
 		<period_>1.00000000000000000e+05</period_>
 	</arrangement_definition_>

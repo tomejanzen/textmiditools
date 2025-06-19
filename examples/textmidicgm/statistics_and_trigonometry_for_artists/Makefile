@@ -17,10 +17,12 @@ variance.xml
 midis = $(xmls:%.xml=%.mid)
 txts = $(xmls:%.xml=%.txt)
 
+.PHONY:all
 all : $(midis)
 
 $(midis): %.mid: %.txt
 	textmidi --textmidi $< --midi $@
 
+.PHONY: clean
 clean:
 	/usr/bin/env rm $(midis) $(txts)

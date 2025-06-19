@@ -1,3 +1,4 @@
+#include <vector>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -5,11 +6,15 @@
 
 #include "RhythmRational.h"
 
-using namespace std;
+using std::cout, std::cerr, std::istringstream, std::boolalpha, std::ifstream,
+      std::setprecision, std::noskipws;
+using std::runtime_error, std::string, std::numeric_limits, std::unique_ptr;
 
-using namespace textmidi;
-using namespace textmidi;
-using namespace textmidi::rational;
+using textmidi::rational::RhythmRational, textmidi::rational::print_rhythm,
+      textmidi::rational::PrintRhythmSimpleContinuedFraction,
+      textmidi::rational::SimpleContinuedFraction;
+
+using std::vector;
 
 int main()
 {
@@ -46,7 +51,7 @@ int main()
     cout << "r /= s: " << r << '\n';
     r *= s;
     cout << "r *= s: " << r << '\n';
-    
+
     RhythmRational y{-1, 4};
     cout << "y " << y << " abs(y) " << abs(y) << '\n';
 
@@ -210,45 +215,48 @@ int main()
     //                  292, 1, 1, 1, 2, 1, 3, 1, 14, 2, 1, 1, 2, 2, 2, 2, 1, 84, 2, 1, 1, 15, 3, 13, 1, 4
     // [3; 7, 15, 1, 292, 1, 1, 1, 2, 1, 3, 1, 14, 2, 1, 1, 2, 2, 2, 2, 1, 84, 2, 1, 1, 15, 3, 13, 1, 4]
     //
-    cout << RhythmRational{3} + RhythmRational{1} 
-                                / (RhythmRational{7} + RhythmRational{1} 
-                                                       / (RhythmRational{15} + RhythmRational{1} 
-                                                                               / (RhythmRational{1} + (RhythmRational{1} 
-                                                                                                      / RhythmRational{292})))) << '\n';
-    RhythmRational::SimpleContinuedFraction scf{3, {7, 15, 1, 292}};
-    cout << scf << '\n';
+    cout << RhythmRational{3} + RhythmRational{1}
+         / (RhythmRational{7} + RhythmRational{1}
+         / (RhythmRational{15} + RhythmRational{1}
+         / (RhythmRational{1} + (RhythmRational{1}
+         / RhythmRational{292})))) << '\n';
+    SimpleContinuedFraction scf{{3, {7, 15, 1, 292}}};
+    cout << "a SimpleContinuedFraction " << scf << '\n';
     RhythmRational pi{scf};
-    cout << setprecision(24) << (static_cast<double>(pi)) << '\n'; 
+    cout << setprecision(24) << (static_cast<double>(pi)) << '\n';
     istringstream iss8{"[3;7,15,1,292]"};
-    RhythmRational::SimpleContinuedFraction scf2{};
+    SimpleContinuedFraction scf2{};
 
     cout << "input:\n";
     iss8 >> scf2;
     cout << scf2 << '\n';
-    
+
     RhythmRational rrscf{scf2};
     cout << static_cast<double>(rrscf) << '\n';
 
     string str;
-    RhythmRational::SimpleContinuedFraction scf3;
+#if 0
+    SimpleContinuedFraction scf3;
     cout << "ENTER A SIMPLE CONTINUED FRACTION: ";
     cin >> scf3;
     RhythmRational rrscf3{scf3};
     cout << setprecision(24) << static_cast<double>(rrscf3) << '\n';
 
-    auto scf3b{static_cast<RhythmRational::SimpleContinuedFraction>(rrscf3)};
+    auto scf3b{static_cast<SimpleContinuedFraction>(rrscf3)};
     cout << scf3b << '\n';
-
+#endif
     RhythmRational zero{0L, 1L};
     RhythmRational one{1L, 1L};
     cout << "zero times one: " << (zero *= one) << '\n';
 
     istringstream iss11{"[4]"};
-    RhythmRational::SimpleContinuedFraction scf11{};
+    SimpleContinuedFraction scf11{};
     iss11 >> scf11;
     cout << "Integer only: " << ' ' << scf11 << '\n';
 
-    textmidi::rational::print_rhythm.reset(new PrintRhythmSimpleContinuedFraction);
+    textmidi::rational::print_rhythm
+        .reset(new PrintRhythmSimpleContinuedFraction);
+
 
     cout << "PRINT AS SIMPLE CONTINUED FRACTION\n";
     cout << "c: " << c << ' ';
@@ -278,6 +286,56 @@ int main()
     cout << "k: " << k << ' ';
     (*print_rhythm)(cout, k);
     cout << '\n';
+
+    cout << "from_double:\n";
+    RhythmRational d1{};
+    d1.from_double(1.5, 2L, true);
+    cout << "1.5: " << d1 << '\n';
+
+    RhythmRational d2{};
+    d2.from_double(11.667, 3L, true);
+    cout << "11.667: " << d2 << '\n';
+
+    cout << "numeric_limits:\n";
+    cout << "max: " << numeric_limits<RhythmRational>::max() << '\n';
+    cout << "min: " << numeric_limits<RhythmRational>::min() << '\n';
+    cout << "lowest: " << numeric_limits<RhythmRational>::lowest() << '\n';
+    cout << "epsilon: " << numeric_limits<RhythmRational>::epsilon() << '\n';
+    cout << "round_error: " << numeric_limits<RhythmRational>::round_error() << '\n';
+    cout << "infinity: " << numeric_limits<RhythmRational>::infinity() << '\n';
+    cout << "quiet_NaN: " << numeric_limits<RhythmRational>::quiet_NaN() << '\n';
+    cout << "signaling_NaN: " << numeric_limits<RhythmRational>::signaling_NaN() << '\n';
+    cout << "denorm_min: " << numeric_limits<RhythmRational>::denorm_min() << '\n';
+    cout << "is_specialized: " << numeric_limits<RhythmRational>::is_specialized << '\n';
+    cout << "is_signed: " << numeric_limits<RhythmRational>::is_signed << '\n';
+    cout << "is_integer: " << numeric_limits<RhythmRational>::is_integer << '\n';
+    cout << "has_infinity: " << numeric_limits<RhythmRational>::has_infinity << '\n';
+    cout << "has_quiet_NaN: " << numeric_limits<RhythmRational>::has_quiet_NaN << '\n';
+    cout << "has_signaling_NaN: " << numeric_limits<RhythmRational>::has_signaling_NaN << '\n';
+    cout << "has_denorm_loss: " << numeric_limits<RhythmRational>::has_denorm_loss << '\n';
+    cout << "round_style: " << numeric_limits<RhythmRational>::round_style << '\n';
+    cout << "is_iec559: " << numeric_limits<RhythmRational>::is_iec559 << '\n';
+    cout << "is_bounded: " << numeric_limits<RhythmRational>::is_bounded << '\n';
+    cout << "is_modulo: " << numeric_limits<RhythmRational>::is_modulo << '\n';
+    cout << "digits: " << numeric_limits<RhythmRational>::digits << '\n';
+    cout << "digits10: " << numeric_limits<RhythmRational>::digits10 << '\n';
+    cout << "max_digits10: " << numeric_limits<RhythmRational>::max_digits10 << '\n';
+    cout << "radix: " << numeric_limits<RhythmRational>::radix << '\n';
+    cout << "min_exponent: " << numeric_limits<RhythmRational>::min_exponent << '\n';
+    cout << "max_exponent: " << numeric_limits<RhythmRational>::max_exponent << '\n';
+    cout << "traps: " << numeric_limits<RhythmRational>::traps << '\n';
+    cout << "tinyness_before: " << numeric_limits<RhythmRational>::tinyness_before << '\n';
+    cout << "prime reciprocals:\n";
+    vector<RhythmRational> rps{RhythmRational(1L, 2L), RhythmRational(1L, 3L), 
+        RhythmRational(1L, 5L), RhythmRational(1L, 7L), RhythmRational(1L, 11L), 
+        RhythmRational(1L, 13L), RhythmRational(1L, 17L), RhythmRational(1L, 19L), 
+        RhythmRational(1L, 23L), RhythmRational(1L, 29L), RhythmRational(1L, 31L), 
+        RhythmRational(1L, 37L), RhythmRational(1L, 41L), RhythmRational(1L, 43L)};
+    for (const auto& rp : rps)
+    {
+        (*print_rhythm)(cout, rp);
+        cout << '\n';
+    }
 
     return 0;
 }

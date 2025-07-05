@@ -1,0 +1,187 @@
+1. Regenerate dependencies.
+Fri Jul  4 08:39:33 PM EDT 2025 DONE
+
+2. Check and up-date header file dependencies in Makefile.am.
+aclocal DONE
+autoconf DONE
+automake --add-missing DONE
+./configure DONE
+source makeothermakefiles.com DONE
+make clean DONE
+make -f Makefile.opt 2> warn.txt DONE
+Check in the results.
+Fri Jul  4 08:50:43 PM EDT 2025
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+Read warn.txt.  The can be a handful of unused arguments. DONE
+
+3. source cpplint.com
+Examine cpplintout.txt.
+fixed a little spacing.
+DONE
+
+4.  Run cppcheck.com
+Review cppcheckout.txt.
+DONE Fri Jul  4 09:07:59 PM EDT 2025
+one lie about q being possibly a const
+at RhythmRational.cc:328, but it is set in the function.
+
+Other unused are of the numeric_limits items in RhythmRational
+and serialize in MusicalForm.h.
+
+5. Run a test with miditext.cc DEBUG_THREADLESS.
+git add miditext.cc
+Edit miditext.cc to add
+#define DEBUG_THREADLESS
+just before where it's tested.
+make clean
+make -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+5b.
+cd test
+./textmidirounttriptest.py classical_archivesshort.txt
+all 100% passed
+DONE Fri Jul  4 10:19:32 PM EDT 2025
+Restore the threaded version: git checkout miditext.cc
+
+5.5 rebuild
+make clean
+make -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+DONE
+
+6. cd test
+./roundtriptests.bash
+All test and binary comparisons should be 100% identical.
+Fri Jul  4 10:48:17 PM EDT 2025 DONE
+
+7. source chorded.com
+All files are to be identical.
+Fri Jul  4 10:48:50 PM EDT 2025 DONE
+
+8. cd test; source eventtests.com
+looks ok.
+
+9.  cd test; source textmidicgmtest.com
+
+textmidicgmtest_arrangements.txt
+    Check for the two voices  (in the second and third tracks) alternating playing every 10 seconds each.
+textmidicgmtest_base.txt
+    Check for a tempo of 60 on a beat of 1/4.
+    The first rhythms in the second track should be 1/4.
+textmidicgmtest_halfbeat.txt
+    Check for a tempo of 60 on a beat of 1/2.
+    The first rhythms in the second track should be 1/2.
+textmidicgmtest_pulse4.txt
+    Check that the rhythms in the second track are multiples of 1/16 notes.
+    (such as 8, 16, 8.)
+textmidicgmtest_tempo90.txt
+    Check for a TIME_SIGNATURE 6 8 720 and TEMPO of 40 3/8.
+    Check that the tempo track rests are dotted halves (for 6/8).
+    Check that the rhythms in the second track are 1/4.
+    (1/4 is one second for 3/8 = M.M. 400 and the max note length
+     is 1 second.)
+
+Fri Jul  4 11:36:32 PM EDT 2025 DONE
+
+10.  After executing this test sequence, compile with clang.
+Report step 6 through 9.
+    make clean
+    make -f Makefile.clang.opt
+    sudo make install
+
+    6. cd test
+    ./roundtriptests.bash
+    All test and binary comparisons should be 100% identical.
+    17 minutes (same as g++). DONE Sat Jul  5 11:51:09 AM EDT 2025
+
+    7. source chorded.com
+    All files are to be identical.
+    DONE Sat Jul  5 11:51:32 AM EDT 2025
+
+    8. cd test; source eventtests.com
+    looks ok Sat Jul  5 11:52:20 AM EDT 2025
+
+    9.  cd test; source textmidicgmtest.com
+
+    textmidicgmtest_arrangements.txt
+        Check for the two voices  (in the second and third tracks) alternating
+        playing every 10 seconds each. DONE
+    textmidicgmtest_base.txt
+        Check for a tempo of 60 on a beat of 1/4. DONE
+        The first rhythms in the second track should be 1/4. ("4") DONE
+    textmidicgmtest_halfbeat.txt
+        Check for a tempo of 60 on a beat of 1/2. DONE
+        The first rhythms in the second track should be 1/2. DONE
+    textmidicgmtest_pulse4.txt
+        Check that the rhythms in the second track are multiples of 1/16 notes.
+        (such as 8, 16, 8.)  DONE
+    textmidicgmtest_tempo90.txt
+        Check for a TIME_SIGNATURE 6 8 720 and TEMPO of 40 3/8.  DONE
+        Check that the tempo track rests are dotted halves (for 6/8). DONE
+        Check that the rhythms in the second track are 1/4. DONE
+        (1/4 is one second for 3/8 = M.M. 400 and the max note length
+         is 1 second.)
+    DONE Sat Jul  5 11:59:34 AM EDT 2025
+
+11. ./testtextmidiformedit.bash
+Follow printed instructions at each step.
+Found defect of zero-rhythms making time never advance and the program not exiting.
+Change Composer.{cc,h} to coerce a minimum rhythm of 1 tick.
+DONE Sat Jul  5 01:35:52 PM EDT 2025
+
+12. ./testtextmidicgmtest.bash
+I did the last couple steps manually because the Python script
+reported an error that was probably a file name with a space in it.
+DONE Sat Jul  5 01:37:03 PM EDT 2025
+
+13. For SMUS conversion: source sacre.com
+musescore sacre_sacrifice.mid
+timidity -invvvt -Os sacre_sacrifice.mid
+Should be the Sacrificial Dance of Stravinksy's The Rite of Spring.
+DONE Sat Jul  5 01:38:34 PM EDT 2025
+source sacre_clean.com
+
+14.  Then edit version.sed and version.bash to upgrade both the
+new and old version numbers.
+
+./version.bash
+
+Check in the changed files.
+git status > ci.com; edit ci.com to just have the changed files with "git add " in front of them.
+run ci.com
+git commit -m "new version TextMIDITools v1.0.99"
+
+./buildkit.bash
+DONE Sat Jul  5 01:46:23 PM EDT 2025
+
+15.
+cd 
+cp -an textmiditools-1.0.nn temp-1.9.nn
+cd temp-1.9.nn
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
+and watch for a successful build of textmidi, miditext, textmidicgm, and smustextmidi.
+DONE Sat Jul  5 01:46:34 PM EDT 2025
+
+16. Update pdfs and copy them to the kit area.
+
+texi2pdf miditext.texi
+texi2pdf smustextmidi.texi
+texi2pdf textmidicgm.texi
+texi2pdf TextMidiFormEdit.texi
+texi2pdf textmidi.texi
+
+cp miditext.pdf ~/textmiditools-1.0.nn/
+cp smustextmidi.pdf ~/textmiditools-1.0.nn/
+cp textmidicgm.pdf ~/textmiditools-1.0.nn/
+cp TextMidiFormEdit.pdf ~/textmiditools-1.0.nn/
+cp textmidi.pdf ~/textmiditools-1.0.nn/
+

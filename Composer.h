@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -25,6 +25,38 @@ namespace textmidi
 {
     namespace cgm
     {
+        class TimeConverter
+        {
+          public:
+            explicit TimeConverter(const MusicTime& music_time)
+              : music_time_(music_time)
+            {
+                rational::RhythmRational beat_tempo{};
+                beat_tempo.from_double(music_time_.beat_tempo_, music_time_.ticks_per_quarter_ * midi::QuartersPerWhole);
+                wholes_per_second_ = beat_tempo * music_time_.beat_ / rational::RhythmRational{midi::SecondsPerMinuteI};
+
+                const rational::RhythmRational ticks_per_second_rat(QuartersPerWholeRat
+                    * wholes_per_second_
+                    * rational::RhythmRational{music_time_.ticks_per_quarter_});
+                const double ticks_per_second_dbl{
+                    static_cast<double>(ticks_per_second_rat.numerator())
+                    / static_cast<double>(ticks_per_second_rat.denominator())};
+                ticks_per_second_ = static_cast<int64_t>(round(ticks_per_second_dbl));
+            }
+            rational::RhythmRational wholes_per_second() const;
+            rational::RhythmRational duration_to_rhythm(double duration) const;
+            rational::RhythmRational snap_to_pulse(rational::RhythmRational rhythm, double pulse) const;
+            std::int64_t ticks_per_whole() const;
+            int64_t ticks_per_second() const
+            {
+                return ticks_per_second_;
+            }
+          private:
+            MusicTime music_time_;
+            rational::RhythmRational wholes_per_second_{1L, 4L};
+            int64_t ticks_per_second_{720L};
+        };
+
         class Composer
         {
           public:
@@ -33,7 +65,7 @@ namespace textmidi
                 TrackScramble() = default;
                 explicit constexpr TrackScramble(
                     arrangements::PermutationEnum scramble,
-                    TicksDuration period) noexcept
+                    rational::RhythmRational period) noexcept
                   : scramble_(scramble),
                     period_(period),
                     arrangements_{}
@@ -41,13 +73,13 @@ namespace textmidi
 
                 arrangements::PermutationEnum scramble_
                     {arrangements::PermutationEnum::Identity};
-                TicksDuration     period_{120UL};
+                rational::RhythmRational     period_{120UL};
                 std::shared_ptr<arrangements::Arrangements> arrangements_{};
             };
 
             Composer(bool gnuplot, bool answer,
                 arrangements::PermutationEnum track_scramble,
-                TicksDuration track_scramble_period, const MusicTime& music_time,
+                rational::RhythmRational track_scramble_period, const MusicTime& music_time,
                 size_t max_events_per_track = 100000) noexcept
               : gnuplot_(gnuplot),
                 answer_(answer),
@@ -55,7 +87,8 @@ namespace textmidi
                 max_events_per_track_{max_events_per_track},
                 random_dev_(),
                 generator_{random_dev_()},
-                music_time_{music_time}
+                music_time_{music_time},
+                time_converter_{music_time}
             {
             }
 
@@ -70,15 +103,10 @@ namespace textmidi
                 const MusicalForm& xml_form, bool write_header = true);
 
           private:
-            rational::RhythmRational
-                duration_to_rhythm(double duration, const MusicTime& music_time) const noexcept;
-            rational::RhythmRational snap_to_pulse(
-                rational::RhythmRational rhythm, double pulse_per_second, const MusicTime& music_time)
-                const noexcept;
             void build_track_scramble_sequences(
                 std::vector<std::vector<std::int32_t>>&
                 track_scramble_sequences,
-                TicksDuration total_duration) noexcept;
+                rational::RhythmRational total_duration) noexcept;
             void build_composition_priority_graph(const MusicalForm& xml_form,
                 std::vector<std::list<std::int32_t>>&
                 leaders_topo_sort) noexcept;
@@ -89,6 +117,7 @@ namespace textmidi
             std::random_device random_dev_;
             std::mt19937 generator_;
             MusicTime music_time_;
+            TimeConverter time_converter_;
         };
 
         extern const midi::NumStringMap<arrangements::PermutationEnum>

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -672,7 +672,8 @@ ostream& MidiFileMetaSetTempoEvent::print(ostream& os) const
     {
         os << "TEMPO " << dec << setprecision(10)
            << ((midi::SecondsPerMinute * midi::UsecPerSecond)
-           / static_cast<double>(tempo_));
+           / static_cast<double>(tempo_))
+           << " 1/4";
     }
     static_cast<void>(os.flags(flags));
     return os;

@@ -1311,7 +1311,7 @@ MIDIKeyString.o: MIDIKeyString.cc Midi.h MIDIKeyString.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 MusicalForm.o: MusicalForm.cc GeneralMIDI.h Midi.h MidiMaps.h RhythmRational.h MIDIKeyString.h MusicalForm.h Arrangements.h HeapsAlgorithmTemplate.h RandomDouble.h RandomInt.h Scales.h Track.h NoteEvent.h Voice.h cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
-Track.o: Track.cc Track.h NoteEvent.h RhythmRational.h
+Track.o: Track.cc Track.h Midi.h NoteEvent.h RhythmRational.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<
 Voice.o: Voice.cc Voice.h MIDIKeyString.h Midi.h RhythmRational.h cgmlegacy.h
 	$(CXX) $(AM_CXXFLAGS) -c -o $@ $<

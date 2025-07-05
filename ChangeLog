@@ -1,5 +1,27 @@
+2025-07-05    Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiForm.xsd: make music_time a complexType.
+        * Composer.{h,cc}: fix defect in which rhythms of
+        zero cause time to not advance, so there must be a
+        minimum note length.
+
+2025-07-04    Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.{h,cc}, RhythmRational.{cc,h}, test/textmidicgmtest.com,
+        test/textmidicgmtest_*.xml:  textmidicgm:
+        Fix arrangements bug.  Rewrote conversion of seconds, ticks, and
+        musical rhythms into a class called TimeConverter.
+        Wrote the test form files for testing handling of musical rhythms, the
+        new textmidi meter with beat size, the time signature.
+
+2025-07-02    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, textmidi.texi, MidiEvents.cc: Allow setting of tempo beat
+        but to be converted to MIDI requirement of beat per quarter.
+        * GnuPlot.cc: compiler warnings.
+        * ChangeLog, Composer.cc, Composer.h, GnuPlot.cc, MusicalForm.cc,
+        MusicalForm.h, RhythmRational.h, Track.cc, Track.h, textmidicgm.cc:
+        Clean up use of rhythm values, time values and arrangements.
+
 2025-06-11    Thomas E. Janzen <janzentome@gmail.com>
-        * AllFormsWindow.py, Composer.cc, MusicalFormWindow.png, TextMidiFormEdit.py, 
+        * AllFormsWindow.py, Composer.cc, MusicalFormWindow.png, TextMidiFormEdit.py,
         TextMidiFormEdit.texi, test/music_time_test.txt, textmidicgm.texi, GnuPlot.cc,
         MIDIKeyString.cc, Midi.h:
         Support music_time in the XML form files.
@@ -15,7 +37,7 @@
         * MIDIKeyString.cc, MidiEvents.{h,cc}, MidiMaps.h, MusicalForm.cc, Midi.h:
         Replace map with unordered map while storm approaches.
         The round-trip test got slower again.
-        * Composer.cc, Composer.h, MidiEvents.cc, MidiEvents.h, MusicalForm.cc, 
+        * Composer.cc, Composer.h, MidiEvents.cc, MidiEvents.h, MusicalForm.cc,
         MusicalForm.h, NoteEvent.cc, Voice.h, main.cc, miditext.cc, smustextmidi.cc,
         textmidi.l: alphabetize include files.
         * Makefile*: re-gen includes for new alphabetic orders.
@@ -25,7 +47,7 @@
         Minor cleanup for readability, names.
 
 2025-05-06    Thomas E. Janzen <janzentome@gmail.com>
-        * MIDIKeyString.cc: simplify prefer_sharp logic more (remove switch), 
+        * MIDIKeyString.cc: simplify prefer_sharp logic more (remove switch),
         and use map in note_name_to_scale_step.
 
 2025-05-05    Thomas E. Janzen <janzentome@gmail.com>
@@ -35,7 +57,7 @@
 
 2025-04-20    Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.{h,cc}: Remove [unused] counter(int) mutator.
-        Remove counter_finite().  Factory now returns a unique_ptr.  
+        Remove counter_finite().  Factory now returns a unique_ptr.
         * MusicalForm.{h,cc}: Remove copyright accessor & mutator.
         * MidiMaps.h: remove "noexcept" on functions that use "at()".
         * NoteEvent.{h,cc}, Composer.cc: Change "musical_rhythm" to "rhythm".
@@ -69,7 +91,7 @@
 2025-03-30     Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.cc, Composer.cc, MIDIKeyString.cc, RhythmRational.h,
         miditext.cc: Allow somewhat longer lines for readability.
-        Use !container::empty() rather than "size()".  Use 
+        Use !container::empty() rather than "size()".  Use
         container::back() rather than container[container.size() - 1].
 
 2025-03-29     Thomas E. Janzen <janzentome@gmail.com>
@@ -90,7 +112,7 @@
         event types.  Try to use unique_ptr and give up.
 
 2025-03-25     Thomas E. Janzen <janzentome@gmail.com>
-        * *test/eventtests.txt, eventtests.com, MidiEvents.cc: 
+        * *test/eventtests.txt, eventtests.com, MidiEvents.cc:
         Fixed XmfPathcType which advanced midi_stream_tail wrong.
         Rewrite a couple while loops.
         * miditext.cc: cast away comparison of ints warning.
@@ -100,7 +122,7 @@
         MidiEvents: replace use of iterators with ranges::subrange;
         make operator<<()s friends.  Roll up nest if predicates
         that don't have side-effects using logical-AND operators.
-        * NoteEvent.{cc,h}: declare operator<< as friend and 
+        * NoteEvent.{cc,h}: declare operator<< as friend and
         change operator<< to directly use data members.
 
 2025-03-10     Thomas E. Janzen <janzentome@gmail.com>
@@ -129,7 +151,7 @@
         * AllFormsWindow.py, FormFrame.py, Sine.py, VoiceWindow.py:
         Tighten up window geometry; add frames with sunken boxes;
         group related widgets more clearly.
-        Fix mistakes with BooleanVar usage.  
+        Fix mistakes with BooleanVar usage.
         Scale from Keyboard was broken; appears fixed now.
         Test with textmidiformedittest.xml.
         Arrangement algorithm was being saved as a string rather
@@ -137,7 +159,7 @@
         Raise pylint score to 8.64
 
 2025-02-27     Thomas E. Janzen <janzentome@gmail.com>
-        * AllFormsWindow.py, VoiceWindow.py, Sine.py: replace ".trace()" calls 
+        * AllFormsWindow.py, VoiceWindow.py, Sine.py: replace ".trace()" calls
         with ".trace_add()."
         One of my old TCL/Tk books says the other old book is obsolete.
         Also write a callback for arrangement_period, omitted unintentionally.
@@ -149,7 +171,7 @@
         * *.py: More polishing with warnings from pylint: score 8.6.
 
 2025-02-22     Thomas E. Janzen <janzentome@gmail.com>
-        * TextMidiFormEdit.texi, *.py: fix warnings from pylint.  
+        * TextMidiFormEdit.texi, *.py: fix warnings from pylint.
         Found one functional defect and fixed.
         Retest using textmidiformedittest.xml.
         Update documentation to reflect capitalization change of
@@ -158,15 +180,15 @@
 2025-02-19     Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.h, Makefile.opt.sed, Midi.h, MidiEvents.cc, MusicalForm.cc,
         miditext.cc, smustextmidi.cc, textmidi.l:
-        Get compilation by clang to work and pass tests.  However g++ is the 
+        Get compilation by clang to work and pass tests.  However g++ is the
         compiler to be used to build.
         * MidiEvents.cc, MidiEvents.h, MidiString.cc, miditext.cc:  Use
         cppcheck and fix resulting reports.  Fix calling a virtual
         function from a constructor (MidiEvents used by miditext).
- 
+
 2025-02-15     Thomas E. Janzen <janzentome@gmail.com>
         * Arrangements.{h,cc}: Youtube CPPCON with Nicolai Josuttis.
-        Discard ArrangementVec.  
+        Discard ArrangementVec.
         Switches use all enum values and no default when possible.
         Specify final on classes.
         Specify final and override on functions as possible.
@@ -201,9 +223,9 @@
         Add move copy and assignment.
 
 2025-02-11     Thomas E. Janzen <janzentome@gmail.com>
-        * Midi.h, miditext.cc, textmidi.l: 
+        * Midi.h, miditext.cc, textmidi.l:
         Add definitions for names of MIDI header and track chunks, and use
-        appropriately.  Use more C++ library e.g. std::equal.  Try to 
+        appropriately.  Use more C++ library e.g. std::equal.  Try to
         clean up MidiHeader initialization.
         Neaten command-line options registrations for readability.
         * smustextmidi.cc: use MidiStreamArray4 and C++ library copy and equal.
@@ -211,9 +233,9 @@
         The velocity selection feature is currently disabled.
 
 2025-02-10     Thomas E. Janzen <janzentome@gmail.com>
-        * Arrangements.h, Composer.h, DynamicsOptions.cc, DynamicsOptions.h, Midi.h, 
-        MidiEvents.h, MidiMaps.h, OptionName.h, RandomDouble.h, RandomInt.h, 
-        RhythmRational.h, Track.h, Voice.h, cgmlegacy.h, main.cc, miditext.cc, 
+        * Arrangements.h, Composer.h, DynamicsOptions.cc, DynamicsOptions.h, Midi.h,
+        MidiEvents.h, MidiMaps.h, OptionName.h, RandomDouble.h, RandomInt.h,
+        RhythmRational.h, Track.h, Voice.h, cgmlegacy.h, main.cc, miditext.cc,
         smustextmidi.cc, textmidi.h, textmidicgm.cc:
         Core Guidelines: don't use c-tor defaults and member initialization syntax
         for default member values.
@@ -236,9 +258,9 @@
         * examples/textmidicgm/: make min_note_len_ 0.00128 seconds.
 
 2025-02-08     Thomas E. Janzen <janzentome@gmail.com>
-        * OptionName.h, DynamicsOptions.cc, DynamicsOptions.h, Makefile, Makefile.am, 
-        Makefile.in, OptionName.h, Options.h, main.cc, miditext.cc, miditext.texi, 
-        smustextmidi.cc, smustextmidi.texi, textmidi.texi, textmidicgm.cc, 
+        * OptionName.h, DynamicsOptions.cc, DynamicsOptions.h, Makefile, Makefile.am,
+        Makefile.in, OptionName.h, Options.h, main.cc, miditext.cc, miditext.texi,
+        smustextmidi.cc, smustextmidi.texi, textmidi.texi, textmidicgm.cc,
         textmidicgm.texi:
         Bring DynamicalOptions into OptionName class usage.  Create OptionName.h
         Update documentation.  Fix website name printed by --help.  Text in OptionName
@@ -277,7 +299,7 @@
 
 2025-02-02     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, textmidiformedit.py:  Fix out of range (negative)
-        pitch index in textmidicgm, and get textmidiformedit.py to 
+        pitch index in textmidicgm, and get textmidiformedit.py to
         write duration_factor.
 
 2025-02-01     Thomas E. Janzen <janzentome@gmail.com>
@@ -300,15 +322,15 @@
         * VoiceWindow.py, textmidiformedit.py: Add duration_factor to the python code.
 
 2025-01-31     Thomas E. Janzen <janzentome@gmail.com>
-        * SmusTrackEvent.h, textmidi.h: 
+        * SmusTrackEvent.h, textmidi.h:
         Reading Grimm: "C++ Core Guidelines Explained".
         Add constexpr specifiers on class member functions.
 
 2025-01-30     Thomas E. Janzen <janzentome@gmail.com>
-        * textmidi.l, Arrangements.{h,cc}, cgmlegacy.{h,cc}, Composer.{h,cc}, HeapsAlgorithmTemplate.h, 
+        * textmidi.l, Arrangements.{h,cc}, cgmlegacy.{h,cc}, Composer.{h,cc}, HeapsAlgorithmTemplate.h,
         MidiEvents.{h,cc}, Midi.{h,cc}, MIDIKeyString.{h,cc}, MidiMaps.{h,cc}, MakeString.{h,cc},
         MusicalForm.{h,cc}, NoteEvent.h, RandomDouble.h, RandomInt.h, rational_support.{h,cc},
-        SmusTrackEvent.{h,cc}, Track.{h,cc}: 
+        SmusTrackEvent.{h,cc}, Track.{h,cc}:
         Reading Grimm: "C++ Core Guidelines Explained": specify functions as noexcept.
         * RhythmRational.{h,cc}: change some simple accessors to constexpr definitions.
         * Arrangements.h, MidiEvents.cc, MidiEvents.h, MusicalForm.h, RandomInt.h,
@@ -353,7 +375,7 @@
 
 2025-01-15     Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, DynamicsOptions.cc, Midi.cc, MidiEvents.cc, MidiMaps.h,
-        MusicalForm.cc, RhythmRational.cc, RhythmRational.h, cgmlegacy.cc, 
+        MusicalForm.cc, RhythmRational.cc, RhythmRational.h, cgmlegacy.cc,
         miditext.cc, textmidi.l, textmidicgm.cc: Use emplace, emplace_back,
         make_pair rather than insert.
         * Options.h, RhythmRational.cc, RhythmRational.h, miditext.cc, miditext.texi,
@@ -393,7 +415,7 @@
         * textmidicgm.texi: add disclaimer re: AI.
 
 2024-07-02     Thomas E. Janzen <janzentome@gmail.com>
-        * textmidicgm.{cc, texi}, Composer.{cc,h}: clean up logic for stacktracking; 
+        * textmidicgm.{cc, texi}, Composer.{cc,h}: clean up logic for stacktracking;
         factor out common code.
         Fix unnecessary escaping of a slash.  Fix attempt to use variable-sized
         C strings for the unix file name routines. (The C++ filesystem calls return
@@ -408,14 +430,14 @@
         as a prefix to the entire path rather than only the filename at the end.
 
 2024-06-25     Thomas E. Janzen <janzentome@gmail.com>
-        * Composer.{cc,h}, textmidicgm.{texi,cc}: Input form files may now be a list 
-        of names or globbed names or both, but must be either all XML forms or 
-        the old forms, which are deprecated.  The option --stacktracks is added 
+        * Composer.{cc,h}, textmidicgm.{texi,cc}: Input form files may now be a list
+        of names or globbed names or both, but must be either all XML forms or
+        the old forms, which are deprecated.  The option --stacktracks is added
         to make all of the output from multiple files to be put into a single
         textmidi file.
 
 2024-06-23     Thomas E. Janzen <janzentome@gmail.com>
-        * Composer.cc, textmidicgm.texi: add a TEXT timestamp of the local time 
+        * Composer.cc, textmidicgm.texi: add a TEXT timestamp of the local time
         to the first track.
         * MusicalForm.cc, textmidicgm.cc, textmidicgm.texi: remove the ".form" infix from
         examples of form files and from random form files generated by textmidicgm.
@@ -431,7 +453,7 @@
         * MusicalForm.h: handle form file versions per boost::serialization XML
         archives practice.
         * textmidicgm.cc: change "x" for update option to "u".
-        * textmidiformedit.py, textmidiformedit.exi: Permit an on-command-line 
+        * textmidiformedit.py, textmidiformedit.exi: Permit an on-command-line
         form file argument.
 
 2024-06-18     Thomas E. Janzen <janzentome@gmail.com>
@@ -439,7 +461,7 @@
         Clean up boost::serialization versioning.
         v0 : 1989 version 0 has no copyright, no arrangement, no counterpuntal followers.
         v2 : 2023-04-08 version >1 has arrangement (i.e., version=2)
-        v2_v2 : 2023-05-04 Follower version >= 2 has options for 
+        v2_v2 : 2023-05-04 Follower version >= 2 has options for
         delay/inversion/retrograde, that is, Follower version=2
         v3_v2 : 2024-05-13     version >= 3 has copyright_ (i.e., version=3)
         * examples/textmidicgm/Demo93: Add program selections to forms.
@@ -462,7 +484,7 @@
 
 2024-06-08     Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.{cc,h}, miditext.cc, textmidi.l etc:
-        make miditext --lazy work better when there are 
+        make miditext --lazy work better when there are
         non-note events in the middle of note lifetimes.
         Reordering of events at the same tick time is allowed.
         This means that roundtrip tests might fail.
@@ -479,7 +501,7 @@
         unset pointer usage in that code in MidiEvents ::print.
 
 2024-04-05     Thomas E. Janzen <janzentome@gmail.com>
-        * MidiEvent.{h,cc}: move ticks_per_whole down into 
+        * MidiEvent.{h,cc}: move ticks_per_whole down into
         MidiChannelVoiceNoteEvent; update NoteOffEvent, NoteOnEvent,
         PressureEvent to refer to the base class.
         Had been crashing when using note_on for ticks_per_whole
@@ -506,7 +528,7 @@
 2024-03-27     Thomas E. Janzen <janzentome@gmail.com>
         * RhythmRational.cc: don't let print_rhythm print negative
         rational numbers.
-        * textmidi.l: change clog output to cout.  
+        * textmidi.l: change clog output to cout.
         * MidiEvents.cc: get miditext --lazy to work better;
         cf. PrintLazyTrack::print.
         * test/textmidiroundtriptest.py: spruce up formatting.

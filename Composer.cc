@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -61,88 +61,34 @@ namespace
     using KeyScaleSeq = std::vector<int32_t>;
 }
 
-//
-// Convert a double duration in seconds to a musical ratio.
-RhythmRational textmidi::cgm::Composer::duration_to_rhythm(double duration, const MusicTime& music_time)
-    const noexcept
+RhythmRational textmidi::cgm::TimeConverter::wholes_per_second() const
 {
-    //  beat    quarter   whole   minute
-    // ------ * ------- * ----- * -------
-    // minute    whole    beat    seconds
+    return wholes_per_second_;
+}
 
-    //  beat    whole   minute
-    // ------ * ----- * -------
-    // minute   beat    seconds
-    RhythmRational wholes_per_second{RhythmRational{music_time.beat_tempo_}
-      * music_time.beat_ / RhythmRational{midi::SecondsPerMinuteI} };
-    // wholes_per_second.reduce();
-    //  Ticks    Quarters    whole
-    // ------- * -------- * -------
-    // Quarter     Whole    second
-    const RhythmRational ticks_per_second{QuartersPerWholeRat * wholes_per_second
-        * RhythmRational{music_time.ticks_per_quarter_}};
-    // Turn the rhythm (duration) into a ratio and multiply
-    // both the numerator and the denominator by ticks_per_second.
-    // This gives us the actual musical rhythm value.
-    const double ticks_per_second_dbl{
-          static_cast<double>(ticks_per_second.numerator())
-        / static_cast<double>(ticks_per_second.denominator())};
-    const int64_t ticks_per_second_int
-        {static_cast<int64_t>(round(ticks_per_second_dbl))};
+RhythmRational textmidi::cgm::TimeConverter::duration_to_rhythm(double duration) const
+{
     RhythmRational duration_rat{};
-    duration_rat.from_double(duration, ticks_per_second_int);
-    RhythmRational beat_tempo_rat{};
-    RhythmRational ticks_per_beat{QuartersPerWholeRat * music_time.beat_
-        * RhythmRational{music_time.ticks_per_quarter_}};
-    beat_tempo_rat.from_double(music_time.beat_tempo_, ticks_per_beat.numerator()
-        * ticks_per_beat.denominator());
-    auto rhythm{duration_rat * wholes_per_second};
+    duration_rat.from_double(duration, ticks_per_second_);
+    auto rhythm{duration_rat * wholes_per_second_};
     return rhythm;
 }
 
-//
-// Coerce a duration to be in multiples of the pulse/second value.
-RhythmRational textmidi::cgm::Composer::snap_to_pulse(RhythmRational rhythm,
-        double pulse_per_second, const MusicTime& music_time) const noexcept
+RhythmRational textmidi::cgm::TimeConverter::snap_to_pulse(RhythmRational rhythm, double pulse) const
 {
-    RhythmRational wholes_per_second{
-      RhythmRational{music_time.beat_tempo_}
-      * WholesPerBeat / RhythmRational{SecondsPerMinuteI} };
-    // wholes_per_second.reduce();
-    const RhythmRational TicksPerSecond{QuartersPerWholeRat * wholes_per_second
-        * RhythmRational{music_time.ticks_per_quarter_}};
-    const double TicksPerSecondDouble{
-          static_cast<double>(TicksPerSecond.numerator())
-        / static_cast<double>(TicksPerSecond.denominator())};
-    const int64_t TicksPerSecondInt64
-        {static_cast<int64_t>(round(TicksPerSecondDouble))};
-    RhythmRational whole_per_pulse(
-        wholes_per_second *
-        RhythmRational(TicksPerSecondInt64,
-        static_cast<int64_t>
-            (round(pulse_per_second * TicksPerSecondDouble))));
-    // Get rid of the remainder.
-    // but first round off by adding a half-pulse.
-    RhythmRational
-        pulse_per_rhythm{(rhythm + whole_per_pulse / RhythmRational{2L}) / whole_per_pulse};
-    if (pulse_per_rhythm.denominator() != 1)
-    {
-        const auto rem{pulse_per_rhythm.numerator() % pulse_per_rhythm.denominator()};
-        // snap the rhythm (duration) to pulses.
-        pulse_per_rhythm = RhythmRational{pulse_per_rhythm.numerator() - rem,
-            pulse_per_rhythm.denominator()};
-        // pulse_per_rhythm.reduce();
-        if (!pulse_per_rhythm)
-        {
-            pulse_per_rhythm = RhythmRational{1L};  // i.e., one pulse minimum.
-        }
-    }
-    rhythm = pulse_per_rhythm * whole_per_pulse;
-    return rhythm;
+    const auto pulse_duration_secs{pulse ? 1.0 / pulse : static_cast<double>(ticks_per_second_)};
+    RhythmRational pulse_rhythm{};
+    pulse_rhythm.from_double(pulse_duration_secs, ticks_per_second_);
+    pulse_rhythm *= wholes_per_second_;
+    return rhythm.snap(pulse_rhythm);
 }
 
-void textmidi::cgm::Composer
-    ::build_composition_priority_graph(const MusicalForm& xml_form,
+std::int64_t textmidi::cgm::TimeConverter::ticks_per_whole() const
+{
+    return midi::QuartersPerWhole * music_time_.ticks_per_quarter_;
+}
+
+void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm& xml_form,
     vector<list<int32_t>>& leaders_topo_sort) noexcept
 {
     using std::ranges::none_of;
@@ -276,9 +222,9 @@ void textmidi::cgm::Composer
 void textmidi::cgm::Composer::
     build_track_scramble_sequences(
     vector<vector<int32_t>>& track_scramble_sequences,
-    TicksDuration total_duration) noexcept
+    rational::RhythmRational total_duration) noexcept
 {
-    for (auto scramble_time{TicksDuration(0)}; scramble_time < total_duration;
+    for (auto scramble_time{rational::RhythmRational(0)}; scramble_time < total_duration;
         scramble_time = scramble_time + track_scramble_.period_)
     {
         track_scramble_sequences.push_back(track_scramble_.arrangements_->arrangement());
@@ -305,22 +251,15 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     using std::chrono::time_point;
     using midi::MaxDynamic, midi::MinDynamic, midi::MIDI_Format;
 
-    const auto ticks_per_second_{static_cast<std::int64_t>((
-        static_cast<double>(xml_form.music_time().ticks_per_quarter_
-        * midi::QuartersPerWhole * xml_form.music_time().beat_.numerator())
-        * xml_form.music_time().beat_tempo_)
-        / static_cast<double>(SecondsPerMinute * xml_form.music_time().beat_.denominator()))};
-    const auto seconds_per_whole_{static_cast<std::int64_t>((static_cast<double>(
-        midi::QuartersPerWhole * xml_form.music_time().beat_.numerator())
-        * xml_form.music_time().beat_tempo_)
-        / static_cast<double>(SecondsPerMinute * xml_form.music_time().beat_.denominator()))};
-
     // If the command line did not set arrangements,
     // then set them from the XML file.
+    // in floating seconds: xml_form.arrangement_definition().period())
+    RhythmRational period_rat{};
+    period_rat.from_double(xml_form.arrangement_definition().period(), time_converter_.ticks_per_whole());
+
     track_scramble_.period_
         = ((PermutationEnum::Undefined == track_scramble_.scramble_)
-        ? (static_cast<TicksDuration>(
-        static_cast<int32_t>(round(xml_form.arrangement_definition().period()))))
+        ?  time_converter_.wholes_per_second() * period_rat
         : track_scramble_.period_);
 
     track_scramble_.scramble_ = (track_scramble_.scramble_
@@ -340,9 +279,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
         textmidi::pitchname_to_keynumber(v.high_pitch()).first); } );
     KeyScaleSeq key_scale;
     xml_form.string_scale_to_int_scale(key_scale);
-    const TicksDuration time_step{xml_form.pulse() ? 1 / xml_form.pulse() : 1};
 
-    const TicksDuration total_duration(duration_to_rhythm(xml_form.len(), music_time_));
+    const rational::RhythmRational total_duration(time_converter_.duration_to_rhythm(xml_form.len()));
 
     vector<list<int32_t>> leaders_topo_sort;
     build_composition_priority_graph(xml_form, leaders_topo_sort);
@@ -366,7 +304,9 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                 while ((track.the_next_time() < total_duration)
                     && (track_note_events.size() < max_events_per_track_))
                 {
-                    size_t scramble_index{(track.the_next_time() / track_scramble_.period_).numerator()};
+                    auto period_inv{track_scramble_.period_.reciprocal()};
+                    auto scramble_rat{track.the_next_time() * period_inv};
+                    size_t scramble_index{static_cast<size_t>(scramble_rat.numerator() / scramble_rat.denominator())};
                     scramble_index
                         = (std::cmp_less(scramble_index, track_scramble_sequences.size())
                         ? scramble_index
@@ -396,17 +336,28 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     dynamic = std::max(dynamic, static_cast<int32_t>(std::round(MinDynamic)));
 
                     double rhythmd {musical_character.duration(random_double())};
-                    auto rhythm{duration_to_rhythm(rhythmd, xml_form.music_time())};
+                    auto rhythm{time_converter_.duration_to_rhythm(rhythmd)};
 
                     // Now apply the pulse.
                     // pulse is in pulses per second.
                     if (xml_form.pulse() != 0)
                     {
-                        rhythm = snap_to_pulse(rhythm, xml_form.pulse(), xml_form.music_time());
+                        rhythm = time_converter_.snap_to_pulse(rhythm, xml_form.pulse());
                     }
-                    const RhythmRational wholes_per_second{
-                        RhythmRational{xml_form.music_time().beat_tempo_} * WholesPerBeat
-                            / RhythmRational{SecondsPerMinuteI}};
+                    // zero rhythms cause time to freeze, so we need a minimum note length.
+                    if (!rhythm)
+                    {
+                        if (xml_form.min_note_len())
+                        {
+                            rhythm = time_converter_.duration_to_rhythm(xml_form.min_note_len());
+                        }
+                        else // fall back to a tick
+                        {
+                            rhythm = RhythmRational{1L, time_converter_.ticks_per_second()};
+                        }
+                    }
+                    RhythmRational tempo_rat{};
+                    tempo_rat.from_double(xml_form.music_time().beat_tempo_, time_converter_.ticks_per_whole());
                     track.the_last_time(track.the_next_time());
                     track.the_next_time(track.the_next_time() + rhythm);
 
@@ -709,21 +660,24 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     struct ::tm tm_temp{};
     timeoss << put_time(localtime_r(&t, &tm_temp), "%FT%T%Z");
     textmidi_str.clear();
+#if 0
     const auto quarter_tempo{music_time_.beat_tempo_ * static_cast<double>(music_time_.beat_ * QuartersPerWholeRat)};
-    (((((((((((textmidi_str += "STARTTRACK\nTEXT Generated ") += timeoss.str())
+#endif
+    (((((((((((((textmidi_str += "STARTTRACK\nTEXT Generated ") += timeoss.str())
         += "\nTIME_SIGNATURE ") += lexical_cast<string>(music_time_.meter_.numerator()))
         += ' ') += lexical_cast<string>(music_time_.meter_.denominator()) += ' ')
         += lexical_cast<string>(music_time_.ticks_per_quarter_))
-        += "\nTEMPO ") += lexical_cast<string>(quarter_tempo))
+        += "\nTEMPO ") += lexical_cast<string>(music_time_.beat_tempo_))
+        += ' ')
+        += lexical_cast<string>(music_time_.beat_))
         += "\nKEY_SIGNATURE C\nTEXT Computer-generated music "
            "from the textmidicgm software\nTRACK ")
         += xml_form.name()) += "\nLAZY\n";
     textmidi_file << textmidi_str;
-    for (TicksDuration aTime{0L}; aTime < total_duration;
-         aTime += TicksDuration{4L * music_time_.ticks_per_quarter_})
+    for (RhythmRational aTime{0L}; aTime < total_duration; aTime += music_time_.meter_)
     {
         textmidi_file << "R ";
-        textmidi::rational::RhythmRational rhythm{music_time_.meter_};
+        RhythmRational rhythm{music_time_.meter_};
         (*textmidi::rational::print_rhythm)(textmidi_file, rhythm);
         textmidi_file << '\n';
     }

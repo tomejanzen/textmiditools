@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: miditext [OPTION]... "
-            "[MIDIFILE]\nmiditext Version 1.0.98\n"}
+            "[MIDIFILE]\nmiditext Version 1.0.99\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nmiditext home page: "
                "https://github.com/tomejanzen/textmiditools\n"};
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "miditext\nTextMIDITools Version 1.0.98\n"
+        cout << "miditext\nTextMIDITools Version 1.0.99\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"

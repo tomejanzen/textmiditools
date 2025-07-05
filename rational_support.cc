@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -26,7 +26,7 @@ RhythmRational textmidi::rational::operator%(RhythmRational dividend,
 
 RhythmRational textmidi::rational::round(RhythmRational ratnum) noexcept
 {
-   const RhythmRational remainder(
+    const RhythmRational remainder(
         ratnum.numerator() % ratnum.denominator(),
         ratnum.denominator());
     if (remainder >= RhythmRational{1L, 2L})

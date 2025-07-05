@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -75,7 +75,7 @@ namespace textmidi
             rational::RhythmRational meter_{4L, 4L, false};
             double beat_tempo_{60.0};
             template<class Archive>
-                void serialize(Archive& arc, const unsigned int version)
+                void serialize(Archive& arc, const unsigned int )
             {
                 arc & BOOST_SERIALIZATION_NVP(ticks_per_quarter_);
                 arc & BOOST_SERIALIZATION_NVP(beat_);
@@ -310,7 +310,7 @@ namespace textmidi
                 ArrangementDefinition arrangement_definition) noexcept;
             void string_scale_to_int_scale(
                 std::vector<std::int32_t>& key_scale) const noexcept;
-            void character_now(TicksDuration theTime,
+            void character_now(rational::RhythmRational theTime,
                     MusicalCharacter& musical_character) const noexcept;
             void random(std::string formname = "random",
                 std::int32_t instrument_flags

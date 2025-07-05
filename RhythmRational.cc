@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -251,6 +251,22 @@ textmidi::rational::RhythmRational
     textmidi::rational::RhythmRational::reciprocal()
 {
     return RhythmRational(denominator_, numerator_);
+}
+
+textmidi::rational::RhythmRational
+    textmidi::rational::RhythmRational::round()
+{
+    return RhythmRational{numerator_ / denominator_};
+}
+
+textmidi::rational::RhythmRational textmidi::rational::RhythmRational::snap(const RhythmRational& grid)
+{
+    auto temp(*this);
+    temp /= grid;
+    temp = temp.round();
+    temp *= grid;
+    temp.reduce();
+    return temp;
 }
 
 std::istream& textmidi::rational::ReadMusicRational::

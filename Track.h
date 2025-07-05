@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -25,7 +25,6 @@ namespace textmidi
         // MIDI specifies tempo as per quarter note.
         const textmidi::rational::RhythmRational WholesPerBeat{1, 4};
         const textmidi::rational::RhythmRational QuartersPerWholeRat(4, 1);
-        using TicksDuration = textmidi::rational::RhythmRational;
 
         class Track
         {
@@ -34,14 +33,14 @@ namespace textmidi
               : last_pitch_index_(last_pitch_index)
             {
             }
-            TicksDuration the_next_time() const noexcept;
+            rational::RhythmRational the_next_time() const noexcept;
             std::int32_t last_pitch_index() const noexcept;
-            void the_last_time(const TicksDuration the_last_time) noexcept;
-            void the_next_time(const TicksDuration the_next_time) noexcept;
+            void the_last_time(const rational::RhythmRational the_last_time) noexcept;
+            void the_next_time(const rational::RhythmRational the_next_time) noexcept;
             void last_pitch_index(const std::int32_t last_pitch_index) noexcept;
           private:
-            TicksDuration the_last_time_{};
-            TicksDuration the_next_time_{};
+            rational::RhythmRational the_last_time_{};
+            rational::RhythmRational the_next_time_{};
             std::int32_t last_pitch_index_{};
         };
     } // namespace cgm

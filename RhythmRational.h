@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -125,6 +125,8 @@ namespace textmidi
                 RhythmRational& operator*=(RhythmRational multiplier);
 
                 RhythmRational reciprocal();
+                RhythmRational round();
+                RhythmRational snap(const RhythmRational& grid);
 
                 void reduce();
                 template<class Archive>
@@ -273,7 +275,7 @@ namespace textmidi
                             is.setstate(std::ios_base::failbit);
                             is.clear();
                             std::string message(
-                                "bad read of RhythmsRational: ");
+                                "bad read of RhythmRational: ");
                             message += buf_string;
                             throw std::runtime_error(message);
                         }

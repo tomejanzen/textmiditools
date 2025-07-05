@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -384,7 +384,7 @@ void MusicalForm::string_scale_to_int_scale (vector<int32_t>& key_scale) const
 // Compute the instantaneous character, that is
 // the current means and ranges of pitch, duration, dynamic
 // and the number of voices playing.
-void MusicalForm::character_now(TicksDuration theTime,
+void MusicalForm::character_now(rational::RhythmRational theTime,
         MusicalCharacter& musical_character) const noexcept
 {
     const double dblTime(static_cast<double>(theTime));

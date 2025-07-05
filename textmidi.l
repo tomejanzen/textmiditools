@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.0.98
+** TextMIDITools Version 1.0.99
 ** Copyright © 2025 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -816,6 +816,26 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf page 7 bottom.
     running_status->clear();
     BEGIN(DETAIL_STATE);
+  }
+
+<DETAIL_STATE>TEMPO{SPACE}{FLOAT}{SOMESPACE}{RATIO} {
+    write_delay();
+    istringstream iss(yytext);
+    string discard{};
+    double mmtempo{60.0};
+    const RhythmRational default_beat{1L, 4L};
+    RhythmRational beat(default_beat);
+    iss >> discard >> mmtempo >> beat;
+    mmtempo *= static_cast<double>(beat / default_beat);
+    // convert ticks per minute to useconds per quarter
+    const uint32_t tempo{static_cast<uint32_t>(
+        std::round((SecondsPerMinute * UsecPerSecond) / mmtempo))};
+
+    const MidiStreamVector tempovec{int24_to_vec(tempo)};
+    (*running_status)(meta_prefix[0], trackchunk);
+
+    copy(midi::tempo_prefix, back_inserter(trackchunk));
+    copy(tempovec, back_inserter(trackchunk));
   }
 
 <DETAIL_STATE>TEMPO{SPACE}{FLOAT} {

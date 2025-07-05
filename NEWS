@@ -609,3 +609,27 @@
     Animations_v3_v2.xml: fix the version of follower_.
     
     miditext: delete extra space character printed after PAN.
+
+    * Version v1.9.98
+    2025-06-11
+    Add music_time to form files for textmidicgm.
+
+    * Version v1.0.99
+    2025-07-05
+    Features:
+       textmidi language now includes an optional beat size for TEMPO.  The default is 1/4.
+       You can specify a tempo for any musical rhythm, for example
+       TEMPO 40.0 3/8
+       which would be converted by textmidi into TEMPO 60 (for a quarter note) in the binary MIDI file.
+       The miditext utility now also writes out the "1/4" for the TEMPO event.  This may
+       break round-trip tests on textmidi text files if you start with a textmidi 
+       file that uses beat sizes other than 1/4.
+
+    Fixes:
+       textmidicgm: zero-rhythms caused musical time to not advance and for high numbers of events
+       to be generated.  A minimum rhythm is now applied from min_note_len or, if that is zero, of 1 MIDI tick.
+       Also, arrangements were using incorrect rhythms for the duration between permutations.
+       The handling of rhythms and time has been heavily overhauled.
+       TextMidiForm.xsd:  music_time had to be a complexType, not a simpleType.
+       GnuPlot.cc: had compiler warnings.
+

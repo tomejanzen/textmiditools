@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.98
+// TextMIDITools Version 1.0.99
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -87,6 +87,8 @@
 
 using std::int32_t, std::string, std::vector, std::unordered_map,
       std::cerr, std::cin, std::cout, std::toupper;
+using textmidi::rational::RhythmRational;
+
 // This isn't really necessary but i wrote it in a
 // quest to get glob to compile, which wouldn't because
 // of a different mistake.
@@ -108,7 +110,6 @@ int32_t main(int argc, char *argv[])
     using boost::lexical_cast, boost::to_upper;
     using textmidi::rational::RhythmExpression, textmidi::rational::print_rhythm,
       textmidi::cgm::MusicalForm, textmidi::cgm::MusicalFormException,
-      textmidi::cgm::TicksDuration,
       textmidi::cgm::arrangement_map, textmidi::cgm::Composer;
     using cgmlegacy::TextForm;
     using arrangements::PermutationEnum;
@@ -161,7 +162,7 @@ int32_t main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: textmidicgm [OPTION]... "
-                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.98\n"}
+                    "[XMLFORMFILE]...\ntextmidicgm Version 1.0.99\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -171,7 +172,7 @@ int32_t main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidicgm\nTextMIDITools Version 1.0.98\n"
+        cout << "textmidicgm\nTextMIDITools Version 1.0.99\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -428,7 +429,7 @@ int32_t main(int argc, char *argv[])
     }
 
     PermutationEnum track_scramble_type{PermutationEnum::Undefined};
-    TicksDuration track_scramble_period{60L};
+    RhythmRational track_scramble_period{60L};
 
     if (var_map.count(arrangements_option.option())) [[unlikely]]
     {
@@ -447,7 +448,7 @@ int32_t main(int argc, char *argv[])
         }
         if (var_map.count(arrangements_period_option.option()))
         {
-            track_scramble_period = TicksDuration{
+            track_scramble_period = RhythmRational{
                 static_cast<int64_t>(
                 floor(var_map[arrangements_period_option.option()].as<double>()))};
         }

@@ -79,7 +79,7 @@ use running-status more freely.
 @node What is textmidi?
 @section What is textmidi?
 @cindex textmidi
-The program @command{textmidi} reads a text representation of a standard MIDI 
+The program @command{textmidi} reads a text representation of a standard MIDI
 file in what is called here @quotedblleft{}textmidi@quotedblright{} language,
 and converts it to a standard MIDI file, which is binary.  Each item in the text
 file corresponds to a sequence of command bytes in the binary MIDI file, more or
@@ -112,7 +112,7 @@ of 240 ticks, either a note or a rest could be as long as 1118481 quarter
 notes or 279620 whole notes.  Since delays are variable-length quantities
 (in byte steps), they can range from 1 byte to 4 bytes in size in the
 MIDI file, but as only 7 bits of value are permitted in each byte,
-values can be only up to 28 bits long (unsigned).  
+values can be only up to 28 bits long (unsigned).
 MIDI also specifies controls, such as damper pedals and
 "pressure" (named for pressure-sensitive keyboards that permit making
 a note louder or software by changing the force applied to the key), and
@@ -153,7 +153,7 @@ Archive at that time.
 textmidi [@b{@minus{}i}|@b{@minus{}@minus{}textmidi}] @var{textmidi_input_file} @b{@minus{}o}|@b{@minus{}@minus{}midi} @var{standard_midi_output_file}
 [@b{@minus{}a}|@b{@minus{}@minus{}answer}] [@b{@minus{}d}|@b{@minus{}@minus{}detache} @var{numticks}]
 [@b{@minus{}l}|@b{@minus{}@minus{}lazynoteoff}] [@b{@minus{}h}|@b{@minus{}@minus{}help}]
-[@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}runningstatus} 
+[@b{@minus{}V}|@b{@minus{}@minus{}version}] [@b{@minus{}v}|@b{@minus{}@minus{}verbose} [@b{@minus{}n}|@b{@minus{}@minus{}runningstatus}
 @var{standard|never|persistentaftermeta|persistentaftersysex|persistentaftersysexormeta)}]
 [@b{@minus{}y}|@b{@minus{}@minus{}dynamics_configuration} @var{dynamics_configuration_file}]
 @end smallexample
@@ -174,15 +174,15 @@ Allowed options:
   -i [ --textmidi ] arg               textmidi file
   -o [ --midi ] arg                   binary MIDI file
   -a [ --answer ]                     Ask before overwriting a file
-  -d [ --detache ] arg                number of ticks to cheat notes to 
+  -d [ --detache ] arg                number of ticks to cheat notes to
                                       separate consecutive notes
-  -l [ --lazynotesoff ]               To end notes, write MIDI note-offs with 
+  -l [ --lazynotesoff ]               To end notes, write MIDI note-offs with
                                       current dynamic rather than note-ons with
                                       velocity 0
-  -n [ --runningstatus ] arg          with @lbracechar{}standard | never | 
-                                      persistentaftermeta | 
-                                      persistentaftersysex | 
-                                      persistentaftersysexormeta @rbracechar{}; default is 
+  -n [ --runningstatus ] arg          with @lbracechar{}standard | never |
+                                      persistentaftermeta |
+                                      persistentaftersysex |
+                                      persistentaftersysexormeta @rbracechar{}; default is
                                       standard
   -y [ --dynamics_configuration ] arg dynamics_configuration file
 
@@ -227,8 +227,8 @@ Specifying @quotedblleft{}persistentaftermeta@quotedblright{} means that @b{meta
 Specifying @quotedblleft{}persistentaftersysex@quotedblright{} means that @b{sysex} events do not clear running status.
 Specifying @quotedblleft{}persistentaftersysexormeta@quotedblright{} means that neither @b{meta} nor @b{sysex} events clear running status.
 The purpose of @quotedblleft{}never@quotedblright{} and @quotedblleft{}persistentafter*@quotedblright{} is to emulate the misbehaviour of some MIDI file
-writing software, so that a round-trip test can be performed 
-in which a MIDI file can be converted to textmidi text, then back to a MIDI 
+writing software, so that a round-trip test can be performed
+in which a MIDI file can be converted to textmidi text, then back to a MIDI
 file that is identical to the original file.  This aids testing.
 From the spec:
 @quotedblleft{}Meta events and sysex events cancel any running status that was in effect.@quotedblright{}
@@ -447,8 +447,8 @@ DELAYS may be zero to 268435455 in MIDI tick units.
 Text meta events (a sort of MIDI pseudo-event that appears only in MIDI files)
 take string arguments.  These events may repeat throughout the track
 within Detail mode.  The string data the follows text event commands must either use the remainder of a line, or be double-quoted.
-Escaped characters in this list may be embedded in string events: \r (carriage return), 
-\n (line-feed), \a (bell), \" (double-quote), \f (formfeed), \b (backspace), 
+Escaped characters in this list may be embedded in string events: \r (carriage return),
+\n (line-feed), \a (bell), \" (double-quote), \f (formfeed), \b (backspace),
 \t (tab), \v (vertical tab).
 
 @smallexample
@@ -536,13 +536,13 @@ use these.
 TICKS Measure 86
 TICKS 'Measure 86'
 @end example
-@command{textmidi} will add a TEXT0F event with the given comment to the MIDI 
-file.  The number of ticks will be written into the string.  Double quotes are 
-not recommended for the comment, but single quotes or no quotes are fine.  If 
-you use this in a textmidi file and convert it to MIDI using @command{textmidi}, 
-then convert it back to a textmidi file (with a different name for example) 
-using @command{miditext}, then the comment at the TICKS command will show the 
-computed number of ticks at that point.  This makes it possible to compare 
+@command{textmidi} will add a TEXT0F event with the given comment to the MIDI
+file.  The number of ticks will be written into the string.  Double quotes are
+not recommended for the comment, but single quotes or no quotes are fine.  If
+you use this in a textmidi file and convert it to MIDI using @command{textmidi},
+then convert it back to a textmidi file (with a different name for example)
+using @command{miditext}, then the comment at the TICKS command will show the
+computed number of ticks at that point.  This makes it possible to compare
 tracks to see if they are landing on the same MIDI time tick at the same
 measure, for example.
 @end table
@@ -552,16 +552,26 @@ measure, for example.
 @cindex Non-text meta events
 Non-text meta events.
 @table @option
-@item TEMPO num
+@item TEMPO num [beat size]
 @cindex TEMPO
-TEMPO is set in beats per minute for a quarter note.  The tempo is per
-quarter note even if the time signature has designated the beat as an
-eighth note.  This restriction to quarter notes comes from the MIDI spec.
-You can still use any time signature, but you need to compute the
-tempo for a quarter note in that time signature.
+TEMPO is in beats per minute for the beat size; the default beat size is a
+quarter note.  The tempo is converted into beats per minute for a quarter note
+as required for a MIDI (1) file.  The tempo is a floating-point number; it may
+have a decimal fraction.  The beat size is a rational number.  For example if
+you enter:
+@smallexample
+TEMPO 60.0 3/8
+@end smallexample
+then the generated MIDI TEMPO command will useb a tempo of 90.0, because 90
+quarters per minute is equivalent to 60 dotted quarters (3/8 notes) per minute.
+If the beat size is not given, then it is assumed to be a quarter note.
+By default, the tempo is per quarter note even if the time signature has
+some other value designated as the beat.  This restriction to quarter notes comes
+from the MIDI spec.
 @example
 TEMPO 72
 @end example
+The tempo reported by @command{miditext} is always for a quarter note.
 @item KEY_SIGNATURE note_name
 @cindex KEY_SIGNATURE
 KEY_SIGNATURE is given as a note name like the pitch names, but with no octave.
@@ -601,7 +611,7 @@ TIME_SIGNATURE 3 4 240
 @end example
 @item XMF_PATCH_TYPE @lbracechar{}GM1|GM2|DLS@rbracechar{}
 Selects the XMF patch type: General MIDI 1, General MIDI 2, or DLS, which refer to the
-synthesizer type.  XMF_PATCH_TYPE should appear only as the first event of 
+synthesizer type.  XMF_PATCH_TYPE should appear only as the first event of
 a given track, but textmidi does not enforce it.
 @example
 XMF_PATCH_TYPE GM1
@@ -609,26 +619,26 @@ XMF_PATCH_TYPE GM2
 XMF_PATCH_TYPE DLS
 @end example
 @item SMPTE_OFFSET @lbracechar{}SMPTE_24FPS|SMPTE_25FPS|SMPTE_30FPSDROPFRAME|SMPTE_30FPSNONDROPFRAME@rbracechar{} HH:MM:SS:Frame:framefraction
-@cindex SMPTE_OFFSET  
+@cindex SMPTE_OFFSET
 @example
 SMPTE_OFFSET 07:47:13:07:11
 @end example
 @item SEQUENCE_NUMBER num
 @example
 SEQUENCE_NUMBER 1
-@cindex SEQUENCE_NUMBER 
+@cindex SEQUENCE_NUMBER
 @end example
 @item MIDI_CHANNEL num
-@cindex MIDI_CHANNEL 
+@cindex MIDI_CHANNEL
 @example
 MIDI_CHANNEL 1
-@cindex MIDI_CHANNEL 
+@cindex MIDI_CHANNEL
 @end example
 @item END_OF_TRACK or @rbracechar{}.
-@cindex END_OF_TRACK  
+@cindex END_OF_TRACK
 MIDI tracks must end with either an END_OF_TRACK or @rbracechar{}.
 @item SEQUENCER_SPECIFIC byte byte byte...
-@cindex SEQUENCER_SPECIFIC 
+@cindex SEQUENCER_SPECIFIC
 @end table
 
 @node Unknown meta events
@@ -696,7 +706,7 @@ CONTROL 2 BANK_SELECT 2
 CONTROL 4 MODULATION 3
 @end example
 @item BREATH
-For example, 
+For example,
 @example
 CONTROL 1 BREATH 64
 @end example
@@ -708,21 +718,21 @@ BREATH  11 99
 @item UNDEFINED_03
 @item FOOT_CONTROLLER
 @example
-CONTROL 1 FOOT_CONTROLLER 0 
+CONTROL 1 FOOT_CONTROLLER 0
 @end example
 @item PORTAMENTO_TIME
 @example
 CONTROL 1 PORTAMENTO_TIME 5
-@end example 
+@end example
 @item DATA_ENTRY_MSB
 @item CHANNEL_VOLUME
 @example
 CONTROL 1 CHANNEL_VOLUME 74
-@end example 
+@end example
 @item BALANCE
 @item UNDEFINED_09
 @item PAN channel_num LEFT|CENTER|RIGHT|@lbracechar{}-64..63@rbracechar{}
-@cindex PAN 
+@cindex PAN
 When using the numeric pan values, note that -64 is left-most, 63 is
 right-most, and 0 is in the center.
 @example
@@ -737,33 +747,33 @@ of the string PAN then Excess64 (=64) will not be added.
 @item EXPRESSION
 @example
 CONTROL 1 EXPRESSION 17
-@end example 
+@end example
 @item EFFECT_1
 @example
 CONTROL 1 EFFECT_1 18
-@end example 
+@end example
 @item EFFECT_2
 @example
 CONTROL 1 EFFECT_2 19
-@end example 
+@end example
 @item UNDEFINED_14
 @item UNDEFINED_15
 @item GENERAL_PURPOSE_1
 @example
 CONTROL 1 GENERAL_PURPOSE_1 20
-@end example 
+@end example
 @item GENERAL_PURPOSE_2
 @example
 CONTROL 1 GENERAL_PURPOSE_2 126
-@end example 
+@end example
 @item GENERAL_PURPOSE_3
 @example
 CONTROL 1 GENERAL_PURPOSE_3 125
-@end example 
+@end example
 @item GENERAL_PURPOSE_4
 @example
 CONTROL 1 GENERAL_PURPOSE_4 124
-@end example 
+@end example
 @item UNDEFINED_20 to UNDEFINED_31
 @item LSB_00 to LSB_31
 @item DAMPER
@@ -782,8 +792,8 @@ DAMPER 12 122
 @example
 CONTROL 1 PORTAMENTO_ON_OFF 0
 CONTROL 1 PORTAMENTO_ON_OFF 127
-@end example 
-@item SOSTENUTO 
+@end example
+@item SOSTENUTO
 @cindex SOSTENUTO
 The sostenuto pedal on a piano: only the keys being held at the time
 are sustained, not notes following the pedal.
@@ -816,19 +826,19 @@ SOFTPEDAL 13 1
 @item LEGATO_FOOT
 @example
 CONTROL 1 LEGATO_FOOT
-@end example 
+@end example
 @item HOLD_2
 @example
 CONTROL 1 HOLD_2
-@end example 
+@end example
 @item SOUND_VARIATION
 @example
 CONTROL 1 SOUND_VARIATION
-@end example 
+@end example
 @item TIMBRE_INTENSITY
 @example
 CONTROL 1 TIMBRE_INTENSITY
-@end example 
+@end example
 @item RELEASE_TIME
 @example
 CONTROL 1 RELEASE_TIME 63
@@ -1026,7 +1036,7 @@ An abbreviated form is available:
 POLY_ON 15
 @end example
 @end itemize
-MIDI 3D is implemented via registered parameters.  The @command{textmidi} 
+MIDI 3D is implemented via registered parameters.  The @command{textmidi}
 program can translate some 3D parameter names.  However, @command{miditext}
 does not output the parameter LSB names; it prints the hexadecimal values instead.
 Below is an example of a 3D MIDI set-up.  It has not been verified on MIDI hardware.
@@ -1071,13 +1081,13 @@ CONTROL 1 REGISTERED_PARAMETER_LSB GAIN_AT_MAX_DISTANCE
 CONTROL 1 DATA_ENTRY_MSB 0x51
 CONTROL 1 LSB_06 0x0f
 
-; reference distance ratio of .001 
+; reference distance ratio of .001
 CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
 CONTROL 1 REGISTERED_PARAMETER_LSB REFERENCE_DISTANCE_RATIO
 CONTROL 1 DATA_ENTRY_MSB 0x00
 CONTROL 1 LSB_06 0x10
 
-; pan spread angle of 30 deg. 
+; pan spread angle of 30 deg.
 CONTROL 1 REGISTERED_PARAMETER_MSB 0x3d
 CONTROL 1 REGISTERED_PARAMETER_LSB PAN_SPREAD_ANGLE
 CONTROL 1 DATA_ENTRY_MSB 0x4a
@@ -1099,13 +1109,13 @@ The program is 1-based.
 PROGRAM 14 47
 @end example
 @item CHANNEL_PRESSURE channel_num pressure_num
-@cindex CHANNEL_PRESSURE 
+@cindex CHANNEL_PRESSURE
 A per-channel pressure.  Pressure is on the velocity scale from 0 to 127.
 @example
 CHANNEL_PRESSURE 15 120
 @end example
 @item PITCH_WHEEL channel_num wheel_num
-@cindex PITCH_WHEEL 
+@cindex PITCH_WHEEL
 @example
 PITCH_WHEEL 16 16000
 @end example
@@ -1121,7 +1131,7 @@ SEQUENCER_SPECIFIC is a way of inserting proprietary synthesizer commands
 into a standard MIDI file.  It is the command SEQUENCER_SPECIFIC followed by
 1-byte values.  Do not include the length of the data; @command{textmidi} will compute
 the length and insert it before the data bytes.
-The values may be either 2-digit hexadecimal byte values prefaced with 
+The values may be either 2-digit hexadecimal byte values prefaced with
 @quotedblleft{}0x@quotedblright{}, or decimal numbers from 0 to 255.
 @smallexample
 SEQUENCER_SPECIFIC 0x43 0x73 0x7f 0x32 0x11 0x00 0x1B 0x03
@@ -1163,7 +1173,7 @@ The commands in a textmidi file may be:
 SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}Device ID@rbracechar{} @lbracechar{}SYSEX_NONRT_SUBID1@rbracechar{} 0xnn 0xnn...
 SYSEX @lbracechar{}SYSEX_SUBID@rbracechar{} @lbracechar{}Device ID@rbracechar{} @lbracechar{}SYSEX_RT_SUBID1@rbracechar{} 0xnn 0xnn...
 @end smallexample
-The device ID may be a hexadecimal or decimal positive byte value, "ALL_CALL" 
+The device ID may be a hexadecimal or decimal positive byte value, "ALL_CALL"
 or a MIDI channel.
 See @quotedblleft{}MIDI 1.0 Detailed Specification@quotedblright{}: M1_v4-2-1_MIDI_1-0_Detailed_Specification_96-1-4.pdf,
 page 35, @quotedblleft{}Device ID@quotedblright{} 0x7f is @quotedblleft{}All Call@quotedblright{} or, on page 57, @quotedblleft{}Broadcast@quotedblright{}.
@@ -1223,7 +1233,7 @@ There are some directives available in @command{textmidi} DETAIL mode.
 @cindex ticks
 When this directive is encountered, print the accumulated MIDI tick value
 to the screen.  This is a @command{textmidi} file debugging feature.
-If the tracks get misaligned by a small number of ticks, then the ticks 
+If the tracks get misaligned by a small number of ticks, then the ticks
 directive can help find where they go out of sync.
 @item Symbolic dynamic
 @cindex dynamics
@@ -1296,10 +1306,10 @@ FILEHEADER 1 120 MULTITRACK
 STARTTRACK
 TIME_SIGNATURE 4 4 240
 TEMPO 60
-LAZY vel 102 chan 1 G5- G6- 8 
-END_LAZY CONTROL 1 DAMPER 0x00 
-LAZY -G5 -G6 8 
-END_LAZY 
+LAZY vel 102 chan 1 G5- G6- 8
+END_LAZY CONTROL 1 DAMPER 0x00
+LAZY -G5 -G6 8
+END_LAZY
 END_OF_TRACK
 @end smallexample
 
@@ -1312,16 +1322,16 @@ STARTTRACK
 TIME_SIGNATURE 4 4 240
 TEMPO 60
 LAZY vel 102 chan 1 G5- G6- 0/1
-END_LAZY CONTROL 1 DAMPER 0x00 
-LAZY -G5 -G6 4 
-END_LAZY 
+END_LAZY CONTROL 1 DAMPER 0x00
+LAZY -G5 -G6 4
+END_LAZY
 END_OF_TRACK
 @end smallexample
 
 @node Rhythm
 @subsubsection Rhythm
 @cindex Rhythm
-Rhythm in LAZY mode is given in duration ratios, that is, fractions of 
+Rhythm in LAZY mode is given in duration ratios, that is, fractions of
 whole notes, just as in
 traditional music notation.  In addition, if the numerator is 1, then the
 denominator alone may be given instead.
@@ -1343,7 +1353,7 @@ To use dotted quarters, add a period to the duration
 @smallexample
 C4 4. D4 8 E4 4. F4 8 G4 4. A4 8 B4 4. C5 8
 C4 4.. D4 16 E4 4.. F4 16 G4 4.. A4 16 B4 4.. C5 16
-@end smallexample 
+@end smallexample
 You may put large numbers of dots (periods) after any rational rhythm (not simple continued fractions).  However @command{miditext} will produce dots only for rhythms that have
 numerators that are equal to one less than an integer power of two (2^n - 1).
 
@@ -1366,7 +1376,7 @@ Note that the simple continued fractions available in @command{textmidi}
 @itemize
 @item must be positive;
 @item overflow is not protected, so an overly-long fraction may
-crash @command{textmidi};  
+crash @command{textmidi};
 @item There must be no spaces anywhere in the simple continued fraction
 from opening bracket to closing bracket;
 @item simple continued fractions may NOT be dotted (as in dotted rhythms);
@@ -1394,7 +1404,7 @@ The 3/4 and dotted half become
 @smallexample
 3/4 = 1/(4/3) = 1/(1 + 1/3)
 @end smallexample
-The integer is 0 as 3/4 is less than 1.  Picking off the denominators in the 
+The integer is 0 as 3/4 is less than 1.  Picking off the denominators in the
 final version, we get 1 and 3.
 Taking the denominators 1 and 3, the line in a @command{textmidi} file becomes
 @smallexample
@@ -1463,7 +1473,7 @@ The chan directive and the vel directive (and other dynamics) apply to all follo
 notes until another directive changes them.
 
 @smallexample
-c#4 e4- 4. chan 3 d4 f4 8 e4 g4 4. ff f4 ab4 8 g4 b4 4. 
+c#4 e4- 4. chan 3 d4 f4 8 e4 g4 4. ff f4 ab4 8 g4 b4 4.
 vel -5 a4 c5 8 -e4 b4 d5 4. c5 eb5 8
 @end smallexample
 
@@ -1483,7 +1493,7 @@ Then to use this trill in a file called prelude.m4 you type
 @example
 trill_68_mid(C4,D4)
 @end example
-Then prelude.m4 is processed by m4 into a textmidi file, which can be 
+Then prelude.m4 is processed by m4 into a textmidi file, which can be
 converted into a MIDI file:
 @example
 m4 prelude.m4 > prelude.txt
@@ -1873,7 +1883,7 @@ General Public License, to permit their use in free software.
 @item @cite{Recommended Practice (RP-019) SMF Device Name and Program Name Meta Events.}
 1998.  Los Angeles.  MIDI Manufacturers Association, Inc.
 
-@item @cite{Three Dimensional Sound Controllers (RP-049).}  
+@item @cite{Three Dimensional Sound Controllers (RP-049).}
 2009.  Version 1.0.  MIDI Manufacturers Association, Inc.
 
 @item @cite{AMEI/MMA Recommended Practice RP-032 SMF Meta-Event for XMF Patch Type Prefix.}

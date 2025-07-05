@@ -19,12 +19,17 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="MusicTime">
-        <xs:element name="ticks_per_quarter_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="beat_"       type="posrational" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="meter_"      type="posrational" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="beat_tempo_" type="xs:double"  minOccurs="1" maxOccurs="1"/>
-    </xs:simpleType>
+    <xs:complexType name="MusicTime">
+        <xs:sequence>
+            <xs:element name="ticks_per_quarter_" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="beat_"       type="posrational" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="meter_"      type="posrational" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="beat_tempo_" type="xs:double"  minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
 
     <xs:complexType name="SineType">
         <xs:sequence>

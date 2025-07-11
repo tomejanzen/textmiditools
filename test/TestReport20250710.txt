@@ -1,0 +1,226 @@
+1. Regenerate dependencies.  
+skip
+
+2. Check and up-date header file dependencies in Makefile.am.
+aclocal 
+autoconf 
+automake --add-missing 
+./configure 
+DONE; did a git status to see that only autom4te.cache changed. 
+source makeothermakefiles.com SKIP
+make clean SKIP
+make -f Makefile.opt 2> warn.txt
+yyunput is defined but not used. (in the flex tokenizer writer textmidi.l)
+basic_string in __builtin_memcpy is reporting too high a byte count.
+Unused "midi_stream_tail"
+
+Check in the results.
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+3. source cpplint.com
+sed -i -f cpplint.sed cpplintout.txt
+Examine cpplintout.txt.
+remove a trailing space in Composer.cc and add #include <tuple> to RhythmRational.h.
+
+4.  Run cppcheck.com
+Review cppcheckout.txt.
+Remove use of variable is_int because there is already such a function in RhythmRational.
+The RhythmRational numeric_limits are not used; that is acceptable.  Also true of div().
+
+5. Run a test with miditext.cc #define DEBUG_THREADLESS  SKIPPED
+just before it's tested.
+make clean
+make -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+5b. SKIP
+cd test
+./textmidiroundtriptest.py classical_archivesshort.txt
+all 100% passed
+
+Restore the threaded version: git checkout miditext.cc
+
+5.5 rebuild SKIP
+make clean
+make -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+6. cd test
+./roundtriptests.bash
+All test and binary comparisons should be identical.
+
+7. source chorded.com
+All files are to be identical.
+
+Files chorded.mid and chordedlazy.mid are identical
+Files chorded2.mid and chorded2lazy.mid are identical
+Files chorded3.mid and chorded3lazy.mid are identical
+
+8. cd test; source eventtests.com
+
+1a2
+> 
+4,6c5,7
+< DELAY 240 CONTROL 1 PAN CENTER
+< DELAY 240 CONTROL 1 SOFTPEDAL ON
+< DELAY 240 COPYRIGHT Copyright © 2025 Ludwig van Beethoven
+---
+> DELAY 240 CONTROL 1 PAN CENTER  
+> DELAY 240 CONTROL 1 SOFTPEDAL 0x7f 
+> DELAY 240 COPYRIGHT "Copyright © 2025 Ludwig van Beethoven"
+8,9c9,10
+< DELAY 240 DEVICE_NAME computer
+< DELAY 240 INSTRUMENT Lead Sax
+---
+> DELAY 240 DEVICE_NAME "computer"
+> DELAY 240 INSTRUMENT "Lead Sax"
+15,19c16,20
+< DELAY 240 NOTE_OFF 1 A#4 64
+< DELAY 240 PAN 1 LEFT
+< DELAY 240 PAN 1 CENTER
+< DELAY 240 PAN 1 RIGHT
+< DELAY 240 PAN 1 2
+---
+> DELAY 240 NOTE_OFF 1 Bb4 64
+> DELAY 240 CONTROL 1 PAN LEFT  
+> DELAY 240 CONTROL 1 PAN CENTER  
+> DELAY 240 CONTROL 1 PAN RIGHT  
+> DELAY 240 CONTROL 1 PAN 2  
+23,24c24,26
+< DELAY 240 PROGRAM_NAME Electric Piano 1
+< DELAY 240 SEQUENCER_SPECIFIC 0x00 0x00 0x00 0x6a 0x00 0x04 0x01
+---
+> DELAY 240 PROGRAM_NAME "Electric Piano 1"
+> DELAY 240 
+> SEQUENCER_SPECIFIC 0x00 0x00 0x00 0x6a 0x00 0x04 0x01
+28c30
+< DELAY 240 SYSEX NON_REALTIME 0x06 0x7c 0x00 0x2a 0x43 0x4c 0x20 0x20 0x43 0x4c 0x50 0x27 0x30 0x33 0x30 0x30 0x00 0x00 0x7f 0x0a 0x00 0x01 0x0b 0x0a 0x0a 0x00 0x0a 0x36 0x0a 0x01 0x01 0x0a 0x0a 0x00 0x02 0x00 0x02 0x00 0x00 0x00 0x0a 0x01 0x01 0x40 0x78 0x00 0x0a 0x0d
+---
+> DELAY 240 SYSEX NON_REALTIME 0x06 NONRT_WAIT 0x00 0x2a 0x43 0x4c 0x20 0x20 0x43 0x4c 0x50 0x27 0x30 0x33 0x30 0x30 0x00 0x00 0x7f 0x0a 0x00 0x01 0x0b 0x0a 0x0a 0x00 0x0a 0x36 0x0a 0x01 0x01 0x0a 0x0a 0x00 0x02 0x00 0x02 0x00 0x00 0x00 0x0a 0x01 0x01 0x40 0x78 0x00 0x0a 0x0d
+30c32
+< DELAY 240 TEMPO 60.125
+---
+> DELAY 240 TEMPO 60.12499987 1/4
+38c40
+< DELAY 240 TICKS "MEASURE 42"
+---
+> DELAY 240 TEXT_0F "Ticks: 8640 \"MEASURE 42\""
+43,53c45,55
+< DELAY 240 BREATH 1 0x40
+< DELAY 240 DAMPER 1 0x40
+< DELAY 240 SOFTPEDAL 1 0x40
+< DELAY 240 MONO_ON 1 0x40
+< DELAY 240 SOFTPEDAL 1 ON
+< DELAY 240 ALL_SOUND_OFF 1
+< DELAY 240 RESET_ALL_CONTROLLERS 2
+< DELAY 240 ALL_NOTES_OFF 3
+< DELAY 240 OMNI_OFF 4
+< DELAY 240 OMNI_ON 5
+< DELAY 240 POLY_ON 6
+---
+> DELAY 240 CONTROL 1 BREATH 0x40 
+> DELAY 240 CONTROL 1 DAMPER 0x40 
+> DELAY 240 CONTROL 1 SOFTPEDAL 0x40 
+> DELAY 240 CONTROL 1 MONO_ON 0x40 
+> DELAY 480 CONTROL 1 ALL_SOUND_OFF 0x00 
+> DELAY 240 CONTROL 2 RESET_ALL_CONTROLLERS 0x00 
+> DELAY 240 CONTROL 3 ALL_NOTES_OFF 0x00 
+> DELAY 240 CONTROL 4 OMNI_OFF 0x00 
+> DELAY 240 CONTROL 5 OMNI_ON 0x00 
+> DELAY 240 CONTROL 6 POLY_ON 0x00 
+> 
+
+9. cd test; source textmidicgmtest.com
+textmidicgmtest_arrangements.txt 
+    Check for the two voices (in the second and third tracks) alternating playing every 10 seconds each.
+    DONE
+textmidicgmtest_base.txt
+    Check for a tempo of 60 on a beat of 1/4. DONE
+    The first rhythms in the second track should be 1/4 ("4"). EXCEPTION
+    [Fixed a defect in snap_to_pulse in which the pulse rhythm was unintentionally modified.]
+    [ Also checked for a zero result and coerced a minimum of a pulse rhythm.]
+    DONE
+
+textmidicgmtest_halfbeat.txt
+    Check for a tempo of 60 on a beat of 1/2. DONE
+    The first rhythms in the second track should be 1/2. EXCEPTION
+
+    [Fixed a defect in snap_to_pulse in which the pulse rhythm was unintentionally modified.]
+    [ Also checked for a zero result and coerced a minimum of a pulse rhythm.]
+    DONE
+
+textmidicgmtest_pulse4.txt
+    Check that the rhythms in the second track are multiples of 1/16 notes. EXCEPTION, they are in 1/32 notes
+    [Fixed a defect in snap_to_pulse in which the pulse rhythm was unintentionally modified.]
+    [ Also checked for a zero result and coerced a minimum of a pulse rhythm.]
+    DONE
+
+    (Such as 8, 16, 8.)
+textmidicgmtest_tempo90.txt
+    Check for a TIME_SIGNATURE 6 8 720 and TEMPO 40 3/8.  DONE
+    Check that the tempo track rests are dotted halves (for 6/8). DONE
+    Check that the rhythms in the second track are 1/4.  EXCEPTION
+    [Fixed a defect in snap_to_pulse in which the pulse rhythm was unintentionally modified.]
+    [ Also checked for a zero result and coerced a minimum of a pulse rhythm.]
+    DONE
+    (1/4 is one second for 3/8 = M.M. 400 and the max note length
+     is 1 second.)
+
+10.  After executing this test sequence, compile with clang. SKIP
+Report step 6 through 9.
+
+11. ./testtextmidiformedit.bash
+Follow printed instructions at each step.
+DONE
+
+12. ./testtextmidicgm.bash
+DONE
+
+13. For SMUS conversion: source sacre.com
+musescore sacre_sacrifice.mid
+timidity -invvvt -Os sacre_sacrifice.mid
+Should be the Sacrificial Dance of Stravinksy's The Rite of Spring.
+source sacre_clean.com
+DONE
+
+14.  Then edit version.sed and version.bash to upgrade both the
+new and old version numbers.
+DONE
+./version.bash DONE
+
+./buildkit.bash
+
+Check in the changed files.
+git status > ci.com; edit ci.com to just have the changed files with "git add " in front of them.
+run ci.com
+git commit -m "new version TextMIDITools v1.0.99"
+
+15.
+cd 
+cp -an textmiditools-1.0.nn temp-1.9.nn
+cd temp-1.9.nn
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
+and watch for a successful build of textmidi, miditext, textmidicgm, and smustextmidi.
+DONE
+
+16. Update pdfs and copy them to the kit area. SKIP
+
+texi2pdf miditext.texi
+texi2pdf smustextmidi.texi
+texi2pdf textmidicgm.texi
+texi2pdf TextMidiFormEdit.texi
+texi2pdf textmidi.texi
+
+cp miditext.pdf ~/textmiditools-1.0.nn/
+cp smustextmidi.pdf ~/textmiditools-1.0.nn/
+cp textmidicgm.pdf ~/textmiditools-1.0.nn/
+cp TextMidiFormEdit.pdf ~/textmiditools-1.0.nn/
+cp textmidi.pdf ~/textmiditools-1.0.nn/
+

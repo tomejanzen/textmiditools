@@ -1,3 +1,4 @@
+#include <cfenv>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -337,6 +338,57 @@ int main()
         cout << '\n';
     }
 
+    std::map<int, string> roundmap
+    {
+        {FE_TOWARDZERO, "FE_TOWARDZERO"},
+        {FE_DOWNWARD, "FE_DOWNWARD"},
+        {FE_UPWARD, "FE_UPWARD"},
+        {FE_TONEAREST,"FE_TONEAREST" }
+    };
+    cout << "FLT_ROUNDS: " << roundmap[fegetround()] << '\n';
+    const RhythmRational snapper{1L, 4L};
+    for (RhythmRational q3{0L}; q3 < RhythmRational{2L}; q3 += RhythmRational{1L, 8L})
+    {
+        cout << q3 << " rounded: " << q3.round() << " snap to " << snapper << ' '<< q3.snap(snapper) << '\n';
+    }
+    for (RhythmRational q4{0L}; q4 < RhythmRational{2L}; q4 += RhythmRational{1L, 7L})
+    {
+        cout << q4 << " rounded: " << q4.round() << " snap to " << snapper << ' '<< q4.snap(snapper) << '\n';
+    }
+    for (RhythmRational q4{2L}; q4 > RhythmRational{-2L}; q4 -= RhythmRational{1L, 7L})
+    {
+        cout << q4 << " rounded: " << q4.round() << " snap to " << snapper << ' '<< q4.snap(snapper) << '\n';
+    }
+    fesetround(FE_TOWARDZERO);
+    cout << "FE_TOWARDZERO ";
+    cout << "FLT_ROUNDS: " << roundmap[fegetround()] << '\n';
+    for (RhythmRational q4{2L}; q4 > RhythmRational{-2L}; q4 -= RhythmRational{1L, 7L})
+    {
+        cout << q4 << " rounded: " << q4.round() << " snap to " << snapper << ' '<< q4.snap(snapper) << '\n';
+    }
+    fesetround(FE_DOWNWARD);
+    cout << "FE_DOWNWARD ";
+    cout << "FLT_ROUNDS: " << roundmap[fegetround()] << '\n';
+    for (RhythmRational q4{2L}; q4 > RhythmRational{-2L}; q4 -= RhythmRational{1L, 7L})
+    {
+        cout << q4 << " rounded: " << q4.round() << " snap to " << snapper << ' '<< q4.snap(snapper) << '\n';
+    }
+    fesetround(FE_UPWARD);
+    cout << "FE_UPWARD ";
+    cout << "FLT_ROUNDS: " << roundmap[fegetround()] << '\n';
+    for (RhythmRational q4{2L}; q4 > RhythmRational{-2L}; q4 -= RhythmRational{1L, 7L})
+    {
+        cout << q4 << " rounded: " << q4.round() << " snap to " << snapper << ' '<< q4.snap(snapper) << '\n';
+    }
+    fesetround(FE_TONEAREST);
+    cout << "FE_TONEAREST ";
+    cout << "FLT_ROUNDS: " << roundmap[fegetround()] << '\n';
+    for (RhythmRational q4{2L}; q4 > RhythmRational{-2L}; q4 -= RhythmRational{1L, 7L})
+    {
+        cout << q4 << " rounded: " << q4.round() << " snap to " << snapper << ' '<< q4.snap(snapper) << '\n';
+    }
+    RhythmRational q1{2L, 3L};
+    RhythmRational q2{1L, 2L};
     return 0;
 }
 

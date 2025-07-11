@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.99
+// TextMIDITools Version 1.1.0
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -11,6 +11,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include <cctype>
+#include <cfenv>
 #include <cmath> // abs()
 #include <cstdint>
 #include <cstdlib>
@@ -256,7 +257,58 @@ textmidi::rational::RhythmRational
 textmidi::rational::RhythmRational
     textmidi::rational::RhythmRational::round()
 {
-    return RhythmRational{numerator_ / denominator_};
+    switch (fegetround())
+    {
+        case FE_DOWNWARD:
+            if (*this >= RhythmRational{0L})
+            {
+                return RhythmRational{numerator_ / denominator_};
+            }
+            else
+            {
+                if (this->is_int())
+                {
+                    return RhythmRational{numerator_ / denominator_};
+                }
+                else
+                {
+                    RhythmRational temp{*this - RhythmRational{1L}};
+                    return RhythmRational{temp.numerator() / temp.denominator()};
+                }
+            }
+            break;
+        case FE_UPWARD:
+            if (*this < RhythmRational{0L})
+            {
+                return RhythmRational{numerator_ / denominator_};
+            }
+            else
+            {
+                if (this->is_int())
+                {
+                    return RhythmRational{numerator_ / denominator_};
+                }
+                else
+                {
+                    RhythmRational temp{*this + RhythmRational{1L}};
+                    return RhythmRational{temp.numerator() / temp.denominator()};
+                }
+            }
+            break;
+        case FE_TOWARDZERO:
+            return RhythmRational{numerator_ / denominator_};
+            break;
+        case FE_TONEAREST:
+        default:
+            const auto tempabs(abs(*this));
+            RhythmRational result{(tempabs.numerator() + (tempabs.denominator() / 2)) / tempabs.denominator()};
+            if (*this < RhythmRational{0L})
+            {
+                result *= RhythmRational{-1L};
+            }
+            return result;
+            break;
+    }
 }
 
 textmidi::rational::RhythmRational textmidi::rational::RhythmRational::snap(const RhythmRational& grid)

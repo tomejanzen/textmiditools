@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.99
+// TextMIDITools Version 1.1.0
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -29,6 +29,7 @@
 #include <regex>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <utility>
 
 #include <boost/archive/xml_iarchive.hpp>
@@ -41,6 +42,9 @@ namespace textmidi
 {
     namespace rational
     {
+        // To improve use a highly composite number <= 2^63.
+        constexpr std::int64_t composite_denominator
+            {2L*2L*2L*3L*3L*3L*5L*5L*11L*13L*16L*18L*23L*18L*31L*37L*41L*43L*47L};
         enum class RhythmExpression : std::int32_t
         {
             Rational = 1,
@@ -69,7 +73,18 @@ namespace textmidi
                     }
                 }
 
-                void from_double(double x, std::int64_t denominator = 1L, bool reduce_it = true)
+                constexpr std::tuple<std::int64_t, RhythmRational> div() const
+                {
+                    return std::tuple(numerator_ / denominator_,
+                           RhythmRational{numerator_ % denominator_, denominator_});
+                }
+
+                constexpr bool is_int() const
+                {
+                    return ((numerator_ % denominator_) == 0L);
+                }
+
+                void from_double(double x, std::int64_t denominator = composite_denominator, bool reduce_it = true)
                 {
                     if (0L == denominator)
                     {
@@ -119,6 +134,12 @@ namespace textmidi
                 bool operator>(RhythmRational comparand) const;
                 bool operator<=(RhythmRational comparand) const;
                 bool operator>=(RhythmRational comparand) const;
+                friend int  operator<=>(const RhythmRational& q1, const RhythmRational& q2)
+                {
+                    if (q1 < q2) return -1;
+                    if (q1 > q2) return  1;
+                    return 0;
+                }
                 RhythmRational& operator+=(RhythmRational addend);
                 RhythmRational& operator-=(RhythmRational subtractor);
                 RhythmRational& operator/=(RhythmRational divisor);

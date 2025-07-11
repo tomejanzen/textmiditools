@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.99
+// TextMIDITools Version 1.1.0
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -168,8 +168,8 @@ MelodyProbabilities::MelodyDirection
     //   0.0 >= down
     //   down >= same
     //   up >= 1.0
-    // To prevent voices from walking off to one end of their ranges, keep
-    //   up == down
+    // Recommendation to composers: To prevent voices from walking
+    // off to one end of their ranges, keep up == down.
 
     if (random_variable >= up_)
     {

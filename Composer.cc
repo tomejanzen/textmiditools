@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.0.99
+// TextMIDITools Version 1.1.0
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,9 +12,10 @@
 #  include <config.h>
 #endif /* HAVE_CONFIG_H */
 
+#include <cctype>
+#include <cfloat>
 #include <cmath>
 #include <cstdint>
-#include <cctype>
 
 #include <algorithm>
 #include <chrono>
@@ -80,7 +81,15 @@ RhythmRational textmidi::cgm::TimeConverter::snap_to_pulse(RhythmRational rhythm
     RhythmRational pulse_rhythm{};
     pulse_rhythm.from_double(pulse_duration_secs, ticks_per_second_);
     pulse_rhythm *= wholes_per_second_;
-    return rhythm.snap(pulse_rhythm);
+    // The original realtime Amiga computer version in 1989 had a minimum length of
+    // a pulse, if a pulse were given.  Therefore we cannot produce a rhythm of zero.
+    // Really, all the rhythms were rounded up.
+    auto snapped{rhythm.snap(pulse_rhythm)};
+    if (!snapped)
+    {
+        snapped = pulse_rhythm;
+    }
+    return snapped;
 }
 
 std::int64_t textmidi::cgm::TimeConverter::ticks_per_whole() const

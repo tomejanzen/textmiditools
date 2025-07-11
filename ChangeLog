@@ -1,3 +1,8 @@
+2025-07-10    Thomas E. Janzen <janzentome@gmail.com>
+        * RhythmRational.{h,cc}, test/testRhythmRational.cc:
+        round() gave incorrect results.  Write test to test fix.
+        Implement support for fesetround().
+
 2025-07-05    Thomas E. Janzen <janzentome@gmail.com>
         * TextMidiForm.xsd: make music_time a complexType.
         * Composer.{h,cc}: fix defect in which rhythms of

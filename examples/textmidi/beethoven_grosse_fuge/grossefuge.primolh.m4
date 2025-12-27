@@ -1794,7 +1794,6 @@ swing(F5,D5,Bb5,Bb5)
 ;m 742
 swing(A5,A4,F5,F5)
 ;m 743
-ticks primolh 743
 F4 Bb4 D5 4 R 8 R 4.
 ; fine
 END_LAZY

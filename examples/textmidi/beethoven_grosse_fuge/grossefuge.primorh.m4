@@ -618,7 +618,7 @@ LAZY
 ff
 END_LAZY
 KEY_SIGNATURE Bb
-END_LAZY
+LAZY
 D4 4 R 8 R 4.
 ;m 236
 R 2.
@@ -1810,7 +1810,6 @@ F6 4 R 8 R 4.
 ;m 742
 lilt(A5,F6,F6)
 ;m 743
-ticks primorh 743
 F5 Bb5 4 R 8 R 4.
 ; fine
 END_LAZY

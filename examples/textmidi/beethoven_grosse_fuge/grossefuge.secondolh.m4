@@ -1739,7 +1739,6 @@ Bb1 4 R 2
 ;m 742
 lilt(F2,F1,F1)
 ;m 743
-ticks secondolh 743
 Bb1 Bb2 4 R 2
 ; fine
 END_LAZY

@@ -1790,7 +1790,6 @@ sixhalfosc(Bb3 D4,F3)
 ;m 742
 sixhalf(A3 C4,F3,A3 C4,F3,C4 Eb4,F3)
 ;m 743
-ticks secondorh 743
 F3 Bb3 D4 4 R 8 R 4.
 ; fine
 END_LAZY

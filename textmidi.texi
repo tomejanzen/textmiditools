@@ -1231,10 +1231,13 @@ There are some directives available in @command{textmidi} DETAIL mode.
 @table @option
 @item ticks
 @cindex ticks
-When this directive is encountered, print the accumulated MIDI tick value
-to the screen.  This is a @command{textmidi} file debugging feature.
-If the tracks get misaligned by a small number of ticks, then the ticks
-directive can help find where they go out of sync.
+When this directive is encountered, write the accumulated MIDI tick value
+to a TEXT_0F meta event.  Use @command{textmidi} to create the MIDI file, then
+@command{miditext} to create a newly named textmidi file, and read the 
+ticks in the TEXT_0F events.  If you put the @command{ticks} command at the same
+point in separate tracks, you can match the total ticks in multiple tracks, or
+find mistakes in rhythmic alignment.
+This is a @command{textmidi} file debugging feature.
 @item Symbolic dynamic
 @cindex dynamics
 Set the dynamic with symbols @lbracechar{}pppp|ppp|pp|p|mp|mf|forte|ff|fff|ffff@rbracechar{}.

@@ -65,11 +65,11 @@ D5 D4 8 R 8 B4 B3 8 -D4 8 D4- E4- A4 A3 8 R 8 G4 G3 8 -D4 -E4 8
 ;m 839
 D4- F#4- Gb3 8 R 8 E4 E3 8 -D4 8 D4 D3 8 -F#4 8 G4 C4 C3 8 A4 8
 ;m 840
-G4 B3 B2 8 R 8 G4 Db4 Db3 8 R 8 Gb4 D4 D4- 8 R 8 Gb4 Gb3 8 R 8
-;m 841
-E4- A4 A3 8 R 8 G4 G3 8 -E4 -D4 8 D6 D5 Gb4 Gb3 D4- 8 R 8 Db6 Db5 8 R 8
+G4 B3 B2 8 R 8 G4 Db4 Db3 8 R 8 Gb4 D4- 8 R 8 Gb4 Gb3 8 R 8
+;m 841 ; Liszt's notation of the D4 has separate releases of it.
+E4- A4 A3 8 R 8 G4 G3 8 -E4 -D4 8 D6 D5 Gb4 Gb3 D4- 8 R 8 Db6 Db5 8 -D4 8
 ;m 842
-D6 D5 8 R 8 B5 B4 8 R 8 A5 A4 E4- 4 G5 G4 8 -E4 -D4 8
+D4- D6 D5 8 R 8 B5 B4 8 R 8 A5 A4 E4- 4 G5 G4 8 -E4 -D4 8
 ;m 843
 D4- F#4- Gb5 Gb4 8 R 8 E5 E4 8 -D4 8 D5 D4 8 -F#4 8 C5 C4 G4 8 A4 8
 ;m 844

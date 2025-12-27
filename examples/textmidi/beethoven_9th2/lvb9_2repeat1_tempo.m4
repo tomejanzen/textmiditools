@@ -83,7 +83,7 @@ R 2.
 R 2.
 ;p 27
 ;m 60
-END_LAZY TEXT p 27
+END_LAZY TEXT page 27
 LAZY
 R 2.
 R 2.
@@ -154,7 +154,7 @@ R 2.
 R 2.
 R 2.
 ;p 28
-END_LAZY TEXT p 28
+END_LAZY TEXT page 28
 LAZY
 ;m 112
 R 2.

@@ -1,5 +1,5 @@
 ;Beethoven: d minor Symphony: molto vivace in textmidi language © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
-END_LAZY TEXT p 29
+END_LAZY TEXT page 29
 LAZY
 ;m 301
 R 2.
@@ -66,7 +66,7 @@ R 2.
 R 2.
 R 2.
 ;p 30
-END_LAZY TEXT p 30
+END_LAZY TEXT page 30
 LAZY
 ;m 347
 R 2.
@@ -138,7 +138,7 @@ R 2.
 ;m 396
 R 2.
 ;p 31
-END_LAZY TEXT p 31
+END_LAZY TEXT page 31
 LAZY
 ;m 397
 R 2.
@@ -209,7 +209,7 @@ END_LAZY TEXT Letter H
 LAZY
 R 2.
 ;p 32
-END_LAZY TEXT p 32
+END_LAZY TEXT page 32
 LAZY
 ;m 439
 R 2.
@@ -275,7 +275,7 @@ R 2.
 ;m 481
 R 2.
 ;p 33
-END_LAZY TEXT p 33
+END_LAZY TEXT page 33
 LAZY
 ;m 482
 R 2.

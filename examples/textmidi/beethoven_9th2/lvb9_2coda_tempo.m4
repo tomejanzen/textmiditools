@@ -14,12 +14,7 @@ R 2.
 ;m 777
 R 2.
 ;m 778
-R 2
-END_LAZY TEMPO 40 
-LAZY 
-R 4
-END_LAZY TEMPO 328 
-LAZY 
+R 2.
 
 ; CODA
 ;=============================================

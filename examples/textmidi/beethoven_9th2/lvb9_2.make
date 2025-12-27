@@ -1,8 +1,9 @@
 .SUFFIXES:
 .SUFFIXES: .mid .txt .m4 .wav
+TEXTMIDI=/usr/bin/env textmidi
 
 lvb9_2.mid : lvb9_2.txt
-	/home/janzent/me/janzent/miscprog/textmidi/textmidi --textmidi $< --midi $@
+	$(TEXTMIDI) --textmidi $< --midi $@
 lvb9_2.txt :  \
                 lvb9_2.m4 \
                 lvb9_2bridge2_piano1.m4 \

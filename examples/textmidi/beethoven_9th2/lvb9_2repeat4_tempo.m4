@@ -30,7 +30,7 @@ R 1
 ;m 828
 R 1
 ;p 35
-END_LAZY TEXT p 35 
+END_LAZY TEXT page 35 
 LAZY
 ;Letter L
 END_LAZY TEXT Letter L 

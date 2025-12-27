@@ -54,7 +54,7 @@ pedalchange
 ;m 964
 A4 C#5 E5 A5 D2 16 D3 16 G3- A3- C#4- E4- 8
 E5 E6 8 -G3 -A3 -C#4 -E4 8 
-D3- G3- A3- C#4- E4- F#5 F#6 8 8
+D3- G3- A3- C#4- E4- F#5 F#6 8 R 8
 E5 E6 8 -D3 -G3 -A3 -C#4 -E4 8
 pedalchange
 ;m 965

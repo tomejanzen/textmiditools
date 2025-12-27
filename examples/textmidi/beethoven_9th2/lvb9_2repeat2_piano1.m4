@@ -272,7 +272,7 @@ F5- F6- Bb2 Bb1 8 R 8 piano R 2
 ;p 32
 
 ;m 439
-G5- Bb3 8 R 4 F4 8 F4 8 -F5 -G5 -F6 8
+G5- Bb3 8 R 4 F4 8 F4 8 -F5 -G5 8
 vel +5 G5- F5- Eb3 8 R 4  G4 F4 8 G4 F4 8 -F6 -G5 -F5 8
 vel +5 Eb5- G5- Eb6- C3 8 R 4  Eb4 G4 C5 8 Eb4 G4 C5 8 -Eb5 -G5 -Eb6 8
 vel +5 Eb5- A5- Eb6- F3 8 R 4  Eb4 A4 C5 8 Eb4 A4 C5 8 -Eb5 -A5 -Eb6 8
@@ -416,7 +416,7 @@ A4 A3 F3 8 R 8 F4 A3 D3 8 R 8 E4 A3 C3 8 R 8
 p
 D5- C3- A3- D4 D3 4 E4 E3 4 Gb4 Gb3 -C3 -A3 4
 ;m 497
--D5 Bb2- G3- G4- 4 E5 4 F#5 -Bb2 -G3 4
+-D5 Bb2- G3- G4- 4 E5 4 F#5 4
 ;m 498
 vel +7
 G5- -G4 -G3 4 F3 F4 4 Eb3 Eb4 -G5 -Bb2 4
@@ -425,7 +425,7 @@ vel +7
 G4- Eb5- G5- Bb3 Bb2 4 Ab3 Ab2 4 G3 G2 -G4 -Eb5 -G5 4
 ;m 500
 vel -12
-G2- G3- G5- E5 Bb4 4 F5 A4 -G5 4 Bb4- -G5 -G2 -G3 4
+G2- G3- G5- E5 Bb4 4 F5 A4 -G5 4 Bb4- G5- -G2 -G3 4
 ;m 501
 A2- A3- -G5 -Bb4 E5 4 A4 D5 F5 4 G4 C#5 E5 -A2 -A3 8 Bb2 16 G3 16
 ;m 502

@@ -1229,15 +1229,20 @@ D4 F4 A4 4
 There are some directives available in @command{textmidi} DETAIL mode.
 
 @table @option
-@item ticks
+@item ticks @quotedblleft{}description@quotedblright{}
 @cindex ticks
-When this directive is encountered, write the accumulated MIDI tick value
-to a TEXT_0F meta event.  Use @command{textmidi} to create the MIDI file, then
-@command{miditext} to create a newly named textmidi file, and read the 
-ticks in the TEXT_0F events.  If you put the @command{ticks} command at the same
-point in separate tracks, you can match the total ticks in multiple tracks, or
-find mistakes in rhythmic alignment.
+When this directive is encountered with a following message string, @command{textmidi} 
+writes the accumulated MIDI tick value and the message
+to a MIDI TEXT_0F meta event in the MIDI file.  If you use @command{textmidi} to 
+create the MIDI file, then @command{miditext} to convert it back to a newly named 
+textmidi file, then you can read the ticks values in the TEXT_0F events.  If you 
+put the @command{ticks} command at the same point in separate tracks, you can match 
+the total ticks in multiple tracks and find mistakes in rhythmic alignment.
 This is a @command{textmidi} file debugging feature.
+@smallexample
+ticks "Rehearsal Letter A"
+@end smallexample
+The quotes are optional if there are no further commands on the line.
 @item Symbolic dynamic
 @cindex dynamics
 Set the dynamic with symbols @lbracechar{}pppp|ppp|pp|p|mp|mf|forte|ff|fff|ffff@rbracechar{}.

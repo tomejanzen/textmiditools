@@ -563,7 +563,7 @@ F4 8 R 8
 R 8 Bb4 9/128 Ab4 7/128
 sixteenthsqtrdyn3(Ab4,Gb4,Db5,Cb5)
 ;m 222
-vel +3 Cb5 16 vel +3 Bb4 16 vel +3 Bb5 16 vel +3 Ab5 16 vel +3 Ab5 16 vel +3 Gb5 16 vel +3 Ab5 16 Gvel +3 B5 16
+vel +3 Cb5 16 vel +3 Bb4 16 vel +3 Bb5 16 vel +3 Ab5 16 vel +3 Ab5 16 vel +3 Gb5 16 vel +3 Ab5 16 vel +3 Gb5 16
 ;m 223
 vel +3 Gb5 16 vel +3 F5 16 vel +3 Cb6 16 vel +3 Bb5 16 vel +3 Bb5 16 vel +3 Ab5 16 vel +3 Ab5 16 vel +3 F5 16
 ;m 224

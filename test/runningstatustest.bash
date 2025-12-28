@@ -7,21 +7,21 @@ function runningstatustest
     temporary_directory=$(mktemp -d)
     bn=$(basename ${midifilename} .mid)
     echo ${bn}
-    miditext --midi ${midifilename} --textmidi ${temporary_directory}/${bn}.txt
+    /usr/bin/env miditext --midi ${midifilename} --textmidi ${temporary_directory}/${bn}.txt
     echo textmidi --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus standard
-    textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus standard
+    /usr/bin/env textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus standard
     /usr/bin/env diff -s ${temporary_directory}/${bn}.mid $midifilename
     echo textmidi --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus never
-    textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus never
+    /usr/bin/env textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus never
     /usr/bin/env diff -s ${temporary_directory}/${bn}.mid $midifilename
     echo textmidi --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftermeta
-    textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftermeta
+    /usr/bin/env textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftermeta
     /usr/bin/env diff -s ${temporary_directory}/${bn}.mid $midifilename
     echo textmidi --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftersysex
-    textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftersysex
+    /usr/bin/env textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftersysex
     /usr/bin/env diff -s ${temporary_directory}/${bn}.mid $midifilename
     echo textmidi --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftersysexormeta
-    textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftersysexormeta
+    /usr/bin/env textmidi      --textmidi ${temporary_directory}/${bn}.txt --midi ${temporary_directory}/${bn}.mid --runningstatus persistentaftersysexormeta
     /usr/bin/env diff -s ${temporary_directory}/${bn}.mid $midifilename
     /usr/bin/env rm ${temporary_directory}/${bn}.mid ${temporary_directory}/${bn}.txt
     /usr/bin/env rmdir ${temporary_directory}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# textmidiform.py 1.0
+# textmidiform.py 1.1
 # Copyright © 2021 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -21,6 +21,7 @@ txt_identical_count = 0
 verbose = False
 lazy = False
 simplecontinuedfraction = False
+lazynoteoff = False
 
 def testmidi(filename, an_option = "standard"):
     global midi_differ_count
@@ -29,10 +30,18 @@ def testmidi(filename, an_option = "standard"):
     global txt_identical_count
     global verbose
     global lazy
+    global lazynoteoff
     global simplecontinuedfraction
 
-    miditext_base_cmd = "miditext --verbose "
-    textmidi_base_cmd = "textmidi --runningstatus " + an_option
+    miditext_base_cmd = "/usr/bin/env miditext "
+    textmidi_base_cmd = "/usr/bin/env textmidi "
+    if verbose:
+        miditext_base_cmd += "--verbose "
+        textmidi_base_cmd += "--verbose "
+    textmidi_base_cmd += "--runningstatus " + an_option
+    if lazynoteoff:
+        textmidi_base_cmd += "--lazynoteoff "
+        
     if lazy:
         miditext_base_cmd += " --lazy"
     if simplecontinuedfraction:
@@ -44,12 +53,13 @@ def testmidi(filename, an_option = "standard"):
     miditext_cmd = miditext_base_cmd + " --midi " + filenamepath.as_posix() + " --textmidi " + textmidifilepath.as_posix()
     miditext_log = os.popen(miditext_cmd)
     if verbose:
-        print(miditext_cmd, "\n")
+        print(miditext_cmd, "")
     miditext_lines = miditext_log.readlines()
     miditext_log.close()
     if verbose:
         for log in miditext_lines:
             print(log, end='')
+
     tempmidifilepath = Path(temp_directory_name.name)
     tempmidifilepath = tempmidifilepath.joinpath(filenamepath.name)
 
@@ -58,7 +68,8 @@ def testmidi(filename, an_option = "standard"):
 
     textmidi_cmd = textmidi_base_cmd + " --textmidi " + textmidifilepath.as_posix() + " --midi " + tempmidifilepath.as_posix()
     if verbose:
-        print(textmidi_cmd, "\n")
+        print()
+        print(textmidi_cmd, '')
     textmidi_log = os.popen(textmidi_cmd)
     textmidi_lines = textmidi_log.readlines()
     textmidi_log.close()
@@ -68,7 +79,8 @@ def testmidi(filename, an_option = "standard"):
 
     remiditext_cmd = miditext_base_cmd + " --midi " + tempmidifilepath.as_posix() + " --textmidi " + retextmidifilepath.as_posix()
     if verbose:
-        print(remiditext_cmd, "\n")
+        print()
+        print(remiditext_cmd, '')
     remiditext_log = os.popen(remiditext_cmd)
     remiditext_lines = remiditext_log.readlines()
     remiditext_log.close()
@@ -77,6 +89,9 @@ def testmidi(filename, an_option = "standard"):
             print(log, end='')
 
     diff_midi_cmd = "/usr/bin/env diff -s " + filenamepath.as_posix() + ' ' + tempmidifilepath.as_posix()
+    if verbose:
+        print()
+        print(diff_midi_cmd, '')
     diff_midi_log = os.popen(diff_midi_cmd, 'r')
     diff_midi_lines = diff_midi_log.readlines()
     diff_midi_log.close()
@@ -87,14 +102,18 @@ def testmidi(filename, an_option = "standard"):
         if (search_rtn):
             if search_rtn.group(1) == "differ":
                 midi_differ_count = midi_differ_count + 1
-                print(line, end='')
+                print(line, end='\n')
             else:
                 if search_rtn.group(1) == "are identical":
                     midi_identical_count = midi_identical_count + 1
-                if verbose:
-                    print(log, end='')
+                    if verbose:
+                        print(line, end='')
 
     diff_txt_cmd = "/usr/bin/env diff -q -bBw -s " + textmidifilepath.as_posix() + ' ' + retextmidifilepath.as_posix()
+    if verbose:
+        print('\n')
+        print(diff_txt_cmd, '')
+
     diff_txt_log = os.popen(diff_txt_cmd, 'r')
     diff_txt_lines = diff_txt_log.readlines()
     diff_txt_log.close()
@@ -104,12 +123,15 @@ def testmidi(filename, an_option = "standard"):
         if (search_rtn):
             if search_rtn.group(1) == "differ":
                 txt_differ_count = txt_differ_count + 1
-                print(line)
+                print(line, end='\n')
             else:
                 if search_rtn.group(1) == "are identical":
                     txt_identical_count = txt_identical_count + 1
-                if verbose:
-                    print(line, end='')
+                    if verbose:
+                        print(line, end='')
+    if verbose:
+        print('\n')
+        print('')
 
     textmidifilepath.unlink()
     tempmidifilepath.unlink()
@@ -132,6 +154,9 @@ if __name__ == '__main__':
                     else:
                         if opt == "simplecontinuedfraction":
                             simplecontinuedfraction = True
+                        else:
+                            if opt == "lazynoteoff":
+                                lazynoteoff = True
     starttime = time.asctime()
     for f in file_list:
         f = f.rstrip()

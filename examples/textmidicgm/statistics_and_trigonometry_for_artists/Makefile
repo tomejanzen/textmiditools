@@ -1,5 +1,8 @@
+TEXTMIDI:=/usr/bin/env textmidi
+TEXTMIDICGM:=/usr/bin/env textmidicgm
+
 %.txt:%.xml
-	textmidicgm --xmlform $< --textmidi $@
+	$(TEXTMIDICGM) --xmlform $< --textmidi $@
 
 xmls = \
 arctan.xml \
@@ -21,7 +24,7 @@ txts = $(xmls:%.xml=%.txt)
 all : $(midis)
 
 $(midis): %.mid: %.txt
-	textmidi --textmidi $< --midi $@
+	$(TEXTMIDI) --textmidi $< --midi $@
 
 .PHONY: clean
 clean:

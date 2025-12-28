@@ -7,8 +7,8 @@ SHELL=/usr/bin/ksh
 M4=/usr/bin/m4
 CP=/bin/cp
 RM=/bin/rm
-TEXTMIDI:=textmidi
-TEXTMIDICGM:=textmidicgm
+TEXTMIDI:=/usr/bin/env textmidi
+TEXTMIDICGM:=/usr/bin/env textmidicgm
 opus=Demo93
 
 names:=\

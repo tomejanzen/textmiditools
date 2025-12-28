@@ -1,5 +1,7 @@
+TEXTMIDI:=/usr/bin/env textmidi
+TEXTMIDICGM:=/usr/bin/env textmidicgm
 %.txt:%.xml
-	textmidicgm --xmlform $< --textmidi $@
+	$(TEXTMIDICGM) --xmlform $< --textmidi $@
 
 midis = \
 commu9.mid \
@@ -12,10 +14,12 @@ xmas92.mid
 
 txts := $(midis:%.mid=%.txt)
 
+.PHONY: all
 all : $(midis)
 
 $(midis): %.mid: %.txt
-	textmidi --textmidi $< --midi $@
+	$(TEXTMIDI) --textmidi $< --midi $@
 
+.PHONY: clean                   
 clean:
 	/usr/bin/env rm $(midis) $(txts)

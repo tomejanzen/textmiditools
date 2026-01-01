@@ -11,7 +11,7 @@ TextMIDITools program textmidi, currently on github under TextMIDITools.
 
 To build, first build and install the program textmidi.
 Then, 
-    make -f lvb9_2.make
+    make -f grossefuge.make
 
 MIDI Program 1 is set on all 4 channels to specify a grand piano sound from
 General MIDI.

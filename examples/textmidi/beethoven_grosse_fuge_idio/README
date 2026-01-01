@@ -1,0 +1,35 @@
+Ludwig van Beethoven, Grosse Fuge, trans. by the composer for piano 4 hands,
+in textmidi language.  
+Arranged for MIDI idiophone percussion under General MIDI on percussion channel 10 
+by Thomas E. Janzen.
+It is proposed that the Grosse Fuge is a set of rhythmic variations.
+Put into the Creative Commons.
+© 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+
+This collection of files will build into Beethoven's Grosse Fuge
+for string quartet, as transcribed for piano four hands by
+Beethoven himself, then arranged for General MIDI idiophone
+percussion by Thomas E. Janzen.
+
+The make file requires the m4 macro processor and the 
+TextMIDITools program textmidi, currently on github under TextMIDITools.
+
+To build, first build and install the program textmidi.
+Then, 
+    make -f grossefuge.make
+
+The source files are:
+
+grossefuge.m4           : Top managing macro file, which includes the others.
+grossefuge.tempo.m4     : Tempo Track
+grossefuge.primorh.m4   : Primo piano part, right hand; program is Marimba.
+grossefuge.primolh.m4   : Primo piano part, left hand; program is Marimba.
+grossefuge.secondorh.m4 : Secondo piano part, right hand; program is Marimba.
+grossefuge.secondorhextra.m4 : Secondo piano part, right hand extra line.
+grossefuge.secondolh.m4 : Secondo piano part, left hand; program is vibraphone.
+grossefuge.trills.m4    : trill definitions.
+grossefuge.click.m4     : click track; commented out in grossefuge.m4.
+instruments.m4          : list of instruments.  Its assignment to Marimba and Vibraphone 
+                          are used by m4 to replace those terms with program numbers.
+percussion.m4           : percussion definitions needed by click track.
+

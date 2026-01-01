@@ -1,0 +1,36 @@
+;Beethoven: Grosse fuge, trans. by the composer, in textmidi language.  
+; Arranged for MIDI pitched percusion under General MIDI
+; © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭
+define(`trill_68_start',`$1 1/16 $2 1/16 $1 1/16 $2 1/16 ')
+define(`trill_68_mid',`$1 1/16 $2 1/16 $1 1/16 $2 1/16 $1 1/16 $2 1/16 ')
+define(`trill_68_mid3',`trill_68_mid($1,$2)')
+define(`trill_68_mid6',`trill_68_mid($1,$2)trill_68_mid($1,$2)')
+define(`trill_68_mid12',`trill_68_mid6($1,$2)trill_68_mid6($1,$2)')
+define(`trill_68_mid24',`trill_68_mid12($1,$2)trill_68_mid12($1,$2)')
+define(`trill_68_mid48',`trill_68_mid24($1,$2)trill_68_mid24($1,$2)')
+define(`trill_68_end',`$1 1/24 $2 1/24 $1 1/24 ')
+define(`trill_68_18',`$1 1/16 $2 1/16 ')
+define(`trill_68_28_grace',`trill_68_18($1,$2)trill_68_end($1,$3)')
+define(`trill_68_38_grace',`trill_68_start($1,$2)trill_68_end($1,$3)')
+define(`trill_68_68_grace',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_end($1,$3)')
+define(`trill_68_98_grace',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_end($1,$3)')
+define(`trill_68_128_grace',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_end($1,$3)')
+define(`trill_68_218',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_end($1,$2)')
+define(`trill_68_158',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_end($1,$2)')
+define(`trill_68_128',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_end($1,$2)')
+define(`trill_68_68',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_end($1,$2)')
+define(`trill_68_98',`trill_68_start($1,$2)trill_68_mid($1,$2)trill_68_mid($1,$2)trill_68_end($1,$2)')
+define(`trill_68_38',`trill_68_start($1,$2)trill_68_end($1,$2)')
+define(`trill_68_398',`trill_68_mid24($1,$2)trill_68_mid12($1,$2)trill_68_mid3($1,$2)')
+define(`trill_68_698',`trill_68_mid48($1,$2)trill_68_mid12($1,$2)trill_68_mid6($1,$2)trill_68_mid3($1,$2)')
+define(`trill_24_18',`$1 48 $2 48 $1 48 $2 48 $1 48 $2 48 ')
+define(`trill_24_14',`$1 48 $2 48 $1 48 $2 48 $1 48 $2 48 $1 48 $2 48 $1 48 $2 48 $1 48 $2 48 ')
+define(`trill_24_24',`trill_24_14($1,$2)trill_24_14($1,$2)')
+define(`trill_24_34',`trill_24_14($1,$2)trill_24_14($1,$2)trill_24_14($1,$2)')
+
+define(`trill_24_34_8_529',`$1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 $2 24 $1 24 ') 
+define(`trill_24_34_533',`$1 16 $2 16 $1 16 $2 16 $1 16 $2 16 $1 16 $2 16 $1 16 $2 16 $1 16 $2 16 ') 
+
+
+define(`trill_24_34_8',`trill_24_34($1,$2)trill_24_18($1,$2)')
+define(`trill_24_44',`trill_24_24($1,$2)trill_24_24($1,$2)')

@@ -59,7 +59,6 @@ define(`sixteenthshalfdyn1',`sixteenthsqtrdyn1($1,$2,$3,$4) sixteenthsqtrdyn1($5
 define(`sixteenthshalfdyn2',`sixteenthsqtrdyn2($1,$2,$3,$4) sixteenthsqtrdyn2($5,$6,$7,$8)')
 define(`sixteenthshalfdyn3',`sixteenthsqtrdyn3($1,$2,$3,$4) sixteenthsqtrdyn3($5,$6,$7,$8)')
 
-
 define(`sixteenthshalf1_3',`sixteenthsqtr1($1,$2,$3,$4) sixteenthsqtr3($5,$6,$7,$8)')
 define(`sixteenthshalf1',`sixteenthsqtr1($1,$2,$3,$4) sixteenthsqtr1($5,$6,$7,$8)')
 define(`sixteenthshalf2',`sixteenthsqtr2($1,$2,$3,$4) sixteenthsqtr2($5,$6,$7,$8)')
@@ -95,11 +94,6 @@ define(`click44', `crashcymbal2 8 acoustic_snare 8 AcousticBassDrum 8 acoustic_s
 define(`offbeats68',`R 4. $1 4 R 8')
 define(`eighths',`$1 8 R 8 $2 8 R 8')
 
-define(`primorhchan',`1')
-define(`primolhchan',`2')
-define(`secondorhchan',`3')
-define(`secondolhchan',`4')
-
 define(`pppp',`vel 10')
 define(`ppp',`vel 25')
 define(`pp',`vel 43')
@@ -121,6 +115,18 @@ define(`ffff',`vel 127')
 ;define(`ff',`vel 98')
 ;define(`fff',`vel 109')
 ;define(`ffff',`vel 120')
+
+define(`AcousticGrandPianochan', `1')
+define(`Celestachan', `2')
+define(`Clavichan', `3')
+define(`OrchestralHarpchan', `4')
+define(`ElectricGuitarCleanchan', `5')
+define(`Kalimbachan', `6')
+define(`Marimbachan', `7')
+define(`TubularBellschan', `8')
+define(`Vibraphonechan', `9')
+define(`Xylophonechan', `11')
+define(`AcousticBassFingerchan', `12')
 
 include(`grossefuge.trills.m4')
 include(`percussion.m4')

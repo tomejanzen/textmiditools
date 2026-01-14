@@ -1,10 +1,10 @@
 STARTTRACK
 TRACK Secondo Right Hand Extra
 TEXT "Beethoven: Grosse fuge, trans. by the composer, in textmidi language - arranged by Thomas E. Janzen for General MIDI percussion.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
-PROGRAM secondorhchan Marimba
+
 LAZY
+chan Marimbachan 
 ffff
-chan secondorhchan
 ;page 4
 ;m 0
 ;pickup

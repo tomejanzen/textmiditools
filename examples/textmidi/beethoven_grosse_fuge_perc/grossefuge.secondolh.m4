@@ -1,10 +1,21 @@
 STARTTRACK
 TRACK Secondo Left Hand
 TEXT "Beethoven: Grosse fuge, trans. by the composer, in textmidi language - arranged by Thomas E. Janzen for General MIDI percussion.  © 2024 by Thomas E. Janzen is licensed under CC BY 4.0 🅯🅭"
-PROGRAM secondolhchan Vibraphone
+PROGRAM AcousticGrandPianochan AcousticGrandPiano
+PROGRAM Celestachan Celesta
+PROGRAM Clavichan Clavi
+PROGRAM OrchestralHarpchan OrchestralHarp
+PROGRAM ElectricGuitarCleanchan ElectricGuitarClean
+PROGRAM Kalimbachan Kalimba
+PROGRAM Marimbachan Marimba
+PROGRAM TubularBellschan TubularBells
+PROGRAM Vibraphonechan Vibraphone
+PROGRAM Xylophonechan Xylophone
+PROGRAM AcousticBassFingerchan AcousticBassFinger
+
 LAZY
+chan Vibraphonechan 
 ffff vel -10
-chan secondolhchan
 ;page 4
 ;m 0
 END_LAZY
@@ -14,9 +25,6 @@ LAZY
 R 4.
 R 4
 ff vel -8 
-END_LAZY
-DAMPER secondolhchan 127
-LAZY
 G1 16
 D2 16
 ;m 1
@@ -46,14 +54,10 @@ D2 16
 G1 16
 D2 16
 ;m 3
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 fff vel -10
 G1 D2 9/8
 ;m 4
-END_LAZY
-DAMPER secondolhchan 0
-LAZY
 ff vel -8 
 G1 G2 15/8
 ;m 5
@@ -76,8 +80,7 @@ F#2 F#3 4 R 8
 ;m 12
 G2 G3 4 R 8 R 4.
 ;m 13
-END_LAZY PROGRAM secondolhchan Harpsichord
-LAZY
+chan ElectricGuitarCleanchan
 lilt(G2,G#2,F3)
 ;m 14
 liltcontd(E3,G#2,A2,F#3)
@@ -97,8 +100,7 @@ LAZY
 p
 R 2
 ;m 20
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 R 4 F1 F2 1.
 ;m 21
 
@@ -117,8 +119,7 @@ G2 4 E3 4
 F3 4
 R 4
 ;m 28
-END_LAZY
-KEY_SIGNATURE Bb
+END_LAZY KEY_SIGNATURE Bb
 LAZY
 pp
 R 9/1
@@ -140,8 +141,7 @@ ff vel -8
 ;m 36
 
 ;m 37
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 restquavers(F3,F3)
 ;m 38
 restquavers(F#3,Eb4)
@@ -153,16 +153,14 @@ restquavershalf(G3)
 gallopfullhalf(R,Eb3,F4,F4)
 ;page 4
 ;m 41
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 gallopskip(F4,D3,Ab4)
 ;m 42
 gallopdown(Ab4,G4,F4,Eb4,D4)
 ;m 43
 gallopskip(Eb4,Eb3,G4)
 ;m 44
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopfull(G4,F4,F4,Eb4,R,Bb2,C4,C4)
 ;m 45
 gallopfull(C4,A2,C3,C3,C3,A1,Eb3,Eb3)
@@ -179,8 +177,7 @@ G3 8 R 8 R 4 R 8. Eb3 16 D3 8 R 16 F3 16
 ;m 51
 Eb3 4 R 2.
 ;m 52
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 restquavers(Bb1 Bb2,Bb1 Bb2)
 ;m 53
 restquavers(B1 B2,Ab2 Ab3)
@@ -205,8 +202,7 @@ R 3/1
 ;m 62
 
 ;m 63
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 R 2
 gallopfullhalf(R,Eb2,F3,F3)
 ;m 64
@@ -223,8 +219,7 @@ gallopdown(F3,E3,F#3,G3,A3)
 ;m 69
 gallopfull(A3,Bb3,B3,C4,C4,D4,D4,C4)
 ;m 70
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan AcousticBassFingerchan
 triplets(B3,D4,C4,C4,B3,Ab3,G3,F3,Eb3,D3,C3,B2)
 ;m 71
 triplets(B2,C3,Db3,C3,Ab2,Bb2,Bb2,G2,Ab2,Ab2,F2,G2)
@@ -246,12 +241,10 @@ triplets(A2,F#2,G2,G2,B2,D3,D3,B2,C3,C3,E3,G3)
 tripletshalf(G3,E3,F3,D3,B2,C3)
 gallopfullhalf(C3,E2,E2,G2)
 ;m 80
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan AcousticBassFingerchan
 repquavers(E2,F1 F2,F#1 F#2,G1 G2)
 ;m 81
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopfull(A1 A2,F3,A4,A4,A4,F3,C5,C5)
 ;m 82
 gallopdown(C5,Bb4,A4,G4,F#4)
@@ -275,8 +268,7 @@ gallopfull(D3,C#3,D3,D3,D3,E3,E3,F3)
 F#3 4 C2 8 C2 8
 repquavershalf(F#3,F#4)
 ;m 92
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 repquavers(R,D2,D3,D4)
 ;m 93
 repquavers(R,C#2,C#3,C#4)
@@ -285,27 +277,25 @@ repquavers(R,A2,A4,Bb4)
 ;m 95
 repquavers(A4,A4,G4,G4)
 ;m 96
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopfull(F4,E4,E4,D4,C#4,F4,F4,E4)
 ;page 8
 ;m 97
 D4 4 R 4
 gallopfullhalf(C#4,G4,G4,F4)
 ;m 98
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 repquavers(E4,D4,C#4,C4)
 ;m 99
 repquavers(C2,C3,C4,R)
 ;m 100
 restquavershalf(C2)
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopfullhalf(C3,C2,C4,C4)
 ;m 101
 gallopdown(C4,Bb3,Ab3,G3,F3)
 ;m 102
+chan AcousticBassFingerchan
 gallopfull(F3,C2,C3,C3,C3,Bb2,Bb2,Ab2)
 ;m 103
 gallopfull(Ab2,G2,G2,F2,F2,E3,E2,F2)
@@ -328,6 +318,7 @@ gallopfull(F#1 F#2,G1 G2,G1 G2,Bb1 Bb2,Bb1 Bb2,A1 A2,G1 G2,G1 G2)
 gallopfull(F#1 F#2,F1 F2,B1 B2,B1 B2,B1 B2,A1 A2,A1 A2,A1 A2)
 ;m 111
 D2 4 R 4 
+chan Xylophonechan
 gallopfullhalf(R,G3,Bb3,Bb3)
 ;m 112
 A3 8 R 8 R 4
@@ -336,8 +327,7 @@ gallopfullhalf(R,D3,F4,F4)
 gallopskip(F4,D3,Ab4)
 ;m 114
 gallopfullhalf(Ab4,G4,G4,F4)
-    END_LAZY PROGRAM secondolhchan AcousticGrandPiano
-    LAZY
+chan AcousticGrandPianochan
 dahditdithalf(Eb4,Ab3,G3,F3,Eb3,D3)
 ;m 115
 dahditdithalf(Eb3,F2,G2,G2,A2,B2)
@@ -350,8 +340,7 @@ dahditditfull(F2,D3,C3,Bb2,A2,G2,A2,D4,C4,Bb3,A3,G3)
 ;m 118
 dahditdithalf(F#3,G3,A3,D3,E3,F#3)
 G3 4 
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 offrestquavershalf(G3)
 ;m 119
 offrestquavershalf(C3)
@@ -363,15 +352,13 @@ offrestquavershalf(Bb3)
 offrestquavershalf(Eb3)
 R 8 Bb2 8
 ;m 122
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 Bb2 8 R 16 Ab2 16 Ab2 8 R 16 Gb2 16
 F2 4 R 8
 Ab2 8
 ;m 123
 gallopdownhalf(A2,G2,F2)
-    END_LAZY PROGRAM secondolhchan AcousticGrandPiano
-    LAZY
+chan AcousticGrandPianochan
 dahditdithalf(Eb2,G2,Ab2,Bb2,C3,Db3)
 ;m 124
 dahditditfull(Eb3,Eb2,F2,G2,Ab2,Bb2,C3,F2,Eb2,Db2,C2,Bb1)
@@ -383,37 +370,32 @@ dahditditfull(A1,Bb1,C2,F1,G1,A1,A1,C2,F2,F2,G2,A2)
 ;m 127
 dahditditfull(Bb1,F2,Bb2,C3,D3,Eb3,D3,Eb3,F3,Bb1,C2,D2)
 ;m 128
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopfull(Eb2,G1,Bb2,Bb2,Bb2,G1,Db3,Db3)
 ;m 129
 gallopdown(Db3,C3,Bb2,Ab2,G2)
 ;m 130
 gallopfull(G2,F2,F2,Eb2,Eb2,Eb2,E2,E2)
 ;m 131
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 E2 8 C2 8 C2 8 r 8
 offrestquavershalf(Bb2)
 ;m 132
 offrestquavers(E2,F2)
 ;m 133
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopdown(Eb4,D4,C4,Bb3,A3)
 ;m 134
 gallopdown(A3,G3,F3,Eb3,D3)
 ;m 135
 D3 8 R 8
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 offrestquavers(Bb1,F2)
 ;m 136
 offrestquavershalf(F1)
 R 8 Eb2 8
 ;m 137
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopdown(D2,C3,B2,Ab2,G2))
 ;m 138
 gallopfull(G3,F3,F3,Eb3,Eb3,D3,Db3,C3)
@@ -427,16 +409,14 @@ R 2/1
 ;m 142
 
 ;m 143
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 quaversfull(R,F3,F3,F3,F#3,Eb4,Eb4,D4)
 ;m 144
 quaversfull(D4,F#3,F#3,G3,G3,E4,Eb4,Eb4)
 ;m 145
 D4 8 R 8 R 4 R 2
 ;m 146
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 R 2 R 4 R 12 Bb1 12 C3 12
 ;m 147
 triplets(C3,A1,C3,C3,A1,Eb3,Eb3,D3,C3,C3,Bb2,A2)
@@ -455,8 +435,7 @@ triplets(Bb1,A1,G1,C2,Bb1,A1,D2,C2,Bb1,Eb2,D2,C2)
 ;m 154
 triplets(F2,Eb2,D2,G2,F2,E2,A2,G2,F2,G2,Eb2,F2)
 ;m 155
-END_LAZY PROGRAM secondolhchan Xylophone
-LAZY
+chan Xylophonechan
 gallopskip2(Bb1,D3,D3,Bb1,B1)
 ;m 156
 gallopfull(G1,B2,G1,G1,C2,C3,Bb2,Bb2)
@@ -470,8 +449,8 @@ gallopfull(Gb1,Gb2,A1,A2,C2,C3,Gb2,Gb1)
 gallopfull(Gb1,Gb2,Bb1,Bb2,Bb1,Db3,Gb2,Gb1)
 ;page 12
 ;m 161
+chan OrchestralHarpchan 
 END_LAZY
-PROGRAM secondolhchan ElectricGrandPiano
 KEY_SIGNATURE Gb
 LAZY
 pp
@@ -502,8 +481,7 @@ R 10/2
 ;m 177
 ;m 178
 ;m 179
-END_LAZY PROGRAM secondolhchan Vibraphone
-LAZY
+chan Vibraphonechan
 R 8 Ab3 8 Ab3 8 Ab3 8 
 ;m 180
 sixteenthsqtrdyn1(Ab3,C3,Db3,Ab3) Ab3 8 R 8
@@ -627,8 +605,8 @@ sixteenthshalfosc(F1,F2)
 sixteenthshalfosc(F1,F2)
 ;page 16
 ;m 235
+chan Clavichan 
 END_LAZY
-PROGRAM secondolhchan Clavichord
 KEY_SIGNATURE Bb
 LAZY
 ff vel -8
@@ -1036,8 +1014,7 @@ R 2.
 ;m 425
 R 2.
 ;m 426
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 R 4.
 D3 8 Eb3 8 Eb4 13/8
 ;m 427
@@ -1150,8 +1127,7 @@ Bb2 4. Db2 8 R 4
 swing(Ab2,C2,Eb2,Ab1)
 ;m 479
 D2 D3 8 
-END_LAZY PROGRAM secondolhchan Marimba
-LAZY
+chan Marimbachan
 Eb2 Eb3 8 Eb2 Eb3 8 R 4.
 ;m 480
 R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
@@ -1176,8 +1152,7 @@ R 4 Eb2 8 Eb2 8 R 4
 ;m 490
 R 4 Eb2 Eb3 8 Eb2 Eb3 8 R 4
 ;m 491
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 lilt(Eb2,F3,F3)
 ;m 492
 swing(F3,Eb2,F3,F3)
@@ -1189,8 +1164,7 @@ swing(Ab3,Eb2,Ab2,Ab2)
 mf vel -8 
 Ab2 8 R 8 R 4
 ;m 496
-END_LAZY PROGRAM secondolhchan AcousticGrandPiano
-LAZY
+chan AcousticGrandPianochan
 sixteenthshalf7(Ab1,Ab2)
 ;m 497
 vel +5
@@ -1242,10 +1216,7 @@ Eb2 Eb3 8
 Eb2 Eb3 8 
 R 8
 ;m 513
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 R 4
 forte vel -10
 trill_24_44(Eb2,F2)
@@ -1308,7 +1279,8 @@ trill_24_34_533(F2,G2)
 ;m 534
 
 ;m 535
-END_LAZY PROGRAM secondolhchan Harpsichord
+chan ElectricGuitarCleanchan
+END_LAZY
 KEY_SIGNATURE Bb
 LAZY
 forte vel -10
@@ -1378,8 +1350,7 @@ swingrest(C2,Eb3)
 ;m 566
 swingrest(F3,F2)
 ;m 567
-END_LAZY PROGRAM secondolhchan Kalimba
-LAZY
+chan Kalimbachan
 liltpickup(D4,F4)
 ;m 568
 mp
@@ -1413,8 +1384,7 @@ A4 8 Bb4 4.
 ;m 579
 liltpickup(F4,D4)
 ;m 580
-END_LAZY PROGRAM secondolhchan Vibraphone
-LAZY
+chan Vibraphonechan
 liltpickup(G3,Db3)
 ;m 581
 mf vel -8 
@@ -1537,8 +1507,7 @@ offbeats68(F3)
 ;m 634
 offbeats68(Bb2)
 ;m 635
-END_LAZY PROGRAM secondolhchan ElectricGrandPiano
-LAZY
+chan OrchestralHarpchan
 offbeats68(F4)
 ;m 636
 swingrest(Bb3,F3)
@@ -1556,8 +1525,7 @@ mf vel -8
 ;m 642
 
 ;m 643
-END_LAZY PROGRAM secondolhchan Kalimba
-LAZY
+chan Kalimbachan
 forte vel -10
 liltpickupsynco(F4,Gb4)
 ;m 644
@@ -1618,8 +1586,7 @@ R 2
 ;m 663
 R 2
 ;m 664a
-END_LAZY PROGRAM secondolhchan AcousticGrandPiano
-LAZY
+chan AcousticGrandPianochan
 ; I made it a regular 2/4 bar to do the fermata
 R 2
 ;m 664b
@@ -1722,8 +1689,7 @@ trill_68_698(Eb2,F2)
 ;m 702
 trill_68_98_grace(F2,G2,E2)
 ;m 703
-END_LAZY PROGRAM secondolhchan Vibraphone
-LAZY
+chan Vibraphonechan
 
 Bb2 4 R 8
 ;m 704
@@ -1765,8 +1731,7 @@ pp
 trill_68_38_grace(A2,Bb2,G2)
 Bb2 4 R 8
 ;m 718
-END_LAZY PROGRAM secondolhchan AcousticGrandPiano
-LAZY
+chan AcousticGrandPianochan
 R 4.
 Bb1 15/8
 ;m 719

@@ -43,12 +43,12 @@ class XmlForm(tkinter.Tk):
         self.grid_rowconfigure(0, weight=1)
 
         self.canvas.bind('<Configure>', self.configure_callback)
+        self.resizable(True, True)
 
         self.draw_form()
         self.title('Form Plot')
 
         self.frame = tkinter.ttk.Frame(self, padding='1 1 1 1')
-
         self.option_add('*tearOff', FALSE)
         self.frame.grid(column=0, row=0, sticky=(N, W, E, S))
         self.columnconfigure(0, weight=1)

@@ -1,3 +1,20 @@
+2026-13-09    Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiFormEdit.py: restore resizability of form plot, which had
+        been written to resize well.
+
+2026-01-09    Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, KeyboardWindow.py, Sine.py, TextMidiFormEdit.py,
+        VoiceWindow.py:  Set windows to be non-resizable; remove some
+        redundant Tk::Frames.
+
+2025-12-31    Thomas E. Janzen <janzentome@gmail.com>
+        * examples/textmidi/beethoven_grosse_fuge, beethoven_grosse_fuge_idio, 
+        beethoven_grosse_fuge_perc: add the idio and perc versions of the grosse
+        fuge; upload to github.
+
+2025-12-26    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.texi: Fix description of "ticks" directive.
+
 2025-07-10    Thomas E. Janzen <janzentome@gmail.com>
         * RhythmRational.{h,cc}, test/testRhythmRational.cc:
         round() gave incorrect results.  Write test to test fix.

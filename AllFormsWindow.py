@@ -317,6 +317,7 @@ class AllFormsWindow(tkinter.Toplevel):
         """Init the all forms window class."""
         super().__init__()
         self.frame = tkinter.ttk.Frame(self, padding='1 1 1 1')
+        self.resizable(False, False)
         self.xml_form = XmlForm
         self.name = StringVar()
         self.copyright = StringVar()

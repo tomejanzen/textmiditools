@@ -24,6 +24,7 @@ class VoiceWindow(tkinter.Toplevel):
         """Init the voice window."""
         super().__init__()
         self.frame = tkinter.ttk.Frame(self, padding='1 1 1 1', borderwidth=4, relief='sunken')
+        self.resizable(False, False)
         self.frame.grid()
         self.xml_form = XmlForm
         self.number_of_voices = tkinter.IntVar()

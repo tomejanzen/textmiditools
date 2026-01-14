@@ -304,6 +304,7 @@ class KeyboardWindow(tkinter.Toplevel):
         self.frame.grid(sticky=NSEW, row=0, column=0)
         self.create_widgets()
         self.title('Keyboard')
+        self.resizable(False, False)
 
     def create_widgets(self):
         """Create the widgets of the keyboard window."""

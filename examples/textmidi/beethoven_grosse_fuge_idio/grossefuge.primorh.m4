@@ -101,6 +101,8 @@ Gb4 4 Eb5 4
 ;m 21
 Db5 4 E4 4
 ;m 22
+END_LAZY TICKS ;m 22
+LAZY
 F4 4 E5 4
 ;m 23
 F5 4 R 4
@@ -116,6 +118,8 @@ A3 4 R 4
 
 chan percussion_channel
 ;m 28
+END_LAZY TICKS ;m 28
+LAZY
 END_LAZY
 KEY_SIGNATURE Bb
 LAZY
@@ -125,6 +129,7 @@ restquavers(low_tom,low_tom)
 ;m 29
 restquavers(low_mid_tom,hi_mid_tom)
 ;m 30
+;m 33
 restquavershalf(low_mid_tom)
 restquaversfullhalf(low_tom,low_mid_tom)
 ;m 31
@@ -144,6 +149,8 @@ gallopskip(hi_mid_tom,high_tom,high_tom)
 ;m 36
 gallopdown(high_tom,hi_mid_tom,hi_mid_tom,low_mid_tom,low_floor_tom)
 ;m 37
+END_LAZY TICKS ;m 37
+LAZY
 high_tom 4 high_tom 8 high_tom 8
 restquavershalf(hi_mid_tom)
 ;m 38
@@ -151,20 +158,32 @@ restquavers(low_mid_tom,low_tom)
 ;m 39
 restquavers(low_mid_tom,high_tom)
 ;m 40
+END_LAZY TICKS ;m 40
+LAZY
 R 4 hi_mid_tom 8 hi_mid_tom 8 low_tom 8 low_mid_tom 8 hi_mid_tom 8 hi_mid_tom 8
 ;page 4
 ;m 41
-gallopskip2(low_mid_tom,high_tom,hi_tom,hi_mid_tom,hi_mid_tom)
+END_LAZY TICKS ;m 41
+LAZY
+gallopskip2(low_mid_tom,high_tom,high_tom,hi_mid_tom,hi_mid_tom)
 ;m 42
+END_LAZY TICKS ;m 42
+LAZY
 gallopfull(hi_mid_tom,low_mid_tom,low_tom,hi_mid_tom,low_mid_tom,low_tom,high_tom,hi_mid_tom)
 ;m 43
+END_LAZY TICKS ;m 43
+LAZY
 gallopfull(high_tom,low_mid_tom,low_tom,low_tom,low_tom,hi_mid_tom,low_mid_tom,low_mid_tom)
 ;m 44
+END_LAZY TICKS ;m 44
+LAZY
 gallopfull(low_mid_tom,high_tom,high_tom,hi_mid_tom,hi_mid_tom,low_tom,low_mid_tom,low_mid_tom)
 ;m 45
+END_LAZY ticks m 45
+LAZY
 high_tom 4 low_tom 8 low_tom 8 restquavershalf(low_tom)
 ;m 46
-restquavers(low_mid_tom,hi_tom)
+restquavers(low_mid_tom,high_tom)
 ;m 47
 restquavers2(hi_mid_tom,low_tom,low_mid_tom)
 ;m 48
@@ -2042,6 +2061,8 @@ crash_cymbal1 high_tom 4 R 8 R 4.
 ;m 742
 lilt(high_tom,high_tom,high_tom)
 ;m 743
+END_LAZY TICKS ;m 743
+LAZY
 crash_cymbal1 high_tom 4 R 8 R 4.
 ; fine
 END_LAZY

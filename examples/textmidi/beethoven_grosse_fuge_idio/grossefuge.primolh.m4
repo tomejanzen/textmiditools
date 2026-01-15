@@ -100,6 +100,8 @@ R 4 C4 4
 ;m 21
 Db4 2.
 ;m 22
+END_LAZY TICKS ;m 22
+LAZY
 
 G4 Bb4 4
 ;m 23
@@ -116,6 +118,8 @@ R 2
 
 chan percussion_channel
 ;m 28
+END_LAZY TICKS ;m 28
+LAZY
 END_LAZY
 KEY_SIGNATURE Bb
 LAZY
@@ -140,24 +144,38 @@ R 1
 R 2
 gallopfullhalf(R,low_mid_tom,high_tom,high_tom)
 ;m 37
+END_LAZY TICKS ;m 37
+LAZY
 gallopskip(high_tom,low_mid_tom,high_tom)
 ;m 38
 gallopdown(high_tom,high_tom,high_tom,hi_mid_tom,hi_mid_tom)
 ;m 39
 gallopskip(hi_mid_tom,low_mid_tom,high_tom)
 ;m 40
+END_LAZY TICKS ;m 40
+LAZY
 gallopdown(high_tom,high_tom,hi_mid_tom,hi_mid_tom,high_tom)
 ;page 4
 ;m 41
+END_LAZY TICKS ;m 41
+LAZY
 hi_mid_tom 8 R 16 low_mid_tom 16 hi_mid_tom 8 hi_mid_tom 8 R 4 hi_mid_tom 8 hi_mid_tom 8
 ;m 42
+END_LAZY TICKS ;m 42
+LAZY
 restquavers(hi_mid_tom,high_tom)
 ;m 43
+END_LAZY TICKS ;m 43
+LAZY
 restquavershalf(high_tom)restquaversfullhalf(hi_mid_tom,high_tom)
 ;m 44
+END_LAZY TICKS ;m 44
+LAZY
 restquavershalf(high_tom)
 quavershalffull(high_tom,high_tom,high_tom,high_tom)
 ;m 45
+END_LAZY ticks m 45
+LAZY
 quaversrest(high_tom,high_tom)
 ;m 46
 quaversrest(high_tom,high_tom)
@@ -2026,6 +2044,8 @@ swing(high_tom,high_tom,high_tom,high_tom)
 ;m 742
 swing(high_tom,hi_mid_tom,high_tom,high_tom)
 ;m 743
+END_LAZY TICKS ;m 743
+LAZY
 acousticbassdrum high_tom 4 R 8 R 4.
 ; fine
 END_LAZY

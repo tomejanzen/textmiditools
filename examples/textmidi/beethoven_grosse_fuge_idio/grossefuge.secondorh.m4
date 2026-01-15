@@ -104,6 +104,8 @@ A3 4
 ;m 21
 Bb3 2.
 ;m 22
+END_LAZY TICKS ;m 22
+LAZY
 
 G3 Db4 4
 ;m 23
@@ -122,6 +124,8 @@ R 4
 
 chan percussion_channel
 ;m 28
+END_LAZY TICKS ;m 28
+LAZY
 END_LAZY
 KEY_SIGNATURE Bb
 LAZY
@@ -148,28 +152,42 @@ restquaversfullhalf(hi_mid_tom,low_mid_tom)
 ;m 36
 quaversfull(R,R,low_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 37
+END_LAZY TICKS ;m 37
+LAZY
 hi_mid_tom 8 hi_mid_tom 8 R 4 R 2
 ;m 38
 R 1
 ;m 39
 R 1
 ;m 40
+END_LAZY TICKS ;m 40
+LAZY
 R 1
 ;page 4
 ;m 41
+END_LAZY TICKS ;m 41
+LAZY
 R 2
 quaversresthalf(hi_mid_tom)
 ;m 42
+END_LAZY TICKS ;m 42
+LAZY
 quaversresthalf(hi_mid_tom)
 quaversresthalf(hi_mid_tom)
 ;m 43
+END_LAZY TICKS ;m 43
+LAZY
 quaversresthalf(low_mid_tom)
 quaversresthalf(hi_mid_tom)
 ;m 44
+END_LAZY TICKS ;m 44
+LAZY
 repquavershalf(hi_mid_tom,hi_mid_tom)
-gallopfullhalf(hi_tom,hi_tom,hi_tom,hi_tom)
+gallopfullhalf(high_tom,high_tom,high_tom,high_tom)
 ;m 45
-gallopfull(hi_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,hi_mid_tom,hi_mid_tom)
+END_LAZY ticks m 45
+LAZY
+gallopfull(high_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 46
 gallopdown(hi_mid_tom,low_mid_tom,high_floor_tom,high_floor_tom,high_floor_tom)
 ;m 47
@@ -2021,6 +2039,8 @@ sixhalfosc(low_mid_tom,low_mid_tom)
 ;m 742
 sixhalf(low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,hi_mid_tom,low_mid_tom)
 ;m 743
+END_LAZY TICKS ;m 743
+LAZY
 low_mid_tom 4 R 8 R 4.
 ; fine
 END_LAZY

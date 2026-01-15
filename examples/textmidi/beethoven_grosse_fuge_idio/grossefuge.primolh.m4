@@ -174,8 +174,6 @@ LAZY
 restquavershalf(high_tom)
 quavershalffull(high_tom,high_tom,high_tom,high_tom)
 ;m 45
-END_LAZY ticks m 45
-LAZY
 quaversrest(high_tom,high_tom)
 ;m 46
 quaversrest(high_tom,high_tom)
@@ -214,10 +212,16 @@ gallopdown(high_tom,high_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom)
 galloppickup(hi_mid_tom,low_mid_tom)
 gallopfullhalf(hi_mid_tom,low_mid_tom,high_tom,high_tom)
 ;m 63
+END_LAZY TICKS ;m 63
+LAZY
 gallopdown(high_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 64
+END_LAZY TICKS ;m 64
+LAZY
 triplets(hi_mid_tom,hi_mid_tom,hi_mid_tom,high_tom,high_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom,high_tom,high_tom,high_tom)
 ;m 65
+END_LAZY TICKS ;m 65
+LAZY
 triplets(high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,hi_mid_tom)
 ;m 66
 triplets(hi_mid_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,high_tom)

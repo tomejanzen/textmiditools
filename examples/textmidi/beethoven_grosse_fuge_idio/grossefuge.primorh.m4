@@ -179,8 +179,6 @@ END_LAZY TICKS ;m 44
 LAZY
 gallopfull(low_mid_tom,high_tom,high_tom,hi_mid_tom,hi_mid_tom,low_tom,low_mid_tom,low_mid_tom)
 ;m 45
-END_LAZY ticks m 45
-LAZY
 high_tom 4 low_tom 8 low_tom 8 restquavershalf(low_tom)
 ;m 46
 restquavers(low_mid_tom,high_tom)
@@ -220,12 +218,18 @@ triplets(high_tom,high_tom,high_tom,high_tom,high_tom,high_tom,hi_mid_tom,low_to
 ;m 62
 triplets(hi_mid_tom,low_tom,low_tom,low_mid_tom,low_mid_tom,low_tom,low_mid_tom,low_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 63
-triplets(high_tom,low_tom,low_tom,low_mid_tom,low_tom,low_tom,high_tohi_mid_tom,hi_mid_tom,high_tom,high_tom,high_tom,high_tom)
+END_LAZY TICKS ;m 63
+LAZY
+triplets(high_tom,low_tom,low_tom,low_mid_tom,low_tom,low_tom,high_tom,hi_mid_tom,high_tom,high_tom,high_tom,high_tom)
 ;m 64
+END_LAZY TICKS ;m 64
+LAZY
 high_tom 12 high_tom 12 high_tom 12
 low_tom 8 low_tom 8
 restquavershalf(low_tom)
 ;m 65
+END_LAZY TICKS ;m 65
+LAZY
 restquavers(low_tom,hi_mid_tom)
 ;m 66
 restquavers2(hi_mid_tom,low_tom,low_tom)

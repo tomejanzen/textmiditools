@@ -174,8 +174,6 @@ END_LAZY TICKS ;m 44
 LAZY
 gallopfull(hightom,hi_mid_tom,low_mid_tom,lowtom,R,low_floor_tom,high_floor_tom,high_floor_tom)
 ;m 45
-END_LAZY ticks m 45
-LAZY
 gallopfull(hi_mid_tom,low_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_floor_tom,low_mid_tom,low_mid_tom)
 ;m 46
 gallopdown(hi_mid_tom,low_mid_tom,low_tom,high_floor_tom,low_floor_tom)
@@ -214,11 +212,17 @@ R 3/1
 ;m 62
 
 ;m 63
+END_LAZY TICKS ;m 63
+LAZY
 R 2
 gallopfullhalf(R,low_floor_tom,high_floor_tom,high_floor_tom)
 ;m 64
+END_LAZY TICKS ;m 64
+LAZY
 gallopskip(high_floor_tom,low_floor_tom,low_mid_tom)
 ;m 65
+END_LAZY TICKS ;m 65
+LAZY
 gallopdown(hi_mid_tom,low_mid_tom,low_tom,high_floor_tom,low_floor_tom)
 ;m 66
 gallopskip2(high_floor_tom,low_floor_tom,low_floor_tom,high_floor_tom,high_floor_tom)

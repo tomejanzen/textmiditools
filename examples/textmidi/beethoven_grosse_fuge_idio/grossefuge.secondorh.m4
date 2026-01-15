@@ -185,8 +185,6 @@ LAZY
 repquavershalf(hi_mid_tom,hi_mid_tom)
 gallopfullhalf(high_tom,high_tom,high_tom,high_tom)
 ;m 45
-END_LAZY ticks m 45
-LAZY
 gallopfull(high_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,low_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 46
 gallopdown(hi_mid_tom,low_mid_tom,high_floor_tom,high_floor_tom,high_floor_tom)
@@ -226,13 +224,19 @@ restquavers(low_mid_tom,high_tom)
 restquavershalf(hi_mid_tom)
 restquaversfullhalf(low_mid_tom,low_mid_tom)
 ;m 63
+END_LAZY TICKS ;m 63
+LAZY
 restquavershalf(low_mid_tom)
 quavershalffull(hi_mid_tom,hi_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 64
+END_LAZY TICKS ;m 64
+LAZY
 high_tom 8 R 8
 tripletsqtr(R,hi_mid_tom,hi_mid_tom)
 tripletshalf(low_mid_tom,hi_mid_tom,hi_mid_tom,low_mid_tom,hi_mid_tom,hi_mid_tom)
 ;m 65
+END_LAZY TICKS ;m 65
+LAZY
 tripletsqtr(low_tom,low_mid_tom,low_tom)
 low_mid_tom 8 R 16 low_mid_tom 16
 low_mid_tom 8 R 16 low_mid_tom 16

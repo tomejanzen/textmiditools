@@ -1,0 +1,168 @@
+0.  Did extra tests on random_program.
+0.1 create default form with
+textmidicgm --random random.xml
+textmidicgm --xmlform random.xml --textmidi random.txt
+textmidi --textmidi random.txt --midi random.mid
+found a bad index for key when it was the maximum integer; fixed; well, kluged.
+
+0.2
+./TextMidiFormEdit.py
+save the defaults as defaults.xml
+0.3
+./textMidiFormEdit.py random.xml
+
+0.4 Add programs and save and check the form file.
+0.5 Delete programs for a voice and save and check the form file.
+0.6 Use xmllint --schema TextMidiForm.xsd defaults.xml
+and check for validation.
+0.7 Use xmllint --schema TextMidiForm.xsd random.xml
+and check for validation.
+
+1. Regenerate dependencies.  
+
+2. Check and up-date header file dependencies in Makefile.am.
+aclocal 
+autoconf 
+automake --add-missing 
+./configure 
+source makeothermakefiles.com
+make clean
+make -f Makefile.opt 2> warn.txt
+Check in the results.
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+Read warn.txt.  The can be a handful of unused arguments.
+DONE familiar exceptions.
+
+3. source cpplint.com
+sed -i -f cpplint.sed cpplintout.txt
+Examine cpplintout.txt.
+DONE fixed all exceptions.
+
+4.  Run cppcheck.com
+Review cppcheckout.txt.
+fixed some low-hanging fruit.
+
+5. Run a test with miditext.cc #define DEBUG_THREADLESS
+just before it's tested.
+make clean
+make -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+5b.
+cd test
+./textmidiroundtriptest.py classical_archivesshort.txt
+PASS
+
+Restore the threaded version: git checkout miditext.cc
+
+5.5 rebuild
+make clean
+make -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+DONE 
+
+6. cd test
+./roundtriptests.bash
+All test and binary comparisons should be identical.
+PASS
+
+7. source chorded.com
+All files are to be identical.
+PASS
+
+8. cd test; source eventtests.com
+DONE looks ok
+
+9. cd test; source textmidicgmtest.com
+textmidicgmtest_arrangements.txt 
+    Check for the two voices (in the second and third tracks) alternating playing every 10 seconds each.
+    PASS
+textmidicgmtest_base.txt
+    Check for a tempo of 60 on a beat of 1/4.
+    The first rhythms in the second track should be 1/4 ("4").
+    PASS
+textmidicgmtest_halfbeat.txt
+    Check for a tempo of 60 on a beat of 1/2.
+    The first rhythms in the second track should be 1/2.
+    PASS
+textmidicgmtest_pulse4.txt
+    Check that the rhythms in the second track are multiples of 1/16 notes.
+    (Such as 8, 16, 8.)
+    PASS
+textmidicgmtest_tempo90.txt
+    Check for a TIME_SIGNATURE 6 8 720 and TEMPO 40 3/8. 
+    Check that the tempo track rests are dotted halves (for 6/8).
+    Check that the rhythms in the second track are 1/4.
+    (1/4 is one second for 3/8 = M.M. 40 and the max note length
+     is 1 second.)
+    PASS, fix TestReport "400" S/B "40".
+
+10.  After executing this test sequence, compile with clang.
+Report step 6 through 9.
+compiled ok.
+skip the test.
+
+11. ./testtextmidiformedit.bash
+Follow printed instructions at each step.
+exception: changed TextMidiForm.xsd so that intarrayType's elements can be empty.
+
+12. ./testtextmidicgm.bash
+follow the directions in the console window
+PASS
+
+13. For SMUS conversion: source sacre.com
+musescore sacre_sacrifice.mid 
+PASS
+timidity -invvvt -Os sacre_sacrifice.mid
+Should be the Sacrificial Dance of Stravinksy's The Rite of Spring.
+PASS
+source sacre_clean.com
+DONE
+
+14.  Then edit version.sed and version.bash to upgrade both the
+new and old version numbers.
+
+./version.bash
+./buildkit.bash
+DONE
+v 1.1.1
+
+Check in the changed files.
+git status > ci.com; edit ci.com to just have the changed files with "git add " in front of them.
+run ci.com
+git commit -m "new version TextMIDITools v1.1.1"
+DONE 
+
+15. 
+cd 
+cp -an textmiditools-1.0.nn temp-1.9.nn
+cd temp-1.9.nn
+aclocal
+autoconf
+automake --add-missing
+./configure
+make
+and watch for a successful build of textmidi, miditext, textmidicgm, and smustextmidi.
+EXCEPTION, update buildkit.bash to copy GeneralMIDIRandom.{cc,h}
+PASS
+
+16. Update pdfs and copy them to the kit area.
+
+texi2pdf miditext.texi
+texi2pdf smustextmidi.texi
+texi2pdf textmidicgm.texi
+texi2pdf TextMidiFormEdit.texi
+texi2pdf textmidi.texi
+DONE
+
+cp miditext.pdf ~/textmiditools-1.0.nn/
+cp smustextmidi.pdf ~/textmiditools-1.0.nn/
+cp textmidicgm.pdf ~/textmiditools-1.0.nn/
+cp TextMidiFormEdit.pdf ~/textmiditools-1.0.nn/
+cp textmidi.pdf ~/textmiditools-1.0.nn/
+DONE
+

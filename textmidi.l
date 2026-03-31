@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.1.0
+** TextMIDITools Version 1.1.1
 ** Copyright © 2025 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -1188,6 +1188,21 @@ DEVICE_ID (ALL_CALL|{BYTE})
              theprogram{};
     iss >> discard >> channel >> theprogram;
     channel_1_to_0(channel);
+    (*running_status)(channel | midi::program[0], trackchunk);
+
+    program_1_to_0(theprogram);
+    theprogram &= byte7_mask;
+    trackchunk.push_back(theprogram);
+  }
+
+<LAZY_STATE,LAZY_NOTE_OR_RHYTHM_STATE>PROGRAM{SPACE}{INTEGER} {
+    write_delay();
+
+    istringstream iss(yytext);
+    string discard;
+    uint32_t theprogram{};
+    iss >> discard >> theprogram;
+    auto channel{global_channel};
     (*running_status)(channel | midi::program[0], trackchunk);
 
     program_1_to_0(theprogram);

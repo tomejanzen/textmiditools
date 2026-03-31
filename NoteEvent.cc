@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -32,6 +32,11 @@ int32_t NoteEvent::vel() const noexcept
     return vel_;
 }
 
+int32_t NoteEvent::program() const noexcept
+{
+    return program_;
+}
+
 textmidi::rational::RhythmRational NoteEvent::rhythm() const noexcept
 {
     return rhythm_;
@@ -42,6 +47,10 @@ textmidi::rational::RhythmRational NoteEvent::rhythm() const noexcept
 std::ostream& textmidi::cgm::operator<<(std::ostream& os, const NoteEvent& ne)
 {
     auto flags{os.flags()};
+    if (ne.program() > 0)
+    {
+        os << "PROGRAM " << ne.program_ << '\n';
+    }
     std::shared_ptr<bool> prefer_sharp{std::make_shared<bool>()};
     if (RestPitch == ne.pitch_)
     {

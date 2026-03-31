@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -236,7 +236,7 @@ void textmidi::rational::RhythmRational::
 
 textmidi::rational::RhythmRational
     textmidi::rational::SimpleContinuedFraction::
-    continued_fraction_list_to_rational(std::list<num_type> &denoms)
+    continued_fraction_list_to_rational(const std::list<num_type>& denoms)
 {
     RhythmRational rr{0L, 1L};
     for (auto di{denoms.rbegin()}; di != denoms.rend(); ++di)

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 //
 // Copyright © 2025 Thomas E. Janzen
@@ -19,11 +19,11 @@ namespace textmidi
     {
 
         RhythmRational operator%(RhythmRational dividend,
-            const RhythmRational& divisor) noexcept;
+            const RhythmRational& divisor);
 
-        RhythmRational round(RhythmRational ratnum) noexcept;
+        RhythmRational round(RhythmRational ratnum);
 
-        RhythmRational snap(RhythmRational num, RhythmRational grid) noexcept;
+        RhythmRational snap(RhythmRational num, RhythmRational grid);
 
     } // namespace rational
 

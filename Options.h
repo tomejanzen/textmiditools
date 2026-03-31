@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 //
 // Copyright © 2025 Thomas E. Janzen
@@ -59,7 +59,7 @@ const textmidi::OptionName
     smus_option{"smus", "input binary SMUS file", 'i'};
 const textmidi::OptionName
     form_option{"form",
-    "input plain text Form files; double-quote wildcards", 'f'};
+    "input legacy plain text Form files; double-quote wildcards", 'f'};
 const textmidi::OptionName
     XML_form_option{"xmlform",
     "input XML text Form files; double-quote wildcards", 'x'};

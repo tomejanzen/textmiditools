@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,7 +15,7 @@
 using textmidi::rational::RhythmRational;
 
 RhythmRational textmidi::rational::operator%(RhythmRational dividend,
-    const RhythmRational& divisor) noexcept
+    const RhythmRational& divisor)
 {
     while ((dividend > divisor) && (divisor != RhythmRational{0L}))
     {
@@ -24,7 +24,7 @@ RhythmRational textmidi::rational::operator%(RhythmRational dividend,
     return dividend;
 }
 
-RhythmRational textmidi::rational::round(RhythmRational ratnum) noexcept
+RhythmRational textmidi::rational::round(RhythmRational ratnum)
 {
     const RhythmRational remainder(
         ratnum.numerator() % ratnum.denominator(),
@@ -41,7 +41,7 @@ RhythmRational textmidi::rational::round(RhythmRational ratnum) noexcept
 }
 
 RhythmRational textmidi::rational::
-    snap(RhythmRational num, RhythmRational grid) noexcept
+    snap(RhythmRational num, RhythmRational grid)
 {
     const auto modnum{(num % grid)};
     if (grid != RhythmRational{0})

@@ -13,7 +13,7 @@
 
 @titlepage
 @title Using @command{textmidi}
-@subtitle The textmidi language to MIDI translator
+@subtitle The textmidi-to-MIDI(1.0) file translator.
 @author Thomas E. Janzen
 @end titlepage
 @copying
@@ -1101,9 +1101,12 @@ CONTROL 1 LSB_06 0x00
 
 END_OF_TRACK
 @end smallexample
-@item PROGRAM channel_num program_num
+@item PROGRAM channel_num program_num OR in LAZY mode, PROGRAM program_num
 @cindex PROGRAM
 PROGRAM selects a General MIDI intrument.
+In LAZY mode sections, the channel number is omitted.  This was done in
+support of random programs in order to make it unnecessary to include
+an "END_LAZY ... LAZY" directives to change the program in LAZY mode.
 The program is 1-based.
 @example
 PROGRAM 14 47

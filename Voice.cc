@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -97,6 +97,21 @@ void VoiceXml::follower(const Follower& follower) noexcept
     follower_ = follower;
 }
 
+const VoiceXml::RandomProgram& VoiceXml::random_program() const noexcept
+{
+    return random_program_;
+}
+
+VoiceXml::RandomProgram& VoiceXml::random_program() noexcept
+{
+    return random_program_;
+}
+
+void VoiceXml::random_program(const RandomProgram& random_program) noexcept
+{
+    random_program_ = random_program;
+}
+
 bool VoiceXml::Follower::follow() const
 {
     return follow_;
@@ -177,3 +192,25 @@ void VoiceXml::Follower::retrograde(bool retrograde)
 {
     retrograde_ = retrograde;
 }
+
+void VoiceXml::RandomProgram::probability(double probability)
+{
+    probability_ = probability;
+}
+
+void VoiceXml::RandomProgram::ensemble(const RandomEnsemble& ensemble)
+{
+    ensemble_ = ensemble;
+}
+
+double VoiceXml::RandomProgram::probability() const
+{
+    return probability_;
+}
+
+VoiceXml::RandomProgram::RandomEnsemble VoiceXml::RandomProgram::ensemble() const
+{
+    return ensemble_;
+}
+
+

@@ -320,10 +320,10 @@ To suggest a solist, the solo voice should probably be in voice 0 position in th
 @menu
 * Number of Voices::
 * Voice::
-* Low Pitch::
-* High Pitch::
 * Channel::
 * Program::
+* Low Pitch::
+* High Pitch::
 * Walking::
 * Pan::
 * Follow/Leader::
@@ -331,6 +331,7 @@ To suggest a solist, the solo voice should probably be in voice 0 position in th
 * Follower Delay::
 * Follower Retrograde::
 * Follower Inversion::
+* Random Program::
 @end menu
 The Instrumental Voices Window has several items.
 @node Number of Voices
@@ -578,6 +579,40 @@ The follower will be a retrograde (that is, a backwards copy) of the leader voic
 for the entire duration of the piece.  Transposition interval still applies.
 The selection of either chromatic or scalar following also applies.
 
+@node Random Program
+@cindex Random Program
+The Random Program feature make a given track (musical line) to randomly
+change its program (or patch, or instrument) from note to note.  This feature
+was inspired by John Cage's composition @emph{Cheap Imitation} as well as
+by Anton Webern's orchestration of Bach's @emph{Ricercar} from his work
+@emph{The Musical Offering}.
+Each voice has its own probability and ensemble for random programs.
+@section probability
+@cindex probability
+The field probability gives the probability that the next note will get a randomly-selected program.
+If the probability is set to 1.0, then every note will get a random instrument (but if it is the same
+as in place then no PROGRAM command will be written).  If the probability is .5, then on average
+every other note will use a new MIDI program.
+@section ensemble
+@cindex ensemble
+The ensemble is a list of 1-based MIDI program numbers from which to randomly choose a program.
+By default, @command{textmidicgm} uses the key number (pitch) selected for a note to find which
+programs are realistically available, given their respective ranges.  The ranges used are seen
+in the program spin button near the top of the voice window.  If no instrument is found that
+supports that pitch, then it generates a rest instead of a note event.
+If the command-line option ignoreranges is specified for @command{textmidicgm}, then instead of
+looking up instruments by key first, @command{textmidicgm} will just randomly select a program
+from the ensemble and specify it.  The NoteEvent class generates a LAZY mode PROGRAM message
+for that program prior to the current note being added to the textmidi file.
+Note that the melodic instruments in General MIDI (1.0) range from 1 to 112 (in a conservative assessment).
+@section Add Button
+The Add button copies the program that is visible in the Program spin button near the top of the voice window
+into the ensemble list.
+You can select different instruments to add to the ensemble by using the Program spin button to show different
+programs.
+@section Delete Button
+The Delete button removes the currently showing program name from the program list and then displays the first
+program in the remaining list.
 @node Form Plot Window
 @chapter Form Plot Window
 @cindex Form Plot Window
@@ -658,6 +693,8 @@ To create a scale that repeats each octave, just click the unique keys for one o
 * All::
 * Complement::
 * Octave Repeat::
+* Random Octave Scale::
+* Random Full Scale::
 @end menu
 @node Clear
 @section Clear
@@ -683,6 +720,18 @@ keys only, which is a form of pentatonic scale.
 @section Octave Repeat
 @cindex Octave Repeat
 Any notes set in the keyboard are repeated per octave throughout the full scale.
+
+@node Random Octave Scale
+@section Random Octave Scale
+@cindex Random Octave Scale
+Create a random scale contained within an octave.  If you press Octave Repeat, this one-octave
+scale will fill the keyboard.  Push Clear first to see the new scale.
+
+@node Random Full Scale
+@section Random Full Scale
+@cindex Random Full Scale
+Create a random scale across the keyboard.  The scale is unlikely to repeat for each octave.
+Push Clear first to see the new scale.
 
 @node GNU Free Documentation License
 @chapter GNU Free Documentation License

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -102,6 +102,8 @@ int32_t glob_error(const char*, int32_t)
 //
 namespace {
     using GlobStatusMap = unordered_map<int32_t, string>;
+    const textmidi::OptionName
+        random_program_ignore_ranges_option{"ignoreranges", "ignore ranges for random programs", 'p'};
 }
 
 int32_t main(int argc, char *argv[])
@@ -144,6 +146,8 @@ int32_t main(int argc, char *argv[])
             boost::program_options::value<string>(), dotted_rhythms_option.text().c_str())
         ((rhythm_expression_option.registered_name().c_str()),
             boost::program_options::value<string>(), rhythm_expression_option.text().c_str())
+        ((random_program_ignore_ranges_option.registered_name().c_str()),
+            random_program_ignore_ranges_option.text().c_str())
     ;
     boost::program_options::variables_map var_map;
     try
@@ -162,7 +166,7 @@ int32_t main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: textmidicgm [OPTION]... "
-                    "[XMLFORMFILE]...\ntextmidicgm Version 1.1.0\n"}
+                    "[XMLFORMFILE]...\ntextmidicgm Version 1.1.1\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidicgm home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -172,7 +176,7 @@ int32_t main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidicgm\nTextMIDITools Version 1.1.0\n"
+        cout << "textmidicgm\nTextMIDITools Version 1.1.1\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 "
             "or later <https://gnu.org/licenses/gpl.html>\n"
@@ -248,8 +252,12 @@ int32_t main(int argc, char *argv[])
                 MusicalForm xml_form{};
                 xml_form.random(random_filename, instrument_flags);
                 {
-                    ofstream xml_form_stream{(random_filename
-                            + string(".xml")).c_str()};
+                    string temp_filename(random_filename);
+                    if (!temp_filename.ends_with(".xml"))
+                    {
+                        temp_filename += string(".xml");
+                    }
+                    ofstream xml_form_stream{temp_filename.c_str()};
                     {
                         boost::archive::xml_oarchive oarc(xml_form_stream);
                         oarc << BOOST_SERIALIZATION_NVP(xml_form);
@@ -497,6 +505,12 @@ int32_t main(int argc, char *argv[])
         }
     }
 
+    bool random_program_ignore_ranges{};
+    if (var_map.count(random_program_ignore_ranges_option.option())) [[unlikely]]
+    {
+        random_program_ignore_ranges = true;
+    }
+
     string textmidi_filename;
     if (var_map.count(textmidi_out_option.option()))
     {
@@ -552,7 +566,7 @@ int32_t main(int argc, char *argv[])
     }
 
     Composer composer{gnuplot, answer, track_scramble_type,
-        track_scramble_period, xml_forms[0].music_time(), max_events_per_track};
+        track_scramble_period, xml_forms[0].music_time(), max_events_per_track, random_program_ignore_ranges};
     {
         ofstream textmidi_file;
         uint64_t x{};

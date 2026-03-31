@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.1.0
+# TextMIDITools Version 1.1.1
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -23,7 +23,7 @@ from AllFormsWindow import AllFormsWindow
 from AllFormsWindow import ScaleFrame
 from VoiceWindow import VoiceWindow
 
-class XmlForm(tkinter.Tk):
+class XmlFormWindow(tkinter.Tk):
     """XML Form support using C++ boost serialization XML archive style."""
     xml_form_dict = {}
     twopi = 2.0 * math.pi
@@ -34,7 +34,7 @@ class XmlForm(tkinter.Tk):
         super().__init__()
         self.default_xml_form()
         self.all_forms_window = AllFormsWindow(self.xml_form_dict)
-        self.voice_window = VoiceWindow(self.xml_form_dict)
+        self.voice_window = VoiceWindow(self.xml_form_dict['voices'])
         self.win_height = 600
         self.win_width = 1000
         self.canvas = Canvas(self, bg='#88AAFF', height=self.win_height,
@@ -62,7 +62,7 @@ class XmlForm(tkinter.Tk):
 
         if filename != '':
             self.install_file(filename)
-            self.voice_window.install_xml_form(self.xml_form_dict)
+            self.voice_window.install_xml_voices(self.xml_form_dict['voices'])
             self.all_forms_window.install_xml_form(self.xml_form_dict)
 
     def install_file(self, afilename):
@@ -366,6 +366,12 @@ class XmlForm(tkinter.Tk):
             follower_dict['inversion'] = False
             follower_dict['retrograde'] = False
             voice_dict['follower'] = follower_dict
+
+            random_program_dict = {}
+            random_program_dict['probability'] = 0.0
+            random_program_dict['ensemble'] = []
+            voice_dict['random_program'] = random_program_dict
+
             vox_list.append(voice_dict)
 
         return vox_list
@@ -582,9 +588,22 @@ class XmlForm(tkinter.Tk):
 
     def traverse_voices(self, voices_dom):
         """Install the voice settings from the XML file's DOM."""
-        xml_voice_list = voices_dom.getElementsByTagName('item')
         voice_list = []
+        xml_voice_list = voices_dom.getElementsByTagName('item')
+        delvox = []
+        for v in range(0, len(xml_voice_list)):
+            if xml_voice_list[v].parentNode != voices_dom : 
+                delvox.append(v)
+        delvox.sort(reverse='True')
+        for n in delvox:
+           xml_voice_list.pop(n) 
+
+        # Check version for None because version is only on the first item in boost serialization
+        voice_item_version = 0
         for vox in xml_voice_list:
+            temp_voice_item_version = vox.getAttribute('version')
+            if (temp_voice_item_version != None) and (temp_voice_item_version != ''):
+                voice_item_version = int(temp_voice_item_version)
             voice_dict = {}
             low_pitch_node = vox.getElementsByTagName('low_pitch_')[0]
             low_pitch = low_pitch_node.firstChild.data
@@ -646,6 +665,8 @@ class XmlForm(tkinter.Tk):
 
                 follower_dict['retrograde'] = bool(int(follower_node
                     .getElementsByTagName('retrograde_')[0].firstChild.data))
+
+                # Read widgets into random_program
             else:
                 delay_dict['numerator'] = '0'
                 delay_dict['denominator'] = '1'
@@ -656,6 +677,26 @@ class XmlForm(tkinter.Tk):
             follower_dict['delay'] = delay_dict
             follower_dict['duration_factor'] = duration_factor_dict
             voice_dict['follower'] = follower_dict
+
+            random_program_dict = {}
+            program_range_dict = {}
+            ensemble_array = []
+            if voice_item_version >= 1:
+                random_program_node = vox.getElementsByTagName('random_program_')[0]
+                random_program_dict['probability'] = float(
+                    random_program_node.getElementsByTagName('probability_')[0].firstChild.data)
+                random_program_range_node = random_program_node.getElementsByTagName('ensemble_')[0]
+                ensemble_list = random_program_node.getElementsByTagName('item')
+                for item_node in ensemble_list :
+                    ensemble_array.append(item_node.firstChild.data)
+            else:
+                random_program_dict['probability'] = 0.0
+                for i in range(1, 113):
+                    ensemble_array.append(i)
+            random_program_dict['ensemble'] = ensemble_array
+
+            voice_dict['random_program'] = random_program_dict
+    
             voice_list.append(voice_dict)
 
         return voice_list
@@ -705,7 +746,7 @@ class XmlForm(tkinter.Tk):
         self.xml_form_dict['texture_form'] = self.traverse_texture_form(self.dom
               .getElementsByTagName('texture_form_')[0])
         self.xml_form_dict['voices'] = (self.traverse_voices(
-                    self.dom.getElementsByTagName('voices_')[0]))
+            self.dom.getElementsByTagName('voices_')[0]))
         if int(self.dom.getElementsByTagName('xml_form')[0]
               .getAttribute('version')) >= 2:
             self.xml_form_dict['arrangement_definition'] = self.traverse_arrangement_definition(
@@ -728,7 +769,7 @@ class XmlForm(tkinter.Tk):
         toplevelwin['menu'] = top_menu
         file_menu = Menu(top_menu)
         top_menu.add_cascade(label='File', menu=file_menu, underline=0)
-        file_menu.add_command(label='Open...',   command=self.get_file_callback,
+        file_menu.add_command(label='Open...',   command=self.open_callback,
             underline=0, accelerator='O')
         file_menu.add_command(label='Save...', command=self.save_callback,
             underline=0, accelerator='S')
@@ -744,13 +785,13 @@ class XmlForm(tkinter.Tk):
         file_menu.add_command(label='Quit', command=lambda:toplevelwin.quit(),
             underline=0, accelerator='Q')
 
-    def get_file_callback(self):
+    def open_callback(self):
         """Present a file selector widget and get the filename."""
         afilename=tkinter.filedialog.askopenfilename(initialdir = '.',
             title = 'Select XML Form File',
             filetypes=(('xml files','*.xml'),('all files','*.*')))
         self.install_file(afilename)
-        self.voice_window.install_xml_form(self.xml_form_dict)
+        self.voice_window.install_xml_voices(self.xml_form_dict['voices'])
         self.all_forms_window.install_xml_form(self.xml_form_dict)
 
     def defaults_callback(self):
@@ -758,7 +799,7 @@ class XmlForm(tkinter.Tk):
         self.all_forms_window.install_xml_form(self.xml_form_dict)
         self.default_xml_form()
         self.draw_form()
-        self.voice_window.install_xml_form(self.xml_form_dict)
+        self.voice_window.install_xml_voices(self.xml_form_dict['voices'])
         self.title('Form Plot')
 
     def save_callback(self):
@@ -771,7 +812,7 @@ class XmlForm(tkinter.Tk):
         # copy form parts of xml_form_dict from AllForms
         # copy voice parts from Voice
 
-        class_id = 0;
+        class_id = 0
 
         self.xml_form_dict['name']         = self.all_forms_window.xml_form['name']
         self.xml_form_dict['copyright']    = self.all_forms_window.xml_form['copyright']
@@ -856,7 +897,7 @@ class XmlForm(tkinter.Tk):
               form_document_type)
         top = form_document.documentElement
         top.setAttribute('signature', 'serialization::archive')
-        top.setAttribute('version', '18')
+        top.setAttribute('version', '19')
         xml_form_element = form_document.createElement('xml_form')
         xml_form_element.setAttribute('class_id', str(class_id))
         class_id = class_id + 1
@@ -945,17 +986,18 @@ class XmlForm(tkinter.Tk):
         voices_element.setAttribute('class_id', str(class_id))
         class_id = class_id + 1
         voices_element.setAttribute('tracking_level', '0')
-        voices_element.setAttribute('version', '0')
+        voices_element.setAttribute('version', '1') # 2026-03-24
+        self.xml_form_dict['voices'] = self.voice_window.get_xml_voices()
         self.add_text_element(form_document, voices_element, 'count', 'count',
             str(len(self.xml_form_dict['voices'])))
         self.add_text_element(form_document, voices_element, 'item_version',
             'item_version', '0')
 
         write_version = True
-        for vox in self.xml_form_dict['voices']:
-            self.add_voice_element(form_document, voices_element, vox, write_version, class_id)
+        for voice_dict in self.xml_form_dict['voices']:
+            class_id = self.add_voice_element(form_document, voices_element, voice_dict, write_version, class_id)
             write_version = False
-        class_id = class_id + 2
+        class_id = class_id + 1 # I don't know why boost::serialization skips a class_id.
         xml_form_element.appendChild(voices_element)
 
         arrangement_definition_element = form_document.createElement('arrangement_definition_')
@@ -984,7 +1026,7 @@ class XmlForm(tkinter.Tk):
             item_element.setAttribute('class_id', str(class_id))
             class_id = class_id + 1
             item_element.setAttribute('tracking_level', '0')
-            item_element.setAttribute('version', '0')
+            item_element.setAttribute('version', '1')
 
         self.add_text_element(doc, item_element, 'low_pitch', 'low_pitch_',
                 str(voice_dict['low_pitch']))
@@ -1034,7 +1076,32 @@ class XmlForm(tkinter.Tk):
         self.add_text_element(doc, follower_element, 'retrograde', 'retrograde_',
                 str(int(voice_dict['follower']['retrograde'])))
         item_element.appendChild(follower_element)
+
+        random_program_element = doc.createElement('random_program_')
+        if write_version:
+            random_program_element.setAttribute('class_id', str(class_id))
+            class_id = class_id + 1
+            random_program_element.setAttribute('tracking_level', '0')
+            random_program_element.setAttribute('version', '0')
+        self.add_text_element(doc, random_program_element, 'probability', 'probability_', str(float(voice_dict['random_program']['probability'])))
+        ensemble_element = doc.createElement('ensemble_')
+# boost serialization treats the program list like the scale, and so does not generate a version or class_id.
+#        if write_version:
+#            ensemble_element.setAttribute('class_id', str(class_id))
+#            class_id = class_id + 1
+#            ensemble_element.setAttribute('tracking_level', '0')
+#            ensemble_element.setAttribute('version', '0')
+        self.add_text_element(doc, ensemble_element, 'count', 'count',
+            str(len(voice_dict['random_program']['ensemble'])))
+        self.add_text_element(doc, ensemble_element, 'item_version',
+            'item_version', '0')
+
+        for i in range(0, len(voice_dict['random_program']['ensemble'])):
+            self.add_text_element(doc, ensemble_element, '', 'item', str(voice_dict['random_program']['ensemble'][i]))
+        random_program_element.appendChild(ensemble_element)
+        item_element.appendChild(random_program_element)
         parent.appendChild(item_element)
+        return class_id
 
     def add_form_element(self, doc, parent, form_name, add_attributes = False, class_id = 0):
         """Add a form element to the internal form structure."""
@@ -1187,7 +1254,7 @@ class XmlForm(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.1.0\nCopyright © 2025 Thomas E. Janzen\n'
+            'TextMIDITools Version 1.1.1\nCopyright © 2025 Thomas E. Janzen\n'
             'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
             'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
             'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')
@@ -1196,7 +1263,7 @@ class XmlForm(tkinter.Tk):
 
 def TextMidiFormEdit(filename):
     """Bring up the whole interface."""
-    xmlform_window = XmlForm(filename)
+    xmlform_window = XmlFormWindow(filename)
     xmlform_window.frame.grid(sticky='we', row=0, column=0)
     xmlform_window.frame.rowconfigure(index=0, weight=1)
     xmlform_window.frame.columnconfigure(index=0, weight=1)

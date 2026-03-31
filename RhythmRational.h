@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen
@@ -355,7 +355,7 @@ namespace textmidi
             value_type val_{};
 
             RhythmRational continued_fraction_list_to_rational(
-                std::list<num_type> &denoms);
+                const std::list<num_type>& denoms);
 
             friend std::ostream& operator<<(std::ostream& os,
                 const SimpleContinuedFraction& scf)
@@ -453,35 +453,31 @@ namespace std
     template<>
     struct numeric_limits<textmidi::rational::RhythmRational>
     {
-        static constexpr textmidi::rational::RhythmRational max() noexcept
+        static constexpr textmidi::rational::RhythmRational max()
             { return textmidi::rational::RhythmRational
             {std::numeric_limits<textmidi::rational::RhythmRational
                 ::value_type>::max(), 1L}; }
-        static constexpr textmidi::rational::RhythmRational min() noexcept
+        static constexpr textmidi::rational::RhythmRational min()
             { return textmidi::rational::RhythmRational
             {-std::numeric_limits<textmidi::rational::RhythmRational
                 ::value_type>::max(), 1L}; }
-        static constexpr textmidi::rational::RhythmRational lowest() noexcept
+        static constexpr textmidi::rational::RhythmRational lowest()
             { return textmidi::rational::RhythmRational
             {std::numeric_limits<textmidi::rational::RhythmRational
                 ::value_type>::lowest(), 1L}; }
-        static constexpr textmidi::rational::RhythmRational epsilon() noexcept
+        static constexpr textmidi::rational::RhythmRational epsilon()
             { return textmidi::rational::RhythmRational
             {1L, std::numeric_limits<textmidi::rational::RhythmRational
                 ::value_type>::max()}; }
         static constexpr textmidi::rational::RhythmRational round_error()
-            noexcept
             { return textmidi::rational::RhythmRational{0L}; }
-        static constexpr textmidi::rational::RhythmRational infinity() noexcept
+        static constexpr textmidi::rational::RhythmRational infinity()
             { return textmidi::rational::RhythmRational{0L}; }
         static constexpr textmidi::rational::RhythmRational quiet_NaN()
-            noexcept
             { return textmidi::rational::RhythmRational{0L}; }
         static constexpr textmidi::rational::RhythmRational signaling_NaN()
-            noexcept
             { return textmidi::rational::RhythmRational{0L}; }
         static constexpr textmidi::rational::RhythmRational denorm_min()
-            noexcept
             { return textmidi::rational::RhythmRational{0L}; }
         static const bool is_specialized = true;
         static const bool is_signed = true;

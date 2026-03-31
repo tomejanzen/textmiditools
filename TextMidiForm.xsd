@@ -79,6 +79,16 @@
         <xs:attribute name="version" type="xs:nonNegativeInteger"/>
     </xs:complexType>
 
+    <xs:complexType name="randomprogramType">
+        <xs:sequence>
+            <xs:element name="probability_" type="probabilityType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ensemble_" type="intarrayType" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
     <xs:simpleType name="channelType">
         <xs:restriction base="xs:nonNegativeInteger">
             <xs:minInclusive value="1"/>
@@ -109,6 +119,7 @@
             <xs:element name="program_" type="programType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="pan_" type="panType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="follower_" type="followerType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="random_program_" type="randomprogramType" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="class_id" type="xs:integer"/>
         <xs:attribute name="tracking_level" type="xs:integer"/>
@@ -470,12 +481,25 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="ScaleType">
+    <xs:complexType name="scaleType">
         <xs:sequence>
             <xs:element name="count" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
             <xs:element name="item_version" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
             <xs:sequence>
                 <xs:element name="item" type="keynameType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="tracking_level" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="version" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+    <xs:complexType name="intarrayType">
+        <xs:sequence>
+            <xs:element name="count" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="item_version" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+            <xs:sequence>
+                <xs:element name="item" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:sequence>
         <xs:attribute name="class_id" type="xs:nonNegativeInteger"/>
@@ -520,7 +544,7 @@
             <xs:element name="len_" type="durationType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="min_note_len_" type="durationType" minOccurs="1" maxOccurs="1"/>
             <xs:element name="max_note_len_" type="durationType" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="scale_" type="ScaleType"/>
+            <xs:element name="scale_" type="scaleType"/>
             <xs:element name="music_time_" type="MusicTime"/>
             <xs:element name="pulse_" type="pulseType"/>
             <xs:element name="melody_probabilities_" type="melodyProbabilitiesType"/>

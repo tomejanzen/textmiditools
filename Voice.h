@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -15,10 +15,13 @@
 #include <limits>
 #include <memory>
 #include <string>
+#include <numeric>
+#include <vector>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/utility.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/vector.hpp>
 
@@ -109,6 +112,30 @@ namespace textmidi
                 bool inversion_;
                 bool retrograde_;
             };
+            class RandomProgram
+            {
+              public:
+                using RandomEnsemble = std::vector<int>;
+                explicit RandomProgram(double probability = 0.0, RandomEnsemble ensemble = RandomEnsemble())
+                  : probability_{probability },
+                    ensemble_{ensemble}
+                {
+                }
+                void probability(double probability);
+                void ensemble(const RandomEnsemble& ensemble);
+                double probability() const;
+                RandomEnsemble ensemble() const;
+
+                template<class Archive>
+                    void serialize(Archive& arc, const unsigned int )
+                {
+                    arc & BOOST_SERIALIZATION_NVP(probability_);
+                    arc & BOOST_SERIALIZATION_NVP(ensemble_);
+                }
+              private:
+                  double probability_{0.0};
+                  RandomEnsemble ensemble_;
+            };
             // There is no serialize for string_view,
             // so these have to be strings.
             explicit VoiceXml(
@@ -118,14 +145,16 @@ namespace textmidi
                     double walking = 0.0,
                     const std::string& program = std::string("1"),
                     std::int32_t pan = 0,
-                    Follower follower = Follower{})
+                    Follower follower = Follower{},
+                    RandomProgram random_program = RandomProgram{})
               : low_pitch_{low_pitch},
                 high_pitch_{high_pitch},
                 channel_{channel},
                 walking_{walking},
                 program_{program},
                 pan_{pan},
-                follower_{follower}
+                follower_{follower},
+                random_program_{random_program}
             {
             }
 
@@ -138,7 +167,8 @@ namespace textmidi
                 walking_{v.walking_ ? 1.0 : 0.0},
                 program_{"1"},
                 pan_{},
-                follower_()
+                follower_(),
+                random_program_{}
             {}
             VoiceXml& operator=(const cgmlegacy::VoiceOld& v)
             {
@@ -150,6 +180,7 @@ namespace textmidi
                 program_ = "1";
                 pan_ = 0;
                 follower_ = Follower{};
+                random_program_ = RandomProgram();
                 return *this;
             }
             std::string low_pitch() const noexcept;
@@ -168,6 +199,9 @@ namespace textmidi
             const Follower& follower() const noexcept;
             Follower& follower() noexcept;
             void follower(const Follower& follower) noexcept;
+            const RandomProgram& random_program() const noexcept;
+            RandomProgram& random_program() noexcept;
+            void random_program(const RandomProgram& random_program) noexcept;
           private:
             std::string low_pitch_{};
             std::string high_pitch_{};
@@ -177,8 +211,9 @@ namespace textmidi
             // 0 = center, negative is left, positive is right.
             std::int32_t pan_{};
             Follower follower_{};
+            RandomProgram random_program_{};
             template<class Archive>
-                void serialize(Archive& arc, const unsigned int )
+                void serialize(Archive& arc, const unsigned int version)
             {
                 arc & BOOST_SERIALIZATION_NVP(low_pitch_);
                 arc & BOOST_SERIALIZATION_NVP(high_pitch_);
@@ -187,11 +222,16 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(program_);
                 arc & BOOST_SERIALIZATION_NVP(pan_);
                 arc & BOOST_SERIALIZATION_NVP(follower_);
+                if (version >= 1)
+                {
+                    arc & BOOST_SERIALIZATION_NVP(random_program_);
+                }
             }
         };
 #pragma pack()
     } // namespace cgm
 } // namespace textmidi
 BOOST_CLASS_VERSION(textmidi::cgm::VoiceXml::Follower, 3)
+BOOST_CLASS_VERSION(textmidi::cgm::VoiceXml, 1)
 
 #endif

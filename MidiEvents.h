@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -715,7 +715,7 @@ namespace textmidi
         constexpr midi::MidiStreamAtom key() const noexcept;
         void key(midi::MidiStreamAtom key) noexcept;
         void key_string(std::string_view ) noexcept;
-        std::string key_string() const noexcept;
+        const std::string& key_string() const noexcept;
         void velocity(midi::MidiStreamAtom ) noexcept;
         constexpr midi::MidiStreamAtom velocity() const noexcept;
         constexpr bool operator==(const MidiChannelVoiceNoteEvent& ) const
@@ -734,7 +734,7 @@ namespace textmidi
         midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept override;
         std::ostream& print(std::ostream& os) const override;
       private:
-        std::uint32_t ticks_per_whole_;
+        std::uint32_t ticks_per_whole_{};
         midi::MidiStreamAtom key_{};
         midi::MidiStreamAtom velocity_{};
         std::string key_string_{};

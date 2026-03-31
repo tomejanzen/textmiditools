@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -47,8 +47,8 @@ const textmidi::cgm::MIDI_Program textmidi::cgm::midi_programs[] =
     // This is used as a 1-based sequence.
     // MIDI refers to channels and programs in a unit (1)-based way.
     // However elsewhere in this package channel and program are
-    // 0-based until they are written to a binary MIDI file.
-    { 0, "Dummy",                           {"A0",  "C8"}},
+    // converted to be 0-based to be written to a binary MIDI file.
+    { 0, "Random",                          {"C-1",  "G9"}},
     // Piano
     { 1, "Acoustic Grand Piano",            {"A0",  "C8"}},
     { 2, "Bright Acoustic Piano",           {"A0",  "C8"}},

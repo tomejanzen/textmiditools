@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -80,7 +80,7 @@ namespace textmidi
             Composer(bool gnuplot, bool answer,
                 arrangements::PermutationEnum track_scramble,
                 rational::RhythmRational track_scramble_period, const MusicTime& music_time,
-                size_t max_events_per_track = 100000) noexcept
+                size_t max_events_per_track = 100000, bool random_program_ignore_ranges = false) noexcept
               : gnuplot_(gnuplot),
                 answer_(answer),
                 track_scramble_(track_scramble, track_scramble_period),
@@ -88,7 +88,8 @@ namespace textmidi
                 random_dev_(),
                 generator_{random_dev_()},
                 music_time_{music_time},
-                time_converter_{music_time}
+                time_converter_{music_time},
+                random_program_ignore_ranges_{random_program_ignore_ranges}
             {
             }
 
@@ -118,6 +119,7 @@ namespace textmidi
             std::mt19937 generator_;
             MusicTime music_time_;
             TimeConverter time_converter_;
+            bool random_program_ignore_ranges_;
         };
 
         extern const midi::NumStringMap<arrangements::PermutationEnum>

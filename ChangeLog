@@ -1,4 +1,44 @@
-2026-13-09    Thomas E. Janzen <janzentome@gmail.com>
+2026-03-30    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidicgm.texi, miditext.texi: explain random programs and fix a defect.
+	* MidiEvents.cc, MidiEvents.h, MidiMaps.h, RhythmRational.{cc,h}: cpplint and
+        cppcheck warnings.
+	* TextMidiForm.xsd: make intarrayType allow 0-long data.
+	* miditext.cc: remove unused
+	* rational_support.h, rational_support.{cc,h}: remove noexcept specs.
+	* test/TestReport.txt: fix tempo 400 to 40.
+	* test/textmidiformedittest.xml: now has random_program paragraph.
+
+2026-03-28    Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py: remove unused spinbox settings (inc, from, to)
+        * VoiceWindow.py: Rearrange the top items to flow better; support random programs.
+        Pass in only the voices part of internal form data; provide an accessor for it.
+        * TextMidiFormEdit.py:
+        * Composer.cc: Support random programs in a line.
+        * GeneralMIDIRandom.{cc,h}: Add support class for random program changes.
+        * TextMidiForm.xsd: support random form XML data.
+        * Voice.{cc,h}: support random programs within a voice.
+        * textmidicgm.cc: add --ignore_ranges option to make random programs not go silent
+        because there is no instrument in range.
+        Generally redo the boost::serialization support to produce the same class_ids and versions.
+        Support versioning so that old form files work.
+        * textmidicgm.texi: Describe random program support.
+        * textmidi.l: add LAZY version of PROGRAM that omits the channel.
+        * (form files).xml: update using textmidicgm --update --xmlform file.xml
+
+2026-02-05    Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.{h,cc}, Makefile.{am,in}, Makefile:  add numeric range;
+        write MIDI_Program constructor.  Update include files for
+        GeneralMIDI compile line.
+
+2026-02-04    Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiFormEdit.py, VoiceWindow.py, Voice.{cc,h}:
+        Add random_program block to the XML form file for textmidicgm.
+
+2026-01-25    Thomas E. Janzen <janzentome@gmail.com>
+        * KeyboardWindow.py, TextMidiFormEdit.texi: Add keyboard buttons for
+        Random Octave Scale and Random Full Scale.
+
+2026-03-09    Thomas E. Janzen <janzentome@gmail.com>
         * TextMidiFormEdit.py: restore resizability of form plot, which had
         been written to resize well.
 

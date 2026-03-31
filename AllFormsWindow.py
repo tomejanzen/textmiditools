@@ -1,6 +1,6 @@
 #!usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py voice window, which permits editing one Voice's attributes."""
-# TextMIDITools Version 1.1.0
+# TextMIDITools Version 1.1.1
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -42,10 +42,10 @@ ArrangementAlgorithmList = list(AlgorithmDict)
 class MusicTime():
     """Class for music time values; a convenience that does not affect the music."""
 
-    def __init__(self, XmlForm = None):
+    def __init__(self, xmlform = None):
         """Init a MusicTime"""
         super().__init__()
-        self.xml_form = XmlForm
+        self.xml_form = xmlform
         self.ticks_per_quarter = tkinter.StringVar()
         self.ticks_per_quarter.set('1440')
         self.meter = tkinter.StringVar()
@@ -313,12 +313,12 @@ class ScaleFrame(tkinter.Frame):
 class AllFormsWindow(tkinter.Toplevel):
     """The form window."""
     twopi = 2.0 * math.pi
-    def __init__(self, XmlForm = None):
+    def __init__(self, xmlform = None):
         """Init the all forms window class."""
         super().__init__()
         self.frame = tkinter.ttk.Frame(self, padding='1 1 1 1')
         self.resizable(False, False)
-        self.xml_form = XmlForm
+        self.xml_form = xmlform
         self.name = StringVar()
         self.copyright = StringVar()
 
@@ -328,7 +328,7 @@ class AllFormsWindow(tkinter.Toplevel):
 
         # scale is after max_note_len and before music_time
 
-        self.music_time = MusicTime(XmlForm)
+        self.music_time = MusicTime(xmlform)
 
         self.ticks_per_quarter = StringVar()
         self.beat = StringVar()
@@ -510,9 +510,6 @@ class AllFormsWindow(tkinter.Toplevel):
         self.arrangement_period.set(
             self.xml_form['arrangement_definition']['period'])
 
-        self.arrangement_algorithm_spinbox['increment'] = 1
-        self.arrangement_algorithm_spinbox['from']      = 0
-        self.arrangement_algorithm_spinbox['to'] = 10
         self.arrangement_algorithm_spinbox['state'] = 'readonly'
         self.arrangement_algorithm_spinbox.set('Identity')
 

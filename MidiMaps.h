@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 //
 // Copyright © 2025 Thomas E. Janzen
@@ -98,7 +98,7 @@ namespace midi
             }
         }
 
-        const std::unordered_map<std::string_view, NumType> string_num_map() const
+        const std::unordered_map<std::string_view, NumType>& string_num_map() const
             noexcept
         {
             return string_num_map_;

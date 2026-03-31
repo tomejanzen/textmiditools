@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -45,6 +45,7 @@
 #include "RandomInt.h"
 #include "RhythmRational.h"
 #include "Track.h"
+#include "GeneralMIDIRandom.h"
 
 using std::numeric_limits, std::list, std::vector, std::string, std::cerr,
       std::ofstream, std::int32_t, std::max, std::min, std::cout, std::toupper;
@@ -260,6 +261,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     using std::chrono::time_point;
     using midi::MaxDynamic, midi::MinDynamic, midi::MIDI_Format;
 
+    using textmidi::cgm::GeneralMIDIRandom;
+
     // If the command line did not set arrangements,
     // then set them from the XML file.
     // in floating seconds: xml_form.arrangement_definition().period())
@@ -307,6 +310,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
 #if defined(TEXTMIDICGM_PRINT)
             cout << "tr: " << tr << '\n';
 #endif
+            GeneralMIDIRandom general_midi_random(xml_form.voices()[tr], random_program_ignore_ranges_);
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow()) [[likely]]
             {
@@ -464,6 +468,19 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     auto trit{find(
                         track_scramble_sequences[scramble_index].begin(),
                         track_scramble_sequences[scramble_index].begin() + number_of_voices, tr)};
+                    bool changed{};
+                    int  program{};
+                    std::tie(changed, program) = general_midi_random.random_program(pitch_index);
+                    if (changed)
+                    {
+                        if (program)
+                        {
+                        }
+                        else // out of range, change to rest
+                        {
+                            pitch_index = RestPitchIndex;
+                        }
+                    }
                     if ((pitch_index != RestPitchIndex)
                         && (trit
                         != (track_scramble_sequences[scramble_index].begin() + number_of_voices)))
@@ -484,10 +501,12 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                         {
                             track.last_pitch_index(key_index);
                         }
-                        NoteEvent temp_note_event{key_number, dynamic, rhythm};
+                        NoteEvent temp_note_event{key_number, dynamic, rhythm, program};
+;
                         track_note_events[tr].push_back(temp_note_event);
                     } else {
-                        NoteEvent temp_note_event{RestPitch, 0, rhythm};
+                        NoteEvent temp_note_event{RestPitch, 0, rhythm, program};
+;
                         track_note_events[tr].push_back(temp_note_event);
                     }
                 }

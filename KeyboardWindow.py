@@ -2,12 +2,14 @@
 """TextMIDITools: TextMidiFormEdit.py KeyBoard display,
 which displays a 128-key keyboard for editing scales.
 """
-# TextMIDITools Version 1.1.0
+# TextMIDITools Version 1.1.1
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 #
+
+import secrets
 
 import tkinter
 import tkinter.ttk
@@ -18,6 +20,7 @@ from tkinter import *
 
 class KeyboardButtons(tkinter.Frame):
     """Present a 128-key keyboard for scale-editing."""
+    octave_chromatic_scale = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     def __init__(self, parent, keyboard):
         """Init KeyboardButtons."""
         super().__init__(parent)
@@ -48,6 +51,16 @@ class KeyboardButtons(tkinter.Frame):
             command=self.octave_repeat_keyboard_callback)
         self.octave_repeat_button.grid(sticky=NSEW, row=1, column=3)
 
+        self.random_octave_scale_button = tkinter.ttk.Button(
+            self.frame, text='Random Octave Scale',
+            command=self.random_octave_scale_callback)
+        self.random_octave_scale_button.grid(sticky=NSEW, row=1, column=4)
+
+        self.random_full_scale_button = tkinter.ttk.Button(
+            self.frame, text='Random Full Scale',
+            command=self.random_full_scale_callback)
+        self.random_full_scale_button.grid(sticky=NSEW, row=1, column=5)
+
     def clear_keyboard_callback(self):
         """User pressed Clear [keyboard]; zero out the scale."""
         self.keyboard.draw_keyboard()
@@ -73,6 +86,43 @@ class KeyboardButtons(tkinter.Frame):
             if self.keyboard.midi_key_selects[key]:
                 for sel in range(key % 12, 128, 12):
                     self.keyboard.midi_key_selects[sel] = True
+        self.keyboard.set_keys_from_selects()
+
+    def random_octave_scale_callback(self):
+        """Generate a random scale within one octave."""
+        octave_chromatic_scale_copy = []
+        for x in self.octave_chromatic_scale:
+            octave_chromatic_scale_copy.append(x)
+        random_octave = []
+        for i in range(0, 12):
+            key = secrets.choice(octave_chromatic_scale_copy)
+            octave_chromatic_scale_copy.remove(key)
+            random_octave.append(key)
+        scalelen = secrets.randbelow(len(random_octave)) + 1
+        middle_c = 60
+        for i in range(0, scalelen):
+            self.keyboard.midi_key_selects[random_octave[i] + middle_c] = True
+        self.keyboard.set_keys_from_selects()
+
+    def random_full_scale_callback(self):
+        """Generate a random scale within a full keyboard."""
+        full_scale = []
+        for oct in range(0, 10):
+            for ctr in range(0, 12):
+                full_scale.append(self.octave_chromatic_scale[ctr] + (oct * 12))
+        """Last partial octave."""
+        for ctr in range(0, 8):
+            full_scale.append(self.octave_chromatic_scale[ctr] + 10 * 12)
+
+        random_full_scale = []
+        for i in range(0, len(full_scale)):
+            note = secrets.choice(full_scale)
+            random_full_scale.append(note)
+            full_scale.remove(note)
+
+        scalelen = secrets.randbelow(len(random_full_scale)) + 1
+        for i in range(0, scalelen):
+            self.keyboard.midi_key_selects[random_full_scale[i]] = True
         self.keyboard.set_keys_from_selects()
 
 class OneOctave():

@@ -14,7 +14,7 @@
 
 @titlepage
 @title Using @command{miditext}
-@subtitle The MIDI-to-textmidi translator
+@subtitle The MIDI(1.0)-to-textmidi translator
 @author Thomas E. Janzen
 @end titlepage
 @copying

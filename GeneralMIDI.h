@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -17,6 +17,7 @@
 
 #include "Midi.h"
 #include "MidiMaps.h"
+#include "MIDIKeyString.h"
 
 namespace textmidi
 {
@@ -55,9 +56,18 @@ namespace textmidi
 
         struct MIDI_Program
         {
-            std::int32_t Number_;
+            MIDI_Program(std::int32_t number, std::string name, std::pair<std::string_view, std::string_view> range)
+              : Number_{number},
+                Name_{name},
+                range_{range},
+                range_nums_{textmidi::pitchname_to_keynumber(std::string{range.first}).first,
+                            textmidi::pitchname_to_keynumber(std::string{range.second}).first}
+            {
+            }
+            std::int32_t Number_; // 1-based as in the MIDI 1 spec, i.e., 1=Acoustic Grand Piano
             const std::string_view Name_;
             std::pair<std::string_view, std::string_view> range_;
+            std::pair<int, int> range_nums_;
         };
 
         extern const MIDI_Program midi_programs[];

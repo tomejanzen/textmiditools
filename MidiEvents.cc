@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.0
+// TextMIDITools Version 1.1.1
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -1646,7 +1646,7 @@ void textmidi::MidiChannelVoiceNoteEvent::key_string(string_view key_string)
     key_string_ = key_string;
 }
 
-string textmidi::MidiChannelVoiceNoteEvent::key_string() const noexcept
+const string& textmidi::MidiChannelVoiceNoteEvent::key_string() const noexcept
 {
     return key_string_;
 }

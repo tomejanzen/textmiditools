@@ -1,0 +1,4 @@
+		<arrangement_definition_ class_id="9" tracking_level="0" version="0">
+			<algorithm_>1</algorithm_>
+			<period_>1.00000000000000000e+05</period_>
+		</arrangement_definition_>

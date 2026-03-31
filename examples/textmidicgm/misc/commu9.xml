@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!DOCTYPE boost_serialization>
-<boost_serialization signature="serialization::archive" version="18">
+<boost_serialization signature="serialization::archive" version="19">
 <xml_form class_id="0" tracking_level="0" version="4">
 	<name_>commu9</name_>
 	<copyright_>commu9 form file © 2024 by Thomas E. Janzen is licensed under CC BY-SA 4.0</copyright_>
@@ -128,8 +128,8 @@
 	</texture_form_>
 	<voices_ class_id="7" tracking_level="0" version="0">
 		<count>9</count>
-		<item_version>0</item_version>
-		<item class_id="8" tracking_level="0" version="0">
+		<item_version>1</item_version>
+		<item class_id="8" tracking_level="0" version="1">
 			<low_pitch_>C4</low_pitch_>
 			<high_pitch_>C6</high_pitch_>
 			<channel_>2</channel_>
@@ -152,6 +152,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_ class_id="10" tracking_level="0" version="0">
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C4</low_pitch_>
@@ -176,6 +183,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C3</low_pitch_>
@@ -200,6 +214,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C3</low_pitch_>
@@ -224,6 +245,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>G2</low_pitch_>
@@ -248,6 +276,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C2</low_pitch_>
@@ -272,6 +307,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C1</low_pitch_>
@@ -296,6 +338,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C1</low_pitch_>
@@ -320,6 +369,13 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 		<item>
 			<low_pitch_>C1</low_pitch_>
@@ -344,9 +400,16 @@
 				<inversion_>0</inversion_>
 				<retrograde_>0</retrograde_>
 			</follower_>
+			<random_program_>
+				<probability_>0.00000000000000000e+00</probability_>
+				<ensemble_>
+					<count>0</count>
+					<item_version>0</item_version>
+				</ensemble_>
+			</random_program_>
 		</item>
 	</voices_>
-	<arrangement_definition_ class_id="10" tracking_level="0" version="0">
+	<arrangement_definition_ class_id="12" tracking_level="0" version="0">
 		<algorithm_>1</algorithm_>
 		<period_>1.00000000000000000e+04</period_>
 	</arrangement_definition_>

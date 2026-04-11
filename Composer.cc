@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.1
+// TextMIDITools Version 1.1.2
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -298,7 +298,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     build_composition_priority_graph(xml_form, leaders_topo_sort);
 
     vector<vector<int32_t>> track_scramble_sequences;
-    build_track_scramble_sequences(track_scramble_sequences, total_duration);
+    build_track_scramble_sequences(track_scramble_sequences, total_duration / time_converter_.wholes_per_second());
 
     vector<vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
@@ -314,7 +314,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow()) [[likely]]
             {
-                while ((track.the_next_time() < total_duration)
+                while ((track.the_next_time() < (total_duration / time_converter_.wholes_per_second()))
                     && (track_note_events.size() < max_events_per_track_))
                 {
                     auto period_inv{track_scramble_.period_.reciprocal()};
@@ -372,7 +372,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     RhythmRational tempo_rat{};
                     tempo_rat.from_double(xml_form.music_time().beat_tempo_, time_converter_.ticks_per_whole());
                     track.the_last_time(track.the_next_time());
-                    track.the_next_time(track.the_next_time() + rhythm);
+                    track.the_next_time(track.the_next_time() + rhythm / time_converter_.wholes_per_second());
 
                     int32_t pitch_index{};
 

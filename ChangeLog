@@ -1,3 +1,10 @@
+2026-04-10    Thomas E. Janzen <janzentome@gmail.com>
+        * Composer.cc, MusicalForm.cc, TextMidiFormEdit.py:
+        Reconcile when musical time is in seconds or in whole notes.
+        Add conversions where needed.  Symptom was the the curves with four times
+        too slow.  Also fix the placement of curve labels in the python GUI
+        form plot window for window resizing.
+
 2026-03-30    Thomas E. Janzen <janzentome@gmail.com>
         * textmidicgm.texi, miditext.texi: explain random programs and fix a defect.
 	* MidiEvents.cc, MidiEvents.h, MidiMaps.h, RhythmRational.{cc,h}: cpplint and

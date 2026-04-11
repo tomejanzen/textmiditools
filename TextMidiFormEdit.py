@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.1.1
+# TextMIDITools Version 1.1.2
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -95,7 +95,7 @@ class XmlFormWindow(tkinter.Tk):
         y_real_estate = float(self.win_height) / 16.0
         y_zero = 3 * y_real_estate
         y_midline = y_zero - 0.5 * y_real_estate
-        y_label = y_midline - 60
+        y_label = y_midline - float(self.win_height) / 10.0
         self.canvas.create_text(30, y_label, text='Pitch', fill=axis_color)
         self.canvas.create_line(0, y_midline, self.win_width, y_midline,
             fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
@@ -154,7 +154,7 @@ class XmlFormWindow(tkinter.Tk):
 
         y_zero = 6.5 * y_real_estate
         y_midline = y_zero - 0.5 * y_real_estate
-        y_label = y_midline - 60
+        y_label = y_midline - float(self.win_height) / 10.0
         self.canvas.create_text(30, y_label, text='Rhythm', fill=axis_color)
         self.canvas.create_line(0, y_midline, self.win_width, y_midline,
             fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
@@ -195,7 +195,7 @@ class XmlFormWindow(tkinter.Tk):
 
         y_zero = 10 * y_real_estate
         y_midline = y_zero - 0.5 * y_real_estate
-        y_label = y_midline - 60
+        y_label = y_midline - float(self.win_height) / 10.0
         self.canvas.create_text(30, y_label, text='Dynamic', fill=axis_color)
         self.canvas.create_line(0, y_midline, self.win_width, y_midline,
             fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
@@ -238,7 +238,7 @@ class XmlFormWindow(tkinter.Tk):
         # but really it is the range.  So there is a reversal of roles here.
         y_zero = 13.5 * y_real_estate
         y_midline = y_zero - 0.5 * y_real_estate
-        y_label = y_midline - 60
+        y_label = y_midline - float(self.win_height) / 10.0
         self.canvas.create_text(30, y_label, text='Texture', fill=axis_color)
         self.canvas.create_line(0, y_midline, self.win_width, y_midline,
             fill=axis_color, dash='-', width=2, activewidth=2, disabledwidth=2)
@@ -1254,7 +1254,7 @@ class XmlFormWindow(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.1.1\nCopyright © 2025 Thomas E. Janzen\n'
+            'TextMIDITools Version 1.1.2\nCopyright © 2025 Thomas E. Janzen\n'
             'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
             'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
             'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')

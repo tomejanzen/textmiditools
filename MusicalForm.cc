@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.1
+// TextMIDITools Version 1.1.2
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -220,7 +220,7 @@ int32_t MusicalCharacter::pitch_index(double rf) noexcept
     auto temp{static_cast<int32_t>(
         round((pitch_range * rf) - (pitch_range / 2.0) + pitch_mean))};
     temp = (temp < 0) ? 0 : temp;
-    temp = (temp >= pitch_range) ? pitch_range - 1 : temp;
+    temp = (temp > midi::MaxKeyboardKey) ? midi::MaxKeyboardKey : temp;
     return temp;
 }
 

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.1
+// TextMIDITools Version 1.1.2
 //
 // RhythmRational 1.0
 // Copyright © 2025 Thomas E. Janzen

@@ -1,0 +1,20 @@
+The enclosed test files were created to test the fix from 2026-04-10 for incorrect timing of form curves due to confusion in time units (whole notes or seconds).
+These also serve as illustration of how each form parameter sinusoid affects the music.
+
+To run the tests, run make
+make
+This produced the textmidi files, then the MIDI files.  Play the MIDI files and listen to the entire 1-minute pieces.
+testcgmmeanpitch : the pitch (MIDI key) starts very low, then over 30 seconds rises to the top of the range, then falls slowly to the bottom again at 60 seconds.
+testcgmrangepitch : the mean pitch is about mid-range; the range of pitch starts very narrowly, then spreads out to  most of the range at 30 seconds, then contracts 
+to one note at 60 seconds.
+testcgmmeanrhythm : the rhythm starts very fast, and slowly lengthens to 1 second per note at 30 seconds, then slowly gets shorter again until the end at 60 seconds.
+testcgmrangerhythm : the rhythm is very regular, and gradually gets more syncopated and random until 30 seconds, when it slowly becomes very regular at 60 seconds.
+testcgmmeandynamic: the loudness, velocity, or dynamic, starts very quietly and gradually loudens until 30 seconds, then fades away until 60 seconds.
+testcgmrangedynamic: the loudness is medium loud at the beginning, but gradually get more varied or syncopated seeming until 30 seconds, when it gradually
+gets more mundane, same, and routine until 60 seconds.
+testcgmtexture: start with one line, then gradually add another voice and another every 15 seconds or so until 30 seconds, then gradually drop voices 
+like Haydn's Farewell symphony.
+textcgmscramble: test the timing of arrangements.  A single voices plays from a 4-voice ensemble, but voice rotation is used to bring a different track
+forward about every 15 seconds.
+2026-04-11 TEJ
+

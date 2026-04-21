@@ -1,3 +1,29 @@
+2026-04-20    Thomas E. Janzen <janzentome@gmail.com>
+        * GeneralMIDI.cc: make program 0 "unused".  It is invalid.
+        * GeneralMidi.py, TextMidiFormEdit.py, VoiceWindow.py:
+        Hacking test-and-fix esp. re: random program block.
+        Make the follower radiobuttons always have a value.
+        Fix spelling of scalar.
+        Refactor a bit so that follower values are set
+        regardless of the follower flag.
+        * MusicalForm.cc: refactor random() a little.
+
+2026-04-18    Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiFormEdit.py, VoiceWindow.py: change redundant sentinel 
+        values 2147483647 to 0.
+        * TextMidiFormEdit.py: add a save html file menu item.
+
+2026-04-16    Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py, TextMidiFormEdit.py: 
+        Refine use of Fraction() for beat and follower voice ratios and delays.
+
+2026-04-14    Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, VoiceWindow.py: 
+        Use python fractions Fraction when reasonable.
+        Note that musical meter may NOT be reduced use the GCD
+        algorithm.  Use exceptions to catch partially-formed
+        fractions in the Entry widgets.
+
 2026-04-10    Thomas E. Janzen <janzentome@gmail.com>
         * Composer.cc, MusicalForm.cc, TextMidiFormEdit.py:
         Reconcile when musical time is in seconds or in whole notes.

@@ -1,3 +1,9 @@
+2026-04-21    Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiFormEdit.texi: read and fix, make sure the HTML
+        feature is described, and random programs are described fully.
+        * TextMidiFormEdit.texi, VoiceWindow.py: Change title of
+        Instrumental Voices window to Voices window.
+
 2026-04-20    Thomas E. Janzen <janzentome@gmail.com>
         * GeneralMIDI.cc: make program 0 "unused".  It is invalid.
         * GeneralMidi.py, TextMidiFormEdit.py, VoiceWindow.py:

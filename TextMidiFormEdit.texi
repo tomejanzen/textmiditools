@@ -8,14 +8,14 @@
 
 @dircategory music
 @direntry
-* TextMidiFormEdit: (TextMidiFormEdit.info). Edit a form file for textmidicgm to use.
+* TextMidiFormEdit: (TextMidiFormEdit.info). Edit a form file for @command{textmidicgm} to use.
 @end direntry
 
 @comment @documentlanguage en_US
 
 @titlepage
 @title Using @command{TextMidiFormEdit}
-@subtitle The textmidicgm form editor
+@subtitle The @command{textmidicgm} form editor
 @author Thomas E. Janzen
 @end titlepage
 @copying
@@ -43,7 +43,7 @@ license is included in the section entitled ``GNU Free Documentation License.''
 * Downloading TextMidiFormEdit::
 * Invoking TextMidiFormEdit::
 * Musical Form Window::
-* Instrumental Voices Window::
+* Voices Window::
 * Form Plot Window::
 * Keyboard Window::
 * GNU Free Documentation License::
@@ -54,15 +54,15 @@ license is included in the section entitled ``GNU Free Documentation License.''
 @chapter Overview
 @cindex overview
 The @command{TextMidiFormEdit} program can be used interactively to
-edit new or pre-existing musical form files used by textmidicgm,
+edit new or pre-existing musical form files used by @command{textmidicgm},
 which generates works of music in textmidi language,
 which can then be converted by @command{textmidi} into standard MIDI 1.1 file formats.
 Using @command{TextMidiFormEdit}, it is possible to edit musical forms
 as defined by @command{textmidicgm} rather than hand-edit the XML form file.
 
-The model of musical form defined by textmidicgm is described in
-the info file for textmidicgm.  This manual only describes the
-user interface for TextMidiFormEdit.py.
+The model of musical form defined by @command{textmidicgm} is described in
+the PDF or info files for @command{textmidicgm}.  This manual only describes the
+user interface for @command{TextMidiFormEdit.py}.
 
 @menu
 * What is TextMidiFormEdit?::
@@ -71,41 +71,41 @@ user interface for TextMidiFormEdit.py.
 @node What is TextMidiFormEdit?
 @section What is TextMidiFormEdit?
 @cindex TextMidiFormEdit
-The program @command{TextMidiFormEdit} can be used interactively to
+@command{TextMidiFormEdit} is a graphical program for editing form files
+to be used by @command{textmidicgm} to create random (random as in windchimes) music.
+@command{TextMidiFormEdit} can be used interactively to
 create new musical form files, or edit previously-existing 
-musical form files, as used by @command{textmidicgm}.
+musical form files.
+The program @command{textmidicgm} is not an @quotedblleft{}AI@quotedblright{} application and does not train on
+other music.
 
 @node Downloading TextMidiFormEdit
 @chapter Downloading TextMidiFormEdit
 @cindex Downloading TextMidiFormEdit
-If you have downloaded TextMidiFormEdit.py and its support *.py files, then
+If you have downloaded @command{TextMidiFormEdit.py} and its support *.py files, then
 you can run it as described below.
-You can also download TextMidiFormEdit from pypi.org.
-@smallexample
-python3 -m pip install --no-deps TextMidiFormEdit
-@end smallexample
 @node Invoking TextMidiFormEdit
 @chapter Invoking TextMidiFormEdit
 @cindex Invoking TextMidiFormEdit
-@command{TextMidiFormEdit.py} has no options.  To run it, go to the directory
+@command{TextMidiFormEdit.py} can be run either without options or with one option: the filename of 
+a pre-existing form XML file.  To run it, go to the directory
 where it is found (after unpacking the archive for TextMIDITools) and invoke it:
 @smallexample
 ./TextMidiFormEdit.py
 @end smallexample
-You may specify a form file to be edited on the command line:
+You may specify an existing form file to be edited on the command line:
 @smallexample
 ./TextMidiFormEdit.py symphony.xml
 @end smallexample
 or open a form file using the menus.
-
-If you downloaded TextMidiFormEdit from pypi.org, or installed it in an equivalent way,
-you can use it as a python package:
+TextMidiFormEdit can also be run in a more step-wise manner as a Python class,
+but a filename is required.
 @smallexample
 python3
 >>> from TextMidiFormEdit import *
->>> TextMidiFormEdit()
+>>> TextMidiFormEdit("filename.xml")
 @end smallexample
-When you quit the application, just exit from python with control-D or 
+When you quit the application, just exit from python:
 @smallexample
 >>> exit()
 @end smallexample
@@ -126,9 +126,9 @@ voices, which is done on the Voices window.
 * Beat Size::
 * Meter::
 * Tempo per Beat::
-* Melodic Probabilities::
 * Arrangements::
-* Scale Transpose and From Keyboard::
+* Melodic Probabilities::
+* Scale
 * Pitch Form::
 * Rhythm Form::
 * Dynamic Form::
@@ -139,7 +139,8 @@ The Musical Form Window has several items.
 @section Name
 @cindex Name
 The name string can be typed in; it is meant to be the title of the musical
-work to be created by textmidicgm.
+work to be created by @command{textmidicgm}.
+The name string is offered as the basename of all file save names but the files may be saved to any name.
 @node Copyright
 @section Copyright
 @cindex Copyright
@@ -150,31 +151,49 @@ by @command{textmidicgm}.
 @section Len
 @cindex Len
 The len text field is the duration of the musical work in seconds.
-Entering 600 will tell textmidicgm to generate 10 minutes of music.
+Entering 600 will tell @command{textmidicgm} to generate 10 minutes of music.
 @node Min/Max Note Len
 @section Min/Max Note Len
 @cindex Min/Max Note Len
-The minimum and maximum note lengths specifies the duration range for all note events.
+The minimum and maximum note lengths (given in seconds as floating-point numbers) 
+specify the duration range for all note events.
 When the rhythm curve is very low and the range curve narrow, the min note length is used;
 when the rhythm curve is high with a narrow range, the maximum note length is used.
+The original @command{AlgoRhythms} for the Amiga computer was a real-time program
+that just pushed note events out the MIDI port as fast as it could, so that the 
+minimum was the transmission time of a note-on/note-off pair; a minimum note length of 
+0.0 seconds never actually arose (but still was fast enough to make my piano synth hang up).
+Because @command{textmidicgm} is merely writing a textmidi-format file, 
+it can try to use 0-long notes, but then musical time would not advance.  This is because time
+advances by adding the note duration to the time (from the start of the piece) of the last note.
+If time does not advance, then the trigger for ending the piece will not occur.  Therefore, huge numbers of notes can be generated, resulting in huge files.  That is why there is a limit on the number of 
+notes (which can be changed on the command line).  See the documentation for @command{textmidicgm}.
 @node Pulse/Sec
 @section Pulse/Sec
 @cindex Pulse/Sec
-Pulse per second is used optionally to force textmidicgm to generate rhythms that line up on
+Pulse per second is used optionally to force @command{textmidicgm} to generate rhythms that line up on
 a pulse.  Such music is likely to be easier to notate in scoring program such that human players 
-could play it.  Note, however, that textmidicgm has no model of meter, that is, the grouping of
-beats and accents.  The original concept for this model of form (develoiped in 1976 for manual
+could play it.  Note, however, that @command{textmidicgm} has no model of meter, that is, the grouping of
+beats and accents.  The original concept for this model of form (developed in 1976 for manual
 composition) was connected to very fluid, conversational, ametrical rhythms.
-On the other hand, setting a pulse can make works produced by textmidicgm sound more dance-like,
+On the other hand, setting a pulse can make works produced by @command{textmidicgm} sound more dance-like,
 for example, with a pulse of about 5 or so per second.
+A pulse-per-second that is less than 1.0 is allowed.  For example, a value of 0.5 pulses per second
+would be one pulse in 2 seconds.
+Setting a pulse-per-second around 8.0 or slower
+is recommended for those who wish to make human-playable scores using @command{textmidicgm}.
 @node Ticks per Quarter
 @section Ticks per Quarter
 @cindex Ticks per Quarter
+MIDI (1) requires specifying ticks per quarter [note], and MIDI (1) tempo is always
+for quarter note; it does, however allow giving a meter in a MIDI file.
+@command{textmidicgm} permits specifying the size of the beat to 
+other than a quarter note, the tempo for that size of beat, and of course the meter.
 The musical time values of ticks/quarter, beat size, meter and tempo per beat are 
 conveniences that specify how the @command{textmidi} language file is to be written.
 They do not, in principle, add to the capability of @command{textmidicgm}.
-Ticks per quarter is required by the MIDI spec and may be a convenient value.  It could be
-as low as 24, is often 240, but can be a higher value such as 720.  It may be helpful to
+Ticks per quarter could be
+as low as 24, is often 240, but can be a higher value such as 720 or even 1440.  It may be helpful to
 have a factor-rich value for ticks/quarter so that divisions such as triplets,
 quintuplets, and the usual divisions of 2 can be exact.  For example, 720 is the product of
 2*2*2*2*3*3*5.  A quarter note is already 1/(2*2) of a whole note, so that 720 ticks per
@@ -186,6 +205,8 @@ in higher resolution that your MIDI playing software's timing offers is probably
 @cindex Beat Size
 The beat size is the musical ratio for the size of a beat.  In 6/8 meter, for example,
 you could specify a beat size of 3/8.
+The textmidi language @emph{TEMPO} now allows specification of tempo for any size beat, 
+but by default applies to a quarter note.
 @node Meter
 @section Meter
 @cindex Meter
@@ -197,36 +218,19 @@ into the @command{textmidi} file as a TIME_SIGNATURE command, along with ticks p
 The tempo per beat is the metronomic tempo of beats per minute for the beat size specified in the
 @emph{beat size} field.  It is converted into a tempo of quarters per minute for the 
 @command{textmidicgm} language output because that is how MIDI (1) uses tempo.
-@command{textmidicgm} will compute rhythms based on beat size, meter, and tempo per beat,
-but must write the equivalent tempo for a quarter note (for example, a meter of 60 for a 
-beat size of 3/8 and with 1440 ticks/quarter will be written as a command TEMPO 90 1440
-because MIDI tempo is always for a quarter note.
-@node Melodic Probabilities
-@section Melodic Probabilities
-@cindex Melodic Probabilities
-Melodic Probabilities are cumulative probabilities that apply only when a voice is in 
-walking mode: they determine how often a voice moves up, or moves down, repeats a note, or
-is resting.  A random variable used to select melodic movement 
-varies in (0..<1.0).  When the random variable is:
-
-@itemize
-@item Below the "Down" probability, the voice will move down a step in the scale; when ;
-@item At or above Down and below the Same probability, it will repeat the previous key;
-@item At or above the Up probability, it will step up the scale.
-@item At or above the Up probability, it will be silent.
-@end itemize
-Because these are cumulative probabilities, the following inequalities must hold:
-0.0 <= Down <= Same <= Up <= 1.0.
-If you don't want the voice to drift off down or up, then the probabilities for up and down should be
-equal, but by differences:  (Up - Same) == (Same - Down).
-These probabilities apply only if a voice is in walking mode.
+@command{textmidicgm} will compute rhythms based on beat size, meter, and tempo per beat.
+It can now write the TEMPO statement as a tempo for a special-size beat because the textmidi
+language's TEMPO statement has been made to accept a beat size.  The program
+@command{textmidi} will convert that TEMPO command to the MIDI (1) version of TEMPO for a quarter note.
+For example, a meter of 60 for a 
+beat size of 3/8 and with 1440 ticks/quarter will be written as a command TEMPO 90 1440.
 @node Arrangements
 @section Arrangements
 @cindex Arrangements
 Arrangements, if set, can change the priority of voices under the texture curve.
 Each arrangement algorithm permutes the voice priorities in a different way.
 Some of the algorithms do not produce all possible permutations, but others do.
-These algorithms are described in the documentation for textmidicgm.
+These algorithms are described in the documentation for @command{textmidicgm}.
 The settable items for Arrangements are:
 @itemize
 @item Algorithm
@@ -244,30 +248,54 @@ The settable items for Arrangements are:
 @item Heaps
 @end itemize
 @item Period
-The period of time before going to the next permutation.
+The period of time alotted to each permutation before changing to the next one.
 @end itemize
-@node Scale Transpose and From Keyboard
-@section Scale Transpose and From Keyboard
-@cindex Scale Transpose and From Keyboard
+@node Melodic Probabilities
+@section Melodic Probabilities
+@cindex Melodic Probabilities
+Melodic Probabilities are cumulative probabilities that apply only when a voice is in 
+walking mode.  The probabilities act as thresholds.  
+The thresholds determine how often a voice moves up, or moves down, repeats a note, or
+is resting.  A random variable used to select melodic movement 
+varies in (0..<1.0).  When the random variable is:
+@itemize
+@item Below the "Down" probability, the voice will move down a step in the scale; when ;
+@item At or above Down and below the Same probability, it will repeat the previous key;
+@item At or above the Up probability, it will step up the scale.
+@item At or above the Up probability, it will be silent.
+@end itemize
+Because these are cumulative probabilities, the following inequalities must hold:
+0.0 <= Down <= Same <= Up <= 1.0.
+If you don't want the voice to drift off down or up, then the probabilities for up and down should be
+equal, but by differences:  (Up - Same) == (Same - Down).
+These probabilities apply only if a voice is in walking mode.
+@node Scale
+@section Scale
+@cindex Scale
 Scales can be entered the following ways:
 @itemize
 @item Loaded from a form file
+If you hand-edit the scale inside the form file,
+remember to change the number inside the tag @emph{<count>}
+to the number of pitches in the scale.  XML format is a bit fragile, 
+and boost::serialization XML archive format is even more fragile.
 @item Set from the scale menu selections
+Select a scale by name in the Scale spin button.  The scale will be reflected
+on the Keyboard window.
 @item Loaded from the keyboard window, by using the "From Keyboard" push button.
+There is more information about the Keyboard window below.
 @end itemize
 Once a scale has been loaded, it may be transposed by using the transpose spin button.
 Note that if the scale loaded from a file was already transposed, then that version
 of the scale will be the 
 transposition of zero (0) in the Musical Form window for that scale.
-
-Pushing the From Keyboard button will copy the scale that is set in the keyboard window
-to be the scale in the musical form.
+Transposition will be reflected in the Keyboard window.
 
 @node Pitch Form
 @section Pitch Form
 @cindex Pitch Form
-The Form curves are the core concept of the textmidicgm model for musical form.
-The curves are always sinusoidal (wave-like), but they are biased to sit above zero
+The Form curves are the core concept of the @command{textmidicgm} model for musical form.
+The curves are always sinusoidal (wave-like), but they are usually biased to sit above zero
 and range from 0 to 1.  Pitch, Rhythm, and Dynamic curves have two sinusoids: mean and range.
 The controls for each sinusoid include a period (in seconds) and a phase slider in radians.
 There are two * pi radians (about 6.28) in a full circle.  The slider ranges from -pi to +pi.
@@ -278,7 +306,7 @@ value.  Only a range sinusoid is used for texture.
 The seven sinusoids are all all independent in phase and period.
 After adjusting form curve values, you should select the Redraw item on the Form Plot window's menu
 to see how you have changed the form.
-The result of these curves is to cause the music generated by textmidicgm to change in 
+The result of these curves is to cause the music generated by @command{textmidicgm} to change in 
 character over time.  Ordinarily the periods used are around 120 to 360 seconds (2 to 6 minutes).
 However, to make a parameter's mean or range stay static, merely make the period very long, such as
 1000000 seconds.
@@ -287,12 +315,15 @@ the Pitch mean curve generally causes the pitches played to be higher when the c
 and lower when the curve is lowe; the Pitch range curve causes a wider range of of notes
 in the scale when the curve is higher and fewer (even just repeating a pitch).
 In walking mode, a voice ignores the pitch curves and follows the melodic probabilities on
-how to walk up and down.
-
+how to walk up and down.  Adjusting amplitude and offset can help avoid the voice spending too long
+playing extremely high or low notes (or loud or soft, or long or short).  When I manually
+wrote the first piece using this model, in 1977, I appear to have
+subjectively adjusted, perhaps in a logarithmic-like compression of the curve as it exceeded the limits.
+This type of adjustment is, however, not available in @command{textmidicgm}.
 @node Rhythm Form
 @section Rhythm Form
 @cindex Rhythm Form
-A high rhythm mean curve generally tells textmidicgm to make longer duration (slower) note events.
+A high rhythm mean curve generally tells @command{textmidicgm} to make longer duration (slower) note events.
 When the rhythm mean curve is at a low point in the wave, it tends to make shorter durations (faster notes).
 A high rhythm range curve tends to make a wider range of durations and sound more syncopated, even
 with a pulse-per-second set; a low rhythm range curve tends to make more monotonous and repetitive
@@ -300,7 +331,7 @@ durations.
 @node Dynamic Form
 @section Dynamic Form
 @cindex Dynamic Form
-A high dynamic mean curve generally tells textmidicgm to make louder note events.
+A high dynamic mean curve generally tells @command{textmidicgm} to make louder note events.
 When the dynamic mean curve is at a low point in the wave, it tends to make quieter notes.
 A high dynamic range curve tends to make a wider range of loudnesses and sound more natural;
 a low dynamic range curve tends to make more evenly loud notes.
@@ -313,9 +344,9 @@ a low texture range curve makes fewer voices play.
 As the texture curve rises, the voices are added in voice number order.
 To suggest a solist, the solo voice should probably be in voice 0 position in the voice window.
 
-@node Instrumental Voices Window
-@chapter Instrumental Voices Window
-@cindex Instrumental Voices Window
+@node Voices Window
+@chapter Voices Window
+@cindex Voices Window
 @image{VoiceWindow,2.9in,2.6in,Voice Window,png}
 @menu
 * Number of Voices::
@@ -327,19 +358,15 @@ To suggest a solist, the solo voice should probably be in voice 0 position in th
 * Walking::
 * Pan::
 * Follow/Leader::
-* Interval Type/Interval::
-* Follower Delay::
-* Follower Retrograde::
-* Follower Inversion::
 * Random Program::
 @end menu
-The Instrumental Voices Window has several items.
+The Voices Window has several items.
 @node Number of Voices
 @section Number of Voices
 @cindex Number of Voices
 The number of voices is the total number of voices that can play when the form's texture curve
 is high.  This model of musical form is basically counterpuntal and made of solo voices.
-There is no real limit for number of voices, but the form editor only offers 23 voices.
+There is no limit for number of voices, but the form editor only offers 128 voices.
 
 @node Voice
 @section Voice
@@ -350,7 +377,7 @@ Voice is the index (in 0..Number of Voices - 1) of the voice to be currently edi
 @section Low Pitch
 @cindex Low Pitch
 The low pitch is the low pitch for the voice.  If the Form Pitch curve goes below this low pitch, then
-the low pitch will be played.  This can be monotonous; textmidicgm has an option on the command that
+the low pitch will be played.  This can be monotonous; @command{textmidicgm} has an option on the command that
 trims the scale to the range for all the instruments together to help with this, but this is not a 
 perfect fix.
 The @quotedblleft{}From Program@quotedblright{} push button will set the Low Pitch suitable for the
@@ -507,7 +534,7 @@ patch.  The instrument ranges were taken from textbooks or from en.wikipedia.org
 @section High Pitch
 @cindex High Pitch
 The high pitch is the high pitch for the voice.  If the Form Pitch curve goes above this high pitch, then
-the high pitch will be played.  This can be monotonous; textmidicgm has an option on the command that
+the high pitch will be played.  This can be monotonous; @command{textmidicgm} has an option on the command that
 trims the scale to the range for all the instruments together to help with this, but this is not a 
 perfect fix.
 The @quotedblleft{}From Program@quotedblright{} push button will set the High Pitch suitable for the
@@ -540,76 +567,102 @@ Pan is the MIDI stereo pan for the voice.
 @node Follow/Leader
 @section Follow/Leader
 @cindex Follow/Leader
-The Follower/Leader feature permits you to tell a voice to ignore the Form curves altogether, and
-instead to follow another voice.  Set the follow button to make a voice follow another.
-Set the Leader to the number of the voice to follow.  Select the interval type of following: scaler or chromatic.
-Scaler intervals will count steps up in the scale (down for a negative interval)
-being used to select the interval of following;
-chromatic intervals will count by 1's up (down for a negative interval) in a chromatic scale to find the
-follower's pitch.
+The Follower/Leader feature can tell a voice to follow (canon) another voice while ignoring
+the Form curves altogether.  Set the follow button to make a voice follow another.
+Set the Leader to the number of the voice to follow.
+Since the follower voice is written after the leader has been completely finished, 
+@menu
+* Interval Type/Interval::
+* Delay::
+* Duration Factor::
+* Retrograde::
+* Inversion::
+@end menu
 
 @node Interval Type/Interval
-@section Interval Type/Interval
+@subsection Interval Type/Interval
 @cindex Interval Type/Interval
 The follower's Interval Type defines whether the follower stays in the scale for the form, or
-if it follows on a chromatic interval.  If the interval type is scaler, then the interval is the
+if it follows on a chromatic interval.  If the interval type is scalar, then the interval is the
 number of steps up or down the scale that the follower appears.  If the interval type is chromatic,
 then the follower will be "Interval" number of chromatic steps away from the voice it is following.
 
-@node Follower Delay
-@section Follower Delay
-@cindex Follower Delay
+@node Delay
+@subsection Delay
+@cindex Delay
 The follower's Delay creates a canon effect in that it 
 delays the start of the following voice for the duration given as an ordinary
-rational number.  It can be set to 1/4 for a quarter note, or 13/17, or
+rational number of whole notes.  It can be set to 1/4 for a quarter note, or 13/17, or
 4/1 or 4 for four whole notes delay and so on.  It interprets 4 as four whole notes and not
 as a quarter note the way @command{textmidi} does in LAZY mode.
 
-@node Follower Inversion
-@section Follower Inversion
-@cindex Follower Inversion
-The follower can be an inversion of the leader voice, for the entire duration 
-of the piece.  Transposition interval still applies.
-The selection of either chromatic or scalar following also applies.
+@node Duration Factor
+@subsection Duration Factor
+@cindex Duration Factor
+The follower's Duration Factor multiplies all of the leader's rhythms
+by a factor that is given as an ordinary rational number.
+It can be set to 1/4 for making the follower four times faster, 4/1 or 4 to be four times slower,
+or other rational numbers.
+It interprets 4 as four whole notes and not as a quarter note the way 
+@command{textmidi} does in LAZY mode.
 
-@node Follower Retrograde
-@section Follower Retrograde
-@cindex Follower Retrograde
+@node Inversion
+@subsection Inversion
+@cindex Inversion
+The follower can be an inversion of the leader voice, for the entire duration 
+of the piece.  Transposition interval and chromatic or scalar interval type also apply.
+
+@node Retrograde
+@subsection Retrograde
+@cindex Retrograde
 The follower will be a retrograde (that is, a backwards copy) of the leader voice, 
-for the entire duration of the piece.  Transposition interval still applies.
-The selection of either chromatic or scalar following also applies.
+for the entire duration of the piece.
 
 @node Random Program
 @cindex Random Program
-The Random Program feature make a given track (musical line) to randomly
+The Random Program feature can make a given track (musical line) randomly
 change its program (or patch, or instrument) from note to note.  This feature
-was inspired by John Cage's composition @emph{Cheap Imitation} as well as
-by Anton Webern's orchestration of Bach's @emph{Ricercar} from his work
-@emph{The Musical Offering}.
+was inspired by John Cage's composition @emph{Cheap Imitation} as rendered for
+orchestra, as well as
+Anton Webern's orchestration of Bach's @emph{Ricercar} from @emph{The Musical Offering}.
+Also note measure 97 of the Andante con moto from Beethoven's
+c minor symphony.
 Each voice has its own probability and ensemble for random programs.
-@section probability
+Random Programs apply only to lead voices, not followers.  However, follower voices will
+copy the changing random instruments of the leads.
+@menu 
+* Probability::
+* Ensemble::
+@end menu
+@node Probability
+@subsection Probability
 @cindex probability
 The field probability gives the probability that the next note will get a randomly-selected program.
 If the probability is set to 1.0, then every note will get a random instrument (but if it is the same
 as in place then no PROGRAM command will be written).  If the probability is .5, then on average
 every other note will use a new MIDI program.
-@section ensemble
-@cindex ensemble
-The ensemble is a list of 1-based MIDI program numbers from which to randomly choose a program.
+If the probability is zero, then the random ensemble will have no effect at all.
+@subsection Ensemble
+@node Ensemble
+@cindex Ensemble
+The ensemble is a list General MIDI programs from which a voice can randomly choose a program.
 By default, @command{textmidicgm} uses the key number (pitch) selected for a note to find which
 programs are realistically available, given their respective ranges.  The ranges used are seen
 in the program spin button near the top of the voice window.  If no instrument is found that
 supports that pitch, then it generates a rest instead of a note event.
-If the command-line option ignoreranges is specified for @command{textmidicgm}, then instead of
+If the command-line option @emph{ignoreranges} is specified for @command{textmidicgm}, then instead of
 looking up instruments by key first, @command{textmidicgm} will just randomly select a program
-from the ensemble and specify it.  The NoteEvent class generates a LAZY mode PROGRAM message
+from the ensemble.  The NoteEvent class generates a LAZY mode version of the PROGRAM message
 for that program prior to the current note being added to the textmidi file.
 Note that the melodic instruments in General MIDI (1.0) range from 1 to 112 (in a conservative assessment).
 @section Add Button
 The Add button copies the program that is visible in the Program spin button near the top of the voice window
 into the ensemble list.
 You can select different instruments to add to the ensemble by using the Program spin button to show different
-programs.
+programs.  Note that changing the voice's program in order to build a random ensemble does change the voice's
+instrument, but that may not matter since you are using a random ensemble in any case.  However you can 
+set the voice's program back to whatever you like, in case you might change the random program probability back 
+to zero.  
 @section Delete Button
 The Delete button removes the currently showing program name from the program list and then displays the first
 program in the remaining list.
@@ -621,7 +674,9 @@ The Form Plot window has a menu.
 @menu
 * Open::
 * Save::
+* Defaults::
 * Redraw::
+* Save HTML::
 * Save Postscript::
 * About::
 * Quit::
@@ -641,14 +696,28 @@ user interface and the plot redrawn.
 @cindex Save
 The Save menu allows you to save an XML 
 form file.  All of the values of the form in the user interface of
-TextMidiFormEdit.py will be written out to the file.
+@command{TextMidiFormEdit.py} will be written out to the file.
 The XML form file is readable by @command{textmidicgm} using the --xmlform option.
+
+@node Defaults
+@section Defaults
+@cindex Defaults
+The @emph{Defaults} menu item sets all values to basic values (not randomly selected values).
+To generate random forms, use @command{textmidicgm} --random.
 
 @node Redraw
 @section Redraw
 @cindex Redraw
 The form plot is redrawn; this is called for if the form curves are 
 changed in the Musical Form window.
+
+@node Save HTML
+@section Save HTML
+@cindex Save HTML
+The Save HTML menu item will save the form data to an HTML file that may be suitable for use in reports.
+The format of the HTML attempts to make the form data easier to see in a glance.  It does not
+include the form plot, but that can be saved as a Postscript file.
+Random Program blocks are not written if the probability is zero.
 
 @node Save Postscript
 @section Save Postscript

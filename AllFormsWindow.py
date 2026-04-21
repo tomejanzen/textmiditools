@@ -11,9 +11,11 @@ import re
 import math
 import tkinter
 import tkinter.constants
+import decimal
 
 from tkinter import *
 from tkinter import messagebox
+from fractions import Fraction
 
 import FormFrame
 import Sine
@@ -49,9 +51,9 @@ class MusicTime():
         self.ticks_per_quarter = tkinter.StringVar()
         self.ticks_per_quarter.set('1440')
         self.meter = tkinter.StringVar()
-        self.meter.set('4/4')
+        self.meter.set('4/4') # meter cannot be reduced by the GCD algorithm
         self.beat = tkinter.StringVar()
-        self.beat.set('1/4')
+        self.beat.set(str(Fraction(1, 4)))
         self.beat_tempo = tkinter.DoubleVar()
         self.beat_tempo.set(60.0)
         self.music_time_dict = self.defaults()
@@ -61,8 +63,10 @@ class MusicTime():
         self.music_time_dict['ticks_per_quarter'] = music_time_dom.getElementsByTagName('ticks_per_quarter')
         beat_dict = {}
         beat_xml = music_time.getElementsByTagName('beat')
-        beat_dict['numerator']   = beat_xml.getElementsByTagName('numerator_')
-        beat_dict['denominator'] = beat_xml.getElementsByTagName('denominator_')
+        temp_beat = Fraction(int(beat_xml.getElementsByTagName('numerator')),
+                             int(beat_xml.getElementsByTagName('denominator')))
+        beat_dict['numerator']   = temp_beat.numerator
+        beat_dict['denominator'] = temp_beat.denominator
         self.music_time_dict['beat'] = beat_dict
         meter_dict = {}
         meter_xml = music_time.getElementsByTagName('meter')
@@ -313,6 +317,7 @@ class ScaleFrame(tkinter.Frame):
 class AllFormsWindow(tkinter.Toplevel):
     """The form window."""
     twopi = 2.0 * math.pi
+    decimal.getcontext().prec = 10
     def __init__(self, xmlform = None):
         """Init the all forms window class."""
         super().__init__()
@@ -399,10 +404,8 @@ class AllFormsWindow(tkinter.Toplevel):
         self.beat_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_ratio_command, validate='focusout',
             textvariable=self.beat)
-        beat_ratio = "/"        
-        beat_ratio = beat_ratio.join([str(self.xml_form['music_time']['beat']['numerator']),
-            str(self.xml_form['music_time']['beat']['denominator'])])
-        self.beat.set(beat_ratio)
+        self.beat.set(str(Fraction(self.xml_form['music_time']['beat']['numerator'],
+                                   self.xml_form['music_time']['beat']['denominator'])))
 
         self.meter_label = tkinter.ttk.Label(self.frame, text='Meter')
         self.meter_entry = tkinter.ttk.Entry(self.frame,
@@ -626,16 +629,14 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def beat_callback(self, event=None, *args):
         """Beat size,e.g. 1/4; set the internal form."""
-        beat_quotient = self.beat.get()
-        slash_index = beat_quotient.find("/")
-        if slash_index > 0:
-            num_list = beat_quotient.split("/")
-            if len(num_list) == 2:
-                self.xml_form['music_time']['beat']['numerator'] = num_list[0]
-                self.xml_form['music_time']['beat']['denominator'] = num_list[1]
-        else:
-            self.xml_form['music_time']['beat']['numerator'] = beat_quotient
-            self.xml_form['music_time']['beat']['denominator'] = 1
+        beat_quotient = Fraction(1, 4)
+        try:
+            beat_quotient = Fraction(self.beat.get())
+        except ValueError:
+            return
+        self.beat.set(str(beat_quotient))
+        self.xml_form['music_time']['beat']['numerator']   = beat_quotient.numerator
+        self.xml_form['music_time']['beat']['denominator'] = beat_quotient.denominator
 
     def meter_callback(self, event=None, *args):
         """Beat size,e.g. 1/4; set the internal form."""
@@ -1289,10 +1290,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
         self.ticks_per_quarter.set(self.xml_form['music_time']['ticks_per_quarter'])
 
-        beat_ratio = "/"
-        beat_ratio = beat_ratio.join([str(self.xml_form['music_time']['beat']['numerator']),
-            str(self.xml_form['music_time']['beat']['denominator'])])
-        self.beat.set(beat_ratio)
+        self.beat.set( str(Fraction(int(self.xml_form['music_time']['beat']['numerator']),
+                                    int(self.xml_form['music_time']['beat']['denominator']))))
 
         meter_ratio = "/"
         meter_ratio = meter_ratio.join([str(self.xml_form['music_time']['meter']['numerator']),

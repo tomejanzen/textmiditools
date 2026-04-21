@@ -22,12 +22,14 @@ from AllFormsWindow import *
 from AllFormsWindow import AllFormsWindow
 from AllFormsWindow import ScaleFrame
 from VoiceWindow import VoiceWindow
+from GeneralMidi import GENERAL_MIDI_INSTRUMENT_DICT
 
 class XmlFormWindow(tkinter.Tk):
     """XML Form support using C++ boost serialization XML archive style."""
     xml_form_dict = {}
     twopi = 2.0 * math.pi
     the_filename = 'Untitled'
+    follower_type_dict = {0 : "Neither", 1 : "Scalar", 2 : "Chromatic"}
 
     def __init__(self, filename):
         """Init the XML form (a C++ boost libraries serialization XML archive style DOM)."""
@@ -342,7 +344,7 @@ class XmlFormWindow(tkinter.Tk):
     def default_voices(self):
         """Install default voice settings."""
         vox_list = []
-        for vox in range(1, 25):
+        for vox in range(0, 25):
             voice_dict = {}
             voice_dict['low_pitch'] = 'A0'
             voice_dict['high_pitch'] = 'C8'
@@ -352,8 +354,8 @@ class XmlFormWindow(tkinter.Tk):
             voice_dict['pan'] = 0
             follower_dict = {}
             follower_dict['follow'] = False
-            follower_dict['leader'] = 2147483647
-            follower_dict['interval_type'] = 0
+            follower_dict['leader'] = 0
+            follower_dict['interval_type'] = 1
             follower_dict['interval'] = 0
             delay_dict = {}
             delay_dict['numerator'] = '0'
@@ -386,7 +388,7 @@ class XmlFormWindow(tkinter.Tk):
     def default_xml_form(self):
         """Install default form."""
         self.xml_form_dict['name'] = 'defaults'
-        self.xml_form_dict['copyright'] = 'Copyright © unspecified'
+        self.xml_form_dict['copyright'] = 'Copyright unspecified'
         self.xml_form_dict['len'] = 600.0
         # at the old MIDI baud rate a note_on+note_off with running status
         # (i.e., no status byte) is 0.00128 seconds.  Zero can
@@ -443,9 +445,10 @@ class XmlFormWindow(tkinter.Tk):
         numerator = numerator_node.firstChild.data
         denominator_node = beat_node.getElementsByTagName('denominator_')[0]
         denominator = denominator_node.firstChild.data
+        f = Fraction(int(denominator), int(numerator))
         music_time_dict['beat'] = {}
-        music_time_dict['beat']['numerator'] = numerator
-        music_time_dict['beat']['denominator'] = denominator
+        music_time_dict['beat']['numerator'] = f.numerator
+        music_time_dict['beat']['denominator'] = f.denominator
         beat_tempo_node = music_time_dom.getElementsByTagName('beat_tempo_')[0]
         music_time_dict['beat_tempo'] = beat_tempo_node.firstChild.data
         return music_time_dict
@@ -704,8 +707,7 @@ class XmlFormWindow(tkinter.Tk):
     def traverse_arrangement_definition(self, arrangement_definition_dom):
         """Get the file's DOM arrangement settings and install in the internal form structure."""
         arrangement_definition_dict = {}
-        algorithm_list = (arrangement_definition_dom
-            .getElementsByTagName('algorithm_'))
+        algorithm_list = (arrangement_definition_dom.getElementsByTagName('algorithm_'))
         arrangement_definition_dict['algorithm'] = algorithm_list[0].firstChild.data
         period_list = arrangement_definition_dom.getElementsByTagName('period_')
         arrangement_definition_dict['period'] = period_list[0].firstChild.data
@@ -754,6 +756,123 @@ class XmlFormWindow(tkinter.Tk):
         else:
             self.xml_form_dict['arrangement_definition'] = self.default_arrangement_definition()
 
+    def html_callback(self):
+        """Write an HTML file of the form."""
+        afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.html',
+            initialfile = self.all_forms_window.xml_form['name'],
+            initialdir = '.',title = 'Save HTML File',
+            filetypes=(('html files','*.html'),('all files','*.*')))
+        html_file = open(afilename, 'w', encoding='UTF-8')
+        print("<!DOCTYPE html>", file=html_file, sep=' ', end='\n')
+        print("<html>", file=html_file, sep=' ', end='\n')
+        print("  <head>", file=html_file, sep=' ', end='\n')
+        print("    <dl>", file=html_file, sep=' ', end='\n')
+        print("      <dt>Name</dt>", file=html_file, sep=' ', end='\n')
+        print("      <dd>", self.xml_form_dict['name'], "</dd>", file=html_file, sep=' ', end='\n')
+        print("      <dt>Copyright</dt>", file=html_file, sep=' ', end='\n')
+        print("      <dd>", self.xml_form_dict['copyright'], "</dd>", file=html_file, sep=' ', end='\n')
+        print("      <dt>Length</dt>", file=html_file, sep=' ', end='\n')
+        print("      <dd>", self.xml_form_dict['len'], "</dd>", file=html_file, sep=' ', end='\n')
+        print("    <dl>", file=html_file, sep=' ', end='\n')
+        print("  </head>", file=html_file, sep=' ', end='\n')
+        print("  <body>", file=html_file, sep=' ', end='\n')
+        print("    <table border>", file=html_file, sep=' ', end='\n')
+        print("      <caption>note len</caption>", file=html_file, sep=' ', end='\n')
+        print("      <tr><th>min</th><th>max</th></tr>", file=html_file, sep=' ', end='\n')
+        print("      <tr><td>", self.xml_form_dict['min_note_len'], '</td><td>2.0</td></tr>', file=html_file, sep=' ', end='\n')
+        print("    </table>", file=html_file, sep=' ', end='\n')
+        print("    <h2>Scale</h2>", file=html_file, sep=' ', end='\n')
+        print("      <ul>", file=html_file, sep=' ', end='\n')
+        the_scale = self.xml_form_dict['scale']
+        last_octave=''
+        if len(the_scale) > 0:
+          last_octave = the_scale[0][-1]
+          print("        <li>", file=html_file, sep=' ', end='')
+        for k in self.xml_form_dict['scale']:
+          long = len(k)
+          if (long > 0):
+            oct = k[long - 1]
+            if oct == last_octave:
+              print(k, file=html_file, sep=' ', end=' ')
+            else:
+              print("</li>\n        <li>", file=html_file, sep=' ', end='')
+              print(k, file=html_file, sep=' ', end=' ')
+            last_octave = oct
+        print("</li>\n      </ul>", file=html_file, sep=' ', end='\n')
+        print("      <table border>", file=html_file, sep=' ', end='\n')
+        print("        <caption>Music Time</caption>", file=html_file, sep=' ', end='\n')
+        print("        <tr><th>ticks/quarter</th><th>beat</th><th>meter</th><th>tempo</th><th>Pulse/Second</th></tr>", file=html_file, sep=' ', end='\n')
+        beat = Fraction(int(self.xml_form_dict['music_time']['beat']['numerator']), int(self.xml_form_dict['music_time']['beat']['denominator']))
+        meter = Fraction(int(self.xml_form_dict['music_time']['meter']['numerator']), int(self.xml_form_dict['music_time']['meter']['denominator']))
+        print("        <tr><td>", self.xml_form_dict['music_time']['ticks_per_quarter'], '</td><td>', beat, '</td><td>', meter, '</td><td>', self.xml_form_dict['music_time']['beat_tempo'], '</td><td>', self.xml_form_dict['pulse'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print("      </table>", file=html_file, sep=' ', end='\n')
+        print("  <table border>", file=html_file, sep=' ', end='\n')
+        print("    <caption>Melody Probabilities</caption>", file=html_file, sep=' ', end='\n')
+        print("    <tr><th>down</th><th>same</th><th>up</th></tr>", file=html_file, sep=' ', end='\n')
+        print("    <tr><td>", self.xml_form_dict['melody_probabilities']['down'], '</td><td>',  
+                self.xml_form_dict['melody_probabilities']['same'], '</td><td>', 
+                self.xml_form_dict['melody_probabilities']['up'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print("  </table>", file=html_file, sep=' ', end='\n')
+        print("  <h2>Form Sines</h2>", file=html_file, sep=' ', end='\n')
+        print("    <table border>", file=html_file, sep=' ', end='\n')
+        print("        <tr><th>Parameter</th><th>Curve</th><th>period</th><th>phase</th><th>amplitude</th><th>offset</th></th>", file=html_file, sep=' ', end='\n')
+        print("        <tr><td>Pitch</td><td>Mean</td><td>", self.xml_form_dict['pitch_form']['mean']['period'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['phase'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['pitch_form']['range']['period'], '</td><td>', self.xml_form_dict['pitch_form']['range']['phase'], '</td><td>', self.xml_form_dict['pitch_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['pitch_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print('        <tr><td>Rhythm</td><td>Mean</td><td>', self.xml_form_dict['rhythm_form']['mean']['period'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['phase'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['rhythm_form']['range']['period'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['phase'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print('        <tr><td>Dynamic</td><td>Mean</td><td>', self.xml_form_dict['dynamic_form']['mean']['period'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['phase'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['dynamic_form']['range']['period'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['phase'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print('        <tr><td>Texture</td><td></td><td>', self.xml_form_dict['texture_form']['period'], '</td><td>', self.xml_form_dict['texture_form']['phase'], '</td><td>', self.xml_form_dict['texture_form']['amplitude'], '</td><td>', self.xml_form_dict['texture_form']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print("    </table>", file=html_file, sep=' ', end='\n')
+        print("    <h2>Voices</h2>", file=html_file, sep=' ', end='\n')
+        print("        <table border>", file=html_file, sep=' ', end='\n')
+        print("          <caption>Set up</caption>", file=html_file, sep=' ', end='\n')
+        print("          <tr><th>voice</th><th>low pitch</th><th>high pitch</th><th>channel</th><th>walking</th><th>program</th><th>pan</th></tr>", file=html_file, sep=' ', end='\n')
+        for vox in range(0, len(self.xml_form_dict['voices'])):
+          print("          <tr><td>", vox, "</td><td>", self.xml_form_dict['voices'][vox]['low_pitch'], '</td><td>', self.xml_form_dict['voices'][vox]['high_pitch'], '</td><td>', self.xml_form_dict['voices'][vox]['channel'], '</td><td>', self.xml_form_dict['voices'][vox]['walking'], '</td><td>', VoiceWindow.general_midi_list[int(self.xml_form_dict['voices'][vox]['program'])], '</td><td>', self.xml_form_dict['voices'][vox]['pan'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print("        </table>", file=html_file, sep=' ', end='\n')
+        print("        <table border>", file=html_file, sep=' ', end='\n')
+        print("          <caption>Followers</caption>", file=html_file, sep=' ', end='\n')
+        print("          <tr><th>vox</th><th>follow</th><th>leader</th><th>interval type</th><th>interval</th><th>delay</th><th>time factor</th><th>inv</th><th>retro</th></tr>", file=html_file, sep=' ', end='\n')
+        for vox in range(0, len(self.xml_form_dict['voices'])):
+          if self.xml_form_dict['voices'][vox]['follower']['follow']:
+            print("          <tr><td>", vox, "</td><td>", bool(self.xml_form_dict['voices'][vox]['follower']['follow']), '</td><td>', 
+              self.xml_form_dict['voices'][vox]['follower']['leader'], '</td><td>', 
+              self.follower_type_dict[self.xml_form_dict['voices'][vox]['follower']['interval_type']], '</td><td>', 
+              self.xml_form_dict['voices'][vox]['follower']['interval'], '</td><td>', 
+              self.xml_form_dict['voices'][vox]['follower']['delay']['numerator'], '/', 
+              self.xml_form_dict['voices'][vox]['follower']['delay']['denominator'], '</td><td>', 
+              self.xml_form_dict['voices'][vox]['follower']['duration_factor']['numerator'], '/', 
+              self.xml_form_dict['voices'][vox]['follower']['duration_factor']['denominator'], '</td><td>', 
+              self.xml_form_dict['voices'][vox]['follower']['inversion'], '</td><td>', 
+              bool(self.xml_form_dict['voices'][vox]['follower']['retrograde']), '</td></tr>', file=html_file, sep=' ', end='\n')
+        print("        </table>", file=html_file, sep=' ', end='\n')
+        print("        <h2>Random Program</h3>", file=html_file, sep=' ', end='\n')
+        print("        <ol>", file=html_file, sep=' ', end='\n')
+        for vox in range(0, len(self.xml_form_dict['voices'])):
+          if self.xml_form_dict['voices'][vox]['random_program']['probability'] > 0.0:
+            print("          <li>voice", vox, "</li>", file=html_file, sep=' ', end='\n')
+            print("            <dl>", file=html_file, sep=' ', end='\n')
+            print("              <dt>Probability</dt>", file=html_file, sep=' ', end='\n')
+            print("              <dd>", self.xml_form_dict['voices'][vox]['random_program']['probability'], '</dd>', file=html_file, sep=' ', end='\n')
+            print("              <dt>Ensemble</dt>", file=html_file, sep=' ', end='\n')
+            print("              <dd>", file=html_file, sep=' ', end='\n')
+            print("              <ul>", file=html_file, sep=' ', end='\n')
+            for prog in range(0, len(self.xml_form_dict['voices'][vox]['random_program']['ensemble'])):
+              print("                <li>", VoiceWindow.general_midi_list[int(self.xml_form_dict['voices'][vox]['random_program']['ensemble'][prog])], '</li>', file=html_file, sep=' ', end='\n')
+            print("              </ul>", file=html_file, sep=' ', end='\n')
+            print("              </dd>", file=html_file, sep=' ', end='\n')
+            print("              </dl>", file=html_file, sep=' ', end='\n')
+        print("    <h2>Arrangements</h2>", file=html_file, sep=' ', end='\n')
+        print("    <dl>", file=html_file, sep=' ', end='\n')
+        print("      <dt>algorithm</dt>", file=html_file, sep=' ', end='\n')
+        print("        <dd>", ArrangementAlgorithmList[self.xml_form_dict['arrangement_definition']['algorithm']], "</dd>", file=html_file, sep=' ', end='\n')
+        print("      <dt>period</dt>", file=html_file, sep=' ', end='\n')
+        print("      <dd>", self.xml_form_dict['arrangement_definition']['period'], '</dd>', file=html_file, sep=' ', end='\n')
+        print("    </dl>", file=html_file, sep=' ', end='\n')
+        print("  </body>", file=html_file, sep=' ', end='\n')
+        print("</html>", file=html_file, sep=' ', end='\n')
+
     def postscript_callback(self):
         """Write a PostScript file of the form window's plot."""
         afilename=tkinter.filedialog.asksaveasfilename(defaultextension='.ps',
@@ -777,9 +896,10 @@ class XmlFormWindow(tkinter.Tk):
                 command=self.defaults_callback, underline=0, accelerator='D')
         file_menu.add_command(label='Redraw', command=self.redraw_callback,
             underline=0, accelerator='R')
+        file_menu.add_command(label='Save HTML...',
+            command=self.html_callback, underline=0, accelerator='H')
         file_menu.add_command(label='Save Postscript...',
-            command=self.postscript_callback,
-            underline=0, accelerator='S')
+            command=self.postscript_callback, underline=0, accelerator='S')
         file_menu.add_command(label='About...', command=self.about_callback,
             underline=0, accelerator='A')
         file_menu.add_command(label='Quit', command=lambda:toplevelwin.quit(),
@@ -1095,7 +1215,6 @@ class XmlFormWindow(tkinter.Tk):
             str(len(voice_dict['random_program']['ensemble'])))
         self.add_text_element(doc, ensemble_element, 'item_version',
             'item_version', '0')
-
         for i in range(0, len(voice_dict['random_program']['ensemble'])):
             self.add_text_element(doc, ensemble_element, '', 'item', str(voice_dict['random_program']['ensemble'][i]))
         random_program_element.appendChild(ensemble_element)

@@ -15,6 +15,7 @@ import tkinter.ttk
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import *
+from fractions import Fraction
 
 from GeneralMidi import *
 
@@ -41,16 +42,16 @@ class VoiceWindow(tkinter.Toplevel):
         self.leader = tkinter.StringVar()
         self.leader.set(0)
         self.interval_type = tkinter.StringVar()
-        self.interval_type.set(0)
+        self.interval_type.set(1)
         self.follow_interval = tkinter.StringVar()
         self.follow_delay = tkinter.StringVar()
         self.follow_duration_factor = tkinter.StringVar()
         self.inversion = tkinter.BooleanVar()
         self.retrograde = tkinter.BooleanVar()
-        self.probability = tkinter.DoubleVar(value=0.0)
-        self.ensemble_strings = []
+        self.random_ensemble_list = []
+        self.random_ensemble = tkinter.StringVar()
 
-        self.voice_number.set(0)
+        self.voice_number.set(1)
         self.create_widgets()
         self.title('Instrumental Voices')
 
@@ -125,7 +126,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.program_spinbox = tkinter.ttk.Spinbox(self.frame,
             textvariable=self.program, values=self.general_midi_list,
             state='readonly', wrap=True)
-        self.program_spinbox.set(self.general_midi_list[self.xml_voices[vox]['program'] - 1])
+        self.program_spinbox.set(self.general_midi_list[self.xml_voices[vox]['program']])
         self.program_spinbox['state'] = 'readonly'
 
         self.walking_scroll_label = tkinter.ttk.Label(self.frame,
@@ -141,8 +142,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.pan_scroll_label = tkinter.ttk.Label(self.frame,
             text='    L..................C..................R')
         self.pan_label = tkinter.ttk.Label(self.frame, text='Pan')
-        self.pan_scrollbar = tkinter.ttk.Scrollbar(self.frame,
-            command=self.pan_callback)
+        self.pan_scrollbar = tkinter.ttk.Scrollbar(self.frame, command=self.pan_callback)
         self.pan_scrollbar['orient'] = 'horizontal'
         temppan = self.xml_voices[vox]['pan'] / 128 + 0.5
         self.pan_scrollbar.set(temppan, temppan)
@@ -170,22 +170,23 @@ class VoiceWindow(tkinter.Toplevel):
         self.interval_frame = tkinter.ttk.Frame(self.follow_frame, padding='1 1 1 1',
                 borderwidth=4, relief='sunken')
 
-        self.scaler_interval_type_label = tkinter.ttk.Label(self.interval_frame,
+        self.scalar_interval_type_label = tkinter.ttk.Label(self.interval_frame,
                 text='Interval Type')
         self.interval_type.set(
             self.xml_voices[vox]['follower']['interval_type'])
-        self.scaler_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.interval_frame,
+        self.scalar_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.interval_frame,
             text='Scaler', variable=self.interval_type, value='1')
 
         self.chromatic_interval_type_radiobutton = tkinter.ttk.Radiobutton(self.interval_frame,
             text='Chromatic', variable=self.interval_type, value='2')
         if self.xml_voices[vox]['follower']['follow'] is True:
-            self.scaler_interval_type_radiobutton['state'] = 'normal'
+            self.scalar_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
         else:
-            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.scalar_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
         self.chromatic_interval_type_radiobutton['state'] = 'disabled'
+        self.scalar_interval_type_radiobutton.update()
 
         self.follow_interval_label = tkinter.ttk.Label(self.interval_frame, text='Interval')
         self.follow_interval_spinbox = tkinter.ttk.Spinbox(self.interval_frame,
@@ -202,23 +203,17 @@ class VoiceWindow(tkinter.Toplevel):
         self.follow_delay_label = tkinter.ttk.Label(self.follow_frame, text='Delay')
         self.follow_delay_entry = tkinter.ttk.Entry(self.follow_frame,
             textvariable=self.follow_delay)
-        delay_ratio = "/"
-        delay_ratio = delay_ratio.join([self.xml_voices[vox]['follower']['delay']['numerator'],
-            self.xml_voices[vox]['follower']['delay']['denominator']])
-        self.follow_delay.set(delay_ratio)
+        self.follow_delay.set(str(Fraction(int(self.xml_voices[vox]['follower']['delay']['numerator']),
+                                           int(self.xml_voices[vox]['follower']['delay']['denominator']))))
         self.follow_delay_entry['state'] = 'disabled'
 
         self.follow_duration_factor_label = tkinter.ttk.Label(self.follow_frame,
                 text='Duration Factor')
         self.follow_duration_factor_entry = tkinter.ttk.Entry(self.follow_frame,
               textvariable=self.follow_duration_factor)
-        duration_factor_ratio = "/"
-        duration_factor_ratio = duration_factor_ratio.join(
-            [self.xml_voices[vox]['follower']['duration_factor']
-            ['numerator'],
-            self.xml_voices[vox]['follower']['duration_factor']
-            ['denominator']])
-        self.follow_duration_factor.set(duration_factor_ratio)
+        duration_factor_ratio = Fraction(int(self.xml_voices[vox]['follower']['duration_factor']['numerator']),
+                                         int(self.xml_voices[vox]['follower']['duration_factor']['denominator']))
+        self.follow_duration_factor.set(str(duration_factor_ratio))
         self.follow_duration_factor_entry['state'] = 'disabled'
 
         self.inversion.set(
@@ -235,28 +230,27 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.random_program_frame = tkinter.ttk.Frame(self.frame, padding='1 1 1 1',
                 borderwidth=4, relief='sunken')
-        self.probability.set(
-            self.xml_voices[vox]['random_program']['probability'])
-        self.probability_scroll_label = tkinter.ttk.Label(self.random_program_frame,
+        self.random_probability_scroll_label = tkinter.ttk.Label(self.random_program_frame,
             text='Static.............................Random')
-        self.probability_label = tkinter.ttk.Label(self.random_program_frame, text='Random Prog Prob')
-        self.probability_scrollbar = tkinter.ttk.Scrollbar(self.random_program_frame,
-            command=self.probability_callback)
-        self.probability_scrollbar['orient'] = 'horizontal'
-        self.probability_scrollbar.bind('<B1-Motion>', self.probability_callback)
-        tempprobability = self.xml_voices[vox]['random_program']['probability']
-        self.probability_scrollbar.set(tempprobability, tempprobability)
+        self.random_probability_label = tkinter.ttk.Label(self.random_program_frame, text='Random Prog Prob')
+        self.random_probability_scrollbar = tkinter.ttk.Scrollbar(self.random_program_frame,
+            command=self.random_probability_callback)
+        self.random_probability_scrollbar['orient'] = 'horizontal'
+#        self.random_probability_scrollbar.bind('<B1-Motion>', self.random_probability_callback)
+        temprandom_probability = self.xml_voices[vox]['random_program']['probability']
+        self.random_probability_scrollbar.set(temprandom_probability, temprandom_probability)
 
-        self.ensemble_strings.clear()
-        for prog in self.xml_voices[vox]['random_program']['ensemble']:
-            self.ensemble_strings.append(self.general_midi_list[int(prog) - 1])
-        self.ensemble_label = tkinter.ttk.Label(self.random_program_frame, text='Random Ensemble')
-        self.ensemble_spinbox = tkinter.ttk.Spinbox(self.random_program_frame,
-            values=self.ensemble_strings, state='readonly', wrap=False)
-        self.ensemble_spinbox['state'] = 'readonly'
-        if self.ensemble_strings == []:
-            self.ensemble_strings.append("empty")
-        self.ensemble_spinbox.set(self.ensemble_strings[0])
+        self.random_ensemble_list.clear()
+        if self.xml_voices[vox]['random_program']['ensemble'] == []:
+           self.random_ensemble_list.append('empty')
+           self.random_ensemble.set("empty") 
+        else:
+            for prog in self.xml_voices[vox]['random_program']['ensemble']:
+                self.random_ensemble_list.append(self.general_midi_list[int(prog)])
+        self.random_ensemble_label = tkinter.ttk.Label(self.random_program_frame, text='Random Ensemble')
+        self.random_ensemble_spinbox = tkinter.ttk.Spinbox(self.random_program_frame,
+            textvariable=self.random_ensemble, values=self.random_ensemble_list, state='readonly', wrap=False)
+        self.random_ensemble_spinbox['state'] = 'readonly'
 
         self.random_program_add_button = tkinter.ttk.Button(self.random_program_frame, text='Add',
             command=self.random_program_add_callback)
@@ -330,9 +324,9 @@ class VoiceWindow(tkinter.Toplevel):
         follow_row = follow_row + 1
         self.interval_frame.grid(row=follow_row, column=0, sticky=NSEW, padx=2, pady=2,
                 columnspan=3)
-        self.scaler_interval_type_label.grid(
+        self.scalar_interval_type_label.grid(
             row=0, column=0, sticky=NSEW, padx=2, pady=2)
-        self.scaler_interval_type_radiobutton.grid(
+        self.scalar_interval_type_radiobutton.grid(
             row=0, column=1, sticky=NSEW, padx=2, pady=2)
         self.chromatic_interval_type_radiobutton.grid(
             row=0, column=2, sticky=NSEW, padx=2, pady=2)
@@ -359,18 +353,18 @@ class VoiceWindow(tkinter.Toplevel):
         the_row = the_row + 1
         the_row = the_row + 1
         self.random_program_frame.grid(row=the_row, column=0, sticky=NSEW, padx = 0, pady=0, columnspan=3)
-        self.probability_scroll_label.grid(
+        self.random_probability_scroll_label.grid(
             row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
-        self.probability_label.grid(
+        self.random_probability_label.grid(
             row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
 
-        self.probability_scrollbar.grid(
+        self.random_probability_scrollbar.grid(
             row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         the_row = the_row + 1
-        self.ensemble_label.grid(
+        self.random_ensemble_label.grid(
             row=the_row, column=0, sticky=NSEW, padx=2, pady=2)
-        self.ensemble_spinbox.grid(
+        self.random_ensemble_spinbox.grid(
             row=the_row, column=1, sticky=NSEW, padx=2, pady=2)
         self.random_program_add_button.grid(sticky=NSEW, row=the_row, column=2)
         self.random_program_delete_button.grid(sticky=NSEW, row=the_row, column=3)
@@ -391,7 +385,7 @@ class VoiceWindow(tkinter.Toplevel):
             self.follow_duration_factor_callback)
         self.inversion.trace_add("write", self.inversion_callback)
         self.retrograde.trace_add("write", self.retrograde_callback)
-        self.probability.trace_add("write", self.probability_callback)
+        self.random_ensemble.trace_add("write", self.random_probability_callback)
 
     def low_pitch_callback(self, event, *args):
         """Low Pitch was set; save to the internal form."""
@@ -436,33 +430,22 @@ class VoiceWindow(tkinter.Toplevel):
     def follow_delay_callback(self, event=None, *args):
         """Follow delay; set the internal form."""
         vox = int(self.voice_number.get())
-        delay_quotient = self.follow_delay.get()
-        slash_index = delay_quotient.find("/")
-        if slash_index > 0:
-            num_list = delay_quotient.split("/")
-            if len(num_list) == 2:
-                self.xml_voices[vox]['follower']['delay']['numerator'] = num_list[0]
-                self.xml_voices[vox]['follower']['delay']['denominator'] = num_list[1]
-        else:
-            self.xml_voices[vox]['follower']['delay']['numerator'] = delay_quotient
-            self.xml_voices[vox]['follower']['delay']['denominator'] = 1
+        try:
+            delay_quotient = Fraction(self.follow_delay.get())
+        except ValueError:
+            return
+        self.xml_voices[vox]['follower']['delay']['numerator']   = delay_quotient.numerator
+        self.xml_voices[vox]['follower']['delay']['denominator'] = delay_quotient.denominator
 
     def follow_duration_factor_callback(self, event=None, *args):
         """Follower Duration multiplier was set; copy to internal form."""
         vox = int(self.voice_number.get())
-        duration_factor_quotient = self.follow_duration_factor.get()
-        slash_index = duration_factor_quotient.find("/")
-        if slash_index > 0:
-            num_list = duration_factor_quotient.split("/")
-            if len(num_list) == 2:
-                self.xml_voices[vox]['follower']['duration_factor']['numerator'] = (
-                        num_list[0])
-                self.xml_voices[vox]['follower']['duration_factor']['denominator'] = (
-                        num_list[1])
-        else:
-            self.xml_voices[vox]['follower']['duration_factor']['numerator'] = (
-                    duration_factor_quotient)
-            self.xml_voices[vox]['follower']['duration_factor']['denominator'] = 1
+        try:
+            duration_factor_quotient = Fraction(self.follow_duration_factor.get())
+        except ValueError:
+            return
+        self.xml_voices[vox]['follower']['duration_factor']['numerator']   = duration_factor_quotient.numerator
+        self.xml_voices[vox]['follower']['duration_factor']['denominator'] = duration_factor_quotient.denominator
 
     def inversion_callback(self, *args):
         """Invert button for follower; copy state to internal form."""
@@ -485,8 +468,7 @@ class VoiceWindow(tkinter.Toplevel):
                     [0:(int(self.number_of_voices.get()))])
         if len(self.xml_voices) < int(self.number_of_voices.get()):
             # default the voices above the voices we're using
-            for voice in range(len(self.xml_voices),
-                    int(self.number_of_voices.get())):
+            for voice in range(len(self.xml_voices), int(self.number_of_voices.get())):
                 voice_dict = {}
                 voice_dict['low_pitch'] = 'A0'
                 voice_dict['high_pitch'] = 'C8'
@@ -496,8 +478,8 @@ class VoiceWindow(tkinter.Toplevel):
                 voice_dict['pan'] = 0
                 follow_dict = {}
                 follow_dict['follow'] = False
-                follow_dict['leader'] = 2147483647
-                follow_dict['interval_type'] = 0
+                follow_dict['leader'] = 0
+                follow_dict['interval_type'] = 1
                 follow_dict['interval'] = 0
                 delay_dict = {}
                 delay_dict['numerator'] = 0
@@ -512,7 +494,7 @@ class VoiceWindow(tkinter.Toplevel):
                 voice_dict['follower'] = follow_dict
                 random_program_dict = {}
                 random_program_dict['probability'] = 0.0
-                random_program_dict['ensemble'] = ['1', '9', '17', '25', '33', '41', '49', '57', '65']
+                random_program_dict['ensemble'] = []
                 voice_dict['random_program'] = random_program_dict
                 self.xml_voices.append(voice_dict)
         self.voice_number_spinbox['to'] = len(self.xml_voices) - 1
@@ -521,17 +503,16 @@ class VoiceWindow(tkinter.Toplevel):
         """Voice number for the currently edited voice set."""
         self.update_idletasks()
         vox = int(self.voice_number.get())
+        instrument_name = self.general_midi_list[self.xml_voices[vox]['program']]
+        self.low_pitch.set(self.xml_voices[vox]['low_pitch'])
+        self.high_pitch.set(self.xml_voices[vox]['high_pitch'])
         chan = self.xml_voices[vox]['channel']
         self.channel.set(chan)
-        instrument_name = self.general_midi_list[
-            self.xml_voices[vox]['program'] - 1]
+        tempwalking = self.xml_voices[vox]['walking']
+        self.walking_scrollbar.set(tempwalking, tempwalking)
         self.program_spinbox['state'] = '!readonly'
         self.program.set(instrument_name)
         self.program_spinbox['state'] = 'readonly'
-        self.low_pitch.set(self.xml_voices[vox]['low_pitch'])
-        self.high_pitch.set(self.xml_voices[vox]['high_pitch'])
-        tempwalking = self.xml_voices[vox]['walking']
-        self.walking_scrollbar.set(tempwalking, tempwalking)
 
         the_pan = float(self.xml_voices[vox]['pan']) / 128.0 + 0.5
         self.pan_scrollbar.set(the_pan, the_pan)
@@ -540,75 +521,70 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.interval_type.set(
             self.xml_voices[vox]['follower']['interval_type'])
+        self.leader_spinbox.set(
+        self.xml_voices[vox]['follower']['leader'])
+        self.follow_interval.set(
+            self.xml_voices[vox]['follower']['interval'])
+        self.interval_type.set(
+            self.xml_voices[vox]['follower']['interval_type'])
+        self.follow_interval.set(
+            self.xml_voices[vox]['follower']['interval'])
+        delay_ratio = Fraction(int(self.xml_voices[vox]['follower']['delay']['numerator']),
+            int(self.xml_voices[vox]['follower']['delay']['denominator']))
+        self.follow_delay.set(str(delay_ratio))
+
+        duration_factor_ratio = Fraction(int(self.xml_voices[vox]['follower']['duration_factor']['numerator']),
+                                         int(self.xml_voices[vox]['follower']['duration_factor']['denominator']))
+        self.follow_duration_factor.set(str(duration_factor_ratio))
+
+        self.inversion.set(self.xml_voices[vox]['follower']['inversion'])
+        self.retrograde.set(self.xml_voices[vox]['follower']['retrograde'])
         if int(self.follow.get()) == 1:
             self.leader_spinbox['state'] = 'normal'
-            self.leader_spinbox.set(
-                self.xml_voices[vox]['follower']['leader'])
-            self.scaler_interval_type_radiobutton['state'] = 'normal'
+            self.scalar_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
             self.follow_interval_spinbox['state'] = 'normal'
             self.follow_delay_entry['state'] = 'normal'
             self.follow_duration_factor_entry['state'] = 'normal'
             self.inversion_checkbutton['state'] = 'normal'
             self.retrograde_checkbutton['state'] = 'normal'
-            #self.walking_scrollbar.activate('none')
-            self.follow_interval.set(
-                self.xml_voices[vox]['follower']['interval'])
-            self.interval_type.set(
-                self.xml_voices[vox]['follower']['interval_type'])
-            self.follow_interval.set(
-                self.xml_voices[vox]['follower']['interval'])
-            delay_ratio = "/"
-            delay_ratio = delay_ratio.join([str(
-                self.xml_voices[vox]['follower']['delay']['numerator']),
-                str(self.xml_voices[vox]['follower']
-                    ['delay']['denominator'])])
-            self.follow_delay.set(delay_ratio)
-
-            duration_factor_ratio = "/"
-            duration_factor_ratio = duration_factor_ratio.join([str(
-                self.xml_voices[vox]['follower']
-                ['duration_factor']['numerator']),
-                str(self.xml_voices[vox]['follower']
-                ['duration_factor']['denominator'])])
-            self.follow_duration_factor.set(duration_factor_ratio)
-
-            self.inversion.set(self.xml_voices[vox]
-                ['follower']['inversion'])
-            self.retrograde.set(self.xml_voices[vox]
-                ['follower']['retrograde'])
-            self.scaler_interval_type_radiobutton.update()
+            self.scalar_interval_type_radiobutton.update()
             self.chromatic_interval_type_radiobutton.update()
             self.follow_interval_spinbox.update()
             self.follow_delay_entry.update()
             self.follow_duration_factor_entry.update()
             self.inversion_checkbutton.update()
             self.retrograde_checkbutton.update()
-            probability_temp = self.xml_voices[vox]['random_program']['probability']
-            self.probability_scrollbar.set(probability_temp, probability_temp)
-            self.probability_scrollbar.update()
-            self.ensemble_spinbox.update()
         else:
             self.leader_spinbox['state'] = 'disabled'
-            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.scalar_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
-            self.leader_spinbox.set('2147483647')
             self.follow_delay_entry['state'] = 'disabled'
             self.follow_duration_factor_entry['state'] = 'disabled'
             self.follow_interval_spinbox['state'] = 'disabled'
             self.inversion_checkbutton['state'] = 'disabled'
             self.retrograde_checkbutton['state'] = 'disabled'
-            self.scaler_interval_type_radiobutton.update()
+
+            self.scalar_interval_type_radiobutton.update()
             self.chromatic_interval_type_radiobutton.update()
             self.follow_interval_spinbox.update()
             self.follow_delay_entry.update()
             self.follow_duration_factor_entry.update()
             self.inversion_checkbutton.update()
             self.retrograde_checkbutton.update()
-            probability_temp = self.xml_voices[vox]['random_program']['probability']
-            self.probability_scrollbar.set(probability_temp, probability_temp)
-            self.probability_scrollbar.update()
-            self.ensemble_spinbox.update()
+
+        self.random_probability_scrollbar.set(self.xml_voices[vox]['random_program']['probability'], 
+            self.xml_voices[vox]['random_program']['probability'])
+        self.random_probability_scrollbar.update()
+        self.random_ensemble_list.clear()
+        if self.xml_voices[vox]['random_program']['ensemble'] == []:
+            self.random_ensemble_list.append('empty')
+            self.random_ensemble.set("empty") 
+        else:
+            for prog in self.xml_voices[vox]['random_program']['ensemble']:
+                self.random_ensemble_list.append(self.general_midi_list[int(prog)])
+            self.random_ensemble.set(self.random_ensemble_list[0])
+        self.random_ensemble_spinbox.update()
 
     def leader_callback(self, event=None, *args):
         """Leader of a follower set; set in internal form."""
@@ -627,36 +603,33 @@ class VoiceWindow(tkinter.Toplevel):
 
     def random_program_add_callback(self):
         """User pressed Add.  Copy the program from the voice program.  Update spinbox->to. """
-        vox = int(self.voice_number.get())
-        add_instrument = self.program_spinbox.get()
-        prog = GENERAL_MIDI_INSTRUMENT_DICT[add_instrument][0]
-        if self.ensemble_strings[0] == 'empty':
-            self.ensemble_strings.clear()
-        self.ensemble_strings.append(add_instrument)
-        if self.ensemble_strings == []:
-            self.ensemble_strings[0].append('empty')
-        self.ensemble_spinbox['values'] = self.ensemble_strings
-        self.ensemble_spinbox.set(self.ensemble_strings[0])
-        self.ensemble_spinbox.update()
-        self.xml_voices[vox]['random_program']['ensemble'].clear()
-        for progstr in self.ensemble_strings:
-            self.xml_voices[vox]['random_program']['ensemble'].append(GENERAL_MIDI_INSTRUMENT_DICT[progstr][0])
+        vox = int(self.voice_number.get()) # the index into general_midi_list
+        add_program_name = self.program_spinbox.get()
+        if self.random_ensemble_list[0] == 'empty':
+            self.random_ensemble_list.clear()
+        self.random_ensemble_list.append(add_program_name)
+        self.random_ensemble_spinbox['values'] = self.random_ensemble_list
+        self.random_ensemble_spinbox.set(self.random_ensemble_list[-1])
+        self.random_ensemble_spinbox.update()
+        self.xml_voices[vox]['random_program']['ensemble'].append(GENERAL_MIDI_INSTRUMENT_DICT[add_program_name][0])
 
     def random_program_delete_callback(self):
         """User pressed Delete.  Delete the displayed program from the program list.  Update spinbox->to. """
-        program_string = self.ensemble_spinbox.get()
-        if program_string != 'empty' :
-            self.ensemble_strings.remove(program_string)
-            if self.ensemble_strings == []:
-                self.ensemble_strings[0] = 'empty'
-            self.ensemble_spinbox['values'] = self.ensemble_strings
-            self.ensemble_spinbox.set(self.ensemble_strings[0])
-            self.ensemble_spinbox.update()
+        program_string = self.random_ensemble_spinbox.get()
+        if self.random_ensemble_list != []:
+            self.random_ensemble_list.remove(program_string)
+            if self.random_ensemble_list == []:
+                self.random_ensemble_list.append('empty')
+                self.random_ensemble.set('empty')
+            self.random_ensemble_spinbox['values'] = self.random_ensemble_list
+            self.random_ensemble_spinbox.set(self.random_ensemble_list[-1])
+            self.random_ensemble_spinbox.update()
             vox = int(self.voice_number.get())
             self.xml_voices[vox]['random_program']['ensemble'].clear()
-            if self.ensemble_strings[0] != 'empty':
-                for progstr in self.ensemble_strings:
+            if self.random_ensemble_list != []:
+                for progstr in self.random_ensemble_list:
                     self.xml_voices[vox]['random_program']['ensemble'].append(GENERAL_MIDI_INSTRUMENT_DICT[progstr][0])
+        self.random_ensemble_spinbox['values'] = self.random_ensemble_list 
 
     def install_xml_voices(self, xml_voices):
         """Install XML form."""
@@ -671,8 +644,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.voice_number_spinbox['state'] = 'readonly'
 
         self.channel.set(chan)
-        self.program.set(
-            self.general_midi_list[self.xml_voices[vox]['program'] - 1])
+        self.program.set(self.general_midi_list[self.xml_voices[vox]['program']])
         self.low_pitch.set(self.xml_voices[vox]['low_pitch'])
         self.high_pitch.set(self.xml_voices[vox]['high_pitch'])
 
@@ -687,6 +659,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.leader.set(self.xml_voices[vox]['follower']['leader'])
         self.interval_type.set(
             self.xml_voices[vox]['follower']['interval_type'])
+
         self.follow_interval.set(
             self.xml_voices[vox]['follower']['interval'])
 
@@ -696,15 +669,21 @@ class VoiceWindow(tkinter.Toplevel):
         self.retrograde.set(
             self.xml_voices[vox]['follower']['retrograde'])
 
-        self.probability.set(self.xml_voices[vox]['random_program']['probability'])
-        self.ensemble_strings.clear()
-        for prog in self.xml_voices[vox]['random_program']['ensemble']:
-            self.ensemble_strings.append(self.general_midi_list[int(prog) - 1])
-        if self.ensemble_strings == []:
-            self.ensemble_strings.append('empty')
-        self.ensemble_spinbox['values'] = self.ensemble_strings
-        self.ensemble_spinbox.set(self.ensemble_strings[0])
-        self.ensemble_spinbox.update()
+        self.random_probability_scrollbar.set(self.xml_voices[vox]['random_program']['probability'], 
+            self.xml_voices[vox]['random_program']['probability'])
+        self.random_probability_scrollbar.update()
+
+        self.random_ensemble_list.clear()
+        if self.xml_voices[vox]['random_program']['ensemble'] == []:
+            self.random_ensemble_list.append('empty')
+            self.random_ensemble.set('empty')
+        else:
+            for prog in self.xml_voices[vox]['random_program']['ensemble']:
+                self.random_ensemble_list.append(self.general_midi_list[int(prog)])
+                self.random_ensemble.set(self.random_ensemble_list[0])
+        self.random_ensemble_spinbox['values'] = self.random_ensemble_list
+        self.random_ensemble_spinbox.set(self.random_ensemble_list[0])
+        self.random_ensemble_spinbox.update()
         self.random_program_frame.update()
         self.frame.update()
 
@@ -714,9 +693,8 @@ class VoiceWindow(tkinter.Toplevel):
         follow = self.follow.get()
         self.xml_voices[vox]['follower']['follow'] = follow
         if follow is True:
-            #self.walking_scrollbar.activate('none')
             self.leader_spinbox['state'] = 'normal'
-            self.scaler_interval_type_radiobutton['state'] = 'normal'
+            self.scalar_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
             self.follow_interval_spinbox['state'] = 'normal'
             self.follow_delay_entry['state'] = 'normal'
@@ -724,11 +702,8 @@ class VoiceWindow(tkinter.Toplevel):
             self.inversion_checkbutton['state'] = 'normal'
             self.retrograde_checkbutton['state'] = 'normal'
         else:
-            #self.walking_scrollbar.activate('arrow1')
-            #self.walking_scrollbar.activate('arrow2')
-            #self.walking_scrollbar.activate('slider')
             self.leader_spinbox['state'] = 'disabled'
-            self.scaler_interval_type_radiobutton['state'] = 'disabled'
+            self.scalar_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
             self.follow_interval_spinbox['state'] = 'disabled'
             self.follow_delay_entry['state'] = 'disabled'
@@ -774,10 +749,10 @@ class VoiceWindow(tkinter.Toplevel):
                     value = setting
                     self.xml_voices[vox]['walking'] = value
 
-    def probability_callback(self, action, sign = 0, unitspage='None'):
-        """Random program probability scrollbar for a follower was pressed."""
+    def random_probability_callback(self, action, sign = 0, unitspage='None'):
+        """Random program probability scrollbar callback."""
         vox = int(self.voice_number.get())
-        firstlastlist = self.probability_scrollbar.get()
+        firstlastlist = self.random_probability_scrollbar.get()
         setting = 0.0
         if action == 'scroll':
             if unitspage == 'pages':
@@ -785,27 +760,29 @@ class VoiceWindow(tkinter.Toplevel):
                 setting = firstlastlist[1]
                 self.coerce_delta(setting, delta)
                 setting = setting + delta
-                self.probability_scrollbar.set(setting, setting)
+                self.random_probability_scrollbar.set(setting, setting)
+                self.xml_voices[vox]['random_program']['probability'] = setting
             else:
                 if unitspage == 'units':
                     delta = float(sign) / 64.0
                     setting = firstlastlist[1]
                     self.coerce_delta(setting, delta)
                     setting = setting + delta
-                    self.probability_scrollbar.set(setting, setting)
+                    self.random_probability_scrollbar.set(setting, setting)
+                    self.xml_voices[vox]['random_program']['probability'] = setting
         else:
             if action == 'moveto':
                 setting = float(sign)
                 setting = max(setting, 0.0)
                 setting = min(setting, 1.0)
-                self.probability_scrollbar.set(setting, setting)
+                self.random_probability_scrollbar.set(setting, setting)
             else:
                 if action == 'goto':
                     setting = firstlastlist[0]
-                    self.probability_scrollbar.set(firstlastlist[0])
-        setting = min(1.0, setting)
-        setting = max(0.0, setting)
-        self.xml_voices[vox]['random_program']['probability'] = setting
+                    self.random_probability_scrollbar.set(firstlastlist[0])
+                    setting = min(1.0, setting)
+                    setting = max(0.0, setting)
+                    self.xml_voices[vox]['random_program']['probability'] = setting
 
     def pan_callback(self, action, sign, unitspage='None'):
         """Pan scrollbar moved; save value to internal form."""

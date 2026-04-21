@@ -11,6 +11,7 @@
 # Corrections on unusual instruments are welcome.
 
 GENERAL_MIDI_INSTRUMENT_DICT = {
+     'Unused'                          : (  0, 'C4',  'C#4'),
      'Acoustic_Grand_Piano'            : (  1, 'A0',  'C8'),
      'Bright_Acoustic_Piano'           : (  2, 'A0',  'C8'),
      'Electric_Grand_Piano'            : (  3, 'E1',  'E7'),

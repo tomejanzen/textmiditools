@@ -1,0 +1,254 @@
+FILEHEADER 2 1440 MULTITRACK
+
+STARTTRACK
+PROGRAM_NAME textmidicgm
+TEXT Generated 2026-05-01T19:37:25EDT
+TIME_SIGNATURE 4 4 1440
+TEMPO 60 1/4
+KEY_SIGNATURE C
+TEXT Computer-generated music from the textmidicgm software
+TRACK cgm_ticks_per_quarter_b TEMPO
+LAZY
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+R 1
+END_LAZY
+ticks 'End of Track'
+END_OF_TRACK
+
+STARTTRACK
+TRACK 0
+PROGRAM 1 1
+PAN 1 0
+CONTROL 1 CHANNEL_VOLUME 100
+
+LAZY
+chan 1
+vel 30 A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+vel 31 A0 32
+vel 30 A0 32
+vel 31 A0 32
+vel 30 A0 32
+vel 31 A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+A0 32
+vel 30 A0 32
+vel 31 A0 32
+A0 32
+A0 32
+vel 32 A0 32
+vel 30 A0 32
+vel 32 A0 32
+vel 31 A0 32
+A0 32
+A0 32
+A0 32
+vel 32 A0 32
+A0 32
+vel 31 A0 32
+A0 32
+vel 32 A0 32
+A0 32
+A0 32
+vel 31 A0 32
+A0 32
+A0 32
+A0 32
+vel 32 A0 32
+A0 32
+vel 31 A0 32
+vel 33 A0 32
+A0 32
+vel 31 A0 32
+A0 32
+vel 32 A0 32
+A0 32
+A0 32
+vel 33 A0 32
+vel 32 A0 32
+vel 33 A0 32
+vel 32 A0 32
+vel 33 A0 32
+vel 34 A0 32
+A0 32
+vel 33 A0 32
+vel 34 A0 32
+vel 35 A0 32
+vel 34 A0 32
+vel 32 A0 32
+vel 34 A0 32
+vel 35 A0 32
+vel 33 A0 32
+vel 36 A0 32
+vel 34 A0 32
+vel 36 A0 32
+vel 32 A0 32
+vel 35 A0 32
+A0 32
+vel 33 A0 32
+vel 32 A0 32
+vel 34 A0 32
+vel 36 A0 32
+vel 35 A0 32
+vel 34 A0 32
+vel 37 A0 32
+vel 33 A0 32
+A0 32
+vel 34 A0 32
+vel 32 A0 32
+vel 36 A0 32
+vel 33 A0 32
+vel 36 A0 32
+vel 37 A0 32
+vel 34 A0 32
+vel 38 A0 32
+vel 36 A0 32
+A0 32
+A0 32
+vel 34 A0 32
+vel 35 A0 32
+vel 39 A0 32
+vel 35 A0 32
+vel 33 A0 16
+vel 39 A0 32
+vel 33 A0 32
+vel 37 A0 32
+vel 41 A0 32
+A0 32
+vel 36 A0 32
+vel 37 A0 32
+vel 33 A0 32
+vel 39 A0 32
+A0 16
+vel 42 A0 32
+vel 40 A0 32
+vel 35 A0 16
+vel 38 A0 32
+vel 42 A0 16
+A0 32
+vel 35 A0 16
+vel 40 A0 32
+vel 43 A0 32
+vel 36 A0 16
+vel 39 A0 32
+vel 40 A0 16
+vel 37 A0 16
+A0 16
+vel 42 A0 32
+vel 45 A0 16
+vel 39 A0 32
+vel 38 A0 16
+vel 46 A0 16
+vel 36 A0 16
+vel 45 A0 16
+vel 49 Bb0 32
+vel 45 A0 32
+vel 48 A0 16
+vel 45 A0 16.
+vel 36 A0 16
+vel 44 A0 32
+vel 41 A0 16
+vel 38 Db1 16
+vel 47 A0 16.
+vel 42 F1 16.
+vel 37 A0 8
+vel 54 Bb0 8
+vel 53 A0 16.
+vel 51 A0 16
+vel 45 D1 16.
+vel 47 A0 16.
+vel 49 B1 16.
+vel 52 B0 16.
+vel 58 C2 16.
+vel 61 C1 16
+vel 56 E1 8
+vel 59 D1 16
+vel 40 A0 5/32
+vel 58 A0 8
+vel 59 B1 5/32
+vel 45 G2 8
+vel 65 A0 5/32
+vel 61 Gb2 5/32
+vel 57 Eb3 16
+vel 56 F2 16.
+vel 46 D3 8
+vel 55 C3 16.
+vel 59 Eb3 5/32
+vel 42 F2 16.
+vel 63 Db2 8.
+vel 51 E2 8.
+vel 47 E1 8
+vel 65 Eb3 8.
+vel 69 G3 8.
+vel 68 Gb4 8.
+vel 64 Db2 8
+B3 8.
+vel 75 Db4 4
+vel 55 A1 8
+vel 90 B4 4
+vel 70 Gb3 9/32
+vel 60 G2 4
+vel 53 Bb3 9/32
+vel 98 Ab1 5/32
+vel 62 D4 5/32
+vel 52 A5 5/32
+vel 55 G4 9/32
+vel 70 Gb7 11/32
+vel 81 Eb3 8..
+vel 104 B7 5/16
+vel 125 B2 9/32
+vel 101 Ab5 4..
+vel 106 E6 4
+vel 68 G6 4..
+vel 127 B5 4...
+vel 63 C8 13/32
+END_LAZY
+ticks 'End of Track'
+END_OF_TRACK
+

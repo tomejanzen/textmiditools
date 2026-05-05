@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.2
+// TextMIDITools Version 1.1.3
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -78,12 +78,12 @@ namespace textmidi
             };
 
             Composer(bool gnuplot, bool answer,
-                arrangements::PermutationEnum track_scramble,
-                rational::RhythmRational track_scramble_period, const MusicTime& music_time,
+                arrangements::PermutationEnum track_priority,
+                rational::RhythmRational track_priority_period, const MusicTime& music_time,
                 size_t max_events_per_track = 100000, bool random_program_ignore_ranges = false) noexcept
               : gnuplot_(gnuplot),
                 answer_(answer),
-                track_scramble_(track_scramble, track_scramble_period),
+                track_priority_(track_priority, track_priority_period),
                 max_events_per_track_{max_events_per_track},
                 random_dev_(),
                 generator_{random_dev_()},
@@ -104,16 +104,16 @@ namespace textmidi
                 const MusicalForm& xml_form, bool write_header = true);
 
           private:
-            void build_track_scramble_sequences(
+            void build_track_priority_sequences(
                 std::vector<std::vector<std::int32_t>>&
-                track_scramble_sequences,
+                track_priority_sequences,
                 rational::RhythmRational total_duration) noexcept;
             void build_composition_priority_graph(const MusicalForm& xml_form,
                 std::vector<std::list<std::int32_t>>&
                 leaders_topo_sort) noexcept;
             bool gnuplot_;
             bool answer_;
-            TrackScramble track_scramble_;
+            TrackScramble track_priority_;
             size_t max_events_per_track_;
             std::random_device random_dev_;
             std::mt19937 generator_;

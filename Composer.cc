@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.2
+// TextMIDITools Version 1.1.3
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -48,7 +48,8 @@
 #include "GeneralMIDIRandom.h"
 
 using std::numeric_limits, std::list, std::vector, std::string, std::cerr,
-      std::ofstream, std::int32_t, std::max, std::min, std::cout, std::toupper;
+      std::ofstream, std::int32_t, std::max, std::min, std::cout, std::toupper,
+      std::min, std::max;
 using std::ranges::copy, std::ranges::find, std::ranges::for_each, std::cmp_greater_equal;
 using boost::lexical_cast;
 using midi::SecondsPerMinuteI;
@@ -230,20 +231,20 @@ void textmidi::cgm::Composer::build_composition_priority_graph(const MusicalForm
 }
 
 void textmidi::cgm::Composer::
-    build_track_scramble_sequences(
-    vector<vector<int32_t>>& track_scramble_sequences,
+    build_track_priority_sequences(
+    vector<vector<int32_t>>& track_priority_sequences,
     rational::RhythmRational total_duration) noexcept
 {
     for (auto scramble_time{rational::RhythmRational(0)}; scramble_time < total_duration;
-        scramble_time = scramble_time + track_scramble_.period_)
+        scramble_time = scramble_time + track_priority_.period_)
     {
-        track_scramble_sequences.push_back(track_scramble_.arrangements_->arrangement());
-        track_scramble_.arrangements_->next();
+        track_priority_sequences.push_back(track_priority_.arrangements_->arrangement());
+        track_priority_.arrangements_->next();
     }
 #undef TEXTMIDICGM_PRINT
 #if defined(TEXTMIDICGM_PRINT)
-    cout << "track_scramble_sequences\n";
-    for_each(track_scramble_sequences, [&](auto tss)
+    cout << "track_priority_sequences\n";
+    for_each(track_priority_sequences, [&](auto tss)
         { copy(tss, ostream_iterator<int32_t>(cout, " ")); cout << '\n'; } );
 #endif
 #undef TEXTMIDICGM_PRINT
@@ -269,21 +270,21 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     RhythmRational period_rat{};
     period_rat.from_double(xml_form.arrangement_definition().period(), time_converter_.ticks_per_whole());
 
-    track_scramble_.period_
-        = ((PermutationEnum::Undefined == track_scramble_.scramble_)
+    track_priority_.period_
+        = ((PermutationEnum::Undefined == track_priority_.scramble_)
         ?  time_converter_.wholes_per_second() * period_rat
-        : track_scramble_.period_);
+        : track_priority_.period_);
 
-    track_scramble_.scramble_ = (track_scramble_.scramble_
+    track_priority_.scramble_ = (track_priority_.scramble_
         == arrangements::PermutationEnum::Undefined)
         ? xml_form.arrangement_definition().algorithm()
-        : track_scramble_.scramble_;
+        : track_priority_.scramble_;
     RandomDouble random_double{};
     vector<Track> tracks(xml_form.voices().size());
     vector<pair<int32_t, int32_t>> tessitura;
 
-    track_scramble_.arrangements_
-        = ArrangementsFactory(track_scramble_.scramble_, xml_form.voices().size());
+    track_priority_.arrangements_
+        = ArrangementsFactory(track_priority_.scramble_, xml_form.voices().size());
 
     for_each(xml_form.voices(), [&](auto v) {
         tessitura.emplace_back( textmidi::
@@ -297,8 +298,8 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     vector<list<int32_t>> leaders_topo_sort;
     build_composition_priority_graph(xml_form, leaders_topo_sort);
 
-    vector<vector<int32_t>> track_scramble_sequences;
-    build_track_scramble_sequences(track_scramble_sequences, total_duration / time_converter_.wholes_per_second());
+    vector<vector<int32_t>> track_priority_sequences;
+    build_track_priority_sequences(track_priority_sequences, total_duration);
 
     vector<vector<cgm::NoteEvent>> track_note_events(xml_form.voices().size());
 
@@ -314,21 +315,23 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             auto& track{tracks[tr]};
             if (!xml_form.voices()[tr].follower().follow()) [[likely]]
             {
-                while ((track.the_next_time() < (total_duration / time_converter_.wholes_per_second()))
+                while ((track.the_next_time() < total_duration)
                     && (track_note_events.size() < max_events_per_track_))
                 {
-                    auto period_inv{track_scramble_.period_.reciprocal()};
+                    auto period_inv{track_priority_.period_.reciprocal()};
+                    // This is dividing the music time by the musical time arrangement period
+                    // to get the current arrangement period.
                     auto scramble_rat{track.the_next_time() * period_inv};
                     size_t scramble_index{static_cast<size_t>(scramble_rat.numerator() / scramble_rat.denominator())};
                     scramble_index
-                        = (std::cmp_less(scramble_index, track_scramble_sequences.size())
+                        = (std::cmp_less(scramble_index, track_priority_sequences.size())
                         ? scramble_index
-                        : track_scramble_sequences.size() - 1);
+                        : track_priority_sequences.size() - 1);
 #if defined(TEXTMIDICGM_PRINT)
                     cout << "scramble_index: " << scramble_index << '\n';
 #endif
                     MusicalCharacter musical_character{};
-                    xml_form.character_now(track.the_next_time(), musical_character);
+                    xml_form.character_now(track.the_next_time() / time_converter_.wholes_per_second(), musical_character);
                     int32_t number_of_voices
                         = static_cast<int32_t>(musical_character.texture_range) + 1;
                     number_of_voices = std::cmp_greater(number_of_voices, xml_form.voices().size())
@@ -343,12 +346,13 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     double dynamicd{(musical_character.dynamic_range * random_double())
                       - (musical_character.dynamic_range / 2.0)
                       +  musical_character.dynamic_mean};
+                    dynamicd = std::min(dynamicd, MaxDynamic);
+                    dynamicd = std::max(dynamicd, MinDynamic);
                     int32_t dynamic{static_cast<int32_t>(round(dynamicd))};
 
-                    dynamic = std::min(dynamic, static_cast<int32_t>(std::round(MaxDynamic)));
-                    dynamic = std::max(dynamic, static_cast<int32_t>(std::round(MinDynamic)));
-
                     double rhythmd {musical_character.duration(random_double())};
+                    rhythmd = std::max(xml_form.min_note_len(), rhythmd);
+                    rhythmd = std::min(xml_form.max_note_len(), rhythmd);
                     auto rhythm{time_converter_.duration_to_rhythm(rhythmd)};
 
                     // Now apply the pulse.
@@ -372,7 +376,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     RhythmRational tempo_rat{};
                     tempo_rat.from_double(xml_form.music_time().beat_tempo_, time_converter_.ticks_per_whole());
                     track.the_last_time(track.the_next_time());
-                    track.the_next_time(track.the_next_time() + rhythm / time_converter_.wholes_per_second());
+                    track.the_next_time(track.the_next_time() + rhythm);
 
                     int32_t pitch_index{};
 
@@ -462,12 +466,12 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                         : track.last_pitch_index());
 
                     // Use number_of_voices to subset
-                    // track_scramble_sequences[scramble_index].
+                    // track_priority_sequences[scramble_index].
                     // If you can find tr in the sub sequence, then play.
 
                     auto trit{find(
-                        track_scramble_sequences[scramble_index].begin(),
-                        track_scramble_sequences[scramble_index].begin() + number_of_voices, tr)};
+                        track_priority_sequences[scramble_index].begin(),
+                        track_priority_sequences[scramble_index].begin() + number_of_voices, tr)};
                     bool changed{};
                     int  program{};
                     std::tie(changed, program) = general_midi_random.random_program(pitch_index);
@@ -483,7 +487,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
                     }
                     if ((pitch_index != RestPitchIndex)
                         && (trit
-                        != (track_scramble_sequences[scramble_index].begin() + number_of_voices)))
+                        != (track_priority_sequences[scramble_index].begin() + number_of_voices)))
                     {
                         auto key_number(key_scale[pitch_index]);
                         key_number = max(key_number, tessitura[tr].first);
@@ -688,10 +692,11 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
     struct ::tm tm_temp{};
     timeoss << put_time(localtime_r(&t, &tm_temp), "%FT%T%Z");
     textmidi_str.clear();
+
+    ((((((((((((((textmidi_str += "STARTTRACK\nPROGRAM_NAME textmidicgm\nTEXT Generated ") += timeoss.str())
 #if 0
     const auto quarter_tempo{music_time_.beat_tempo_ * static_cast<double>(music_time_.beat_ * QuartersPerWholeRat)};
 #endif
-    (((((((((((((textmidi_str += "STARTTRACK\nTEXT Generated ") += timeoss.str())
         += "\nTIME_SIGNATURE ") += lexical_cast<string>(music_time_.meter_.numerator()))
         += ' ') += lexical_cast<string>(music_time_.meter_.denominator()) += ' ')
         += lexical_cast<string>(music_time_.ticks_per_quarter_))
@@ -700,7 +705,7 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
         += lexical_cast<string>(music_time_.beat_))
         += "\nKEY_SIGNATURE C\nTEXT Computer-generated music "
            "from the textmidicgm software\nTRACK ")
-        += xml_form.name()) += "\nLAZY\n";
+        += "TEMPO ") += xml_form.name()) += "\nLAZY\n";
     textmidi_file << textmidi_str;
     for (RhythmRational aTime{0L}; aTime < total_duration; aTime += music_time_.meter_)
     {

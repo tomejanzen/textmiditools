@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.2
+// TextMIDITools Version 1.1.3
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -575,12 +575,11 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
         {
             v.follower().follow(true);
             v.follower().leader(leader);
-            v.follower().interval_type(static_cast<VoiceXml::Follower::
-                IntervalType>(ri() % 2 + 1));
             v.follower().delay(textmidi::rational::RhythmRational{static_cast<std::int64_t>(ri() / 2L)});
             v.follower().inversion((ri() % 2) == 1);
             v.follower().retrograde((ri() % 2) == 1);
         }
+        v.follower().interval_type(static_cast<VoiceXml::Follower::IntervalType>(ri() % 2 + 1));
         v.random_program().probability(rd());
         // acoustic piano, glock, acoustic guitar, acoustic bass, viola, choir aahs, trombone, alto sax, tinkle bell
         v.random_program().ensemble(textmidi::cgm::VoiceXml::RandomProgram::RandomEnsemble{1, 10, 25, 33, 42, 53, 58, 66, 113});

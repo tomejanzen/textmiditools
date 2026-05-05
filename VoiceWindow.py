@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py Voice Window for editing a voice's attributes."""
-# TextMIDITools Version 1.1.2
+# TextMIDITools Version 1.1.3
 # TextMidiFormEdit.py 1.0
 # Copyright © 2025 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -51,9 +51,9 @@ class VoiceWindow(tkinter.Toplevel):
         self.random_ensemble_list = []
         self.random_ensemble = tkinter.StringVar()
 
-        self.voice_number.set(1)
+        self.voice_number.set(0)
         self.create_widgets()
-        self.title('Instrumental Voices')
+        self.title('Voices')
 
     def get_xml_voices(self):
         return self.xml_voices
@@ -186,7 +186,7 @@ class VoiceWindow(tkinter.Toplevel):
             self.scalar_interval_type_radiobutton['state'] = 'disabled'
             self.chromatic_interval_type_radiobutton['state'] = 'disabled'
         self.chromatic_interval_type_radiobutton['state'] = 'disabled'
-        self.scalar_interval_type_radiobutton.update()
+#self.scalar_interval_type_radiobutton.update()
 
         self.follow_interval_label = tkinter.ttk.Label(self.interval_frame, text='Interval')
         self.follow_interval_spinbox = tkinter.ttk.Spinbox(self.interval_frame,
@@ -483,7 +483,7 @@ class VoiceWindow(tkinter.Toplevel):
                 follow_dict['interval'] = 0
                 delay_dict = {}
                 delay_dict['numerator'] = 0
-                delay_dict['denominator'] = 0
+                delay_dict['denominator'] = 1
                 follow_dict['delay'] = delay_dict
                 duration_dict = {}
                 duration_dict['numerator'] = 1

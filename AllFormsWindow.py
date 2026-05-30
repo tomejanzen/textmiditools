@@ -1,8 +1,8 @@
 #!usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py voice window, which permits editing one Voice's attributes."""
-# TextMIDITools Version 1.1.3
+# TextMIDITools Version 1.1.4
 # TextMidiFormEdit.py 1.0
-# Copyright © 2025 Thomas E. Janzen
+# Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -60,16 +60,16 @@ class MusicTime():
 
     def traverse(self, music_time_dom):
         """Build a music_time from the domain object model."""
-        self.music_time_dict['ticks_per_quarter'] = music_time_dom.getElementsByTagName('ticks_per_quarter')
+        self.music_time_dict['ticks_per_quarter'] = music_time_dom.getElementsByTagName('ticks_per_quarter_')
         beat_dict = {}
-        beat_xml = music_time.getElementsByTagName('beat')
-        temp_beat = Fraction(int(beat_xml.getElementsByTagName('numerator')),
-                             int(beat_xml.getElementsByTagName('denominator')))
+        beat_xml = music_time.getElementsByTagName('beat_')
+        temp_beat = Fraction(int(beat_xml.getElementsByTagName('numerator_')),
+                             int(beat_xml.getElementsByTagName('denominator_')))
         beat_dict['numerator']   = temp_beat.numerator
         beat_dict['denominator'] = temp_beat.denominator
         self.music_time_dict['beat'] = beat_dict
         meter_dict = {}
-        meter_xml = music_time.getElementsByTagName('meter')
+        meter_xml = music_time.getElementsByTagName('meter_')
         meter_dict['numerator']   = meter_xml.getElementsByTagName('numerator_')
         meter_dict['denominator'] = meter_xml.getElementsByTagName('denominator_')
         self.music_time_dict['meter'] = meter_dict
@@ -371,30 +371,32 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
         self.len_label = tkinter.ttk.Label(self.frame, text='Len')
-        validate_dbl_cmd = (self.register(self.validate_float),
+        validate_positive_dbl_cmd = (self.register(self.validate_positive_float),
+            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        validate_signed_dbl_cmd = (self.register(self.validate_signed_float),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.len_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_dbl_cmd, validate='focusout',
+            validatecommand=validate_positive_dbl_cmd, validate='focusout',
             textvariable=self.len)
         self.len.set(self.xml_form['len'])
 
         self.min_note_len_label = tkinter.ttk.Label(
             self.frame, text='Min Note Len')
         self.min_note_len_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_dbl_cmd, validate='focusout',
+            validatecommand=validate_positive_dbl_cmd, validate='focusout',
             textvariable=self.min_note_len)
         self.min_note_len.set(self.xml_form['min_note_len'])
 
         self.max_note_len_label = tkinter.ttk.Label(
             self.frame, text='Max Note Len')
         self.max_note_len_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_dbl_cmd, validate='focusout',
+            validatecommand=validate_positive_dbl_cmd, validate='focusout',
             textvariable=self.max_note_len)
         self.max_note_len.set(self.xml_form['max_note_len'])
 
         self.ticks_per_quarter_label = tkinter.ttk.Label(self.frame, text='Ticks per Quarter')
         self.ticks_per_quarter_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_dbl_cmd, validate='focusout',
+            validatecommand=validate_positive_dbl_cmd, validate='focusout',
             textvariable=self.ticks_per_quarter)
         self.ticks_per_quarter.set(self.xml_form['music_time']['ticks_per_quarter'])
 
@@ -406,7 +408,6 @@ class AllFormsWindow(tkinter.Toplevel):
             textvariable=self.beat)
         self.beat.set(str(Fraction(self.xml_form['music_time']['beat']['numerator'],
                                    self.xml_form['music_time']['beat']['denominator'])))
-
         self.meter_label = tkinter.ttk.Label(self.frame, text='Meter')
         self.meter_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_ratio_command, validate='focusout',
@@ -418,13 +419,13 @@ class AllFormsWindow(tkinter.Toplevel):
 
         self.beat_tempo_label = tkinter.ttk.Label(self.frame, text='Tempo per Beat')
         self.beat_tempo_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_dbl_cmd, validate='focusout',
+            validatecommand=validate_positive_dbl_cmd, validate='focusout',
             textvariable=self.beat_tempo)
-        self.beat_tempo.set(self.xml_form['music_time']['beat_tempo'])
+        self.beat_tempo.set(format(float(self.xml_form['music_time']['beat_tempo']), ".10f"))
 
         self.pulse_label = tkinter.ttk.Label(self.frame, text='Pulse/Sec')
         self.pulse_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_dbl_cmd, validate='focusout',
+            validatecommand=validate_positive_dbl_cmd, validate='focusout',
             textvariable=self.pulse)
         self.pulse.set(self.xml_form['pulse'])
 
@@ -511,7 +512,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.arrangement_period_entry = tkinter.ttk.Entry(self.arrangements_frame,
             textvariable=self.arrangement_period)
         self.arrangement_period.set(
-            self.xml_form['arrangement_definition']['period'])
+            format(float(self.xml_form['arrangement_definition']['period']), ".8f"))
 
         self.arrangement_algorithm_spinbox['state'] = 'readonly'
         self.arrangement_algorithm_spinbox.set('Identity')
@@ -682,7 +683,11 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def pitch_mean_period_callback(self, event, *args):
         """The pitch mean period field had an event; save value to the domain object model."""
-        self.xml_form['pitch_form']['mean']['period'] = self.pitch_form.mean.period.get()
+        period = self.pitch_form.mean.period.get()
+        if float(period) > 0.0:
+            self.xml_form['pitch_form']['mean']['period'] = self.pitch_form.mean.period.get()
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def pitch_mean_phase_callback(self, action, sign, unitspage=None):
         """The pitch mean phase scrollbar had an event; save value to the domain object model."""
@@ -760,7 +765,11 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def pitch_range_period_callback(self, event, *args):
         """The pitch range period field had an event; save value to the domain object model."""
-        self.xml_form['pitch_form']['range']['period'] = self.pitch_form.range.period.get()
+        period = self.pitch_form.range.period.get()
+        if float(period) > 0.0:
+            self.xml_form['pitch_form']['range']['period'] = period
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def pitch_range_phase_callback(self, action, sign, unitspage=None):
         """
@@ -846,7 +855,11 @@ class AllFormsWindow(tkinter.Toplevel):
 
     def rhythm_mean_period_callback(self, event, *args):
         """The rhythm mean perioc field had an event; save the value to the Domain Oject Model."""
-        self.xml_form['rhythm_form']['mean']['period'] = self.rhythm_form.mean.period.get()
+        period = self.rhythm_form.mean.period.get()
+        if float(period) > 0.0:
+            self.xml_form['rhythm_form']['mean']['period'] = period
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def rhythm_mean_phase_callback(self, action, sign, unitspage=None):
         """
@@ -928,7 +941,11 @@ class AllFormsWindow(tkinter.Toplevel):
             The rhythm range period field had an event;
             save the value to the domain object model.
         """
-        self.xml_form['rhythm_form']['range']['period'] = self.rhythm_form.range.period.get()
+        period = self.rhythm_form.range.period.get()
+        if float(period) > 0.0:
+            self.xml_form['rhythm_form']['range']['period'] = period
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def rhythm_range_phase_callback(self, action, sign, unitspage=None):
         """
@@ -1013,7 +1030,11 @@ class AllFormsWindow(tkinter.Toplevel):
             The dynamic mean period field had an event;
             save the value to the internal form structure.
         """
-        self.xml_form['dynamic_form']['mean']['period'] = self.dynamic_form.mean.period.get()
+        period = self.dynamic_form.mean.period.get()
+        if float(period) > 0.0:
+            self.xml_form['dynamic_form']['mean']['period'] = period
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def dynamic_mean_phase_callback(self, action, sign, unitspage=None):
         """
@@ -1098,7 +1119,11 @@ class AllFormsWindow(tkinter.Toplevel):
             The dynamic range period field had an event;
             save the value to the domain object model.
         """
-        self.xml_form['dynamic_form']['range']['period'] = self.dynamic_form.range.period.get()
+        period = self.dynamic_form.range.period.get()
+        if float(period) > 0.0:
+            self.xml_form['dynamic_form']['range']['period'] = period
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def dynamic_range_phase_callback(self, action, sign, unitspage=None):
         """
@@ -1184,7 +1209,11 @@ class AllFormsWindow(tkinter.Toplevel):
             The texture range period field had an event;
             save the value to the domain object model.
         """
-        self.xml_form['texture_form']['period'] = self.texture_form.period.get()
+        period = self.texture_form.period.get()
+        if float(period) > 0.0:
+            self.xml_form['texture_form']['period'] = period
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def texture_range_phase_callback(self, action, sign, unitspage=None):
         """
@@ -1277,7 +1306,11 @@ class AllFormsWindow(tkinter.Toplevel):
             The Arrangement field had an event;
             save the contents to the internal form structure.
         """
-        self.xml_form['arrangement_definition']['period'] = str(self.arrangement_period.get())
+        period = self.arrangement_period.get()
+        if float(period) > 0.0:
+            self.xml_form['arrangement_definition']['period'] = str(period)
+        else:
+            messagebox.showerror('message', "bad value: must be \"real\" greater than zero")
 
     def install_xml_form(self, xml_form):
         """Install an XML form file, presumably that has been read in from a file."""
@@ -1298,7 +1331,7 @@ class AllFormsWindow(tkinter.Toplevel):
             str(self.xml_form['music_time']['meter']['denominator'])])
         self.meter.set(meter_ratio)
 
-        self.beat_tempo.set(self.xml_form['music_time']['beat_tempo'])
+        self.beat_tempo.set(format(float(self.xml_form['music_time']['beat_tempo']), ".8f"))
 
         self.pulse.set(float(self.xml_form['pulse']))
         self.down_var.set(float(self.xml_form['melody_probabilities']['down']))
@@ -1311,7 +1344,7 @@ class AllFormsWindow(tkinter.Toplevel):
         self.texture_form.install_xml_sine(self.xml_form['texture_form'])
         self.scale_frame.set_keyboard_from_xml(self.xml_form)
 
-        self.arrangement_period.set(self.xml_form['arrangement_definition']['period'])
+        self.arrangement_period.set(format(float(self.xml_form['arrangement_definition']['period']), ".8f"))
         algorithm = self.xml_form['arrangement_definition']['algorithm']
         self.arrangement_algorithm.set(ArrangementAlgorithmList[int(algorithm)])
 
@@ -1333,7 +1366,25 @@ class AllFormsWindow(tkinter.Toplevel):
             messagebox.showerror('message', "bad value (1/2, 3/4, 51/1440)")
         return ret
 
-    def validate_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def validate_signed_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+        """Validate a floating value from the user and put up an alert if it is improper."""
+        # P: proposed value
+        # s: chars added or deleted
+        # S: current value prior to change
+        # v: index of string to be added or deleted
+        # V: 1 insert, 0 delete, -1 if forced validation or a text var validation
+        # W:
+        pat = re.compile(r"[-+]?[0-9]*([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        mat = pat.fullmatch(str(proposed))
+        ret = False
+        if mat:
+            ret = True
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (examples: 5.125, -5.125, or 5.125E05)")
+        return ret
+
+    def validate_positive_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
         """Validate a floating value from the user and put up an alert if it is improper."""
         # P: proposed value
         # s: chars added or deleted
@@ -1348,7 +1399,7 @@ class AllFormsWindow(tkinter.Toplevel):
             ret = True
         else:
             ret = False
-            messagebox.showerror('message', "bad value (5.125 or 5.125E05)")
+            messagebox.showerror('message', "bad value (examples: 5.125 or 5.125E05)")
         return ret
 
     def validate_probability(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):

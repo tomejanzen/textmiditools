@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.3
+// TextMIDITools Version 1.1.4
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -76,6 +76,13 @@ const midi::NumStringMap<int32_t> midi::pan_map
     {"RIGHT",  MaxSignedPan}
 };
 
+const midi::NumStringMap<int32_t> midi::pan_map_hires
+{
+    {"LEFT",   -8192},
+    {"CENTER", 0},
+    {"RIGHT",  8191}
+};
+
 const midi::NumStringMap<midi::MidiStreamAtom> midi::text_meta_map
 {
     {"TEXT",            midi::text_prefix[0]},
@@ -96,7 +103,7 @@ const midi::NumStringMap<midi::MidiStreamAtom> midi::text_meta_map
     {"SEQUENCER_SPECIFIC", midi::sequencer_specific_prefix[0]}
 };
 
-const midi:: NumStringMap<midi::MidiStreamAtom> midi::control_function_map
+const midi::NumStringMap<midi::MidiStreamAtom> midi::control_function_map
 {
     {"BANK_SELECT", midi::control_bank_select[0]},
     {"MODULATION", midi::control_modulation[0]},
@@ -130,20 +137,20 @@ const midi:: NumStringMap<midi::MidiStreamAtom> midi::control_function_map
     {"UNDEFINED_29", midi::control_undefined_29[0]},
     {"UNDEFINED_30", midi::control_undefined_30[0]},
     {"UNDEFINED_31", midi::control_undefined_31[0]},
-    {"LSB_00", midi::control_lsb_00[0]},
-    {"LSB_01", midi::control_lsb_01[0]},
-    {"LSB_02", midi::control_lsb_02[0]},
+    {"BANK_SELECT_LSB", midi::control_bank_select_lsb[0]},
+    {"MODULATION_LSB", midi::control_modulation_lsb[0]},
+    {"BREATH_LSB", midi::control_breath_controller_lsb[0]},
     {"LSB_03", midi::control_lsb_03[0]},
-    {"LSB_04", midi::control_lsb_04[0]},
-    {"LSB_05", midi::control_lsb_05[0]},
-    {"LSB_06", midi::control_lsb_06[0]},
-    {"LSB_07", midi::control_lsb_07[0]},
-    {"LSB_08", midi::control_lsb_08[0]},
+    {"FOOT_CONTROLLER_LSB", midi::control_foot_controller_lsb[0]},
+    {"PORTAMENTO_TIME_LSB", midi::control_portamento_time_lsb[0]},
+    {"DATA_ENTRY_LSB", midi::control_data_entry_lsb[0]},
+    {"CHANNEL_VOLUME_LSB", midi::control_channel_volume_lsb[0]},
+    {"BALANCE_LSB", midi::control_balance_lsb[0]},
     {"LSB_09", midi::control_lsb_09[0]},
-    {"LSB_10", midi::control_lsb_10[0]},
-    {"LSB_11", midi::control_lsb_11[0]},
-    {"LSB_12", midi::control_lsb_12[0]},
-    {"LSB_13", midi::control_lsb_13[0]},
+    {"PAN_LSB", midi::control_pan_lsb[0]},
+    {"EXPRESSION_LSB", midi::control_expression_lsb[0]},
+    {"EFFECT_1_LSB", midi::control_effect_1_lsb[0]},
+    {"EFFECT_2_LSB", midi::control_effect_2_lsb[0]},
     {"LSB_14", midi::control_lsb_14[0]},
     {"LSB_15", midi::control_lsb_15[0]},
     {"LSB_16", midi::control_lsb_16[0]},
@@ -309,3 +316,20 @@ const midi::NumStringMap<textmidi::rational::RhythmExpression>
     {"SIMPLECONTINUEDFRACTION",
         textmidi::rational::RhythmExpression::SimpleContinuedFraction},
 };
+
+const midi::NumStringMap<midi::MidiStreamAtom> midi::control_lsb_map
+{
+    {"LSB_00", midi::control_lsb_00[0]},
+    {"LSB_01", midi::control_lsb_01[0]},
+    {"LSB_02", midi::control_lsb_02[0]},
+    {"LSB_04", midi::control_lsb_04[0]},
+    {"LSB_05", midi::control_lsb_05[0]},
+    {"LSB_06", midi::control_lsb_06[0]},
+    {"LSB_07", midi::control_lsb_07[0]},
+    {"LSB_08", midi::control_lsb_08[0]},
+    {"LSB_10", midi::control_lsb_10[0]},
+    {"LSB_11", midi::control_lsb_11[0]},
+    {"LSB_12", midi::control_lsb_12[0]},
+    {"LSB_13", midi::control_lsb_13[0]},
+};
+

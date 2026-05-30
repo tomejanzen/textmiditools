@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.3
+// TextMIDITools Version 1.1.4
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -596,8 +596,6 @@ namespace textmidi
         static StreamEvent
             recognize(midi::MidiStreamRange midi_stream_tail) noexcept;
         std::ostream& print(std::ostream& os) const final;
-      private:
-        std::string name_{};
       friend std::ostream& operator<<(std::ostream& , const MidiFileMetaTrackNameEvent& );
     };
     std::ostream& operator<<(std::ostream& , const MidiFileMetaTrackNameEvent& );
@@ -654,8 +652,6 @@ namespace textmidi
         static StreamEvent
             recognize(midi::MidiStreamRange midi_stream_tail) noexcept;
         std::ostream& print(std::ostream& os) const final;
-      private:
-        std::string cue_point_{};
       friend std::ostream& operator<<(std::ostream& , const MidiFileMetaCuePointEvent& );
     };
     std::ostream& operator<<(std::ostream& , const MidiFileMetaCuePointEvent& );
@@ -833,8 +829,7 @@ namespace textmidi
     };
     std::ostream& operator<<(std::ostream& , const MidiChannelVoicePitchBendEvent& );
 
-    // OK
-    class MidiChannelVoiceControlChangeEvent final
+    class MidiChannelVoiceControlChangeEvent
         : public MidiChannelVoiceModeEvent
     {
       public:
@@ -844,18 +839,107 @@ namespace textmidi
         {
         }
         void id(midi::MidiStreamAtom ) noexcept;
-        midi::MidiStreamAtom value() const noexcept;
-        void value(midi::MidiStreamAtom ) noexcept;
+        midi::MidiStreamAtom id() const noexcept;
+        int value() const noexcept;
+        void value(int ) noexcept;
+        static StreamEvent
+            recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept;
+        std::ostream& print(std::ostream& os) const;
+      private:
+        midi::MidiStreamAtom id_{};
+        int value_{};
+      friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeEvent& );
+    };
+    std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeEvent& );
+
+    class MidiChannelVoiceControlChangePanEvent
+        : public MidiChannelVoiceControlChangeEvent
+    {
+      public:
+        explicit MidiChannelVoiceControlChangePanEvent(
+            const midi::RunningStatusStandard& running_status) noexcept
+          : MidiChannelVoiceControlChangeEvent(running_status)
+        {
+        }
         static StreamEvent
             recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
         midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept final;
         std::ostream& print(std::ostream& os) const final;
-      private:
-        midi::MidiStreamAtom id_{};
-        midi::MidiStreamAtom value_{};
-      friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeEvent& );
+      friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangePanEvent& );
     };
-    std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeEvent& );
+
+    std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangePanEvent& );
+
+    class MidiChannelVoiceControlChangeHiResEvent
+        : public MidiChannelVoiceControlChangeEvent
+    {
+      public:
+        explicit MidiChannelVoiceControlChangeHiResEvent(
+            const midi::RunningStatusStandard& running_status) noexcept
+          : MidiChannelVoiceControlChangeEvent(running_status)
+        {
+        }
+        static StreamEvent
+            recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept;
+        std::ostream& print(std::ostream& os) const;
+      friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResEvent& );
+    };
+    std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResEvent& );
+
+    class MidiChannelVoiceControlChangeHiResPanEvent final
+        : public MidiChannelVoiceControlChangeHiResEvent
+    {
+      public:
+        explicit MidiChannelVoiceControlChangeHiResPanEvent(
+            const midi::RunningStatusStandard& running_status) noexcept
+          : MidiChannelVoiceControlChangeHiResEvent(running_status)
+        {
+        }
+        static StreamEvent
+            recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept final;
+        std::ostream& print(std::ostream& os) const final;
+      friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResPanEvent& );
+    };
+    std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResPanEvent& );
+
+    class MidiChannelVoiceControlChangeHiResSoundBankEvent final
+        : public MidiChannelVoiceControlChangeHiResEvent
+    {
+      public:
+        explicit MidiChannelVoiceControlChangeHiResSoundBankEvent(
+            const midi::RunningStatusStandard& running_status) noexcept
+          : MidiChannelVoiceControlChangeHiResEvent(running_status),
+            program_{}
+        {
+        }
+        static StreamEvent
+            recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept final;
+        std::ostream& print(std::ostream& os) const final;
+        int program() const;
+        void program(int prog);
+      private:
+         int program_;
+      friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResSoundBankEvent& );
+    };
+    std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResSoundBankEvent& );
+
+    class MidiChannelVoiceControlChangeFactory
+        : public MidiChannelVoiceControlChangeEvent
+    {
+      public:
+        explicit MidiChannelVoiceControlChangeFactory(
+            const midi::RunningStatusStandard& running_status) noexcept
+          : MidiChannelVoiceControlChangeEvent(running_status)
+        {
+        }
+        static StreamEvent
+            recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept final;
+    };
 
     class MidiChannelVoiceChannelPressureEvent final
         : public MidiChannelVoiceModeEvent

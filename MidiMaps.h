@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.3
+// TextMIDITools Version 1.1.4
 //
 //
 // Copyright © 2025 Thomas E. Janzen
@@ -125,12 +125,14 @@ namespace midi
     extern const NumStringMap<std::int32_t> smpte_fps_map;
     extern NumStringMap<std::int32_t> dynamics_map;
     extern const NumStringMap<std::int32_t> pan_map;
+    extern const NumStringMap<std::int32_t> pan_map_hires;
     extern const NumStringMap<midi::MIDI_Format> format_map;
 
     std::ostream& operator<<(std::ostream& os, midi::MIDI_Format mf);
 
     extern const NumStringMap<midi::MidiStreamAtom> text_meta_map;
     extern const NumStringMap<midi::MidiStreamAtom> control_function_map;
+    extern const NumStringMap<midi::MidiStreamAtom> control_lsb_map;
     extern const NumStringMap<MidiStreamAtom> control_on_off_map;
     extern const NumStringMap<midi::XmfPatchTypeEnum> xmf_patch_type_map;
 
@@ -146,6 +148,7 @@ namespace midi
 
     extern const NumStringMap<textmidi::rational::RhythmExpression>
         rhythm_expression_map;
+
 
 } // namespace midi
 

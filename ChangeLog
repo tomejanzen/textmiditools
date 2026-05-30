@@ -1,3 +1,60 @@
+2026-05-29    Thomas E. Janzen <janzentome@gmail.com>
+	* TextMidiFormEdit.texi, miditext.texi, textmidi.texi, 
+	textmidicgm.texi:
+        Reflect addition of aggregate events for Control;
+        edit textmidicgm.texi to improve the aeshetics explanation
+        under "Model of Musical Form"; edit TextMidiFormEdit.texi
+        to describe the new "Randomize" menu item.
+        miditext now generally writes decimal values to the textmidi file;
+        it had written hexadecimal, except for SYSEX and out of range data.
+        Fix transposition of beat size numerator/denominator in traverse_music_time.
+        Use format() on arrangement period and tempo in TextMidiFormEdit.py.
+        Fix support of PAN symbols LEFT,CENTER,RIGHT for CONTROL_HIRES.
+        Removed a couple of unused member strings in meta events.
+
+2026-05-28    Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.cc, textmidi.l: Debug HIRES handling.
+        * textmidi.vim: update with new control events.
+
+2026-05-27    Thomas E. Janzen <janzentome@gmail.com>
+	* miditext.cc, MidiEvents.{cc,h}:
+        miditext is probably working with new ControlChange classes.
+    
+2026-05-26    Thomas E. Janzen <janzentome@gmail.com>
+	* Midi.h, MidiEvents.{cc,h}, MidiMaps.{cc,h}:
+        Continue to work on handling high-resolution Controls.
+
+2026-05-21    Thomas E. Janzen <janzentome@gmail.com>
+        * MidiEvents.{h,cc}:  Add hi res Controls, with broken
+        out PAN_HIRES and BANK_SELECT.  PAN has to be separate
+        because it is a signed value.
+        BANK_SELECT_PROGRAM is separate because it is followed by a PROGRAM.
+
+2026-05-19    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l : Fix CONTROL BANK_SELECT to be 1-based as text
+
+2026-05-18    Thomas E. Janzen <janzentome@gmail.com>
+        * Midi.h, MidiMaps.{cc,h}, TextMidiFormEdit.py:  name the
+        LSB bytes for Controls.  Fix the string for Effect 1 and Effect 2,
+        which were mistakenly "EXPRESSION_[12]".
+        * test/TestReport.txt: add checking both Windows and linux.
+        * textmidi.l, textmidi.vim: support the Controls' new LSB synonyms.
+        * textmidi.texi: document new LSB synonyms.
+
+2026-05-13    Thomas E. Janzen <janzentome@gmail.com>
+        * TextMidiFormEdit.py:  Fix meter in html_callback.  Meter can't be
+        a Fraction because it can't be reduced as a fraction.
+        Fix random pan to be properly distributed from -64 to 63.
+        In randomize_callback set range of the voice from the plausible 
+        realistic range for the randomly-selected program.
+        HTML output: Add "(seconds)" to note length table;
+        add "phase (degrees)" column to the form table.
+
+2026-05-12    Thomas E. Janzen <janzentome@gmail.com>
+	* AllFormsWindow.py, Sine.py, TextMidiFormEdit.py, VoiceWindow.py, TextMidiFormEdit.texi:
+        Add a "Randomize" menu item.  It is not identical to the the random
+        function in textmidicgm.
+
 2026-05-04    Thomas E. Janzen <janzentome@gmail.com>
         * test/textmidicgm/cgm_test*: create suite of
         tests for each datum in the XML form file.

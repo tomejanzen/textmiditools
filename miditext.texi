@@ -391,6 +391,8 @@ but @command{textmidi} always creates the standard event with five total bytes:
 (0xFF, 0x59, 2 [the following data length], sharps/flats, mode).
 @item
 @command{miditext} always produces the full CONTROL command forms and not the abbreviated forms.
+In addition, the aggregate control events, CONTROL_HIRES and CONTROL_BANK_SELECT_PROGRAM are
+generated only if the internal delays are zero; otherwise the individual events are written.
 @end itemize
 
 @node Known Bugs

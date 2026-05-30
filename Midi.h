@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.3
+// TextMIDITools Version 1.1.4
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -58,6 +58,7 @@ namespace midi
     inline constexpr std::int32_t MidiChannelQty{16};
     inline constexpr std::int32_t MidiIdiophoneChannel{10};
     inline constexpr std::int32_t PanExcess64{64};
+    inline constexpr std::int32_t PanExcess8192{8192};
     inline constexpr std::uint32_t variable_len_word_mask{0xfffffff};
 
     inline constexpr std::int64_t
@@ -69,7 +70,7 @@ namespace midi
         {static_cast<MidiStreamAtom>(~variable_len_flag)};
     inline constexpr MidiStreamAtom variable_len_shift       {7};
     inline constexpr MidiStreamAtom octet_mask               {0xff};
-    inline constexpr MidiStreamArray1 meta_prefix{0xff};
+    inline constexpr MidiStreamArray1 meta_prefix            {0xff};
     inline constexpr MidiStreamArray2 sequence_number_prefix {0x00, 0x02};
     // Variable-length string meta-events.
     inline constexpr MidiStreamArray1 text_prefix            {0x01};
@@ -88,7 +89,7 @@ namespace midi
     inline constexpr MidiStreamArray1 text_0E_prefix         {0x0E};
     inline constexpr MidiStreamArray1 text_0F_prefix         {0x0F};
     inline constexpr MidiStreamArray1 unknown_prefix         {0x11};
-    inline constexpr MidiStreamArray2 smpte_prefix{0x54, 5};
+    inline constexpr MidiStreamArray2 smpte_prefix           {0x54, 5};
     inline constexpr MidiStreamArray2 midi_channel_prefix    {0x20, 1};
     inline constexpr MidiStreamArray2 end_of_track_prefix    {0x2f, 0};
     inline constexpr MidiStreamArray2 tempo_prefix           {0x51, 3};
@@ -137,6 +138,8 @@ namespace midi
     inline constexpr MidiStreamAtom NoteOff               = 0x80;
     inline constexpr MidiStreamAtom PolyphonicKeyPressure = 0xa0;
     inline constexpr MidiStreamAtom Control               = 0xb0;
+    inline constexpr std::int32_t MaxControlValue{127};
+    inline constexpr std::int32_t MaxControlHiResValue{16383};
     inline constexpr MidiStreamAtom Program               = 0xc0;
     inline constexpr MidiStreamAtom ChannelPressure       = 0xd0;
     inline constexpr MidiStreamAtom PitchWheel            = 0xe0;
@@ -155,106 +158,117 @@ namespace midi
     inline constexpr MidiStreamAtom channel_mask         {0x0F};
     inline constexpr MidiStreamAtom byte7_mask           {0x7F};
     inline constexpr MidiStreamAtom byte7_shift          {7};
+    inline constexpr int control_hires_mask                  {0x3FFF};
     inline constexpr MidiStreamAtom nybble_mask          {0x0F};
 
-    inline constexpr MidiStreamArray1 control_bank_select     {0x00};
-    inline constexpr MidiStreamArray1 control_modulation      {0x01};
-    inline constexpr MidiStreamArray1 control_breath_controller{0x02};
-    inline constexpr MidiStreamArray1 control_undefined_03    {0x03};
-    inline constexpr MidiStreamArray1 control_foot_controller {0x04};
-    inline constexpr MidiStreamArray1 control_portamento_time {0x05};
-    inline constexpr MidiStreamArray1 control_data_entry_msb  {0x06};
-    inline constexpr MidiStreamArray1 control_channel_volume  {0x07};
-    inline constexpr MidiStreamArray1 control_balance         {0x08};
-    inline constexpr MidiStreamArray1 control_undefined_09    {0x09};
-
-    inline constexpr MidiStreamArray1 control_pan             {0x0A};
-
-    inline constexpr MidiStreamArray1 control_expression      {0x0b};
-    inline constexpr MidiStreamArray1 control_effect_1        {0x0c};
-    inline constexpr MidiStreamArray1 control_effect_2        {0x0d};
-    inline constexpr MidiStreamArray1 control_undefined_14    {0x0e};
-    inline constexpr MidiStreamArray1 control_undefined_15    {0x0f};
-    inline constexpr MidiStreamArray1 control_general_purpose_1{0x10};
-    inline constexpr MidiStreamArray1 control_general_purpose_2{0x11};
-    inline constexpr MidiStreamArray1 control_general_purpose_3{0x12};
-    inline constexpr MidiStreamArray1 control_general_purpose_4{0x13};
-    inline constexpr MidiStreamArray1 control_undefined_20     {0x14};
-    inline constexpr MidiStreamArray1 control_undefined_21     {0x15};
-    inline constexpr MidiStreamArray1 control_undefined_22     {0x16};
-    inline constexpr MidiStreamArray1 control_undefined_23     {0x17};
-    inline constexpr MidiStreamArray1 control_undefined_24     {0x18};
-    inline constexpr MidiStreamArray1 control_undefined_25     {0x19};
-    inline constexpr MidiStreamArray1 control_undefined_26     {0x1a};
-    inline constexpr MidiStreamArray1 control_undefined_27     {0x1b};
-    inline constexpr MidiStreamArray1 control_undefined_28     {0x1c};
-    inline constexpr MidiStreamArray1 control_undefined_29     {0x1d};
-    inline constexpr MidiStreamArray1 control_undefined_30     {0x1e};
-    inline constexpr MidiStreamArray1 control_undefined_31     {0x1f};
-    inline constexpr MidiStreamArray1 control_lsb_00           {0x20};
-    inline constexpr MidiStreamArray1 control_lsb_01           {0x21};
-    inline constexpr MidiStreamArray1 control_lsb_02           {0x22};
-    inline constexpr MidiStreamArray1 control_lsb_03           {0x23};
-    inline constexpr MidiStreamArray1 control_lsb_04           {0x24};
-    inline constexpr MidiStreamArray1 control_lsb_05           {0x25};
-    inline constexpr MidiStreamArray1 control_lsb_06           {0x26};
-    inline constexpr MidiStreamArray1 control_lsb_07           {0x27};
-    inline constexpr MidiStreamArray1 control_lsb_08           {0x28};
-    inline constexpr MidiStreamArray1 control_lsb_09           {0x29};
-    inline constexpr MidiStreamArray1 control_lsb_10           {0x2a};
-    inline constexpr MidiStreamArray1 control_lsb_11           {0x2b};
-    inline constexpr MidiStreamArray1 control_lsb_12           {0x2c};
-    inline constexpr MidiStreamArray1 control_lsb_13           {0x2d};
-    inline constexpr MidiStreamArray1 control_lsb_14           {0x2e};
-    inline constexpr MidiStreamArray1 control_lsb_15           {0x2f};
-    inline constexpr MidiStreamArray1 control_lsb_16           {0x30};
-    inline constexpr MidiStreamArray1 control_lsb_17           {0x31};
-    inline constexpr MidiStreamArray1 control_lsb_18           {0x32};
-    inline constexpr MidiStreamArray1 control_lsb_19           {0x33};
-    inline constexpr MidiStreamArray1 control_lsb_20           {0x34};
-    inline constexpr MidiStreamArray1 control_lsb_21           {0x35};
-    inline constexpr MidiStreamArray1 control_lsb_22           {0x36};
-    inline constexpr MidiStreamArray1 control_lsb_23           {0x37};
-    inline constexpr MidiStreamArray1 control_lsb_24           {0x38};
-    inline constexpr MidiStreamArray1 control_lsb_25           {0x39};
-    inline constexpr MidiStreamArray1 control_lsb_26           {0x3a};
-    inline constexpr MidiStreamArray1 control_lsb_27           {0x3b};
-    inline constexpr MidiStreamArray1 control_lsb_28           {0x3c};
-    inline constexpr MidiStreamArray1 control_lsb_29           {0x3d};
-    inline constexpr MidiStreamArray1 control_lsb_30           {0x3e};
-    inline constexpr MidiStreamArray1 control_lsb_31           {0x3f};
-    inline constexpr MidiStreamArray1 control_damper          {0x40};
-    inline constexpr MidiStreamArray1 control_portamento_on_off{0x41};
-    inline constexpr MidiStreamArray1 control_sostenuto       {0x42};
-    inline constexpr MidiStreamArray1 control_softpedal       {0x43};
-    inline constexpr MidiStreamAtom   control_pedalthreshold  {0x40};
-    inline constexpr MidiStreamArray1 control_legato_foot     {0x44};
-    inline constexpr MidiStreamArray1 control_hold_2           {0x45};
-    inline constexpr MidiStreamArray1 control_sound_variation {0x46};
-    inline constexpr MidiStreamArray1 control_timbre_intensity{0x47};
-    inline constexpr MidiStreamArray1 control_release_time    {0x48};
-    inline constexpr MidiStreamArray1 control_attack_time     {0x49};
-    inline constexpr MidiStreamArray1 control_brightness      {0x4a};
-    inline constexpr MidiStreamArray1 control_decay_time      {0x4b};
-    inline constexpr MidiStreamArray1 control_vibrato_rate    {0x4c};
-    inline constexpr MidiStreamArray1 control_vibrato_depth   {0x4d};
+    inline constexpr MidiStreamArray1 control_bank_select       {0x00};
+    inline constexpr MidiStreamArray1 control_modulation        {0x01};
+    inline constexpr MidiStreamArray1 control_breath_controller {0x02};
+    inline constexpr MidiStreamArray1 control_undefined_03      {0x03};
+    inline constexpr MidiStreamArray1 control_foot_controller   {0x04};
+    inline constexpr MidiStreamArray1 control_portamento_time   {0x05};
+    inline constexpr MidiStreamArray1 control_data_entry_msb    {0x06};
+    inline constexpr MidiStreamArray1 control_channel_volume    {0x07};
+    inline constexpr MidiStreamArray1 control_balance           {0x08};
+    inline constexpr MidiStreamArray1 control_undefined_09      {0x09};
+    inline constexpr MidiStreamArray1 control_pan               {0x0A};
+    inline constexpr MidiStreamArray1 control_expression        {0x0b};
+    inline constexpr MidiStreamArray1 control_effect_1          {0x0c};
+    inline constexpr MidiStreamArray1 control_effect_2          {0x0d};
+    inline constexpr MidiStreamArray1 control_undefined_14      {0x0e};
+    inline constexpr MidiStreamArray1 control_undefined_15      {0x0f};
+    inline constexpr MidiStreamArray1 control_general_purpose_1 {0x10};
+    inline constexpr MidiStreamArray1 control_general_purpose_2 {0x11};
+    inline constexpr MidiStreamArray1 control_general_purpose_3 {0x12};
+    inline constexpr MidiStreamArray1 control_general_purpose_4 {0x13};
+    inline constexpr MidiStreamArray1 control_undefined_20      {0x14};
+    inline constexpr MidiStreamArray1 control_undefined_21      {0x15};
+    inline constexpr MidiStreamArray1 control_undefined_22      {0x16};
+    inline constexpr MidiStreamArray1 control_undefined_23      {0x17};
+    inline constexpr MidiStreamArray1 control_undefined_24      {0x18};
+    inline constexpr MidiStreamArray1 control_undefined_25      {0x19};
+    inline constexpr MidiStreamArray1 control_undefined_26      {0x1a};
+    inline constexpr MidiStreamArray1 control_undefined_27      {0x1b};
+    inline constexpr MidiStreamArray1 control_undefined_28      {0x1c};
+    inline constexpr MidiStreamArray1 control_undefined_29      {0x1d};
+    inline constexpr MidiStreamArray1 control_undefined_30      {0x1e};
+    inline constexpr MidiStreamArray1 control_undefined_31      {0x1f};
+    inline constexpr MidiStreamArray1 control_lsb_00            {0x20};
+    inline constexpr MidiStreamArray1 control_bank_select_lsb   {0x20};
+    inline constexpr MidiStreamArray1 control_lsb_01            {0x21};
+    inline constexpr MidiStreamArray1 control_modulation_lsb    {0x21};
+    inline constexpr MidiStreamArray1 control_lsb_02            {0x22};
+    inline constexpr MidiStreamArray1 control_breath_controller_lsb {0x22};
+    inline constexpr MidiStreamArray1 control_lsb_03            {0x23};
+    inline constexpr MidiStreamArray1 control_lsb_04            {0x24};
+    inline constexpr MidiStreamArray1 control_foot_controller_lsb {0x24};
+    inline constexpr MidiStreamArray1 control_lsb_05            {0x25};
+    inline constexpr MidiStreamArray1 control_portamento_time_lsb {0x25};
+    inline constexpr MidiStreamArray1 control_lsb_06            {0x26};
+    inline constexpr MidiStreamArray1 control_data_entry_lsb    {0x26};
+    inline constexpr MidiStreamArray1 control_lsb_07            {0x27};
+    inline constexpr MidiStreamArray1 control_channel_volume_lsb {0x27};
+    inline constexpr MidiStreamArray1 control_lsb_08            {0x28};
+    inline constexpr MidiStreamArray1 control_balance_lsb       {0x28};
+    inline constexpr MidiStreamArray1 control_lsb_09            {0x29};
+    inline constexpr MidiStreamArray1 control_lsb_10            {0x2a};
+    inline constexpr MidiStreamArray1 control_pan_lsb           {0x2a};
+    inline constexpr MidiStreamArray1 control_lsb_11            {0x2b};
+    inline constexpr MidiStreamArray1 control_expression_lsb    {0x2b};
+    inline constexpr MidiStreamArray1 control_lsb_12            {0x2c};
+    inline constexpr MidiStreamArray1 control_effect_1_lsb      {0x2c};
+    inline constexpr MidiStreamArray1 control_lsb_13            {0x2d};
+    inline constexpr MidiStreamArray1 control_effect_2_lsb      {0x2d};
+    inline constexpr MidiStreamArray1 control_lsb_14            {0x2e};
+    inline constexpr MidiStreamArray1 control_lsb_15            {0x2f};
+    inline constexpr MidiStreamArray1 control_lsb_16            {0x30};
+    inline constexpr MidiStreamArray1 control_lsb_17            {0x31};
+    inline constexpr MidiStreamArray1 control_lsb_18            {0x32};
+    inline constexpr MidiStreamArray1 control_lsb_19            {0x33};
+    inline constexpr MidiStreamArray1 control_lsb_20            {0x34};
+    inline constexpr MidiStreamArray1 control_lsb_21            {0x35};
+    inline constexpr MidiStreamArray1 control_lsb_22            {0x36};
+    inline constexpr MidiStreamArray1 control_lsb_23            {0x37};
+    inline constexpr MidiStreamArray1 control_lsb_24            {0x38};
+    inline constexpr MidiStreamArray1 control_lsb_25            {0x39};
+    inline constexpr MidiStreamArray1 control_lsb_26            {0x3a};
+    inline constexpr MidiStreamArray1 control_lsb_27            {0x3b};
+    inline constexpr MidiStreamArray1 control_lsb_28            {0x3c};
+    inline constexpr MidiStreamArray1 control_lsb_29            {0x3d};
+    inline constexpr MidiStreamArray1 control_lsb_30            {0x3e};
+    inline constexpr MidiStreamArray1 control_lsb_31            {0x3f};
+    inline constexpr MidiStreamArray1 control_damper            {0x40};
+    inline constexpr MidiStreamArray1 control_portamento_on_off {0x41};
+    inline constexpr MidiStreamArray1 control_sostenuto         {0x42};
+    inline constexpr MidiStreamArray1 control_softpedal         {0x43};
+    inline constexpr MidiStreamAtom   control_pedalthreshold    {0x40};
+    inline constexpr MidiStreamArray1 control_legato_foot       {0x44};
+    inline constexpr MidiStreamArray1 control_hold_2            {0x45};
+    inline constexpr MidiStreamArray1 control_sound_variation   {0x46};
+    inline constexpr MidiStreamArray1 control_timbre_intensity  {0x47};
+    inline constexpr MidiStreamArray1 control_release_time      {0x48};
+    inline constexpr MidiStreamArray1 control_attack_time       {0x49};
+    inline constexpr MidiStreamArray1 control_brightness        {0x4a};
+    inline constexpr MidiStreamArray1 control_decay_time        {0x4b};
+    inline constexpr MidiStreamArray1 control_vibrato_rate      {0x4c};
+    inline constexpr MidiStreamArray1 control_vibrato_depth     {0x4d};
     inline constexpr MidiStreamArray1 control_sound_controller_9 {0x4e};
     inline constexpr MidiStreamArray1 control_sound_controller_10 {0x4f};
 
-    inline constexpr MidiStreamArray1 control_general_purpose_5{0x50};
-    inline constexpr MidiStreamArray1 control_general_purpose_6{0x51};
-    inline constexpr MidiStreamArray1 control_general_purpose_7{0x52};
-    inline constexpr MidiStreamArray1 control_general_purpose_8{0x53};
-    inline constexpr MidiStreamArray1 control_portamento       {0x54};
-    inline constexpr MidiStreamArray1 control_hires_velocity_msb{0x58};
+    inline constexpr MidiStreamArray1 control_general_purpose_5 {0x50};
+    inline constexpr MidiStreamArray1 control_general_purpose_6 {0x51};
+    inline constexpr MidiStreamArray1 control_general_purpose_7 {0x52};
+    inline constexpr MidiStreamArray1 control_general_purpose_8 {0x53};
+    inline constexpr MidiStreamArray1 control_portamento        {0x54};
+    inline constexpr MidiStreamArray1 control_hires_velocity_msb {0x58};
 
     inline constexpr MidiStreamArray1 control_reverb_send_level {0x5b};
-    inline constexpr MidiStreamArray1 control_tremolo_depth  {0x5c};
+    inline constexpr MidiStreamArray1 control_tremolo_depth     {0x5c};
     inline constexpr MidiStreamArray1 control_chorus_send_level {0x5d};
-    inline constexpr MidiStreamArray1 control_celeste_depth  {0x5e};
-    inline constexpr MidiStreamArray1 control_phaser_depth   {0x5f};
-    inline constexpr MidiStreamArray1 control_data_increment {0x60};
-    inline constexpr MidiStreamArray1 control_data_decrement {0x61};
+    inline constexpr MidiStreamArray1 control_celeste_depth     {0x5e};
+    inline constexpr MidiStreamArray1 control_phaser_depth      {0x5f};
+    inline constexpr MidiStreamArray1 control_data_increment    {0x60};
+    inline constexpr MidiStreamArray1 control_data_decrement    {0x61};
     inline constexpr MidiStreamArray1
         control_non_registered_parameter_lsb {0x62};
     inline constexpr MidiStreamArray1
@@ -263,32 +277,32 @@ namespace midi
     inline constexpr MidiStreamArray1 control_registered_parameter_msb {0x65};
 
     // Reserved by MIDI Spec:
-    inline constexpr MidiStreamArray1 control_all_sound_off  {0x78};
+    inline constexpr MidiStreamArray1 control_all_sound_off         {0x78};
     inline constexpr MidiStreamArray1 control_reset_all_controllers {0x79};
-    inline constexpr MidiStreamArray1 control_local_control{0x7a};
-    inline constexpr MidiStreamAtom   local_control_off{0x00};
-    inline constexpr MidiStreamAtom   local_control_on{0x7f};
-    inline constexpr MidiStreamArray1 control_all_notes_off  {0x7b};
-    inline constexpr MidiStreamArray1 control_omni_off       {0x7c};
-    inline constexpr MidiStreamArray1 control_omni_on        {0x7d};
-    inline constexpr MidiStreamArray1 control_mono_on        {0x7e};
-    inline constexpr MidiStreamArray1 control_poly_on        {0x7f};
-    inline constexpr MidiStreamArray1 control_full           {0x7F};
-    inline constexpr MidiStreamArray1 control_off            {0x00};
-    inline constexpr MidiStreamArray1 midi_time_code_quarter_frame{0xf1};
-    inline constexpr MidiStreamArray1 song_position_pointer  {0xf2};
-    inline constexpr MidiStreamArray1 song_select            {0xf3};
-    inline constexpr MidiStreamArray1 tune_request           {0xf6};
-    inline constexpr MidiStreamArray1 start_of_sysex         {0xf0};
-    inline constexpr MidiStreamArray1 end_of_sysex           {0xf7};
+    inline constexpr MidiStreamArray1 control_local_control         {0x7a};
+    inline constexpr MidiStreamAtom   local_control_off             {0x00};
+    inline constexpr MidiStreamAtom   local_control_on              {0x7f};
+    inline constexpr MidiStreamArray1 control_all_notes_off         {0x7b};
+    inline constexpr MidiStreamArray1 control_omni_off              {0x7c};
+    inline constexpr MidiStreamArray1 control_omni_on               {0x7d};
+    inline constexpr MidiStreamArray1 control_mono_on               {0x7e};
+    inline constexpr MidiStreamArray1 control_poly_on               {0x7f};
+    inline constexpr MidiStreamArray1 control_full                  {0x7F};
+    inline constexpr MidiStreamArray1 control_off                   {0x00};
+    inline constexpr MidiStreamArray1 midi_time_code_quarter_frame  {0xf1};
+    inline constexpr MidiStreamArray1 song_position_pointer         {0xf2};
+    inline constexpr MidiStreamArray1 song_select                   {0xf3};
+    inline constexpr MidiStreamArray1 tune_request                  {0xf6};
+    inline constexpr MidiStreamArray1 start_of_sysex                {0xf0};
+    inline constexpr MidiStreamArray1 end_of_sysex                  {0xf7};
 
     // MIDI 1.0 Detailed Specification
     // M1_v4-2-1_MIDI_1-0_Detailed_Specification_96-1-4.pdf
     // page 35, "Device ID" 0x7f is "All Call" or, on page 57, "Broadcast".
-    inline constexpr MidiStreamArray1 sysex_deviceid_all_call {0x7f};
+    inline constexpr MidiStreamArray1 sysex_deviceid_all_call    {0x7f};
     inline constexpr MidiStreamArray1 sysex_subid_non_commercial {0x7d};
-    inline constexpr MidiStreamArray1 sysex_subid_non_realtime {0x7e};
-    inline constexpr MidiStreamArray1 sysex_subid_realtime {0x7f};
+    inline constexpr MidiStreamArray1 sysex_subid_non_realtime   {0x7e};
+    inline constexpr MidiStreamArray1 sysex_subid_realtime       {0x7f};
     inline constexpr MidiStreamArray1
         sysex_subid_nonrt_sample_dump_header {0x01};
     inline constexpr MidiStreamArray1
@@ -296,135 +310,135 @@ namespace midi
     inline constexpr MidiStreamArray1
         sysex_subid_nonrt_sample_dump_request {0x03};
 
-    inline constexpr MidiStreamArray1 sysex_subid_nonrt_timecode{0x04};
-    inline constexpr MidiStreamArray1 sysex_subid_timecode_special{0x00};
+    inline constexpr MidiStreamArray1 sysex_subid_nonrt_timecode   {0x04};
+    inline constexpr MidiStreamArray1 sysex_subid_timecode_special {0x00};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_punch_in_points{0x01};
+        sysex_subid_timecode_punch_in_points {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_punch_out_points{0x02};
+        sysex_subid_timecode_punch_out_points {0x02};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_delete_punch_in_point{0x03};
+        sysex_subid_timecode_delete_punch_in_point {0x03};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_delete_punch_out_point{0x04};
+        sysex_subid_timecode_delete_punch_out_point {0x04};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_event_start_point{0x05};
+        sysex_subid_timecode_event_start_point {0x05};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_event_stop_point{0x06};
+        sysex_subid_timecode_event_stop_point {0x06};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_event_start_points_with_additional_info{0x07};
+        sysex_subid_timecode_event_start_points_with_additional_info {0x07};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_event_stop_points_with_additional_info{0x08};
+        sysex_subid_timecode_event_stop_points_with_additional_info {0x08};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_delete_event_start_point{0x09};
+        sysex_subid_timecode_delete_event_start_point {0x09};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_delete_event_stop_point{0x0a};
+        sysex_subid_timecode_delete_event_stop_point {0x0a};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_cue_points{0x0b};
+        sysex_subid_timecode_cue_points {0x0b};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_cue_points_with_additional_info{0x0c};
+        sysex_subid_timecode_cue_points_with_additional_info {0x0c};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_delete_cue_point{0x0d};
+        sysex_subid_timecode_delete_cue_point {0x0d};
     inline constexpr MidiStreamArray1
-        sysex_subid_timecode_event_name_in_additional_info{0x0e};
+        sysex_subid_timecode_event_name_in_additional_info {0x0e};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_sample_dump_extensions{0x05};
+        sysex_subid_nonrt_sample_dump_extensions {0x05};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_sample_dump_extensions_multiple_loop_points{0x01};
+        sysex_subid_nonrt_sample_dump_extensions_multiple_loop_points {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_sample_dump_extensions_loop_points_request{0x02};
+        sysex_subid_nonrt_sample_dump_extensions_loop_points_request {0x02};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_general_info{0x06};
+        sysex_subid_nonrt_general_info {0x06};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_general_info_id_request{0x01};
+        sysex_subid_nonrt_general_info_id_request {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_general_info_id_reply{0x02};
+        sysex_subid_nonrt_general_info_id_reply {0x02};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_file_dump{0x07};
+        sysex_subid_nonrt_file_dump {0x07};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_file_dump_header{0x01};
+        sysex_subid_nonrt_file_dump_header {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_file_dump_data_packet{0x02};
+        sysex_subid_nonrt_file_dump_data_packet {0x02};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_file_dump_data_request{0x03};
+        sysex_subid_nonrt_file_dump_data_request {0x03};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_tuning_std{0x08};
+        sysex_subid_nonrt_tuning_std {0x08};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_tuning_std_bulk_dump_request{0x01};
+        sysex_subid_nonrt_tuning_std_bulk_dump_request {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_tuning_std_bulk_dump_reply{0x02};
+        sysex_subid_nonrt_tuning_std_bulk_dump_reply {0x02};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_gm{0x09};
+        sysex_subid_nonrt_gm {0x09};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_gm_on{0x01};
+        sysex_subid_nonrt_gm_on {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_gm_off{0x02};
+        sysex_subid_nonrt_gm_off {0x02};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_end_of_file{0x7b};
+        sysex_subid_nonrt_end_of_file {0x7b};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_wait{0x7c};
+        sysex_subid_nonrt_wait {0x7c};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_cancel{0x7d};
+        sysex_subid_nonrt_cancel {0x7d};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_nak{0x7e};
+        sysex_subid_nonrt_nak {0x7e};
     inline constexpr MidiStreamArray1
-        sysex_subid_nonrt_ack{0x7f};
+        sysex_subid_nonrt_ack {0x7f};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_timecode{0x01};
+        sysex_subid_rt_timecode {0x01};
     inline constexpr MidiStreamArray1
         sysex_subid_rt_timecode_full_message {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_timecode_user_bits{0x02};
+        sysex_subid_rt_timecode_user_bits {0x02};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_show_control{0x02};
+        sysex_subid_rt_show_control {0x02};
     inline constexpr MidiStreamArray1
         sysex_subid_rt_show_control_extensions {0x00};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_notation_information{0x03};
+        sysex_subid_rt_notation_information {0x03};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_notation_information_bar_number{0x01};
+        sysex_subid_rt_notation_information_bar_number {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_notation_information_time_signature_immediate{0x02};
+        sysex_subid_rt_notation_information_time_signature_immediate {0x02};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_notation_information_time_signature_delayed{0x42};
+        sysex_subid_rt_notation_information_time_signature_delayed {0x42};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_device_control{0x04};
+        sysex_subid_rt_device_control {0x04};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_device_control_main_volume{0x01};
+        sysex_subid_rt_device_control_main_volume {0x01};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_device_control_main_balance{0x02};
+        sysex_subid_rt_device_control_main_balance {0x02};
 
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_mtc_cueing{0x05};
+        sysex_subid_rt_mtc_cueing {0x05};
     // Use non-RT timecode commands except delete punch,
     // delete event, delete cue point.
 
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_machine_control_commands{0x06};
+        sysex_subid_rt_machine_control_commands {0x06};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_machine_control_responses{0x07};
+        sysex_subid_rt_machine_control_responses {0x07};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_tuning_std{0x08};
+        sysex_subid_rt_tuning_std {0x08};
     inline constexpr MidiStreamArray1
-        sysex_subid_rt_tuning_std_note_change{0x02};
+        sysex_subid_rt_tuning_std_note_change {0x02};
 
-    inline constexpr MidiStreamAtom MiddleC{60};
+    inline constexpr MidiStreamAtom MiddleC {60};
 
-    inline constexpr std::int32_t SMPTE_hours_max{23};
+    inline constexpr std::int32_t SMPTE_hours_max {23};
 
     inline constexpr std::int64_t QuartersPerWhole(4);
-    inline constexpr size_t bits_per_byte{8};
+    inline constexpr size_t bits_per_byte {8};
     inline constexpr auto ChunkNameLen{4};
-    inline constexpr auto HeaderChunkLen{6};
-    inline constexpr MidiStreamArray4 MidiHeaderChunkName{'M', 'T', 'h', 'd'};
+    inline constexpr auto HeaderChunkLen {6};
+    inline constexpr MidiStreamArray4 MidiHeaderChunkName {'M', 'T', 'h', 'd'};
     inline constexpr MidiStreamArray4 MidiTrackChunkName {'M', 'T', 'r', 'k'};
 
     enum class RegisteredParameterMsbs : MidiStreamAtom

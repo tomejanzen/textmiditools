@@ -637,3 +637,26 @@
     2026-03-28
     Features:
         Add supports for random program for each note in each voice.
+
+    * Version v1.1.4
+    2026-05-29
+        TextMidiFormEdit.py GUI has a "Randomize" menu item
+        for creating a largely random form.
+        The textmidi language now has aggregate Control
+        events for high-resolution values and for 
+        Control Bank Select, which MIDI 1.0 requires to have
+        3 sequential events; the single-event expressions
+        still are supported but the aggregate events may be
+        more convenient.  Miditext always outputs the new
+        aggregate events.  Also miditext outputs decimal
+        for most values aside from Sysex and out-of-range
+        error messages.
+        Documents updated to reflect.
+        The beat size fraction was transposed for
+        denominaor/numerator in TextMidiFormEdit; this
+        has been fixed.
+        The XML form data is now range-checked in the Python GUI.
+
+
+
+    Code clean up.

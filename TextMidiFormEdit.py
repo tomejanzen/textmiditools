@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.1.3
-# Copyright © 2025 Thomas E. Janzen
+# TextMIDITools Version 1.1.4
+# Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -12,11 +12,14 @@ import tkinter
 import tkinter.constants
 import tkinter.filedialog
 import tkinter.ttk
+import secrets
 
+from math import pi
 from tkinter import *
 from tkinter.ttk import *
 from xml.dom import minidom
 from xml.dom.minidom import parse, Node, getDOMImplementation
+from tkinter import messagebox
 
 from AllFormsWindow import *
 from AllFormsWindow import AllFormsWindow
@@ -30,6 +33,9 @@ class XmlFormWindow(tkinter.Tk):
     twopi = 2.0 * math.pi
     the_filename = 'Untitled'
     follower_type_dict = {0 : "Neither", 1 : "Scalar", 2 : "Chromatic"}
+
+    def randfloat(me):
+        return float(secrets.randbelow(16384)) / 16384.0
 
     def __init__(self, filename):
         """Init the XML form (a C++ boost libraries serialization XML archive style DOM)."""
@@ -314,6 +320,38 @@ class XmlFormWindow(tkinter.Tk):
         melody_probabilities_dict['up'] = 0.6666667
         return melody_probabilities_dict
 
+    def randomize_melody_probabilities(self):
+        """Set up default melody cumulative probabilities."""
+        # These probabilities are cumulative.
+        # 1.0 - up == same - down,  so that the walking voice
+        #            goes up or down equal amounts.
+        #     # up
+        #     # up
+        # .75 - up if above up
+        #     # same
+        #     # same
+        # .50 - same if above same
+        #     # down
+        #     # down
+        # .25 - down if above down
+        #     # (silent)
+        #     # (silent)
+        temp_tacit = 0.125            
+        temp_down = self.randfloat()
+        temp_same = self.randfloat()
+        temp_up = temp_down
+        temp_sum = temp_up + temp_same + temp_down
+        temp_factor = (1.0 - temp_tacit) / temp_sum
+        temp_down = temp_down * temp_factor
+        temp_same = temp_same * temp_factor
+        temp_up   = temp_up   * temp_factor
+
+        melody_probabilities_dict = {}
+        melody_probabilities_dict['down'] = temp_tacit
+        melody_probabilities_dict['same'] = temp_tacit + temp_down
+        melody_probabilities_dict['up']   = temp_tacit + temp_down + temp_same
+        return melody_probabilities_dict
+
     def default_form(self):
         """Install a default form."""
         parameter_dict = {}
@@ -322,11 +360,44 @@ class XmlFormWindow(tkinter.Tk):
         param_mean_dict['phase']  = 0.0
         param_mean_dict['amplitude'] = 0.50
         param_mean_dict['offset'] = 0.50
+
         parameter_dict['mean'] = param_mean_dict
 
         param_range_dict = {}
         param_range_dict['period'] = 180.0
         param_range_dict['phase'] = 0.0
+        param_range_dict['amplitude'] = 0.50
+        param_range_dict['offset'] = 0.50
+
+        parameter_dict['range'] = param_range_dict
+        return parameter_dict
+
+    def validate_form(self, parameter_dict):
+        """Validate a form."""
+        valid = True
+        if parameter_dict['mean']['period'] <= 0.0:
+            messagebox.showerror('message', "bad value: mean period must be greater than zero")
+            valid = False
+
+        param_range_dict = parameter_dict['range']
+        if parameter_dict['range']['period'] <= 0.0:
+            messagebox.showerror('message', "bad value: range period must be greater than zero")
+
+        return valid
+
+    def randomize_form(self):
+        """Install a default form."""
+        parameter_dict = {}
+        param_mean_dict = {}
+        param_mean_dict['period'] = self.randfloat() * 300.0 + 60.0
+        param_mean_dict['phase']  = self.randfloat() * self.twopi - math.pi
+        param_mean_dict['amplitude'] = 0.50
+        param_mean_dict['offset'] = 0.50
+        parameter_dict['mean'] = param_mean_dict
+
+        param_range_dict = {}
+        param_range_dict['period'] = self.randfloat() * 300.0 + 60.0
+        param_range_dict['phase']  = self.randfloat() * 2.0 * math.pi - math.pi
         param_range_dict['amplitude'] = 0.50
         param_range_dict['offset'] = 0.50
         parameter_dict['range'] = param_range_dict
@@ -337,6 +408,23 @@ class XmlFormWindow(tkinter.Tk):
         texture_dict = {}
         texture_dict['period'] = 180.0
         texture_dict['phase'] = 0.0
+        texture_dict['amplitude'] = 0.50
+        texture_dict['offset'] = 0.50
+        return texture_dict
+
+    def validate_texture_form(self, texture_dict):
+        """Install default texture form."""
+        valid = True
+        if texture_dict['period'] <= 0.0:
+            messagebox.showerror('message', "bad value: texture period must be greater than zero")
+            valid = False
+        return valid
+
+    def randomize_texture_form(self):
+        """Install default texture form."""
+        texture_dict = {}
+        texture_dict['period'] = self.randfloat() * 300.0 + 60.0
+        texture_dict['phase']  = self.randfloat() * self.twopi - math.pi
         texture_dict['amplitude'] = 0.50
         texture_dict['offset'] = 0.50
         return texture_dict
@@ -378,7 +466,66 @@ class XmlFormWindow(tkinter.Tk):
 
         return vox_list
 
+    def randomize_voices(self):
+        """Install default voice settings."""
+        vox_list = []
+        vox_qty = secrets.randbelow(24)
+        for vox in range(0, vox_qty):
+            voice_dict = {}
+            voice_dict['channel'] = (vox % 16) + 1
+            voice_dict['walking'] = self.randfloat()
+            voice_dict['program'] = secrets.randbelow(128) + 1
+            voice_dict['low_pitch'] = GENERAL_MIDI_INSTRUMENT_DICT[VoiceWindow.general_midi_list[voice_dict['program']]][1]
+            voice_dict['high_pitch'] = GENERAL_MIDI_INSTRUMENT_DICT[VoiceWindow.general_midi_list[voice_dict['program']]][2]
+            voice_dict['pan']     = secrets.randbelow(128) - 64
+
+            follower_dict = {}
+            follower_dict['follow'] = False
+            follower_dict['leader'] = 0
+            follower_dict['interval_type'] = 1
+            follower_dict['interval'] = 0
+            delay_dict = {}
+            delay_dict['numerator'] = '0'
+            delay_dict['denominator'] = '1'
+            follower_dict['delay'] = delay_dict
+            duration_factor_dict = {}
+            duration_factor_dict['numerator'] = '1'
+            duration_factor_dict['denominator'] = '1'
+            follower_dict['duration_factor'] = duration_factor_dict
+            follower_dict['inversion'] = False
+            follower_dict['retrograde'] = False
+            voice_dict['follower'] = follower_dict
+
+            random_program_dict = {}
+            random_program_dict['probability'] = 0.0
+            random_program_dict['ensemble'] = []
+            voice_dict['random_program'] = random_program_dict
+
+            vox_list.append(voice_dict)
+
+        return vox_list
+
     def default_arrangement_definition(self):
+        """Install default arrangement."""
+        arrangement_definition_dict = {}
+        arrangement_definition_dict['algorithm'] = 1
+        arrangement_definition_dict['period'] = 100000.0
+        return arrangement_definition_dict
+
+    def validate_arrangement_definition(self, arrangement_dict):
+        """Install default arrangement."""
+        valid = True
+        if arrangement_dict['period'] <= 0.0:
+            messagebox.showerror('message', "bad value: arrangement period must be greater than zero")
+            valid = False
+
+        if arrangement_dict['algorithm'] < 1 or arrangement_dict['algorithm'] > 10:
+            messagebox.showerror('message', "bad value: arrangement algorithm must be in (1..10)")
+            valid = False
+
+        return valid
+
+    def randomize_arrangement_definition(self):
         """Install default arrangement."""
         arrangement_definition_dict = {}
         arrangement_definition_dict['algorithm'] = 1
@@ -417,6 +564,93 @@ class XmlFormWindow(tkinter.Tk):
         self.xml_form_dict['voices'] = self.default_voices()
         self.xml_form_dict['arrangement_definition'] = self.default_arrangement_definition()
 
+    def validate_xml_form(self):
+        """Install default form."""
+        valid = True
+        if self.xml_form_dict['len'] <= 0.0:
+            messagebox.showerror('message', "bad value: length of form must be in > 0.0")
+            valid = False
+        # at the old MIDI baud rate a note_on+note_off with running status
+        # (i.e., no status byte) is 0.00128 seconds.  Zero can
+        # make scores that don't advance in time, or make players crash.
+        if self.xml_form_dict['min_note_len'] < 0.0:
+            messagebox.showerror('message', "bad value: min_note_len must be >= 0.0")
+            valid = False
+
+        if self.xml_form_dict['min_note_len'] > self.xml_form_dict['max_note_len'] or self.xml_form_dict['max_note_len']  < 0.0:
+
+            messagebox.showerror('message', "bad value: max_note_len must be >= 0.0 and >= min_note_len")
+            valid = False
+
+        self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
+        self.xml_form_dict['music_time'] = {}
+        if self.xml_form_dict['music_time']['ticks_per_quarter'] <= 0:
+            messagebox.showerror('message', "bad value: ticks_per_quarter must be > 0.0")
+            valid = False
+
+
+        beatF = Fraction(self.xml_form_dict['music_time']['beat']['numerator'], 
+                self.xml_form_dict['music_time']['beat']['denominator'])
+        if beatF <= Fraction(0, 1):
+            messagebox.showerror('message', "bad value: beat must be > 0/1")
+            valid = False
+
+        meterF = Fraction(self.xml_form_dict['music_time']['meter']['numerator'],
+                          self.xml_form_dict['music_time']['meter']['denominator'])
+        if meterF <= Fraction(0, 1):
+            messagebox.showerror('message', "bad value: meter must be > 0/1")
+            valid = False
+
+        if self.xml_form_dict['music_time']['beat_tempo'] <= 0.0:
+            messagebox.showerror('message', "bad value: beat_tempo must be > 0/1")
+            valid = False
+
+        if self.xml_form_dict['pulse'] < 0:
+            messagebox.showerror('message', "bad value: pulse must be >= 0")
+            valid = False
+
+        self.xml_form_dict['melody_probabilities'] = self.default_melody_probabilities()
+        self.xml_form_dict['pitch_form'] = self.default_form()
+        self.xml_form_dict['rhythm_form'] = self.default_form()
+        self.xml_form_dict['dynamic_form'] = self.default_form()
+        self.xml_form_dict['texture_form'] = self.default_texture_form()
+        self.xml_form_dict['voices'] = self.default_voices()
+        self.xml_form_dict['arrangement_definition'] = self.default_arrangement_definition()
+
+        return valid
+
+    def randomize_xml_form(self):
+        """Install default form."""
+        self.xml_form_dict['name'] = 'randomize'
+        self.xml_form_dict['copyright'] = 'Copyright unspecified'
+        self.xml_form_dict['len'] = 1800.
+        # at the old MIDI baud rate a note_on+note_off with running status
+        # (i.e., no status byte) is 0.00128 seconds.  Zero can
+        # make scores that don't advance in time, or make players crash.
+        self.xml_form_dict['min_note_len'] = 0.00128
+        self.xml_form_dict['max_note_len'] = self.xml_form_dict['min_note_len'] + self.randfloat() * 2.0
+        self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
+        self.xml_form_dict['music_time'] = {}
+        self.xml_form_dict['music_time']['ticks_per_quarter'] = '1440'
+        beat_dict = {}
+        beat_dict['numerator']   = 1
+        beat_dict['denominator'] = 4
+        self.xml_form_dict['music_time']['beat'] = beat_dict
+        meter_dict = {}
+        meter_dict['numerator']   = 4
+        meter_dict['denominator'] = 4
+        self.xml_form_dict['music_time']['meter']  = meter_dict
+        self.xml_form_dict['music_time']['beat_tempo'] = 60.0
+
+        self.xml_form_dict['pulse'] = 16.0 * self.randfloat()
+        self.xml_form_dict['melody_probabilities'] = self.randomize_melody_probabilities()
+        self.xml_form_dict['pitch_form'] = self.randomize_form()
+        self.xml_form_dict['rhythm_form'] = self.randomize_form()
+        self.xml_form_dict['dynamic_form'] = self.randomize_form()
+        self.xml_form_dict['texture_form'] = self.randomize_texture_form()
+        self.xml_form_dict['voices'] = self.randomize_voices()
+        self.xml_form_dict['arrangement_definition'] = self.randomize_arrangement_definition()
+
     def traverse_scale(self, scale_dom):
         """Build a scale from the domain object model."""
         scale_array = []
@@ -445,7 +679,7 @@ class XmlFormWindow(tkinter.Tk):
         numerator = numerator_node.firstChild.data
         denominator_node = beat_node.getElementsByTagName('denominator_')[0]
         denominator = denominator_node.firstChild.data
-        f = Fraction(int(denominator), int(numerator))
+        f = Fraction(int(numerator), int(denominator))
         music_time_dict['beat'] = {}
         music_time_dict['beat']['numerator'] = f.numerator
         music_time_dict['beat']['denominator'] = f.denominator
@@ -777,7 +1011,7 @@ class XmlFormWindow(tkinter.Tk):
         print("  </head>", file=html_file, sep=' ', end='\n')
         print("  <body>", file=html_file, sep=' ', end='\n')
         print("    <table border>", file=html_file, sep=' ', end='\n')
-        print("      <caption>note len</caption>", file=html_file, sep=' ', end='\n')
+        print("      <caption>note len (seconds)</caption>", file=html_file, sep=' ', end='\n')
         print("      <tr><th>min</th><th>max</th></tr>", file=html_file, sep=' ', end='\n')
         print("      <tr><td>", self.xml_form_dict['min_note_len'], '</td><td>2.0</td></tr>', file=html_file, sep=' ', end='\n')
         print("    </table>", file=html_file, sep=' ', end='\n')
@@ -803,8 +1037,8 @@ class XmlFormWindow(tkinter.Tk):
         print("        <caption>Music Time</caption>", file=html_file, sep=' ', end='\n')
         print("        <tr><th>ticks/quarter</th><th>beat</th><th>meter</th><th>tempo</th><th>Pulse/Second</th></tr>", file=html_file, sep=' ', end='\n')
         beat = Fraction(int(self.xml_form_dict['music_time']['beat']['numerator']), int(self.xml_form_dict['music_time']['beat']['denominator']))
-        meter = Fraction(int(self.xml_form_dict['music_time']['meter']['numerator']), int(self.xml_form_dict['music_time']['meter']['denominator']))
-        print("        <tr><td>", self.xml_form_dict['music_time']['ticks_per_quarter'], '</td><td>', beat, '</td><td>', meter, '</td><td>', self.xml_form_dict['music_time']['beat_tempo'], '</td><td>', self.xml_form_dict['pulse'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        meter_str = str(self.xml_form_dict['music_time']['meter']['numerator']) + "/" + str(self.xml_form_dict['music_time']['meter']['denominator'])
+        print("        <tr><td>", self.xml_form_dict['music_time']['ticks_per_quarter'], '</td><td>', beat, '</td><td>', meter_str, '</td><td>', self.xml_form_dict['music_time']['beat_tempo'], '</td><td>', self.xml_form_dict['pulse'], '</td></tr>', file=html_file, sep=' ', end='\n')
         print("      </table>", file=html_file, sep=' ', end='\n')
         print("  <table border>", file=html_file, sep=' ', end='\n')
         print("    <caption>Melody Probabilities</caption>", file=html_file, sep=' ', end='\n')
@@ -815,14 +1049,21 @@ class XmlFormWindow(tkinter.Tk):
         print("  </table>", file=html_file, sep=' ', end='\n')
         print("  <h2>Form Sines</h2>", file=html_file, sep=' ', end='\n')
         print("    <table border>", file=html_file, sep=' ', end='\n')
-        print("        <tr><th>Parameter</th><th>Curve</th><th>period</th><th>phase</th><th>amplitude</th><th>offset</th></th>", file=html_file, sep=' ', end='\n')
-        print("        <tr><td>Pitch</td><td>Mean</td><td>", self.xml_form_dict['pitch_form']['mean']['period'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['phase'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
-        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['pitch_form']['range']['period'], '</td><td>', self.xml_form_dict['pitch_form']['range']['phase'], '</td><td>', self.xml_form_dict['pitch_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['pitch_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
-        print('        <tr><td>Rhythm</td><td>Mean</td><td>', self.xml_form_dict['rhythm_form']['mean']['period'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['phase'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
-        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['rhythm_form']['range']['period'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['phase'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
-        print('        <tr><td>Dynamic</td><td>Mean</td><td>', self.xml_form_dict['dynamic_form']['mean']['period'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['phase'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
-        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['dynamic_form']['range']['period'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['phase'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
-        print('        <tr><td>Texture</td><td></td><td>', self.xml_form_dict['texture_form']['period'], '</td><td>', self.xml_form_dict['texture_form']['phase'], '</td><td>', self.xml_form_dict['texture_form']['amplitude'], '</td><td>', self.xml_form_dict['texture_form']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        print("        <tr><th>Parameter</th><th>Curve</th><th>period</th><th>phase (radians)</th><th>phase (degrees)</th><th>amplitude</th><th>offset</th></th>", file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['pitch_form']['mean']['phase']
+        print("        <tr><td>Pitch</td><td>Mean</td><td>", self.xml_form_dict['pitch_form']['mean']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>', self.xml_form_dict['pitch_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['pitch_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['pitch_form']['range']['phase']
+        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['pitch_form']['range']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>', self.xml_form_dict['pitch_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['pitch_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['rhythm_form']['mean']['phase']
+        print('        <tr><td>Rhythm</td><td>Mean</td><td>', self.xml_form_dict['rhythm_form']['mean']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>',  self.xml_form_dict['rhythm_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['rhythm_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['rhythm_form']['range']['phase']
+        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['rhythm_form']['range']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>', self.xml_form_dict['rhythm_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['rhythm_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['dynamic_form']['mean']['phase']
+        print('        <tr><td>Dynamic</td><td>Mean</td><td>', self.xml_form_dict['dynamic_form']['mean']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>', self.xml_form_dict['dynamic_form']['mean']['amplitude'], '</td><td>', self.xml_form_dict['dynamic_form']['mean']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['dynamic_form']['range']['phase']
+        print('        <tr><td></td><td>Range</td><td>', self.xml_form_dict['dynamic_form']['range']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>', self.xml_form_dict['dynamic_form']['range']['amplitude'], '</td><td>', self.xml_form_dict['dynamic_form']['range']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
+        phi = self.xml_form_dict['texture_form']['phase']
+        print('        <tr><td>Texture</td><td></td><td>', self.xml_form_dict['texture_form']['period'], '</td><td>', phi, '</td><td>', math.degrees(phi), '</td><td>', self.xml_form_dict['texture_form']['amplitude'], '</td><td>', self.xml_form_dict['texture_form']['offset'], '</td></tr>', file=html_file, sep=' ', end='\n')
         print("    </table>", file=html_file, sep=' ', end='\n')
         print("    <h2>Voices</h2>", file=html_file, sep=' ', end='\n')
         print("        <table border>", file=html_file, sep=' ', end='\n')
@@ -893,13 +1134,15 @@ class XmlFormWindow(tkinter.Tk):
         file_menu.add_command(label='Save...', command=self.save_callback,
             underline=0, accelerator='S')
         file_menu.add_command(label='Defaults...',
-                command=self.defaults_callback, underline=0, accelerator='D')
+                command=self.defaults_callback, underline=0, accelerator='F')
+        file_menu.add_command(label='Randomize...',
+                command=self.randomize_callback, underline=0, accelerator='R')
         file_menu.add_command(label='Redraw', command=self.redraw_callback,
-            underline=0, accelerator='R')
+            underline=0, accelerator='D')
         file_menu.add_command(label='Save HTML...',
             command=self.html_callback, underline=0, accelerator='H')
         file_menu.add_command(label='Save Postscript...',
-            command=self.postscript_callback, underline=0, accelerator='S')
+            command=self.postscript_callback, underline=0, accelerator='P')
         file_menu.add_command(label='About...', command=self.about_callback,
             underline=0, accelerator='A')
         file_menu.add_command(label='Quit', command=lambda:toplevelwin.quit(),
@@ -918,6 +1161,14 @@ class XmlFormWindow(tkinter.Tk):
         """Set the default values for a form."""
         self.all_forms_window.install_xml_form(self.xml_form_dict)
         self.default_xml_form()
+        self.draw_form()
+        self.voice_window.install_xml_voices(self.xml_form_dict['voices'])
+        self.title('Form Plot')
+
+    def randomize_callback(self):
+        """Set the default values for a form."""
+        self.all_forms_window.install_xml_form(self.xml_form_dict)
+        self.randomize_xml_form()
         self.draw_form()
         self.voice_window.install_xml_voices(self.xml_form_dict['voices'])
         self.title('Form Plot')
@@ -1373,7 +1624,7 @@ class XmlFormWindow(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.1.3\nCopyright © 2025 Thomas E. Janzen\n'
+            'TextMIDITools Version 1.1.4\nCopyright © 2026 Thomas E. Janzen\n'
             'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
             'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
             'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')

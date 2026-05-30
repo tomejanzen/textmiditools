@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.1.3
+** TextMIDITools Version 1.1.4
 ** Copyright © 2025 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -78,6 +78,7 @@ using midi::MidiStreamVector, midi::MidiStreamAtom, midi::octet_mask,
       midi::text_0D_prefix,midi::text_0E_prefix, midi::text_0F_prefix,
       midi::SecondsPerMinute, midi::UsecPerSecond,
       midi::byte7_mask, midi::control, midi::control_function_map,
+      midi::control_lsb_map,
       midi::control_registered_parameter_lsb, midi::control_pan,
       midi::PanExcess64, midi::pan_map, midi::control_on_off_map,
       midi::end_of_track_prefix, midi::byte7_shift;
@@ -323,6 +324,27 @@ namespace
     }
 
     //
+    // bank_1_to_0
+    // transforms a textmidi value (usu. bank or bank) in (1..16384)
+    // to a MIDI binary bank in (0..16383).
+    void bank_1_to_0(uint32_t& bank) noexcept
+    {
+        if (0 == bank)
+        {
+            const string errstr{
+                ((string{TextMidiFeatures::me()->text_filename()} += ':')
+                += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
+                += " Bank was zero (0) and left as zero; "
+                "textmidi bank numbers must be in [1..16384]\n"};
+            cerr << errstr;
+        }
+        else
+        {
+            --bank;
+        }
+    }
+
+    //
     // channel_1_to_0
     // transforms a textmidi value (usu. channel or program) in (1..16)
     // to a MIDI binary channel in (0..15).
@@ -464,7 +486,7 @@ namespace
             }
             else // else is decimal
             {
-                i = lexical_cast<uint32_t>(str);
+                i = lexical_cast<int32_t>(str);
             }
             return i;
         }
@@ -499,6 +521,7 @@ INTEGER ([-+]?{DIGIT}+)
 UINTEGER ({DIGIT}+)
 DECBYTE [12]?{DIGIT}{1,2}
 XINTEGER 0x([[:xdigit:]])+
+ANY_INTEGER ({INTEGER}|{XINTEGER})
 HEXBYTE 0x([[:xdigit:]]){1,2}
 UXINTEGER ({UINTEGER}|{XINTEGER})
 BYTE ({DECBYTE}|{HEXBYTE})
@@ -531,7 +554,7 @@ ALPHANUMUNDER ({ALPHANUM}|_)
 IDENT ({LETTERUNDER}{ALPHANUMUNDER}*)
 ASSIGNMENT ({IDENT}{SPACE}={SPACE}{STRING})
 TEXT_META (TEXT|COPYRIGHT|TRACK|INSTRUMENT|LYRIC|MARKER|CUE_POINT|PROGRAM_NAME|DEVICE_NAME|TEXT_0A|TEXT_0B|TEXT_0C|TEXT_0D|TEXT_0E|TEXT_0F|TICKS)
-CONTROL_FUNCTION (BANK_SELECT|MODULATION|BREATH|UNDEFINED_([[:digit:]]){2}|FOOT_CONTROLLER|PORTAMENTO_TIME|DATA_ENTRY_MSB|CHANNEL_VOLUME|BALANCE|PAN|EXPRESSION|EFFECT_1|EFFECT_2|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB|ALL_SOUND_OFF|RESET_ALL_CONTROLLERS|LOCAL_CONTROL|ALL_NOTES_OFF|OMNI_OFF|OMNI_ON|MONO_ON|POLY_ON|LSB_([[:digit:]]{2}))
+CONTROL_FUNCTION (BANK_SELECT|BANK_SELECT_LSB|MODULATION|MODULATION_LSB|BREATH|BREATH_LSB|UNDEFINED_([[:digit:]]){2}|FOOT_CONTROLLER|FOOT_CONTROLLER_LSB|PORTAMENTO_TIME|PORTAMENTO_TIME_LSB|DATA_ENTRY_MSB|DATA_ENTRY_LSB|CHANNEL_VOLUME|CHANNEL_VOLUME_LSB|BALANCE|BALANCE_LSB|PAN|PAN_LSB|EXPRESSION|EXPRESSION_LSB|EFFECT_1|EFFECT_1_LSB|EFFECT_2|EFFECT_2_LSB|GENERAL_PURPOSE_1|GENERAL_PURPOSE_2|GENERAL_PURPOSE_3|GENERAL_PURPOSE_4|DAMPER|PORTAMENTO_ON_OFF|SOSTENUTO|SOFTPEDAL|LEGATO_FOOT|HOLD_2|SOUND_VARIATION|TIMBRE_INTENSITY|RELEASE_TIME|ATTACK_TIME|BRIGHTNESS|DECAY_TIME|VIBRATO_RATE|VIBRATO_DEPTH|SOUND_CONTROLLER_9|SOUND_CONTROLLER_10|GENERAL_PURPOSE_5|GENERAL_PURPOSE_6|GENERAL_PURPOSE_7|GENERAL_PURPOSE_8|PORTAMENTO|HIRES_VELOCITY_MSB|REVERB_SEND_LEVEL|TREMOLO_DEPTH|CHORUS_SEND_LEVEL|CELESTE_DEPTH|PHASER_DEPTH|DATA_INCREMENT|DATA_DECREMENT|NON_REGISTERED_PARAMETER_LSB|NON_REGISTERED_PARAMETER_MSB|REGISTERED_PARAMETER_LSB|REGISTERED_PARAMETER_MSB|ALL_SOUND_OFF|RESET_ALL_CONTROLLERS|LOCAL_CONTROL|ALL_NOTES_OFF|OMNI_OFF|OMNI_ON|MONO_ON|POLY_ON|LSB_([[:digit:]]{2}))
 CONTROL_VALUE (AZIMUTH|ELEVATION|GAIN|DISTANCE|MAXIMUM_DISTANCE|GAIN_AT_MAX_DISTANCE|REFERENCE_DISTANCE_RATIO|PAN_SPREAD_ANGLE|ROLL_ANGLE)
 
 LBRACE [{]
@@ -966,6 +989,44 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(pressure);
   }
 
+<DETAIL_STATE>CONTROL_BANK_SELECT_PROGRAM{SPACE}{BYTE}{SPACE}{INTEGER}{SPACE}{BYTE} {
+    write_delay();
+    istringstream iss(yytext);
+    string discard;
+    uint32_t channel{};
+    uint32_t theprogram{};
+    uint32_t thebank{};
+    iss >> discard >> channel >> thebank >> theprogram;
+    channel_1_to_0(channel);
+    program_1_to_0(theprogram);
+    theprogram &= byte7_mask;
+
+    // This treats the BANK in TEXTMIDI as a 1-based value, but in the binary SMF 
+    // it is 0-based.
+    bank_1_to_0(thebank);
+
+    auto thebank_msb = (thebank >> byte7_shift) & byte7_mask;
+    auto thebank_lsb =  thebank                 & byte7_mask;
+
+    // The MIDI 1.0 standard requires that BANK_SELECT be a 3 event sequence:
+    // control-bankselect msb; 
+    // control-bankselect lsb; 
+    // program
+    (*running_status)(channel | control[0], trackchunk);
+    trackchunk.push_back(midi::control_bank_select[0]);
+    trackchunk.push_back(thebank_msb);
+
+    write_delay();
+    (*running_status)(channel | control[0], trackchunk);
+    trackchunk.push_back(midi::control_bank_select_lsb[0]);
+    trackchunk.push_back(thebank_lsb);
+
+    write_delay();
+    (*running_status)(channel | midi::program[0], trackchunk);
+    trackchunk.push_back(theprogram);
+
+}
+
 <DETAIL_STATE>CONTROL{SPACE}{BYTE}{SPACE}({BYTE}|{CONTROL_FUNCTION}){SPACE}({CONTROL_VALUE}|{BYTE}|{ONOFF}) {
     write_delay();
 
@@ -980,9 +1041,15 @@ DEVICE_ID (ALL_CALL|{BYTE})
     channel_1_to_0(channel);
     (*running_status)(channel | control[0], trackchunk);
 
+    // In May 2026 I introduced named least-significant bytes.
+    // But I have to continue support for LSB_13 etc.
+    // So I put the new names in control_function_map and
+    // moved the corresponding LSB_nn names into controL_lsb_map.
     string control_id_strv{control_id_str};
     to_upper(control_id_strv);
-    const auto id_code = control_function_map(control_id_strv);
+//    const auto id_code = control_function_map(control_id_strv) 
+//        ? control_function_map(control_id_strv) : control_lsb_map(control_id_strv);
+    const auto id_code{control_function_map(control_id_strv)};
     int32_t control_id{};
     if (id_code)
     {
@@ -990,8 +1057,18 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-        control_id = HexOrDec()(control_id_str);
+        const auto lsb_code{midi::control_lsb_map(control_id_strv)};
+        if (lsb_code)
+        {
+            control_id = *lsb_code;
+        }
+        else
+        {
+            control_id = HexOrDec()(control_id_str);
+        }
     }
+    // THIS TREATS THE TEXTMIDI BANK AS ALREADY 0-BASED
+    // AS NEEDED IN THE BINARY SMF.
     control_id &= byte7_mask;
     trackchunk.push_back(control_id);
 
@@ -1038,6 +1115,110 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     control_value &= byte7_mask;
     trackchunk.push_back(control_value);
+  }
+
+<DETAIL_STATE>CONTROL_HIRES{SPACE}{BYTE}{SPACE}({BYTE}|{CONTROL_FUNCTION}){SPACE}({CONTROL_VALUE}|{PANVALUE}|{ANY_INTEGER}|{ONOFF}) {
+    write_delay();
+
+    istringstream iss(yytext);
+    string discard;
+    uint32_t channel{};
+
+    string control_id_str{},
+           control_value_str{};
+    iss >> discard >> channel >> control_id_str >> control_value_str;
+
+    channel_1_to_0(channel);
+    (*running_status)(channel | control[0], trackchunk);
+
+    // In May 2026 I introduced named least-significant bytes.
+    // But I have to continue support for LSB_13 etc.
+    // So I put the new names in control_function_map and
+    // moved the corresponding LSB_nn names into controL_lsb_map.
+    string control_id_strv{control_id_str};
+    to_upper(control_id_strv);
+//    const auto id_code = control_function_map(control_id_strv) 
+//        ? control_function_map(control_id_strv) : control_lsb_map(control_id_strv);
+    const auto id_code{control_function_map(control_id_strv)};
+    int32_t control_id{};
+    if (id_code)
+    {
+        control_id = *id_code;
+    }
+    else
+    {
+        const auto lsb_code{midi::control_lsb_map(control_id_strv)};
+        if (lsb_code)
+        {
+            control_id = *lsb_code;
+        }
+        else
+        {
+            control_id = HexOrDec()(control_id_str);
+        }
+    }
+    // THIS TREATS THE TEXTMIDI BANK AS ALREADY 0-BASED
+    // AS NEEDED IN THE BINARY SMF.
+    control_id &= byte7_mask;
+    trackchunk.push_back(control_id);
+
+    bool was_mapped{};
+    auto upper_control_value_str{control_value_str};
+    to_upper(upper_control_value_str);
+    const auto on_off_code = control_on_off_map(upper_control_value_str);
+    int32_t control_value{};
+    if (on_off_code)
+    {
+        control_value = *on_off_code;
+        was_mapped = true;
+    }
+    else
+    {
+        if (control_registered_parameter_lsb[0] == control_id)
+        {
+            if (const auto control_value_code
+                = midi::parm_3d_map(upper_control_value_str))
+            {
+                control_value = static_cast<int32_t>(*control_value_code);
+                was_mapped = true;
+            }
+            else
+            {
+                if (const auto control_value_code_2
+                    = midi::parm_00_map(upper_control_value_str))
+                {
+                    control_value = static_cast<int32_t>(*control_value_code_2);
+                    was_mapped = true;
+                }
+            }
+        }
+        if (!was_mapped && (control_id == midi::control_pan[0]))
+        {
+            auto mapvalopt = midi::pan_map_hires(upper_control_value_str);
+            if (mapvalopt)
+            {
+                control_value = static_cast<int>(*mapvalopt);
+                was_mapped = true;
+            }
+        }
+        // handle MIDI 3D
+        if (!was_mapped)
+        {
+            control_value = HexOrDec()(control_value_str);
+        }
+    }
+    // If "PAN" was used, add Excess64
+    if (id_code && (control_pan[0] == control_id))
+    {
+        control_value += midi::PanExcess8192;
+    }
+    trackchunk.push_back((control_value >> 7) & byte7_mask);
+    write_delay();
+    // use running status, skip status
+    (*running_status)(channel | control[0], trackchunk);
+    trackchunk.push_back(control_id + 0x20);
+    trackchunk.push_back(control_value & byte7_mask);
+    // don't write the trailing delay; that's done as a prefix to other events.
   }
 
 <DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}PAN{SPACE}({INTEGER}|{PANVALUE}) {

@@ -715,18 +715,47 @@ The gnuplot data file will be named from the name inside the XML form file, with
 @cindex Model of Musical Form
 
 The @command{textmidicgm} program models musical form as a musical character
-that is modulated by sinusoids.  This was explored in
-a traditionally-composed work in 1976/1977, and again in 1982.
+that is defined by 
+@itemize 
+@item how high the pitches (MIDI key numbers) are and the range of pitches
+@item how loud the notes are and the range of loudness
+@item how short in time the notes are and the range of length
+@item How many and what particular instruments (pathes or programs) playing
+@end itemize
+These four quantities and three ranges define an instantaneous musical character.
+These seven quantities are then modulated by sinusoids, originally meant to have various periods of about 
+90 seconds to four minutes (although a very long period can make an attribute seem static).  The sinusoids
+can also start with seven different phases.  The sinusoids, with different periods and phases,
+cause the parameters to combine with different combinations of value and range over time.
+
+This exact model was explored in
+a traditionally-composed work in 1976/1977, and again in 1982 in another work.
 It was automated by the AlgoRhythms program distributed as open-source
-software for the Commodore  Amiga , which was described in a paper
+software for the Commodore Amiga in 1989, which was described in a paper
 listed in the Bibliography.
 
 Note that a hard limit of 100,000 note events has been added to avoid
-filling a disk because selections produce notes of short length with
-a static rhythm mean.
+filling a disk because a selection of a minimum note length of zero can
+produce notes of such short length which do not advance musical time very quickly
 
-@command{textmidicgm} does not model musical melody, meter, harmony, or
-traditional forms such as sonata form.
+@command{textmidicgm} does not model musical melody or motivic development.
+Nor does it produce a heirarchical meter, use a harmonic grammar, or
+create traditional forms such as a song or sonata form.  It does not produce 
+@quotedblleft{}hooks@quotedblright{}, memes, or a musical dialectic.
+The randomness of the music and modulating sinusoids with periods over a few minutes
+produce a slowly-changing character of music and an effect similar to wind chimes in 
+a changing wind.  It is perhaps best appreciated in a  
+meditative attitude that some @quotedblleft{}Minimalist@quotedblright{}
+music might encourage while being the other side of the coin; it may take 10 to 30 minutes for a new listener
+to adjust their listening attitude to appreciate music from textmidicgm.
+
+This model of musical form is not very effective at imitating any historical or popular form
+with the possible exception of a broadly-defined 
+@quotedblleft{}International@quotedblright{} style of concert music, heard
+from the mid-1960's on, that is
+more-or-less atonal or semi-tonal, less tuneful, and highly coloristic.
+On the other hand, it can be instructive to at least try to imitate 
+other traditional music.
 
 Musical character is described as the following intantaneous
 statistical quantities:

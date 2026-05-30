@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py sine wave support and sinusoid subwindow."""
-# TextMIDITools Version 1.1.3
+# TextMIDITools Version 1.1.4
 # TextMidiFormEdit.py 1.0
-# Copyright © 2025 Thomas E. Janzen
+# Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -54,13 +54,15 @@ class Sine(tkinter.Frame):
         # %v type of validation currently set
         # %V type of validation that triggered (key, focusin, focusout, forced)
         # %W tk name of widget
-        validate_command = (self.register(self.validate_float),
+        validate_positive_cmd = (self.register(self.validate_positive_float),
+            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        validate_signed_cmd = (self.register(self.validate_signed_float),
             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
         self.phase_scroll_label = tkinter.ttk.Label(self.sine_frame,
             text='-pi..................0..................pi')
         self.period_label = tkinter.ttk.Label(self.sine_frame, text='Period')
         self.period_entry = tkinter.ttk.Entry(self.sine_frame,
-            validatecommand=validate_command, validate='focusout',
+            validatecommand=validate_positive_cmd, validate='focusout',
             textvariable=self.period)
 
         self.phase_label = tkinter.ttk.Label(self.sine_frame, text='Phase')
@@ -72,7 +74,7 @@ class Sine(tkinter.Frame):
 
         self.amplitude_label = tkinter.ttk.Label(self.sine_frame, text='Amplitude')
         self.amplitude_entry = tkinter.ttk.Entry(self.sine_frame,
-            validatecommand=validate_command, validate='focusout',
+            validatecommand=validate_positive_cmd, validate='focusout',
             textvariable=self.amplitude)
 
         self.offset_label = tkinter.ttk.Label(self.sine_frame, text='Offset')
@@ -125,7 +127,46 @@ class Sine(tkinter.Frame):
         self.offset_scrollbar.set(offset, offset)
         self.offset_scrollbar.update()
         self.update()
-    def validate_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def validate_signed_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+        """Validate a floating-point entry from the user over the GUI."""
+        # 1-insert, 0=del, -1 if forced
+        pat = re.compile(r"[-+]?[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        mat = pat.fullmatch(str(proposed))
+        ret = False
+        if mat:
+            ret = True
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (examples: 5.125, -5.125 or 5.125E05)")
+        return ret
+    
+    def validate_positive_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+        """Validate a floating-point entry from the user over the GUI."""
+        # 1-insert, 0=del, -1 if forced
+        pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        mat = pat.fullmatch(str(proposed))
+        ret = False
+        if mat:
+            ret = True
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (5.125 or 5.125E05)")
+        return ret
+
+    def validate_positive_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+        """Validate a floating-point entry from the user over the GUI."""
+        # 1-insert, 0=del, -1 if forced
+        pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")
+        mat = pat.fullmatch(str(proposed))
+        ret = False
+        if mat:
+            ret = True
+        else:
+            ret = False
+            messagebox.showerror('message', "bad value (examples: 5.125 or 5.125E05)")
+        return ret
+
+    def validate_positive_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
         """Validate a floating-point entry from the user over the GUI."""
         # 1-insert, 0=del, -1 if forced
         pat = re.compile(r"[0-9]+([.][0-9]*)?([Ee][-+]?[0-9]+)?")

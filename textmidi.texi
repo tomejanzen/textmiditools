@@ -681,7 +681,7 @@ NOTE_OFF 1 G4 57
 POLY_KEY_PRESSURE 1 G4 100
 @end example
 A succession of POLY_KEY_PRESSURE commands, with delays between them, can
-create swelling and fading effects if the player used supports poly key
+create swelling and fading effects if the MIDI player used supports poly key
 pressure.
 @item CONTROL channel_num controller_id value_num
 @cindex CONTROL
@@ -692,6 +692,13 @@ any valid number in 0..127, including those represented by strings.
 About a half-dozen of the controls have shorter forms available, but
 the @command{miditext} program always writes the full form using the
 CONTROL keyword.
+
+Note that CONTROL events handle 7-bit data.  To use 14-bit controls,
+you can use either a second control ID with the @quotedblleft{}_LSB@quotedblright{} suffix
+or the CONTROL_HIRES aggregate event, described below.
+To properly set the sound bank, it may be more convenient to use
+CONTROL_BANK_SELECT_PROGRAM, also described below.
+
 @example
 CONTROL 13 64 10
 @end example
@@ -701,16 +708,35 @@ Some MIDI controller ID's have names:
 @example
 CONTROL 2 BANK_SELECT 2
 @end example
+BANK_SELECT should always be used in a sequence of BANK_SELECT, BANK_SELECT_LSB, and PROGRAM.
+Using just the CONTROL_BANK_SELECT_PROGRAM aggregate event, described below, may be more convenient.
+For high-resolution controls, the first control event's value is the control value
+divided by 128, and the second control event's value is the low 7 bits of the intended value.
+@example
+CONTROL 2 BANK_SELECT 2
+CONTROL 2 BANK_SELECT_LSB 0
+PROGRAM 2 1
+@end example
+The bank selected is 2 * 128 + 0 = bank 256.
 @item MODULATION
 @example
 CONTROL 4 MODULATION 3
+@end example
+Add 7 more bits of precision with the LSB control:
+@example
+CONTROL 4 MODULATION 3
+CONTROL 4 MODULATION_LSB 127
 @end example
 @item BREATH
 For example,
 @example
 CONTROL 1 BREATH 64
 @end example
-An abbreviated form is available.  Leave off the CONTROL:
+For 7 more bits of precision, use BREATH_LSB:
+@example
+CONTROL 1 BREATH 64
+CONTROL 1 BREATH_LSB 127
+@end example
 @example
 BREATH [chan] [velocity]
 BREATH  11 99
@@ -720,16 +746,40 @@ BREATH  11 99
 @example
 CONTROL 1 FOOT_CONTROLLER 0
 @end example
+For 7 more bits of precision, add the LSB control:
+@example
+CONTROL 1 FOOT_CONTROLLER 0
+CONTROL 1 FOOT_CONTROLLER_LSB 125 
+@end example
 @item PORTAMENTO_TIME
 @example
 CONTROL 1 PORTAMENTO_TIME 5
 @end example
+For 7 more bits of precision, use the LSB control:
+@example
+CONTROL 1 PORTAMENTO_TIME 5
+CONTROL 1 PORTAMENTO_TIME_LSB 96
+@end example
 @item DATA_ENTRY_MSB
+@item DATA_ENTRY_LSB
 @item CHANNEL_VOLUME
 @example
 CONTROL 1 CHANNEL_VOLUME 74
 @end example
+For 7 more bits of precision, use CHANNEL_VOLUME_LSB:
+@example
+CONTROL 1 CHANNEL_VOLUME 74
+CONTROL 1 CHANNEL_VOLUME_LSB 100
+@end example
 @item BALANCE
+@example
+CONTROL 5 BALANCE 60
+@end example
+For 7 more bits of precision, use the LSB code:
+@example
+CONTROL 5 BALANCE 60
+CONTROL 5 BALANCE_LSB 160
+@end example
 @item UNDEFINED_09
 @item PAN channel_num LEFT|CENTER|RIGHT|@lbracechar{}-64..63@rbracechar{}
 @cindex PAN
@@ -744,17 +794,37 @@ CONTROL 1 PAN 12
 @end example
 Note that if a CONTROL for pan was written using the number for PAN (=10, =0x0A) instead
 of the string PAN then Excess64 (=64) will not be added.
+For 7 more bits of precision, use PAN_LSB:
+@example
+CONTROL 5 PAN -64
+CONTROL 5 PAN_LSB 127
+@end example
 @item EXPRESSION
 @example
 CONTROL 1 EXPRESSION 17
+@end example
+For 7 more bits of precision, add EXPRESSION_LSB:
+@example
+CONTROL 1 EXPRESSION 17
+CONTROL 1 EXPRESSION_LSB 100
 @end example
 @item EFFECT_1
 @example
 CONTROL 1 EFFECT_1 18
 @end example
+For 7 more bits of precision, add the LSB control:
+@example
+CONTROL 1 EFFECT_1 18
+CONTROL 1 EFFECT_1_LSB 81
+@end example
 @item EFFECT_2
 @example
 CONTROL 1 EFFECT_2 19
+@end example
+For 7 more bits of precision, add the LSB control:
+@example
+CONTROL 1 EFFECT_2 18
+CONTROL 1 EFFECT_2_LSB 81
 @end example
 @item UNDEFINED_14
 @item UNDEFINED_15
@@ -946,6 +1016,58 @@ CONTROL 1 REGISTERED_PARAMETER_LSB 63
 @example
 CONTROL 1 REGISTERED_PARAMETER_MSB 63
 @end example
+@end itemize
+@item CONTROL_HIRES channel_num controller_id value_num
+@cindex CONTROL_HIRES
+@command{textmidi} provides the aggregate event CONTROL_HIRES to produce two control events: the first 
+to send the most significant 7 bits of the value, and the @quotedblleft{}_LSB@quotedblright{} 
+control ID to send the least-significant 7 bits of the value with a a delay of zero between them.
+With PAN, the values may be -8192 to 8191.  Other controls take values from 0 to 16383.
+As elsewhere, channel_num is in 1..16.  The controller_id is described for CONTROL, above.
+Use the non-LSB control IDs desceribed above for CONTROL; 
+don't use the @quotedblleft{}_LSB@quotedblright{} IDs.  You may use BANK_SELECT but
+it may be more convenient to use the special @command{textmidi} aggregate event CONTROL_BANK_SELECT_PROGRAM,
+described below.
+Note that when converting MIDI files to text, @command{miditext} will convert
+to @command{textmidi}'s aggregate events only if the delays between the individual events are all zero.
+To set pan to 256 on channel 3, you can use CONTROL_HIRES: 
+@example
+CONTROL_HIRES 3 PAN 256
+@end example 
+This is equivalent to the following individual events:
+@example
+CONTROL 3 PAN 2
+CONTROL 3 PAN_LSB 0
+@end example 
+@item CONTROL_BANK_SELECT_PROGRAM channel_num bank_num(0..8191) program_num(1..16)
+@cindex CONTROL_BANK_SELECT_PROGRAM
+@command{textmidi} provides an aggregate event
+CONTROL_BANK_SELECT_PROGRAM for the setting of the sound bank with a program.
+The MIDI (1.0) specification requires that the setting of the sound bank
+comprises three MIDI events (which @command{textmidi} still supports):
+@example
+CONTROL_BANK_SELECT_PROGRAM channel_num bank_num program
+@end example
+This produces the event sequence:
+@example
+; send the value right-shifted 7 bits
+CONTROL channel_num BANK_SELECT bank_num/128 
+; send the low 7 bits of bank num
+CONTROL channel_num BANK_SELECT_LSB bank_num & 0x7F
+PROGRAM channel_num program_num
+@end example
+To produce the sequence of events to choose channel 2, bank 256, and program 68, with the aggregate event
+CONTROL_BANK_SELECT_PROGRAM:
+@example
+CONTROL_BANK_SELECT_PROGRAM 2 256 68
+@end example
+This is equivalent to using the three events (note that the lack of DELAY statements will produce delays of zero
+between the events):
+@example
+CONTROL 2 BANK_SELECT 2
+CONTROL 2 BANK_SELECT_LSB 0
+PROGRAM 2 68
+@end example
 @item ALL_SOUND_OFF
 @cindex ALL_SOUND_OFF
 This would probably not be used in a MIDI file, but only by a MIDI player.
@@ -1035,7 +1157,6 @@ An abbreviated form is available:
 @example
 POLY_ON 15
 @end example
-@end itemize
 MIDI 3D is implemented via registered parameters.  The @command{textmidi}
 program can translate some 3D parameter names.  However, @command{miditext}
 does not output the parameter LSB names; it prints the hexadecimal values instead.

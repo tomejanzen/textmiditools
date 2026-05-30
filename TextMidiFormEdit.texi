@@ -128,7 +128,7 @@ voices, which is done on the Voices window.
 * Tempo per Beat::
 * Arrangements::
 * Melodic Probabilities::
-* Scale
+* Scale::
 * Pitch Form::
 * Rhythm Form::
 * Dynamic Form::
@@ -619,6 +619,7 @@ The follower will be a retrograde (that is, a backwards copy) of the leader voic
 for the entire duration of the piece.
 
 @node Random Program
+@section Random Program
 @cindex Random Program
 The Random Program feature can make a given track (musical line) randomly
 change its program (or patch, or instrument) from note to note.  This feature
@@ -636,14 +637,14 @@ copy the changing random instruments of the leads.
 @end menu
 @node Probability
 @subsection Probability
-@cindex probability
+@cindex Probability
 The field probability gives the probability that the next note will get a randomly-selected program.
 If the probability is set to 1.0, then every note will get a random instrument (but if it is the same
-as in place then no PROGRAM command will be written).  If the probability is .5, then on average
-every other note will use a new MIDI program.
+as is in place then no PROGRAM command will be written).  If the probability is .5, then on average
+every other note will randomize its MIDI program.
 If the probability is zero, then the random ensemble will have no effect at all.
-@subsection Ensemble
 @node Ensemble
+@subsection Ensemble
 @cindex Ensemble
 The ensemble is a list General MIDI programs from which a voice can randomly choose a program.
 By default, @command{textmidicgm} uses the key number (pitch) selected for a note to find which
@@ -675,6 +676,7 @@ The Form Plot window has a menu.
 * Open::
 * Save::
 * Defaults::
+* Randomize::
 * Redraw::
 * Save HTML::
 * Save Postscript::
@@ -688,13 +690,13 @@ The Form Plot Window menu has several items.
 @node Open
 @section Open
 @cindex Open
-The Open menu allows you to load a boost::serialization (cf. boost.org) XML archive
+The Open menu item (accelerator 'O') allows you to load a boost::serialization (cf. boost.org) XML archive
 form file.  All of the values of the form file will be distributed throughout the
 user interface and the plot redrawn.
 @node Save
 @section Save
 @cindex Save
-The Save menu allows you to save an XML 
+The Save menu item (accelerator 'S') allows you to save an XML 
 form file.  All of the values of the form in the user interface of
 @command{TextMidiFormEdit.py} will be written out to the file.
 The XML form file is readable by @command{textmidicgm} using the --xmlform option.
@@ -702,19 +704,37 @@ The XML form file is readable by @command{textmidicgm} using the --xmlform optio
 @node Defaults
 @section Defaults
 @cindex Defaults
-The @emph{Defaults} menu item sets all values to basic values (not randomly selected values).
-To generate random forms, use @command{textmidicgm} --random.
+The @emph{Defaults} menu item (accelerator 'F') sets all values to basic values (not randomly selected values).
+To generate random forms, use the @emph{Randomize} menu item or @command{textmidicgm} --random filename.
+This does not randomize either the scale or the Random Program feature.
 
+@node Randomize
+@section Randomize
+@cindex Randomize
+The @emph{Randomize} menu item (accelerator 'R') makes randomized selections and values in the form except the
+following:
+@itemize
+@item The scale is set to a full chromatic scale.
+@item The length is set to a half hour.
+@item Minimum note length is set to 0.00128 seconds.
+@item Ticks per quarter is set to 1440.
+@item The beat is set to a quarter note.
+@item The meter is set to 4/4.
+@item The tempo is set to M.M. 60 per quarter.
+@item No voice is set to follow.
+@item No voice is set with a random ensemble.
+@end itemize
 @node Redraw
 @section Redraw
 @cindex Redraw
-The form plot is redrawn; this is called for if the form curves are 
+The @emph{Redraw} menu item (accelerator 'D') redraws the form plot; this is called for if the form curves are 
 changed in the Musical Form window.
 
 @node Save HTML
 @section Save HTML
 @cindex Save HTML
-The Save HTML menu item will save the form data to an HTML file that may be suitable for use in reports.
+The Save HTML menu item (accelerator 'H') 
+will save the form data to an HTML file that may be suitable for use in reports.
 The format of the HTML attempts to make the form data easier to see in a glance.  It does not
 include the form plot, but that can be saved as a Postscript file.
 Random Program blocks are not written if the probability is zero.
@@ -722,17 +742,17 @@ Random Program blocks are not written if the probability is zero.
 @node Save Postscript
 @section Save Postscript
 @cindex Save Postscript
-The Save Postscript menu item will save a Postscript image of the Form Plot window.
+The Save Postscript menu item (accelerator 'P') will save a Postscript image of the Form Plot window.
 
 @node About
 @section About
 @cindex About
-The About item puts up a window with information about the program.
+The About menu item (accelerator 'A') puts up a window with information about the program.
 
 @node Quit
 @section Quit
 @cindex Quit
-The Quit menu item will exit the program.  The window close decoration will also
+The Quit menu item (accelerator 'Q') will exit the program.  The window close decoration will also
 do this.  Any work done but unsaved is lost; you are not prompted to save work.
 
 @node Keyboard Window

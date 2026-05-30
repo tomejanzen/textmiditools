@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py Voice Window for editing a voice's attributes."""
-# TextMIDITools Version 1.1.3
+# TextMIDITools Version 1.1.4
 # TextMidiFormEdit.py 1.0
-# Copyright © 2025 Thomas E. Janzen
+# Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -75,7 +75,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.number_of_voices_spinbox['increment'] = 1
         self.number_of_voices_spinbox['from']      = 1
         self.number_of_voices_spinbox.set(len(self.xml_voices))
-        self.number_of_voices_spinbox['to'] = 128
+        self.number_of_voices_spinbox['to'] = 1024
 
         self.voice_number_label = tkinter.ttk.Label(self.frame, text='Voice')
         self.voice_number_spinbox = tkinter.ttk.Spinbox(self.frame, wrap=False,

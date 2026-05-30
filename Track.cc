@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.3
+// TextMIDITools Version 1.1.4
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -25,6 +25,7 @@ void textmidi::cgm::Track::
 {
     the_last_time_ = the_last_time;
 }
+
 void textmidi::cgm::Track::
     the_next_time(const textmidi::rational::RhythmRational the_next_time) noexcept
 {

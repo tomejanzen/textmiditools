@@ -1,0 +1,228 @@
+
+1. Regenerate dependencies.  
+make clean
+make > b.com
+edit b.com to remove optimization and replace -o with -MF and change the .o name to .i.
+Add -MM.
+source b.,com
+compare the dependencies to those in Makefile.am.
+
+-- There were no new changes to dependencies.
+
+2. Check and up-date header file dependencies in Makefile.am.
+aclocal 
+autoconf 
+automake --add-missing 
+./configure 
+source makeothermakefiles.com
+make clean
+[ Don't use make jobs. ]
+make -f Makefile.opt 2> warn.txt
+Check in the results.
+--  NO CHANGES, git status showed no changed files.
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+Read warn.txt.  There can be a handful of unused arguments.
+-- yyunput unused.  This is part of flex.  
+-- 2 exceptions of usual unused midi_stream_tail.
+
+3. source cpplint.com
+sed -i -f cpplint.sed cpplintout.txt
+Examine cpplintout.txt.
+-- MidiEvents.cc had a line > 135 characters, so I abbr. value as val.
+-- Also removed a trailing space on another line.
+-- re-ran cpplint.com.  No exceptions.
+
+4.  source cppcheck.com
+Review cppcheckout.txt.
+--said arrangements_impl_ was never used but it is used in a couple places.
+--ignoring cgmlegacy.cc exceptions because i should remove this support anyway.
+--Complains about BOOST_CLASS_VERSION but that's just part 
+-- of boost::serialization XML archives.
+-- complains about OptionName return registered_name s/b by cons ref, but that's
+-- probably because it hasn't been updated to account for the constexpr feature.
+-- says MidiFileMetaMidiChannelEvent doesn't declare an destructor but it does. '
+-- Probably "final" throws it off.  cppcheck is out-of-date.
+-- said MidiEvents.h consume_stream() and print() were 
+-- marked override but g++ won't compile it if I mark an "= 0" abstract funcxtion override.
+-- complains about the static recognize functions.  But static functions are fully named with the
+-- class name, so there's no conflict.  So another false message.
+-- textmidi.h "inc_line_ctr" is never used is a lie.
+-- says MidiEvent.h str_ is unused but that is a lie.
+-- says TrackName name_ is unused.  Turns out to be true.  Removed.
+-- also cue_point_ is unused; removed.
+-- says MidiChannelVoiceModeEvent local_status isn't used but it is.
+-- says key_string_ is never used but it is.
+-- says ControlChangeEvent::value_ is never used but it is.
+-- says Track.cc: last_pitch_index is never used but it is. not true.
+-- says last_pitch_index is unused.  not true
+-- RhythmRational features of numeric::limits are unused.   Don't care.
+-- says NoteEvent::rhythm is unused; not true, used in Composer.
+-- says NoteEvent::vel() is unused; not true.
+-- says MidiEvents.cc lazy_ is unused.  not true
+-- says MidiEvents.cc chord_ is unused.  not true
+-- says static function flush() is overridden in SmusTrackEvent.h but that is meaningless.
+-- says string_num_map is unused; false.
+-- says NoteEvent :: pitch() is unused.  not true
+-- says string_num_map is unused; not true
+-- says i_am_lazy_ is unused; not true;
+-- says tied_vec_ is unused; not true;
+-- says NoteEvent::pitch() is unused; not true
+-- says MidiEventFactory::running_status- is never used.  Not true.
+-- ignore running_status_, pitch.
+-- channel_keyboards reported unused; not true
+
+I have the impression that cppcheck reports an object as unused if it
+is not used inside the class declaration and definition files.
+
+5. Run a test with miditext.cc #define DEBUG_THREADLESS
+just before it's tested.
+make clean
+make -j 10 -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+5b.
+cd test
+./textmidiroundtriptest.py classical_archivesshort.txt
+--All 100% passed midi files and text files both.
+
+Restore the threaded version: git checkout miditext.cc
+
+5.5 rebuild
+make clean
+make -j 10 -f Makefile.opt
+strip textmidi smustextmidi textmidicgm miditext
+sudo make install
+
+6. cd test
+./roundtriptests.bash
+All test and binary comparisons should be identical.
+--start 18:41
+--end 18:52
+--all midi files 100% identical.
+--all text files 100% identical.
+
+7. source chorded.com
+All files are to be identical.
+-- all 3 lines report identical.
+
+8. cd test; source eventtests.com
+--looks ok.
+
+8.5   cd test
+source hires.com
+vimdiff -o hires
+It is expected that:
+  for pan values, some values will convert to LEFT, CENTER, RIGHT.
+  Other control values that are hexadecimal (0x45) will convert to decimal.
+
+--CONTROL 1 HIRES PAN was not handling symbols (LEFT, CENTER, RIGHT).; fixed
+-- reran classical_archivesshort test.
+
+9. cd test; source textmidicgmtest.com
+textmidicgmtest_arrangements.txt 
+    Check for the two voices (in the second and third tracks) alternating playing every 10 seconds each.
+    -- pass
+textmidicgmtest_base.txt
+    Check for a tempo of 60 on a beat of 1/4.
+    The first rhythms in the second track should be 1/4 ("4").
+    -- pass
+textmidicgmtest_halfbeat.txt
+    Check for a tempo of 60 on a beat of 1/2.
+    The first rhythms in the second track should be 1/2 (i.e., "2").
+    -- pass
+textmidicgmtest_pulse4.txt
+    Check that the rhythms in the second track are multiples of 1/16 notes.
+    (Such as 8, 16, 8.)
+    -- pass
+textmidicgmtest_tempo90.txt
+    Check for a TIME_SIGNATURE 6 8 720 and TEMPO 40 3/8. 
+    Check that the tempo track rests are dotted halves (for 6/8).
+    Check that the rhythms in the second track are 1/4.
+    (1/4 is one second for 3/8 = M.M. 40 and the max note length
+     is 1 second.)
+    -- pass
+
+10.  After executing this test sequence, compile with clang.
+Report step 6 through 9.
+    -- 6. pass
+    -- 7. pass
+    -- 8. pass
+    -- 8.5 pass
+    -- 9.0 pass
+--This also serves as a regression test of changes made above.
+
+11. ./testtextmidiformedit.bash
+Follow printed instructions at each step.
+--Found Python mistakes, bad ident and use of || for "or". Fixed.
+--PASS
+--It still complains about formats in mid-edit but it does not prevent you from
+--working and getting the values you want.
+
+12. ./testtextmidicgm.bash
+Follow the directions in the console window.
+--Saw a score then heard the music.  CEFGW.
+
+12.1  Check that TextMidiFormEdit.py runs properly on both Windows and linux.
+--DONE
+
+13. For SMUS conversion: source sacre.com
+musescore sacre_sacrifice.mid
+--DONE 
+timidity -invvvt -Os sacre_sacrifice.mid
+--DONE heard the music
+Should be the Sacrificial Dance of Stravinksy's The Rite of Spring.
+source sacre_clean.com
+--DONE
+
+14.  Then edit version.sed and version.bash to upgrade both the
+new and old version numbers.
+--DONE 1.1.3 becomes 1.1.4
+
+./version.bash
+--DONE
+./buildkit.bash
+--DONE
+
+Check in the changed files.
+git status > ci.com; edit ci.com to just have the changed files with "git add " in front of them.
+run ci.com
+git commit -m "new version TextMIDITools v1.0.99"
+--DONE
+
+15. 
+cd 
+cp -an textmiditools-1.0.nn temp-1.9.nn
+cd temp-1.9.nn
+aclocal
+autoconf
+automake --add-missing
+./configure
+make -j 10
+--DONE
+and watch for a successful build of textmidi, miditext, textmidicgm, and smustextmidi.
+Run each to see the help output and see the Python program run.
+./textmidi
+./miditext
+./smustextmidi
+./textmidicgm
+./TextMidiFormEdit.py
+
+16. Update pdfs and copy them to the kit area.
+
+texi2pdf miditext.texi
+texi2pdf smustextmidi.texi
+texi2pdf textmidicgm.texi
+texi2pdf TextMidiFormEdit.texi
+texi2pdf textmidi.texi
+--DONE
+
+cp miditext.pdf ~/textmiditools-1.0.nn/
+cp smustextmidi.pdf ~/textmiditools-1.0.nn/
+cp textmidicgm.pdf ~/textmiditools-1.0.nn/
+cp TextMidiFormEdit.pdf ~/textmiditools-1.0.nn/
+cp textmidi.pdf ~/textmiditools-1.0.nn/
+--DONE
+

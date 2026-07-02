@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -33,10 +33,26 @@ namespace textmidi
 {
     namespace cgm
     {
+    class VoiceException
+    {
+      public:
+        explicit VoiceException(const std::string& exception_msg)
+            noexcept
+          : exception_msg_(exception_msg)
+        {
+        }
+
+        const std::string& what() const noexcept
+        {
+            return exception_msg_;
+        }
+      private:
+        std::string exception_msg_;
+    };
     // Crashes without pack pragma; VoiceXml was inexplicably a different size
     // in textmidicgm.cc than in Composer.cc (seen in gdb debugger).
     // Moving the bool to the end did not help.
-    #pragma pack(4)
+#pragma pack(4)
         class VoiceXml
         {
             friend class boost::serialization::access;
@@ -83,6 +99,7 @@ namespace textmidi
                     duration_factor);
                 void inversion(bool inversion);
                 void retrograde(bool retrograde);
+                bool valid() const;
 
                 template<class Archive>
                     void serialize(Archive& arc, const unsigned int version)
@@ -132,6 +149,7 @@ namespace textmidi
                     arc & BOOST_SERIALIZATION_NVP(probability_);
                     arc & BOOST_SERIALIZATION_NVP(ensemble_);
                 }
+                bool valid() const;
               private:
                   double probability_{0.0};
                   RandomEnsemble ensemble_;
@@ -202,6 +220,7 @@ namespace textmidi
             const RandomProgram& random_program() const noexcept;
             RandomProgram& random_program() noexcept;
             void random_program(const RandomProgram& random_program) noexcept;
+            bool valid() const;
           private:
             std::string low_pitch_{};
             std::string high_pitch_{};

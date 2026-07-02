@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -51,9 +51,41 @@ using std::ranges::for_each, std::ranges::copy, std::ranges::min_element,
       std::ranges::unique, std::ranges::remove_if, std::cerr;
 using textmidi::cgm::Sine, textmidi::cgm::MeanRangeSines,
       textmidi::cgm::MelodyProbabilities, textmidi::cgm::MusicalCharacter,
-      textmidi::cgm::MusicalForm,
+      textmidi::cgm::MusicalForm, textmidi::cgm::MusicTime,
       textmidi::cgm::VoiceXml, textmidi::cgm::ArrangementDefinition;
 using boost::lexical_cast;
+
+bool MusicTime::valid() const
+{
+    if (ticks_per_quarter_ <= 0)
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid ticks_per_quarter: ") += lexical_cast<string>(ticks_per_quarter_)};
+    }
+
+    if (beat_ <= rational::RhythmRational(0L))
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid beat size: ") += lexical_cast<string>(beat_)};
+    }
+
+    if (meter_ <= rational::RhythmRational(0L))
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid meter: ") += lexical_cast<string>(meter_)};
+    }
+
+    if (beat_tempo_ <= 0.0)
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid beat_tempo: ") += lexical_cast<string>(beat_tempo_)};
+    }
+    return true;
+}
 
 double Sine::period() const noexcept
 {
@@ -101,14 +133,14 @@ double Sine::value_now(double the_time) const noexcept
 
 bool Sine::valid() const
 {
-    auto test = [](double period) { return 0.0 != period; };
+    auto test = [](double period) { return period > 0.0; };
     if (!test(period_)) [[unlikely]]
     {
         throw MusicalFormException{
         (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
             += " Invalid Sine period: ") += lexical_cast<string>(period_)};
     }
-    return test(period_);
+    return true;
 }
 
 const Sine& MeanRangeSines::mean_sine() const noexcept
@@ -133,11 +165,10 @@ Sine& MeanRangeSines::range_sine() noexcept
 
 bool MeanRangeSines::valid() const
 {
-    auto test = [](const Sine& sine) { return sine.valid(); };
-    bool rtn{};
+    bool rtn = true;
     try
     {
-        rtn = test(mean_sine_);
+        mean_sine_.valid();
     }
     catch (MusicalFormException& mfe)
     {
@@ -145,7 +176,7 @@ bool MeanRangeSines::valid() const
     }
     try
     {
-        rtn = test(range_sine_);
+        range_sine_.valid();
     }
     catch (MusicalFormException& mfe)
     {
@@ -208,6 +239,29 @@ void MelodyProbabilities::same(double same) noexcept
 void MelodyProbabilities::up(double up) noexcept
 {
     up_ = up;
+}
+
+bool MelodyProbabilities::valid() const
+{
+    if (down_ < 0)
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid down: ") += lexical_cast<string>(down_)};
+    }
+    if (same_ < down_)
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid same, must be >= down: ") += lexical_cast<string>(same_)};
+    }
+    if ((up_ < same_) || (up_ > 1.0))
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid up, must be >= same <= 1.0: ") += lexical_cast<string>(up_)};
+    }
+    return true;
 }
 
 double MusicalCharacter::duration(double rf) noexcept
@@ -370,6 +424,40 @@ void MusicalForm::arrangement_definition(
     ArrangementDefinition arrangement_definition) noexcept
 {
     arrangement_definition_ = arrangement_definition;
+}
+
+bool ArrangementDefinition::valid() const
+{
+    switch (algorithm_)
+    {
+      case arrangements::PermutationEnum::Undefined:
+      case arrangements::PermutationEnum::Identity:
+      case arrangements::PermutationEnum::LexicographicForward:
+      case arrangements::PermutationEnum::LexicographicBackward:
+      case arrangements::PermutationEnum::RotateRight:
+      case arrangements::PermutationEnum::RotateLeft:
+      case arrangements::PermutationEnum::Reverse:
+      case arrangements::PermutationEnum::SwapPairs:
+      case arrangements::PermutationEnum::Skip:
+      case arrangements::PermutationEnum::Shuffle:
+      case arrangements::PermutationEnum::Heaps:
+        break;
+      default:
+        throw MusicalFormException{
+            (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid Arrangement algorithm: ")
+            += boost::lexical_cast<string>(static_cast<int>(algorithm_))};
+
+        break;
+    }
+
+    if (!(period_ >= 0.0))
+    {
+        throw MusicalFormException{
+        (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid arrangement period: ") += lexical_cast<string>(period_)};
+    }
+    return true;
 }
 
 void MusicalForm::string_scale_to_int_scale (vector<int32_t>& key_scale) const
@@ -680,16 +768,58 @@ void MusicalForm::random(string formname, int32_t instrument_flags)
 
 bool MusicalForm::valid() const
 {
-    bool rtn{true};
-    if (0.0 == len_)
+    if (len_ <= 0.0)
     {
         throw MusicalFormException{
             (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
             += " Invalid length: ") += lexical_cast<string>(len_)};
     }
+
+    if (min_note_len_ < 0.0)
+    {
+        throw MusicalFormException{
+            (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid min_note_len: ") += lexical_cast<string>(min_note_len_)};
+    }
+
+    if (max_note_len_ < min_note_len_)
+    {
+        throw MusicalFormException{
+            (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid max_note_len, must be >= min_note_len: ") += lexical_cast<string>(max_note_len_)};
+    }
+    if (scale_.empty())
+    {
+        throw MusicalFormException{
+            (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid scale length, must be > 0: ") += lexical_cast<string>(scale_.size())};
+    }
     try
     {
-        rtn = pitch_form_.valid();
+        music_time_.valid();
+    }
+    catch (MusicalFormException& mfe)
+    {
+        throw MusicalFormException{mfe.what() + " Invalid music_time.\n"};
+    }
+
+    if (pulse_ < 0.0)
+    {
+        throw MusicalFormException{
+            (((string(__FILE__) += ':') += BOOST_PP_STRINGIZE(__LINE__))
+            += " Invalid pulse/second, must be >= 0: ") += lexical_cast<string>(pulse_)};
+    }
+    try
+    {
+        melody_probabilities_.valid();
+    }
+    catch (MusicalFormException& mfe)
+    {
+        throw MusicalFormException{mfe.what() + " Invalid melody_probabilities_.\n"};
+    }
+    try
+    {
+        pitch_form_.valid();
     }
     catch (MusicalFormException& mfe)
     {
@@ -697,7 +827,7 @@ bool MusicalForm::valid() const
     }
     try
     {
-        rtn = rhythm_form_.valid();
+        rhythm_form_.valid();
     }
     catch (MusicalFormException& mfe)
     {
@@ -705,7 +835,7 @@ bool MusicalForm::valid() const
     }
     try
     {
-        rtn = dynamic_form_.valid();
+        dynamic_form_.valid();
     }
     catch (MusicalFormException& mfe)
     {
@@ -713,13 +843,32 @@ bool MusicalForm::valid() const
     }
     try
     {
-        rtn = texture_form_.valid();
+        texture_form_.valid();
     }
     catch (MusicalFormException& mfe)
     {
         throw MusicalFormException{mfe.what() + " Invalid texture form.\n"};
     }
-    return rtn;
+    for (const auto& vox : voices_)
+    {
+        try
+        {
+            vox.valid();
+        }
+        catch (VoiceException& ve)
+        {
+            throw MusicalFormException{ve.what() + " Invalid voice.\n"};
+        }
+    }
+    try
+    {
+        arrangement_definition_.valid();
+    }
+    catch (MusicalFormException& mfe)
+    {
+        throw MusicalFormException{mfe.what() + " Invalid arrangement definition.\n"};
+    }
+    return true;
 }
 
 void MusicalForm::clamp_scale_to_instrument_ranges() noexcept

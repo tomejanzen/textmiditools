@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py Voice Window for editing a voice's attributes."""
-# TextMIDITools Version 1.1.4
+# TextMIDITools Version 1.1.5
 # TextMidiFormEdit.py 1.0
 # Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -155,12 +155,12 @@ class VoiceWindow(tkinter.Toplevel):
 
         self.leader_label = tkinter.ttk.Label(self.follow_frame, text='Leader')
         self.leader_spinbox = tkinter.ttk.Spinbox(self.follow_frame,
-            textvariable=self.leader, wrap=True)
+            textvariable=self.leader, state='readonly', wrap=True)
         self.leader_spinbox['increment'] = 1.0
         self.leader_spinbox['from'] = 0.0
-        self.leader_spinbox['to'] = self.number_of_voices_spinbox.get()
+        self.leader_spinbox['to'] = int(self.number_of_voices_spinbox.get()) - 1
         if self.xml_voices[vox]['follower']['follow'] is True:
-            self.leader_spinbox['state'] = 'normal'
+            self.leader_spinbox['state'] = 'readonly'
         else:
             self.leader_spinbox['state'] = 'disabled'
         self.leader_spinbox.set(
@@ -243,7 +243,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.random_ensemble_list.clear()
         if self.xml_voices[vox]['random_program']['ensemble'] == []:
            self.random_ensemble_list.append('empty')
-           self.random_ensemble.set("empty") 
+           self.random_ensemble.set("empty")
         else:
             for prog in self.xml_voices[vox]['random_program']['ensemble']:
                 self.random_ensemble_list.append(self.general_midi_list[int(prog)])
@@ -459,13 +459,15 @@ class VoiceWindow(tkinter.Toplevel):
 
     def number_of_voices_callback(self, event=None, *args):
         """Number of voices spin button set; use value to set voice container."""
+        vox_qty = int(self.number_of_voices.get())
         vox = int(self.voice_number.get())
-        if vox >= int(self.number_of_voices.get()):
-            vox = int(self.number_of_voices.get()) - 1
+        self.voice_number.set(min(vox, vox_qty - 1))
+        leader = int(self.leader.get())
+        self.leader.set(min(leader, vox_qty - 1))
+        self.leader_spinbox['to'] = int(self.number_of_voices.get()) - 1
 
-        if len(self.xml_voices) > int(self.number_of_voices.get()):
-            self.xml_voices = (self.xml_voices
-                    [0:(int(self.number_of_voices.get()))])
+        if len(self.xml_voices) > vox_qty:
+            self.xml_voices = self.xml_voices[0:vox_qty]
         if len(self.xml_voices) < int(self.number_of_voices.get()):
             # default the voices above the voices we're using
             for voice in range(len(self.xml_voices), int(self.number_of_voices.get())):
@@ -540,7 +542,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.inversion.set(self.xml_voices[vox]['follower']['inversion'])
         self.retrograde.set(self.xml_voices[vox]['follower']['retrograde'])
         if int(self.follow.get()) == 1:
-            self.leader_spinbox['state'] = 'normal'
+            self.leader_spinbox['state'] = 'readonly'
             self.scalar_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
             self.follow_interval_spinbox['state'] = 'normal'
@@ -573,13 +575,13 @@ class VoiceWindow(tkinter.Toplevel):
             self.inversion_checkbutton.update()
             self.retrograde_checkbutton.update()
 
-        self.random_probability_scrollbar.set(self.xml_voices[vox]['random_program']['probability'], 
+        self.random_probability_scrollbar.set(self.xml_voices[vox]['random_program']['probability'],
             self.xml_voices[vox]['random_program']['probability'])
         self.random_probability_scrollbar.update()
         self.random_ensemble_list.clear()
         if self.xml_voices[vox]['random_program']['ensemble'] == []:
             self.random_ensemble_list.append('empty')
-            self.random_ensemble.set("empty") 
+            self.random_ensemble.set("empty")
         else:
             for prog in self.xml_voices[vox]['random_program']['ensemble']:
                 self.random_ensemble_list.append(self.general_midi_list[int(prog)])
@@ -629,7 +631,7 @@ class VoiceWindow(tkinter.Toplevel):
             if self.random_ensemble_list != []:
                 for progstr in self.random_ensemble_list:
                     self.xml_voices[vox]['random_program']['ensemble'].append(GENERAL_MIDI_INSTRUMENT_DICT[progstr][0])
-        self.random_ensemble_spinbox['values'] = self.random_ensemble_list 
+        self.random_ensemble_spinbox['values'] = self.random_ensemble_list
 
     def install_xml_voices(self, xml_voices):
         """Install XML form."""
@@ -669,7 +671,7 @@ class VoiceWindow(tkinter.Toplevel):
         self.retrograde.set(
             self.xml_voices[vox]['follower']['retrograde'])
 
-        self.random_probability_scrollbar.set(self.xml_voices[vox]['random_program']['probability'], 
+        self.random_probability_scrollbar.set(self.xml_voices[vox]['random_program']['probability'],
             self.xml_voices[vox]['random_program']['probability'])
         self.random_probability_scrollbar.update()
 
@@ -693,7 +695,7 @@ class VoiceWindow(tkinter.Toplevel):
         follow = self.follow.get()
         self.xml_voices[vox]['follower']['follow'] = follow
         if follow is True:
-            self.leader_spinbox['state'] = 'normal'
+            self.leader_spinbox['state'] = 'readonly'
             self.scalar_interval_type_radiobutton['state'] = 'normal'
             self.chromatic_interval_type_radiobutton['state'] = 'normal'
             self.follow_interval_spinbox['state'] = 'normal'

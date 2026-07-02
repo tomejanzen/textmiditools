@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.1.4
+# TextMIDITools Version 1.1.5
 # Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -532,6 +532,21 @@ class XmlFormWindow(tkinter.Tk):
         arrangement_definition_dict['period'] = 100000.0
         return arrangement_definition_dict
 
+    def default_music_time(self):
+        """Create a default music_time."""
+        music_time_dict = {}
+        music_time_dict['ticks_per_quarter'] = '1440'
+        beat_dict = {}
+        beat_dict['numerator']   = 1
+        beat_dict['denominator'] = 4
+        music_time_dict['beat'] = beat_dict
+        meter_dict = {}
+        meter_dict['numerator']   = 4
+        meter_dict['denominator'] = 4
+        music_time_dict['meter']  = meter_dict
+        music_time_dict['beat_tempo'] = 60.0
+        return music_time_dict
+
     def default_xml_form(self):
         """Install default form."""
         self.xml_form_dict['name'] = 'defaults'
@@ -543,18 +558,7 @@ class XmlFormWindow(tkinter.Tk):
         self.xml_form_dict['min_note_len'] = 0.00128
         self.xml_form_dict['max_note_len'] = 2.0
         self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
-        self.xml_form_dict['music_time'] = {}
-        self.xml_form_dict['music_time']['ticks_per_quarter'] = '1440'
-        beat_dict = {}
-        beat_dict['numerator']   = 1
-        beat_dict['denominator'] = 4
-        self.xml_form_dict['music_time']['beat'] = beat_dict
-        meter_dict = {}
-        meter_dict['numerator']   = 4
-        meter_dict['denominator'] = 4
-        self.xml_form_dict['music_time']['meter']  = meter_dict
-        self.xml_form_dict['music_time']['beat_tempo'] = 60.0
-
+        self.xml_form_dict['music_time'] = self.default_music_time()
         self.xml_form_dict['pulse'] = 8.0
         self.xml_form_dict['melody_probabilities'] = self.default_melody_probabilities()
         self.xml_form_dict['pitch_form'] = self.default_form()
@@ -630,17 +634,7 @@ class XmlFormWindow(tkinter.Tk):
         self.xml_form_dict['min_note_len'] = 0.00128
         self.xml_form_dict['max_note_len'] = self.xml_form_dict['min_note_len'] + self.randfloat() * 2.0
         self.xml_form_dict['scale'] = ScaleFrame.full_midi_scale
-        self.xml_form_dict['music_time'] = {}
-        self.xml_form_dict['music_time']['ticks_per_quarter'] = '1440'
-        beat_dict = {}
-        beat_dict['numerator']   = 1
-        beat_dict['denominator'] = 4
-        self.xml_form_dict['music_time']['beat'] = beat_dict
-        meter_dict = {}
-        meter_dict['numerator']   = 4
-        meter_dict['denominator'] = 4
-        self.xml_form_dict['music_time']['meter']  = meter_dict
-        self.xml_form_dict['music_time']['beat_tempo'] = 60.0
+        self.xml_form_dict['music_time'] = self.default_music_time()
 
         self.xml_form_dict['pulse'] = 16.0 * self.randfloat()
         self.xml_form_dict['melody_probabilities'] = self.randomize_melody_probabilities()
@@ -967,8 +961,12 @@ class XmlFormWindow(tkinter.Tk):
                     'max_note_len_')[0].firstChild.data)
         self.xml_form_dict['scale'] = (self.traverse_scale(
                     self.dom.getElementsByTagName('scale_')[0]))
-        self.xml_form_dict['music_time'] = (self.traverse_music_time(
-                    self.dom.getElementsByTagName('music_time_')[0]))
+        if int(self.dom.getElementsByTagName('xml_form')[0]
+              .getAttribute('version')) >= 4:
+            self.xml_form_dict['music_time'] = (self.traverse_music_time(
+                self.dom.getElementsByTagName('music_time_')[0]))
+        else:
+            self.xml_form_dict['music_time'] = self.default_music_time()
         self.xml_form_dict['pulse'] = self.dom.getElementsByTagName('pulse_')[0].firstChild.data
         self.xml_form_dict['melody_probabilities'] = (self.traverse_melody_probabilities
             (self.dom.getElementsByTagName('melody_probabilities_')[0]))
@@ -1357,7 +1355,7 @@ class XmlFormWindow(tkinter.Tk):
         voices_element.setAttribute('class_id', str(class_id))
         class_id = class_id + 1
         voices_element.setAttribute('tracking_level', '0')
-        voices_element.setAttribute('version', '1') # 2026-03-24
+        voices_element.setAttribute('version', '0')
         self.xml_form_dict['voices'] = self.voice_window.get_xml_voices()
         self.add_text_element(form_document, voices_element, 'count', 'count',
             str(len(self.xml_form_dict['voices'])))
@@ -1624,7 +1622,7 @@ class XmlFormWindow(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.1.4\nCopyright © 2026 Thomas E. Janzen\n'
+            'TextMIDITools Version 1.1.5\nCopyright © 2026 Thomas E. Janzen\n'
             'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
             'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
             'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')

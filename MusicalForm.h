@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -70,6 +70,7 @@ namespace textmidi
                 beat_tempo_{beat_tempo}
             {
             }
+            bool valid() const;
             std::int64_t ticks_per_quarter_{1440};
             rational::RhythmRational beat_{1L, 4L};
             rational::RhythmRational meter_{4L, 4L, false};
@@ -82,6 +83,7 @@ namespace textmidi
                 arc & BOOST_SERIALIZATION_NVP(meter_);
                 arc & BOOST_SERIALIZATION_NVP(beat_tempo_);
                 assert(beat_tempo_ > 0.0);
+                this->valid();
             }
         };
 
@@ -181,6 +183,7 @@ namespace textmidi
             void down(double down) noexcept;
             void same(double same) noexcept;
             void up(double up) noexcept;
+            bool valid() const;
           private:
             double down_{0.0};
             double same_{0.3333};
@@ -223,6 +226,8 @@ namespace textmidi
             {
                 period_ = period;
             }
+
+            bool valid() const;
           private:
             arrangements::PermutationEnum algorithm_;
             double period_;

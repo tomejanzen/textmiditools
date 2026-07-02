@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -43,8 +43,10 @@ namespace midi
     inline constexpr double MaxDynamic{127};
     inline constexpr double MaxPitchBend{127};
     inline constexpr std::int32_t MinSignedPan{-64};
+    inline constexpr std::int32_t MinHiResSignedPan{-8192};
     inline constexpr std::int32_t CenterSignedPan{0};
     inline constexpr std::int32_t MaxSignedPan{63};
+    inline constexpr std::int32_t MaxHiResSignedPan{8191};
 
     inline constexpr std::int32_t MaxSmpteHours{23};
     inline constexpr std::int32_t MaxSmpteMinutes{59};
@@ -147,7 +149,11 @@ namespace midi
     inline constexpr MidiStreamArray1 note_on                {NoteOn};
     inline constexpr MidiStreamArray1 note_off               {NoteOff};
     inline constexpr std::int32_t          full_note_length       {3};
+    inline constexpr std::int32_t          full_pitch_bend_length {3};
+    inline constexpr std::int32_t          full_control_length {3};
+    inline constexpr std::int32_t          full_program_length {2};
     inline constexpr std::int32_t          running_status_note_length{2};
+    inline constexpr std::int32_t          full_hires_control_length{7};
     inline constexpr MidiStreamArray1
         polyphonic_key_pressure{PolyphonicKeyPressure};
     inline constexpr MidiStreamArray1 control                {Control};
@@ -156,6 +162,7 @@ namespace midi
     inline constexpr MidiStreamArray1 channel_pressure       {ChannelPressure};
     inline constexpr MidiStreamArray1 pitch_wheel            {PitchWheel};
     inline constexpr MidiStreamAtom channel_mask         {0x0F};
+    inline constexpr MidiStreamAtom command_mask         {0xF0};
     inline constexpr MidiStreamAtom byte7_mask           {0x7F};
     inline constexpr MidiStreamAtom byte7_shift          {7};
     inline constexpr int control_hires_mask                  {0x3FFF};

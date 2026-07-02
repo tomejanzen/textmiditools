@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -679,6 +679,8 @@ namespace textmidi
         const midi::RunningStatusStandard& local_status() const noexcept;
         void local_status(const midi::RunningStatusStandard& ) noexcept;
         midi::RunningStatusStandard& local_status() noexcept;
+        static std::tuple<bool, midi::MidiStreamAtom> status(midi::MidiStreamAtom next,
+           midi::RunningStatusStandard running_status) noexcept;
         static bool recognize(midi::MidiStreamRange  midi_stream_tail,
             const midi::RunningStatusStandard& running_status) noexcept;
       private:

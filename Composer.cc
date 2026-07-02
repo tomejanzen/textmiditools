@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -739,13 +739,17 @@ void textmidi::cgm::Composer::operator()(ofstream& textmidi_file,
             += '\n';
         textmidi_file << textmidi_str;
         int32_t lastVel{128};
+        RhythmRational accum_rhythm{xml_form.music_time().meter_};
         for_each(track_note_events[track_index], [&](const auto& eventRef)
         {
-            // round the duration in seconds to be in pulses.
-            // This program assumes that one quarter note
-            // is one second and the tempo
-            // is M.M. quarter = 60.
-            //
+            {
+                auto measure = accum_rhythm / xml_form.music_time().meter_;
+                if (measure.is_int())
+                {
+                    textmidi_file << ";m. " << measure.numerator() << '\n';
+                }
+                accum_rhythm += eventRef.rhythm();
+            }
             if ((RestPitch != eventRef.pitch()) && (eventRef.vel() != lastVel))
             {
                 textmidi_file << "vel " << eventRef.vel() << " ";

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.4
+// TextMIDITools Version 1.1.5
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -18,6 +18,23 @@
 
 namespace textmidi
 {
+    class KeyStringException
+    {
+      public:
+        explicit KeyStringException(const std::string& exception_msg)
+            noexcept
+          : exception_msg_(exception_msg)
+        {
+        }
+
+        const std::string& what() const noexcept
+        {
+            return exception_msg_;
+        }
+      private:
+        std::string exception_msg_;
+    };
+
     inline constexpr std::int32_t halfsteps_per_octave{12};
     extern std::pair<std::int32_t, bool>
         key_sig_name_to_accidentals(const std::string& key_sig_name);

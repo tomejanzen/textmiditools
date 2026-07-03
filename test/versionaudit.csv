@@ -1,0 +1,15 @@
+Struct,BOOST_CLASS_VERSION macro,checked version,TextMidiFormEdit version check,TextMidiFormEdit version write
+#            ensemble,,,,0
+follower,3,>=3,>=3,3
+arrangement_definition,,,,0
+beat_,,,,0
+form,,,,0
+mean_sine,,,,0
+melody_probabilities_,,,,0
+music_time_,,,,0
+random_program,,,,0
+scale_,,,,0
+serialization::archive,,,,19
+voices,,,,0
+VoiceXml (item),1,>=1,>=1,1
+xml_form,4,>=4,>=4,4

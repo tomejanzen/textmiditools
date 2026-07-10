@@ -1,0 +1,152 @@
+.TH SMUSTEXTMIDI 1 2026-07-09 "Linux" "User Commands"
+.SH NAME
+smustextmidi \- convert a MIDI 1.0 standard file to textmidi language
+.SH SYNOPSIS
+.SY smustextmidi
+.OP OPTION
+.OP \-\-smus INPUT
+.OP \-\-textmidi OUTPUT
+.YS
+
+.SH DESCRIPTION
+.B smustextmidi
+converts a text file description of a MIDI file to textmidi language.
+It always converts to lazy mode because SMUS files express rhythms
+as traditional musical durations.
+.B smustextmidi 
+is fully documented in a PDF file smustextmidi.pdf.
+.SH OPTIONS
+.TP
+.BI \-\-smus\  input_file
+The input file; a Simple Musical Score file.
+.
+.
+.TP
+.BI \-\-textmidi\  output_file
+The output file; a text file in textmidi language.
+.
+.
+.TP
+.BI \-\-dotted_rhythms\  true|false
+If true and lazy is selected, then dotted rhythms are written for the appropriate rhythms.
+If false and lazy is selected, then rhythms are written without using dots.
+.
+.
+.TP
+.BI \-\-rhythmexpression\  rational|simplecontinuedfraction
+The output file; a text file in textmidi language.
+.
+.
+.TP
+.BI \-\-dynamics_configuration\  {dynamics_file}
+Specify the optional file of dynamic values for the lazy mode dynamics symbols, for example, mf, forte, fff etc.
+The format of the file is of symbols with equal signs and MIDI velocity values for each symbol.
+The symbols may be in any order.  It is not necessary to set all of the available symbols.
+If a symbol does not appear, then a default value is used.
+Format:
+.nf
+ppppp=5
+pppp=10
+ppp=25
+pp=40
+p=50
+mp=62
+mf=75
+forte=90
+ff=110
+fff=120
+ffff=127
+fffff=127
+.fi
+.
+.
+.TP
+.B \-\-answer
+Ask to verify to overwrite the output file if the output file exists.
+.
+.
+.TP
+.B \-\-version
+Print the version of the program.
+.
+.
+.TP
+.B \-\-verbose
+Print additional information during processing.
+.
+.
+.TP
+.B \-\-help
+Print the command line options.
+.
+.
+.SH EXIT STATUS
+.TP
+.B smustextmidi
+always returns an EXIT_SUCCESS.
+.SH ERRORS
+.
+Errors reported by
+.B smustextmidi
+include:
+.
+.RS
+.RS
+.TP
+Program options error:
+.
+.TP
+File does not exist.
+.
+.TP
+Usage: smustextmidi [OPTION]...  [SMUSFILE]
+.
+You must provide an SMUS input file
+.TP
+Usage: smustextmidi [OPTION]... [SMUSFILE]
+.
+You must provide a textmidi output file
+.TP
+can't open smus
+.
+.TP
+Not a FORM file
+.
+.TP
+IOS exceptions.
+.
+.TP
+Input file was not an SMUS file!?
+.
+.TP
+No SHDR chunk!
+.
+.TP
+This was supposed to be a TRACK
+.
+.SH FILES
+.TP
+.I input_file
+is an SMUS file.
+.
+.
+.TP
+.I output_file
+is a textmidi file.
+.
+.
+.TP
+.I dynamics.cfg
+or other name contains dynamic symbols assigned to MIDI velocities.
+
+.SH CONFORMING TO
+International MIDI Association MIDI Specification 1.1.
+.SH EXAMPLE
+.SH NOTES
+.SH BUGS
+.SH AUTHORS
+Written for linux by Thomas E. Janzen in 2004 based on smusmidi which Janzen had written in 1991
+for the Commodore Amiga.
+.SH SEE ALSO
+.TP
+.B textmidi

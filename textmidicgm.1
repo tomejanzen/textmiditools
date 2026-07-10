@@ -1,0 +1,212 @@
+.TH TEXTMIDICGM 1 2026-07-09 "Linux" "User Commands"
+.SH NAME
+textmidicgm \- Generate a random composition for a provided musical form specification and write to textmidi language
+.SH SYNOPSIS
+.SY textmidicgm
+.OP OPTION
+.OP \-\-xmlform INPUT
+.OP \-\-textmidi OUTPUT
+.YS
+
+.SH DESCRIPTION
+.B textmidicgm
+creates a random musical composition as a textmidi format output,
+which textmidi can convert to a Standard MIDI File.
+.B textmidicgm
+always writes note events in lazy mode.
+.B textmidicgm 
+is fully documented in a PDF file textmidicgm.pdf.
+.SH OPTIONS
+.TP
+.B \-\-help
+Print the command line options.
+.
+.
+.TP
+.B \-\-verbose
+Print additional information during processing.
+.
+.
+.TP
+.B \-\-stacktracks
+Process multiple form files and render as parallel, concurrent musical lines.
+.
+.
+.TP
+.B \-\-version
+Print the version of the program.
+.
+.
+.TP
+.BI \-\-form\  input_file
+The legacy input form file; a line-oriented musical form definition.
+This was used on the Amiga version called AlgoRhythms.
+It is deprecated and support may be removed.
+.
+.
+.TP
+.BI \-\-xmlform\  input_file
+The input file; a boost::serialization XML archive with a musical form definition.
+.
+.
+.TP
+.BI \-\-update\  
+Update the form file to reflect form definitions for the current software release
+and write to the name given to the xmlform option with "_update" appended.
+.
+.
+.TP
+.B \-\-answer
+Ask to verify to overwrite the output file if the output file exists.
+.
+.
+.TP
+.BI \-\-textmidi\  output_file
+The output file; a text file in textmidi language.
+.
+.
+.TP
+.BI \-\-gnuplot
+Write a gnuplot data file of the image of the form window.
+This data can be rendered in gnuplot using textmidicgm.gnuplot.
+.
+.
+.TP
+.BI \-\-random\ filename
+Create a randomized form file and write it to the file name.
+.
+.
+.TP
+.BI \-\-instruments\ argument
+For a random form, specify families of instruments to use.
+.nf
+piano 
+chromaticpercussion 
+organ 
+guitar 
+bass 
+strings
+ensemble 
+brass 
+reed 
+pipe 
+synthlead 
+synthpad 
+syntheffects 
+ethnic 
+percussive 
+soundeffects 
+all 
+melodic 
+idiophone
+.fi
+.
+.
+.TP
+.BI \-\-clampscale
+In each form, clamp the scale to the union of the voices' ranges.
+.
+.
+.TP
+.BI \-\-arrangements\ arg
+Specify an algorithm for shuffling the voice priority.
+.nf
+rotateright 
+rotateleft 
+reverse 
+previouspermutation 
+nextpermutation 
+swappairs
+shuffle 
+skip 
+heaps 
+identity
+.fi
+.TP
+.BI \-\-maxeventspertrack\ num
+Specify the maximum number of events in one track
+before quitting and exiting.  The rational for this is
+that on the one hand, some rhythms can cause huge numbers of
+note events to be written, but on the other you may
+wish to exceed the default of 100,000 events.
+.
+.
+.TP
+.BI \-\-dotted_rhythms\  true|false
+If true and lazy is selected, then dotted rhythms are written for the appropriate rhythms.
+If false and lazy is selected, then rhythms are written without using dots.
+.
+.
+.TP
+.BI \-\-rhythmexpression\  rational|simplecontinuedfraction
+The output file; a text file in textmidi language.
+.
+.
+.TP
+.BI \-\-ignoreranges
+Disregard the range limits for a voice's program  (patch, instrument).
+.
+.
+.SH EXIT STATUS
+.TP
+.B textmidicgm
+always returns an EXIT_SUCCESS.
+.SH ERRORS
+.
+Errors reported by
+.B textmidicgm
+include:
+.
+.RS
+.RS
+.TP
+Program options error:
+.
+.TP
+[instrument group] is not an instrument group.
+.
+.TP
+You must have either a text form file, an XML form file or invoke --random
+.
+.TP
+glob failed [for file globbing)
+.
+.TP
+Invalid Form.
+.
+.TP
+IOS exceptions.
+.
+.TP
+Track scrambling selections are: ...
+.
+.TP
+voice [num] is a self-follower!
+.TP
+You have a zero-long scale!  Fill in a scale!
+.
+.TP
+follower leader must be in (0..# of tracks-1)
+.
+.SH FILES
+.TP
+.I XML form file
+.
+A standard boost::serialization XML archive of a musical form.
+.
+.
+.TP
+.I output_file
+is a text file in the MIDI language supported by 
+.B textmidi.
+.
+.
+.SH CONFORMING TO
+.SH EXAMPLE
+.SH NOTES
+.SH BUGS
+.SH AUTHORS
+Written by Thomas E. Janzen in 2004 and refined until release.
+.SH SEE ALSO
+.TP
+.B textmidi

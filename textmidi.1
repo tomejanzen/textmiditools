@@ -1,0 +1,237 @@
+.TH TEXTMIDI 1 2026-07-09 "Linux" "User Commands"
+.SH NAME
+textmidi \- convert a textmidi language file 
+to a MIDI 1.0 standard file format binary file and print the number of lines processed.
+.SH SYNOPSIS
+.SY textmidi
+.OP OPTION
+.OP --textmidi INPUT
+.OP --midi OUTPUT
+.YS
+
+.SH DESCRIPTION
+.B textmidi
+converts a text file description of 
+a MIDI file to a binary standard MIDI file.
+.B textmidi 
+is fully documented in a PDF file textmidi.pdf.
+.SH OPTIONS
+.TP
+.BI \-\-textmidi\  text_midi_input_file
+The input file: a text representation of a MIDI file.
+.
+.
+.TP
+.BI \-\-midi\  binary_midi_output_file
+The output file; a standard MIDI 1.0 file is written.
+If the midi option is not given, then a name is formed from the input textmidi 
+file's name by replacing the "txt" suffix with "mid".
+.
+.
+.TP
+.BI \-\-runningstatus\  {standard | never | persistentaftermeta | persistentaftersysex | persistentaftersysexormeta}
+Specify the running status policy.
+If \fInever\/\fR is specified, then status bytes always appear regardless of being identical to a previous status value.
+This was provided to make it possible to perform round-trip conversion tests of the test file set, about half of which
+do not apply the running status policy described in the MIDI 1.0 standard.
+MIDI status is one 8-bit byte that includes a command and a MIDI channel.
+If \fIstandard\/\fR is specified, then the MIDI specification's rules for running status are applied.
+The MIDI standard requires running status to be "reset", that is, treated as though the status will change, 
+on the appearnace of either SysEx or Meta events.  The persistent policies try to implement a failure to implement these
+policies, but ultimately did not help with testing.  There is no way to adapt to "whimsical" 
+application of running status policy to a round-trip test.
+The running status policy of a MIDI file does not prevent the miditext program from converting it to textmidi language
+as long as it is otherwise a coherent MIDI file.
+.
+.
+.TP
+.BI \-\-dynamics_configuration\  {dynamics_file}
+Specify the optional file of dynamic values for the lazy mode dynamics symbols, for example, mf, forte, fff etc.
+The format of the file is of symbols with equal signs and MIDI velocity values for each symbol.
+The symbols may be in any order.  It is not necessary to set all of the available symbols.
+If a symbol does not appear, then a default value is used.
+Format:
+.nf
+ppppp=5
+pppp=10
+ppp=25
+pp=40
+p=50
+mp=62
+mf=75
+forte=90
+ff=110
+fff=120
+ffff=127
+fffff=127
+.fi
+.
+.
+.TP
+.BI \-\-detache\  num
+A small number of MIDI ticks to separate consecutive notes.
+It always is shaved off the end of note events (not from rests).
+The default is 0, but 10 seems to work.  It was used ca. CE 2000
+because one synthesizer misbehaved if note followed on note
+too quickly.
+.
+.
+.TP
+.B \-\-version
+Print the version of the program.
+.
+.
+.TP
+.B \-\-verbose
+Print additional information during processing.
+.
+.
+.TP
+.B \-\-answer
+Ask to verify to overwrite the output file if the output file exists.
+.
+.
+.TP
+.B \-\-lazynoteoff
+Instructs 
+.B textmidi 
+to issue note-off commands to end notes rather than
+note-on with a velocity of zero.  The default is note-ons.
+.
+.
+.TP
+.B \-\-help
+Print the command line options.
+.
+.
+
+.SH EXIT STATUS
+.
+The
+.B textmidi
+program always returns EXIT_SUCCESS.
+.SH ERRORS
+.
+Errors reported by 
+.B textmidi
+are usually preceded by a line number in the textmidi file
+and include:
+.
+.RS
+.RS
+.TP
+Program options error: [\fI\,exception string\/\fR]
+.
+.TP
+Invalid meta event name [\fI\,meta event name\/\fR]
+.
+.TP
+Improper keyevent: [\fI\,key name\/\fR]]
+.
+.TP
+Non-key letter before Key Name: 
+[\fI\,note_name\/\fR] in track sssf [\fI\,num\/\fR]  at beat [\fI\,num\/\fR]
+.
+.TP
+[\fI\,textmidi filename\/\fR] File does not exist
+.
+.TP
+Can't open [\fI\,midifilename\/\fR]
+.
+.TP
+Need a textmidi file name!
+.
+.TP
+Need a MIDI file name!
+.
+.TP
+Program was zero (0) and left as zero; textmidi program numbers must be in [1..16]
+.
+.TP
+Bank was zero (0) and left as zero; textmidi bank numbers must be in [1..16384]
+.
+.TP
+Channel was zero (0) and left as zero; channel numbers must be in [1..16]
+.
+.TP
+[\fI\,textmidi filename\/\fR]:[\fI\,line number\/\fR]
+File format was: [\fI\,format\/\fR] but must be in [\fI\,MONOTRACK, MULTITRACK, MULTISEQUENCE\/\fR] 
+or omitted for a default of MULTITRACK
+.
+.TP
+File format was MONOTRACK which allows only one track but there are [\fI\,num\/\fR]
+.TP
+Ties are not allowed in DETAIL mode: in track [\fI\,num\/\fR] at beat [\fI\,num\/\fR]
+.
+.TP
+Non~note letter before Note Name: 
+[\fI\,note_name\/\fR] in track [\fI\,num\/\fR] at beat [\fI\,num\/\fR]
+.
+.TP
+Key Name without octave: [\fI\,keyname\/\fR] in track [\fI\,num\/\fR] at beat [\fI\,num\/\fR]
+.
+.TP
+A duration denominator that is > ticks_per_quarter! 
+[\fI\,divisor\/\fR] > [\fI\,global_ticks_per_quarter\/\fR]
+.
+.TP
+The textmidi and MIDI filenames are the same!
+You would have overwritten the textmidi file!; Must exit!
+.
+.TP
+Can't open [\fI\,output_file\/\fR]
+.
+.SH FILES
+.TP
+.I text_midi_input_file
+is a text file in the MIDI language supported by 
+.B textmidi.
+For complex scores, it may be helpful to use the m4 macro processor to make the file more 
+succinct.  For example, a trill
+could be defined in an m4 file and invoked in the m4 MIDI file; m4 is run 
+to create the text MIDI file
+that is the input to 
+.B textmidi
+.
+.
+.TP
+.I binary_midi_output_file
+is the output of 
+.B textmidi
+.
+It is a standard MIDI file which can be used with programs that play and edit 
+standard MIDI files.
+.
+.
+.TP
+.I dynamics.cfg
+or other name contains dynamic symbols assigned to MIDI velocities.
+.SH CONFORMING TO
+International MIDI Association MIDI Specification 1.1.
+.SH EXAMPLE
+.SS Program source
+.nf
+FILEHEADER 1 240
+STARTTRACK
+TRACK Example
+TEMPO 60
+TIME_SIGNATURE 4 4 24
+PROGRAM 1 1
+NOTE_ON 1 C4 64 
+DELAY 240
+NOTE_ON 1 C4 0
+LAZY
+chan 1
+mf
+C4 8 K+2 8 K+2 8 K+1 8 K+2 8 K+2 8 K+2 8 K+1 8 
+END_LAZY
+END_OF_TRACK
+.fi
+.SH NOTES
+.SH BUGS
+.SH AUTHORS
+Written by Thomas E. Janzen in 1999 and refined until release.
+.SH SEE ALSO
+.TP 
+.B miditext
+

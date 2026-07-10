@@ -1,0 +1,219 @@
+.TH MIDITEXT 1 2026-07-09 "Linux" "User Commands"
+.SH NAME
+miditext \- convert a MIDI 1.0 standard file to textmidi language
+.SH SYNOPSIS
+.SY miditext
+.OP OPTION
+.OP \-\-midi INPUT
+.OP \-\-textmidi OUTPUT
+.YS
+
+.SH DESCRIPTION
+.B miditext
+Converts a text file description of a MIDI file to textmidi language
+.B miditext 
+is fully documented in a PDF file miditext.pdf.
+.SH OPTIONS
+.TP
+.BI \-\-midi\  input_file
+The input file; a standard MIDI 1.0 file.
+.
+.
+.TP
+.BI \-\-textmidi\  output_file
+The output file; a text file in textmidi language.
+.
+.
+.TP
+.BI \-\-dotted_rhythms\  true|false
+If true and lazy is selected, then dotted rhythms are written for the appropriate rhythms.
+If false and lazy is selected, then rhythms are written without using dots.
+.
+.
+.TP
+.BI \-\-rhythmexpression\  rational|simplecontinuedfraction
+The output file; a text file in textmidi language.
+.
+.
+.TP
+.BI \-\-dynamics_configuration\  {dynamics_file}
+Specify the optional file of dynamic values for the lazy mode dynamics symbols, for example, mf, forte, fff etc.
+The format of the file is of symbols with equal signs and MIDI velocity values for each symbol.
+The symbols may be in any order.  It is not necessary to set all of the available symbols.
+If a symbol does not appear, then a default value is used.
+Format:
+.nf
+ppppp=5
+pppp=10
+ppp=25
+pp=40
+p=50
+mp=62
+mf=75
+forte=90
+ff=110
+fff=120
+ffff=127
+fffff=127
+.fi
+.
+.
+.TP
+.BI \-\-quantize\  \(aqnumerator/denominator\(aq
+A musical rhythm ratio to which to quantize the durations.  
+Quotes are typically needed in command shells.
+For example "1/16" would quantize to a sixteenth note.
+.
+.
+.TP
+.B \-\-lazy
+Generate output in textmidi "lazy" mode, an abbreviated
+representation that represents musical notes rather than
+note-on and note-off pairs.
+.
+.
+.TP
+.B \-\-answer
+Ask to verify to overwrite the output file if the output file exists.
+.
+.
+.TP
+.B \-\-version
+Print the version of the program.
+.
+.
+.TP
+.B \-\-verbose
+Print additional information during processing.
+.
+.
+.TP
+.B \-\-help
+Print the command line options.
+.
+.
+.SH EXIT STATUS
+.TP
+.B miditext
+always returns an EXIT_SUCCESS.
+.SH ERRORS
+.
+Errors reported by
+.B miditext
+include:
+.
+.RS
+.RS
+.TP
+There is extra data after the tracks which will be ignored.
+.
+.TP
+No Track header MTrk in track:
+.
+.TP
+File too short for track the length found in the track:
+.
+.TP
+Program options error:
+.
+.TP
+File does not exist.
+.
+.TP
+You must provide a MIDI input file
+.
+.TP
+The text and MIDI filenames are the same!  You would have overwritten the MIDI file!; Must exit!
+.
+.TP
+Open failed for file
+.
+.TP
+IOS exceptions.
+.
+.TP
+ERROR File too short for a MIDI Header
+.
+.TP
+MIDI channel exceeded MIDI limit
+.         
+.TP
+SMPTE Offset out of range
+. 
+.TP
+MIDI Key Number exceeded MIDI limit
+.         
+.TP
+MIDI velocity exceeded MIDI limit
+.
+.TP
+MIDI Pitch Bend LSB exceeded MIDI limit
+.
+.TP
+MIDI Pitch Bend MSB exceeded MIDI limit
+.
+.TP
+Illegal 8-bit control value:
+.
+.TP
+Illegal pan value fails range:
+. 
+.TP
+Illegal 14-bit control value: 
+.
+.TP
+Illegal 8-bit control value:
+.
+.TP
+MIDI pressure exceeded MIDI limit
+. 
+.TP
+no noteoff found, channel:
+.                 
+.TP
+Unrecognized byte sequence:
+.
+.TP
+key counter went negative on channel: too many note-offs\n";
+.
+.TP
+You must provide a MIDI input file
+.
+.TP
+You would have overwritten the source name!; Must exit!
+.
+.TP
+open failed
+.
+.SH FILES
+.TP
+.I midi_input_file
+is the output of 
+.B textmidi
+.
+It is a standard MIDI 1.0 file which can be used with programs that play and edit 
+standard MIDI 1.0 files.
+.
+.
+.TP
+.I output_file
+is a text file in the MIDI language supported by 
+.B textmidi.
+.
+.
+.TP
+.I dynamics.cfg
+or other name contains dynamic symbols assigned to MIDI velocities.
+
+.SH CONFORMING TO
+International MIDI Association MIDI Specification 1.1.
+.SH EXAMPLE
+.SH NOTES
+.SH BUGS
+Output in lazy mode is not fully qualified and may fail for 
+overlapping durations.
+.SH AUTHORS
+Written by Thomas E. Janzen in 1999 and refined until release.
+.SH SEE ALSO
+.TP
+.B textmidi

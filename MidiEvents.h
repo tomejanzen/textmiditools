@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.5
+// TextMIDITools Version 1.1.6
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -846,8 +846,8 @@ namespace textmidi
         void value(int ) noexcept;
         static StreamEvent
             recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
-        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept;
-        std::ostream& print(std::ostream& os) const;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept override;
+        std::ostream& print(std::ostream& os) const override;
       private:
         midi::MidiStreamAtom id_{};
         int value_{};
@@ -884,8 +884,8 @@ namespace textmidi
         }
         static StreamEvent
             recognize(midi::MidiStreamRange midi_stream_tail, midi::RunningStatusStandard& running_status) noexcept;
-        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept;
-        std::ostream& print(std::ostream& os) const;
+        midi::MidiStreamRange consume_stream(midi::MidiStreamRange midi_stream_tail) noexcept override;
+        std::ostream& print(std::ostream& os) const override;
       friend std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResEvent& );
     };
     std::ostream& operator<<(std::ostream& , const MidiChannelVoiceControlChangeHiResEvent& );

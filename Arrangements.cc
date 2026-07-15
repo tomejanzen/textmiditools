@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.5
+// TextMIDITools Version 1.1.6
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -139,37 +139,36 @@ unique_ptr<arrangements::Arrangements> arrangements::ArrangementsFactory(
     {
       case PermutationEnum::Undefined:
       case PermutationEnum::Identity:
-        return std::move(make_unique<arrangements::ArrangementsIdentity>(length));
+        return make_unique<arrangements::ArrangementsIdentity>(length);
         break;
       case PermutationEnum::LexicographicForward:
-        return std::move(make_unique<arrangements
-            ::ArrangementsLexicographicForward>(length));
+        return make_unique<arrangements
+            ::ArrangementsLexicographicForward>(length);
         break;
       case PermutationEnum::LexicographicBackward:
-        return std::move(make_unique<arrangements
-            ::ArrangementsLexicographicBackward>(length));
+        return make_unique<arrangements::ArrangementsLexicographicBackward>(length);
         break;
       case PermutationEnum::RotateRight:
-        return std::move(make_unique<arrangements::ArrangementsRotateRight>(length));
+        return make_unique<arrangements::ArrangementsRotateRight>(length);
         break;
       case PermutationEnum::RotateLeft:
-        return std::move(make_unique<arrangements::ArrangementsRotateLeft>(length));
+        return make_unique<arrangements::ArrangementsRotateLeft>(length);
         break;
       case PermutationEnum::Reverse:
-        return std::move(make_unique<arrangements::ArrangementsReverse>(length));
+        return make_unique<arrangements::ArrangementsReverse>(length);
         break;
       case PermutationEnum::SwapPairs:
-        return std::move(make_unique<arrangements::ArrangementsSwapPairs>(length));
+        return make_unique<arrangements::ArrangementsSwapPairs>(length);
         break;
       case PermutationEnum::Skip:
-        return std::move(make_unique<arrangements::ArrangementsSkip>(length));
+        return make_unique<arrangements::ArrangementsSkip>(length);
         break;
       case PermutationEnum::Shuffle:
-        return std::move(make_unique<arrangements::ArrangementsShuffle>(length));
+        return make_unique<arrangements::ArrangementsShuffle>(length);
         break;
       case PermutationEnum::Heaps:
-        return std::move(make_unique<arrangements::ArrangementsHeaps>(length));
+        return make_unique<arrangements::ArrangementsHeaps>(length);
         break;
     }
-    return std::move(make_unique<arrangements::ArrangementsIdentity>(length));
+    return make_unique<arrangements::ArrangementsIdentity>(length);
 }

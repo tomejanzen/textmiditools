@@ -660,3 +660,68 @@
 
 
     Code clean up.
+
+    * Version v1.1.5
+    2026-07-01
+    Features:
+        textmidicgm:
+            * Validate values in the XML.  Throw exceptions when values are unusable.
+            Ignore bools because boost serialization XML archive will throw stream_error 
+            on bad bools that are neither 0 nor 1.
+            * Write a measure number comment to the textmidi file when the
+
+    Fixes:
+        miditext:
+            No functional changes.
+            Rewrite recognize() for composite control events.
+            Cleanup use of "using":
+                If a symbol is used once or twice, don't have "using".
+                If a symbol is used multiply in one or two functions, then put the "using"
+                in the scope of that function.
+                If a symbol is used in more than 2 functions, then have a top-level "using".
+            Audit and adjust recognize functions of voice and mode events.
+            Overhaul voice/mode events.
+
+        textmidicgm:
+            * Fix range check of MIDI Programs.
+            accumulated rhythm is exactly at the measure line.  First measure is 1.
+            Form is ";m. 123"
+
+        TextMidiFormEdit:
+            * VoiceWindow: Make the voice leader to be constrained by
+            number of voices, but not hidden voices.  Make leader spinbox readonly.
+
+            * TextMidiFormEdit: Added missing check for version that would
+            include 'music_time'.
+            Voices as an aggregate has the version '1', but should have the version
+            of aggregates, zero.
+            Fix editing of beat size.
+            * versionaudit.csv: create audit spreadsheet for XML archive versioning.
+
+    * Version v1.1.6                
+    2026-07-14
+    Features:
+        Testing:
+            Add control.txt and control.com test files.  Stop using hires.com.
+        textmidi:
+            Range-check pan values.
+        Documentation:
+            Write manual pages and reconcile error messages with code.
+    Fixes:
+        textmidi:
+            Improve lexical analyzer specification to have more specific
+            control commands prior to more general ones.
+        miditext:
+            Add "override" to a few functions that should have had it.
+        TextMidiFormEdit.py:
+            Repair use of Python TCL/TK vaidatecommand functions,
+            after referring to python.org and pythontutorial.net
+            register() wraps Python callables
+            for the TCL engine.  the "%" list are the arguments passed, but you only
+            pass the one you need, and we need %P, the new edited value.  Validate
+            functions return true and false.  If false is returned, the
+            invalidcommand specified is called, so move the messagebox the
+            invalidcommand function.
+            Fix validatecommand logic for probabilities.
+
+

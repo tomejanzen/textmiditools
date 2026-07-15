@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.5
+// TextMIDITools Version 1.1.6
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     {
         const string logstr{((string{
             "Usage: textmidi [OPTION]..."
-            " [TEXTMIDIFILE]\ntextmidi Version 1.1.5\n"}
+            " [TEXTMIDIFILE]\ntextmidi Version 1.1.6\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\ntextmidi home page: "
             "https://github.com/tomejanzen/textmiditools\n"};
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "textmidi\nTextMIDITools Version 1.1.5\n"
+        cout << "textmidi\nTextMIDITools Version 1.1.6\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"
@@ -120,22 +120,22 @@ int main(int argc, char *argv[])
         answer = true;
     }
 
-    string text_filename{}; // set in main.cc as option
+    string textmidi_filename{}; // set in main.cc as option
     if (var_map.count(textmidi_in_option.option()))
     {
-        text_filename = var_map[textmidi_in_option.option()].as<string>();
-        textmidi::TextMidiFeatures::me()->text_filename(text_filename);
-        if (!std::filesystem::exists(text_filename))
+        textmidi_filename = var_map[textmidi_in_option.option()].as<string>();
+        textmidi::TextMidiFeatures::me()->textmidi_filename(textmidi_filename);
+        if (!std::filesystem::exists(textmidi_filename))
         {
             const string errstr{((textmidi_in_option.option() + ' ')
-                += text_filename) += " File does not exist.\n"};
+                += textmidi_filename) += " File does not exist.\n"};
             cerr << errstr;
             exit(EXIT_SUCCESS);
         }
     }
     else
     {
-        cerr << "Need a textmidi text file name!\n";
+        cerr << "Need a textmidi file name!\n";
         cerr << desc << '\n';
         exit(EXIT_SUCCESS);
     }
@@ -156,16 +156,16 @@ int main(int argc, char *argv[])
                 exit(0);
             }
         }
-        if (midi_filename == text_filename)
+        if (midi_filename == textmidi_filename)
         {
-            cerr << "The text and MIDI filenames are the same!  "
-                    "You would have overwritten the text file!; Must exit!\n";
+            cerr << "The textmidi and MIDI filenames are the same!  "
+                    "You would have overwritten the textmidi file!; Must exit!\n";
             exit(EXIT_SUCCESS);
         }
     }
     else
     {
-        cerr << "Need a binary MIDI file name!\n";
+        cerr << "Need a MIDI file name!\n";
         cerr << desc << '\n';
         exit(EXIT_SUCCESS);
     }
@@ -216,10 +216,10 @@ int main(int argc, char *argv[])
 
     if (midi_filename.empty()) [[unlikely]]
     {
-        midi_filename = text_filename + ".mid";
+        midi_filename = textmidi_filename + ".mid";
     }
 
-    yyin = fopen(text_filename.c_str(), "r");
+    yyin = fopen(textmidi_filename.c_str(), "r");
     if (0 == yyin)
     {
         perror("fopen");

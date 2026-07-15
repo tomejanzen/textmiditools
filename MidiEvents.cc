@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.5
+// TextMIDITools Version 1.1.6
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -2387,7 +2387,6 @@ tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceControlChangeHiResSoundBan
     // Check for two control change with the same channel, and a program with the same channel.
     MidiStreamAtom status{};
     bool had_status1{};
-    bool had_status2{};
 
     if (midi_stream_tail.size() >= 1)
     {
@@ -2412,6 +2411,7 @@ tuple<MidiStreamRange, OptionalEvent> MidiChannelVoiceControlChangeHiResSoundBan
 
             // Now look for the second control.
             bool this_is_2_controls{true};
+            bool had_status2{};
             if (midi_stream_tail.size() >= static_cast<size_t>(ctr))
             {
                 MidiStreamAtom status2{};

@@ -1,6 +1,6 @@
 #!usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py voice window, which permits editing one Voice's attributes."""
-# TextMIDITools Version 1.1.5
+# TextMIDITools Version 1.1.6
 # TextMidiFormEdit.py 1.0
 # Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -371,12 +371,13 @@ class AllFormsWindow(tkinter.Toplevel):
         self.frame.columnconfigure(index=0, weight=1)
         self.frame.columnconfigure(index=1, weight=1)
         self.len_label = tkinter.ttk.Label(self.frame, text='Len')
-        validate_positive_dbl_cmd = (self.register(self.validate_positive_float),
-            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
-        validate_signed_dbl_cmd = (self.register(self.validate_signed_float),
-            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        validate_positive_dbl_cmd = (self.register(self.validate_positive_float), '%P')
+        invalid_positive_dbl_cmd = (self.register(self.invalid_positive_float), '%P')
+        validate_signed_dbl_cmd = (self.register(self.validate_signed_float), '%P')
+        invalid_signed_dbl_cmd = (self.register(self.invalid_signed_float), '%P')
         self.len_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_positive_dbl_cmd, validate='focusout',
+            invalidcommand=invalid_positive_dbl_cmd,
             textvariable=self.len)
         self.len.set(self.xml_form['len'])
 
@@ -384,6 +385,7 @@ class AllFormsWindow(tkinter.Toplevel):
             self.frame, text='Min Note Len')
         self.min_note_len_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_positive_dbl_cmd, validate='focusout',
+            invalidcommand=invalid_positive_dbl_cmd,
             textvariable=self.min_note_len)
         self.min_note_len.set(self.xml_form['min_note_len'])
 
@@ -391,21 +393,23 @@ class AllFormsWindow(tkinter.Toplevel):
             self.frame, text='Max Note Len')
         self.max_note_len_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_positive_dbl_cmd, validate='focusout',
+            invalidcommand=invalid_positive_dbl_cmd,
             textvariable=self.max_note_len)
         self.max_note_len.set(self.xml_form['max_note_len'])
 
         self.ticks_per_quarter_label = tkinter.ttk.Label(self.frame, text='Ticks per Quarter')
         self.ticks_per_quarter_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_positive_dbl_cmd, validate='focusout',
+            invalidcommand=invalid_positive_dbl_cmd,
             textvariable=self.ticks_per_quarter)
         self.ticks_per_quarter.set(self.xml_form['music_time']['ticks_per_quarter'])
 
-        validate_ratio_command = (self.register(self.validate_rational),
-            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        validate_ratio_cmd = (self.register(self.validate_rational), '%P')
+        invalid_ratio_cmd = (self.register(self.invalid_rational), '%P')
         self.beat_label = tkinter.ttk.Label(self.frame, text='Beat Size')
         self.beat_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_ratio_command, validate='focusout',
-            textvariable=self.beat)
+            validatecommand=validate_ratio_cmd, validate='focusout',
+            invalidcommand=invalid_ratio_cmd, textvariable=self.beat)
         beat_ratio = "/"
         beat_ratio = beat_ratio.join([str(self.xml_form['music_time']['beat']['numerator']),
             str(self.xml_form['music_time']['beat']['denominator'])])
@@ -413,8 +417,8 @@ class AllFormsWindow(tkinter.Toplevel):
 
         self.meter_label = tkinter.ttk.Label(self.frame, text='Meter')
         self.meter_entry = tkinter.ttk.Entry(self.frame,
-            validatecommand=validate_ratio_command, validate='focusout',
-            textvariable=self.meter)
+            validatecommand=validate_ratio_cmd, validate='focusout',
+            invalidcommand=invalid_ratio_cmd, textvariable=self.meter)
         meter_ratio = "/"
         meter_ratio = meter_ratio.join([str(self.xml_form['music_time']['meter']['numerator']),
             str(self.xml_form['music_time']['meter']['denominator'])])
@@ -423,13 +427,13 @@ class AllFormsWindow(tkinter.Toplevel):
         self.beat_tempo_label = tkinter.ttk.Label(self.frame, text='Tempo per Beat')
         self.beat_tempo_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_positive_dbl_cmd, validate='focusout',
-            textvariable=self.beat_tempo)
+            invalidcommand=invalid_positive_dbl_cmd, textvariable=self.beat_tempo)
         self.beat_tempo.set(format(float(self.xml_form['music_time']['beat_tempo']), ".10f"))
 
         self.pulse_label = tkinter.ttk.Label(self.frame, text='Pulse/Sec')
         self.pulse_entry = tkinter.ttk.Entry(self.frame,
             validatecommand=validate_positive_dbl_cmd, validate='focusout',
-            textvariable=self.pulse)
+            invalidcommand=invalid_positive_dbl_cmd, textvariable=self.pulse)
         self.pulse.set(self.xml_form['pulse'])
 
         self.melody_probabilities_frame = tkinter.ttk.Frame(self,
@@ -437,22 +441,25 @@ class AllFormsWindow(tkinter.Toplevel):
         self.melody_probabilities_label = tkinter.ttk.Label(
                 self.melody_probabilities_frame, text='MELODY PROBABILITIES')
 
-        validate_prob_command = (self.register(self.validate_probability),
-            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        validate_prob_cmd = (self.register(self.validate_probability), '%P')
+        invalid_prob_cmd = (self.register(self.invalid_probability), '%P')
         self.probabilities_var_label = tkinter.ttk.Label(self.melody_probabilities_frame,
                 text='Down/Same/Up')
         self.down_var_entry = tkinter.ttk.Entry(self.melody_probabilities_frame,
-            validatecommand=validate_prob_command,
+            validatecommand=validate_prob_cmd,
+            invalidcommand=invalid_prob_cmd,
             validate='focusout', textvariable=self.down_var)
         self.down_var.set(self.xml_form['melody_probabilities']['down'])
 
         self.same_var_entry = tkinter.ttk.Entry(self.melody_probabilities_frame,
-            validatecommand=validate_prob_command, validate='focusout',
+            validatecommand=validate_prob_cmd, validate='focusout',
+            invalidcommand=invalid_prob_cmd,
             textvariable=self.same_var)
         self.same_var.set(self.xml_form['melody_probabilities']['same'])
 
         self.up_var_entry = tkinter.ttk.Entry(self.melody_probabilities_frame,
-            validatecommand=validate_prob_command, validate='focusout',
+            validatecommand=validate_prob_cmd, validate='focusout',
+            invalidcommand=invalid_prob_cmd,
             textvariable=self.up_var)
         self.up_var.set(self.xml_form['melody_probabilities']['up'])
 
@@ -1369,7 +1376,7 @@ class AllFormsWindow(tkinter.Toplevel):
         algorithm = self.xml_form['arrangement_definition']['algorithm']
         self.arrangement_algorithm.set(ArrangementAlgorithmList[int(algorithm)])
 
-    def validate_rational(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def validate_rational(self, proposed):
         """Validate a rational value, slash required, from the user and put up an alert if it is improper."""
         # P: proposed value
         # s: chars added or deleted
@@ -1382,12 +1389,12 @@ class AllFormsWindow(tkinter.Toplevel):
         ret = False
         if mat:
             ret = True
-        else:
-            ret = False
-            messagebox.showerror('message', "bad value (1/2, 3/4, 51/1440)")
         return ret
 
-    def validate_signed_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def invalid_rational(self, proposed):
+        messagebox.showerror('message', "bad rational value (1/2, 3/4, 51/1440)")
+
+    def validate_signed_float(self, proposed):
         """Validate a floating value from the user and put up an alert if it is improper."""
         # P: proposed value
         # s: chars added or deleted
@@ -1400,12 +1407,12 @@ class AllFormsWindow(tkinter.Toplevel):
         ret = False
         if mat:
             ret = True
-        else:
-            ret = False
-            messagebox.showerror('message', "bad value (examples: 5.125, -5.125, or 5.125E05)")
         return ret
 
-    def validate_positive_float(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def invalid_signed_float(self, proposed):
+        messagebox.showerror('message', "bad signed floating value (examples: 5.125, -5.125, or 5.125E05)")
+
+    def validate_positive_float(self, proposed):
         """Validate a floating value from the user and put up an alert if it is improper."""
         # P: proposed value
         # s: chars added or deleted
@@ -1418,12 +1425,13 @@ class AllFormsWindow(tkinter.Toplevel):
         ret = False
         if mat:
             ret = True
-        else:
-            ret = False
-            messagebox.showerror('message', "bad value (examples: 5.125 or 5.125E05)")
         return ret
 
-    def validate_probability(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def invalid_positive_float(self, proposed):
+        messagebox.showerror('message', "bad positive floating value (examples: 5.125 or 5.125E05)")
+
+
+    def validate_probability(self, proposed):
         """
             Validate a floating value probability (in 0..1)
             from the user and put up an alert if it is improper.
@@ -1433,7 +1441,7 @@ class AllFormsWindow(tkinter.Toplevel):
         mat = pat.fullmatch(str(proposed))
         ret = False
         if mat:
-            ret = ret and True
+            ret = True
             num = float(str(proposed))
             inrange = (num <= 1.0 and num >= 0.0)
             if inrange:
@@ -1447,10 +1455,11 @@ class AllFormsWindow(tkinter.Toplevel):
                    <= float(self.xml_form['melody_probabilities']['up'])):
                 ret = ret and True
             else:
-                messagebox.showerror('message',
-                    "improper values: required: down <= same <= up")
                 ret = False
         else:
             ret = False
-            messagebox.showerror('message', "bad value (0.0 to 1.0 or 1.0E-4)")
         return ret
+
+    def invalid_probability(self, proposed):
+        messagebox.showerror('message', "bad value (0.0 to 1.0 or 1.0E-4), and down <= same <= up")
+

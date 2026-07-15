@@ -1,3 +1,37 @@
+2026-07-14    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, test/control.txt:  add test file control.txt.
+        Move recognition clauses for special versions of control to
+        be above the general recognition of controls.
+        * MidiEvents.{cc,h}: add override to a few functions.
+        * smustextmidi.cc:  remove trailing space
+        * AllFormsWindow.py: fix validatecommand for probabilities.
+
+2026-07-14    Thomas E. Janzen <janzentome@gmail.com>
+        * textmidi.l, textmidi.1:  Fix handling of PAN.
+        Re-order lexical analyzer writer to first look for 
+        CONTROL chan PAN val
+        then
+        CONTROL chan control_id value
+        then 
+        CONTROL_HIRES chan control_id value
+        then
+        PAN chan value
+        and check pan value range and report an error.
+
+2026-07-11    Thomas E. Janzen <janzentome@gmail.com>
+        * AllFormsWindow.py, Sine.py, VoiceWindow.py, TextMidiFormEdit.py:
+        Rationalize use of validate commands.  register() wraps Python callables
+        for the TCL engine.  the "%" list are the arguments passed, but you only
+        pass the one you need, and we need %P, the new edited value.  Validate
+        functions return true and false.  If false is returned, the
+        invalidcommand specified is called, so move the messagebox the
+        invalidcommand function.
+
+2026-07-09    Thomas E. Janzen <janzentome@gmail.com>
+        * main.cc, miditext.1, smustextmidi.cc, textmidi.1, textmidi.l,
+        textmidi.texi, textmidicgm.1:
+        Update manual pages and reconcile code (esp. for error messages).
+
 2026-07-01    Thomas E. Janzen <janzentome@gmail.com>
         * MidiEvents.cc: Finish rewrite of sound bank composite event.
         * Voice.cc: fix range check of programs.
@@ -79,7 +113,7 @@
 2026-05-27    Thomas E. Janzen <janzentome@gmail.com>
 	* miditext.cc, MidiEvents.{cc,h}:
         miditext is probably working with new ControlChange classes.
-   
+
 2026-05-26    Thomas E. Janzen <janzentome@gmail.com>
 	* Midi.h, MidiEvents.{cc,h}, MidiMaps.{cc,h}:
         Continue to work on handling high-resolution Controls.

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.5
+// TextMIDITools Version 1.1.6
 //
 //
 // Copyright © 2025 Thomas E. Janzen
@@ -36,9 +36,9 @@ namespace textmidi
 
         TextMidiFeatures(const TextMidiFeatures& ) = delete;
 
-        void text_filename(const std::string& text_filename)
+        void textmidi_filename(const std::string& textmidi_filename)
         {
-            this->text_filename_ = text_filename;
+            this->textmidi_filename_ = textmidi_filename;
         }
 
         void line_ctr(std::int32_t line_ctr)
@@ -61,9 +61,9 @@ namespace textmidi
             this->verbose_ = verbose;
         }
 
-        std::string text_filename() const
+        std::string textmidi_filename() const
         {
-            return this->text_filename_;
+            return this->textmidi_filename_;
         }
 
         std::ofstream& midi_filestr()
@@ -100,7 +100,7 @@ namespace textmidi
 
         // The input file name, selected by command-line options,
         // is used in error messages.
-        std::string text_filename_{"unknown.txt"};
+        std::string textmidi_filename_{"unknown.txt"};
         // The ofstream of the binary standard MIDI output file.
         std::ofstream midi_filestr_{};
         // line_ctr counts the lines in the input text file

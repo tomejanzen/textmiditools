@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py Voice Window for editing a voice's attributes."""
-# TextMIDITools Version 1.1.5
+# TextMIDITools Version 1.1.6
 # TextMidiFormEdit.py 1.0
 # Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -97,18 +97,18 @@ class VoiceWindow(tkinter.Toplevel):
         # %v type of validation currently set
         # %V type of validation that triggered (key, focusin, focusout, forced)
         # %W tk name of widget
-        validate_command = (self.register(self.validate_pitchname),
-            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        validate_command = (self.register(self.validate_pitchname), '%P')
+        invalid_command = (self.register(self.invalid_pitchname), '%P')
         self.low_pitch_entry = tkinter.ttk.Entry(self.frame,
             textvariable=self.low_pitch, validatecommand=validate_command,
-            validate='focusout')
+            invalidcommand=invalid_command, validate='focusout')
         self.low_pitch.set(self.xml_voices[vox]['low_pitch'])
         self.low_pitch_from_program_button = tkinter.ttk.Button(self.frame, text='From Program',
             command=self.low_pitch_from_program_callback)
 
         self.high_pitch_label = tkinter.ttk.Label(self.frame, text='High Pitch')
         self.high_pitch_entry = tkinter.ttk.Entry(self.frame, textvariable=self.high_pitch,
-              validatecommand=validate_command, validate='focusout')
+              validatecommand=validate_command, invalidcommand=invalid_command, validate='focusout')
         self.high_pitch.set(self.xml_voices[vox]['high_pitch'])
         self.high_pitch_from_program_button = tkinter.ttk.Button(self.frame, text='From Program',
             command=self.high_pitch_from_program_callback)
@@ -822,15 +822,19 @@ class VoiceWindow(tkinter.Toplevel):
                     value = 63
                 self.xml_voices[vox]['pan'] = value
 
-    def validate_pitchname(self, val, add_chars, proposed, sss, sss2, vvv, vvv2, www):
+    def validate_pitchname(self, proposed):
         """Validate the pitch name; put up alert if it fails."""
         # 1-insert, 0=del, -1 if forced
-        pat = re.compile(r"([C][#x]?-1)|([ABDEFGabdefg]([#bx]|bb)?-1)|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))")
+        pat = re.compile(r"([C][#x]?-1)|([ABDEFGabdefg]([#bx]|bb)?-1)|(([A-Ga-g]([#bx]|bb)?[0-8])|([C-Fc-f]([#bx]|bb)?[9])|([Gg]([b]|bb)?[9]))$")
         mat = pat.match(str(proposed))
         ret = False
         if mat:
             ret = True
         else:
             ret = False
-            messagebox.showerror('message', "bad pitch name (C-1 to G9")
         return ret
+
+    def invalid_pitchname(self, proposed):
+        """Invalid pitch name; called if validate_pitchanme returns false."""
+        messagebox.showerror('message', "bad pitch name (C-1 to G9")
+

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """TextMIDITools: TextMidiFormEdit.py top-level module."""
-# TextMIDITools Version 1.1.5
+# TextMIDITools Version 1.1.6
 # Copyright © 2026 Thomas E. Janzen
 # License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
@@ -336,7 +336,7 @@ class XmlFormWindow(tkinter.Tk):
         # .25 - down if above down
         #     # (silent)
         #     # (silent)
-        temp_tacit = 0.125            
+        temp_tacit = 0.125
         temp_down = self.randfloat()
         temp_same = self.randfloat()
         temp_up = temp_down
@@ -593,7 +593,7 @@ class XmlFormWindow(tkinter.Tk):
             valid = False
 
 
-        beatF = Fraction(self.xml_form_dict['music_time']['beat']['numerator'], 
+        beatF = Fraction(self.xml_form_dict['music_time']['beat']['numerator'],
                 self.xml_form_dict['music_time']['beat']['denominator'])
         if beatF <= Fraction(0, 1):
             messagebox.showerror('message', "bad value: beat must be > 0/1")
@@ -606,7 +606,7 @@ class XmlFormWindow(tkinter.Tk):
             valid = False
 
         if self.xml_form_dict['music_time']['beat_tempo'] <= 0.0:
-            messagebox.showerror('message', "bad value: beat_tempo must be > 0/1")
+            messagebox.showerror('message', "bad value: beat_tempo must be > 0.0")
             valid = False
 
         if self.xml_form_dict['pulse'] < 0:
@@ -823,11 +823,11 @@ class XmlFormWindow(tkinter.Tk):
         xml_voice_list = voices_dom.getElementsByTagName('item')
         delvox = []
         for v in range(0, len(xml_voice_list)):
-            if xml_voice_list[v].parentNode != voices_dom : 
+            if xml_voice_list[v].parentNode != voices_dom :
                 delvox.append(v)
         delvox.sort(reverse='True')
         for n in delvox:
-           xml_voice_list.pop(n) 
+           xml_voice_list.pop(n)
 
         # Check version for None because version is only on the first item in boost serialization
         voice_item_version = 0
@@ -927,7 +927,7 @@ class XmlFormWindow(tkinter.Tk):
             random_program_dict['ensemble'] = ensemble_array
 
             voice_dict['random_program'] = random_program_dict
-    
+
             voice_list.append(voice_dict)
 
         return voice_list
@@ -1041,8 +1041,8 @@ class XmlFormWindow(tkinter.Tk):
         print("  <table border>", file=html_file, sep=' ', end='\n')
         print("    <caption>Melody Probabilities</caption>", file=html_file, sep=' ', end='\n')
         print("    <tr><th>down</th><th>same</th><th>up</th></tr>", file=html_file, sep=' ', end='\n')
-        print("    <tr><td>", self.xml_form_dict['melody_probabilities']['down'], '</td><td>',  
-                self.xml_form_dict['melody_probabilities']['same'], '</td><td>', 
+        print("    <tr><td>", self.xml_form_dict['melody_probabilities']['down'], '</td><td>',
+                self.xml_form_dict['melody_probabilities']['same'], '</td><td>',
                 self.xml_form_dict['melody_probabilities']['up'], '</td></tr>', file=html_file, sep=' ', end='\n')
         print("  </table>", file=html_file, sep=' ', end='\n')
         print("  <h2>Form Sines</h2>", file=html_file, sep=' ', end='\n')
@@ -1075,15 +1075,15 @@ class XmlFormWindow(tkinter.Tk):
         print("          <tr><th>vox</th><th>follow</th><th>leader</th><th>interval type</th><th>interval</th><th>delay</th><th>time factor</th><th>inv</th><th>retro</th></tr>", file=html_file, sep=' ', end='\n')
         for vox in range(0, len(self.xml_form_dict['voices'])):
           if self.xml_form_dict['voices'][vox]['follower']['follow']:
-            print("          <tr><td>", vox, "</td><td>", bool(self.xml_form_dict['voices'][vox]['follower']['follow']), '</td><td>', 
-              self.xml_form_dict['voices'][vox]['follower']['leader'], '</td><td>', 
-              self.follower_type_dict[self.xml_form_dict['voices'][vox]['follower']['interval_type']], '</td><td>', 
-              self.xml_form_dict['voices'][vox]['follower']['interval'], '</td><td>', 
-              self.xml_form_dict['voices'][vox]['follower']['delay']['numerator'], '/', 
-              self.xml_form_dict['voices'][vox]['follower']['delay']['denominator'], '</td><td>', 
-              self.xml_form_dict['voices'][vox]['follower']['duration_factor']['numerator'], '/', 
-              self.xml_form_dict['voices'][vox]['follower']['duration_factor']['denominator'], '</td><td>', 
-              self.xml_form_dict['voices'][vox]['follower']['inversion'], '</td><td>', 
+            print("          <tr><td>", vox, "</td><td>", bool(self.xml_form_dict['voices'][vox]['follower']['follow']), '</td><td>',
+              self.xml_form_dict['voices'][vox]['follower']['leader'], '</td><td>',
+              self.follower_type_dict[self.xml_form_dict['voices'][vox]['follower']['interval_type']], '</td><td>',
+              self.xml_form_dict['voices'][vox]['follower']['interval'], '</td><td>',
+              self.xml_form_dict['voices'][vox]['follower']['delay']['numerator'], '/',
+              self.xml_form_dict['voices'][vox]['follower']['delay']['denominator'], '</td><td>',
+              self.xml_form_dict['voices'][vox]['follower']['duration_factor']['numerator'], '/',
+              self.xml_form_dict['voices'][vox]['follower']['duration_factor']['denominator'], '</td><td>',
+              self.xml_form_dict['voices'][vox]['follower']['inversion'], '</td><td>',
               bool(self.xml_form_dict['voices'][vox]['follower']['retrograde']), '</td></tr>', file=html_file, sep=' ', end='\n')
         print("        </table>", file=html_file, sep=' ', end='\n')
         print("        <h2>Random Program</h3>", file=html_file, sep=' ', end='\n')
@@ -1622,7 +1622,7 @@ class XmlFormWindow(tkinter.Tk):
         about_window.grid(sticky='we', row=0, column=0)
         about_top.title('About')
         about_window.insert('1.0',
-            'TextMIDITools Version 1.1.5\nCopyright © 2026 Thomas E. Janzen\n'
+            'TextMIDITools Version 1.1.6\nCopyright © 2026 Thomas E. Janzen\n'
             'License GPLv3+: GNU GPL version 3 \nor later <https://gnu.org/licenses/gpl.html>\n'
             'TextMidiFormEdit.py musical form editor\nUse with textmidicgm, part of '
             'TextMIDITools\nat github.com/tomejanzen/TextMIDITools')

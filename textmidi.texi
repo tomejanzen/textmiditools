@@ -503,7 +503,7 @@ INSTRUMENT "Flugel Horn or best substitute"
 @item LYRIC [string]<EOL> or LYRIC "string"
 @cindex LYRIC
 A lyric string.
-The MIDI Manufacturers Assocation publishes "RP17 SMF Luric Events Definition" with guidelines on adding lyrics to MIDI files.
+The MIDI Manufacturers Association publishes "RP17 SMF Luric Events Definition" with guidelines on adding lyrics to MIDI files.
 The guidelines there include the following:
 @itemize
 @item Each LYRIC event should have just one syllable.

@@ -1,5 +1,5 @@
 //
-// TextMIDITools Version 1.1.5
+// TextMIDITools Version 1.1.6
 //
 // Copyright © 2025 Thomas E. Janzen
 // License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -12,13 +12,12 @@
 //
 //  FACILITY:
 //
-//      SMUSMIDI file format convertor on Commodore (TM) Amiga (TM)
-//      compiled with SAS/C V6.5
+//      SMUSMIDI file format convertor
 //
 //  ABSTRACT:
 //
 //  smustextmidi converts SMUS files from DMCS (TM Electronic Arts)
-//     Simple Music Score to textmidi text format, which textmidi
+//     Simple Musical Score to textmidi text format, which textmidi
 //     can convert into standard MIDI file format.
 //
 //  AUTHOR: Tom Janzen
@@ -164,7 +163,7 @@ int main(int argc, char *argv[])
     if (var_map.count(help_option.option()))
     {
         const string logstr{((string{"Usage: smustextmidi [OPTION]..."
-                    " [SMUSFILE]\nsmustextmidi Version 1.1.5\n"}
+                    " [SMUSFILE]\nsmustextmidi Version 1.1.6\n"}
             += lexical_cast<string>(desc)) += '\n')
             += "Report bugs to: janzentome@gmail.com\nsmustextmidi home page:"
             " https://github.com/tomejanzen/textmiditools\n"};
@@ -174,7 +173,7 @@ int main(int argc, char *argv[])
 
     if (var_map.count(version_option.option())) [[unlikely]]
     {
-        cout << "smustextmidi\nTextMIDITools Version 1.1.5\n"
+        cout << "smustextmidi\nTextMIDITools Version 1.1.6\n"
             "Copyright © 2025 Thomas E. Janzen\n"
             "License GPLv3+: GNU GPL version 3 or later "
             "<https://gnu.org/licenses/gpl.html>\n"

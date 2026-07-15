@@ -1,6 +1,6 @@
 %{
 /*
-** TextMIDITools Version 1.1.5
+** TextMIDITools Version 1.1.6
 ** Copyright © 2025 Thomas E. Janzen
 ** License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 ** This is free software: you are free to change and redistribute it.
@@ -311,7 +311,7 @@ namespace
         if (0 == program)
         {
             const string errstr{
-                ((string{TextMidiFeatures::me()->text_filename()} += ':')
+                ((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
                 += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Program was zero (0) and left as zero; "
                 "textmidi program numbers must be in [1..16]\n"};
@@ -332,7 +332,7 @@ namespace
         if (0 == bank)
         {
             const string errstr{
-                ((string{TextMidiFeatures::me()->text_filename()} += ':')
+                ((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
                 += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Bank was zero (0) and left as zero; "
                 "textmidi bank numbers must be in [1..16384]\n"};
@@ -353,7 +353,7 @@ namespace
         if (0 == channel)
         {
             const string errstr{
-                ((string{TextMidiFeatures::me()->text_filename()} += ':')
+                ((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
                 += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Channel was zero (0) and left as zero;"
                 " channels must be in [1..16]\n"};
@@ -612,7 +612,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     }
     else
     {
-        string errstr{((((string{TextMidiFeatures::me()->text_filename()}
+        string errstr{((((string{TextMidiFeatures::me()->textmidi_filename()}
             += ':')
             += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
             += "File format was: ") += format_str) += " but must be in {"};
@@ -626,7 +626,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
     if ((MIDI_Format::MonoTrack == midi_header.format_)
         && (midi_header.ntrks_ > 1))
     {
-        const string errstr{((((string{TextMidiFeatures::me()->text_filename()}
+        const string errstr{((((string{TextMidiFeatures::me()->textmidi_filename()}
             += ':')
             += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
             +=  " File format was MONOTRACK which allows "
@@ -785,7 +785,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         else
         {
             const string errstr{
-                ((((string{TextMidiFeatures::me()->text_filename()} += ':')
+                ((((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
                 += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Invalid meta event name ") += meta_name) += '\n'};
             cerr << errstr;
@@ -989,6 +989,120 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(pressure);
   }
 
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL}{SPACE}{INTEGER} {
+    write_delay();
+
+    string control_id_str{};
+    int32_t control_id{};
+    uint32_t channel{};
+    istringstream iss{yytext};
+    iss >> control_id_str >> channel;
+    to_upper(control_id_str);
+    channel_1_to_0(channel);
+    (*running_status)(channel | control[0], trackchunk);
+
+    const auto id = control_function_map(control_id_str);
+    if (id)
+    {
+        control_id = *id;
+    }
+    trackchunk.push_back(control_id);
+    trackchunk.push_back(0);
+  }
+
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{UXINTEGER} {
+    write_delay();
+
+    string control_id_str;
+    uint32_t channel{};
+    string control_value_str{};
+    istringstream iss(yytext);
+    iss >> control_id_str >> channel >> control_value_str;
+    channel_1_to_0(channel);
+    (*running_status)(channel | control[0], trackchunk);
+
+    to_upper(control_id_str);
+    const auto id = control_function_map(control_id_str);
+    int32_t control_id{};
+    if (id)
+    {
+        control_id = *id;
+    }
+    trackchunk.push_back(control_id);
+
+    int32_t control_value{};
+    control_value = HexOrDec()(control_value_str);
+    control_value &= byte7_mask;
+    trackchunk.push_back(control_value);
+  }
+
+<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}({UXINTEGER}|{ONOFF}) {
+    write_delay();
+
+    string control_id_str;
+    uint32_t channel{};
+    string control_value_str{};
+    istringstream iss(yytext);
+    iss >> control_id_str >> channel >> control_value_str;
+    // Can't upcase the "x" in hexadecimal 0x00
+    // and use stream conversion on it.
+    auto upper_control_value_str{control_value_str};
+    to_upper(upper_control_value_str);
+    to_upper(control_id_str);
+    channel_1_to_0(channel);
+    (*running_status)(channel | control[0], trackchunk);
+
+    // Can't fail; the grammar would not have qualified an invalid name.
+    const auto id = control_function_map(control_id_str);
+    trackchunk.push_back(*id);
+
+    int32_t control_value{};
+    const auto val = control_on_off_map(upper_control_value_str);
+    if (val)
+    {
+        control_value = *val;
+    }
+    else
+    {
+        control_value = HexOrDec()(control_value_str);
+    }
+    trackchunk.push_back(control_value);
+  }
+
+<DETAIL_STATE>PAN{SPACE}{INTEGER}{SPACE}{PANVALUE} {
+    write_delay();
+
+    string discard{};
+    string panstring{};
+    uint32_t channel{};
+    istringstream iss(yytext);
+    iss >> discard >> channel >> panstring;
+    channel_1_to_0(channel);
+    (*running_status)(channel | control[0], trackchunk);
+    trackchunk.push_back(control_pan[0]);
+
+    to_upper(panstring);
+    const auto map_iter{pan_map(panstring)};
+    int32_t control_value{};
+    if (map_iter)
+    {
+        control_value = *map_iter;
+    }
+    else
+    {
+        control_value = lexical_cast<int32_t>(panstring);
+        if (  !((control_value >= midi::MinSignedPan)
+            and (control_value <= midi::MaxSignedPan)))
+        {
+            cerr << "Coerced improper 7-bit PAN to zero: " << control_value << '\n';
+            control_value = 0;
+        }
+    }
+    control_value += PanExcess64;
+    control_value &= byte7_mask;
+    trackchunk.push_back(control_value);
+  }
+
 <DETAIL_STATE>CONTROL_BANK_SELECT_PROGRAM{SPACE}{BYTE}{SPACE}{INTEGER}{SPACE}{BYTE} {
     write_delay();
     istringstream iss(yytext);
@@ -1026,6 +1140,43 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(theprogram);
 
 }
+
+<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}PAN{SPACE}({INTEGER}|{PANVALUE}) {
+    write_delay();
+
+    istringstream iss(yytext);
+    string discard;
+
+    const auto control_id{control_pan[0]};
+    int32_t control_value{};
+    string control_value_str{};
+    string discard_control_id_str;
+    uint32_t channel{};
+    iss >> discard >> channel >> discard_control_id_str >> control_value_str;
+    channel_1_to_0(channel);
+    (*running_status)(channel | control[0], trackchunk);
+    trackchunk.push_back(control_id);
+
+    to_upper(control_value_str);
+    const auto map_iter{pan_map(control_value_str)};
+    if (map_iter)
+    {
+        control_value = *map_iter;
+    }
+    else
+    {
+        control_value = lexical_cast<int32_t>(control_value_str);
+        if (  !((control_value >= midi::MinSignedPan)
+            and (control_value <= midi::MaxSignedPan)))
+        {
+            cerr << "Coerced improper 7-bit PAN to zero: " << control_value << '\n';
+            control_value = 0;
+        }
+    }
+    control_value += PanExcess64;
+    control_value &= byte7_mask;
+    trackchunk.push_back(control_value);
+  }
 
 <DETAIL_STATE>CONTROL{SPACE}{BYTE}{SPACE}({BYTE}|{CONTROL_FUNCTION}){SPACE}({CONTROL_VALUE}|{BYTE}|{ONOFF}) {
     write_delay();
@@ -1109,8 +1260,14 @@ DEVICE_ID (ALL_CALL|{BYTE})
         }
     }
     // If "PAN" was used, add Excess64
-    if (id_code && (control_pan[0] == control_id))
+    if (control_pan[0] == control_id)
     {
+        if (  !((control_value >= midi::MinSignedPan)
+            and (control_value <= midi::MaxSignedPan)))
+        {
+            cerr << "Coerced improper 7-bit PAN to zero: " << control_value << '\n';
+            control_value = 0;
+        }
         control_value += PanExcess64;
     }
     control_value &= byte7_mask;
@@ -1210,6 +1367,12 @@ DEVICE_ID (ALL_CALL|{BYTE})
     // If "PAN" was used, add Excess64
     if (id_code && (control_pan[0] == control_id))
     {
+        if (  !((control_value >= midi::MinHiResSignedPan)
+            and (control_value <= midi::MaxHiResSignedPan)))
+        {
+            cerr << "Coerced improper 14-bit PAN to zero: " << control_value << '\n';
+            control_value = 0;
+        }
         control_value += midi::PanExcess8192;
     }
     trackchunk.push_back((control_value >> 7) & byte7_mask);
@@ -1219,145 +1382,6 @@ DEVICE_ID (ALL_CALL|{BYTE})
     trackchunk.push_back(control_id + 0x20);
     trackchunk.push_back(control_value & byte7_mask);
     // don't write the trailing delay; that's done as a prefix to other events.
-  }
-
-<DETAIL_STATE>CONTROL{SPACE}{INTEGER}{SPACE}PAN{SPACE}({INTEGER}|{PANVALUE}) {
-    write_delay();
-
-    istringstream iss(yytext);
-    string discard;
-
-    const auto control_id{control_pan[0]};
-    int32_t control_value{};
-    string control_value_str{};
-    string discard_control_id_str;
-    uint32_t channel{};
-    iss >> discard >> channel >> discard_control_id_str >> control_value_str;
-    channel_1_to_0(channel);
-    (*running_status)(channel | control[0], trackchunk);
-    trackchunk.push_back(control_id);
-
-    to_upper(control_value_str);
-    const auto map_iter{pan_map(control_value_str)};
-    if (map_iter)
-    {
-        control_value = *map_iter;
-    }
-    else
-    {
-        control_value = lexical_cast<int32_t>(control_value_str);
-    }
-    control_value += PanExcess64;
-    control_value &= byte7_mask;
-    trackchunk.push_back(control_value);
-  }
-
-<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL}{SPACE}{INTEGER} {
-    write_delay();
-
-    string control_id_str{};
-    int32_t control_id{};
-    uint32_t channel{};
-    istringstream iss{yytext};
-    iss >> control_id_str >> channel;
-    to_upper(control_id_str);
-    channel_1_to_0(channel);
-    (*running_status)(channel | control[0], trackchunk);
-
-    const auto id = control_function_map(control_id_str);
-    if (id)
-    {
-        control_id = *id;
-    }
-    trackchunk.push_back(control_id);
-    trackchunk.push_back(0);
-  }
-
-<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_INT}{SPACE}{INTEGER}{SPACE}{UXINTEGER} {
-    write_delay();
-
-    string control_id_str;
-    uint32_t channel{};
-    string control_value_str{};
-    istringstream iss(yytext);
-    iss >> control_id_str >> channel >> control_value_str;
-    channel_1_to_0(channel);
-    (*running_status)(channel | control[0], trackchunk);
-
-    to_upper(control_id_str);
-    const auto id = control_function_map(control_id_str);
-    int32_t control_id{};
-    if (id)
-    {
-        control_id = *id;
-    }
-    trackchunk.push_back(control_id);
-
-    int32_t control_value{};
-    control_value = HexOrDec()(control_value_str);
-    control_value &= byte7_mask;
-    trackchunk.push_back(control_value);
-  }
-
-<DETAIL_STATE>{ALTERNATE_CONTROL_CHANNEL_ONOFF}{SPACE}{INTEGER}{SPACE}({UXINTEGER}|{ONOFF}) {
-    write_delay();
-
-    string control_id_str;
-    uint32_t channel{};
-    string control_value_str{};
-    istringstream iss(yytext);
-    iss >> control_id_str >> channel >> control_value_str;
-    // Can't upcase the "x" in hexadecimal 0x00
-    // and use stream conversion on it.
-    auto upper_control_value_str{control_value_str};
-    to_upper(upper_control_value_str);
-    to_upper(control_id_str);
-    channel_1_to_0(channel);
-    (*running_status)(channel | control[0], trackchunk);
-
-    // Can't fail; the grammar would not have qualified an invalid name.
-    const auto id = control_function_map(control_id_str);
-    trackchunk.push_back(*id);
-
-    int32_t control_value{};
-    const auto val = control_on_off_map(upper_control_value_str);
-    if (val)
-    {
-        control_value = *val;
-    }
-    else
-    {
-        control_value = HexOrDec()(control_value_str);
-    }
-    trackchunk.push_back(control_value);
-  }
-
-<DETAIL_STATE>PAN{SPACE}{INTEGER}{SPACE}{PANVALUE} {
-    write_delay();
-
-    string discard{};
-    string panstring{};
-    uint32_t channel{};
-    istringstream iss(yytext);
-    iss >> discard >> channel >> panstring;
-    channel_1_to_0(channel);
-    (*running_status)(channel | control[0], trackchunk);
-    trackchunk.push_back(control_pan[0]);
-
-    to_upper(panstring);
-    const auto map_iter{pan_map(panstring)};
-    int32_t pancode{};
-    if (map_iter)
-    {
-        pancode = *map_iter;
-    }
-    else
-    {
-        pancode = lexical_cast<int32_t>(panstring);
-    }
-    pancode += PanExcess64;
-    pancode &= byte7_mask;
-    trackchunk.push_back(pancode);
   }
 
 <DETAIL_STATE>PROGRAM{SPACE}{INTEGER}{SPACE}{INTEGER} {
@@ -1816,7 +1840,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
         else
         {
             const string errstr{
-                ((((((((((((string{TextMidiFeatures::me()->text_filename()}
+                ((((((((((((string{TextMidiFeatures::me()->textmidi_filename()}
                 += ':')
                 += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                 += " Chord note with tie in but was "
@@ -1836,9 +1860,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <LAZY_STATE>{NON_NOTE_LETTER}{LAZY_PITCH_NAME} {
     const string errstr{
-        ((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        ((((((((((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
         += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
-        += " Non Key Letter before Key Name: ")
+        += " Non-key letter before Key Name: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ")
         += lexical_cast<string>(track_counter))
@@ -1851,7 +1875,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <DETAIL_STATE>(-{PITCH_NAME})|({PITCH_NAME}-) {
     const string errstr{
-        ((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        ((((((((((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
         += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Ties are not allowed in DETAIL mode: ")
         += BOOST_PP_STRINGIZE(__LINE__))
@@ -1866,9 +1890,9 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <DETAIL_STATE>{NON_NOTE_LETTER}{PITCH_NAME} {
     const string errstr{
-        ((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        ((((((((((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
         += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
-        += " Non-Note Letter before Note Name: ")
+        += " Non-note letter before Note Name: ")
         += BOOST_PP_STRINGIZE(__LINE__))
         += ' ') += yytext) += " in track ")
            += lexical_cast<string>(track_counter))
@@ -1881,7 +1905,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{LAZY_PITCH_NAME} {
     const string errstr{
-        ((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        ((((((((((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
         += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Key Name without octave: ")
         += BOOST_PP_STRINGIZE(__LINE__))
@@ -1895,7 +1919,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
 
 <LAZY_STATE>{SPACE}{NOTE_NAME}{SOMESPACE}{RHYTHM} {
     const string errstr{
-        ((((((((((string{TextMidiFeatures::me()->text_filename()} += ':')
+        ((((((((((string{TextMidiFeatures::me()->textmidi_filename()} += ':')
         += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
         += " Key Name without octave: ")
         += BOOST_PP_STRINGIZE(__LINE__))
@@ -1951,7 +1975,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
             if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
             {
                 const string errstr{
-                    ((((((string{TextMidiFeatures::me()->text_filename()}
+                    ((((((string{TextMidiFeatures::me()->textmidi_filename()}
                     += ':')
                     += lexical_cast<string>(TextMidiFeatures::me()->line_ctr()))
                     += " WARN: a duration denominator "
@@ -2067,7 +2091,7 @@ DEVICE_ID (ALL_CALL|{BYTE})
             if (thedivisor > (global_ticks_per_quarter * QuartersPerWhole))
             {
                 const string errstr{
-                    ((((((string{TextMidiFeatures::me()->text_filename()}
+                    ((((((string{TextMidiFeatures::me()->textmidi_filename()}
                     += ':')
                     += lexical_cast<string>(
                         TextMidiFeatures::me()->line_ctr()))
